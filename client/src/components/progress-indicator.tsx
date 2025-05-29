@@ -6,10 +6,9 @@ interface ProgressIndicatorProps {
 
 const steps = [
   { id: "contact", label: "Contact Information", number: 1 },
-  { id: "ebitda", label: "EBITDA", number: 2 },
-  { id: "adjustments", label: "Adjustments", number: 3 },
-  { id: "valueDrivers", label: "Value Drivers", number: 4 },
-  { id: "followUp", label: "Follow-up", number: 5 },
+  { id: "ebitda", label: "EBITDA & Adjustments", number: 2 },
+  { id: "valueDrivers", label: "Value Drivers", number: 3 },
+  { id: "followUp", label: "Follow-up", number: 4 },
 ];
 
 export default function ProgressIndicator({ currentStep }: ProgressIndicatorProps) {
@@ -20,7 +19,7 @@ export default function ProgressIndicator({ currentStep }: ProgressIndicatorProp
       <div className="bg-white rounded-lg shadow-sm p-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold text-slate-900">Business Valuation Assessment</h2>
-          <span className="text-sm text-slate-500">Step {currentStepNumber} of 5</span>
+          <span className="text-sm text-slate-500">Step {currentStepNumber} of 4</span>
         </div>
 
         <div className="relative">

@@ -16,7 +16,7 @@ export class EmailService {
 
   constructor() {
     // Configure with environment variables or use a test account
-    this.transporter = nodemailer.createTransporter({
+    this.transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST || 'smtp.ethereal.email',
       port: parseInt(process.env.SMTP_PORT || '587'),
       secure: false,
