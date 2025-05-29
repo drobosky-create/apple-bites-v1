@@ -1,4 +1,6 @@
-import { valuationAssessments, type ValuationAssessment, type InsertValuationAssessment } from "@shared/schema";
+import { users, type User, type InsertUser, valuationAssessments, type ValuationAssessment, type InsertValuationAssessment } from "@shared/schema";
+import { db } from "./db";
+import { eq } from "drizzle-orm";
 
 export interface IStorage {
   createValuationAssessment(assessment: InsertValuationAssessment): Promise<ValuationAssessment>;
@@ -7,61 +9,37 @@ export interface IStorage {
   getAllValuationAssessments(): Promise<ValuationAssessment[]>;
 }
 
-export class MemStorage implements IStorage {
-  private assessments: Map<number, ValuationAssessment>;
-  private currentId: number;
-
-  constructor() {
-    this.assessments = new Map();
-    this.currentId = 1;
-  }
-
+export class DatabaseStorage implements IStorage {
   async createValuationAssessment(insertAssessment: InsertValuationAssessment): Promise<ValuationAssessment> {
-    const id = this.currentId++;
-    const assessment: ValuationAssessment = {
-      ...insertAssessment,
-      id,
-      jobTitle: insertAssessment.jobTitle || null,
-      ownerSalary: insertAssessment.ownerSalary || null,
-      personalExpenses: insertAssessment.personalExpenses || null,
-      oneTimeExpenses: insertAssessment.oneTimeExpenses || null,
-      otherAdjustments: insertAssessment.otherAdjustments || null,
-      adjustmentNotes: insertAssessment.adjustmentNotes || null,
-      additionalComments: insertAssessment.additionalComments || null,
-      baseEbitda: null,
-      adjustedEbitda: null,
-      valuationMultiple: null,
-      lowEstimate: null,
-      midEstimate: null,
-      highEstimate: null,
-      overallScore: null,
-      narrativeSummary: null,
-      pdfUrl: null,
-      isProcessed: false,
-      createdAt: new Date(),
-    };
-    this.assessments.set(id, assessment);
+    const [assessment] = await db
+      .insert(valuationAssessments)
+      .values(insertAssessment)
+      .returning();
     return assessment;
   }
 
   async getValuationAssessment(id: number): Promise<ValuationAssessment | undefined> {
-    return this.assessments.get(id);
+    const [assessment] = await db.select().from(valuationAssessments).where(eq(valuationAssessments.id, id));
+    return assessment || undefined;
   }
 
   async updateValuationAssessment(id: number, updates: Partial<ValuationAssessment>): Promise<ValuationAssessment> {
-    const existing = this.assessments.get(id);
-    if (!existing) {
+    const [assessment] = await db
+      .update(valuationAssessments)
+      .set(updates)
+      .where(eq(valuationAssessments.id, id))
+      .returning();
+    
+    if (!assessment) {
       throw new Error(`Assessment with id ${id} not found`);
     }
     
-    const updated = { ...existing, ...updates };
-    this.assessments.set(id, updated);
-    return updated;
+    return assessment;
   }
 
   async getAllValuationAssessments(): Promise<ValuationAssessment[]> {
-    return Array.from(this.assessments.values());
+    return await db.select().from(valuationAssessments);
   }
 }
 
-export const storage = new MemStorage();
+export const storage = new DatabaseStorage();
