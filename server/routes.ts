@@ -242,6 +242,48 @@ export async function registerRoutes(app: Express): Promise<Server> {
           // Don't fail the entire request if email fails
         }
 
+        // Send lead data to CRM webhook
+        try {
+          const webhookData = {
+            name: `${assessment.firstName} ${assessment.lastName}`,
+            email: assessment.email,
+            phone: assessment.phone,
+            company: assessment.company,
+            jobTitle: assessment.jobTitle || '',
+            adjustedEBITDA: metrics.adjustedEbitda,
+            valuationEstimate: metrics.midEstimate,
+            valuationLow: metrics.lowEstimate,
+            valuationHigh: metrics.highEstimate,
+            overallScore: metrics.overallScore,
+            driverGrades: {
+              "Financial Performance": assessment.financialPerformance,
+              "Customer Concentration": assessment.customerConcentration,
+              "Management Team": assessment.managementTeam,
+              "Competitive Position": assessment.competitivePosition,
+              "Growth Prospects": assessment.growthProspects,
+              "Systems & Processes": assessment.systemsProcesses,
+              "Asset Quality": assessment.assetQuality,
+              "Industry Outlook": assessment.industryOutlook,
+              "Risk Factors": assessment.riskFactors,
+              "Owner Dependency": assessment.ownerDependency
+            },
+            followUpIntent: assessment.followUpIntent,
+            executiveSummary: executiveSummary,
+            pdfLink: assessment.pdfUrl ? `${req.protocol}://${req.get('host')}${assessment.pdfUrl}` : null
+          };
+
+          await fetch('https://services.leadconnectorhq.com/hooks/QNFrfENaRul2JhIdFd0Z/webhook-trigger/f5367269-75ef-42ba-a27c-9a4435f1dfd0', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(webhookData)
+          });
+          
+          console.log(`Lead data sent to CRM for ${assessment.email}`);
+        } catch (webhookError) {
+          console.error('Failed to send lead data to CRM, but continuing:', webhookError);
+          // Don't fail the entire request if webhook fails
+        }
+
         res.json(assessment);
       } catch (processingError) {
         console.error('Error during processing:', processingError);
