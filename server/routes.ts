@@ -272,7 +272,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             pdfLink: assessment.pdfUrl ? `${req.protocol}://${req.get('host')}${assessment.pdfUrl}` : null
           };
 
-          await fetch('https://services.leadconnectorhq.com/hooks/QNFrfENaRul2JhIdFd0Z/webhook-trigger/f5367269-75ef-42ba-a27c-9a4435f1dfd0', {
+          await fetch('https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhldFd0Z/webhook-trigger/8b5475d9-3027-471a-8dcb-d6ab9dabedb8', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(webhookData)
