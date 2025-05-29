@@ -1,0 +1,158 @@
+import { UseFormReturn } from "react-hook-form";
+import { FollowUpData } from "@shared/schema";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft, Send, Clock } from "lucide-react";
+
+interface FollowUpFormProps {
+  form: UseFormReturn<FollowUpData>;
+  onSubmit: () => void;
+  onPrev: () => void;
+  onDataChange: (data: FollowUpData) => void;
+  isSubmitting: boolean;
+}
+
+export default function FollowUpForm({ form, onSubmit, onPrev, onDataChange, isSubmitting }: FollowUpFormProps) {
+  const handleSubmit = (data: FollowUpData) => {
+    onDataChange(data);
+    onSubmit();
+  };
+
+  return (
+    <div className="bg-white rounded-lg shadow-sm">
+      <div className="p-6 border-b border-slate-200">
+        <h3 className="text-xl font-semibold text-slate-900 mb-2">Follow-up Preferences</h3>
+        <p className="text-slate-600">Let us know how you'd like to proceed after receiving your valuation report.</p>
+      </div>
+
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(handleSubmit)} className="p-6 space-y-6">
+          <FormField
+            control={form.control}
+            name="followUpIntent"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm font-medium text-slate-700">
+                  Would you like to discuss your valuation results with one of our experts?
+                </FormLabel>
+                <FormControl>
+                  <div className="space-y-3">
+                    <label className="flex items-start space-x-3 p-4 border border-slate-200 rounded-lg cursor-pointer hover:border-primary/30 transition-colors">
+                      <input 
+                        type="radio" 
+                        value="yes" 
+                        checked={field.value === "yes"}
+                        onChange={() => {
+                          field.onChange("yes");
+                          onDataChange(form.getValues());
+                        }}
+                        className="mt-1" 
+                      />
+                      <div className="flex-1">
+                        <div className="font-medium text-slate-900">Yes, schedule a consultation</div>
+                        <div className="text-sm text-slate-600 mt-1">I'd like to discuss the results and explore options for improving my business value or preparing for a potential sale.</div>
+                      </div>
+                    </label>
+                    
+                    <label className="flex items-start space-x-3 p-4 border border-slate-200 rounded-lg cursor-pointer hover:border-primary/30 transition-colors">
+                      <input 
+                        type="radio" 
+                        value="maybe" 
+                        checked={field.value === "maybe"}
+                        onChange={() => {
+                          field.onChange("maybe");
+                          onDataChange(form.getValues());
+                        }}
+                        className="mt-1" 
+                      />
+                      <div className="flex-1">
+                        <div className="font-medium text-slate-900">Maybe later</div>
+                        <div className="text-sm text-slate-600 mt-1">I'd like to review the report first and may reach out for a consultation in the future.</div>
+                      </div>
+                    </label>
+                    
+                    <label className="flex items-start space-x-3 p-4 border border-slate-200 rounded-lg cursor-pointer hover:border-primary/30 transition-colors">
+                      <input 
+                        type="radio" 
+                        value="no" 
+                        checked={field.value === "no"}
+                        onChange={() => {
+                          field.onChange("no");
+                          onDataChange(form.getValues());
+                        }}
+                        className="mt-1" 
+                      />
+                      <div className="flex-1">
+                        <div className="font-medium text-slate-900">No thank you</div>
+                        <div className="text-sm text-slate-600 mt-1">I just need the valuation report for my own reference.</div>
+                      </div>
+                    </label>
+                  </div>
+                </FormControl>
+                <FormMessage className="form-error" />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="additionalComments"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Additional Comments (Optional)</FormLabel>
+                <FormControl>
+                  <Textarea 
+                    {...field} 
+                    rows={4}
+                    className="form-input"
+                    placeholder="Any specific areas of interest or questions about your business..."
+                    onChange={(e) => {
+                      field.onChange(e);
+                      onDataChange(form.getValues());
+                    }}
+                  />
+                </FormControl>
+                <p className="form-help">Share any specific goals or questions about your business valuation</p>
+                <FormMessage className="form-error" />
+              </FormItem>
+            )}
+          />
+
+          <div className="bg-amber-50 rounded-lg p-4 border border-amber-200">
+            <div className="flex items-start space-x-3">
+              <div className="flex-shrink-0">
+                <Clock className="w-5 h-5 text-amber-600 mt-0.5" />
+              </div>
+              <div className="text-sm text-amber-800">
+                <p className="font-medium mb-1">Processing Time</p>
+                <p>Your valuation report will be generated and emailed to you within 5-10 minutes. Please check your email and spam folder.</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex justify-between pt-6">
+            <Button 
+              type="button" 
+              variant="ghost" 
+              onClick={onPrev}
+              className="text-slate-600 px-8 py-3 rounded-lg font-medium hover:text-slate-900"
+              disabled={isSubmitting}
+            >
+              <ArrowLeft className="mr-2 w-4 h-4" />
+              Previous
+            </Button>
+            <Button 
+              type="submit" 
+              className="bg-green-600 text-white px-8 py-3 rounded-lg font-medium hover:bg-green-700 transition-colors focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+              disabled={isSubmitting}
+            >
+              <Send className="mr-2 w-4 h-4" />
+              {isSubmitting ? "Generating Report..." : "Generate Valuation Report"}
+            </Button>
+          </div>
+        </form>
+      </Form>
+    </div>
+  );
+}
