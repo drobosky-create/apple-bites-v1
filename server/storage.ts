@@ -21,6 +21,13 @@ export class MemStorage implements IStorage {
     const assessment: ValuationAssessment = {
       ...insertAssessment,
       id,
+      jobTitle: insertAssessment.jobTitle || null,
+      ownerSalary: insertAssessment.ownerSalary || null,
+      personalExpenses: insertAssessment.personalExpenses || null,
+      oneTimeExpenses: insertAssessment.oneTimeExpenses || null,
+      otherAdjustments: insertAssessment.otherAdjustments || null,
+      adjustmentNotes: insertAssessment.adjustmentNotes || null,
+      additionalComments: insertAssessment.additionalComments || null,
       baseEbitda: null,
       adjustedEbitda: null,
       valuationMultiple: null,

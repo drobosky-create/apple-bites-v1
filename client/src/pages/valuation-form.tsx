@@ -67,16 +67,7 @@ export default function ValuationForm() {
           />
         )}
 
-        {currentStep === "adjustments" && (
-          <AdjustmentsForm
-            form={forms.adjustments}
-            onNext={nextStep}
-            onPrev={prevStep}
-            onDataChange={(data) => updateFormData("adjustments", data)}
-            calculateAdjustedEbitda={calculateAdjustedEbitda}
-            baseEbitda={calculateEbitda()}
-          />
-        )}
+
 
         {currentStep === "valueDrivers" && (
           <ValueDriversForm

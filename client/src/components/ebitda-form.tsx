@@ -371,7 +371,7 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
               Previous
             </Button>
             <Button type="submit" className="btn-primary px-8 py-3 rounded-lg font-medium">
-              Next: Adjustments
+              Next: Value Drivers
               <ArrowRight className="ml-2 w-4 h-4" />
             </Button>
           </div>

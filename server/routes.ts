@@ -22,10 +22,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
     // Calculate adjusted EBITDA
     const adjustedEbitda = baseEbitda +
-      parseFloat(formData.adjustments.ownerSalary || "0") +
-      parseFloat(formData.adjustments.personalExpenses || "0") +
-      parseFloat(formData.adjustments.oneTimeExpenses || "0") +
-      parseFloat(formData.adjustments.otherAdjustments || "0");
+      parseFloat(formData.ebitda.ownerSalary || "0") +
+      parseFloat(formData.ebitda.personalExpenses || "0") +
+      parseFloat(formData.ebitda.oneTimeExpenses || "0") +
+      parseFloat(formData.ebitda.otherAdjustments || "0");
 
     // Convert grades to numeric scores for multiple calculation
     const gradeToScore = (grade: string): number => {
@@ -102,12 +102,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         depreciation: formData.ebitda.depreciation,
         amortization: formData.ebitda.amortization,
         
-        // Adjustments
-        ownerSalary: formData.adjustments.ownerSalary || "0",
-        personalExpenses: formData.adjustments.personalExpenses || "0",
-        oneTimeExpenses: formData.adjustments.oneTimeExpenses || "0",
-        otherAdjustments: formData.adjustments.otherAdjustments || "0",
-        adjustmentNotes: formData.adjustments.adjustmentNotes || "",
+        // Adjustments (now part of EBITDA form)
+        ownerSalary: formData.ebitda.ownerSalary || "0",
+        personalExpenses: formData.ebitda.personalExpenses || "0",
+        oneTimeExpenses: formData.ebitda.oneTimeExpenses || "0",
+        otherAdjustments: formData.ebitda.otherAdjustments || "0",
+        adjustmentNotes: formData.ebitda.adjustmentNotes || "",
         
         // Value drivers
         financialPerformance: formData.valueDrivers.financialPerformance,
