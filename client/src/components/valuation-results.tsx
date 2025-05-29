@@ -101,10 +101,20 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
           </div>
         </div>
 
-        {/* Narrative Summary */}
-        {results.narrativeSummary && (
+        {/* Executive Summary */}
+        {results.executiveSummary && (
           <div className="bg-white border border-slate-200 rounded-lg p-6">
             <h5 className="font-semibold text-slate-900 mb-4">Executive Summary</h5>
+            <div className="prose prose-slate max-w-none">
+              <p className="text-slate-600 leading-relaxed whitespace-pre-line">{results.executiveSummary}</p>
+            </div>
+          </div>
+        )}
+
+        {/* Detailed Analysis */}
+        {results.narrativeSummary && (
+          <div className="bg-white border border-slate-200 rounded-lg p-6">
+            <h5 className="font-semibold text-slate-900 mb-4">Detailed Analysis</h5>
             <div className="prose prose-slate max-w-none">
               <p className="text-slate-600 leading-relaxed">{results.narrativeSummary}</p>
             </div>

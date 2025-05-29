@@ -54,6 +54,7 @@ export const valuationAssessments = pgTable("valuation_assessments", {
   
   // Generated Content
   narrativeSummary: text("narrative_summary"),
+  executiveSummary: text("executive_summary"),
   pdfUrl: text("pdf_url"),
   
   // Processing Status
@@ -72,6 +73,7 @@ export const insertValuationAssessmentSchema = createInsertSchema(valuationAsses
   highEstimate: true,
   overallScore: true,
   narrativeSummary: true,
+  executiveSummary: true,
   pdfUrl: true,
   isProcessed: true,
   createdAt: true,

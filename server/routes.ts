@@ -160,7 +160,49 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
         const narrativeAnalysis = await generateValuationNarrative(analysisInput);
         
-        // Update assessment with calculated values and narrative
+        // Generate concise executive summary
+        const gradeToScore = (grade: string): number => {
+          switch (grade) {
+            case 'A': return 10; case 'B': return 8; case 'C': return 6; 
+            case 'D': return 4; case 'F': return 2; default: return 6;
+          }
+        };
+        
+        const driverScores = {
+          financialPerformance: gradeToScore(assessment.financialPerformance),
+          customerConcentration: gradeToScore(assessment.customerConcentration),
+          managementTeam: gradeToScore(assessment.managementTeam),
+          competitivePosition: gradeToScore(assessment.competitivePosition),
+          growthProspects: gradeToScore(assessment.growthProspects),
+          systemsProcesses: gradeToScore(assessment.systemsProcesses),
+          assetQuality: gradeToScore(assessment.assetQuality),
+          industryOutlook: gradeToScore(assessment.industryOutlook),
+          riskFactors: gradeToScore(assessment.riskFactors),
+          ownerDependency: gradeToScore(assessment.ownerDependency)
+        };
+        
+        // Call the summary API internally
+        const summaryResponse = await fetch('http://localhost:5000/api/generate-summary', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            companyName: assessment.company,
+            adjustedEBITDA: metrics.adjustedEbitda,
+            valuationEstimate: metrics.midEstimate,
+            driverScores: driverScores,
+            followUpIntent: assessment.followUpIntent
+          })
+        });
+        
+        let executiveSummary = '';
+        if (summaryResponse.ok) {
+          const summaryData = await summaryResponse.json();
+          executiveSummary = summaryData.summary;
+        } else {
+          executiveSummary = `Executive Summary: ${assessment.company} shows an adjusted EBITDA of $${metrics.adjustedEbitda.toLocaleString()} with an estimated valuation of $${metrics.midEstimate.toLocaleString()}. The analysis indicates ${metrics.overallScore} overall performance across key business drivers.`;
+        }
+        
+        // Update assessment with calculated values, narrative, and summary
         assessment = await storage.updateValuationAssessment(assessment.id, {
           ...metrics,
           baseEbitda: metrics.baseEbitda.toString(),
@@ -171,6 +213,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           highEstimate: metrics.highEstimate.toString(),
           overallScore: metrics.overallScore,
           narrativeSummary: narrativeAnalysis.narrativeSummary,
+          executiveSummary: executiveSummary,
         });
 
         // Generate PDF report
