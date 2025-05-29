@@ -29,16 +29,21 @@ Keep tone objective, supportive, and M&A oriented.
 `;
 
   try {
+    console.log('Generating summary for:', companyName);
+    
     const completion = await openai.chat.completions.create({
       model: 'gpt-4o', // using the latest model
       messages: [{ role: 'user', content: prompt }],
+      max_tokens: 300,
+      temperature: 0.7
     });
 
     const summary = completion.choices[0].message?.content;
+    console.log('Summary generated successfully');
     res.json({ summary });
   } catch (error) {
     console.error('OpenAI error:', error);
-    res.status(500).json({ error: 'Failed to generate summary' });
+    res.status(500).json({ error: 'Failed to generate summary', details: error.message });
   }
 });
 
