@@ -272,12 +272,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
             pdfLink: assessment.pdfUrl ? `${req.protocol}://${req.get('host')}${assessment.pdfUrl}` : null
           };
 
-          await fetch('https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhldFd0Z/webhook-trigger/8b5475d9-3027-471a-8dcb-d6ab9dabedb8', {
+          console.log('Sending webhook data:', JSON.stringify(webhookData, null, 2));
+          
+          const webhookResponse = await fetch('https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhldFd0Z/webhook-trigger/8b5475d9-3027-471a-8dcb-d6ab9dabedb8', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(webhookData)
           });
           
+          console.log('Webhook response status:', webhookResponse.status);
+          console.log('Webhook response:', await webhookResponse.text());
           console.log(`Lead data sent to CRM for ${assessment.email}`);
         } catch (webhookError) {
           console.error('Failed to send lead data to CRM, but continuing:', webhookError);
