@@ -45,8 +45,7 @@ export default function ValuationForm() {
           </div>
         </div>
       </header>
-
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 bg-[#4eaeeb00]">
         {currentStep !== "results" && <ProgressIndicator currentStep={currentStep} />}
 
         {currentStep === "contact" && (
@@ -92,7 +91,6 @@ export default function ValuationForm() {
           <ValuationResults results={results} />
         )}
       </main>
-
       <LoadingModal 
         isVisible={isSubmitting} 
         message="Analyzing your business data and calculating valuation..."
