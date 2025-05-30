@@ -241,35 +241,99 @@ export default function InteractiveValuationSlider() {
           {/* Grade Distribution Visualization */}
           <div className="bg-gray-50 p-4 rounded-lg">
             <h4 className="font-semibold mb-3 text-center">Distribution of Business Value by Grade</h4>
-            <div className="relative h-16 bg-gradient-to-r from-red-200 via-yellow-200 via-green-200 to-green-400 rounded-lg">
-              {/* Current Grade Marker */}
+            <div className="relative h-16 rounded-lg overflow-hidden border border-gray-200">
+              {/* Grade Segments */}
+              {[
+                { grade: 'F', color: 'bg-red-500', multiple: '2.0x', label: 'Poor Operations' },
+                { grade: 'D', color: 'bg-red-400', multiple: '3.0x', label: 'Below Average' },
+                { grade: 'C', color: 'bg-yellow-500', multiple: '4.2x', label: 'Average Operations' },
+                { grade: 'B', color: 'bg-green-400', multiple: '5.7x', label: 'Good Operations' },
+                { grade: 'A', color: 'bg-green-500', multiple: '7.5x', label: 'Excellent Operations' }
+              ].map((segment, index) => (
+                <div
+                  key={segment.grade}
+                  className={`absolute top-0 h-16 ${segment.color} group cursor-pointer transition-all duration-200 hover:brightness-110`}
+                  style={{
+                    left: `${(index / 5) * 100}%`,
+                    width: '20%'
+                  }}
+                  title={`Grade ${segment.grade}: ${segment.multiple} EBITDA Multiple - ${segment.label}`}
+                >
+                  {/* Hover Tooltip */}
+                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
+                    <div className="bg-gray-900 text-white text-xs rounded py-2 px-3 whitespace-nowrap shadow-lg">
+                      <div className="font-semibold">Grade {segment.grade}</div>
+                      <div>{segment.multiple} Multiple</div>
+                      <div className="text-gray-300">{segment.label}</div>
+                      {/* Tooltip Arrow */}
+                      <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-gray-900"></div>
+                    </div>
+                  </div>
+                  
+                  {/* Grade Label */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="text-white font-semibold text-sm">{segment.grade}</span>
+                  </div>
+                </div>
+              ))}
+              
+              {/* Current Grade Indicator */}
               <div 
-                className="absolute top-0 transform -translate-x-1/2 transition-all duration-300"
-                style={{ left: `${(gradeToNumber(baseGrade) / 4) * 100}%` }}
+                className="absolute top-0 h-16 flex items-center justify-center transition-all duration-300 z-20"
+                style={{ 
+                  left: `${(gradeToNumber(baseGrade) / 4) * 100}%`,
+                  transform: 'translateX(-50%)'
+                }}
               >
-                <div className="w-1 h-16 bg-gray-800"></div>
-                <div className="text-xs text-gray-800 mt-1 whitespace-nowrap">
-                  Current
+                <div className="flex flex-col items-center">
+                  <div className="w-0.5 h-16 bg-gray-800 shadow-lg"></div>
+                  <div className="text-xs text-gray-800 mt-1 bg-white px-1 rounded shadow">
+                    Current
+                  </div>
                 </div>
               </div>
               
-              {/* Slider Grade Marker */}
-              <div 
-                className="absolute top-0 transform -translate-x-1/2 transition-all duration-300"
-                style={{ left: `${(gradeToNumber(sliderGrade) / 4) * 100}%` }}
-              >
-                <div className="w-1 h-16 bg-green-600"></div>
-                <div className="text-xs text-green-600 mt-1 whitespace-nowrap">
-                  Target
+              {/* Target Grade Indicator */}
+              {sliderGrade !== baseGrade && (
+                <div 
+                  className="absolute top-0 h-16 flex items-center justify-center transition-all duration-300 z-20"
+                  style={{ 
+                    left: `${(gradeToNumber(sliderGrade) / 4) * 100}%`,
+                    transform: 'translateX(-50%)'
+                  }}
+                >
+                  <div className="flex flex-col items-center">
+                    <div className="w-0.5 h-16 bg-blue-600 shadow-lg"></div>
+                    <div className="text-xs text-blue-600 mt-1 bg-white px-1 rounded shadow">
+                      Target
+                    </div>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
-            <div className="flex justify-between text-xs text-gray-500 mt-2">
-              <span>F</span>
-              <span>D</span>
-              <span>C</span>
-              <span>B</span>
-              <span>A</span>
+            
+            {/* Grade Labels Below */}
+            <div className="flex justify-between text-xs text-gray-600 mt-3 px-2">
+              <div className="text-center">
+                <div className="font-semibold">F</div>
+                <div className="text-red-600">2.0x</div>
+              </div>
+              <div className="text-center">
+                <div className="font-semibold">D</div>
+                <div className="text-red-500">3.0x</div>
+              </div>
+              <div className="text-center">
+                <div className="font-semibold">C</div>
+                <div className="text-yellow-600">4.2x</div>
+              </div>
+              <div className="text-center">
+                <div className="font-semibold">B</div>
+                <div className="text-green-600">5.7x</div>
+              </div>
+              <div className="text-center">
+                <div className="font-semibold">A</div>
+                <div className="text-green-700">7.5x</div>
+              </div>
             </div>
           </div>
         </CardContent>
