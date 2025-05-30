@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, decimal, timestamp, boolean } from "drizzle-orm/pg-core";
+import { pgTable, text, varchar, serial, integer, decimal, timestamp, boolean } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 import { relations } from "drizzle-orm";
@@ -179,6 +179,59 @@ export type InsertLead = z.infer<typeof insertLeadSchema>;
 export type Lead = typeof leads.$inferSelect;
 export type InsertLeadActivity = z.infer<typeof insertLeadActivitySchema>;
 export type LeadActivity = typeof leadActivities.$inferSelect;
+
+// Team management tables
+export const teamMembers = pgTable("team_members", {
+  id: serial("id").primaryKey(),
+  email: varchar("email", { length: 255 }).notNull().unique(),
+  firstName: varchar("first_name", { length: 100 }).notNull(),
+  lastName: varchar("last_name", { length: 100 }).notNull(),
+  role: varchar("role", { length: 50 }).notNull().default("member"), // admin, manager, member
+  hashedPassword: varchar("hashed_password", { length: 255 }).notNull(),
+  isActive: boolean("is_active").default(true),
+  lastLoginAt: timestamp("last_login_at"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const teamSessions = pgTable("team_sessions", {
+  id: varchar("id", { length: 128 }).primaryKey(),
+  teamMemberId: integer("team_member_id").references(() => teamMembers.id, { onDelete: "cascade" }),
+  expiresAt: timestamp("expires_at").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Relations
+export const teamMembersRelations = relations(teamMembers, ({ many }) => ({
+  sessions: many(teamSessions),
+}));
+
+export const teamSessionsRelations = relations(teamSessions, ({ one }) => ({
+  teamMember: one(teamMembers, {
+    fields: [teamSessions.teamMemberId],
+    references: [teamMembers.id],
+  }),
+}));
+
+// Schema types
+export const insertTeamMemberSchema = createInsertSchema(teamMembers).omit({
+  id: true,
+  hashedPassword: true,
+  createdAt: true,
+  updatedAt: true,
+}).extend({
+  password: z.string().min(8, "Password must be at least 8 characters"),
+});
+
+export const loginSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(1, "Password is required"),
+});
+
+export type InsertTeamMember = z.infer<typeof insertTeamMemberSchema>;
+export type TeamMember = typeof teamMembers.$inferSelect;
+export type TeamSession = typeof teamSessions.$inferSelect;
+export type LoginCredentials = z.infer<typeof loginSchema>;
 
 // Form step schemas for validation
 export const contactInfoSchema = z.object({

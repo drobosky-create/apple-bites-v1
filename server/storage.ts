@@ -2,12 +2,17 @@ import {
   valuationAssessments, 
   leads,
   leadActivities,
+  teamMembers,
+  teamSessions,
   type ValuationAssessment, 
   type InsertValuationAssessment,
   type Lead,
   type InsertLead,
   type LeadActivity,
-  type InsertLeadActivity
+  type InsertLeadActivity,
+  type TeamMember,
+  type InsertTeamMember,
+  type TeamSession
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, and } from "drizzle-orm";
@@ -31,6 +36,17 @@ export interface IStorage {
   // Lead activity methods
   createLeadActivity(activity: InsertLeadActivity): Promise<LeadActivity>;
   getLeadActivities(leadId: number): Promise<LeadActivity[]>;
+
+  // Team management methods
+  createTeamMember(member: InsertTeamMember & { hashedPassword: string }): Promise<TeamMember>;
+  getTeamMemberByEmail(email: string): Promise<TeamMember | undefined>;
+  getTeamMemberById(id: number): Promise<TeamMember | undefined>;
+  getAllTeamMembers(): Promise<TeamMember[]>;
+  updateTeamMember(id: number, updates: Partial<TeamMember>): Promise<TeamMember>;
+  deleteTeamMember(id: number): Promise<void>;
+  createTeamSession(teamMemberId: number, sessionId: string, expiresAt: Date): Promise<TeamSession>;
+  getTeamSession(sessionId: string): Promise<TeamSession | undefined>;
+  deleteTeamSession(sessionId: string): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
