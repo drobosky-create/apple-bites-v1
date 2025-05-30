@@ -27,7 +27,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       parseFloat(formData.ebitda.oneTimeExpenses || "0") +
       parseFloat(formData.ebitda.otherAdjustments || "0");
 
-    // Convert grades to numeric scores for multiple calculation
+    // Convert grades to numeric scores for average calculation
     const gradeToScore = (grade: string): number => {
       switch (grade) {
         case 'A': return 5;
@@ -43,35 +43,43 @@ export async function registerRoutes(app: Express): Promise<Server> {
     const scores = Object.values(formData.valueDrivers).map((grade: any) => gradeToScore(grade));
     const averageScore = scores.reduce((sum: number, score: number) => sum + score, 0) / scores.length;
     
-    // Base multiple starts at 3.0x, adjusted by average score
-    // Score of 5 (all A's) = 6.0x multiple
-    // Score of 3 (all C's) = 3.0x multiple  
-    // Score of 1 (all F's) = 1.5x multiple
-    const baseMultiple = 3.0;
-    const scoreAdjustment = (averageScore - 3) * 0.75;
-    const valuationMultiple = Math.max(1.5, baseMultiple + scoreAdjustment);
+    // Determine overall letter grade based on average
+    const overallGrade = averageScore >= 4.5 ? 'A' :
+                        averageScore >= 3.5 ? 'B' :
+                        averageScore >= 2.5 ? 'C' :
+                        averageScore >= 1.5 ? 'D' : 'F';
+
+    // Use consistent multiplier scale based on overall grade
+    const getMultipleForGrade = (grade: string): number => {
+      switch (grade) {
+        case 'A': return 7.5;
+        case 'B': return 5.7;
+        case 'C': return 4.2;
+        case 'D': return 3.0;
+        case 'F': return 2.0;
+        default: return 4.2;
+      }
+    };
+
+    const valuationMultiple = getMultipleForGrade(overallGrade);
 
     // Calculate valuation estimates (±20% range)
     const midEstimate = adjustedEbitda * valuationMultiple;
     const lowEstimate = midEstimate * 0.8;
     const highEstimate = midEstimate * 1.2;
 
-    // Overall score letter grade
-    const overallScore = averageScore >= 4.5 ? 'A' :
-                        averageScore >= 3.5 ? 'B' :
-                        averageScore >= 2.5 ? 'C' :
-                        averageScore >= 1.5 ? 'D' : 'F';
-    const plusMinus = averageScore % 1 >= 0.7 ? '+' : 
-                     averageScore % 1 <= 0.3 ? '-' : '';
+    // Add grade modifier for display (+ or -)
+    const gradeModifier = averageScore > (gradeToScore(overallGrade) + 0.3) ? '+' :
+                         averageScore < (gradeToScore(overallGrade) - 0.3) ? '-' : '';
 
     return {
       baseEbitda,
       adjustedEbitda,
-      valuationMultiple: parseFloat(valuationMultiple.toFixed(2)),
-      lowEstimate,
-      midEstimate,
-      highEstimate,
-      overallScore: overallScore + plusMinus
+      valuationMultiple: parseFloat(valuationMultiple.toFixed(1)),
+      lowEstimate: Math.round(lowEstimate),
+      midEstimate: Math.round(midEstimate),
+      highEstimate: Math.round(highEstimate),
+      overallScore: overallGrade + gradeModifier
     };
   }
 

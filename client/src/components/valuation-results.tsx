@@ -1,12 +1,15 @@
 import { ValuationAssessment } from "@shared/schema";
 import { Button } from "@/components/ui/button";
-import { CheckCircle, Download, Calendar, Mail } from "lucide-react";
+import { CheckCircle, Download, Calendar, Mail, Calculator } from "lucide-react";
+import { useLocation } from "wouter";
 
 interface ValuationResultsProps {
   results: ValuationAssessment;
 }
 
 export default function ValuationResults({ results }: ValuationResultsProps) {
+  const [, setLocation] = useLocation();
+
   const formatCurrency = (value: string | null) => {
     if (!value) return "$0";
     return new Intl.NumberFormat('en-US', {
@@ -26,6 +29,10 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
   const handleScheduleConsultation = () => {
     // This could open a calendar widget or redirect to scheduling page
     console.log('Schedule consultation clicked');
+  };
+
+  const handleExploreImprovements = () => {
+    setLocation('/value-calculator');
   };
 
   return (
@@ -134,6 +141,15 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
             >
               <Download className="mr-2 w-4 h-4" />
               Download Full Report
+            </Button>
+
+            <Button 
+              onClick={handleExploreImprovements}
+              variant="outline"
+              className="flex-1 px-6 py-3 rounded-lg font-medium border-green-600 text-green-600 hover:bg-green-50 flex items-center justify-center"
+            >
+              <Calculator className="mr-2 w-4 h-4" />
+              Explore Value Improvements
             </Button>
 
             <Button 
