@@ -1,6 +1,7 @@
 import { pgTable, text, serial, integer, decimal, timestamp, boolean } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
+import { relations } from "drizzle-orm";
 
 export const valuationAssessments = pgTable("valuation_assessments", {
   id: serial("id").primaryKey(),
@@ -63,6 +64,86 @@ export const valuationAssessments = pgTable("valuation_assessments", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+// Dedicated leads table for CRM integration and lead tracking
+export const leads = pgTable("leads", {
+  id: serial("id").primaryKey(),
+  
+  // Basic Contact Information
+  firstName: text("first_name").notNull(),
+  lastName: text("last_name").notNull(),
+  email: text("email").notNull().unique(),
+  phone: text("phone"),
+  company: text("company").notNull(),
+  jobTitle: text("job_title"),
+  
+  // Lead Source and Classification
+  leadSource: text("lead_source").default("valuation_form"), // "valuation_form", "calculator", "direct", etc.
+  leadStatus: text("lead_status").default("new"), // "new", "contacted", "qualified", "converted", "closed"
+  leadScore: integer("lead_score").default(0), // 0-100 scoring system
+  
+  // Business Information
+  industry: text("industry"),
+  companySize: text("company_size"), // "1-10", "11-50", "51-200", "200+"
+  annualRevenue: decimal("annual_revenue", { precision: 12, scale: 2 }),
+  
+  // Assessment Results
+  valuationAssessmentId: integer("valuation_assessment_id"),
+  estimatedValue: decimal("estimated_value", { precision: 12, scale: 2 }),
+  overallGrade: text("overall_grade"),
+  followUpIntent: text("follow_up_intent"), // "yes", "maybe", "no"
+  
+  // CRM Integration
+  crmId: text("crm_id"), // External CRM system ID
+  lastCrmSync: timestamp("last_crm_sync"),
+  crmSyncStatus: text("crm_sync_status").default("pending"), // "pending", "synced", "failed"
+  
+  // Engagement Tracking
+  lastContactDate: timestamp("last_contact_date"),
+  nextFollowUpDate: timestamp("next_follow_up_date"),
+  totalInteractions: integer("total_interactions").default(0),
+  emailsSent: integer("emails_sent").default(0),
+  
+  // Additional Data
+  notes: text("notes"),
+  tags: text("tags").array(), // For categorization and filtering
+  
+  // Timestamps
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Lead interactions/activities log
+export const leadActivities = pgTable("lead_activities", {
+  id: serial("id").primaryKey(),
+  leadId: integer("lead_id").notNull(),
+  
+  activityType: text("activity_type").notNull(), // "assessment_completed", "email_sent", "call_made", "meeting_scheduled", etc.
+  activityData: text("activity_data"), // JSON string for additional data
+  description: text("description"),
+  
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Relations
+export const leadsRelations = relations(leads, ({ one, many }) => ({
+  valuationAssessment: one(valuationAssessments, {
+    fields: [leads.valuationAssessmentId],
+    references: [valuationAssessments.id],
+  }),
+  activities: many(leadActivities),
+}));
+
+export const leadActivitiesRelations = relations(leadActivities, ({ one }) => ({
+  lead: one(leads, {
+    fields: [leadActivities.leadId],
+    references: [leads.id],
+  }),
+}));
+
+export const valuationAssessmentsRelations = relations(valuationAssessments, ({ many }) => ({
+  leads: many(leads),
+}));
+
 export const insertValuationAssessmentSchema = createInsertSchema(valuationAssessments).omit({
   id: true,
   baseEbitda: true,
@@ -81,6 +162,23 @@ export const insertValuationAssessmentSchema = createInsertSchema(valuationAsses
 
 export type InsertValuationAssessment = z.infer<typeof insertValuationAssessmentSchema>;
 export type ValuationAssessment = typeof valuationAssessments.$inferSelect;
+
+// Lead schemas
+export const insertLeadSchema = createInsertSchema(leads).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertLeadActivitySchema = createInsertSchema(leadActivities).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type InsertLead = z.infer<typeof insertLeadSchema>;
+export type Lead = typeof leads.$inferSelect;
+export type InsertLeadActivity = z.infer<typeof insertLeadActivitySchema>;
+export type LeadActivity = typeof leadActivities.$inferSelect;
 
 // Form step schemas for validation
 export const contactInfoSchema = z.object({

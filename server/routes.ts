@@ -11,6 +11,42 @@ import path from 'path';
 
 export async function registerRoutes(app: Express): Promise<Server> {
   
+  // Calculate lead score based on assessment data and metrics
+  function calculateLeadScore(assessment: any, metrics: any): number {
+    let score = 0;
+    
+    // Base score from follow-up intent (0-40 points)
+    switch (assessment.followUpIntent) {
+      case 'yes': score += 40; break;
+      case 'maybe': score += 20; break;
+      case 'no': score += 5; break;
+    }
+    
+    // Business size score based on adjusted EBITDA (0-30 points)
+    const ebitda = metrics.adjustedEbitda;
+    if (ebitda >= 10000000) score += 30; // $10M+
+    else if (ebitda >= 5000000) score += 25; // $5M+
+    else if (ebitda >= 1000000) score += 20; // $1M+
+    else if (ebitda >= 500000) score += 15; // $500K+
+    else if (ebitda >= 100000) score += 10; // $100K+
+    else score += 5;
+    
+    // Overall grade score (0-20 points)
+    const gradeScore = assessment.valueDrivers ? 
+      Object.values(assessment.valueDrivers).reduce((sum: number, grade: any) => {
+        const gradeValue = grade === 'A' ? 5 : grade === 'B' ? 4 : grade === 'C' ? 3 : grade === 'D' ? 2 : 1;
+        return sum + gradeValue;
+      }, 0) / Object.keys(assessment.valueDrivers).length : 3;
+    
+    score += Math.round((gradeScore / 5) * 20);
+    
+    // Contact completeness (0-10 points)
+    if (assessment.phone) score += 5;
+    if (assessment.jobTitle) score += 5;
+    
+    return Math.min(100, Math.max(0, score));
+  }
+  
   // Calculate valuation metrics
   function calculateValuationMetrics(formData: any) {
     // Calculate base EBITDA
@@ -211,6 +247,66 @@ export async function registerRoutes(app: Express): Promise<Server> {
           narrativeSummary: narrativeAnalysis.narrativeSummary,
           executiveSummary: executiveSummary,
         });
+
+        // Create or update lead record for CRM integration
+        try {
+          let lead = await storage.getLeadByEmail(assessment.email);
+          
+          if (lead) {
+            // Update existing lead with latest assessment data
+            lead = await storage.updateLead(lead.id, {
+              firstName: assessment.firstName,
+              lastName: assessment.lastName,
+              phone: assessment.phone,
+              company: assessment.company,
+              jobTitle: assessment.jobTitle || undefined,
+              valuationAssessmentId: assessment.id,
+              estimatedValue: metrics.midEstimate.toString(),
+              overallGrade: metrics.overallScore,
+              followUpIntent: assessment.followUpIntent,
+              totalInteractions: (lead.totalInteractions || 0) + 1,
+              leadScore: calculateLeadScore(assessment, metrics),
+              lastContactDate: new Date(),
+            });
+          } else {
+            // Create new lead record
+            lead = await storage.createLead({
+              firstName: assessment.firstName,
+              lastName: assessment.lastName,
+              email: assessment.email,
+              phone: assessment.phone,
+              company: assessment.company,
+              jobTitle: assessment.jobTitle || undefined,
+              leadSource: "valuation_form",
+              leadStatus: "new",
+              leadScore: calculateLeadScore(assessment, metrics),
+              valuationAssessmentId: assessment.id,
+              estimatedValue: metrics.midEstimate.toString(),
+              overallGrade: metrics.overallScore,
+              followUpIntent: assessment.followUpIntent,
+              totalInteractions: 1,
+              lastContactDate: new Date(),
+              tags: [],
+            });
+          }
+
+          // Log assessment completion activity
+          await storage.createLeadActivity({
+            leadId: lead.id,
+            activityType: "assessment_completed",
+            description: `Completed business valuation assessment with ${metrics.overallScore} grade and $${metrics.midEstimate.toLocaleString()} valuation`,
+            activityData: JSON.stringify({
+              assessmentId: assessment.id,
+              valuation: metrics.midEstimate,
+              grade: metrics.overallScore,
+              followUpIntent: assessment.followUpIntent,
+            }),
+          });
+
+        } catch (leadError) {
+          console.error('Error managing lead data:', leadError);
+          // Continue with the rest of the flow even if lead creation fails
+        }
 
         // Generate PDF report
         const pdfBuffer = await generateValuationPDF(assessment);
