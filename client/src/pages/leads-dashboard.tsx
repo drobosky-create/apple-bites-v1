@@ -5,14 +5,33 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Search, User, Mail, Phone, Building, Calendar, TrendingUp } from 'lucide-react';
+import { Search, User, Mail, Phone, Building, Calendar, TrendingUp, LogOut } from 'lucide-react';
 import type { Lead } from '@shared/schema';
+import AdminLogin from '@/components/admin-login';
+import { useAdminAuth } from '@/hooks/use-admin-auth';
 
 export default function LeadsDashboard() {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+  const { isAuthenticated, isLoading, login, logout } = useAdminAuth();
 
-  const { data: leads, isLoading } = useQuery<Lead[]>({
+  // Show login screen if not authenticated
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Checking authentication...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return <AdminLogin onLoginSuccess={login} />;
+  }
+
+  const { data: leads, isLoading: leadsLoading } = useQuery<Lead[]>({
     queryKey: ['/api/leads', statusFilter === 'all' ? '' : statusFilter, searchQuery],
     queryFn: async () => {
       const params = new URLSearchParams();
@@ -61,7 +80,7 @@ export default function LeadsDashboard() {
     });
   };
 
-  if (isLoading) {
+  if (leadsLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
@@ -75,9 +94,15 @@ export default function LeadsDashboard() {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Lead Management</h1>
-          <p className="text-gray-600">Track and manage leads from valuation assessments</p>
+        <div className="mb-8 flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">Lead Management</h1>
+            <p className="text-gray-600">Track and manage leads from valuation assessments</p>
+          </div>
+          <Button variant="outline" onClick={logout} className="flex items-center gap-2">
+            <LogOut className="w-4 h-4" />
+            Logout
+          </Button>
         </div>
 
         {/* Filters */}

@@ -13,7 +13,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Admin authentication middleware
   const isAdminAuthenticated = (req: any, res: any, next: any) => {
-    if (req.session?.adminAuthenticated) {
+    if ((req.session as any)?.adminAuthenticated) {
       return next();
     }
     return res.status(401).json({ error: 'Admin authentication required' });
@@ -416,7 +416,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
       
       if (username === adminUsername && password === adminPassword) {
-        req.session.adminAuthenticated = true;
+        (req.session as any).adminAuthenticated = true;
         res.json({ success: true, message: 'Authentication successful' });
       } else {
         res.status(401).json({ error: 'Invalid credentials' });
@@ -427,11 +427,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   app.get("/api/admin/status", (req, res) => {
-    res.json({ authenticated: !!req.session?.adminAuthenticated });
+    res.json({ authenticated: !!(req.session as any)?.adminAuthenticated });
   });
 
   app.post("/api/admin/logout", (req, res) => {
-    req.session.adminAuthenticated = false;
+    (req.session as any).adminAuthenticated = false;
     res.json({ success: true });
   });
 
