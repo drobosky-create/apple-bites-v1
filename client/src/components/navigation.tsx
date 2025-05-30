@@ -25,16 +25,7 @@ export default function Navigation() {
               </Button>
             </Link>
             
-            <Link href="/value-calculator">
-              <Button 
-                variant={location === "/value-calculator" ? "default" : "ghost"}
-                size="sm"
-                className="flex items-center space-x-2"
-              >
-                <Calculator className="w-4 h-4" />
-                <span>Value Calculator</span>
-              </Button>
-            </Link>
+
             
             <Link href="/admin/analytics">
               <Button 
