@@ -277,7 +277,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             "Owner Dependency": assessment.ownerDependency
           },
           followUpIntent: assessment.followUpIntent,
-          executiveSummary: executiveSummary,
+          executiveSummary: assessment.executiveSummary || '',
           pdfLink: assessment.pdfUrl ? `${req.protocol}://${req.get('host')}${assessment.pdfUrl}` : null
         };
 
