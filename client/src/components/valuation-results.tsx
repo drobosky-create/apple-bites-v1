@@ -32,7 +32,8 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
   };
 
   const handleExploreImprovements = () => {
-    setLocation('/value-calculator');
+    // Redirect to value calculator with current grade data prefilled
+    setLocation(`/value-calculator?grade=${results.overallScore}`);
   };
 
   return (

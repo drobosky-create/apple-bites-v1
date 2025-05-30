@@ -18,7 +18,7 @@ export interface CampaignTemplate {
 
 export class EmailCampaignService {
   private config: EmailCampaignConfig;
-  private templates: CampaignTemplate[];
+  private templates: CampaignTemplate[] = [];
 
   constructor() {
     this.config = {

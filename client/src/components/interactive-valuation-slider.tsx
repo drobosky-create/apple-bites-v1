@@ -53,13 +53,15 @@ export default function InteractiveValuationSlider() {
 
   // EBITDA multiples based on operational grades
   const getMultipleForGrade = (grade: OperationalGrade): number => {
-    switch (grade) {
-      case 'A': return 7.5; // 6.5x to 9.0x range
-      case 'B': return 5.7; // 5.0x to 6.4x range
-      case 'C': return 4.2; // 3.5x to 4.9x range
-      case 'D': return 3.0; // 2.5x to 3.4x range
-      case 'F': return 2.0; // < 2.5x range
-    }
+    // Using centralized multiplier scale for consistency
+    const multipliers = {
+      'A': 7.5, // Excellent Operations
+      'B': 5.7, // Good Operations
+      'C': 4.2, // Average Operations
+      'D': 3.0, // Needs Improvement
+      'F': 2.0  // At Risk
+    };
+    return multipliers[grade] || 4.2;
   };
 
   const calculateValuation = (grade: OperationalGrade): number => {
