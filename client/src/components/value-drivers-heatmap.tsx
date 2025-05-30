@@ -179,97 +179,83 @@ export default function ValueDriversHeatmap({ assessment }: ValueDriversHeatmapP
         <p className="text-slate-600">Interactive visualization of your business performance across key value drivers</p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="space-y-4">
-          {Object.entries(groupedDrivers).map(([category, categoryDrivers]) => (
-            <Card key={category} className={`p-4 ${getCategoryColor(category)}`}>
-              <h4 className="font-semibold text-slate-900 mb-3 capitalize">
-                {categoryLabels[category]}
-              </h4>
-              <div className="grid grid-cols-2 gap-2">
-                {categoryDrivers.map((driver) => (
+      <div className="space-y-4">
+        {Object.entries(groupedDrivers).map(([category, categoryDrivers]) => (
+          <Card key={category} className={`p-4 ${getCategoryColor(category)}`}>
+            <h4 className="font-semibold text-slate-900 mb-3 capitalize">
+              {categoryLabels[category]}
+            </h4>
+            <div className="space-y-2">
+              {categoryDrivers.map((driver) => (
+                <div key={driver.key} className="space-y-2">
                   <button
-                    key={driver.key}
-                    onClick={() => setSelectedDriver(driver)}
+                    onClick={() => setSelectedDriver(selectedDriver?.key === driver.key ? null : driver)}
                     className={`
-                      p-3 rounded-lg text-white font-medium text-sm transition-all duration-200 
+                      w-full p-3 rounded-lg text-white font-medium text-sm transition-all duration-200 
                       ${getGradeColor(driver.grade)} 
                       ${selectedDriver?.key === driver.key ? `ring-2 ring-offset-2 ${getGradeBorderColor(driver.grade).replace('border-', 'ring-')}` : ''}
-                      hover:scale-105 cursor-pointer
+                      hover:scale-[1.02] cursor-pointer
                     `}
                   >
                     <div className="flex items-center justify-between">
-                      <span className="text-xs leading-tight">{driver.label}</span>
-                      <div className="flex flex-col items-end">
+                      <span className="text-sm leading-tight">{driver.label}</span>
+                      <div className="flex items-center gap-2">
                         <span className="text-lg font-bold">{driver.grade}</span>
                         {getTrendIcon(driver.grade)}
                       </div>
                     </div>
                   </button>
-                ))}
-              </div>
-            </Card>
-          ))}
-        </div>
+                  
+                  {selectedDriver?.key === driver.key && (
+                    <div className="bg-white/90 backdrop-blur-sm rounded-lg p-4 border-2 border-white/50 shadow-lg animate-in slide-in-from-top-2 duration-200">
+                      <div className="flex items-start justify-between mb-3">
+                        <div>
+                          <h5 className="text-lg font-semibold text-slate-900 mb-1">
+                            {selectedDriver.label}
+                          </h5>
+                          <div className="flex items-center gap-2">
+                            <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium text-white ${getGradeColor(selectedDriver.grade)}`}>
+                              Grade {selectedDriver.grade}
+                            </span>
+                            {getImpactBadge(selectedDriver.impact)}
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <p className="text-slate-700 mb-3 text-sm">
+                        {selectedDriver.description}
+                      </p>
 
-        <div className="lg:sticky lg:top-6">
-          {selectedDriver ? (
-            <Card className="p-6">
-              <div className="flex items-start justify-between mb-4">
-                <div>
-                  <h4 className="text-xl font-semibold text-slate-900 mb-1">
-                    {selectedDriver.label}
-                  </h4>
-                  <div className="flex items-center gap-2">
-                    <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium text-white ${getGradeColor(selectedDriver.grade)}`}>
-                      Grade {selectedDriver.grade}
-                    </span>
-                    {getImpactBadge(selectedDriver.impact)}
-                  </div>
-                </div>
-                {getTrendIcon(selectedDriver.grade)}
-              </div>
-              
-              <p className="text-slate-600 mb-4">
-                {selectedDriver.description}
-              </p>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div className="bg-slate-50 rounded-lg p-3">
+                          <h6 className="font-medium text-slate-900 mb-2 text-sm">Performance Level</h6>
+                          <div className="flex items-center gap-2">
+                            <div className="flex-1 bg-slate-200 rounded-full h-2">
+                              <div 
+                                className={`h-2 rounded-full ${getGradeColor(selectedDriver.grade).split(' ')[0]}`}
+                                style={{ width: `${(getGradeScore(selectedDriver.grade) / 5) * 100}%` }}
+                              ></div>
+                            </div>
+                            <span className="text-xs font-medium text-slate-600">
+                              {getGradeScore(selectedDriver.grade)}/5
+                            </span>
+                          </div>
+                        </div>
 
-              <div className="space-y-3">
-                <div className="bg-slate-50 rounded-lg p-4">
-                  <h5 className="font-medium text-slate-900 mb-2">Performance Level</h5>
-                  <div className="flex items-center gap-2">
-                    <div className="flex-1 bg-slate-200 rounded-full h-2">
-                      <div 
-                        className={`h-2 rounded-full ${getGradeColor(selectedDriver.grade).split(' ')[0]}`}
-                        style={{ width: `${(getGradeScore(selectedDriver.grade) / 5) * 100}%` }}
-                      ></div>
+                        <div className="bg-slate-50 rounded-lg p-3">
+                          <h6 className="font-medium text-slate-900 mb-2 text-sm">Impact on Valuation</h6>
+                          <p className="text-xs text-slate-600 capitalize">
+                            <strong>{selectedDriver.impact}</strong> impact on overall business valuation
+                          </p>
+                        </div>
+                      </div>
                     </div>
-                    <span className="text-sm font-medium text-slate-600">
-                      {getGradeScore(selectedDriver.grade)}/5
-                    </span>
-                  </div>
+                  )}
                 </div>
-
-                <div className="bg-slate-50 rounded-lg p-4">
-                  <h5 className="font-medium text-slate-900 mb-2">Impact on Valuation</h5>
-                  <p className="text-sm text-slate-600 capitalize">
-                    This driver has <strong>{selectedDriver.impact}</strong> impact on your overall business valuation.
-                  </p>
-                </div>
-              </div>
-            </Card>
-          ) : (
-            <Card className="p-6 text-center">
-              <Info className="w-12 h-12 text-slate-400 mx-auto mb-4" />
-              <h4 className="text-lg font-medium text-slate-900 mb-2">
-                Select a Value Driver
-              </h4>
-              <p className="text-slate-600">
-                Click on any value driver tile to view detailed analysis and performance metrics.
-              </p>
-            </Card>
-          )}
-        </div>
+              ))}
+            </div>
+          </Card>
+        ))}
       </div>
 
       <div className="bg-slate-50 rounded-lg p-4">
