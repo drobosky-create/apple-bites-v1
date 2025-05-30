@@ -15,22 +15,6 @@ export default function LeadsDashboard() {
   const [statusFilter, setStatusFilter] = useState('all');
   const { isAuthenticated, isLoading, login, logout } = useAdminAuth();
 
-  // Show login screen if not authenticated
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Checking authentication...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (!isAuthenticated) {
-    return <AdminLogin onLoginSuccess={login} />;
-  }
-
   const { data: leads, isLoading: leadsLoading } = useQuery<Lead[]>({
     queryKey: ['/api/leads', statusFilter === 'all' ? '' : statusFilter, searchQuery],
     queryFn: async () => {
@@ -42,7 +26,25 @@ export default function LeadsDashboard() {
       if (!response.ok) throw new Error('Failed to fetch leads');
       return response.json();
     },
+    enabled: isAuthenticated, // Only fetch when authenticated
   });
+
+  // Show authentication loading state
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Checking authentication...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show login screen if not authenticated
+  if (!isAuthenticated) {
+    return <AdminLogin onLoginSuccess={login} />;
+  }
 
   const getStatusColor = (status: string) => {
     const colors: Record<string, string> = {

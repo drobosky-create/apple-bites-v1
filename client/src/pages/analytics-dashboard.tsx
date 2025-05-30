@@ -13,7 +13,12 @@ import { useAdminAuth } from "@/hooks/use-admin-auth";
 export default function AnalyticsDashboard() {
   const { isAuthenticated, isLoading: authLoading, login, logout } = useAdminAuth();
 
-  // Show login screen if not authenticated
+  const { data: assessments, isLoading } = useQuery<ValuationAssessment[]>({
+    queryKey: ['/api/analytics/assessments'],
+    enabled: isAuthenticated // Only fetch when authenticated
+  });
+
+  // Show authentication loading state
   if (authLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -25,13 +30,10 @@ export default function AnalyticsDashboard() {
     );
   }
 
+  // Show login screen if not authenticated
   if (!isAuthenticated) {
     return <AdminLogin onLoginSuccess={login} />;
   }
-
-  const { data: assessments, isLoading } = useQuery<ValuationAssessment[]>({
-    queryKey: ['/api/analytics/assessments']
-  });
 
   if (isLoading) {
     return (
