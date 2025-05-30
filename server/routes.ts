@@ -556,7 +556,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const newMember = await storage.createTeamMember({
         ...memberData,
         hashedPassword,
-      });
+      } as any);
 
       const { hashedPassword: _, ...memberWithoutPassword } = newMember;
       res.status(201).json(memberWithoutPassword);
