@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import Navigation from "@/components/navigation";
 import ValuationForm from "@/pages/valuation-form";
 import AnalyticsDashboard from "@/pages/analytics-dashboard";
+import ValueCalculator from "@/pages/value-calculator";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -14,6 +15,7 @@ function Router() {
       <Navigation />
       <Switch>
         <Route path="/" component={ValuationForm} />
+        <Route path="/value-calculator" component={ValueCalculator} />
         <Route path="/admin/analytics" component={AnalyticsDashboard} />
         <Route component={NotFound} />
       </Switch>

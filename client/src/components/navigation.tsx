@@ -1,6 +1,6 @@
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { BarChart3, FileText } from "lucide-react";
+import { BarChart3, FileText, Calculator } from "lucide-react";
 
 export default function Navigation() {
   const [location] = useLocation();
@@ -22,6 +22,17 @@ export default function Navigation() {
               >
                 <FileText className="w-4 h-4" />
                 <span>Valuation Form</span>
+              </Button>
+            </Link>
+            
+            <Link href="/value-calculator">
+              <Button 
+                variant={location === "/value-calculator" ? "default" : "ghost"}
+                size="sm"
+                className="flex items-center space-x-2"
+              >
+                <Calculator className="w-4 h-4" />
+                <span>Value Calculator</span>
               </Button>
             </Link>
             
