@@ -69,17 +69,37 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
             </div>
           </div>
           
-          {/* Primary CTA after valuation */}
-          <div className="mt-6 text-center">
-            <Button 
-              onClick={handleExploreImprovements}
-              className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg font-medium text-lg flex items-center justify-center mx-auto"
-            >
-              <Calculator className="mr-2 w-5 h-5" />
-              Explore Value Improvements
-            </Button>
-            <p className="text-sm text-slate-600 mt-2">
-              See how operational improvements could increase your business value
+          {/* Primary CTAs after valuation */}
+          <div className="mt-6">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button 
+                onClick={handleDownloadPDF}
+                className="flex-1 sm:flex-none btn-primary px-6 py-3 rounded-lg font-medium flex items-center justify-center"
+                disabled={!results.pdfUrl}
+              >
+                <Download className="mr-2 w-4 h-4" />
+                Download Full Report
+              </Button>
+
+              <Button 
+                onClick={handleExploreImprovements}
+                className="flex-1 sm:flex-none bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium flex items-center justify-center"
+              >
+                <Calculator className="mr-2 w-4 h-4" />
+                Explore Value Improvements
+              </Button>
+
+              <Button 
+                onClick={handleScheduleConsultation}
+                variant="outline"
+                className="flex-1 sm:flex-none px-6 py-3 rounded-lg font-medium border-primary text-primary hover:bg-primary/5 flex items-center justify-center"
+              >
+                <Calendar className="mr-2 w-4 h-4" />
+                Schedule Consultation
+              </Button>
+            </div>
+            <p className="text-sm text-slate-600 mt-3 text-center">
+              Download your detailed report, explore improvement opportunities, or schedule a consultation
             </p>
           </div>
         </div>
