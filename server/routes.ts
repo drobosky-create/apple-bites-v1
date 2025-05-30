@@ -306,6 +306,52 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // GET /api/analytics/assessments - Get all assessments for analytics
+  app.get("/api/analytics/assessments", async (req, res) => {
+    try {
+      const assessments = await storage.getAllValuationAssessments();
+      res.json(assessments);
+    } catch (error) {
+      console.error("Error fetching analytics data:", error);
+      res.status(500).json({ message: "Failed to fetch analytics data" });
+    }
+  });
+
+  // GET /api/analytics/metrics - Get summary metrics
+  app.get("/api/analytics/metrics", async (req, res) => {
+    try {
+      const assessments = await storage.getAllValuationAssessments();
+      
+      const metrics = {
+        totalAssessments: assessments.length,
+        completedAssessments: assessments.filter(a => a.isProcessed).length,
+        averageValuation: assessments.length > 0 
+          ? assessments.reduce((sum, a) => sum + parseFloat(a.midEstimate || "0"), 0) / assessments.length 
+          : 0,
+        totalEbitda: assessments.reduce((sum, a) => sum + parseFloat(a.adjustedEbitda || "0"), 0),
+        followUpDistribution: assessments.reduce((acc, a) => {
+          acc[a.followUpIntent] = (acc[a.followUpIntent] || 0) + 1;
+          return acc;
+        }, {} as Record<string, number>),
+        scoreDistribution: assessments.reduce((acc, a) => {
+          const score = a.overallScore?.charAt(0) || 'C';
+          acc[score] = (acc[score] || 0) + 1;
+          return acc;
+        }, {} as Record<string, number>),
+        monthlyTrends: assessments.reduce((acc, a) => {
+          const month = new Date(a.createdAt || '').toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+          acc[month] = (acc[month] || 0) + 1;
+          return acc;
+        }, {} as Record<string, number>)
+      };
+      
+      res.json(metrics);
+    } catch (error) {
+      console.error("Error calculating metrics:", error);
+      res.status(500).json({ message: "Failed to calculate metrics" });
+    }
+  });
+
   // GET /api/test-webhook - Test webhook connection
   app.get("/api/test-webhook", async (req, res) => {
     try {
