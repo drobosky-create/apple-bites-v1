@@ -50,7 +50,7 @@ export class EmailCampaignService {
             <div style="background: #f3f4f6; padding: 20px; border-radius: 8px; margin: 20px 0;">
               <h3 style="margin: 0; color: #374151;">Valuation Summary</h3>
               <ul style="margin: 10px 0;">
-                <li><strong>Current Valuation:</strong> ${{midEstimate}}</li>
+                <li><strong>Current Valuation:</strong> ${{estimatedValue}}</li>
                 <li><strong>Operational Grade:</strong> {{overallScore}}</li>
                 <li><strong>EBITDA Multiple:</strong> {{valuationMultiple}}x</li>
               </ul>
@@ -89,7 +89,7 @@ Thank you for completing your business valuation, {{firstName}}!
 Your {{company}} assessment shows significant value potential:
 
 Valuation Summary:
-- Current Valuation: ${{midEstimate}}
+- Current Valuation: ${{estimatedValue}}
 - Operational Grade: {{overallScore}}
 - EBITDA Multiple: {{valuationMultiple}}x
 
@@ -123,7 +123,7 @@ Apple Bites Valuation
             <div style="background: #fef2f2; border-left: 4px solid #dc2626; padding: 20px; margin: 20px 0;">
               <h3 style="margin: 0; color: #991b1b;">Current Assessment</h3>
               <p style="margin: 10px 0;"><strong>Operational Grade:</strong> {{overallScore}}</p>
-              <p style="margin: 10px 0;"><strong>Current Valuation:</strong> ${{midEstimate}}</p>
+              <p style="margin: 10px 0;"><strong>Current Valuation:</strong> ${{estimatedValue}}</p>
             </div>
 
             <div style="background: #f0fdf4; border-left: 4px solid #16a34a; padding: 20px; margin: 20px 0;">
@@ -164,7 +164,7 @@ Your {{company}} valuation revealed substantial room for improvement.
 
 Current Assessment:
 - Operational Grade: {{overallScore}}
-- Current Valuation: ${{midEstimate}}
+- Current Valuation: ${{estimatedValue}}
 
 By addressing key operational areas, you could see 50-150% valuation increase within 12-24 months.
 

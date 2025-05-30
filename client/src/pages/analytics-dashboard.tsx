@@ -5,10 +5,30 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } from "recharts";
-import { TrendingUp, Users, DollarSign, FileText, Download, Eye } from "lucide-react";
+import { TrendingUp, Users, DollarSign, FileText, Download, Eye, LogOut } from "lucide-react";
 import { ValuationAssessment } from "@shared/schema";
+import AdminLogin from "@/components/admin-login";
+import { useAdminAuth } from "@/hooks/use-admin-auth";
 
 export default function AnalyticsDashboard() {
+  const { isAuthenticated, isLoading: authLoading, login, logout } = useAdminAuth();
+
+  // Show login screen if not authenticated
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Checking authentication...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return <AdminLogin onLoginSuccess={login} />;
+  }
+
   const { data: assessments, isLoading } = useQuery<ValuationAssessment[]>({
     queryKey: ['/api/analytics/assessments']
   });
@@ -56,9 +76,15 @@ export default function AnalyticsDashboard() {
 
   return (
     <div className="max-w-7xl mx-auto p-6">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-slate-900">Analytics Dashboard</h1>
-        <p className="text-slate-600 mt-2">Comprehensive insights into business valuations and lead performance</p>
+      <div className="mb-8 flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-bold text-slate-900">Analytics Dashboard</h1>
+          <p className="text-slate-600 mt-2">Comprehensive insights into business valuations and lead performance</p>
+        </div>
+        <Button variant="outline" onClick={logout} className="flex items-center gap-2">
+          <LogOut className="w-4 h-4" />
+          Logout
+        </Button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
