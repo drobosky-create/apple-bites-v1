@@ -68,6 +68,20 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
               <div className="text-sm text-slate-600 mt-1">High Estimate</div>
             </div>
           </div>
+          
+          {/* Primary CTA after valuation */}
+          <div className="mt-6 text-center">
+            <Button 
+              onClick={handleExploreImprovements}
+              className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg font-medium text-lg flex items-center justify-center mx-auto"
+            >
+              <Calculator className="mr-2 w-5 h-5" />
+              Explore Value Improvements
+            </Button>
+            <p className="text-sm text-slate-600 mt-2">
+              See how operational improvements could increase your business value
+            </p>
+          </div>
         </div>
 
         {/* Key Metrics */}
