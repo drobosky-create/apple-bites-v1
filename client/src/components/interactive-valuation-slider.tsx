@@ -196,34 +196,7 @@ export default function InteractiveValuationSlider() {
         </Card>
       </div>
 
-      {/* Live Comparison Chart */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Valuation Comparison</CardTitle>
-          <CardDescription>Current vs potential business value by operational grade</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ResponsiveContainer width="100%" height={250}>
-            <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="category" />
-              <YAxis tickFormatter={(value) => `$${(value / 1000000).toFixed(1)}M`} />
-              <Tooltip 
-                formatter={(value: number) => [
-                  `$${Math.round(value).toLocaleString()}`,
-                  'Valuation'
-                ]}
-                labelFormatter={(label) => `${label} Valuation`}
-              />
-              <Bar 
-                dataKey="valuation" 
-                fill="#64748B"
-                radius={[4, 4, 0, 0]}
-              />
-            </BarChart>
-          </ResponsiveContainer>
-        </CardContent>
-      </Card>
+
 
       {/* Interactive Grade Slider */}
       <Card>
