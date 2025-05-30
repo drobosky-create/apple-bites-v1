@@ -1,13 +1,15 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertValuationAssessmentSchema, type ValuationAssessment } from "@shared/schema";
+import { insertValuationAssessmentSchema, type ValuationAssessment, loginSchema, insertTeamMemberSchema, type LoginCredentials, type InsertTeamMember } from "@shared/schema";
 import { generateValuationNarrative, type ValuationAnalysisInput } from "./openai";
 import { generateValuationPDF } from "./pdf-generator";
 import { emailService } from "./email-service";
 import { getMultiplierForGrade, getLabelForGrade, scoreToGrade } from "./config/multiplierScale";
 import fs from 'fs/promises';
 import path from 'path';
+import bcrypt from 'bcryptjs';
+import { nanoid } from 'nanoid';
 
 export async function registerRoutes(app: Express): Promise<Server> {
   
@@ -17,6 +19,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
       return next();
     }
     return res.status(401).json({ error: 'Admin authentication required' });
+  };
+
+  // Team authentication middleware
+  const isTeamAuthenticated = async (req: any, res: any, next: any) => {
+    const sessionId = (req.session as any)?.teamSessionId;
+    if (!sessionId) {
+      return res.status(401).json({ error: 'Authentication required' });
+    }
+
+    try {
+      const session = await storage.getTeamSession(sessionId);
+      if (!session || session.expiresAt < new Date()) {
+        return res.status(401).json({ error: 'Session expired' });
+      }
+
+      const teamMember = await storage.getTeamMemberById(session.teamMemberId!);
+      if (!teamMember || !teamMember.isActive) {
+        return res.status(401).json({ error: 'Account inactive' });
+      }
+
+      req.user = teamMember;
+      return next();
+    } catch (error) {
+      return res.status(401).json({ error: 'Authentication failed' });
+    }
+  };
+
+  // Role-based access control middleware
+  const requireRole = (roles: string[]) => {
+    return (req: any, res: any, next: any) => {
+      if (!req.user || !roles.includes(req.user.role)) {
+        return res.status(403).json({ error: 'Insufficient permissions' });
+      }
+      return next();
+    };
   };
   
   // Calculate lead score based on assessment data and metrics
@@ -433,6 +470,132 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/admin/logout", (req, res) => {
     (req.session as any).adminAuthenticated = false;
     res.json({ success: true });
+  });
+
+  // Team authentication routes
+  app.post("/api/team/login", async (req, res) => {
+    try {
+      const validatedData = loginSchema.parse(req.body);
+      const { email, password } = validatedData;
+
+      const teamMember = await storage.getTeamMemberByEmail(email);
+      if (!teamMember || !teamMember.isActive) {
+        return res.status(401).json({ error: 'Invalid credentials' });
+      }
+
+      const isValidPassword = await bcrypt.compare(password, teamMember.hashedPassword);
+      if (!isValidPassword) {
+        return res.status(401).json({ error: 'Invalid credentials' });
+      }
+
+      // Create session
+      const sessionId = nanoid();
+      const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
+      await storage.createTeamSession(teamMember.id, sessionId, expiresAt);
+
+      // Update last login
+      await storage.updateTeamMember(teamMember.id, { lastLoginAt: new Date() });
+
+      (req.session as any).teamSessionId = sessionId;
+
+      // Return user without password
+      const { hashedPassword, ...userWithoutPassword } = teamMember;
+      res.json({ 
+        success: true, 
+        user: userWithoutPassword,
+        message: 'Login successful' 
+      });
+    } catch (error) {
+      res.status(400).json({ error: 'Invalid request data' });
+    }
+  });
+
+  app.get("/api/team/me", isTeamAuthenticated, (req, res) => {
+    const { hashedPassword, ...userWithoutPassword } = req.user;
+    res.json({ user: userWithoutPassword });
+  });
+
+  app.post("/api/team/logout", isTeamAuthenticated, async (req, res) => {
+    try {
+      const sessionId = (req.session as any)?.teamSessionId;
+      if (sessionId) {
+        await storage.deleteTeamSession(sessionId);
+      }
+      (req.session as any).teamSessionId = null;
+      res.json({ success: true });
+    } catch (error) {
+      res.status(500).json({ error: 'Logout failed' });
+    }
+  });
+
+  // Team management routes (admin only)
+  app.get("/api/team/members", isTeamAuthenticated, requireRole(['admin']), async (req, res) => {
+    try {
+      const members = await storage.getAllTeamMembers();
+      const membersWithoutPasswords = members.map(({ hashedPassword, ...member }) => member);
+      res.json(membersWithoutPasswords);
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to fetch team members' });
+    }
+  });
+
+  app.post("/api/team/members", isTeamAuthenticated, requireRole(['admin']), async (req, res) => {
+    try {
+      const validatedData = insertTeamMemberSchema.parse(req.body);
+      const { password, ...memberData } = validatedData;
+
+      // Check if email already exists
+      const existingMember = await storage.getTeamMemberByEmail(memberData.email);
+      if (existingMember) {
+        return res.status(400).json({ error: 'Email already exists' });
+      }
+
+      // Hash password
+      const hashedPassword = await bcrypt.hash(password, 12);
+
+      const newMember = await storage.createTeamMember({
+        ...memberData,
+        hashedPassword,
+      });
+
+      const { hashedPassword: _, ...memberWithoutPassword } = newMember;
+      res.status(201).json(memberWithoutPassword);
+    } catch (error) {
+      res.status(400).json({ error: 'Failed to create team member' });
+    }
+  });
+
+  app.put("/api/team/members/:id", isTeamAuthenticated, requireRole(['admin']), async (req, res) => {
+    try {
+      const memberId = parseInt(req.params.id);
+      const updates = req.body;
+
+      // Don't allow updating password through this endpoint
+      delete updates.hashedPassword;
+      delete updates.password;
+
+      const updatedMember = await storage.updateTeamMember(memberId, updates);
+      const { hashedPassword, ...memberWithoutPassword } = updatedMember;
+      res.json(memberWithoutPassword);
+    } catch (error) {
+      res.status(400).json({ error: 'Failed to update team member' });
+    }
+  });
+
+  app.delete("/api/team/members/:id", isTeamAuthenticated, requireRole(['admin']), async (req, res) => {
+    try {
+      const memberId = parseInt(req.params.id);
+      
+      // Don't allow deleting yourself
+      if (memberId === req.user.id) {
+        return res.status(400).json({ error: 'Cannot delete your own account' });
+      }
+
+      await storage.deleteTeamMember(memberId);
+      res.json({ success: true });
+    } catch (error) {
+      res.status(400).json({ error: 'Failed to delete team member' });
+    }
   });
 
   // Lead management routes (protected)

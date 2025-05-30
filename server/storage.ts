@@ -151,6 +151,59 @@ export class DatabaseStorage implements IStorage {
       .where(eq(leadActivities.leadId, leadId))
       .orderBy(desc(leadActivities.createdAt));
   }
+
+  // Team management methods
+  async createTeamMember(member: InsertTeamMember & { hashedPassword: string }): Promise<TeamMember> {
+    const [teamMember] = await db
+      .insert(teamMembers)
+      .values(member)
+      .returning();
+    return teamMember;
+  }
+
+  async getTeamMemberByEmail(email: string): Promise<TeamMember | undefined> {
+    const [member] = await db.select().from(teamMembers).where(eq(teamMembers.email, email));
+    return member;
+  }
+
+  async getTeamMemberById(id: number): Promise<TeamMember | undefined> {
+    const [member] = await db.select().from(teamMembers).where(eq(teamMembers.id, id));
+    return member;
+  }
+
+  async getAllTeamMembers(): Promise<TeamMember[]> {
+    return await db.select().from(teamMembers).orderBy(desc(teamMembers.createdAt));
+  }
+
+  async updateTeamMember(id: number, updates: Partial<TeamMember>): Promise<TeamMember> {
+    const [member] = await db
+      .update(teamMembers)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(teamMembers.id, id))
+      .returning();
+    return member;
+  }
+
+  async deleteTeamMember(id: number): Promise<void> {
+    await db.delete(teamMembers).where(eq(teamMembers.id, id));
+  }
+
+  async createTeamSession(teamMemberId: number, sessionId: string, expiresAt: Date): Promise<TeamSession> {
+    const [session] = await db
+      .insert(teamSessions)
+      .values({ id: sessionId, teamMemberId, expiresAt })
+      .returning();
+    return session;
+  }
+
+  async getTeamSession(sessionId: string): Promise<TeamSession | undefined> {
+    const [session] = await db.select().from(teamSessions).where(eq(teamSessions.id, sessionId));
+    return session;
+  }
+
+  async deleteTeamSession(sessionId: string): Promise<void> {
+    await db.delete(teamSessions).where(eq(teamSessions.id, sessionId));
+  }
 }
 
 export const storage = new DatabaseStorage();
