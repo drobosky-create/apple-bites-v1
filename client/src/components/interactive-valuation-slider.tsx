@@ -8,71 +8,73 @@ import { TrendingUp, ArrowRight, Phone } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { ValuationAssessment } from "@shared/schema";
 
+type OperationalGrade = 'A' | 'B' | 'C' | 'D' | 'F';
+
 export default function InteractiveValuationSlider() {
   // Fetch the most recent assessment data
   const { data: assessments, isLoading } = useQuery<ValuationAssessment[]>({
     queryKey: ['/api/analytics/assessments']
   });
 
+  // Grade mapping functions
+  const gradeToNumber = (grade: OperationalGrade): number => {
+    switch (grade) {
+      case 'A': return 4;
+      case 'B': return 3;
+      case 'C': return 2;
+      case 'D': return 1;
+      case 'F': return 0;
+    }
+  };
+
+  const numberToGrade = (num: number): OperationalGrade => {
+    switch (num) {
+      case 4: return 'A';
+      case 3: return 'B';
+      case 2: return 'C';
+      case 1: return 'D';
+      default: return 'F';
+    }
+  };
+
   // Use most recent assessment data or defaults
   const latestAssessment = assessments?.[assessments.length - 1];
-  const currentEbitda = latestAssessment ? parseFloat(latestAssessment.adjustedEbitda || "0") : 391566;
-  const baseScore = latestAssessment ? 
-    (latestAssessment.overallScore?.includes('A') ? 85 : 
-     latestAssessment.overallScore?.includes('B') ? 75 : 
-     latestAssessment.overallScore?.includes('C') ? 65 : 
-     latestAssessment.overallScore?.includes('D') ? 55 : 45) : 65;
+  const currentEbitda = latestAssessment ? parseFloat(latestAssessment.adjustedEbitda || "0") : 1379841;
+  const baseGrade: OperationalGrade = latestAssessment ? 
+    (latestAssessment.overallScore?.charAt(0) as OperationalGrade || 'C') : 'C';
 
-  const [sliderScore, setSliderScore] = useState(baseScore);
+  const [sliderGrade, setSliderGrade] = useState<OperationalGrade>(baseGrade);
   const [showBooking, setShowBooking] = useState(false);
 
   // Update slider when new data loads
   useEffect(() => {
-    setSliderScore(baseScore);
-  }, [baseScore]);
+    setSliderGrade(baseGrade);
+  }, [baseGrade]);
 
-  // Enhanced valuation calculation with smooth interpolation from 2.0x to 9.0x
-  const calculateValuation = (score: number): number => {
-    let multiple: number;
-    
-    if (score <= 30) {
-      multiple = 0; // Not sellable
-    } else if (score <= 35) {
-      multiple = 0.5; // Liquidation range
-    } else if (score < 90) {
-      // Linear interpolation from 2.0x at score 40 to 9.0x at score 90
-      const minScore = 40;
-      const maxScore = 90;
-      const minMultiple = 2.0;
-      const maxMultiple = 9.0;
-      
-      const normalizedScore = Math.max(0, Math.min(1, (score - minScore) / (maxScore - minScore)));
-      multiple = minMultiple + (normalizedScore * (maxMultiple - minMultiple));
-    } else {
-      multiple = 9.0; // Strategic range cap
+  // EBITDA multiples based on operational grades
+  const getMultipleForGrade = (grade: OperationalGrade): number => {
+    switch (grade) {
+      case 'A': return 7.5; // 6.5x to 9.0x range
+      case 'B': return 5.7; // 5.0x to 6.4x range
+      case 'C': return 4.2; // 3.5x to 4.9x range
+      case 'D': return 3.0; // 2.5x to 3.4x range
+      case 'F': return 2.0; // < 2.5x range
     }
-    
+  };
+
+  const calculateValuation = (grade: OperationalGrade): number => {
+    const multiple = getMultipleForGrade(grade);
     return currentEbitda * multiple;
   };
 
-  const currentValuation = calculateValuation(baseScore);
-  const sliderValuation = calculateValuation(sliderScore);
+  const currentValuation = calculateValuation(baseGrade);
+  const sliderValuation = calculateValuation(sliderGrade);
   const potentialIncrease = sliderValuation - currentValuation;
   const percentageIncrease = currentValuation > 0 ? ((potentialIncrease / currentValuation) * 100) : 0;
 
-  // Calculate current and slider multiples for display
-  const getCurrentMultiple = (score: number): number => {
-    if (score <= 30) return 0;
-    if (score <= 35) return 0.5;
-    if (score < 90) {
-      const normalizedScore = Math.max(0, Math.min(1, (score - 40) / (90 - 40)));
-      return 2.0 + (normalizedScore * (9.0 - 2.0));
-    }
-    return 9.0;
-  };
-
-  const currentMultiple = getCurrentMultiple(baseScore);
-  const sliderMultiple = getCurrentMultiple(sliderScore);
+  // Get multiples for display
+  const currentMultiple = getMultipleForGrade(baseGrade);
+  const sliderMultiple = getMultipleForGrade(sliderGrade);
 
   // Data for the comparison chart
   const chartData = [
@@ -80,36 +82,37 @@ export default function InteractiveValuationSlider() {
       category: 'Current',
       valuation: Math.round(currentValuation),
       multiple: currentMultiple.toFixed(1),
-      score: baseScore
+      grade: baseGrade
     },
     {
       category: 'Potential',
       valuation: Math.round(sliderValuation),
       multiple: sliderMultiple.toFixed(1),
-      score: sliderScore
+      grade: sliderGrade
     }
   ];
 
-  const getScoreCategory = (score: number): { label: string; color: string } => {
-    if (score <= 30) return { label: "Not Sellable", color: "bg-red-500" };
-    if (score <= 45) return { label: "Liquidation Range", color: "bg-orange-500" };
-    if (score <= 60) return { label: "Below Market", color: "bg-yellow-500" };
-    if (score <= 70) return { label: "Market Average", color: "bg-blue-500" };
-    if (score <= 80) return { label: "Above Market", color: "bg-green-500" };
-    return { label: "Strategic Range", color: "bg-purple-500" };
+  const getGradeCategory = (grade: OperationalGrade): { label: string; color: string; bgColor: string } => {
+    switch (grade) {
+      case 'A': return { label: "Excellent Operations", color: "text-green-800", bgColor: "bg-green-500" };
+      case 'B': return { label: "Good Operations", color: "text-green-700", bgColor: "bg-green-400" };
+      case 'C': return { label: "Average Operations", color: "text-yellow-700", bgColor: "bg-yellow-500" };
+      case 'D': return { label: "Below Average", color: "text-red-700", bgColor: "bg-red-400" };
+      case 'F': return { label: "Poor Operations", color: "text-red-800", bgColor: "bg-red-500" };
+    }
   };
 
-  const currentCategory = getScoreCategory(baseScore);
-  const sliderCategory = getScoreCategory(sliderScore);
+  const currentCategory = getGradeCategory(baseGrade);
+  const sliderCategory = getGradeCategory(sliderGrade);
 
   useEffect(() => {
-    if (sliderScore > baseScore + 5) {
+    if (gradeToNumber(sliderGrade) > gradeToNumber(baseGrade)) {
       const timer = setTimeout(() => setShowBooking(true), 2000);
       return () => clearTimeout(timer);
     } else {
       setShowBooking(false);
     }
-  }, [sliderScore, baseScore]);
+  }, [sliderGrade, baseGrade, gradeToNumber]);
 
   if (isLoading) {
     return (
@@ -132,7 +135,7 @@ export default function InteractiveValuationSlider() {
           Business Value Improvement Calculator
         </h2>
         <p className="text-slate-600">
-          See how operational improvements translate to increased business valuation
+          See how improving your business operations translates to increased valuation
         </p>
         {latestAssessment && (
           <p className="text-sm text-slate-500 mt-2">
@@ -146,7 +149,7 @@ export default function InteractiveValuationSlider() {
         <Card className="border-2 transition-all duration-300">
           <CardHeader className="text-center">
             <CardTitle className="text-lg">Current Value</CardTitle>
-            <CardDescription>Based on your Value Builder Score of {baseScore}</CardDescription>
+            <CardDescription>Based on your Operational Grade of {baseGrade}</CardDescription>
           </CardHeader>
           <CardContent className="text-center">
             <div className="text-3xl font-bold text-slate-900 mb-2 transition-all duration-300">
@@ -155,7 +158,7 @@ export default function InteractiveValuationSlider() {
             <div className="text-sm text-slate-600 mb-2">
               {currentMultiple.toFixed(1)}x EBITDA Multiple
             </div>
-            <Badge variant="secondary" className={`${currentCategory.color} text-white`}>
+            <Badge variant="secondary" className={`${currentCategory.bgColor} text-white`}>
               {currentCategory.label}
             </Badge>
           </CardContent>
@@ -164,26 +167,28 @@ export default function InteractiveValuationSlider() {
         <Card className="border-2 border-green-200 bg-green-50 transition-all duration-300">
           <CardHeader className="text-center">
             <CardTitle className="text-lg text-green-800">Potential Value</CardTitle>
-            <CardDescription>With a Value Builder Score of {sliderScore}</CardDescription>
+            <CardDescription>
+              {sliderGrade === 'A' ? 'At Grade A Operations' : `With an Operational Grade of A`}
+            </CardDescription>
           </CardHeader>
           <CardContent className="text-center">
             <div className="text-3xl font-bold text-green-800 mb-2 transition-all duration-300">
-              ${Math.round(sliderValuation).toLocaleString()}
+              ${Math.round(sliderGrade === 'A' ? sliderValuation : calculateValuation('A')).toLocaleString()}
             </div>
             <div className="text-sm text-green-700 mb-2">
-              {sliderMultiple.toFixed(1)}x EBITDA Multiple
+              {sliderGrade === 'A' ? sliderMultiple.toFixed(1) : getMultipleForGrade('A').toFixed(1)}x EBITDA Multiple
             </div>
-            <Badge variant="secondary" className={`${sliderCategory.color} text-white`}>
-              {sliderCategory.label}
+            <Badge variant="secondary" className={`${sliderGrade === 'A' ? sliderCategory.bgColor : 'bg-green-500'} text-white`}>
+              {sliderGrade === 'A' ? sliderCategory.label : 'Excellent Operations'}
             </Badge>
-            {potentialIncrease > 0 && (
+            {(sliderGrade === 'A' ? potentialIncrease : calculateValuation('A') - currentValuation) > 0 && (
               <div className="mt-3 p-3 bg-white rounded-lg border transition-all duration-300">
                 <div className="text-sm text-gray-600">Potential Increase</div>
                 <div className="text-xl font-bold text-green-600">
-                  +${Math.round(potentialIncrease).toLocaleString()}
+                  +${Math.round(sliderGrade === 'A' ? potentialIncrease : calculateValuation('A') - currentValuation).toLocaleString()}
                 </div>
                 <div className="text-sm text-green-600">
-                  ({percentageIncrease.toFixed(0)}% increase)
+                  ({Math.round(((sliderGrade === 'A' ? potentialIncrease : calculateValuation('A') - currentValuation) / currentValuation) * 100)}% increase)
                 </div>
               </div>
             )}
@@ -195,7 +200,7 @@ export default function InteractiveValuationSlider() {
       <Card>
         <CardHeader>
           <CardTitle>Valuation Comparison</CardTitle>
-          <CardDescription>Current vs potential business value</CardDescription>
+          <CardDescription>Current vs potential business value by operational grade</CardDescription>
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={250}>
@@ -204,7 +209,7 @@ export default function InteractiveValuationSlider() {
               <XAxis dataKey="category" />
               <YAxis tickFormatter={(value) => `$${(value / 1000000).toFixed(1)}M`} />
               <Tooltip 
-                formatter={(value: number, name) => [
+                formatter={(value: number) => [
                   `$${Math.round(value).toLocaleString()}`,
                   'Valuation'
                 ]}
@@ -212,7 +217,7 @@ export default function InteractiveValuationSlider() {
               />
               <Bar 
                 dataKey="valuation" 
-                fill={(entry, index) => index === 0 ? "#64748B" : "#10B981"}
+                fill="#64748B"
                 radius={[4, 4, 0, 0]}
               />
             </BarChart>
@@ -220,52 +225,52 @@ export default function InteractiveValuationSlider() {
         </CardContent>
       </Card>
 
-      {/* Interactive Slider */}
+      {/* Interactive Grade Slider */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <TrendingUp className="h-5 w-5" />
-            Adjust Your Value Builder Score
+            Adjust Your Operational Grade
           </CardTitle>
           <CardDescription>
-            Move the slider to see how operational improvements impact your business value
+            Move the slider to see how improving your business operations impacts your valuation
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="px-4">
             <div className="flex justify-between text-sm text-gray-500 mb-2">
-              <span>Not Sellable (30)</span>
-              <span>Market Average (60)</span>
-              <span>Strategic Range (90+)</span>
+              <span>F - Poor</span>
+              <span>C - Average</span>
+              <span>A - Excellent</span>
             </div>
             <Slider
-              value={[sliderScore]}
-              onValueChange={(value) => setSliderScore(value[0])}
-              max={95}
-              min={30}
+              value={[gradeToNumber(sliderGrade)]}
+              onValueChange={(value) => setSliderGrade(numberToGrade(value[0]))}
+              max={4}
+              min={0}
               step={1}
               className="w-full"
             />
             <div className="flex justify-center mt-4">
               <div className="text-center">
                 <div className="text-2xl font-bold text-slate-900 transition-all duration-300">
-                  Score: {sliderScore}
+                  Grade: {sliderGrade}
                 </div>
                 <div className="text-sm text-slate-600">
-                  Current: {baseScore}
+                  Current: {baseGrade}
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Value Distribution Visualization */}
+          {/* Grade Distribution Visualization */}
           <div className="bg-gray-50 p-4 rounded-lg">
-            <h4 className="font-semibold mb-3 text-center">Distribution of Business Value</h4>
-            <div className="relative h-16 bg-gradient-to-r from-red-200 via-yellow-200 via-blue-200 via-green-200 to-purple-200 rounded-lg">
-              {/* Current Score Marker */}
+            <h4 className="font-semibold mb-3 text-center">Distribution of Business Value by Grade</h4>
+            <div className="relative h-16 bg-gradient-to-r from-red-200 via-yellow-200 via-green-200 to-green-400 rounded-lg">
+              {/* Current Grade Marker */}
               <div 
                 className="absolute top-0 transform -translate-x-1/2 transition-all duration-300"
-                style={{ left: `${((baseScore - 30) / 65) * 100}%` }}
+                style={{ left: `${(gradeToNumber(baseGrade) / 4) * 100}%` }}
               >
                 <div className="w-1 h-16 bg-gray-800"></div>
                 <div className="text-xs text-gray-800 mt-1 whitespace-nowrap">
@@ -273,10 +278,10 @@ export default function InteractiveValuationSlider() {
                 </div>
               </div>
               
-              {/* Slider Score Marker */}
+              {/* Slider Grade Marker */}
               <div 
                 className="absolute top-0 transform -translate-x-1/2 transition-all duration-300"
-                style={{ left: `${((sliderScore - 30) / 65) * 100}%` }}
+                style={{ left: `${(gradeToNumber(sliderGrade) / 4) * 100}%` }}
               >
                 <div className="w-1 h-16 bg-green-600"></div>
                 <div className="text-xs text-green-600 mt-1 whitespace-nowrap">
@@ -285,11 +290,11 @@ export default function InteractiveValuationSlider() {
               </div>
             </div>
             <div className="flex justify-between text-xs text-gray-500 mt-2">
-              <span>30</span>
-              <span>45</span>
-              <span>60</span>
-              <span>75</span>
-              <span>90+</span>
+              <span>F</span>
+              <span>D</span>
+              <span>C</span>
+              <span>B</span>
+              <span>A</span>
             </div>
           </div>
         </CardContent>
@@ -303,7 +308,7 @@ export default function InteractiveValuationSlider() {
               Ready to Unlock Your Business Value?
             </h3>
             <p className="text-blue-700 mb-4">
-              Based on your potential {percentageIncrease.toFixed(0)}% value increase, 
+              By improving your operational grade from {baseGrade} to {sliderGrade}, 
               you could add <strong>${Math.round(potentialIncrease).toLocaleString()}</strong> to your business value.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -323,25 +328,25 @@ export default function InteractiveValuationSlider() {
       {/* Educational Content */}
       <Card>
         <CardHeader>
-          <CardTitle>How to Improve Your Value Builder Score</CardTitle>
+          <CardTitle>How to Improve Your Operational Grade</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
             <div>
-              <h4 className="font-semibold mb-2">Financial Performance</h4>
-              <p className="text-gray-600">Improve revenue consistency and profitability tracking</p>
+              <h4 className="font-semibold mb-2">Financial Performance (Grade A: 7.5x+ multiple)</h4>
+              <p className="text-gray-600">Consistent profitability, strong cash flow management, and professional financial reporting</p>
             </div>
             <div>
-              <h4 className="font-semibold mb-2">Growth Potential</h4>
-              <p className="text-gray-600">Develop scalable systems and market expansion plans</p>
+              <h4 className="font-semibold mb-2">Operational Excellence (Grade B: 5.7x multiple)</h4>
+              <p className="text-gray-600">Streamlined processes, quality management systems, and scalable operations</p>
             </div>
             <div>
-              <h4 className="font-semibold mb-2">Switzerland Structure</h4>
-              <p className="text-gray-600">Reduce dependency on key employees, customers, or suppliers</p>
+              <h4 className="font-semibold mb-2">Market Position (Grade C: 4.2x multiple)</h4>
+              <p className="text-gray-600">Competitive differentiation, customer loyalty, and market share protection</p>
             </div>
             <div>
-              <h4 className="font-semibold mb-2">Recurring Revenue</h4>
-              <p className="text-gray-600">Build predictable, subscription-based income streams</p>
+              <h4 className="font-semibold mb-2">Risk Management (Grades D-F: 2.0-3.0x multiple)</h4>
+              <p className="text-gray-600">Diversified revenue streams, reduced owner dependency, and operational stability</p>
             </div>
           </div>
         </CardContent>
