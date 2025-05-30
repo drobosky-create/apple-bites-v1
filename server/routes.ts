@@ -242,77 +242,114 @@ export async function registerRoutes(app: Express): Promise<Server> {
           // Don't fail the entire request if email fails
         }
 
-        // Send lead data to CRM webhook
-        try {
-          const webhookData = {
-            name: `${assessment.firstName} ${assessment.lastName}`,
-            email: assessment.email,
-            phone: assessment.phone,
-            company: assessment.company,
-            jobTitle: assessment.jobTitle || '',
-            adjustedEBITDA: metrics.adjustedEbitda,
-            valuationEstimate: metrics.midEstimate,
-            valuationLow: metrics.lowEstimate,
-            valuationHigh: metrics.highEstimate,
-            overallScore: metrics.overallScore,
-            driverGrades: {
-              "Financial Performance": assessment.financialPerformance,
-              "Customer Concentration": assessment.customerConcentration,
-              "Management Team": assessment.managementTeam,
-              "Competitive Position": assessment.competitivePosition,
-              "Growth Prospects": assessment.growthProspects,
-              "Systems & Processes": assessment.systemsProcesses,
-              "Asset Quality": assessment.assetQuality,
-              "Industry Outlook": assessment.industryOutlook,
-              "Risk Factors": assessment.riskFactors,
-              "Owner Dependency": assessment.ownerDependency
-            },
-            followUpIntent: assessment.followUpIntent,
-            executiveSummary: executiveSummary,
-            pdfLink: assessment.pdfUrl ? `${req.protocol}://${req.get('host')}${assessment.pdfUrl}` : null
-          };
-
-          console.log('Sending webhook data:', JSON.stringify(webhookData, null, 2));
-          
-          const webhookResponse = await fetch('https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhldFd0Z/webhook-trigger/8b5475d9-3027-471a-8dcb-d6ab9dabedb8', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(webhookData)
-          });
-          
-          console.log('Webhook response status:', webhookResponse.status);
-          console.log('Webhook response:', await webhookResponse.text());
-          console.log(`Lead data sent to CRM for ${assessment.email}`);
-        } catch (webhookError) {
-          console.error('Failed to send lead data to CRM, but continuing:', webhookError);
-          // Don't fail the entire request if webhook fails
-        }
-
-        res.json(assessment);
-      } catch (processingError) {
-        console.error('Error during processing:', processingError);
+      } catch (pdfError) {
+        console.error('PDF generation failed, but continuing with webhook:', pdfError);
         
-        // Update with basic metrics even if AI/PDF generation fails
+        // Update assessment without PDF
         assessment = await storage.updateValuationAssessment(assessment.id, {
-          ...metrics,
-          baseEbitda: metrics.baseEbitda.toString(),
-          adjustedEbitda: metrics.adjustedEbitda.toString(),
-          valuationMultiple: metrics.valuationMultiple.toString(),
-          lowEstimate: metrics.lowEstimate.toString(),
-          midEstimate: metrics.midEstimate.toString(),
-          highEstimate: metrics.highEstimate.toString(),
-          overallScore: metrics.overallScore,
-          narrativeSummary: `Valuation completed for ${assessment.company}. The analysis shows an estimated business value range based on adjusted EBITDA of $${metrics.adjustedEbitda.toLocaleString()} and a valuation multiple of ${metrics.valuationMultiple}x.`,
           isProcessed: true,
         });
-
-        res.json(assessment);
       }
+
+      // Send lead data to CRM webhook (moved outside PDF try-catch)
+      try {
+        const webhookData = {
+          name: `${assessment.firstName} ${assessment.lastName}`,
+          email: assessment.email,
+          phone: assessment.phone,
+          company: assessment.company,
+          jobTitle: assessment.jobTitle || '',
+          adjustedEBITDA: metrics.adjustedEbitda,
+          valuationEstimate: metrics.midEstimate,
+          valuationLow: metrics.lowEstimate,
+          valuationHigh: metrics.highEstimate,
+          overallScore: metrics.overallScore,
+          driverGrades: {
+            "Financial Performance": assessment.financialPerformance,
+            "Customer Concentration": assessment.customerConcentration,
+            "Management Team": assessment.managementTeam,
+            "Competitive Position": assessment.competitivePosition,
+            "Growth Prospects": assessment.growthProspects,
+            "Systems & Processes": assessment.systemsProcesses,
+            "Asset Quality": assessment.assetQuality,
+            "Industry Outlook": assessment.industryOutlook,
+            "Risk Factors": assessment.riskFactors,
+            "Owner Dependency": assessment.ownerDependency
+          },
+          followUpIntent: assessment.followUpIntent,
+          executiveSummary: executiveSummary,
+          pdfLink: assessment.pdfUrl ? `${req.protocol}://${req.get('host')}${assessment.pdfUrl}` : null
+        };
+
+        console.log('Sending webhook data:', JSON.stringify(webhookData, null, 2));
+        
+        const webhookResponse = await fetch('https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhldFd0Z/webhook-trigger/8b5475d9-3027-471a-8dcb-d6ab9dabedb8', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(webhookData)
+        });
+        
+        console.log('Webhook response status:', webhookResponse.status);
+        console.log('Webhook response:', await webhookResponse.text());
+        console.log(`Lead data sent to CRM for ${assessment.email}`);
+      } catch (webhookError) {
+        console.error('Failed to send lead data to CRM, but continuing:', webhookError);
+        // Don't fail the entire request if webhook fails
+      }
+
+      res.json(assessment);
     } catch (error) {
       console.error("Error processing valuation:", error);
       res.status(500).json({ 
         message: error instanceof Error ? error.message : "Internal server error" 
       });
+    }
+  });
+
+  // GET /api/test-webhook - Test webhook connection
+  app.get("/api/test-webhook", async (req, res) => {
+    try {
+      const testData = {
+        name: "Test User",
+        email: "test@example.com",
+        phone: "555-0123",
+        company: "Test Company",
+        jobTitle: "CEO",
+        adjustedEBITDA: 100000,
+        valuationEstimate: 500000,
+        valuationLow: 400000,
+        valuationHigh: 600000,
+        overallScore: "B+",
+        driverGrades: {
+          "Financial Performance": "A",
+          "Customer Concentration": "B",
+          "Management Team": "A"
+        },
+        followUpIntent: "yes",
+        executiveSummary: "Test summary",
+        pdfLink: null
+      };
+
+      console.log('Testing webhook with data:', JSON.stringify(testData, null, 2));
+      
+      const webhookResponse = await fetch('https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhldFd0Z/webhook-trigger/8b5475d9-3027-471a-8dcb-d6ab9dabedb8', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(testData)
+      });
+      
+      const responseText = await webhookResponse.text();
+      console.log('Webhook test response status:', webhookResponse.status);
+      console.log('Webhook test response:', responseText);
+      
+      res.json({
+        status: webhookResponse.status,
+        response: responseText,
+        success: webhookResponse.ok
+      });
+    } catch (error) {
+      console.error('Webhook test failed:', error);
+      res.status(500).json({ error: error.message });
     }
   });
 
