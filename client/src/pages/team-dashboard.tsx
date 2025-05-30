@@ -122,7 +122,10 @@ export default function TeamDashboard() {
 
   // Show login screen if not authenticated
   if (!isAuthenticated) {
-    return <TeamLogin onLoginSuccess={() => {}} />;
+    return <TeamLogin onLoginSuccess={(userData) => {
+      // Force refresh of authentication state
+      window.location.reload();
+    }} />;
   }
 
   const getRoleBadgeColor = (role: string) => {
