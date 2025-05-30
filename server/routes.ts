@@ -398,6 +398,80 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Lead management routes
+  app.get("/api/leads", async (req, res) => {
+    try {
+      const { status, search } = req.query;
+      
+      let leads;
+      if (search) {
+        leads = await storage.searchLeads(search as string);
+      } else if (status) {
+        leads = await storage.getLeadsByStatus(status as string);
+      } else {
+        leads = await storage.getAllLeads();
+      }
+      
+      res.json(leads);
+    } catch (error) {
+      console.error('Error fetching leads:', error);
+      res.status(500).json({ error: "Failed to fetch leads" });
+    }
+  });
+
+  app.get("/api/leads/:id", async (req, res) => {
+    try {
+      const leadId = parseInt(req.params.id);
+      const lead = await storage.getLeadById(leadId);
+      
+      if (!lead) {
+        return res.status(404).json({ error: "Lead not found" });
+      }
+      
+      res.json(lead);
+    } catch (error) {
+      console.error('Error fetching lead:', error);
+      res.status(500).json({ error: "Failed to fetch lead" });
+    }
+  });
+
+  app.put("/api/leads/:id", async (req, res) => {
+    try {
+      const leadId = parseInt(req.params.id);
+      const updates = req.body;
+      
+      const lead = await storage.updateLead(leadId, updates);
+      res.json(lead);
+    } catch (error) {
+      console.error('Error updating lead:', error);
+      res.status(500).json({ error: "Failed to update lead" });
+    }
+  });
+
+  app.get("/api/leads/:id/activities", async (req, res) => {
+    try {
+      const leadId = parseInt(req.params.id);
+      const activities = await storage.getLeadActivities(leadId);
+      res.json(activities);
+    } catch (error) {
+      console.error('Error fetching lead activities:', error);
+      res.status(500).json({ error: "Failed to fetch lead activities" });
+    }
+  });
+
+  app.post("/api/leads/:id/activities", async (req, res) => {
+    try {
+      const leadId = parseInt(req.params.id);
+      const activityData = { ...req.body, leadId };
+      
+      const activity = await storage.createLeadActivity(activityData);
+      res.json(activity);
+    } catch (error) {
+      console.error('Error creating lead activity:', error);
+      res.status(500).json({ error: "Failed to create lead activity" });
+    }
+  });
+
   // GET /api/analytics/assessments - Get all assessments for analytics
   app.get("/api/analytics/assessments", async (req, res) => {
     try {
