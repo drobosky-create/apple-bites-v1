@@ -11,6 +11,14 @@ import path from 'path';
 
 export async function registerRoutes(app: Express): Promise<Server> {
   
+  // Admin authentication middleware
+  const isAdminAuthenticated = (req: any, res: any, next: any) => {
+    if (req.session?.adminAuthenticated) {
+      return next();
+    }
+    return res.status(401).json({ error: 'Admin authentication required' });
+  };
+  
   // Calculate lead score based on assessment data and metrics
   function calculateLeadScore(assessment: any, metrics: any): number {
     let score = 0;
@@ -398,8 +406,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Lead management routes
-  app.get("/api/leads", async (req, res) => {
+  // Admin authentication routes
+  app.post("/api/admin/login", async (req, res) => {
+    try {
+      const { username, password } = req.body;
+      
+      // Simple admin credentials check (in production, use proper password hashing)
+      const adminUsername = process.env.ADMIN_USERNAME || 'admin';
+      const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+      
+      if (username === adminUsername && password === adminPassword) {
+        req.session.adminAuthenticated = true;
+        res.json({ success: true, message: 'Authentication successful' });
+      } else {
+        res.status(401).json({ error: 'Invalid credentials' });
+      }
+    } catch (error) {
+      res.status(500).json({ error: 'Authentication failed' });
+    }
+  });
+
+  app.get("/api/admin/status", (req, res) => {
+    res.json({ authenticated: !!req.session?.adminAuthenticated });
+  });
+
+  app.post("/api/admin/logout", (req, res) => {
+    req.session.adminAuthenticated = false;
+    res.json({ success: true });
+  });
+
+  // Lead management routes (protected)
+  app.get("/api/leads", isAdminAuthenticated, async (req, res) => {
     try {
       const { status, search } = req.query;
       
@@ -419,7 +456,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get("/api/leads/:id", async (req, res) => {
+  app.get("/api/leads/:id", isAdminAuthenticated, async (req, res) => {
     try {
       const leadId = parseInt(req.params.id);
       const lead = await storage.getLeadById(leadId);
@@ -435,7 +472,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.put("/api/leads/:id", async (req, res) => {
+  app.put("/api/leads/:id", isAdminAuthenticated, async (req, res) => {
     try {
       const leadId = parseInt(req.params.id);
       const updates = req.body;
@@ -448,7 +485,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get("/api/leads/:id/activities", async (req, res) => {
+  app.get("/api/leads/:id/activities", isAdminAuthenticated, async (req, res) => {
     try {
       const leadId = parseInt(req.params.id);
       const activities = await storage.getLeadActivities(leadId);
@@ -459,7 +496,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/leads/:id/activities", async (req, res) => {
+  app.post("/api/leads/:id/activities", isAdminAuthenticated, async (req, res) => {
     try {
       const leadId = parseInt(req.params.id);
       const activityData = { ...req.body, leadId };
