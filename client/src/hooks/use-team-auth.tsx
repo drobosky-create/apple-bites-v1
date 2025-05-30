@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import type { TeamMember } from '@shared/schema';
 
 interface TeamAuthContextType {
@@ -16,6 +16,7 @@ const TeamAuthContext = createContext<TeamAuthContextType | undefined>(undefined
 
 export function TeamAuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<TeamMember | null>(null);
+  const queryClient = useQueryClient();
 
   // Check if team member is authenticated on app load
   const { data: authData, isLoading } = useQuery({
@@ -33,6 +34,8 @@ export function TeamAuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (authData?.user) {
       setUser(authData.user);
+    } else {
+      setUser(null);
     }
   }, [authData]);
 
@@ -46,6 +49,8 @@ export function TeamAuthProvider({ children }: { children: ReactNode }) {
 
   const login = (userData: TeamMember) => {
     setUser(userData);
+    // Invalidate and refetch the auth query to ensure state consistency
+    queryClient.invalidateQueries({ queryKey: ['/api/team/me'] });
   };
 
   const logout = async () => {
@@ -58,6 +63,8 @@ export function TeamAuthProvider({ children }: { children: ReactNode }) {
       console.error('Logout error:', error);
     }
     setUser(null);
+    // Invalidate auth queries on logout
+    queryClient.invalidateQueries({ queryKey: ['/api/team/me'] });
   };
 
   return (
