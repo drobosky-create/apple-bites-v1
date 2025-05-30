@@ -5,6 +5,7 @@ import { insertValuationAssessmentSchema, type ValuationAssessment } from "@shar
 import { generateValuationNarrative, type ValuationAnalysisInput } from "./openai";
 import { generateValuationPDF } from "./pdf-generator";
 import { emailService } from "./email-service";
+import { getMultiplierForGrade, getLabelForGrade, scoreToGrade } from "./config/multiplierScale";
 import fs from 'fs/promises';
 import path from 'path';
 
@@ -28,7 +29,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       parseFloat(formData.ebitda.otherAdjustments || "0");
 
     // Convert grades to numeric scores for average calculation
-    const gradeToScore = (grade: string): number => {
+    const gradeToScoreValue = (grade: string): number => {
       switch (grade) {
         case 'A': return 5;
         case 'B': return 4;
@@ -40,28 +41,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
     };
 
     // Calculate weighted average score
-    const scores = Object.values(formData.valueDrivers).map((grade: any) => gradeToScore(grade));
+    const scores = Object.values(formData.valueDrivers).map((grade: any) => gradeToScoreValue(grade));
     const averageScore = scores.reduce((sum: number, score: number) => sum + score, 0) / scores.length;
     
-    // Determine overall letter grade based on average
-    const overallGrade = averageScore >= 4.5 ? 'A' :
-                        averageScore >= 3.5 ? 'B' :
-                        averageScore >= 2.5 ? 'C' :
-                        averageScore >= 1.5 ? 'D' : 'F';
+    // Determine overall letter grade using centralized function
+    const overallGrade = scoreToGrade(averageScore);
 
-    // Use consistent multiplier scale based on overall grade
-    const getMultipleForGrade = (grade: string): number => {
-      switch (grade) {
-        case 'A': return 7.5;
-        case 'B': return 5.7;
-        case 'C': return 4.2;
-        case 'D': return 3.0;
-        case 'F': return 2.0;
-        default: return 4.2;
-      }
-    };
-
-    const valuationMultiple = getMultipleForGrade(overallGrade);
+    // Use centralized multiplier scale
+    const valuationMultiple = getMultiplierForGrade(overallGrade);
 
     // Calculate valuation estimates (±20% range)
     const midEstimate = adjustedEbitda * valuationMultiple;
@@ -69,8 +56,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     const highEstimate = midEstimate * 1.2;
 
     // Add grade modifier for display (+ or -)
-    const gradeModifier = averageScore > (gradeToScore(overallGrade) + 0.3) ? '+' :
-                         averageScore < (gradeToScore(overallGrade) - 0.3) ? '-' : '';
+    const gradeModifier = averageScore > (gradeToScoreValue(overallGrade) + 0.3) ? '+' :
+                         averageScore < (gradeToScoreValue(overallGrade) - 0.3) ? '-' : '';
 
     return {
       baseEbitda,
@@ -207,7 +194,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
           const summaryData = await summaryResponse.json();
           executiveSummary = summaryData.summary;
         } else {
-          executiveSummary = `Executive Summary: ${assessment.company} shows an adjusted EBITDA of $${metrics.adjustedEbitda.toLocaleString()} with an estimated valuation of $${metrics.midEstimate.toLocaleString()}. The analysis indicates ${metrics.overallScore} overall performance across key business drivers.`;
+          const gradeLabel = getLabelForGrade(metrics.overallScore);
+          executiveSummary = `Executive Summary: ${assessment.company} shows an adjusted EBITDA of $${metrics.adjustedEbitda.toLocaleString()} with an estimated valuation of $${metrics.midEstimate.toLocaleString()}. Based on your Operational Grade of ${metrics.overallScore} ("${gradeLabel}"), a multiplier of ${metrics.valuationMultiple}x was applied to your Adjusted EBITDA to generate the valuation estimate. The analysis indicates ${metrics.overallScore} overall performance across key business drivers.`;
         }
         
         // Update assessment with calculated values, narrative, and summary
