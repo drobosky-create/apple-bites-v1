@@ -168,27 +168,29 @@ export default function InteractiveValuationSlider() {
           <CardHeader className="text-center">
             <CardTitle className="text-lg text-green-800">Potential Value</CardTitle>
             <CardDescription>
-              {sliderGrade === 'A' ? 'At Grade A Operations' : `With an Operational Grade of A`}
+              With an Operational Grade of {sliderGrade}
             </CardDescription>
           </CardHeader>
           <CardContent className="text-center">
             <div className="text-3xl font-bold text-green-800 mb-2 transition-all duration-300">
-              ${Math.round(sliderGrade === 'A' ? sliderValuation : calculateValuation('A')).toLocaleString()}
+              ${Math.round(sliderValuation).toLocaleString()}
             </div>
             <div className="text-sm text-green-700 mb-2">
-              {sliderGrade === 'A' ? sliderMultiple.toFixed(1) : getMultipleForGrade('A').toFixed(1)}x EBITDA Multiple
+              {sliderMultiple.toFixed(1)}x EBITDA Multiple
             </div>
-            <Badge variant="secondary" className={`${sliderGrade === 'A' ? sliderCategory.bgColor : 'bg-green-500'} text-white`}>
-              {sliderGrade === 'A' ? sliderCategory.label : 'Excellent Operations'}
+            <Badge variant="secondary" className={`${sliderCategory.bgColor} text-white`}>
+              {sliderCategory.label}
             </Badge>
-            {(sliderGrade === 'A' ? potentialIncrease : calculateValuation('A') - currentValuation) > 0 && (
+            {potentialIncrease !== 0 && (
               <div className="mt-3 p-3 bg-white rounded-lg border transition-all duration-300">
-                <div className="text-sm text-gray-600">Potential Increase</div>
-                <div className="text-xl font-bold text-green-600">
-                  +${Math.round(sliderGrade === 'A' ? potentialIncrease : calculateValuation('A') - currentValuation).toLocaleString()}
+                <div className="text-sm text-gray-600">
+                  {potentialIncrease > 0 ? 'Potential Increase' : 'Potential Decrease'}
                 </div>
-                <div className="text-sm text-green-600">
-                  ({Math.round(((sliderGrade === 'A' ? potentialIncrease : calculateValuation('A') - currentValuation) / currentValuation) * 100)}% increase)
+                <div className={`text-xl font-bold ${potentialIncrease > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                  {potentialIncrease > 0 ? '+' : ''}${Math.round(potentialIncrease).toLocaleString()}
+                </div>
+                <div className={`text-sm ${potentialIncrease > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                  ({potentialIncrease > 0 ? '+' : ''}{Math.round(percentageIncrease)}% change)
                 </div>
               </div>
             )}
