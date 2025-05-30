@@ -2,6 +2,7 @@ import { ValuationAssessment } from "@shared/schema";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Download, Calendar, Mail, Calculator } from "lucide-react";
 import { useLocation } from "wouter";
+import ValueDriversHeatmap from "./value-drivers-heatmap";
 
 interface ValuationResultsProps {
   results: ValuationAssessment;
@@ -141,6 +142,11 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Value Drivers Heatmap */}
+        <div className="bg-white border border-slate-200 rounded-lg p-6">
+          <ValueDriversHeatmap assessment={results} />
         </div>
 
         {/* Executive Summary */}
