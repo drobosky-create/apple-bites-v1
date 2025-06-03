@@ -152,12 +152,7 @@ export class GoHighLevelService {
           'risk_factors_grade': assessment.riskFactors,
           'owner_dependency_grade': assessment.ownerDependency,
           'follow_up_intent': assessment.followUpIntent,
-          'executive_summary': assessment.executiveSummary || '',
-          // Pre-formatted monetary values for email display
-          'formatted_valuation_estimate': `$${Number(assessment.midEstimate).toLocaleString()}`,
-          'formatted_valuation_low': `$${Number(assessment.lowEstimate).toLocaleString()}`,
-          'formatted_valuation_high': `$${Number(assessment.highEstimate).toLocaleString()}`,
-          'formatted_adjusted_ebitda': `$${Number(assessment.adjustedEbitda).toLocaleString()}`
+          'executive_summary': assessment.executiveSummary || ''
         }
       };
 
@@ -191,12 +186,7 @@ export class GoHighLevelService {
           valuation_low: assessment.lowEstimate,
           valuation_high: assessment.highEstimate,
           adjusted_ebitda: assessment.adjustedEbitda,
-          executive_summary: assessment.executiveSummary || '',
-          // Pre-formatted monetary values for email display
-          formatted_valuation_estimate: `$${Number(assessment.midEstimate).toLocaleString()}`,
-          formatted_valuation_low: `$${Number(assessment.lowEstimate).toLocaleString()}`,
-          formatted_valuation_high: `$${Number(assessment.highEstimate).toLocaleString()}`,
-          formatted_adjusted_ebitda: `$${Number(assessment.adjustedEbitda).toLocaleString()}`
+          executive_summary: assessment.executiveSummary || ''
         },
         assessment: {
           id: assessment.id,

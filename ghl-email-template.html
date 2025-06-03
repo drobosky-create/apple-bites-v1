@@ -229,8 +229,8 @@
                 <!-- Valuation Highlight -->
                 <div class="value-highlight">
                     <div class="label">Estimated Business Value</div>
-                    <div class="amount">
-                        {{contact.formatted_valuation_estimate}}
+                    <div class="amount" id="primaryValuation">
+                        ${{contact.valuation_estimate}}
                     </div>
                 </div>
 
@@ -246,21 +246,20 @@
                     <div class="metrics-grid">
                         <div class="metric">
                             <div class="metric-label">Valuation Range</div>
-                            <div class="metric-value">
-                                {{ contact.formatted_valuation_low }} - {{
-                                contact.formatted_valuation_high }}
+                            <div class="metric-value" id="valuationRange">
+                                ${{contact.valuation_low}} - ${{contact.valuation_high}}
                             </div>
                         </div>
                         <div class="metric">
                             <div class="metric-label">Primary Valuation</div>
-                            <div class="metric-value">
-                                {{ contact.formatted_valuation_estimate }}
+                            <div class="metric-value" id="valuationEstimate">
+                                ${{contact.valuation_estimate}}
                             </div>
                         </div>
                         <div class="metric">
                             <div class="metric-label">Adjusted EBITDA</div>
-                            <div class="metric-value">
-                                {{ contact.formatted_adjusted_ebitda }}
+                            <div class="metric-value" id="adjustedEbitda">
+                                ${{contact.adjusted_ebitda}}
                             </div>
                         </div>
                         <div class="metric">
@@ -357,5 +356,52 @@
                 </div>
             </div>
         </div>
+    
+    <script>
+        // Format currency values with commas
+        function formatCurrency(value) {
+            if (!value || isNaN(value)) return '$0';
+            return '$' + Number(value).toLocaleString();
+        }
+        
+        function formatCurrencyRange(lowValue, highValue) {
+            if (!lowValue || !highValue || isNaN(lowValue) || isNaN(highValue)) return '$0 - $0';
+            return formatCurrency(lowValue) + ' - ' + formatCurrency(highValue);
+        }
+        
+        // Wait for page to load, then format all monetary values
+        document.addEventListener('DOMContentLoaded', function() {
+            // Format primary valuation
+            const primaryValuation = document.getElementById('primaryValuation');
+            if (primaryValuation) {
+                const value = primaryValuation.textContent.replace(/[$,]/g, '');
+                primaryValuation.textContent = formatCurrency(value);
+            }
+            
+            // Format valuation estimate
+            const valuationEstimate = document.getElementById('valuationEstimate');
+            if (valuationEstimate) {
+                const value = valuationEstimate.textContent.replace(/[$,]/g, '');
+                valuationEstimate.textContent = formatCurrency(value);
+            }
+            
+            // Format adjusted EBITDA
+            const adjustedEbitda = document.getElementById('adjustedEbitda');
+            if (adjustedEbitda) {
+                const value = adjustedEbitda.textContent.replace(/[$,]/g, '');
+                adjustedEbitda.textContent = formatCurrency(value);
+            }
+            
+            // Format valuation range
+            const valuationRange = document.getElementById('valuationRange');
+            if (valuationRange) {
+                const text = valuationRange.textContent;
+                const values = text.replace(/[$,]/g, '').split(' - ');
+                if (values.length === 2) {
+                    valuationRange.textContent = formatCurrencyRange(values[0], values[1]);
+                }
+            }
+        });
+    </script>
     </body>
 </html>
