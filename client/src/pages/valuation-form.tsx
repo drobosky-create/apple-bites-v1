@@ -34,14 +34,14 @@ export default function ValuationForm() {
               <div className="flex-shrink-0 flex items-center gap-4">
                 <img 
                   src="/assets/Meritage Logo2.png" 
-                  alt="Heritage Partners" 
+                  alt="Meritage Partners" 
                   className="h-12 w-auto"
                 />
                 <div className="border-l border-slate-300 pl-4">
                   <h1 className="text-2xl font-bold text-slate-900">
                     Business Valuation Platform
                   </h1>
-                  <p className="text-sm text-slate-500 font-medium">Powered by Heritage Partners</p>
+                  <p className="text-sm text-slate-500 font-medium">Powered by Meritage Partners</p>
                 </div>
               </div>
             </div>

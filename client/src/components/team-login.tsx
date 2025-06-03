@@ -63,7 +63,7 @@ export default function TeamLogin({ onLoginSuccess }: TeamLoginProps) {
         <div className="text-center mb-8">
           <img 
             src="/assets/Meritage Logo2.png" 
-            alt="Heritage Partners" 
+            alt="Meritage Partners" 
             className="h-16 w-auto mx-auto mb-6"
           />
           <h1 className="text-2xl font-bold text-slate-900 mb-2">Team Dashboard Access</h1>
