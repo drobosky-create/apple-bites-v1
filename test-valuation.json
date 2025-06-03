@@ -1,11 +1,11 @@
 {
   "contact": {
-    "firstName": "Sarah",
-    "lastName": "Thompson", 
-    "email": "sarah.thompson@techmanufacturing.com",
-    "phone": "555-234-5678",
-    "company": "TechManufacturing Corp",
-    "jobTitle": "CEO"
+    "firstName": "David",
+    "lastName": "Wilson", 
+    "email": "david.wilson@precisionsystems.com",
+    "phone": "555-345-6789",
+    "company": "Precision Systems LLC",
+    "jobTitle": "Owner"
   },
   "ebitda": {
     "netIncome": "500000",
