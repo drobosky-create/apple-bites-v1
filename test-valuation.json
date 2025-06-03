@@ -1,35 +1,35 @@
 {
   "contact": {
-    "firstName": "Robert",
-    "lastName": "Johnson", 
-    "email": "robert.johnson@globalmanufacturing.com",
-    "phone": "555-567-8901",
-    "company": "Global Manufacturing Solutions",
-    "jobTitle": "Founder & CEO"
+    "firstName": "Sarah",
+    "lastName": "Thompson", 
+    "email": "sarah.thompson@techsolutions.com",
+    "phone": "555-789-0123",
+    "company": "TechSolutions Pro",
+    "jobTitle": "Owner & President"
   },
   "ebitda": {
-    "netIncome": "500000",
-    "interest": "50000",
-    "taxes": "75000",
-    "depreciation": "100000",
-    "amortization": "25000",
-    "ownerSalary": "150000",
-    "personalExpenses": "25000",
-    "oneTimeExpenses": "50000",
-    "otherAdjustments": "0",
-    "adjustmentNotes": "Owner salary and personal expenses normalized"
+    "netIncome": "750000",
+    "interest": "30000",
+    "taxes": "120000",
+    "depreciation": "85000",
+    "amortization": "15000",
+    "ownerSalary": "180000",
+    "personalExpenses": "20000",
+    "oneTimeExpenses": "40000",
+    "otherAdjustments": "10000",
+    "adjustmentNotes": "Normalized owner compensation and removed one-time expenses"
   },
   "valueDrivers": {
-    "financialPerformance": "B",
-    "customerConcentration": "A",
-    "managementTeam": "B",
-    "competitivePosition": "B",
+    "financialPerformance": "A",
+    "customerConcentration": "B",
+    "managementTeam": "A",
+    "competitivePosition": "A",
     "growthProspects": "A",
-    "systemsProcesses": "C",
-    "assetQuality": "B",
+    "systemsProcesses": "B",
+    "assetQuality": "A",
     "industryOutlook": "B",
-    "riskFactors": "B",
-    "ownerDependency": "C"
+    "riskFactors": "A",
+    "ownerDependency": "B"
   },
   "followUp": {
     "followUpIntent": "yes",
