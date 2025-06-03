@@ -1,0 +1,38 @@
+{
+  "contact": {
+    "firstName": "John",
+    "lastName": "Smith",
+    "email": "john.smith@testcompany.com",
+    "phone": "555-123-4567",
+    "company": "Test Manufacturing Co",
+    "jobTitle": "CEO"
+  },
+  "ebitda": {
+    "netIncome": "500000",
+    "interest": "50000",
+    "taxes": "75000",
+    "depreciation": "100000",
+    "amortization": "25000",
+    "ownerSalary": "150000",
+    "personalExpenses": "25000",
+    "oneTimeExpenses": "50000",
+    "otherAdjustments": "0",
+    "adjustmentNotes": "Owner salary and personal expenses normalized"
+  },
+  "valueDrivers": {
+    "financialPerformance": "B",
+    "customerConcentration": "A",
+    "managementTeam": "B",
+    "competitivePosition": "B",
+    "growthProspects": "A",
+    "systemsProcesses": "C",
+    "assetQuality": "B",
+    "industryOutlook": "B",
+    "riskFactors": "B",
+    "ownerDependency": "C"
+  },
+  "followUp": {
+    "followUpIntent": "yes",
+    "additionalComments": "Interested in discussing value enhancement strategies and potential exit planning."
+  }
+}
