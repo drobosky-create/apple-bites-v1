@@ -143,7 +143,12 @@ export class GoHighLevelService {
           'financial_performance': assessment.financialPerformance,
           'growth_prospects': assessment.growthProspects,
           'competitive_position': assessment.competitivePosition,
-          'management_team': assessment.managementTeam
+          'management_team': assessment.managementTeam,
+          // Pre-formatted monetary values for email display
+          'formatted_valuation_estimate': `$${Number(assessment.midEstimate).toLocaleString()}`,
+          'formatted_valuation_low': `$${Number(assessment.lowEstimate).toLocaleString()}`,
+          'formatted_valuation_high': `$${Number(assessment.highEstimate).toLocaleString()}`,
+          'formatted_adjusted_ebitda': `$${Number(assessment.adjustedEbitda).toLocaleString()}`
         }
       };
 
@@ -166,10 +171,19 @@ export class GoHighLevelService {
       // Send email
       const emailSent = await this.sendEmail(emailData);
 
-      // Send webhook with full assessment data
+      // Send webhook with full assessment data including pre-formatted values
       const webhookData = {
         event: 'valuation_completed',
-        contact: contactData,
+        contact: {
+          ...contactData,
+          // Add pre-formatted monetary values for email templates
+          formatted_valuation_estimate: `$${Number(assessment.midEstimate).toLocaleString()}`,
+          formatted_valuation_low: `$${Number(assessment.lowEstimate).toLocaleString()}`,
+          formatted_valuation_high: `$${Number(assessment.highEstimate).toLocaleString()}`,
+          formatted_adjusted_ebitda: `$${Number(assessment.adjustedEbitda).toLocaleString()}`,
+          overall_grade_af: assessment.overallScore,
+          executive_summary: assessment.executiveSummary || ''
+        },
         assessment: {
           id: assessment.id,
           companyName: assessment.company,

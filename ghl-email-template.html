@@ -227,7 +227,7 @@
             <!-- Valuation Highlight -->
             <div class="value-highlight">
                 <div class="label">Estimated Business Value</div>
-                <div class="amount">${{contact.valuation_estimate}}</div>
+                <div class="amount">{{contact.formatted_valuation_estimate}}</div>
             </div>
             
             <!-- Overall Grade -->
@@ -242,15 +242,15 @@
                 <div class="metrics-grid">
                     <div class="metric">
                         <div class="metric-label">Valuation Range</div>
-                        <div class="metric-value">${{ contact.valuation__low }} - ${{ contact.valuation__high }}</div>
+                        <div class="metric-value">{{ contact.formatted_valuation_low }} - {{ contact.formatted_valuation_high }}</div>
                     </div>
                     <div class="metric">
                         <div class="metric-label">Primary Valuation</div>
-                        <div class="metric-value">${{ contact.valuation_estimate }}</div>
+                        <div class="metric-value">{{ contact.formatted_valuation_estimate }}</div>
                     </div>
                     <div class="metric">
                         <div class="metric-label">Adjusted EBITDA</div>
-                        <div class="metric-value">${{ contact.adjusted_ebitda }}</div>
+                        <div class="metric-value">{{ contact.formatted_adjusted_ebitda }}</div>
                     </div>
                     <div class="metric">
                         <div class="metric-label">Overall Grade</div>
