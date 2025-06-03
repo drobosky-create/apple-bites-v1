@@ -96,7 +96,7 @@ export default function AdjustmentsForm({
                         {...field} 
                         type="number" 
                         placeholder="0" 
-                        className="form-input pl-8"
+                        className="bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20 pl-8"
                         onChange={(e) => {
                           field.onChange(e);
                           onDataChange(form.getValues());
@@ -123,7 +123,7 @@ export default function AdjustmentsForm({
                         {...field} 
                         type="number" 
                         placeholder="0" 
-                        className="form-input pl-8"
+                        className="bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20 pl-8"
                         onChange={(e) => {
                           field.onChange(e);
                           onDataChange(form.getValues());
@@ -150,7 +150,7 @@ export default function AdjustmentsForm({
                         {...field} 
                         type="number" 
                         placeholder="0" 
-                        className="form-input pl-8"
+                        className="bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20 pl-8"
                         onChange={(e) => {
                           field.onChange(e);
                           onDataChange(form.getValues());
@@ -175,7 +175,7 @@ export default function AdjustmentsForm({
                   <Textarea 
                     {...field} 
                     rows={4}
-                    className="form-input"
+                    className="bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20"
                     placeholder="Describe any adjustments in detail..."
                     onChange={(e) => {
                       field.onChange(e);
