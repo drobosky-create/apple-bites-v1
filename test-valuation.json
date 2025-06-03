@@ -1,11 +1,11 @@
 {
   "contact": {
-    "firstName": "Sarah",
-    "lastName": "Thompson", 
-    "email": "sarah.thompson@techsolutions.com",
-    "phone": "555-789-0123",
-    "company": "TechSolutions Pro",
-    "jobTitle": "Owner & President"
+    "firstName": "Michael",
+    "lastName": "Rodriguez", 
+    "email": "michael.rodriguez@innovatetech.com",
+    "phone": "555-234-5678",
+    "company": "InnovateTech Solutions",
+    "jobTitle": "Founder & CEO"
   },
   "ebitda": {
     "netIncome": "750000",

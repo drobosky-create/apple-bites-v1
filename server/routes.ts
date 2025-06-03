@@ -418,6 +418,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
           industryOutlookGrade: assessment.industryOutlook,
           riskFactorsGrade: assessment.riskFactors,
           ownerDependencyGrade: assessment.ownerDependency,
+          // Nested structure for GoHighLevel driverGrades mapping
+          driverGrades: {
+            "Financial Performance": assessment.financialPerformance,
+            "Customer Concentration": assessment.customerConcentration,
+            "Management Team": assessment.managementTeam,
+            "Competitive Position": assessment.competitivePosition,
+            "Growth Prospects": assessment.growthProspects,
+            "Systems & Processes": assessment.systemsProcesses,
+            "Asset Quality": assessment.assetQuality,
+            "Industry Outlook": assessment.industryOutlook,
+            "Risk Factors": assessment.riskFactors,
+            "Owner Dependency": assessment.ownerDependency
+          },
           followUpIntent: assessment.followUpIntent,
           executiveSummary: assessment.executiveSummary || '',
           submissionDate: new Date().toISOString(),
@@ -750,6 +763,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
         industryOutlookGrade: "B",
         riskFactorsGrade: "B",
         ownerDependencyGrade: "C",
+        // Nested structure for GoHighLevel driverGrades mapping
+        driverGrades: {
+          "Financial Performance": "A",
+          "Customer Concentration": "B",
+          "Management Team": "A",
+          "Competitive Position": "B",
+          "Growth Prospects": "A",
+          "Systems & Processes": "C",
+          "Asset Quality": "B",
+          "Industry Outlook": "B",
+          "Risk Factors": "B",
+          "Owner Dependency": "C"
+        },
         followUpIntent: "yes",
         executiveSummary: "Test summary with complete field mapping for GoHighLevel integration",
         submissionDate: new Date().toISOString(),
