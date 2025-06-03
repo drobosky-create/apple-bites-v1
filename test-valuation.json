@@ -1,8 +1,8 @@
 {
   "contact": {
-    "firstName": "John",
-    "lastName": "Smith",
-    "email": "john.smith@testcompany.com",
+    "firstName": "Sarah",
+    "lastName": "Johnson", 
+    "email": "sarah.johnson@techsolutions.com",
     "phone": "555-123-4567",
     "company": "Test Manufacturing Co",
     "jobTitle": "CEO"
