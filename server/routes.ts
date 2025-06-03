@@ -723,7 +723,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // GET /api/test-webhook - Test webhook connection
+  // GET /api/test-webhook - Test webhook connection with all fields
   app.get("/api/test-webhook", async (req, res) => {
     try {
       const testData = {
@@ -737,14 +737,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
         valuationLow: 400000,
         valuationHigh: 600000,
         overallScore: "B+",
-        driverGrades: {
-          "Financial Performance": "A",
-          "Customer Concentration": "B",
-          "Management Team": "A"
-        },
+        // Individual value driver grades (these should trigger new field mapping)
+        financialPerformanceGrade: "A",
+        customerConcentrationGrade: "B", 
+        managementTeamGrade: "A",
+        competitivePositionGrade: "B",
+        growthProspectsGrade: "A",
+        systemsProcessesGrade: "C",
+        assetQualityGrade: "B",
+        industryOutlookGrade: "B",
+        riskFactorsGrade: "B",
+        ownerDependencyGrade: "C",
         followUpIntent: "yes",
-        executiveSummary: "Test summary",
-        pdfLink: null
+        executiveSummary: "Test summary with complete field mapping for GoHighLevel integration",
+        pdfLink: null,
+        submissionDate: new Date().toISOString(),
+        leadSource: "Business Valuation Calculator"
       };
 
       console.log('Testing webhook with data:', JSON.stringify(testData, null, 2));
