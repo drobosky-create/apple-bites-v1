@@ -287,15 +287,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
           executiveSummary = `Executive Summary: ${assessment.company} shows an adjusted EBITDA of $${metrics.adjustedEbitda.toLocaleString()} with an estimated valuation of $${metrics.midEstimate.toLocaleString()}. Based on your Operational Grade of ${metrics.overallScore} ("${gradeLabel}"), a multiplier of ${metrics.valuationMultiple}x was applied to your Adjusted EBITDA to generate the valuation estimate. The analysis indicates ${metrics.overallScore} overall performance across key business drivers.`;
         }
         
-        // Update assessment with calculated values, narrative, and summary
+        // Update assessment with calculated values, narrative, and summary - validate to prevent overflow
         assessment = await storage.updateValuationAssessment(assessment.id, {
           ...metrics,
-          baseEbitda: metrics.baseEbitda.toString(),
-          adjustedEbitda: metrics.adjustedEbitda.toString(),
-          valuationMultiple: metrics.valuationMultiple.toString(),
-          lowEstimate: metrics.lowEstimate.toString(),
-          midEstimate: metrics.midEstimate.toString(),
-          highEstimate: metrics.highEstimate.toString(),
+          baseEbitda: validateNumeric(metrics.baseEbitda),
+          adjustedEbitda: validateNumeric(metrics.adjustedEbitda),
+          valuationMultiple: validateNumeric(metrics.valuationMultiple, 99.99),
+          lowEstimate: validateNumeric(metrics.lowEstimate),
+          midEstimate: validateNumeric(metrics.midEstimate),
+          highEstimate: validateNumeric(metrics.highEstimate),
           overallScore: metrics.overallScore,
           narrativeSummary: narrativeAnalysis.narrativeSummary,
           executiveSummary: executiveSummary,
@@ -314,7 +314,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
               company: assessment.company,
               jobTitle: assessment.jobTitle || undefined,
               valuationAssessmentId: assessment.id,
-              estimatedValue: metrics.midEstimate.toString(),
+              estimatedValue: validateNumeric(metrics.midEstimate),
               overallGrade: metrics.overallScore,
               followUpIntent: assessment.followUpIntent,
               totalInteractions: (lead.totalInteractions || 0) + 1,
@@ -334,7 +334,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
               leadStatus: "new",
               leadScore: calculateLeadScore(assessment, metrics),
               valuationAssessmentId: assessment.id,
-              estimatedValue: metrics.midEstimate.toString(),
+              estimatedValue: validateNumeric(metrics.midEstimate),
               overallGrade: metrics.overallScore,
               followUpIntent: assessment.followUpIntent,
               totalInteractions: 1,

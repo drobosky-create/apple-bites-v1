@@ -184,6 +184,30 @@
     color: white !important;
   }
 
+  /* Override Generate Valuation Report button yellow styling */
+  button[style*="background-color: rgb(250 204 21)"],
+  button[style*="background: rgb(250 204 21)"],
+  .bg-primary.text-primary-foreground {
+    background: rgb(37 99 235) !important;
+    background-color: rgb(37 99 235) !important;
+    border-color: rgb(37 99 235) !important;
+  }
+
+  /* Override any remaining yellow buttons */
+  button:not(.heritage-gradient):not([disabled]) {
+    background-color: rgb(37 99 235) !important;
+    color: white !important;
+  }
+
+  /* Fix shadcn primary colors that may be yellow */
+  .bg-primary {
+    background-color: rgb(37 99 235) !important;
+  }
+
+  .text-primary-foreground {
+    color: white !important;
+  }
+
   /* Ensure form labels are black */
   label {
     color: rgb(15 23 42) !important;
