@@ -38,7 +38,6 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
         <h3 className="text-xl font-semibold text-slate-900 mb-2">EBITDA & Adjustments</h3>
         <p className="text-slate-600">Please provide your company's financial information for the most recent fiscal year and any adjustments to normalize EBITDA.</p>
       </div>
-
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="p-6 space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -206,7 +205,7 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
                 name="ownerSalary"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Excess Owner Compensation</FormLabel>
+                    <FormLabel>Owners Perks and Benefits</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <span className="absolute left-3 top-3 text-slate-400">$</span>
