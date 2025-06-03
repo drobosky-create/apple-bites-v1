@@ -166,6 +166,24 @@
     box-shadow: 0 0 0 2px rgb(var(--meritage-blue) / 0.2) !important;
   }
 
+  /* Override grade selection yellow styling */
+  .bg-yellow-500,
+  .bg-amber-500,
+  .border-yellow-500,
+  .border-amber-500,
+  [style*="background-color: rgb(250 204 21)"],
+  [style*="background-color: rgb(245 158 11)"] {
+    background-color: rgb(71 85 105) !important;
+    border-color: rgb(71 85 105) !important;
+  }
+
+  /* Override "C" grade yellow styling specifically */
+  [data-grade="C"] {
+    background-color: rgb(71 85 105) !important;
+    border-color: rgb(71 85 105) !important;
+    color: white !important;
+  }
+
   /* Ensure form labels are black */
   label {
     color: rgb(15 23 42) !important;

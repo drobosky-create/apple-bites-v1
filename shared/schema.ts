@@ -15,17 +15,17 @@ export const valuationAssessments = pgTable("valuation_assessments", {
   jobTitle: text("job_title"),
   
   // EBITDA Components
-  netIncome: decimal("net_income", { precision: 12, scale: 2 }).notNull(),
-  interest: decimal("interest", { precision: 12, scale: 2 }).notNull(),
-  taxes: decimal("taxes", { precision: 12, scale: 2 }).notNull(),
-  depreciation: decimal("depreciation", { precision: 12, scale: 2 }).notNull(),
-  amortization: decimal("amortization", { precision: 12, scale: 2 }).notNull(),
+  netIncome: decimal("net_income", { precision: 15, scale: 2 }).notNull(),
+  interest: decimal("interest", { precision: 15, scale: 2 }).notNull(),
+  taxes: decimal("taxes", { precision: 15, scale: 2 }).notNull(),
+  depreciation: decimal("depreciation", { precision: 15, scale: 2 }).notNull(),
+  amortization: decimal("amortization", { precision: 15, scale: 2 }).notNull(),
   
   // Owner Adjustments
-  ownerSalary: decimal("owner_salary", { precision: 12, scale: 2 }).default("0"),
-  personalExpenses: decimal("personal_expenses", { precision: 12, scale: 2 }).default("0"),
-  oneTimeExpenses: decimal("one_time_expenses", { precision: 12, scale: 2 }).default("0"),
-  otherAdjustments: decimal("other_adjustments", { precision: 12, scale: 2 }).default("0"),
+  ownerSalary: decimal("owner_salary", { precision: 15, scale: 2 }).default("0"),
+  personalExpenses: decimal("personal_expenses", { precision: 15, scale: 2 }).default("0"),
+  oneTimeExpenses: decimal("one_time_expenses", { precision: 15, scale: 2 }).default("0"),
+  otherAdjustments: decimal("other_adjustments", { precision: 15, scale: 2 }).default("0"),
   adjustmentNotes: text("adjustment_notes"),
   
   // Value Driver Scores (A-F grades)
@@ -45,12 +45,12 @@ export const valuationAssessments = pgTable("valuation_assessments", {
   additionalComments: text("additional_comments"),
   
   // Calculated Values
-  baseEbitda: decimal("base_ebitda", { precision: 12, scale: 2 }),
-  adjustedEbitda: decimal("adjusted_ebitda", { precision: 12, scale: 2 }),
-  valuationMultiple: decimal("valuation_multiple", { precision: 5, scale: 2 }),
-  lowEstimate: decimal("low_estimate", { precision: 12, scale: 2 }),
-  midEstimate: decimal("mid_estimate", { precision: 12, scale: 2 }),
-  highEstimate: decimal("high_estimate", { precision: 12, scale: 2 }),
+  baseEbitda: decimal("base_ebitda", { precision: 15, scale: 2 }),
+  adjustedEbitda: decimal("adjusted_ebitda", { precision: 15, scale: 2 }),
+  valuationMultiple: decimal("valuation_multiple", { precision: 8, scale: 2 }),
+  lowEstimate: decimal("low_estimate", { precision: 15, scale: 2 }),
+  midEstimate: decimal("mid_estimate", { precision: 15, scale: 2 }),
+  highEstimate: decimal("high_estimate", { precision: 15, scale: 2 }),
   overallScore: text("overall_score"),
   
   // Generated Content

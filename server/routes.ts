@@ -162,6 +162,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Missing required form data sections" });
       }
 
+      // Helper function to validate and cap numeric values
+      const validateNumeric = (value: string | number, max: number = 999999999): string => {
+        const num = parseFloat(value.toString());
+        if (isNaN(num)) return "0";
+        return Math.min(Math.abs(num), max).toFixed(2);
+      };
+
       // Prepare the data for database insertion
       const assessmentData = {
         // Contact info
@@ -172,18 +179,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
         company: formData.contact.company,
         jobTitle: formData.contact.jobTitle || "",
         
-        // EBITDA components
-        netIncome: formData.ebitda.netIncome,
-        interest: formData.ebitda.interest,
-        taxes: formData.ebitda.taxes,
-        depreciation: formData.ebitda.depreciation,
-        amortization: formData.ebitda.amortization,
+        // EBITDA components - validate to prevent overflow
+        netIncome: validateNumeric(formData.ebitda.netIncome),
+        interest: validateNumeric(formData.ebitda.interest),
+        taxes: validateNumeric(formData.ebitda.taxes),
+        depreciation: validateNumeric(formData.ebitda.depreciation),
+        amortization: validateNumeric(formData.ebitda.amortization),
         
-        // Adjustments (now part of EBITDA form)
-        ownerSalary: formData.ebitda.ownerSalary || "0",
-        personalExpenses: formData.ebitda.personalExpenses || "0",
-        oneTimeExpenses: formData.ebitda.oneTimeExpenses || "0",
-        otherAdjustments: formData.ebitda.otherAdjustments || "0",
+        // Adjustments (now part of EBITDA form) - validate to prevent overflow
+        ownerSalary: validateNumeric(formData.ebitda.ownerSalary || "0"),
+        personalExpenses: validateNumeric(formData.ebitda.personalExpenses || "0"),
+        oneTimeExpenses: validateNumeric(formData.ebitda.oneTimeExpenses || "0"),
+        otherAdjustments: validateNumeric(formData.ebitda.otherAdjustments || "0"),
         adjustmentNotes: formData.ebitda.adjustmentNotes || "",
         
         // Value drivers
