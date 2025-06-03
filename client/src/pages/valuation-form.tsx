@@ -31,11 +31,18 @@ export default function ValuationForm() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
             <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  Apple Bites
-                </h1>
-                <p className="text-sm text-slate-500 font-medium">Business Valuation Platform</p>
+              <div className="flex-shrink-0 flex items-center gap-4">
+                <img 
+                  src="/assets/Meritage Logo2.png" 
+                  alt="Heritage Partners" 
+                  className="h-12 w-auto"
+                />
+                <div className="border-l border-slate-300 pl-4">
+                  <h1 className="text-2xl font-bold text-slate-900">
+                    Business Valuation Platform
+                  </h1>
+                  <p className="text-sm text-slate-500 font-medium">Powered by Heritage Partners</p>
+                </div>
               </div>
             </div>
             <div className="flex items-center space-x-4">

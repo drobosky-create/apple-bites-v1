@@ -58,14 +58,16 @@ export default function TeamLogin({ onLoginSuccess }: TeamLoginProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-      <Card className="w-full max-w-md p-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
+      <Card className="w-full max-w-md p-8 bg-white/80 backdrop-blur-sm border-0 shadow-lg">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
-            <Users className="w-8 h-8 text-blue-600" />
-          </div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Team Login</h1>
-          <p className="text-gray-600">Access your team dashboard</p>
+          <img 
+            src="/assets/Meritage Logo2.png" 
+            alt="Heritage Partners" 
+            className="h-16 w-auto mx-auto mb-6"
+          />
+          <h1 className="text-2xl font-bold text-slate-900 mb-2">Team Dashboard Access</h1>
+          <p className="text-slate-600">Sign in to manage your platform</p>
         </div>
 
         <Form {...form}>

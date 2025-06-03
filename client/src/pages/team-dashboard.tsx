@@ -145,11 +145,18 @@ export default function TeamDashboard() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8 flex justify-between items-start">
-          <div className="space-y-1">
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Team Dashboard
-            </h1>
-            <p className="text-slate-600 text-lg">Manage team members and access controls</p>
+          <div className="flex items-center gap-6">
+            <img 
+              src="/assets/Meritage Logo2.png" 
+              alt="Heritage Partners" 
+              className="h-12 w-auto"
+            />
+            <div className="space-y-1">
+              <h1 className="text-4xl font-bold text-slate-900">
+                Team Dashboard
+              </h1>
+              <p className="text-slate-600 text-lg">Manage team members and access controls</p>
+            </div>
           </div>
           <div className="flex items-center gap-4 bg-white rounded-xl shadow-sm border px-4 py-3">
             <div className="text-sm text-slate-700">
