@@ -75,7 +75,7 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
                 onClick={handleDownloadPDF}
-                className="flex-1 sm:flex-none btn-primary px-6 py-3 rounded-lg font-medium flex items-center justify-center"
+                className="flex-1 sm:flex-none heritage-gradient text-white px-6 py-3 rounded-lg font-medium flex items-center justify-center shadow-sm hover:shadow-md transition-all duration-200"
                 disabled={!results.pdfUrl}
               >
                 <Download className="mr-2 w-4 h-4" />

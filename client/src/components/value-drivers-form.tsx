@@ -205,7 +205,7 @@ export default function ValueDriversForm({ form, onNext, onPrev, onDataChange }:
               <ArrowLeft className="mr-2 w-4 h-4" />
               Previous
             </Button>
-            <Button type="submit" className="btn-primary px-8 py-3 rounded-lg font-medium">
+            <Button type="submit" className="heritage-gradient text-white px-8 py-3 rounded-lg font-medium shadow-sm hover:shadow-md transition-all duration-200">
               Next: Follow-up Preferences
               <ArrowRight className="ml-2 w-4 h-4" />
             </Button>
