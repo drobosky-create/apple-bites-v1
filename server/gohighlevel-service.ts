@@ -156,6 +156,16 @@ export class GoHighLevelService {
         }
       };
 
+      // Debug logging for webhook payload
+      console.log('=== GoHighLevel Debug ===');
+      console.log('Assessment values:', {
+        firstName: assessment.firstName,
+        midEstimate: assessment.midEstimate,
+        adjustedEbitda: assessment.adjustedEbitda,
+        overallScore: assessment.overallScore
+      });
+      console.log('Contact data being sent:', JSON.stringify(contactData, null, 2));
+
       // Create or update contact
       const contactResult = await this.createOrUpdateContact(contactData);
 
