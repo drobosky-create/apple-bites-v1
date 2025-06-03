@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Users, Plus, Edit, Trash2, Shield, LogOut, UserPlus, Settings } from 'lucide-react';
@@ -130,11 +130,11 @@ export default function TeamDashboard() {
 
   const getRoleBadgeColor = (role: string) => {
     const colors: Record<string, string> = {
-      'admin': 'bg-red-100 text-red-800',
-      'manager': 'bg-blue-100 text-blue-800',
-      'member': 'bg-green-100 text-green-800',
+      'admin': 'bg-gradient-to-r from-red-500 to-pink-500 text-white shadow-sm',
+      'manager': 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-sm',
+      'member': 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-sm',
     };
-    return colors[role] || 'bg-gray-100 text-gray-800';
+    return colors[role] || 'bg-gradient-to-r from-slate-400 to-slate-500 text-white shadow-sm';
   };
 
   const onSubmit = (data: InsertTeamMember) => {
@@ -142,21 +142,26 @@ export default function TeamDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8 flex justify-between items-center">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Team Dashboard</h1>
-            <p className="text-gray-600">Manage team members and access controls</p>
+        <div className="mb-8 flex justify-between items-start">
+          <div className="space-y-1">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              Team Dashboard
+            </h1>
+            <p className="text-slate-600 text-lg">Manage team members and access controls</p>
           </div>
-          <div className="flex items-center gap-4">
-            <div className="text-sm text-gray-600">
-              Welcome, {user?.firstName} {user?.lastName}
-              <Badge className={`ml-2 ${getRoleBadgeColor(user?.role || '')}`}>
-                {user?.role}
-              </Badge>
+          <div className="flex items-center gap-4 bg-white rounded-xl shadow-sm border px-4 py-3">
+            <div className="text-sm text-slate-700">
+              <div className="font-medium">Welcome, {user?.firstName} {user?.lastName}</div>
+              <div className="flex items-center gap-2 mt-1">
+                <Shield className="w-3 h-3 text-slate-400" />
+                <Badge className={`${getRoleBadgeColor(user?.role || '')} text-xs`}>
+                  {user?.role?.toUpperCase()}
+                </Badge>
+              </div>
             </div>
-            <Button variant="outline" onClick={logout} className="flex items-center gap-2">
+            <Button variant="outline" onClick={logout} className="flex items-center gap-2 hover:bg-red-50 hover:border-red-200">
               <LogOut className="w-4 h-4" />
               Logout
             </Button>
@@ -168,55 +173,70 @@ export default function TeamDashboard() {
           <>
             {/* Admin Dashboard */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Total Members</CardTitle>
-                  <Users className="h-4 w-4 text-muted-foreground" />
+              <Card className="border-0 shadow-sm bg-gradient-to-br from-blue-50 to-blue-100/50 hover:shadow-md transition-all duration-200">
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+                  <CardTitle className="text-sm font-medium text-slate-600">Total Members</CardTitle>
+                  <div className="p-2 bg-blue-500/10 rounded-lg">
+                    <Users className="h-5 w-5 text-blue-600" />
+                  </div>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">{teamMembers?.length || 0}</div>
+                  <div className="text-3xl font-bold text-slate-900">{teamMembers?.length || 0}</div>
+                  <p className="text-xs text-slate-500 mt-1">registered accounts</p>
                 </CardContent>
               </Card>
 
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Active Members</CardTitle>
-                  <Shield className="h-4 w-4 text-muted-foreground" />
+              <Card className="border-0 shadow-sm bg-gradient-to-br from-emerald-50 to-emerald-100/50 hover:shadow-md transition-all duration-200">
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+                  <CardTitle className="text-sm font-medium text-slate-600">Active Members</CardTitle>
+                  <div className="p-2 bg-emerald-500/10 rounded-lg">
+                    <Shield className="h-5 w-5 text-emerald-600" />
+                  </div>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">
+                  <div className="text-3xl font-bold text-emerald-700">
                     {teamMembers?.filter(m => m.isActive).length || 0}
                   </div>
+                  <p className="text-xs text-slate-500 mt-1">currently active</p>
                 </CardContent>
               </Card>
 
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Admins</CardTitle>
-                  <Settings className="h-4 w-4 text-muted-foreground" />
+              <Card className="border-0 shadow-sm bg-gradient-to-br from-purple-50 to-purple-100/50 hover:shadow-md transition-all duration-200">
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+                  <CardTitle className="text-sm font-medium text-slate-600">Admins</CardTitle>
+                  <div className="p-2 bg-purple-500/10 rounded-lg">
+                    <Settings className="h-5 w-5 text-purple-600" />
+                  </div>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">
+                  <div className="text-3xl font-bold text-purple-700">
                     {teamMembers?.filter(m => m.role === 'admin').length || 0}
                   </div>
+                  <p className="text-xs text-slate-500 mt-1">with admin access</p>
                 </CardContent>
               </Card>
             </div>
 
             {/* Team Members Management */}
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between">
-                <CardTitle>Team Members</CardTitle>
+            <Card className="border-0 shadow-sm">
+              <CardHeader className="flex flex-row items-center justify-between bg-gradient-to-r from-slate-50 to-slate-100/50 rounded-t-lg border-b border-slate-200">
+                <div>
+                  <CardTitle className="text-xl text-slate-900">Team Members</CardTitle>
+                  <p className="text-sm text-slate-600 mt-1">Manage access and permissions</p>
+                </div>
                 <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
                   <DialogTrigger asChild>
-                    <Button className="flex items-center gap-2">
+                    <Button className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-sm">
                       <UserPlus className="w-4 h-4" />
                       Add Member
                     </Button>
                   </DialogTrigger>
-                  <DialogContent>
+                  <DialogContent className="sm:max-w-md">
                     <DialogHeader>
                       <DialogTitle>Add Team Member</DialogTitle>
+                      <DialogDescription>
+                        Create a new team member account with appropriate role permissions.
+                      </DialogDescription>
                     </DialogHeader>
                     <Form {...form}>
                       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
