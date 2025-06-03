@@ -34,7 +34,7 @@ export default function ProgressIndicator({ currentStep }: ProgressIndicatorProp
                 <div
                   className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
                     step.number <= currentStepNumber
-                      ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg scale-110"
+                      ? "heritage-gradient text-white shadow-lg scale-110"
                       : "bg-slate-200 text-slate-400"
                   }`}
                 >
@@ -59,7 +59,7 @@ export default function ProgressIndicator({ currentStep }: ProgressIndicatorProp
                     <div
                       className={`h-full transition-all duration-500 ${
                         step.number < currentStepNumber 
-                          ? "bg-gradient-to-r from-blue-600 to-purple-600 w-full" 
+                          ? "heritage-gradient w-full" 
                           : "w-0"
                       }`}
                     />
