@@ -38,9 +38,7 @@ export default function ValuationForm() {
                   className="h-12 w-auto"
                 />
                 <div className="border-l border-slate-300 pl-4">
-                  <h1 className="text-2xl font-bold text-slate-900">
-                    Business Valuation Platform
-                  </h1>
+                  <h1 className="text-2xl font-bold text-slate-900">Apple Bites Business Assessment</h1>
                   <p className="text-sm text-slate-500 font-medium">Powered by Meritage Partners</p>
                 </div>
               </div>
