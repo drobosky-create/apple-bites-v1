@@ -233,7 +233,7 @@
             <!-- Overall Grade -->
             <div class="grade-section">
                 <div class="grade-label">Overall Operational Grade</div>
-                <div class="grade-value">{{contact.overall_grade_af}}</div>
+                <div class="grade-value">{{inboundWebhookRequest.overallScore}}</div>
             </div>
             
             <!-- Key Metrics -->
@@ -286,6 +286,22 @@
                     <div class="metric">
                         <div class="metric-label">Systems & Processes</div>
                         <div class="metric-value">{{inboundWebhookRequest.systemsProcessesGrade}}</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Asset Quality</div>
+                        <div class="metric-value">{{inboundWebhookRequest.assetQualityGrade}}</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Industry Outlook</div>
+                        <div class="metric-value">{{inboundWebhookRequest.industryOutlookGrade}}</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Risk Factors</div>
+                        <div class="metric-value">{{inboundWebhookRequest.riskFactorsGrade}}</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Owner Dependency</div>
+                        <div class="metric-value">{{inboundWebhookRequest.ownerDependencyGrade}}</div>
                     </div>
                 </div>
             </div>
