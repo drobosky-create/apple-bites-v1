@@ -53,7 +53,7 @@ export default function ValueDriversHeatmap({ assessment }: ValueDriversHeatmapP
     const score = getGradeScore(grade);
     if (score >= 4) return <TrendingUp className="w-4 h-4 text-green-600" />;
     if (score <= 2) return <TrendingDown className="w-4 h-4 text-red-600" />;
-    return <Minus className="w-4 h-4 text-yellow-600" />;
+    return <Minus className="w-4 h-4 text-slate-600" />;
   };
 
   const drivers: DriverData[] = [

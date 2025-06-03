@@ -98,7 +98,7 @@ export default function InteractiveValuationSlider() {
     switch (grade) {
       case 'A': return { label: "Excellent Operations", color: "text-green-800", bgColor: "bg-green-500" };
       case 'B': return { label: "Good Operations", color: "text-green-700", bgColor: "bg-green-400" };
-      case 'C': return { label: "Average Operations", color: "text-yellow-700", bgColor: "bg-yellow-500" };
+      case 'C': return { label: "Average Operations", color: "text-slate-700", bgColor: "bg-slate-500" };
       case 'D': return { label: "Below Average", color: "text-red-700", bgColor: "bg-red-400" };
       case 'F': return { label: "Poor Operations", color: "text-red-800", bgColor: "bg-red-500" };
     }
