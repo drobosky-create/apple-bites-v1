@@ -133,17 +133,26 @@ export class GoHighLevelService {
           `Value: $${Number(assessment.midEstimate).toLocaleString()}`
         ],
         customFields: {
-          'valuation_score': assessment.overallScore,
-          'low_estimate': assessment.lowEstimate,
-          'mid_estimate': assessment.midEstimate,
-          'high_estimate': assessment.highEstimate,
+          // Match GoHighLevel field names exactly
+          'overall_grade_af': assessment.overallScore,
+          'valuation_estimate': assessment.midEstimate,
+          'valuation_low': assessment.lowEstimate,
+          'valuation_high': assessment.highEstimate,
           'adjusted_ebitda': assessment.adjustedEbitda,
           'valuation_multiple': assessment.valuationMultiple,
           'assessment_date': assessment.createdAt,
-          'financial_performance': assessment.financialPerformance,
-          'growth_prospects': assessment.growthProspects,
-          'competitive_position': assessment.competitivePosition,
-          'management_team': assessment.managementTeam,
+          'financial_performance_grade': assessment.financialPerformance,
+          'customer_concentration_grade': assessment.customerConcentration,
+          'management_team_grade': assessment.managementTeam,
+          'competitive_position_grade': assessment.competitivePosition,
+          'growth_prospects_grade': assessment.growthProspects,
+          'systems_processes_grade': assessment.systemsProcesses,
+          'asset_quality_grade': assessment.assetQuality,
+          'industry_outlook_grade': assessment.industryOutlook,
+          'risk_factors_grade': assessment.riskFactors,
+          'owner_dependency_grade': assessment.ownerDependency,
+          'follow_up_intent': assessment.followUpIntent,
+          'executive_summary': assessment.executiveSummary || '',
           // Pre-formatted monetary values for email display
           'formatted_valuation_estimate': `$${Number(assessment.midEstimate).toLocaleString()}`,
           'formatted_valuation_low': `$${Number(assessment.lowEstimate).toLocaleString()}`,
@@ -176,13 +185,18 @@ export class GoHighLevelService {
         event: 'valuation_completed',
         contact: {
           ...contactData,
-          // Add pre-formatted monetary values for email templates
+          // Match GoHighLevel field names exactly for email templates
+          overall_grade_af: assessment.overallScore,
+          valuation_estimate: assessment.midEstimate,
+          valuation_low: assessment.lowEstimate,
+          valuation_high: assessment.highEstimate,
+          adjusted_ebitda: assessment.adjustedEbitda,
+          executive_summary: assessment.executiveSummary || '',
+          // Pre-formatted monetary values for email display
           formatted_valuation_estimate: `$${Number(assessment.midEstimate).toLocaleString()}`,
           formatted_valuation_low: `$${Number(assessment.lowEstimate).toLocaleString()}`,
           formatted_valuation_high: `$${Number(assessment.highEstimate).toLocaleString()}`,
-          formatted_adjusted_ebitda: `$${Number(assessment.adjustedEbitda).toLocaleString()}`,
-          overall_grade_af: assessment.overallScore,
-          executive_summary: assessment.executiveSummary || ''
+          formatted_adjusted_ebitda: `$${Number(assessment.adjustedEbitda).toLocaleString()}`
         },
         assessment: {
           id: assessment.id,
