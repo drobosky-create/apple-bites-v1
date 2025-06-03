@@ -48,6 +48,24 @@
     border: 1px solid rgba(var(--meritage-navy), 0.1);
     box-shadow: 0 4px 6px -1px rgba(var(--meritage-navy), 0.1);
   }
+
+  /* Blue/Grey form styling */
+  .form-input {
+    background: rgb(248 250 252);
+    border: 1px solid rgb(203 213 225);
+    color: rgb(15 23 42);
+    transition: all 0.2s ease;
+  }
+  
+  .form-input:focus {
+    background: rgb(241 245 249);
+    border-color: rgb(59 130 246);
+    box-shadow: 0 0 0 3px rgb(59 130 246 / 0.1);
+  }
+  
+  .form-input::placeholder {
+    color: rgb(100 116 139);
+  }
 }
 
 
