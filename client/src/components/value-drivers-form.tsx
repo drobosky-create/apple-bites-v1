@@ -137,67 +137,34 @@ export default function ValueDriversForm({ form, onNext, onPrev, onDataChange }:
             </div>
           </div>
 
-          <div className="space-y-6">
-            {valueDrivers.slice(0, 5).map((driver) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {valueDrivers.map((driver) => (
               <FormField
                 key={driver.name}
                 control={form.control}
                 name={driver.name as keyof ValueDriversData}
                 render={({ field }) => (
                   <FormItem>
-                    <div className="border border-slate-200 rounded-lg p-6">
-                      <div className="flex justify-between items-start mb-4">
-                        <div className="flex-1">
-                          <FormLabel className="text-lg font-semibold text-slate-900">{driver.title}</FormLabel>
-                          <p className="text-slate-600 mt-1">{driver.description}</p>
-                        </div>
-                        <FormControl>
-                          <GradeRadioGroup
-                            name={driver.name}
-                            value={field.value as Grade}
-                            onChange={(value) => {
-                              field.onChange(value);
-                              onDataChange(form.getValues());
-                            }}
-                          />
-                        </FormControl>
-                      </div>
+                    <div className="border border-slate-200 rounded-lg p-4">
+                      <FormLabel className="font-semibold text-slate-900 mb-2 block">{driver.title}</FormLabel>
+                      <p className="text-sm text-slate-600 mb-3">{driver.description}</p>
+                      <FormControl>
+                        <GradeRadioGroup
+                          name={driver.name}
+                          value={field.value as Grade}
+                          onChange={(value) => {
+                            field.onChange(value);
+                            onDataChange(form.getValues());
+                          }}
+                          size="small"
+                        />
+                      </FormControl>
                     </div>
                     <FormMessage className="form-error" />
                   </FormItem>
                 )}
               />
             ))}
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {valueDrivers.slice(5).map((driver) => (
-                <FormField
-                  key={driver.name}
-                  control={form.control}
-                  name={driver.name as keyof ValueDriversData}
-                  render={({ field }) => (
-                    <FormItem>
-                      <div className="border border-slate-200 rounded-lg p-4">
-                        <FormLabel className="font-semibold text-slate-900 mb-2 block">{driver.title}</FormLabel>
-                        <p className="text-sm text-slate-600 mb-3">{driver.description}</p>
-                        <FormControl>
-                          <GradeRadioGroup
-                            name={driver.name}
-                            value={field.value as Grade}
-                            onChange={(value) => {
-                              field.onChange(value);
-                              onDataChange(form.getValues());
-                            }}
-                            size="small"
-                          />
-                        </FormControl>
-                      </div>
-                      <FormMessage className="form-error" />
-                    </FormItem>
-                  )}
-                />
-              ))}
-            </div>
           </div>
 
           <div className="flex justify-between pt-6">
