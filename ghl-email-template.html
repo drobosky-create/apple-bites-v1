@@ -242,19 +242,19 @@
                 <div class="metrics-grid">
                     <div class="metric">
                         <div class="metric-label">Valuation Range</div>
-                        <div class="metric-value">${{contact.low_estimate}} - ${{inboundWebhookRequest.valuationHigh}}</div>
+                        <div class="metric-value">${{inboundWebhookRequest.valuationLow}} - ${{inboundWebhookRequest.valuationHigh}}</div>
                     </div>
                     <div class="metric">
-                        <div class="metric-label">Mid-Point Valuation</div>
-                        <div class="metric-value">${{contact.midpoint_valuation}}</div>
+                        <div class="metric-label">Primary Valuation</div>
+                        <div class="metric-value">${{inboundWebhookRequest.valuationEstimate}}</div>
                     </div>
                     <div class="metric">
                         <div class="metric-label">Adjusted EBITDA</div>
                         <div class="metric-value">${{inboundWebhookRequest.adjustedEBITDA}}</div>
                     </div>
                     <div class="metric">
-                        <div class="metric-label">Follow-up Interest</div>
-                        <div class="metric-value">{{contact.interest_expense_if_any}}</div>
+                        <div class="metric-label">Overall Grade</div>
+                        <div class="metric-value">{{inboundWebhookRequest.overallScore}}</div>
                     </div>
                 </div>
             </div>
@@ -263,7 +263,7 @@
             <div class="metrics-section">
                 <div class="metrics-title">Executive Analysis</div>
                 <div style="background: white; padding: 20px; border-radius: 6px; line-height: 1.6;">
-                    {{contact.aigenerated_summary}}
+                    {{inboundWebhookRequest.executiveSummary}}
                 </div>
             </div>
             
