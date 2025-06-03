@@ -407,7 +407,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           valuationLow: metrics.lowEstimate,
           valuationHigh: metrics.highEstimate,
           overallScore: metrics.overallScore,
-          // Individual driver grades for easier GoHighLevel access
+          // Individual driver grades as separate fields for GoHighLevel mapping
           financialPerformanceGrade: assessment.financialPerformance,
           customerConcentrationGrade: assessment.customerConcentration,
           managementTeamGrade: assessment.managementTeam,
@@ -420,6 +420,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
           ownerDependencyGrade: assessment.ownerDependency,
           followUpIntent: assessment.followUpIntent,
           executiveSummary: assessment.executiveSummary || '',
+          submissionDate: new Date().toISOString(),
+          leadSource: 'Business Valuation Calculator',
           pdfLink: assessment.pdfUrl ? `${req.protocol}://${req.get('host')}${assessment.pdfUrl}` : null
         };
 
@@ -723,6 +725,62 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // GET /api/test-webhook-new - Test webhook with new field structure
+  app.get("/api/test-webhook-new", async (req, res) => {
+    try {
+      const testData = {
+        name: "Test User Complete",
+        email: "test-complete@example.com",
+        phone: "555-0123",
+        company: "Test Company",
+        jobTitle: "CEO",
+        adjustedEBITDA: 100000,
+        valuationEstimate: 500000,
+        valuationLow: 400000,
+        valuationHigh: 600000,
+        overallScore: "B+",
+        // Individual value driver grades as separate fields
+        financialPerformanceGrade: "A",
+        customerConcentrationGrade: "B", 
+        managementTeamGrade: "A",
+        competitivePositionGrade: "B",
+        growthProspectsGrade: "A",
+        systemsProcessesGrade: "C",
+        assetQualityGrade: "B",
+        industryOutlookGrade: "B",
+        riskFactorsGrade: "B",
+        ownerDependencyGrade: "C",
+        followUpIntent: "yes",
+        executiveSummary: "Test summary with complete field mapping for GoHighLevel integration",
+        submissionDate: new Date().toISOString(),
+        leadSource: "Business Valuation Calculator",
+        pdfLink: null
+      };
+
+      console.log('Testing NEW webhook with complete field data:', JSON.stringify(testData, null, 2));
+      
+      const webhookResponse = await fetch('https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhldFd0Z/webhook-trigger/8b5475d9-3027-471a-8dcb-d6ab9dabedb8', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(testData)
+      });
+      
+      const responseText = await webhookResponse.text();
+      console.log('NEW webhook test response status:', webhookResponse.status);
+      console.log('NEW webhook test response:', responseText);
+      
+      res.json({
+        status: webhookResponse.status,
+        response: responseText,
+        success: webhookResponse.ok,
+        sentData: testData
+      });
+    } catch (error) {
+      console.error('NEW webhook test failed:', error);
+      res.status(500).json({ error: error.message });
+    }
+  });
+
   // GET /api/test-webhook - Test webhook connection with all fields
   app.get("/api/test-webhook", async (req, res) => {
     try {
@@ -737,25 +795,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
         valuationLow: 400000,
         valuationHigh: 600000,
         overallScore: "B+",
-        // Individual value driver grades (these should trigger new field mapping)
-        financialPerformanceGrade: "A",
-        customerConcentrationGrade: "B", 
-        managementTeamGrade: "A",
-        competitivePositionGrade: "B",
-        growthProspectsGrade: "A",
-        systemsProcessesGrade: "C",
-        assetQualityGrade: "B",
-        industryOutlookGrade: "B",
-        riskFactorsGrade: "B",
-        ownerDependencyGrade: "C",
+        driverGrades: {
+          "Financial Performance": "A",
+          "Customer Concentration": "B",
+          "Management Team": "A"
+        },
         followUpIntent: "yes",
-        executiveSummary: "Test summary with complete field mapping for GoHighLevel integration",
-        pdfLink: null,
-        submissionDate: new Date().toISOString(),
-        leadSource: "Business Valuation Calculator"
+        executiveSummary: "Test summary",
+        pdfLink: null
       };
 
-      console.log('Testing webhook with data:', JSON.stringify(testData, null, 2));
+      console.log('Testing webhook with complete field data:', JSON.stringify(testData, null, 2));
       
       const webhookResponse = await fetch('https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhldFd0Z/webhook-trigger/8b5475d9-3027-471a-8dcb-d6ab9dabedb8', {
         method: 'POST',
