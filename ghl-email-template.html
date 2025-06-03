@@ -233,7 +233,7 @@
             <!-- Overall Grade -->
             <div class="grade-section">
                 <div class="grade-label">Overall Operational Grade</div>
-                <div class="grade-value">{{inboundWebhookRequest.overallScore}}</div>
+                <div class="grade-value">{{contact.overall_grade_af}}</div>
             </div>
             
             <!-- Key Metrics -->
@@ -242,59 +242,28 @@
                 <div class="metrics-grid">
                     <div class="metric">
                         <div class="metric-label">Valuation Range</div>
-                        <div class="metric-value">${{inboundWebhookRequest.valuationLow}} - ${{inboundWebhookRequest.valuationHigh}}</div>
+                        <div class="metric-value">${{contact.low_estimate}} - ${{inboundWebhookRequest.valuationHigh}}</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Mid-Point Valuation</div>
+                        <div class="metric-value">${{contact.midpoint_valuation}}</div>
                     </div>
                     <div class="metric">
                         <div class="metric-label">Adjusted EBITDA</div>
                         <div class="metric-value">${{inboundWebhookRequest.adjustedEBITDA}}</div>
                     </div>
                     <div class="metric">
-                        <div class="metric-label">Job Title</div>
-                        <div class="metric-value">{{inboundWebhookRequest.jobTitle}}</div>
-                    </div>
-                    <div class="metric">
                         <div class="metric-label">Follow-up Interest</div>
-                        <div class="metric-value">{{inboundWebhookRequest.followUpIntent}}</div>
+                        <div class="metric-value">{{contact.interest_expense_if_any}}</div>
                     </div>
                 </div>
             </div>
             
-            <!-- Value Driver Scores -->
+            <!-- Executive Summary -->
             <div class="metrics-section">
-                <div class="metrics-title">Value Driver Analysis</div>
-                <div class="metrics-grid">
-                    <div class="metric">
-                        <div class="metric-label">Financial Performance</div>
-                        <div class="metric-value">{{inboundWebhookRequest.financialPerformanceGrade}}</div>
-                    </div>
-                    <div class="metric">
-                        <div class="metric-label">Growth Prospects</div>
-                        <div class="metric-value">{{inboundWebhookRequest.growthProspectsGrade}}</div>
-                    </div>
-                    <div class="metric">
-                        <div class="metric-label">Competitive Position</div>
-                        <div class="metric-value">{{inboundWebhookRequest.competitivePositionGrade}}</div>
-                    </div>
-                    <div class="metric">
-                        <div class="metric-label">Management Team</div>
-                        <div class="metric-value">{{inboundWebhookRequest.managementTeamGrade}}</div>
-                    </div>
-                    <div class="metric">
-                        <div class="metric-label">Customer Concentration</div>
-                        <div class="metric-value">{{inboundWebhookRequest.customerConcentrationGrade}}</div>
-                    </div>
-                    <div class="metric">
-                        <div class="metric-label">Systems & Processes</div>
-                        <div class="metric-value">{{inboundWebhookRequest.systemsProcessesGrade}}</div>
-                    </div>
-                    <div class="metric">
-                        <div class="metric-label">Asset Quality</div>
-                        <div class="metric-value">{{inboundWebhookRequest.assetQualityGrade}}</div>
-                    </div>
-                    <div class="metric">
-                        <div class="metric-label">Industry Outlook</div>
-                        <div class="metric-value">{{inboundWebhookRequest.industryOutlookGrade}}</div>
-                    </div>
+                <div class="metrics-title">Executive Analysis</div>
+                <div style="background: white; padding: 20px; border-radius: 6px; line-height: 1.6;">
+                    {{contact.aigenerated_summary}}
                 </div>
             </div>
             
