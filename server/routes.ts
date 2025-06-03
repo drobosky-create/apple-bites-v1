@@ -5,6 +5,7 @@ import { insertValuationAssessmentSchema, type ValuationAssessment, loginSchema,
 import { generateValuationNarrative, type ValuationAnalysisInput } from "./openai";
 import { generateValuationPDF } from "./pdf-generator";
 import { emailService } from "./email-service";
+import { goHighLevelService } from "./gohighlevel-service";
 import { getMultiplierForGrade, getLabelForGrade, scoreToGrade } from "./config/multiplierScale";
 import fs from 'fs/promises';
 import path from 'path';
@@ -370,13 +371,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
           isProcessed: true,
         });
 
-        // Send email with PDF attachment
+        // Send email through GoHighLevel and create contact
         try {
-          await emailService.sendValuationReport(assessment, pdfBuffer);
-          console.log(`Valuation report emailed to ${assessment.email}`);
-        } catch (emailError) {
-          console.error('Failed to send email, but continuing:', emailError);
-          // Don't fail the entire request if email fails
+          const ghlResult = await goHighLevelService.processValuationAssessment(assessment, pdfBuffer);
+          console.log(`GoHighLevel processing completed:`, {
+            contactCreated: ghlResult.contactCreated,
+            emailSent: ghlResult.emailSent,
+            webhookSent: ghlResult.webhookSent,
+            email: assessment.email
+          });
+        } catch (ghlError) {
+          console.error('GoHighLevel processing failed, but continuing:', ghlError);
+          // Don't fail the entire request if GoHighLevel fails
         }
 
       } catch (pdfError) {
