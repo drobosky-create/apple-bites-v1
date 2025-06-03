@@ -130,7 +130,7 @@ export class GoHighLevelService {
         tags: [
           'Business Valuation Lead',
           `Grade: ${assessment.overallScore}`,
-          `Value: ${assessment.midEstimate}`
+          `Value: $${Number(assessment.midEstimate).toLocaleString()}`
         ],
         customFields: {
           'valuation_score': assessment.overallScore,
