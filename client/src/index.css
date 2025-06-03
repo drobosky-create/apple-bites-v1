@@ -6,7 +6,7 @@
   :root {
     /* Meritage Partners Brand Colors */
     --meritage-navy: 31 41 79; /* #1F294F */
-    --meritage-gold: 194 165 82; /* #C2A552 */
+    --meritage-blue: 59 130 246; /* #3B82F6 - blue-500 */
     --meritage-light-blue: 220 235 251; /* #DCEBFB */
     --meritage-dark-blue: 15 23 42; /* #0F172A */
     
@@ -15,7 +15,7 @@
     --foreground: var(--meritage-dark-blue);
     --primary: var(--meritage-navy);
     --primary-foreground: 248 250 252;
-    --secondary: var(--meritage-gold);
+    --secondary: var(--meritage-blue);
     --secondary-foreground: var(--meritage-dark-blue);
     --muted: 241 245 249; /* slate-100 */
     --muted-foreground: 100 116 139; /* slate-500 */
@@ -32,11 +32,11 @@
 
 @layer components {
   .heritage-gradient {
-    background: linear-gradient(135deg, rgb(var(--meritage-navy)) 0%, rgb(var(--meritage-gold)) 100%);
+    background: linear-gradient(135deg, rgb(var(--meritage-navy)) 0%, rgb(var(--meritage-blue)) 100%);
   }
   
   .heritage-text-gradient {
-    background: linear-gradient(135deg, rgb(var(--meritage-navy)) 0%, rgb(var(--meritage-gold)) 100%);
+    background: linear-gradient(135deg, rgb(var(--meritage-navy)) 0%, rgb(var(--meritage-blue)) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
