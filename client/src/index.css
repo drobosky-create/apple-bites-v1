@@ -6,8 +6,8 @@
   :root {
     /* Meritage Partners Brand Colors */
     --meritage-navy: 31 41 79; /* #1F294F */
-    --meritage-purple: 147 51 234; /* #9333EA - purple-600 */
-    --meritage-light-purple: 243 232 255; /* #F3E8FF */
+    --meritage-blue: 59 130 246; /* #3B82F6 - blue-500 */
+    --meritage-light-blue: 220 235 251; /* #DCEBFB */
     --meritage-dark-blue: 15 23 42; /* #0F172A */
     
     /* Updated color palette based on Meritage Partners branding */
@@ -15,11 +15,11 @@
     --foreground: 15 23 42; /* black/dark blue */
     --primary: var(--meritage-navy);
     --primary-foreground: 248 250 252;
-    --secondary: var(--meritage-purple);
+    --secondary: var(--meritage-blue);
     --secondary-foreground: 15 23 42; /* black text */
     --muted: 241 245 249; /* slate-100 */
     --muted-foreground: 71 85 105; /* slate-600 for better readability */
-    --accent: var(--meritage-light-purple);
+    --accent: var(--meritage-light-blue);
     --accent-foreground: 15 23 42; /* black text */
     --destructive: 239 68 68; /* red-500 */
     --destructive-foreground: 248 250 252;
@@ -32,11 +32,11 @@
 
 @layer components {
   .heritage-gradient {
-    background: linear-gradient(135deg, rgb(var(--meritage-navy)) 0%, rgb(var(--meritage-purple)) 100%);
+    background: linear-gradient(135deg, rgb(var(--meritage-navy)) 0%, rgb(var(--meritage-blue)) 100%);
   }
   
   .heritage-text-gradient {
-    background: linear-gradient(135deg, rgb(var(--meritage-navy)) 0%, rgb(var(--meritage-purple)) 100%);
+    background: linear-gradient(135deg, rgb(var(--meritage-navy)) 0%, rgb(var(--meritage-blue)) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -59,8 +59,8 @@
   
   .form-input:focus {
     background: rgb(241 245 249);
-    border-color: rgb(147 51 234);
-    box-shadow: 0 0 0 3px rgb(147 51 234 / 0.1);
+    border-color: rgb(59 130 246);
+    box-shadow: 0 0 0 3px rgb(59 130 246 / 0.1);
     color: rgb(15 23 42) !important;
   }
   
