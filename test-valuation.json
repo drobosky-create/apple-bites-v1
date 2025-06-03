@@ -1,11 +1,11 @@
 {
   "contact": {
-    "firstName": "David",
-    "lastName": "Wilson", 
-    "email": "david.wilson@precisionsystems.com",
-    "phone": "555-345-6789",
-    "company": "Precision Systems LLC",
-    "jobTitle": "Owner"
+    "firstName": "Jennifer",
+    "lastName": "Martinez", 
+    "email": "jennifer.martinez@advancedtech.com",
+    "phone": "555-456-7890",
+    "company": "Advanced Tech Industries",
+    "jobTitle": "President"
   },
   "ebitda": {
     "netIncome": "500000",
