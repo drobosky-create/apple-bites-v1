@@ -255,7 +255,7 @@ export default function TeamDashboard() {
                               <FormItem>
                                 <FormLabel>First Name</FormLabel>
                                 <FormControl>
-                                  <Input {...field} />
+                                  <Input {...field} className="bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20" />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -268,7 +268,7 @@ export default function TeamDashboard() {
                               <FormItem>
                                 <FormLabel>Last Name</FormLabel>
                                 <FormControl>
-                                  <Input {...field} />
+                                  <Input {...field} className="bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20" />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -282,7 +282,7 @@ export default function TeamDashboard() {
                             <FormItem>
                               <FormLabel>Email</FormLabel>
                               <FormControl>
-                                <Input {...field} type="email" />
+                                <Input {...field} type="email" className="bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20" />
                               </FormControl>
                               <FormMessage />
                             </FormItem>

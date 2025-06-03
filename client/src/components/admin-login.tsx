@@ -90,7 +90,7 @@ export default function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
                         {...field}
                         type="text"
                         placeholder="Enter your username"
-                        className="pl-10"
+                        className="bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20 pl-10"
                         disabled={loginMutation.isPending}
                       />
                     </div>
@@ -113,7 +113,7 @@ export default function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
                         {...field}
                         type="password"
                         placeholder="Enter your password"
-                        className="pl-10"
+                        className="bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20 pl-10"
                         disabled={loginMutation.isPending}
                       />
                     </div>
