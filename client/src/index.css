@@ -72,18 +72,26 @@
   .bg-yellow-500,
   .bg-yellow-400,
   .bg-yellow-600,
+  .bg-yellow-300,
+  .bg-yellow-200,
+  .bg-yellow-100,
   .bg-amber-500,
   .bg-amber-400,
-  .bg-amber-600 {
+  .bg-amber-600,
+  .bg-amber-300,
+  .bg-amber-200,
+  .bg-amber-100 {
     background: rgb(var(--meritage-navy)) !important;
   }
   
   .text-amber-600,
   .text-amber-700,
   .text-amber-800,
+  .text-amber-500,
   .text-yellow-600,
   .text-yellow-700,
   .text-yellow-800,
+  .text-yellow-500,
   .text-orange-600,
   .text-orange-700,
   .text-orange-800,
@@ -95,9 +103,19 @@
   
   .border-yellow-500,
   .border-yellow-400,
+  .border-yellow-300,
+  .border-yellow-200,
   .border-amber-500,
-  .border-amber-400 {
+  .border-amber-400,
+  .border-amber-300,
+  .border-amber-200 {
     border-color: rgb(var(--meritage-blue)) !important;
+  }
+  
+  /* Override warning/caution colors that may use yellow */
+  .text-yellow-800,
+  .text-amber-800 {
+    color: rgb(var(--meritage-navy)) !important;
   }
 
   /* Ensure form labels are black */

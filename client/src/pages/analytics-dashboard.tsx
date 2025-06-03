@@ -74,7 +74,7 @@ export default function AnalyticsDashboard() {
     return acc;
   }, {} as Record<string, number>) || {};
 
-  const pieColors = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8'];
+  const pieColors = ['#0088FE', '#00C49F', '#64748B', '#FF8042', '#8884D8'];
 
   return (
     <div className="max-w-7xl mx-auto p-6">

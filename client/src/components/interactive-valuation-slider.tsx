@@ -248,7 +248,7 @@ export default function InteractiveValuationSlider() {
               {[
                 { grade: 'F', color: 'bg-red-500', multiple: '2.0x', label: 'Poor Operations' },
                 { grade: 'D', color: 'bg-red-400', multiple: '3.0x', label: 'Below Average' },
-                { grade: 'C', color: 'bg-yellow-500', multiple: '4.2x', label: 'Average Operations' },
+                { grade: 'C', color: 'bg-slate-500', multiple: '4.2x', label: 'Average Operations' },
                 { grade: 'B', color: 'bg-green-400', multiple: '5.7x', label: 'Good Operations' },
                 { grade: 'A', color: 'bg-green-500', multiple: '7.5x', label: 'Excellent Operations' }
               ].map((segment, index) => (
