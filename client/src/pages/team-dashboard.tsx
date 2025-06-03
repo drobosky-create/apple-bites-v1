@@ -233,7 +233,7 @@ export default function TeamDashboard() {
                 </div>
                 <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
                   <DialogTrigger asChild>
-                    <Button className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-sm">
+                    <Button className="flex items-center gap-2 heritage-gradient text-white shadow-sm hover:shadow-md transition-all duration-200">
                       <UserPlus className="w-4 h-4" />
                       Add Member
                     </Button>

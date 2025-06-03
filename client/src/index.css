@@ -50,28 +50,7 @@
   }
 }
 
-:root {
-  --background: 210 11% 98%; /* #F8FAFC */
-  --foreground: 222 84% 5%; /* #0F172A */
-  --muted: 210 40% 98%; /* #F1F5F9 */
-  --muted-foreground: 215 16% 47%; /* #64748B */
-  --popover: 0 0% 100%; /* #FFFFFF */
-  --popover-foreground: 222 84% 5%; /* #0F172A */
-  --card: 0 0% 100%; /* #FFFFFF */
-  --card-foreground: 222 84% 5%; /* #0F172A */
-  --border: 214 32% 91%; /* #E2E8F0 */
-  --input: 214 32% 91%; /* #E2E8F0 */
-  --primary: 221 83% 53%; /* #1E40AF */
-  --primary-foreground: 210 40% 98%; /* #F1F5F9 */
-  --secondary: 210 40% 96%; /* #F1F5F9 */
-  --secondary-foreground: 222 47% 11%; /* #1E293B */
-  --accent: 210 40% 96%; /* #F1F5F9 */
-  --accent-foreground: 222 47% 11%; /* #1E293B */
-  --destructive: 0 84% 60%; /* #EF4444 */
-  --destructive-foreground: 0 0% 98%; /* #FAFAFA */
-  --ring: 221 83% 53%; /* #1E40AF */
-  --radius: 0.5rem;
-}
+
 
 .dark {
   --background: 222 84% 5%; /* #0F172A */
