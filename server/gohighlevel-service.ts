@@ -133,13 +133,13 @@ export class GoHighLevelService {
           `Value: $${Number(assessment.midEstimate).toLocaleString()}`
         ],
         customFields: {
-          // Match GoHighLevel field names exactly
+          // Convert decimal strings to numbers for GoHighLevel
           'overall_grade_af': assessment.overallScore,
-          'valuation_estimate': assessment.midEstimate,
-          'valuation_low': assessment.lowEstimate,
-          'valuation_high': assessment.highEstimate,
-          'adjusted_ebitda': assessment.adjustedEbitda,
-          'valuation_multiple': assessment.valuationMultiple,
+          'valuation_estimate': Number(assessment.midEstimate) || 0,
+          'valuation_low': Number(assessment.lowEstimate) || 0,
+          'valuation_high': Number(assessment.highEstimate) || 0,
+          'adjusted_ebitda': Number(assessment.adjustedEbitda) || 0,
+          'valuation_multiple': Number(assessment.valuationMultiple) || 0,
           'assessment_date': assessment.createdAt,
           'financial_performance_grade': assessment.financialPerformance,
           'customer_concentration_grade': assessment.customerConcentration,
@@ -179,13 +179,28 @@ export class GoHighLevelService {
       const webhookData = {
         event: 'valuation_completed',
         contact: {
-          ...contactData,
-          // Match GoHighLevel field names exactly for email templates
+          first_name: assessment.firstName || '',
+          last_name: assessment.lastName || '',
+          email: assessment.email,
+          phone: assessment.phone || '',
+          company_name: assessment.company || '',
+          // Custom fields matching GoHighLevel exactly - convert strings to numbers
           overall_grade_af: assessment.overallScore,
-          valuation_estimate: assessment.midEstimate,
-          valuation_low: assessment.lowEstimate,
-          valuation_high: assessment.highEstimate,
-          adjusted_ebitda: assessment.adjustedEbitda,
+          valuation_estimate: Number(assessment.midEstimate) || 0,
+          valuation_low: Number(assessment.lowEstimate) || 0,
+          valuation_high: Number(assessment.highEstimate) || 0,
+          adjusted_ebitda: Number(assessment.adjustedEbitda) || 0,
+          financial_performance_grade: assessment.financialPerformance,
+          customer_concentration_grade: assessment.customerConcentration,
+          management_team_grade: assessment.managementTeam,
+          competitive_position_grade: assessment.competitivePosition,
+          growth_prospects_grade: assessment.growthProspects,
+          systems_processes_grade: assessment.systemsProcesses,
+          asset_quality_grade: assessment.assetQuality,
+          industry_outlook_grade: assessment.industryOutlook,
+          risk_factors_grade: assessment.riskFactors,
+          owner_dependency_grade: assessment.ownerDependency,
+          follow_up_intent: assessment.followUpIntent,
           executive_summary: assessment.executiveSummary || ''
         },
         assessment: {
