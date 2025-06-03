@@ -3,7 +3,7 @@ import { FollowUpData } from "@shared/schema";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Send, Clock } from "lucide-react";
+import { ArrowLeft, ArrowRight, Send, Clock } from "lucide-react";
 
 interface FollowUpFormProps {
   form: UseFormReturn<FollowUpData>;
@@ -20,14 +20,19 @@ export default function FollowUpForm({ form, onSubmit, onPrev, onDataChange, isS
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-sm">
-      <div className="p-6 border-b border-slate-200">
-        <h3 className="text-xl font-semibold text-slate-900 mb-2">Follow-up Preferences</h3>
-        <p className="text-slate-600">Let us know how you'd like to proceed after receiving your valuation report.</p>
+    <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-sm border border-slate-200/60">
+      <div className="p-8 border-b border-slate-200/60 bg-gradient-to-r from-slate-50/80 to-blue-50/40 rounded-t-xl">
+        <div className="flex items-center gap-3 mb-3">
+          <div className="p-2 bg-blue-100 rounded-lg">
+            <ArrowRight className="w-5 h-5 text-blue-600" />
+          </div>
+          <h3 className="text-2xl font-bold text-slate-900">Follow-up Preferences</h3>
+        </div>
+        <p className="text-slate-600 leading-relaxed">Let us know how you'd like to proceed after receiving your valuation report.</p>
       </div>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)} className="p-6 space-y-6">
+        <form onSubmit={form.handleSubmit(handleSubmit)} className="p-8 space-y-6">
           <FormField
             control={form.control}
             name="followUpIntent"
