@@ -821,6 +821,43 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Test endpoint for GoHighLevel integration
+  app.post("/api/test-gohighlevel", async (req, res) => {
+    try {
+      const testContact = {
+        firstName: "Test",
+        lastName: "User",
+        email: "test@example.com",
+        phone: "555-123-4567",
+        companyName: "Test Company"
+      };
+
+      // Test contact creation
+      const contactResult = await goHighLevelService.createOrUpdateContact(testContact);
+      
+      // Test webhook
+      const webhookResult = await goHighLevelService.sendWebhook({
+        event: "test_integration",
+        contact: testContact,
+        timestamp: new Date().toISOString()
+      });
+
+      res.json({
+        success: true,
+        results: {
+          contactCreated: !!contactResult,
+          webhookSent: webhookResult
+        }
+      });
+    } catch (error) {
+      console.error("GoHighLevel test failed:", error);
+      res.status(500).json({
+        success: false,
+        error: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
