@@ -10,7 +10,6 @@ export default function Navigation() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
-            <h1 className="text-xl font-semibold text-slate-900">Apple Bites Valuation</h1>
           </div>
           
           <nav className="flex space-x-4">
