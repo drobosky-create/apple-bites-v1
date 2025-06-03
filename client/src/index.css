@@ -12,15 +12,15 @@
     
     /* Updated color palette based on Meritage Partners branding */
     --background: 248 250 252; /* slate-50 */
-    --foreground: var(--meritage-dark-blue);
+    --foreground: 15 23 42; /* black/dark blue */
     --primary: var(--meritage-navy);
     --primary-foreground: 248 250 252;
     --secondary: var(--meritage-blue);
-    --secondary-foreground: var(--meritage-dark-blue);
+    --secondary-foreground: 15 23 42; /* black text */
     --muted: 241 245 249; /* slate-100 */
-    --muted-foreground: 100 116 139; /* slate-500 */
+    --muted-foreground: 71 85 105; /* slate-600 for better readability */
     --accent: var(--meritage-light-blue);
-    --accent-foreground: var(--meritage-dark-blue);
+    --accent-foreground: 15 23 42; /* black text */
     --destructive: 239 68 68; /* red-500 */
     --destructive-foreground: 248 250 252;
     --border: 226 232 240; /* slate-200 */
@@ -53,7 +53,7 @@
   .form-input {
     background: rgb(248 250 252);
     border: 1px solid rgb(203 213 225);
-    color: rgb(15 23 42);
+    color: rgb(15 23 42) !important;
     transition: all 0.2s ease;
   }
   
@@ -61,10 +61,37 @@
     background: rgb(241 245 249);
     border-color: rgb(59 130 246);
     box-shadow: 0 0 0 3px rgb(59 130 246 / 0.1);
+    color: rgb(15 23 42) !important;
   }
   
   .form-input::placeholder {
-    color: rgb(100 116 139);
+    color: rgb(100 116 139) !important;
+  }
+
+  /* Override any gold/brown text colors */
+  .text-amber-600,
+  .text-amber-700,
+  .text-amber-800,
+  .text-yellow-600,
+  .text-yellow-700,
+  .text-yellow-800,
+  .text-orange-600,
+  .text-orange-700,
+  .text-orange-800,
+  .text-brown-600,
+  .text-brown-700,
+  .text-brown-800 {
+    color: rgb(15 23 42) !important;
+  }
+
+  /* Ensure form labels are black */
+  label {
+    color: rgb(15 23 42) !important;
+  }
+
+  /* Ensure all text elements are readable */
+  .form-error {
+    color: rgb(239 68 68) !important;
   }
 }
 
