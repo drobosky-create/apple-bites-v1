@@ -118,6 +118,30 @@
     color: rgb(var(--meritage-navy)) !important;
   }
 
+  /* Override shadcn button hover states to prevent yellow highlighting */
+  .hover\:bg-accent:hover,
+  button:hover {
+    background-color: rgb(71 85 105 / 0.1) !important;
+  }
+  
+  .hover\:text-accent-foreground:hover {
+    color: rgb(15 23 42) !important;
+  }
+
+  /* Specific override for navigation buttons */
+  nav button:hover:not(.heritage-gradient) {
+    background-color: rgb(71 85 105 / 0.1) !important;
+    color: rgb(15 23 42) !important;
+  }
+
+  /* Override any remaining yellow/amber hover states */
+  .hover\:bg-yellow-50:hover,
+  .hover\:bg-amber-50:hover,
+  .hover\:bg-yellow-100:hover,
+  .hover\:bg-amber-100:hover {
+    background-color: rgb(71 85 105 / 0.1) !important;
+  }
+
   /* Ensure form labels are black */
   label {
     color: rgb(15 23 42) !important;
