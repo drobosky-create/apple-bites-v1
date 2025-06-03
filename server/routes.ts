@@ -427,7 +427,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
         console.log('Sending webhook data:', JSON.stringify(webhookData, null, 2));
         
-        const webhookResponse = await fetch('https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhldFd0Z/webhook-trigger/a1c07f34-9591-4c89-9d05-7f0ea296de31', {
+        const webhookResponse = await fetch('https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhldFd0Z/webhook-trigger/dc1a8a7f-47ee-4c9a-b474-e1aeb21af3e3', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(webhookData)
@@ -759,7 +759,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       console.log('Testing NEW webhook with complete field data:', JSON.stringify(testData, null, 2));
       
-      const webhookResponse = await fetch('https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhldFd0Z/webhook-trigger/a1c07f34-9591-4c89-9d05-7f0ea296de31', {
+      const webhookResponse = await fetch('https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhldFd0Z/webhook-trigger/dc1a8a7f-47ee-4c9a-b474-e1aeb21af3e3', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(testData)

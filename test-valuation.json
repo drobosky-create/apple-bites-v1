@@ -1,11 +1,11 @@
 {
   "contact": {
-    "firstName": "Jennifer",
-    "lastName": "Martinez", 
-    "email": "jennifer.martinez@advancedtech.com",
-    "phone": "555-456-7890",
-    "company": "Advanced Tech Industries",
-    "jobTitle": "President"
+    "firstName": "Robert",
+    "lastName": "Johnson", 
+    "email": "robert.johnson@globalmanufacturing.com",
+    "phone": "555-567-8901",
+    "company": "Global Manufacturing Solutions",
+    "jobTitle": "Founder & CEO"
   },
   "ebitda": {
     "netIncome": "500000",
