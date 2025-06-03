@@ -142,6 +142,30 @@
     background-color: rgb(71 85 105 / 0.1) !important;
   }
 
+  /* Fix form input focus states to prevent yellow highlighting */
+  .focus\:ring-yellow-500:focus,
+  .focus\:ring-amber-500:focus,
+  .focus\:border-yellow-500:focus,
+  .focus\:border-amber-500:focus {
+    border-color: rgb(var(--meritage-blue)) !important;
+    box-shadow: 0 0 0 2px rgb(var(--meritage-blue) / 0.2) !important;
+  }
+
+  /* Override Radix UI and shadcn form focus states */
+  input:focus,
+  textarea:focus,
+  select:focus {
+    border-color: rgb(var(--meritage-blue)) !important;
+    box-shadow: 0 0 0 2px rgb(var(--meritage-blue) / 0.2) !important;
+    outline: none !important;
+  }
+
+  /* Fix any remaining yellow focus rings */
+  .focus-visible\:ring-yellow-500:focus-visible,
+  .focus-visible\:ring-amber-500:focus-visible {
+    box-shadow: 0 0 0 2px rgb(var(--meritage-blue) / 0.2) !important;
+  }
+
   /* Ensure form labels are black */
   label {
     color: rgb(15 23 42) !important;

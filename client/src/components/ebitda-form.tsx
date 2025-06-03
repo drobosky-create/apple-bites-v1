@@ -47,7 +47,7 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
               name="netIncome"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
+                  <FormLabel className="text-slate-900 font-medium">
                     Net Income <span className="text-red-500">*</span>
                   </FormLabel>
                   <FormControl>
@@ -76,7 +76,7 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
               name="interest"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
+                  <FormLabel className="text-slate-900 font-medium">
                     Interest Expense <span className="text-red-500">*</span>
                   </FormLabel>
                   <FormControl>
@@ -107,7 +107,7 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
               name="taxes"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
+                  <FormLabel className="text-slate-900 font-medium">
                     Tax Expense <span className="text-red-500">*</span>
                   </FormLabel>
                   <FormControl>
@@ -136,7 +136,7 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
               name="depreciation"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
+                  <FormLabel className="text-slate-900 font-medium">
                     Depreciation <span className="text-red-500">*</span>
                   </FormLabel>
                   <FormControl>
@@ -161,34 +161,39 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
             />
           </div>
 
-          <FormField
-            control={form.control}
-            name="amortization"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>
-                  Amortization <span className="text-red-500">*</span>
-                </FormLabel>
-                <FormControl>
-                  <div className="relative">
-                    <span className="absolute left-3 top-3 text-slate-400">$</span>
-                    <Input 
-                      {...field} 
-                      type="number" 
-                      placeholder="0" 
-                      className="bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20 pl-8"
-                      onChange={(e) => {
-                        field.onChange(e);
-                        onDataChange(form.getValues());
-                      }}
-                    />
-                  </div>
-                </FormControl>
-                <p className="form-help">Amortization of intangible assets</p>
-                <FormMessage className="form-error" />
-              </FormItem>
-            )}
-          />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <FormField
+              control={form.control}
+              name="amortization"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-slate-900 font-medium">
+                    Amortization <span className="text-red-500">*</span>
+                  </FormLabel>
+                  <FormControl>
+                    <div className="relative">
+                      <span className="absolute left-3 top-3 text-slate-400">$</span>
+                      <Input 
+                        {...field} 
+                        type="number" 
+                        placeholder="0" 
+                        className="bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20 pl-8"
+                        onChange={(e) => {
+                          field.onChange(e);
+                          onDataChange(form.getValues());
+                        }}
+                      />
+                    </div>
+                  </FormControl>
+                  <p className="form-help">Amortization of intangible assets</p>
+                  <FormMessage className="form-error" />
+                </FormItem>
+              )}
+            />
+            
+            {/* Empty column to maintain grid balance */}
+            <div></div>
+          </div>
 
           {/* Owner Adjustments Section */}
           <div className="mt-8">
