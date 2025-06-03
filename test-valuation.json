@@ -1,11 +1,11 @@
 {
   "contact": {
-    "firstName": "Michael",
-    "lastName": "Rodriguez", 
-    "email": "michael.rodriguez@innovatetech.com",
-    "phone": "555-987-6543",
-    "company": "InnovateTech Solutions",
-    "jobTitle": "Founder & CEO"
+    "firstName": "Sarah",
+    "lastName": "Thompson", 
+    "email": "sarah.thompson@techmanufacturing.com",
+    "phone": "555-234-5678",
+    "company": "TechManufacturing Corp",
+    "jobTitle": "CEO"
   },
   "ebitda": {
     "netIncome": "500000",
