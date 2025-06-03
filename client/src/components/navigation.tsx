@@ -18,7 +18,7 @@ export default function Navigation() {
               <Button 
                 variant={location === "/" ? "default" : "ghost"}
                 size="sm"
-                className="flex items-center space-x-2"
+                className={`flex items-center space-x-2 ${location === "/" ? "heritage-gradient text-white" : "text-slate-700 hover:text-slate-900"}`}
               >
                 <FileText className="w-4 h-4" />
                 <span>Valuation Form</span>
@@ -31,7 +31,7 @@ export default function Navigation() {
               <Button 
                 variant={location === "/admin/leads" ? "default" : "ghost"}
                 size="sm"
-                className="flex items-center space-x-2"
+                className={`flex items-center space-x-2 ${location === "/admin/leads" ? "heritage-gradient text-white" : "text-slate-700 hover:text-slate-900"}`}
               >
                 <Users className="w-4 h-4" />
                 <span>Leads</span>
@@ -42,7 +42,7 @@ export default function Navigation() {
               <Button 
                 variant={location === "/admin/analytics" ? "default" : "ghost"}
                 size="sm"
-                className="flex items-center space-x-2"
+                className={`flex items-center space-x-2 ${location === "/admin/analytics" ? "heritage-gradient text-white" : "text-slate-700 hover:text-slate-900"}`}
               >
                 <BarChart3 className="w-4 h-4" />
                 <span>Analytics</span>
