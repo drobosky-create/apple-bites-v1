@@ -259,7 +259,7 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
                 name="oneTimeExpenses"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>One-Time Expenses</FormLabel>
+                    <FormLabel>Non-Recurring Expenses</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <span className="absolute left-3 top-3 text-slate-400">$</span>
