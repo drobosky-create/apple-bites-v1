@@ -84,7 +84,8 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
 
               <Button 
                 onClick={handleExploreImprovements}
-                className="flex-1 sm:flex-none bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium flex items-center justify-center"
+                variant="outline"
+                className="flex-1 sm:flex-none px-6 py-3 rounded-lg font-medium border-green-600 text-green-600 hover:bg-green-50 flex items-center justify-center"
               >
                 <Calculator className="mr-2 w-4 h-4" />
                 Explore Value Improvements

@@ -68,7 +68,16 @@
     color: rgb(100 116 139) !important;
   }
 
-  /* Override any gold/brown text colors */
+  /* Override any yellow/gold/brown colors with professional blue-gray scheme */
+  .bg-yellow-500,
+  .bg-yellow-400,
+  .bg-yellow-600,
+  .bg-amber-500,
+  .bg-amber-400,
+  .bg-amber-600 {
+    background: rgb(var(--meritage-navy)) !important;
+  }
+  
   .text-amber-600,
   .text-amber-700,
   .text-amber-800,
@@ -82,6 +91,13 @@
   .text-brown-700,
   .text-brown-800 {
     color: rgb(15 23 42) !important;
+  }
+  
+  .border-yellow-500,
+  .border-yellow-400,
+  .border-amber-500,
+  .border-amber-400 {
+    border-color: rgb(var(--meritage-blue)) !important;
   }
 
   /* Ensure form labels are black */
