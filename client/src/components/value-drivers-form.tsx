@@ -200,7 +200,7 @@ export default function ValueDriversForm({ form, onNext, onPrev, onDataChange }:
               type="button" 
               variant="ghost" 
               onClick={onPrev}
-              className="text-slate-600 px-8 py-3 rounded-lg font-medium hover:text-slate-900"
+              className="bg-gradient-to-r from-slate-500 to-slate-600 text-white px-8 py-3 rounded-lg font-medium hover:from-slate-600 hover:to-slate-700 transition-all duration-200 shadow-md hover:shadow-lg"
             >
               <ArrowLeft className="mr-2 w-4 h-4" />
               Previous
