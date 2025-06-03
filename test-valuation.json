@@ -1,11 +1,11 @@
 {
   "contact": {
-    "firstName": "Sarah",
-    "lastName": "Johnson", 
-    "email": "sarah.johnson@techsolutions.com",
-    "phone": "555-123-4567",
-    "company": "Test Manufacturing Co",
-    "jobTitle": "CEO"
+    "firstName": "Michael",
+    "lastName": "Rodriguez", 
+    "email": "michael.rodriguez@innovatetech.com",
+    "phone": "555-987-6543",
+    "company": "InnovateTech Solutions",
+    "jobTitle": "Founder & CEO"
   },
   "ebitda": {
     "netIncome": "500000",
