@@ -58,5 +58,32 @@ export default function ValueCalculator() {
     );
   }
 
-  return <InteractiveValuationSlider />;
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="mb-12 flex items-start justify-between">
+          <div className="space-y-2">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              Value Improvement Calculator
+            </h1>
+            <p className="text-lg text-slate-600 max-w-2xl">
+              Explore how improving your operational grades affects your business valuation and discover opportunities for growth
+            </p>
+          </div>
+          <Button
+            variant="outline"
+            onClick={() => setLocation('/')}
+            className="flex items-center gap-2 bg-white/80 backdrop-blur-sm border-slate-200 hover:bg-white hover:shadow-md transition-all duration-200"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back to Assessment
+          </Button>
+        </div>
+
+        <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-slate-200/60 p-8">
+          <InteractiveValuationSlider />
+        </div>
+      </div>
+    </div>
+  );
 }

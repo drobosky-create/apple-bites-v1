@@ -18,14 +18,19 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-sm">
-      <div className="p-6 border-b border-slate-200">
-        <h3 className="text-xl font-semibold text-slate-900 mb-2">Contact Information</h3>
-        <p className="text-slate-600">Please provide your contact details to begin the valuation assessment.</p>
+    <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-sm border border-slate-200/60">
+      <div className="p-8 border-b border-slate-200/60 bg-gradient-to-r from-slate-50/80 to-blue-50/40 rounded-t-xl">
+        <div className="flex items-center gap-3 mb-3">
+          <div className="p-2 bg-blue-100 rounded-lg">
+            <Shield className="w-5 h-5 text-blue-600" />
+          </div>
+          <h3 className="text-2xl font-bold text-slate-900">Contact Information</h3>
+        </div>
+        <p className="text-slate-600 leading-relaxed">Please provide your contact details to begin the comprehensive valuation assessment.</p>
       </div>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="p-6 space-y-6">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="p-8 space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <FormField
               control={form.control}
@@ -124,21 +129,23 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
             )}
           />
 
-          <div className="bg-slate-50 rounded-lg p-4">
+          <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-6 border border-blue-100">
             <div className="flex items-start space-x-3">
               <div className="flex-shrink-0">
-                <Shield className="w-5 h-5 text-primary mt-0.5" />
+                <div className="p-2 bg-blue-100 rounded-lg">
+                  <Shield className="w-5 h-5 text-blue-600" />
+                </div>
               </div>
-              <div className="text-sm text-slate-600">
-                <p className="font-medium mb-1">Data Privacy</p>
-                <p>Your information is encrypted and secure. We will use this data solely for generating your business valuation report and will not share it with third parties.</p>
+              <div className="text-sm text-slate-700">
+                <p className="font-semibold mb-2 text-slate-900">Data Privacy & Security</p>
+                <p className="leading-relaxed">Your information is encrypted and secure. We will use this data solely for generating your business valuation report and will not share it with third parties.</p>
               </div>
             </div>
           </div>
 
-          <div className="flex justify-between pt-6">
+          <div className="flex justify-between pt-8">
             <div></div>
-            <Button type="submit" className="btn-primary px-8 py-3 rounded-lg font-medium">
+            <Button type="submit" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105">
               Next: EBITDA Information
               <ArrowRight className="ml-2 w-4 h-4" />
             </Button>

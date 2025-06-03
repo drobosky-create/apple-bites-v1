@@ -25,28 +25,34 @@ export default function ValuationForm() {
   } = useValuationForm();
 
   return (
-    <div className="font-sans bg-slate-50 min-h-screen">
+    <div className="font-sans bg-gradient-to-br from-slate-50 to-blue-50 min-h-screen">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-slate-200">
+      <header className="bg-white/95 backdrop-blur-sm shadow-sm border-b border-slate-200/60">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
+          <div className="flex justify-between items-center h-20">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <h1 className="text-2xl font-bold text-slate-900">Apple Bites</h1>
-                <p className="text-sm text-slate-500">Business Valuation Platform</p>
+                <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                  Apple Bites
+                </h1>
+                <p className="text-sm text-slate-500 font-medium">Business Valuation Platform</p>
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              <div className="text-sm text-slate-600">
-                <Shield className="inline w-4 h-4 text-primary mr-2" />
-                Secure Assessment
+              <div className="flex items-center text-sm text-slate-600 bg-slate-100/70 px-3 py-2 rounded-lg">
+                <Shield className="w-4 h-4 text-blue-600 mr-2" />
+                <span className="font-medium">Secure Assessment</span>
               </div>
             </div>
           </div>
         </div>
       </header>
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 bg-[#4eaeeb00]">
-        {currentStep !== "results" && <ProgressIndicator currentStep={currentStep} />}
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {currentStep !== "results" && (
+          <div className="mb-8">
+            <ProgressIndicator currentStep={currentStep} />
+          </div>
+        )}
 
         {currentStep === "contact" && (
           <ContactForm
