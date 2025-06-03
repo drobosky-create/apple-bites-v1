@@ -31,7 +31,7 @@ export default function ValueDriversHeatmap({ assessment }: ValueDriversHeatmapP
     const colorMap: Record<Grade, string> = {
       'A': 'bg-green-500 hover:bg-green-600',
       'B': 'bg-blue-500 hover:bg-blue-600', 
-      'C': 'bg-yellow-500 hover:bg-yellow-600',
+      'C': 'bg-slate-500 hover:bg-slate-600',
       'D': 'bg-orange-500 hover:bg-orange-600',
       'F': 'bg-red-500 hover:bg-red-600'
     };
@@ -42,7 +42,7 @@ export default function ValueDriversHeatmap({ assessment }: ValueDriversHeatmapP
     const borderMap: Record<Grade, string> = {
       'A': 'border-green-600',
       'B': 'border-blue-600',
-      'C': 'border-yellow-600', 
+      'C': 'border-slate-600', 
       'D': 'border-orange-600',
       'F': 'border-red-600'
     };

@@ -49,7 +49,7 @@ export default function LeadsDashboard() {
   const getStatusColor = (status: string) => {
     const colors: Record<string, string> = {
       'new': 'bg-blue-100 text-blue-800',
-      'contacted': 'bg-yellow-100 text-yellow-800',
+      'contacted': 'bg-blue-100 text-blue-800',
       'qualified': 'bg-green-100 text-green-800',
       'converted': 'bg-purple-100 text-purple-800',
       'closed': 'bg-gray-100 text-gray-800',
@@ -59,7 +59,7 @@ export default function LeadsDashboard() {
 
   const getScoreColor = (score: number) => {
     if (score >= 70) return 'text-green-600';
-    if (score >= 40) return 'text-yellow-600';
+    if (score >= 40) return 'text-blue-600';
     return 'text-red-600';
   };
 

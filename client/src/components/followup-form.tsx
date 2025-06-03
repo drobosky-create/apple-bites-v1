@@ -105,7 +105,7 @@ export default function FollowUpForm({ form, onSubmit, onPrev, onDataChange, isS
                   <Textarea 
                     {...field} 
                     rows={4}
-                    className="form-input"
+                    className="bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20"
                     placeholder="Any specific areas of interest or questions about your business..."
                     onChange={(e) => {
                       field.onChange(e);
@@ -119,12 +119,12 @@ export default function FollowUpForm({ form, onSubmit, onPrev, onDataChange, isS
             )}
           />
 
-          <div className="bg-amber-50 rounded-lg p-4 border border-amber-200">
+          <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
             <div className="flex items-start space-x-3">
               <div className="flex-shrink-0">
-                <Clock className="w-5 h-5 text-amber-600 mt-0.5" />
+                <Clock className="w-5 h-5 text-blue-600 mt-0.5" />
               </div>
-              <div className="text-sm text-amber-800">
+              <div className="text-sm text-blue-800">
                 <p className="font-medium mb-1">Processing Time</p>
                 <p>Your valuation report will be generated and emailed to you within 5-10 minutes. Please check your email and spam folder.</p>
               </div>
