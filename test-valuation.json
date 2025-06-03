@@ -1,11 +1,11 @@
 {
   "contact": {
-    "firstName": "Michael",
-    "lastName": "Rodriguez", 
-    "email": "michael.rodriguez@innovatetech.com",
-    "phone": "555-234-5678",
-    "company": "InnovateTech Solutions",
-    "jobTitle": "Founder & CEO"
+    "firstName": "Debug",
+    "lastName": "Test", 
+    "email": "debug-mapping@test.com",
+    "phone": "555-999-0000",
+    "company": "Mapping Test Company",
+    "jobTitle": "Test Manager"
   },
   "ebitda": {
     "netIncome": "750000",
