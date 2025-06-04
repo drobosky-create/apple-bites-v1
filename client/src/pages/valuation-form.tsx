@@ -29,13 +29,13 @@ export default function ValuationForm() {
       {/* Header */}
       <header className="bg-white/95 backdrop-blur-sm shadow-sm border-b border-slate-200/60">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-20">
+          <div className="flex justify-between items-center h-28">
             <div className="flex items-center">
               <div className="flex-shrink-0 flex items-center gap-4">
                 <img 
                   src="/meritage-logo.png" 
                   alt="Meritage Partners" 
-                  className="h-12 w-auto"
+                  className="h-24 w-auto"
                 />
                 <div className="border-l border-slate-300 pl-4">
                   <h1 className="text-2xl font-bold text-slate-900">Apple Bites Business Assessment</h1>
