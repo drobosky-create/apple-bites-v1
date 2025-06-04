@@ -64,7 +64,7 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
               <div className="text-sm text-slate-600 mt-1">Most Likely</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-primary">{formatCurrency(results.highEstimate)}</div>
+              <div className="text-3xl font-bold text-[#2563eb]">{formatCurrency(results.highEstimate)}</div>
               <div className="text-sm text-slate-600 mt-1">High Estimate</div>
             </div>
           </div>
