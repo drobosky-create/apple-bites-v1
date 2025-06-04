@@ -148,7 +148,7 @@ export default function InteractiveValuationSlider() {
 
       {/* Current vs Potential Value Cards with Animation */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        <Card className="border-2 transition-all duration-300">
+        <Card className="border-2 border-slate-200 transition-all duration-300">
           <CardHeader className="text-center">
             <CardTitle className="text-lg">Current Value</CardTitle>
             <CardDescription>Based on your Operational Grade of {baseGrade}</CardDescription>

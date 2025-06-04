@@ -217,6 +217,41 @@
   .form-error {
     color: rgb(239 68 68) !important;
   }
+
+  /* Force remove ALL yellow elements from value calculator */
+  .bg-yellow-400,
+  .bg-yellow-500,
+  .bg-yellow-600,
+  .border-yellow-400,
+  .border-yellow-500,
+  .border-yellow-600,
+  .text-yellow-400,
+  .text-yellow-500,
+  .text-yellow-600 {
+    background-color: rgb(37 99 235) !important;
+    border-color: rgb(37 99 235) !important;
+    color: white !important;
+  }
+
+  /* Override slider yellow thumb and track colors */
+  .bg-primary,
+  [data-state="active"],
+  [data-radix-slider-thumb] {
+    background-color: rgb(37 99 235) !important;
+    border-color: rgb(37 99 235) !important;
+  }
+
+  /* Force all card borders to be blue/gray */
+  .border-2:not(.border-blue-200):not(.border-slate-200):not(.border-red-200) {
+    border-color: rgb(37 99 235) !important;
+  }
+
+  /* Override any remaining yellow styling in the value calculator */
+  [style*="border-color: yellow"],
+  [style*="border-color: #fbbf24"],
+  [style*="border-color: #f59e0b"] {
+    border-color: rgb(37 99 235) !important;
+  }
 }
 
 
