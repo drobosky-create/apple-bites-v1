@@ -203,7 +203,7 @@ export default function InteractiveValuationSlider() {
 
 
       {/* Interactive Grade Slider */}
-      <Card>
+      <Card className="border-2 border-slate-200">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <TrendingUp className="h-5 w-5" />
@@ -370,7 +370,7 @@ export default function InteractiveValuationSlider() {
       )}
 
       {/* Educational Content */}
-      <Card>
+      <Card className="border-2 border-slate-200">
         <CardHeader>
           <CardTitle>How to Improve Your Operational Grade</CardTitle>
         </CardHeader>

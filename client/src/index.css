@@ -252,6 +252,60 @@
   [style*="border-color: #f59e0b"] {
     border-color: rgb(37 99 235) !important;
   }
+
+  /* Target specific card components with yellow borders */
+  .border-2.border-yellow-200,
+  .border-2.border-yellow-300,
+  .border-2.border-yellow-400,
+  .border-2.border-amber-200,
+  .border-2.border-amber-300,
+  .border-2.border-amber-400 {
+    border-color: rgb(37 99 235) !important;
+  }
+
+  /* Force override for any remaining yellow borders in cards */
+  [class*="border-yellow"],
+  [class*="border-amber"],
+  .border-yellow-200,
+  .border-yellow-300,
+  .border-yellow-400,
+  .border-amber-200,
+  .border-amber-300,
+  .border-amber-400 {
+    border-color: rgb(37 99 235) !important;
+  }
+
+  /* Override inline styles that may be setting yellow borders */
+  *[style*="border: 2px solid rgb(254, 240, 138)"],
+  *[style*="border-color: rgb(254, 240, 138)"],
+  *[style*="border-color: rgb(251, 191, 36)"],
+  *[style*="border-color: rgb(245, 158, 11)"] {
+    border-color: rgb(37 99 235) !important;
+  }
+
+  /* Nuclear option: force ALL borders to be Meritage blue/gray in value calculator */
+  div[class*="value-calculator"] .border-2,
+  div[class*="interactive-valuation"] .border-2,
+  .border-2 {
+    border-color: rgb(148 163 184) !important; /* slate-400 */
+  }
+
+  /* Override all shadcn Card components to prevent yellow borders */
+  [data-radix-card],
+  .card,
+  [class*="card-"] {
+    border-color: rgb(148 163 184) !important;
+  }
+
+  /* Override all yellow/amber color variants globally */
+  .bg-yellow-50, .bg-yellow-100, .bg-yellow-200, .bg-yellow-300, .bg-yellow-400, .bg-yellow-500, .bg-yellow-600, .bg-yellow-700, .bg-yellow-800, .bg-yellow-900,
+  .bg-amber-50, .bg-amber-100, .bg-amber-200, .bg-amber-300, .bg-amber-400, .bg-amber-500, .bg-amber-600, .bg-amber-700, .bg-amber-800, .bg-amber-900,
+  .border-yellow-50, .border-yellow-100, .border-yellow-200, .border-yellow-300, .border-yellow-400, .border-yellow-500, .border-yellow-600, .border-yellow-700, .border-yellow-800, .border-yellow-900,
+  .border-amber-50, .border-amber-100, .border-amber-200, .border-amber-300, .border-amber-400, .border-amber-500, .border-amber-600, .border-amber-700, .border-amber-800, .border-amber-900 {
+    background-color: rgb(37 99 235) !important;
+    border-color: rgb(37 99 235) !important;
+    color: white !important;
+  }
 }
 
 
