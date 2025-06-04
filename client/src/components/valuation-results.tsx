@@ -28,8 +28,8 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
   };
 
   const handleScheduleConsultation = () => {
-    // This could open a calendar widget or redirect to scheduling page
-    console.log('Schedule consultation clicked');
+    // Open GoHighLevel calendar widget in a new window
+    window.open('https://api.leadconnectorhq.com/widget/booking/6C02AqJrPOT5XzWDoID1', '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
   };
 
   const handleExploreImprovements = () => {
