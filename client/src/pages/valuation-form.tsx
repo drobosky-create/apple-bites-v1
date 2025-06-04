@@ -33,7 +33,7 @@ export default function ValuationForm() {
             <div className="flex items-center">
               <div className="flex-shrink-0 flex items-center gap-4">
                 <img 
-                  src="/assets/Meritage Logo2.png" 
+                  src="/Meritage Logo2.png" 
                   alt="Meritage Partners" 
                   className="h-12 w-auto"
                 />

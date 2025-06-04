@@ -62,7 +62,7 @@ export default function TeamLogin({ onLoginSuccess }: TeamLoginProps) {
       <Card className="w-full max-w-md p-8 bg-white/80 backdrop-blur-sm border-0 shadow-lg">
         <div className="text-center mb-8">
           <img 
-            src="/assets/Meritage Logo2.png" 
+            src="/Meritage Logo2.png" 
             alt="Meritage Partners" 
             className="h-16 w-auto mx-auto mb-6"
           />
