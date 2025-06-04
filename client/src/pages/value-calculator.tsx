@@ -64,7 +64,7 @@ export default function ValueCalculator() {
         <div className="mb-12 flex items-start justify-between">
           <div className="flex items-center gap-6">
             <img 
-              src="/Meritage Logo2.png" 
+              src="/meritage-logo.png" 
               alt="Meritage Partners" 
               className="h-12 w-auto"
             />
