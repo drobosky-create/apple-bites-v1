@@ -29,7 +29,7 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
 
   const handleScheduleConsultation = () => {
     // Open GoHighLevel calendar widget in a new window
-    window.open('https://api.leadconnectorhq.com/widget/booking/6C02AqJrPOT5XzWDoID1', '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
+    window.open('https://api.leadconnectorhq.com/widget/bookings/scheduleanappointmentcallwithus-230ad544-8f6f-4125-9d14-f1b202f0becc-7fdb3832-39a9-4c80-a146-60233fb444a1-aaa07f1f-456b-4ccc-81e4-adb0ad437aa3-0b2d0529-cb48-461f-b8b5-712b398e91eb-fcbf65a8-70d2-4009-b786-ac4166822f0b-0f63997e-5577-46ae-9f21-00d7deb09698-236c7ec4-83c2-48f3-8aac-f523237ed3b4', '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
   };
 
   const handleExploreImprovements = () => {
