@@ -136,8 +136,8 @@ export class GoHighLevelService {
           // Convert decimal strings to numbers for GoHighLevel
           'overall_grade_af': assessment.overallScore,
           'valuation_estimate': Number(assessment.midEstimate) || 0,
-          'valuation_low': Number(assessment.lowEstimate) || 0,
-          'valuation_high': Number(assessment.highEstimate) || 0,
+          'valuation__low': Number(assessment.lowEstimate) || 0,
+          'valuation__high': Number(assessment.highEstimate) || 0,
           'adjusted_ebitda': Number(assessment.adjustedEbitda) || 0,
           'valuation_multiple': Number(assessment.valuationMultiple) || 0,
           'assessment_date': assessment.createdAt,
