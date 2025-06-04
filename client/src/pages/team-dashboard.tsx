@@ -147,7 +147,7 @@ export default function TeamDashboard() {
         <div className="mb-8 flex justify-between items-start">
           <div className="flex items-center gap-6">
             <img 
-              src="/meritage-logo.png" 
+              src="/meritage-logo.png?v=2" 
               alt="Meritage Partners" 
               className="h-12 w-auto"
             />
