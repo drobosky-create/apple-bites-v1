@@ -141,7 +141,7 @@ export default function InteractiveValuationSlider() {
         </p>
         {latestAssessment && (
           <p className="text-sm text-slate-500 mt-2">
-            Based on data from {latestAssessment.company || 'your recent assessment'}
+            Based on your recent assessment data
           </p>
         )}
       </div>
@@ -166,18 +166,18 @@ export default function InteractiveValuationSlider() {
           </CardContent>
         </Card>
 
-        <Card className="border-2 border-green-200 bg-green-50 transition-all duration-300">
+        <Card className="border-2 border-blue-200 bg-blue-50 transition-all duration-300">
           <CardHeader className="text-center">
-            <CardTitle className="text-lg text-green-800">Potential Value</CardTitle>
+            <CardTitle className="text-lg text-blue-800">Potential Value</CardTitle>
             <CardDescription>
               With an Operational Grade of {sliderGrade}
             </CardDescription>
           </CardHeader>
           <CardContent className="text-center">
-            <div className="text-3xl font-bold text-green-800 mb-2 transition-all duration-300">
+            <div className="text-3xl font-bold text-blue-800 mb-2 transition-all duration-300">
               ${Math.round(sliderValuation).toLocaleString()}
             </div>
-            <div className="text-sm text-green-700 mb-2">
+            <div className="text-sm text-blue-700 mb-2">
               {sliderMultiple.toFixed(1)}x EBITDA Multiple
             </div>
             <Badge variant="secondary" className={`${sliderCategory.bgColor} text-white`}>
@@ -188,10 +188,10 @@ export default function InteractiveValuationSlider() {
                 <div className="text-sm text-gray-600">
                   {potentialIncrease > 0 ? 'Potential Increase' : 'Potential Decrease'}
                 </div>
-                <div className={`text-xl font-bold ${potentialIncrease > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                <div className={`text-xl font-bold ${potentialIncrease > 0 ? 'text-blue-600' : 'text-red-600'}`}>
                   {potentialIncrease > 0 ? '+' : ''}${Math.round(potentialIncrease).toLocaleString()}
                 </div>
-                <div className={`text-sm ${potentialIncrease > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                <div className={`text-sm ${potentialIncrease > 0 ? 'text-blue-600' : 'text-red-600'}`}>
                   ({potentialIncrease > 0 ? '+' : ''}{Math.round(percentageIncrease)}% change)
                 </div>
               </div>
@@ -249,8 +249,8 @@ export default function InteractiveValuationSlider() {
                 { grade: 'F', color: 'bg-red-500', multiple: '2.0x', label: 'Poor Operations' },
                 { grade: 'D', color: 'bg-red-400', multiple: '3.0x', label: 'Below Average' },
                 { grade: 'C', color: 'bg-slate-500', multiple: '4.2x', label: 'Average Operations' },
-                { grade: 'B', color: 'bg-green-400', multiple: '5.7x', label: 'Good Operations' },
-                { grade: 'A', color: 'bg-green-500', multiple: '7.5x', label: 'Excellent Operations' }
+                { grade: 'B', color: 'bg-blue-400', multiple: '5.7x', label: 'Good Operations' },
+                { grade: 'A', color: 'bg-blue-600', multiple: '7.5x', label: 'Excellent Operations' }
               ].map((segment, index) => (
                 <div
                   key={segment.grade}
@@ -326,15 +326,15 @@ export default function InteractiveValuationSlider() {
               </div>
               <div className="text-center">
                 <div className="font-semibold">C</div>
-                <div className="text-yellow-600">4.2x</div>
+                <div className="text-slate-600">4.2x</div>
               </div>
               <div className="text-center">
                 <div className="font-semibold">B</div>
-                <div className="text-green-600">5.7x</div>
+                <div className="text-blue-600">5.7x</div>
               </div>
               <div className="text-center">
                 <div className="font-semibold">A</div>
-                <div className="text-green-700">7.5x</div>
+                <div className="text-blue-700">7.5x</div>
               </div>
             </div>
           </div>
@@ -353,7 +353,10 @@ export default function InteractiveValuationSlider() {
               you could add <strong>${Math.round(potentialIncrease).toLocaleString()}</strong> to your business value.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Button className="bg-blue-600 hover:bg-blue-700">
+              <Button 
+                className="bg-blue-600 hover:bg-blue-700"
+                onClick={() => window.open('https://api.leadconnectorhq.com/widget/booking/6C02AqJrPOT5XzWDoID1', '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes')}
+              >
                 <Phone className="h-4 w-4 mr-2" />
                 Schedule Strategy Call
               </Button>
