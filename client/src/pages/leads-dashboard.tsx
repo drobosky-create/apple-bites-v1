@@ -1,11 +1,15 @@
 import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Search, User, Mail, Phone, Building, Calendar, TrendingUp, LogOut } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
+import { Search, User, Mail, Phone, Building, Calendar, TrendingUp, LogOut, ArrowLeft, Eye, Edit, Trash2, ExternalLink } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+import { apiRequest } from '@/lib/queryClient';
 import type { Lead } from '@shared/schema';
 import AdminLogin from '@/components/admin-login';
 import { useAdminAuth } from '@/hooks/use-admin-auth';
@@ -13,7 +17,13 @@ import { useAdminAuth } from '@/hooks/use-admin-auth';
 export default function LeadsDashboard() {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [showStatusModal, setShowStatusModal] = useState(false);
+  const [newStatus, setNewStatus] = useState('');
   const { isAuthenticated, isLoading, login, logout } = useAdminAuth();
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
 
   const { data: leads, isLoading: leadsLoading } = useQuery<Lead[]>({
     queryKey: ['/api/leads', statusFilter === 'all' ? '' : statusFilter, searchQuery],
@@ -28,6 +38,72 @@ export default function LeadsDashboard() {
     },
     enabled: isAuthenticated, // Only fetch when authenticated
   });
+
+  // Mutation for updating lead status
+  const updateLeadMutation = useMutation({
+    mutationFn: async ({ id, status }: { id: number; status: string }) => {
+      return apiRequest(`/api/leads/${id}`, 'PATCH', { status });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/leads'] });
+      toast({
+        title: "Status Updated",
+        description: "Lead status has been successfully updated.",
+      });
+      setShowStatusModal(false);
+      setSelectedLead(null);
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Update Failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
+  });
+
+  // Mutation for deleting lead
+  const deleteLeadMutation = useMutation({
+    mutationFn: async (id: number) => {
+      return apiRequest(`/api/leads/${id}`, 'DELETE');
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/leads'] });
+      toast({
+        title: "Lead Deleted",
+        description: "Lead has been successfully deleted.",
+      });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Delete Failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
+  });
+
+  // Handler functions
+  const handleViewDetails = (lead: Lead) => {
+    setSelectedLead(lead);
+    setShowDetailsModal(true);
+  };
+
+  const handleUpdateStatus = (lead: Lead) => {
+    setSelectedLead(lead);
+    setNewStatus(lead.leadStatus || 'new');
+    setShowStatusModal(true);
+  };
+
+  const handleStatusUpdate = () => {
+    if (selectedLead && newStatus) {
+      updateLeadMutation.mutate({ id: selectedLead.id, status: newStatus });
+    }
+  };
+
+  const handleDeleteLead = (leadId: number) => {
+    deleteLeadMutation.mutate(leadId);
+  };
 
   // Show authentication loading state
   if (isLoading) {
@@ -49,7 +125,7 @@ export default function LeadsDashboard() {
   const getStatusColor = (status: string) => {
     const colors: Record<string, string> = {
       'new': 'bg-blue-100 text-blue-800',
-      'contacted': 'bg-blue-100 text-blue-800',
+      'contacted': 'bg-emerald-100 text-emerald-800',
       'qualified': 'bg-green-100 text-green-800',
       'converted': 'bg-purple-100 text-purple-800',
       'closed': 'bg-gray-100 text-gray-800',
