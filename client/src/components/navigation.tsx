@@ -28,7 +28,7 @@ export default function Navigation() {
               <Button 
                 variant={location === "/team" ? "default" : "outline"}
                 size="sm"
-                className={`flex items-center space-x-2 ${location === "/team" ? "bg-[#f5c842] hover:bg-[#e6b63a] text-[#1a2332]" : "text-[#f5c842] hover:text-white hover:bg-[#f5c842]/20 border-[#f5c842]"}`}
+                className="justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border bg-background h-9 rounded-md px-3 flex items-center space-x-2 hover:text-white hover:bg-[#f5c842]/20 border-[#f5c842] text-[#fffcfc]"
               >
                 <Shield className="w-4 h-4" />
                 <span>Admin Login</span>
