@@ -1,7 +1,7 @@
-import type { Express } from "express";
+import type { Express, Request } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertValuationAssessmentSchema, type ValuationAssessment, loginSchema, insertTeamMemberSchema, type LoginCredentials, type InsertTeamMember } from "@shared/schema";
+import { insertValuationAssessmentSchema, type ValuationAssessment, loginSchema, insertTeamMemberSchema, type LoginCredentials, type InsertTeamMember, type TeamMember } from "@shared/schema";
 import { generateValuationNarrative, type ValuationAnalysisInput } from "./openai";
 import { generateValuationPDF } from "./pdf-generator";
 import { emailService } from "./email-service";
@@ -11,6 +11,15 @@ import fs from 'fs/promises';
 import path from 'path';
 import bcrypt from 'bcryptjs';
 import { nanoid } from 'nanoid';
+
+// Extend Express Request interface
+declare global {
+  namespace Express {
+    interface Request {
+      user?: TeamMember;
+    }
+  }
+}
 
 export async function registerRoutes(app: Express): Promise<Server> {
   
@@ -563,7 +572,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get("/api/team/me", isTeamAuthenticated, (req, res) => {
+  app.get("/api/team/me", isTeamAuthenticated, (req: any, res) => {
+    if (!req.user) {
+      return res.status(401).json({ error: 'User not found' });
+    }
     const { hashedPassword, ...userWithoutPassword } = req.user;
     res.json({ user: userWithoutPassword });
   });
