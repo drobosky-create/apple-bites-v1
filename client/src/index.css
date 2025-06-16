@@ -216,6 +216,97 @@
     border-color: rgb(203 213 225) !important;
   }
 
+  /* Force all search inputs and filter dropdowns to use blue styling */
+  input[placeholder*="Search"],
+  .search-input,
+  [data-testid="search"],
+  .bg-yellow-400 {
+    background-color: rgb(37 99 235) !important;
+    border-color: rgb(37 99 235) !important;
+    color: white !important;
+  }
+
+  /* Override analytics dashboard tabs and navigation */
+  [role="tablist"] button,
+  .tabs-trigger,
+  .tab-button {
+    background-color: rgb(37 99 235) !important;
+    border-color: rgb(37 99 235) !important;
+    color: white !important;
+  }
+
+  /* Force all card containers and sections to use proper borders */
+  .dashboard-container,
+  .leads-container,
+  .analytics-container,
+  .card-container {
+    border-color: rgb(203 213 225) !important;
+    background-color: rgb(248 250 252) !important;
+  }
+
+  /* Nuclear option: Override ALL yellow backgrounds, borders, and text globally */
+  *[style*="background-color: yellow"],
+  *[style*="background: yellow"],
+  *[style*="border-color: yellow"],
+  *[style*="color: yellow"],
+  *[class*="yellow"],
+  *[class*="amber"] {
+    background-color: rgb(37 99 235) !important;
+    border-color: rgb(37 99 235) !important;
+    color: white !important;
+  }
+
+  /* Specific overrides for dashboard page elements */
+  .leads-dashboard .search-container,
+  .analytics-dashboard .tabs-container,
+  [data-testid*="search"],
+  [data-testid*="filter"],
+  .search-input-container,
+  .filter-dropdown-container {
+    background-color: rgb(37 99 235) !important;
+    border-color: rgb(37 99 235) !important;
+  }
+
+  /* Override any yellow card borders in dashboard pages */
+  .min-h-screen .bg-white,
+  .dashboard-page .card,
+  .analytics-page .card,
+  .leads-page .card {
+    border-color: rgb(203 213 225) !important;
+  }
+
+  /* Target specific elements from the dashboard screenshots */
+  .bg-yellow-400,
+  [style*="background-color: rgb(250, 204, 21)"],
+  [style*="background-color: #facc15"],
+  .search-container input,
+  input[type="search"],
+  .relative input[placeholder*="Search"] {
+    background-color: rgb(37 99 235) !important;
+    border-color: rgb(37 99 235) !important;
+    color: white !important;
+  }
+
+  /* Override tab styling in analytics dashboard */
+  .border-yellow-300,
+  [style*="border-color: rgb(253, 224, 71)"],
+  [style*="border-color: #fde047"],
+  .tabs-list,
+  .tabs-trigger,
+  [role="tab"] {
+    background-color: rgb(37 99 235) !important;
+    border-color: rgb(37 99 235) !important;
+    color: white !important;
+  }
+
+  /* Force override for any remaining yellow borders on cards */
+  .border-yellow-200,
+  [style*="border: 2px solid rgb(254, 240, 138)"],
+  [style*="border-color: rgb(254, 240, 138)"],
+  .card.border-2 {
+    border-color: rgb(203 213 225) !important;
+  }
+
   /* Override grade selection yellow styling */
   .bg-yellow-500,
   .bg-amber-500,
