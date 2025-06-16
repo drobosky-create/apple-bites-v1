@@ -28,32 +28,31 @@ export default function ValuationForm() {
     <div className="font-sans bg-gradient-to-br from-slate-50 to-blue-50 min-h-screen">
       {/* Header */}
       <header className="bg-white/95 backdrop-blur-sm shadow-sm border-b border-slate-200/60">
-        <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
-          <div className="flex justify-between items-center h-16 sm:h-20 lg:h-28">
-            <div className="flex items-center min-w-0 flex-1">
-              <div className="flex-shrink-0 flex items-center gap-2 sm:gap-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-28">
+            <div className="flex items-center">
+              <div className="flex-shrink-0 flex items-center gap-4">
                 <img 
                   src="/meritage-logo.png?v=2" 
                   alt="Meritage Partners" 
-                  className="h-10 sm:h-16 lg:h-24 w-auto"
+                  className="h-24 w-auto"
                 />
-                <div className="border-l border-slate-300 pl-2 sm:pl-4 min-w-0">
-                  <h1 className="text-sm sm:text-xl lg:text-2xl font-bold text-slate-900 truncate">Apple Bites Business Assessment</h1>
-                  <p className="text-xs sm:text-sm text-slate-500 font-medium hidden sm:block">Powered by Meritage Partners</p>
+                <div className="border-l border-slate-300 pl-4">
+                  <h1 className="text-2xl font-bold text-slate-900">Apple Bites Business Assessment</h1>
+                  <p className="text-sm text-slate-500 font-medium">Powered by Meritage Partners</p>
                 </div>
               </div>
             </div>
-            <div className="flex items-center space-x-2 sm:space-x-4 flex-shrink-0">
-              <div className="flex items-center text-xs sm:text-sm text-slate-600 bg-slate-100/70 px-2 sm:px-3 py-1 sm:py-2 rounded-lg">
-                <Shield className="w-3 h-3 sm:w-4 sm:h-4 text-blue-600 mr-1 sm:mr-2" />
-                <span className="font-medium hidden sm:inline">Secure Assessment</span>
-                <span className="font-medium sm:hidden">Secure</span>
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center text-sm text-slate-600 bg-slate-100/70 px-3 py-2 rounded-lg">
+                <Shield className="w-4 h-4 text-blue-600 mr-2" />
+                <span className="font-medium">Secure Assessment</span>
               </div>
             </div>
           </div>
         </div>
       </header>
-      <main className="max-w-4xl mx-auto px-2 sm:px-4 lg:px-8 py-4 sm:py-8 lg:py-12">
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {currentStep !== "results" && (
           <div className="mb-8">
             <ProgressIndicator currentStep={currentStep} />
