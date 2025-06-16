@@ -21,7 +21,7 @@ export default function ProgressIndicator({ currentStep }: ProgressIndicatorProp
         <h2 className="text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">Apple Bites Business Assessment</h2>
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-          <span className="text-sm font-medium text-slate-600">Step {currentStepNumber} of 4</span>
+          <span className="text-sm font-medium text-slate-600">Step {currentStepNumber} of 5</span>
         </div>
       </div>
       <div className="relative">
