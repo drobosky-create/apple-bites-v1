@@ -303,12 +303,53 @@ export default function LeadsDashboard() {
                 </div>
 
                 <div className="flex flex-col gap-2 ml-4">
-                  <Button variant="outline" size="sm">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => handleViewDetails(lead)}
+                    className="flex items-center gap-2"
+                  >
+                    <Eye className="w-4 h-4" />
                     View Details
                   </Button>
-                  <Button variant="outline" size="sm">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => handleUpdateStatus(lead)}
+                    className="flex items-center gap-2"
+                  >
+                    <Edit className="w-4 h-4" />
                     Update Status
                   </Button>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        className="flex items-center gap-2 text-red-600 hover:text-red-700 hover:bg-red-50"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                        Delete
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Delete Lead</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Are you sure you want to delete this lead? This action cannot be undone.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => handleDeleteLead(lead.id)}
+                          className="bg-red-600 hover:bg-red-700"
+                        >
+                          Delete
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </div>
               </div>
             </Card>
@@ -327,6 +368,118 @@ export default function LeadsDashboard() {
           )}
         </div>
       </div>
+
+      {/* View Details Modal */}
+      <Dialog open={showDetailsModal} onOpenChange={setShowDetailsModal}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Lead Details</DialogTitle>
+            <DialogDescription>
+              Complete information for {selectedLead?.firstName} {selectedLead?.lastName}
+            </DialogDescription>
+          </DialogHeader>
+          {selectedLead && (
+            <div className="space-y-6">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm font-medium text-gray-700">Name</label>
+                  <p className="text-sm text-gray-900">{selectedLead.firstName} {selectedLead.lastName}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-700">Company</label>
+                  <p className="text-sm text-gray-900">{selectedLead.company}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-700">Email</label>
+                  <p className="text-sm text-gray-900">{selectedLead.email}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-700">Phone</label>
+                  <p className="text-sm text-gray-900">{selectedLead.phone || 'Not provided'}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-700">Status</label>
+                  <Badge className={getStatusColor(selectedLead.leadStatus || 'new')}>
+                    {selectedLead.leadStatus}
+                  </Badge>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-700">Lead Score</label>
+                  <p className={`text-sm font-medium ${getScoreColor(selectedLead.leadScore || 0)}`}>
+                    {selectedLead.leadScore}/100
+                  </p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-700">Estimated Value</label>
+                  <p className="text-sm text-gray-900">{formatCurrency(selectedLead.estimatedValue)}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-700">Overall Grade</label>
+                  <p className="text-sm text-gray-900">{selectedLead.overallGrade || 'Not assessed'}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-700">Follow-up Intent</label>
+                  <p className="text-sm text-gray-900 capitalize">{selectedLead.followUpIntent || 'Not specified'}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-700">Created</label>
+                  <p className="text-sm text-gray-900">{formatDate(selectedLead.createdAt)}</p>
+                </div>
+              </div>
+              {selectedLead.notes && (
+                <div>
+                  <label className="text-sm font-medium text-gray-700">Notes</label>
+                  <p className="text-sm text-gray-900 mt-1">{selectedLead.notes}</p>
+                </div>
+              )}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Update Status Modal */}
+      <Dialog open={showStatusModal} onOpenChange={setShowStatusModal}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Update Lead Status</DialogTitle>
+            <DialogDescription>
+              Update the status for {selectedLead?.firstName} {selectedLead?.lastName}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <label className="text-sm font-medium text-gray-700">Current Status</label>
+              <p className="text-sm text-gray-600">{selectedLead?.leadStatus || 'new'}</p>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-gray-700">New Status</label>
+              <Select value={newStatus} onValueChange={setNewStatus}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select new status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="new">New</SelectItem>
+                  <SelectItem value="contacted">Contacted</SelectItem>
+                  <SelectItem value="qualified">Qualified</SelectItem>
+                  <SelectItem value="converted">Converted</SelectItem>
+                  <SelectItem value="closed">Closed</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex justify-end gap-2">
+              <Button variant="outline" onClick={() => setShowStatusModal(false)}>
+                Cancel
+              </Button>
+              <Button 
+                onClick={handleStatusUpdate}
+                disabled={updateLeadMutation.isPending}
+              >
+                {updateLeadMutation.isPending ? 'Updating...' : 'Update Status'}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
