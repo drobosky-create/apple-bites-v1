@@ -10,6 +10,23 @@ import ValueCalculator from "@/pages/value-calculator";
 import NotFound from "@/pages/not-found";
 
 function Router() {
+  // Check if this is an embed view
+  const isEmbed = new URLSearchParams(window.location.search).get('embed') === 'true';
+  
+  if (isEmbed) {
+    // Embedded version without header/footer
+    return (
+      <div className="min-h-screen bg-transparent">
+        <Switch>
+          <Route path="/" component={ValuationForm} />
+          <Route path="/value-calculator" component={ValueCalculator} />
+          <Route component={NotFound} />
+        </Switch>
+      </div>
+    );
+  }
+  
+  // Full standalone version with header/footer
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex flex-col">
       <Navigation />
