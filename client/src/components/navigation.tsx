@@ -1,6 +1,6 @@
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { BarChart3, FileText, Calculator, Users } from "lucide-react";
+import { FileText, Shield } from "lucide-react";
 
 export default function Navigation() {
   const [location] = useLocation();
@@ -17,34 +17,21 @@ export default function Navigation() {
               <Button 
                 variant={location === "/" ? "default" : "ghost"}
                 size="sm"
-                className={`flex items-center space-x-2 ${location === "/" ? "heritage-gradient text-white" : "text-slate-700 hover:text-slate-900"}`}
+                className={`flex items-center space-x-2 ${location === "/" ? "bg-blue-600 hover:bg-blue-700 text-white" : "text-slate-700 hover:text-slate-900"}`}
               >
                 <FileText className="w-4 h-4" />
                 <span>Valuation Form</span>
               </Button>
             </Link>
             
-
-            
-            <Link href="/admin/leads">
+            <Link href="/team">
               <Button 
-                variant={location === "/admin/leads" ? "default" : "ghost"}
+                variant={location === "/team" ? "default" : "outline"}
                 size="sm"
-                className={`flex items-center space-x-2 ${location === "/admin/leads" ? "heritage-gradient text-white" : "text-slate-700 hover:text-slate-900"}`}
+                className={`flex items-center space-x-2 ${location === "/team" ? "bg-blue-600 hover:bg-blue-700 text-white" : "text-slate-700 hover:text-slate-900 border-slate-300"}`}
               >
-                <Users className="w-4 h-4" />
-                <span>Leads</span>
-              </Button>
-            </Link>
-            
-            <Link href="/admin/analytics">
-              <Button 
-                variant={location === "/admin/analytics" ? "default" : "ghost"}
-                size="sm"
-                className={`flex items-center space-x-2 ${location === "/admin/analytics" ? "heritage-gradient text-white" : "text-slate-700 hover:text-slate-900"}`}
-              >
-                <BarChart3 className="w-4 h-4" />
-                <span>Analytics</span>
+                <Shield className="w-4 h-4" />
+                <span>Admin Login</span>
               </Button>
             </Link>
           </nav>
