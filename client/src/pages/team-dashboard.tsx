@@ -15,6 +15,7 @@ import { insertTeamMemberSchema, type InsertTeamMember, type TeamMember } from '
 import TeamLogin from '@/components/team-login';
 import { useTeamAuth } from '@/hooks/use-team-auth';
 import { useToast } from '@/hooks/use-toast';
+import PasswordChangeForm from '@/components/password-change-form';
 
 export default function TeamDashboard() {
   const { user, isAuthenticated, isLoading, hasRole, logout } = useTeamAuth();
@@ -144,23 +145,41 @@ export default function TeamDashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8 flex justify-between items-start">
-          <div className="flex items-center gap-6">
+        {/* Top Navigation */}
+        <div className="mb-6 flex justify-between items-center">
+          <div className="flex items-center gap-4">
             <img 
               src="/meritage-logo.png?v=2" 
               alt="Meritage Partners" 
-              className="h-12 w-auto"
+              className="h-10 w-auto"
             />
-            <div className="space-y-1">
-              <h1 className="text-4xl font-bold text-slate-900">
-                Team Dashboard
-              </h1>
-              <p className="text-slate-600 text-lg">Manage team members and access controls</p>
+            <div className="border-l border-slate-300 pl-4">
+              <h1 className="text-2xl font-bold text-slate-900">Team Dashboard</h1>
             </div>
           </div>
-          <div className="flex items-center gap-4 bg-slate-50 rounded-xl shadow-sm border border-slate-200 px-4 py-3">
+          <div className="flex items-center gap-3">
+            <Button 
+              onClick={() => window.open('/', '_blank')}
+              className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white"
+            >
+              📊 Leads & Analytics
+            </Button>
+            <Button 
+              onClick={() => window.open('/team', '_blank')}
+              variant="outline"
+              className="flex items-center gap-2"
+            >
+              <Shield className="w-4 h-4" />
+              Admin Login
+            </Button>
+          </div>
+        </div>
+
+        {/* User Info and Actions */}
+        <div className="mb-8 flex justify-between items-center">
+          <div className="flex items-center gap-4 bg-slate-50 rounded-xl shadow-sm border border-slate-200 px-6 py-4">
             <div className="text-sm text-slate-700">
-              <div className="font-medium">Welcome, {user?.firstName} {user?.lastName}</div>
+              <div className="font-semibold text-lg">Welcome, {user?.firstName} {user?.lastName}</div>
               <div className="flex items-center gap-2 mt-1">
                 <Shield className="w-3 h-3 text-slate-400" />
                 <Badge className={`${getRoleBadgeColor(user?.role || '')} text-xs`}>
@@ -168,6 +187,25 @@ export default function TeamDashboard() {
                 </Badge>
               </div>
             </div>
+          </div>
+          <div className="flex items-center gap-3">
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="outline" className="flex items-center gap-2">
+                  <Settings className="w-4 h-4" />
+                  Change Password
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-md bg-white">
+                <DialogHeader>
+                  <DialogTitle>Change Password</DialogTitle>
+                  <DialogDescription>
+                    Update your account password for security.
+                  </DialogDescription>
+                </DialogHeader>
+                <PasswordChangeForm userId={user?.id} />
+              </DialogContent>
+            </Dialog>
             <Button variant="outline" onClick={logout} className="flex items-center gap-2 hover:bg-red-50 hover:border-red-200">
               <LogOut className="w-4 h-4" />
               Logout
