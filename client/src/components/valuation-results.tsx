@@ -205,61 +205,7 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
           </div>
         )}
 
-        {/* Detailed Analysis */}
-        {results.narrativeSummary && (
-          <div className="bg-white border border-slate-200 rounded-lg p-6">
-            <h5 className="font-semibold text-slate-900 mb-4">Detailed Analysis</h5>
-            <div className="prose prose-slate max-w-none">
-              <p className="text-slate-600 leading-relaxed">{results.narrativeSummary}</p>
-            </div>
-          </div>
-        )}
 
-        {/* Actions */}
-        <div className="bg-white border border-slate-200 rounded-lg p-6">
-          <h5 className="font-semibold text-slate-900 mb-4">Your Valuation Report</h5>
-          <p className="text-slate-600 mb-6">A comprehensive PDF report has been generated with detailed analysis, benchmarking data, and recommendations for improving your business value.</p>
-
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Button 
-              onClick={handleDownloadPDF}
-              className="flex-1 btn-primary px-6 py-3 rounded-lg font-medium flex items-center justify-center"
-              disabled={!results.pdfUrl}
-            >
-              <Download className="mr-2 w-4 h-4" />
-              Download Full Report
-            </Button>
-
-            <Button 
-              onClick={handleExploreImprovements}
-              variant="outline"
-              className="flex-1 px-6 py-3 rounded-lg font-medium border-green-600 text-green-600 hover:bg-green-50 flex items-center justify-center"
-            >
-              <Calculator className="mr-2 w-4 h-4" />
-              Explore Value Improvements
-            </Button>
-
-            <Button 
-              onClick={handleScheduleConsultation}
-              className="flex-1 px-6 py-3 rounded-lg font-medium bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-center shadow-sm hover:shadow-md transition-all duration-200"
-            >
-              <Calendar className="mr-2 w-4 h-4" />
-              Schedule Consultation
-            </Button>
-          </div>
-
-          <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
-            <div className="flex items-start space-x-3">
-              <div className="flex-shrink-0">
-                <Mail className="w-5 h-5 text-blue-600 mt-0.5" />
-              </div>
-              <div className="text-sm text-blue-800">
-                <p className="font-medium mb-1">Report Sent</p>
-                <p>A copy of your valuation report has been emailed to <span className="font-medium">{results.email}</span></p>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );
