@@ -1,10 +1,33 @@
 import puppeteer from 'puppeteer';
 import { ValuationAssessment } from '@shared/schema';
+import { exec } from 'child_process';
+import { promisify } from 'util';
+
+const execAsync = promisify(exec);
 
 export async function generateValuationPDF(assessment: ValuationAssessment): Promise<Buffer> {
+  // Get the correct chromium path
+  let executablePath: string | undefined;
+  try {
+    const { stdout } = await execAsync('which chromium');
+    executablePath = stdout.trim();
+  } catch (error) {
+    console.error('Could not find chromium executable:', error);
+  }
+
   const browser = await puppeteer.launch({
     headless: true,
-    args: ['--no-sandbox', '--disable-setuid-sandbox']
+    executablePath,
+    args: [
+      '--no-sandbox', 
+      '--disable-setuid-sandbox',
+      '--disable-dev-shm-usage',
+      '--disable-accelerated-2d-canvas',
+      '--no-first-run',
+      '--no-zygote',
+      '--single-process',
+      '--disable-gpu'
+    ]
   });
 
   try {
@@ -24,7 +47,7 @@ export async function generateValuationPDF(assessment: ValuationAssessment): Pro
       }
     });
 
-    return pdfBuffer;
+    return Buffer.from(pdfBuffer);
   } finally {
     await browser.close();
   }
