@@ -397,4 +397,118 @@
   .form-help {
     @apply text-sm text-muted-foreground;
   }
+  
+  /* Mobile-first responsive design for GoHighLevel embeds */
+  @media (max-width: 767px) {
+    /* Ensure minimum touch targets for mobile */
+    button, input, select, textarea {
+      min-height: 44px !important;
+    }
+    
+    /* Prevent horizontal scrolling */
+    body, html {
+      overflow-x: hidden !important;
+    }
+    
+    /* Better text size for mobile readability */
+    input, textarea {
+      font-size: 16px !important; /* Prevents zoom on iOS */
+    }
+    
+    /* Optimize form spacing for small screens */
+    .space-y-6 > * + * {
+      margin-top: 1rem !important;
+    }
+    
+    .space-y-4 > * + * {
+      margin-top: 0.75rem !important;
+    }
+    
+    /* Ensure proper viewport behavior in iframes */
+    .min-h-screen {
+      min-height: 100vh !important;
+      min-height: 100svh !important; /* Use small viewport height when available */
+    }
+    
+    /* Fix grid layouts for mobile */
+    .grid-cols-2 {
+      grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+    }
+    
+    /* Better button sizing for mobile */
+    .heritage-gradient {
+      padding: 0.75rem 1.5rem !important;
+      font-size: 0.875rem !important;
+    }
+  }
+  
+  /* GoHighLevel iframe optimization for very small screens */
+  @media (max-width: 480px) {
+    /* Further optimize for very small screens */
+    .px-4 {
+      padding-left: 0.5rem !important;
+      padding-right: 0.5rem !important;
+    }
+    
+    .py-12 {
+      padding-top: 1rem !important;
+      padding-bottom: 1rem !important;
+    }
+    
+    .py-8 {
+      padding-top: 0.75rem !important;
+      padding-bottom: 0.75rem !important;
+    }
+    
+    /* Compact text sizing for very small screens */
+    .text-2xl {
+      font-size: 1.25rem !important;
+    }
+    
+    .text-xl {
+      font-size: 1.125rem !important;
+    }
+    
+    /* Reduce gap spacing on small screens */
+    .gap-6 {
+      gap: 1rem !important;
+    }
+    
+    .gap-4 {
+      gap: 0.75rem !important;
+    }
+    
+    /* Better form field spacing */
+    .p-8 {
+      padding: 1rem !important;
+    }
+    
+    .p-6 {
+      padding: 0.75rem !important;
+    }
+  }
+  
+  /* Iframe-specific optimizations for GoHighLevel */
+  @media screen and (max-width: 600px) {
+    /* Force single column layout in small iframes */
+    .md\:grid-cols-2 {
+      grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+    }
+    
+    /* Optimize header for iframe embedding */
+    .h-28 {
+      height: 4rem !important;
+    }
+    
+    .h-24 {
+      height: 3rem !important;
+    }
+    
+    /* Better text truncation for small spaces */
+    .truncate {
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+    }
+  }
 }

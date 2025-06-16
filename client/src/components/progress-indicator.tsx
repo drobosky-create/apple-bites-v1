@@ -32,7 +32,7 @@ export default function ProgressIndicator({ currentStep }: ProgressIndicatorProp
             <div key={step.id} className="flex items-center flex-1">
               <div className="flex items-center relative">
                 <div
-                  className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
+                  className={`w-6 h-6 sm:w-8 sm:h-8 lg:w-10 lg:h-10 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold transition-all duration-300 ${
                     step.number <= currentStepNumber
                       ? "heritage-gradient text-white shadow-lg scale-110"
                       : "bg-slate-200 text-slate-400"
@@ -40,13 +40,14 @@ export default function ProgressIndicator({ currentStep }: ProgressIndicatorProp
                 >
                   {step.number}
                 </div>
-                <div className="ml-4">
+                <div className="ml-2 sm:ml-3 lg:ml-4">
                   <span
-                    className={`block text-sm font-semibold transition-colors duration-300 ${
+                    className={`block text-xs sm:text-sm font-semibold transition-colors duration-300 ${
                       step.number <= currentStepNumber ? "text-slate-900" : "text-slate-400"
                     }`}
                   >
-                    {step.label}
+                    <span className="hidden sm:inline">{step.label}</span>
+                    <span className="sm:hidden">{step.label.split(' ')[0]}</span>
                   </span>
                   {step.number === currentStepNumber && (
                     <span className="block text-xs text-blue-600 font-medium mt-0.5">Current</span>
