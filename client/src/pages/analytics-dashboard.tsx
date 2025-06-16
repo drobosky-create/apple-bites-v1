@@ -74,7 +74,7 @@ export default function AnalyticsDashboard() {
     return acc;
   }, {} as Record<string, number>) || {};
 
-  const pieColors = ['#0088FE', '#00C49F', '#64748B', '#FF8042', '#8884D8'];
+  const pieColors = ['#64748B', '#94A3B8', '#CBD5E1', '#E2E8F0', '#F1F5F9'];
 
   return (
     <div className="max-w-7xl mx-auto p-6">
@@ -194,11 +194,11 @@ export default function AnalyticsDashboard() {
               <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
                   <BarChart data={Object.entries(scoreDistribution).map(([key, value]) => ({ grade: key, count: value }))}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="grade" />
-                    <YAxis />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
+                    <XAxis dataKey="grade" stroke="#64748B" />
+                    <YAxis stroke="#64748B" />
                     <Tooltip />
-                    <Bar dataKey="count" fill="#8884d8" />
+                    <Bar dataKey="count" fill="#94A3B8" />
                   </BarChart>
                 </ResponsiveContainer>
               </CardContent>
@@ -284,12 +284,12 @@ export default function AnalyticsDashboard() {
             <CardContent>
               <ResponsiveContainer width="100%" height={400}>
                 <LineChart data={Object.entries(valuationByMonth).map(([month, count]) => ({ month, count }))}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
+                  <XAxis dataKey="month" stroke="#64748B" />
+                  <YAxis stroke="#64748B" />
                   <Tooltip />
                   <Legend />
-                  <Line type="monotone" dataKey="count" stroke="#8884d8" strokeWidth={2} />
+                  <Line type="monotone" dataKey="count" stroke="#64748B" strokeWidth={2} />
                 </LineChart>
               </ResponsiveContainer>
             </CardContent>

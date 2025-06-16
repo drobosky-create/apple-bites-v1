@@ -307,6 +307,45 @@
     border-color: rgb(203 213 225) !important;
   }
 
+  /* Comprehensive yellow border elimination */
+  .border,
+  .border-2,
+  .border-4,
+  .rounded-lg,
+  .rounded-xl,
+  .bg-white {
+    border-color: rgb(203 213 225) !important;
+  }
+
+  /* Target specific dashboard card containers */
+  .min-h-screen .bg-white,
+  .bg-white.p-6,
+  .bg-white.rounded-lg,
+  .bg-white.border,
+  [data-testid*="card"],
+  .dashboard-card,
+  .lead-card,
+  .analytics-card {
+    border: 1px solid rgb(203 213 225) !important;
+    outline: none !important;
+  }
+
+  /* Override all possible yellow border variants */
+  .border-yellow-50,
+  .border-yellow-100,
+  .border-yellow-200,
+  .border-yellow-300,
+  .border-yellow-400,
+  .border-yellow-500,
+  .border-amber-50,
+  .border-amber-100,
+  .border-amber-200,
+  .border-amber-300,
+  .border-amber-400,
+  .border-amber-500 {
+    border-color: rgb(203 213 225) !important;
+  }
+
   /* Override grade selection yellow styling */
   .bg-yellow-500,
   .bg-amber-500,
