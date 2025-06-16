@@ -2,6 +2,8 @@ import puppeteer from 'puppeteer';
 import { ValuationAssessment } from '@shared/schema';
 import { exec } from 'child_process';
 import { promisify } from 'util';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 
 const execAsync = promisify(exec);
 
@@ -53,6 +55,18 @@ export async function generateValuationPDF(assessment: ValuationAssessment): Pro
   }
 }
 
+function getMeritageLogoBase64(): string {
+  try {
+    const logoPath = join(process.cwd(), 'attached_assets/Meritage Logo2.png');
+    const logoBuffer = readFileSync(logoPath);
+    return `data:image/png;base64,${logoBuffer.toString('base64')}`;
+  } catch (error) {
+    console.error('Could not load Meritage logo:', error);
+    // Fallback to a simple SVG version
+    return `data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQwIiBoZWlnaHQ9IjgwIiB2aWV3Qm94PSIwIDAgMjQwIDgwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cmVjdCB3aWR0aD0iMjQwIiBoZWlnaHQ9IjgwIiBmaWxsPSJ3aGl0ZSIgc3Ryb2tlPSIjMWU0MGFmIiBzdHJva2Utd2lkdGg9IjIiLz4KPHR5ZXh0IHg9IjEyMCIgeT0iMzUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyMiIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiMxZTQwYWYiIHRleHQtYW5jaG9yPSJtaWRkbGUiPk1FUklUQUdFPC90ZXh0Pgo8dGV4dCB4PSIxMjAiIHk9IjU4IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTQiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSIjZjViZDQyIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5QQVJUTEVSU0s8L3RleHQ+Cjwvc3ZnPgo=`;
+  }
+}
+
 function generateHTMLReport(assessment: ValuationAssessment): string {
   const formatCurrency = (value: string | null) => {
     if (!value) return '$0';
@@ -94,10 +108,20 @@ function generateHTMLReport(assessment: ValuationAssessment): string {
             color: white;
             padding: 30px;
             text-align: center;
+            position: relative;
+            min-height: 120px;
+        }
+        
+        .logo {
+            position: absolute;
+            top: 20px;
+            left: 30px;
+            max-height: 80px;
+            max-width: 240px;
         }
         
         .header h1 {
-            margin: 0;
+            margin: 20px 0 0 0;
             font-size: 28px;
             font-weight: bold;
         }
@@ -258,6 +282,7 @@ function generateHTMLReport(assessment: ValuationAssessment): string {
 </head>
 <body>
     <div class="header">
+        <img src="${getMeritageLogoBase64()}" alt="Meritage Partners Logo" class="logo">
         <h1>Business Valuation Report</h1>
         <p>Comprehensive Analysis & Assessment</p>
     </div>
@@ -369,7 +394,7 @@ function generateHTMLReport(assessment: ValuationAssessment): string {
         ` : ''}
         
         <div class="footer">
-            <p><strong>Apple Bites Business Valuation Platform</strong></p>
+            <p><strong>Meritage Partners - Business Valuation Specialists</strong></p>
             <p>This report was generated on ${formatDate(assessment.createdAt)}</p>
             
             <div class="disclaimer">
