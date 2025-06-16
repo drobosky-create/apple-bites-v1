@@ -238,7 +238,7 @@ export default function TeamDashboard() {
                       Add Member
                     </Button>
                   </DialogTrigger>
-                  <DialogContent className="sm:max-w-md">
+                  <DialogContent className="sm:max-w-md bg-white">
                     <DialogHeader>
                       <DialogTitle>Add Team Member</DialogTitle>
                       <DialogDescription>

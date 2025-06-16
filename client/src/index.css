@@ -335,6 +335,22 @@
     border-color: rgb(37 99 235) !important;
     color: white !important;
   }
+
+  /* Force all dialogs and modals to use white background */
+  [data-radix-dialog-content],
+  [role="dialog"],
+  .dialog-content,
+  [data-state="open"] {
+    background-color: white !important;
+    background: white !important;
+  }
+
+  /* Override any yellow dialog backgrounds */
+  [data-radix-dialog-content][style*="background"],
+  [role="dialog"][style*="background"] {
+    background-color: white !important;
+    background: white !important;
+  }
 }
 
 
