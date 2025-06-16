@@ -89,7 +89,7 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
             <div className="flex gap-2 justify-center">
               <Button 
                 onClick={handleDownloadPDF}
-                className="flex-1 bg-slate-600 hover:bg-slate-700 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center justify-center shadow-sm hover:shadow-md transition-all duration-200"
+                className="flex-1 heritage-gradient text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center justify-center shadow-sm hover:shadow-md transition-all duration-200"
               >
                 <Download className="mr-1 w-3 h-3" />
                 Download Full Report
@@ -98,7 +98,7 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
               <Button 
                 onClick={handleExploreImprovements}
                 variant="outline"
-                className="flex-1 px-4 py-2 rounded-lg text-sm font-medium border-green-600 text-green-600 hover:bg-green-50 flex items-center justify-center"
+                className="flex-1 px-4 py-2 rounded-lg text-sm font-medium border-[#1a2332] text-[#1a2332] hover:bg-[#1a2332] hover:text-white flex items-center justify-center"
               >
                 <Calculator className="mr-1 w-3 h-3" />
                 Explore Value Improvements
@@ -106,7 +106,7 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
 
               <Button 
                 onClick={handleScheduleConsultation}
-                className="flex-1 px-4 py-2 rounded-lg text-sm font-medium bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-center shadow-sm hover:shadow-md transition-all duration-200"
+                className="flex-1 px-4 py-2 rounded-lg text-sm font-medium bg-[#f5c842] hover:bg-[#e6b63a] text-[#1a2332] flex items-center justify-center shadow-sm hover:shadow-md transition-all duration-200"
               >
                 <Calendar className="mr-1 w-3 h-3" />
                 Schedule Consultation
@@ -116,12 +116,12 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
         </div>
 
         {/* Operational Grade Display */}
-        <div className="bg-gradient-to-br from-emerald-50 via-white to-cyan-50 border border-emerald-200 rounded-lg p-4 text-center">
-          <h5 className="text-base font-semibold text-slate-900 mb-3">Overall Operational Grade</h5>
-          <div className="inline-block bg-white rounded-full p-4 shadow-lg border-2 border-emerald-300">
-            <div className="text-4xl font-bold text-emerald-600">{results.overallScore}</div>
+        <div className="bg-gradient-to-br from-[#f5c842]/10 via-white to-[#1a2332]/5 border border-[#f5c842]/30 rounded-lg p-4 text-center">
+          <h5 className="text-base font-semibold text-[#1a2332] mb-3">Overall Operational Grade</h5>
+          <div className="inline-block bg-white rounded-full p-4 shadow-lg border-2 border-[#f5c842]">
+            <div className="text-4xl font-bold text-[#1a2332]">{results.overallScore}</div>
           </div>
-          <p className="mt-2 text-slate-600 text-sm font-medium">With an Operational Grade of {results.overallScore}</p>
+          <p className="mt-2 text-[#1a2332]/70 text-sm font-medium">With an Operational Grade of {results.overallScore}</p>
         </div>
 
         {/* Key Metrics */}
