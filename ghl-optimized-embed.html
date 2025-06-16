@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Valuation Calculator - Meritage Partners</title>
+    <link href="https://fonts.googleapis.com/css2?family=Clear+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Clear Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8fafc;
+            min-height: 100vh;
+        }
+        
+        .calculator-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px 0;
+        }
+        
+        .header h1 {
+            color: #1f294f;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+        
+        .header p {
+            color: #64748b;
+            font-size: 18px;
+            line-height: 1.6;
+        }
+        
+        .calculator-frame {
+            width: 100%;
+            height: 800px;
+            border: none;
+            border-radius: 12px;
+            background: white;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .calculator-frame:hover {
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 25px;
+            padding: 20px 0;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .footer p {
+            color: #64748b;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .contact-info {
+            color: #94a3b8;
+            font-size: 13px;
+            margin-top: 8px;
+        }
+        
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .logo {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #1f294f, #3b82f6);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 24px;
+            margin-right: 15px;
+        }
+        
+        /* Mobile Responsive Design */
+        @media (max-width: 768px) {
+            .calculator-container {
+                padding: 15px;
+                margin: 10px;
+                border-radius: 12px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .header p {
+                font-size: 16px;
+            }
+            
+            .calculator-frame {
+                height: 700px;
+            }
+            
+            .logo {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+                margin-right: 12px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .calculator-container {
+                padding: 12px;
+                margin: 5px;
+                border-radius: 8px;
+            }
+            
+            .header {
+                margin-bottom: 20px;
+                padding: 15px 0;
+            }
+            
+            .header h1 {
+                font-size: 20px;
+            }
+            
+            .header p {
+                font-size: 14px;
+            }
+            
+            .calculator-frame {
+                height: 600px;
+                border-radius: 8px;
+            }
+            
+            .logo {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+                margin-right: 10px;
+            }
+            
+            .footer p {
+                font-size: 13px;
+            }
+            
+            .contact-info {
+                font-size: 12px;
+            }
+        }
+        
+        /* GHL Integration Optimizations */
+        @media (max-width: 375px) {
+            .calculator-frame {
+                height: 550px;
+            }
+            
+            .header h1 {
+                font-size: 18px;
+            }
+        }
+        
+        /* Loading state */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 800px;
+            background: #f8fafc;
+            border-radius: 12px;
+        }
+        
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #e2e8f0;
+            border-top: 4px solid #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator-container">
+        <div class="header">
+            <div class="logo-container">
+                <div class="logo">M</div>
+                <div>
+                    <h1>Business Valuation Calculator</h1>
+                    <p>Professional M&A Analysis by Meritage Partners</p>
+                </div>
+            </div>
+        </div>
+        
+        <div id="loading" class="loading">
+            <div class="loading-spinner"></div>
+        </div>
+        
+        <iframe 
+            id="calculator"
+            class="calculator-frame"
+            src="https://your-replit-domain.replit.app/"
+            title="Business Valuation Calculator by Meritage Partners"
+            loading="lazy"
+            style="display: none;"
+            onload="document.getElementById('loading').style.display='none'; this.style.display='block';">
+        </iframe>
+        
+        <div class="footer">
+            <p>© 2025 Meritage Partners - M&A Advisory & Business Valuation Experts</p>
+            <div class="contact-info">
+                info@meritage-partners.com | (949) 522-9121
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Handle iframe communication for mobile optimization
+        window.addEventListener('message', function(event) {
+            if (event.data.type === 'resize') {
+                const iframe = document.getElementById('calculator');
+                if (iframe && event.data.height) {
+                    iframe.style.height = event.data.height + 'px';
+                }
+            }
+        });
+        
+        // Mobile viewport optimization
+        function optimizeForMobile() {
+            const iframe = document.getElementById('calculator');
+            const container = document.querySelector('.calculator-container');
+            
+            if (window.innerWidth <= 480) {
+                iframe.style.height = '600px';
+                container.style.padding = '10px';
+            } else if (window.innerWidth <= 768) {
+                iframe.style.height = '700px';
+                container.style.padding = '15px';
+            } else {
+                iframe.style.height = '800px';
+                container.style.padding = '20px';
+            }
+        }
+        
+        window.addEventListener('resize', optimizeForMobile);
+        document.addEventListener('DOMContentLoaded', optimizeForMobile);
+    </script>
+</body>
+</html>
