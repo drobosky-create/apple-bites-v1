@@ -11,6 +11,8 @@ import { Shield, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import appleBitesLogo from "@assets/Apple Bites Business Assessment V2_1750116954168.png";
 
+import _2 from "@assets/2.png";
+
 export default function ValuationForm() {
   const {
     currentStep,
@@ -34,7 +36,7 @@ export default function ValuationForm() {
         {currentStep !== "results" && (
           <div className="text-center mb-8">
             <img 
-              src={appleBitesLogo} 
+              src={_2} 
               alt="Apple Bites Business Assessment" 
               className="mx-auto mb-6 h-32 w-auto"
             />
