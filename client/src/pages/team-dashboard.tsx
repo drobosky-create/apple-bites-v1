@@ -158,18 +158,20 @@ export default function TeamDashboard() {
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <Button 
-              onClick={() => window.open('/admin/leads', '_blank')}
-              className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white"
-            >
-              👥 Leads
-            </Button>
-            <Button 
-              onClick={() => window.open('/admin/analytics', '_blank')}
-              className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white"
-            >
-              📊 Analytics
-            </Button>
+            <Link href="/admin/leads">
+              <Button 
+                className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white"
+              >
+                👥 Leads
+              </Button>
+            </Link>
+            <Link href="/admin/analytics">
+              <Button 
+                className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white"
+              >
+                📊 Analytics
+              </Button>
+            </Link>
           </div>
         </div>
 

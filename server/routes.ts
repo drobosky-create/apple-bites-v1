@@ -14,11 +14,30 @@ import { nanoid } from 'nanoid';
 
 export async function registerRoutes(app: Express): Promise<Server> {
   
-  // Admin authentication middleware
-  const isAdminAuthenticated = (req: any, res: any, next: any) => {
+  // Admin authentication middleware - also allows team members
+  const isAdminAuthenticated = async (req: any, res: any, next: any) => {
+    // Check if admin is authenticated via admin login
     if ((req.session as any)?.adminAuthenticated) {
       return next();
     }
+
+    // Check if team member is authenticated (team members have admin access)
+    const sessionId = (req.session as any)?.teamSessionId;
+    if (sessionId) {
+      try {
+        const session = await storage.getTeamSession(sessionId);
+        if (session && session.expiresAt > new Date()) {
+          const teamMember = await storage.getTeamMemberById(session.teamMemberId!);
+          if (teamMember && teamMember.isActive) {
+            req.user = teamMember;
+            return next();
+          }
+        }
+      } catch (error) {
+        // Continue to admin auth check
+      }
+    }
+
     return res.status(401).json({ error: 'Admin authentication required' });
   };
 
