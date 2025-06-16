@@ -6,9 +6,10 @@ interface ProgressIndicatorProps {
 
 const steps = [
   { id: "contact", label: "Contact Information", number: 1 },
-  { id: "ebitda", label: "EBITDA & Adjustments", number: 2 },
-  { id: "valueDrivers", label: "Value Drivers", number: 3 },
-  { id: "followUp", label: "Follow-up", number: 4 },
+  { id: "ebitda", label: "EBITDA Calculation", number: 2 },
+  { id: "adjustments", label: "EBITDA Adjustments", number: 3 },
+  { id: "valueDrivers", label: "Value Drivers", number: 4 },
+  { id: "followUp", label: "Follow-up", number: 5 },
 ];
 
 export default function ProgressIndicator({ currentStep }: ProgressIndicatorProps) {

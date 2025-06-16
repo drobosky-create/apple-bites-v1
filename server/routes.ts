@@ -647,12 +647,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.delete("/api/team/members/:id", isTeamAuthenticated, requireRole(['admin']), async (req, res) => {
+  app.delete("/api/team/members/:id", isTeamAuthenticated, requireRole(['admin']), async (req: any, res) => {
     try {
       const memberId = parseInt(req.params.id);
       
       // Don't allow deleting yourself
-      if (memberId === req.user.id) {
+      if (req.user && memberId === req.user.id) {
         return res.status(400).json({ error: 'Cannot delete your own account' });
       }
 
@@ -664,9 +664,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Password change endpoint
-  app.post("/api/team/change-password", isTeamAuthenticated, async (req, res) => {
+  app.post("/api/team/change-password", isTeamAuthenticated, async (req: any, res) => {
     try {
       const { currentPassword, newPassword } = req.body;
+      if (!req.user) {
+        return res.status(401).json({ error: 'User not found' });
+      }
       const userId = req.user.id;
 
       if (!currentPassword || !newPassword) {
@@ -923,7 +926,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     } catch (error) {
       console.error('NEW webhook test failed:', error);
-      res.status(500).json({ error: error.message });
+      res.status(500).json({ error: error instanceof Error ? error.message : 'Unknown error' });
     }
   });
 
@@ -970,7 +973,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     } catch (error) {
       console.error('Webhook test failed:', error);
-      res.status(500).json({ error: error.message });
+      res.status(500).json({ error: error instanceof Error ? error.message : 'Unknown error' });
     }
   });
 
