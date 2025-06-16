@@ -7,7 +7,7 @@ export default function Navigation() {
 
   return (
     <header className="bg-[#1a2332] border-b border-[#f5c842]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-[#0b2147]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-[#0b2147] bg-[#0b2147]">
         <div className="flex justify-between items-center h-16 text-[#0b2147] bg-[#0b2147]">
           <div className="flex items-center">
           </div>
