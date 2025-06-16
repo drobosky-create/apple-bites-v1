@@ -166,15 +166,15 @@ export default function InteractiveValuationSlider() {
           </CardContent>
         </Card>
 
-        <Card className="border-2 border-blue-200 bg-blue-50 transition-all duration-300">
+        <Card className="border-2 border-[#f5c842] bg-gradient-to-br from-[#f5c842]/10 to-[#1a2332]/5 transition-all duration-300">
           <CardHeader className="text-center">
-            <CardTitle className="text-lg text-blue-800">Potential Value</CardTitle>
-            <CardDescription className="text-sm text-[#080000]">
+            <CardTitle className="text-lg text-[#1a2332]">Potential Value</CardTitle>
+            <CardDescription className="text-sm text-[#1a2332]/70">
               With an Operational Grade of {sliderGrade}
             </CardDescription>
           </CardHeader>
           <CardContent className="text-center">
-            <div className="text-3xl font-bold text-blue-800 mb-2 transition-all duration-300">
+            <div className="text-3xl font-bold text-[#1a2332] mb-2 transition-all duration-300">
               ${Math.round(sliderValuation).toLocaleString()}
             </div>
             <div className="text-sm text-blue-700 mb-2">

@@ -177,14 +177,14 @@ export default function LeadsDashboard() {
             <Button 
               variant="outline" 
               onClick={() => window.location.href = '/'}
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 text-[#1a2332] hover:text-white hover:bg-[#1a2332] border-[#1a2332]"
             >
               <ArrowLeft className="w-4 h-4" />
               Back to Home
             </Button>
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">Lead Management</h1>
-              <p className="text-gray-600">Track and manage leads from valuation assessments</p>
+              <h1 className="text-3xl font-bold text-[#1a2332] mb-2">Lead Management</h1>
+              <p className="text-[#1a2332]/70">Track and manage leads from valuation assessments</p>
             </div>
           </div>
           <div className="flex gap-2">
