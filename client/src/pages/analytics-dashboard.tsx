@@ -158,10 +158,10 @@ export default function AnalyticsDashboard() {
 
         <TabsContent value="overview" className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card>
+            <Card className="bg-gradient-to-br from-purple-50 via-white to-blue-50 border-0 shadow-lg">
               <CardHeader>
-                <CardTitle>Follow-up Intent</CardTitle>
-                <CardDescription>Distribution of client interest levels</CardDescription>
+                <CardTitle className="text-slate-800">Follow-up Intent</CardTitle>
+                <CardDescription className="text-slate-600">Distribution of client interest levels</CardDescription>
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={350}>
@@ -224,10 +224,10 @@ export default function AnalyticsDashboard() {
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="bg-gradient-to-br from-emerald-50 via-white to-cyan-50 border-0 shadow-lg">
               <CardHeader>
-                <CardTitle>Overall Score Distribution</CardTitle>
-                <CardDescription>Business performance grades</CardDescription>
+                <CardTitle className="text-slate-800">Overall Score Distribution</CardTitle>
+                <CardDescription className="text-slate-600">Business performance grades</CardDescription>
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={380}>
@@ -293,10 +293,10 @@ export default function AnalyticsDashboard() {
         </TabsContent>
 
         <TabsContent value="assessments">
-          <Card>
+          <Card className="bg-gradient-to-br from-slate-50 via-white to-gray-50 border-0 shadow-lg">
             <CardHeader>
-              <CardTitle>All Valuations</CardTitle>
-              <CardDescription>Complete list of business assessments</CardDescription>
+              <CardTitle className="text-slate-800">All Valuations</CardTitle>
+              <CardDescription className="text-slate-600">Complete list of business assessments</CardDescription>
             </CardHeader>
             <CardContent>
               <Table>
@@ -362,10 +362,10 @@ export default function AnalyticsDashboard() {
         </TabsContent>
 
         <TabsContent value="trends">
-          <Card>
+          <Card className="bg-gradient-to-br from-rose-50 via-white to-orange-50 border-0 shadow-lg">
             <CardHeader>
-              <CardTitle>Assessment Trends</CardTitle>
-              <CardDescription>Valuations over time</CardDescription>
+              <CardTitle className="text-slate-800">Assessment Trends</CardTitle>
+              <CardDescription className="text-slate-600">Valuations over time</CardDescription>
             </CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={420}>
