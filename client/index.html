@@ -9,17 +9,5 @@
     <script type="module" src="/src/main.tsx"></script>
     <!-- This is a replit script which adds a banner on the top of the page when opened in development mode outside the replit environment -->
     <script type="text/javascript" src="https://replit.com/public/js/replit-dev-banner.js"></script>
-    
-    <!-- Dynamic iframe height adjustment script -->
-    <script>
-      function sendHeight() {
-        const height = document.body.scrollHeight;
-        window.parent.postMessage({ frameHeight: height }, "*");
-      }
-
-      window.addEventListener("load", sendHeight);
-      window.addEventListener("resize", sendHeight);
-      setInterval(sendHeight, 1000); // backup in case content changes dynamically
-    </script>
   </body>
 </html>

@@ -18,24 +18,12 @@
     <iframe 
         src="https://70ef3e24-4187-4ef2-9d35-c0a1b2e306e3-00-1ymlxjzri85qo.kirk.replit.dev/" 
         width="100%" 
-        height="700" 
-        style="border: none; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.15), 0 4px 6px rgba(0,0,0,0.1); background: white;"
+        height="650" 
+        style="border: none; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.15), 0 4px 6px rgba(0,0,0,0.1); background: white; overflow: hidden;"
         title="Business Valuation Calculator by Meritage Partners"
-        loading="lazy">
+        loading="lazy"
+        scrolling="no">
     </iframe>
-    
-    <!-- Dynamic iframe height adjustment script -->
-    <script>
-      window.addEventListener("message", function (event) {
-        // Listen for height updates from the iframe content
-        if (event.data.frameHeight) {
-          const iframe = document.querySelector('iframe[src*="kirk.replit.dev"]');
-          if (iframe) {
-            iframe.style.height = event.data.frameHeight + "px";
-          }
-        }
-      });
-    </script>
     <div style="text-align: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
         <div style="display: inline-flex; align-items: center; gap: 20px; flex-wrap: wrap; justify-content: center; margin-bottom: 12px;">
             <a href="mailto:info@meritage-partners.com" style="color: #1f294f; text-decoration: none; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 6px; transition: color 0.2s;">
