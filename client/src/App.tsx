@@ -17,6 +17,7 @@ function Router() {
         <Switch>
           <Route path="/" component={ValuationForm} />
           <Route path="/value-calculator" component={ValueCalculator} />
+          <Route path="/admin" component={() => <div className="min-h-96 flex items-center justify-center"><div className="text-center"><h2 className="text-2xl font-bold text-slate-800 mb-4">Admin Access</h2><p className="text-slate-600">Please contact Meritage Partners for admin access.</p></div></div>} />
           <Route component={NotFound} />
         </Switch>
       </main>
