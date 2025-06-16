@@ -1,6 +1,6 @@
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { FileText, Shield } from "lucide-react";
+import { FileText, Shield, Users, BarChart3, TrendingUp } from "lucide-react";
 
 export default function Navigation() {
   const [location] = useLocation();
