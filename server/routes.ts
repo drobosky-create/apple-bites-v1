@@ -495,8 +495,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get("/api/admin/status", (req, res) => {
-    res.json({ authenticated: !!(req.session as any)?.adminAuthenticated });
+  app.get("/api/admin/status", async (req, res) => {
+    // Check if admin is authenticated via admin login
+    if ((req.session as any)?.adminAuthenticated) {
+      return res.json({ authenticated: true });
+    }
+
+    // Check if team member is authenticated (team members have admin access)
+    const sessionId = (req.session as any)?.teamSessionId;
+    if (sessionId) {
+      try {
+        const session = await storage.getTeamSession(sessionId);
+        if (session && session.expiresAt > new Date()) {
+          const teamMember = await storage.getTeamMemberById(session.teamMemberId!);
+          if (teamMember && teamMember.isActive) {
+            return res.json({ authenticated: true });
+          }
+        }
+      } catch (error) {
+        // Continue to return false
+      }
+    }
+
+    res.json({ authenticated: false });
   });
 
   app.post("/api/admin/logout", (req, res) => {
