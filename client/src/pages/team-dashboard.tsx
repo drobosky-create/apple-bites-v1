@@ -163,14 +163,14 @@ export default function TeamDashboard() {
               <Button 
                 className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white"
               >
-                👥 Leads
+                Leads
               </Button>
             </Link>
             <Link href="/admin/analytics">
               <Button 
                 className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white"
               >
-                📊 Analytics
+                Analytics
               </Button>
             </Link>
           </div>
@@ -272,7 +272,7 @@ export default function TeamDashboard() {
                 </div>
                 <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
                   <DialogTrigger asChild>
-                    <Button className="flex items-center gap-2 heritage-gradient text-white shadow-sm hover:shadow-md transition-all duration-200">
+                    <Button className="flex items-center gap-2 slate-gradient text-white shadow-sm hover:shadow-md transition-all duration-200">
                       <UserPlus className="w-4 h-4" />
                       Add Member
                     </Button>
@@ -356,7 +356,7 @@ export default function TeamDashboard() {
                             <FormItem>
                               <FormLabel>Password</FormLabel>
                               <FormControl>
-                                <Input {...field} type="password" />
+                                <Input {...field} type="password" className="bg-[#fffff8] border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20" />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
