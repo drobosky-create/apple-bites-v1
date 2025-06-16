@@ -74,7 +74,7 @@ export default function AnalyticsDashboard() {
     return acc;
   }, {} as Record<string, number>) || {};
 
-  const pieColors = ['#3B82F6', '#60A5FA', '#93C5FD', '#DBEAFE', '#EFF6FF'];
+  const pieColors = ['#8B5CF6', '#06B6D4', '#10B981', '#F59E0B', '#EF4444'];
 
   return (
     <div className="max-w-7xl mx-auto p-6">
@@ -166,32 +166,57 @@ export default function AnalyticsDashboard() {
               <CardContent>
                 <ResponsiveContainer width="100%" height={350}>
                   <PieChart>
+                    <defs>
+                      <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#8B5CF6" />
+                        <stop offset="100%" stopColor="#A855F7" />
+                      </linearGradient>
+                      <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#06B6D4" />
+                        <stop offset="100%" stopColor="#0891B2" />
+                      </linearGradient>
+                      <linearGradient id="gradient3" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#10B981" />
+                        <stop offset="100%" stopColor="#059669" />
+                      </linearGradient>
+                      <linearGradient id="gradient4" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#F59E0B" />
+                        <stop offset="100%" stopColor="#D97706" />
+                      </linearGradient>
+                      <linearGradient id="gradient5" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#EF4444" />
+                        <stop offset="100%" stopColor="#DC2626" />
+                      </linearGradient>
+                    </defs>
                     <Pie
                       data={Object.entries(followUpData).map(([key, value]) => ({ name: key, value }))}
                       cx="50%"
                       cy="50%"
                       labelLine={false}
                       label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                      outerRadius={100}
-                      innerRadius={40}
+                      outerRadius={110}
+                      innerRadius={45}
                       fill="#8884d8"
                       dataKey="value"
                       stroke="#ffffff"
-                      strokeWidth={2}
+                      strokeWidth={3}
                     >
                       {Object.entries(followUpData).map((_, index) => (
                         <Cell 
                           key={`cell-${index}`} 
-                          fill={pieColors[index % pieColors.length]}
+                          fill={`url(#gradient${index + 1})`}
                         />
                       ))}
                     </Pie>
                     <Tooltip 
                       contentStyle={{
-                        backgroundColor: 'white',
-                        border: '1px solid #e2e8f0',
-                        borderRadius: '8px',
-                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                        border: 'none',
+                        borderRadius: '12px',
+                        boxShadow: '0 10px 25px rgba(0, 0, 0, 0.15)',
+                        padding: '12px 16px',
+                        fontSize: '14px',
+                        fontWeight: '500'
                       }}
                     />
                   </PieChart>
@@ -205,37 +230,60 @@ export default function AnalyticsDashboard() {
                 <CardDescription>Business performance grades</CardDescription>
               </CardHeader>
               <CardContent>
-                <ResponsiveContainer width="100%" height={350}>
+                <ResponsiveContainer width="100%" height={380}>
                   <BarChart 
                     data={Object.entries(scoreDistribution).map(([key, value]) => ({ grade: key, count: value }))}
                     margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
                   >
-                    <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" opacity={0.8} />
+                    <defs>
+                      <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#6366F1" />
+                        <stop offset="50%" stopColor="#8B5CF6" />
+                        <stop offset="100%" stopColor="#A855F7" />
+                      </linearGradient>
+                      <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+                        <feDropShadow dx="0" dy="4" stdDeviation="3" floodColor="rgba(0,0,0,0.1)" />
+                      </filter>
+                    </defs>
+                    <CartesianGrid 
+                      strokeDasharray="2 2" 
+                      stroke="#E5E7EB" 
+                      opacity={0.6}
+                      horizontal={true}
+                      vertical={false}
+                    />
                     <XAxis 
                       dataKey="grade" 
-                      stroke="#64748B" 
-                      fontSize={12}
+                      stroke="#6B7280" 
+                      fontSize={13}
+                      fontWeight="600"
                       tickLine={false}
                       axisLine={false}
+                      tick={{ fill: '#374151' }}
                     />
                     <YAxis 
-                      stroke="#64748B" 
+                      stroke="#6B7280" 
                       fontSize={12}
                       tickLine={false}
                       axisLine={false}
+                      tick={{ fill: '#6B7280' }}
                     />
                     <Tooltip 
                       contentStyle={{
-                        backgroundColor: 'white',
-                        border: '1px solid #e2e8f0',
-                        borderRadius: '8px',
-                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                        backgroundColor: 'rgba(255, 255, 255, 0.98)',
+                        border: 'none',
+                        borderRadius: '12px',
+                        boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+                        padding: '16px',
+                        fontSize: '14px',
+                        fontWeight: '500'
                       }}
                     />
                     <Bar 
                       dataKey="count" 
-                      fill="#3B82F6"
-                      radius={[4, 4, 0, 0]}
+                      fill="url(#barGradient)"
+                      radius={[8, 8, 0, 0]}
+                      filter="url(#shadow)"
                     />
                   </BarChart>
                 </ResponsiveContainer>
@@ -320,41 +368,84 @@ export default function AnalyticsDashboard() {
               <CardDescription>Valuations over time</CardDescription>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={400}>
+              <ResponsiveContainer width="100%" height={420}>
                 <LineChart 
                   data={Object.entries(valuationByMonth).map(([month, count]) => ({ month, count }))}
                   margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
                 >
-                  <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" opacity={0.6} />
+                  <defs>
+                    <linearGradient id="lineGradient" x1="0" y1="0" x2="1" y2="0">
+                      <stop offset="0%" stopColor="#06B6D4" />
+                      <stop offset="30%" stopColor="#3B82F6" />
+                      <stop offset="70%" stopColor="#8B5CF6" />
+                      <stop offset="100%" stopColor="#EC4899" />
+                    </linearGradient>
+                    <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="rgba(59, 130, 246, 0.3)" />
+                      <stop offset="100%" stopColor="rgba(59, 130, 246, 0.05)" />
+                    </linearGradient>
+                    <filter id="glow">
+                      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                      <feMerge> 
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                      </feMerge>
+                    </filter>
+                  </defs>
+                  <CartesianGrid 
+                    strokeDasharray="1 3" 
+                    stroke="#E5E7EB" 
+                    opacity={0.4}
+                    horizontal={true}
+                    vertical={false}
+                  />
                   <XAxis 
                     dataKey="month" 
-                    stroke="#64748B" 
+                    stroke="#6B7280" 
                     fontSize={12}
+                    fontWeight="500"
                     tickLine={false}
                     axisLine={false}
+                    tick={{ fill: '#374151' }}
                   />
                   <YAxis 
-                    stroke="#64748B" 
+                    stroke="#6B7280" 
                     fontSize={12}
                     tickLine={false}
                     axisLine={false}
+                    tick={{ fill: '#6B7280' }}
                   />
                   <Tooltip 
                     contentStyle={{
-                      backgroundColor: 'white',
-                      border: '1px solid #e2e8f0',
-                      borderRadius: '8px',
-                      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                      backgroundColor: 'rgba(255, 255, 255, 0.98)',
+                      border: 'none',
+                      borderRadius: '12px',
+                      boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+                      padding: '16px',
+                      fontSize: '14px',
+                      fontWeight: '500'
                     }}
                   />
                   <Legend />
                   <Line 
                     type="monotone" 
                     dataKey="count" 
-                    stroke="#3B82F6" 
-                    strokeWidth={3}
-                    dot={{ fill: '#3B82F6', strokeWidth: 2, r: 6 }}
-                    activeDot={{ r: 8, stroke: '#3B82F6', strokeWidth: 2, fill: '#ffffff' }}
+                    stroke="url(#lineGradient)" 
+                    strokeWidth={4}
+                    dot={{ 
+                      fill: '#3B82F6', 
+                      strokeWidth: 3, 
+                      r: 7,
+                      stroke: '#ffffff'
+                    }}
+                    activeDot={{ 
+                      r: 10, 
+                      stroke: '#3B82F6', 
+                      strokeWidth: 3, 
+                      fill: '#ffffff',
+                      filter: 'url(#glow)'
+                    }}
+                    filter="url(#glow)"
                   />
                 </LineChart>
               </ResponsiveContainer>
