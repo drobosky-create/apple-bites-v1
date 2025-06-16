@@ -346,6 +346,94 @@
     border-color: rgb(203 213 225) !important;
   }
 
+  /* Target analytics dashboard specific elements */
+  .analytics-dashboard *,
+  [data-testid*="analytics"] *,
+  .recharts-wrapper *,
+  .recharts-surface *,
+  .recharts-pie *,
+  .recharts-sector *,
+  .recharts-cell * {
+    border-color: rgb(203 213 225) !important;
+  }
+
+  /* Override any yellow styling in Recharts components */
+  .recharts-pie-sector[fill="#FFBB28"],
+  .recharts-pie-sector[fill="#FF8042"],
+  .recharts-pie-sector[fill="#FFCA28"],
+  .recharts-cell[fill="#FFBB28"],
+  .recharts-cell[fill="#FF8042"],
+  .recharts-cell[fill="#FFCA28"] {
+    fill: #94A3B8 !important;
+  }
+
+  /* Force all SVG elements in charts to use muted colors */
+  svg path[fill*="#FF"],
+  svg path[fill*="yellow"],
+  svg circle[fill*="#FF"],
+  svg circle[fill*="yellow"],
+  svg rect[fill*="#FF"],
+  svg rect[fill*="yellow"] {
+    fill: #94A3B8 !important;
+  }
+
+  /* Nuclear option: Override ALL yellow/orange/amber colors globally */
+  *[style*="rgb(255, 187, 40)"],
+  *[style*="rgb(255, 128, 66)"],
+  *[style*="rgb(255, 202, 40)"],
+  *[style*="#FFBB28"],
+  *[style*="#FF8042"],
+  *[style*="#FFCA28"],
+  *[fill="#FFBB28"],
+  *[fill="#FF8042"],
+  *[fill="#FFCA28"] {
+    background-color: #94A3B8 !important;
+    border-color: #94A3B8 !important;
+    color: white !important;
+    fill: #94A3B8 !important;
+  }
+
+  /* Target specific Recharts default colors */
+  .recharts-default-tooltip,
+  .recharts-tooltip-wrapper,
+  .recharts-legend-wrapper {
+    background-color: white !important;
+    border-color: rgb(203 213 225) !important;
+  }
+
+  /* Override any remaining yellow backgrounds or borders */
+  .bg-warning,
+  .border-warning,
+  .text-warning,
+  .alert-warning {
+    background-color: rgb(37 99 235) !important;
+    border-color: rgb(37 99 235) !important;
+    color: white !important;
+  }
+
+  /* Force override Recharts default color palette */
+  .recharts-wrapper svg g g path,
+  .recharts-wrapper svg g g circle,
+  .recharts-wrapper svg g g rect {
+    fill: #64748B !important;
+  }
+
+  /* Override specific problematic colors that might still show */
+  *[fill="#0088FE"] { fill: #64748B !important; }
+  *[fill="#00C49F"] { fill: #94A3B8 !important; }
+  *[fill="#FFBB28"] { fill: #CBD5E1 !important; }
+  *[fill="#FF8042"] { fill: #E2E8F0 !important; }
+  *[fill="#8884D8"] { fill: #F1F5F9 !important; }
+
+  /* Target SVG elements with specific yellow/orange fills */
+  svg *[fill="#FFBB28"],
+  svg *[fill="#FF8042"],
+  svg *[fill="#FFCA28"],
+  svg *[fill="#FFA500"],
+  svg *[fill="#FFD700"] {
+    fill: #94A3B8 !important;
+  }
+
   /* Override grade selection yellow styling */
   .bg-yellow-500,
   .bg-amber-500,
