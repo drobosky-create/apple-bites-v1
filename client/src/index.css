@@ -434,6 +434,76 @@
     fill: #94A3B8 !important;
   }
 
+  /* Aggressive tab styling override */
+  [data-state="active"],
+  [data-state="active"]:hover,
+  .tabs-trigger[data-state="active"],
+  .tabs-trigger[aria-selected="true"],
+  [role="tab"][aria-selected="true"],
+  [role="tab"][data-state="active"] {
+    background-color: rgb(37 99 235) !important;
+    border-color: rgb(37 99 235) !important;
+    color: white !important;
+    box-shadow: none !important;
+  }
+
+  /* Override all tab-related yellow styling */
+  .tabs-list,
+  [role="tablist"],
+  .tabs-trigger,
+  [role="tab"] {
+    background-color: rgb(37 99 235) !important;
+    border-color: rgb(37 99 235) !important;
+    color: white !important;
+  }
+
+  .tabs-trigger:not([data-state="active"]),
+  [role="tab"]:not([aria-selected="true"]) {
+    background-color: rgb(71 85 105) !important;
+    border-color: rgb(71 85 105) !important;
+    color: white !important;
+  }
+
+  /* Target specific yellow border around active tabs */
+  .border-b-2,
+  .border-b-4,
+  .border-yellow,
+  .border-amber {
+    border-bottom-color: rgb(37 99 235) !important;
+  }
+
+  /* Nuclear option for Radix UI tabs with yellow styling */
+  [data-radix-tabs-trigger],
+  [data-radix-tabs-trigger][data-state="active"],
+  [data-radix-tabs-trigger][data-state="inactive"],
+  .radix-tabs-trigger,
+  .radix-tabs-list {
+    background-color: rgb(37 99 235) !important;
+    border-color: rgb(37 99 235) !important;
+    color: white !important;
+    border-bottom: 2px solid rgb(37 99 235) !important;
+  }
+
+  /* Override any inline styles that might be setting yellow */
+  *[style*="border-bottom: 2px solid rgb(254, 240, 138)"],
+  *[style*="border-bottom-color: rgb(254, 240, 138)"],
+  *[style*="border-bottom: 2px solid yellow"],
+  *[style*="background-color: rgb(254, 240, 138)"] {
+    border-bottom: 2px solid rgb(37 99 235) !important;
+    border-bottom-color: rgb(37 99 235) !important;
+    background-color: rgb(37 99 235) !important;
+  }
+
+  /* Force all button elements in tabs to use Meritage colors */
+  .tabs-list button,
+  [role="tablist"] button,
+  button[role="tab"] {
+    background-color: rgb(37 99 235) !important;
+    border-color: rgb(37 99 235) !important;
+    color: white !important;
+    border-bottom: 2px solid rgb(37 99 235) !important;
+  }
+
   /* Override grade selection yellow styling */
   .bg-yellow-500,
   .bg-amber-500,
