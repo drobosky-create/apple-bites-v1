@@ -70,7 +70,7 @@ export class EmailCampaignService {
             </p>
 
             <div style="text-align: center; margin: 30px 0;">
-              <a href="https://calendly.com/brian-franco/strategy-call?prefill_name={{firstName}} {{lastName}}&prefill_company={{company}}" 
+              <a href="https://api.leadconnectorhq.com/widget/bookings/applebites" 
                  style="background: #1e40af; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">
                 Schedule Strategy Call
               </a>
@@ -95,7 +95,7 @@ Valuation Summary:
 
 Based on your results, I'd like to discuss specific strategies to maximize your business value.
 
-Schedule a complimentary strategy call: https://calendly.com/brian-franco/strategy-call
+Schedule a complimentary strategy call: https://api.leadconnectorhq.com/widget/bookings/applebites
 
 Best regards,
 Brian Franco
@@ -145,7 +145,7 @@ Apple Bites Valuation
             </ul>
 
             <div style="text-align: center; margin: 30px 0;">
-              <a href="https://calendly.com/brian-franco/value-improvement-call?prefill_name={{firstName}} {{lastName}}&prefill_company={{company}}" 
+              <a href="https://api.leadconnectorhq.com/widget/bookings/applebites" 
                  style="background: #dc2626; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">
                 Explore Value Improvement Plan
               </a>
@@ -168,7 +168,7 @@ Current Assessment:
 
 By addressing key operational areas, you could see 50-150% valuation increase within 12-24 months.
 
-Explore your value improvement plan: https://calendly.com/brian-franco/value-improvement-call
+Explore your value improvement plan: https://api.leadconnectorhq.com/widget/bookings/applebites
 
 Best regards,
 Brian Franco
@@ -212,7 +212,7 @@ Apple Bites Valuation
             <p>Would you be interested in a brief, no-obligation conversation about value enhancement strategies specific to your situation?</p>
 
             <div style="text-align: center; margin: 30px 0;">
-              <a href="https://calendly.com/brian-franco/consultation?prefill_name={{firstName}} {{lastName}}&prefill_company={{company}}" 
+              <a href="https://api.leadconnectorhq.com/widget/bookings/applebites" 
                  style="background: #1e40af; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">
                 Schedule Brief Consultation
               </a>
@@ -232,7 +232,7 @@ Current trends show favorable conditions for businesses focused on operational i
 
 Would you be interested in a brief consultation about value enhancement strategies?
 
-Schedule here: https://calendly.com/brian-franco/consultation
+Schedule here: https://api.leadconnectorhq.com/widget/bookings/applebites
 
 Best regards,
 Brian Franco
