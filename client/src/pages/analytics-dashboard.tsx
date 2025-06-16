@@ -74,7 +74,7 @@ export default function AnalyticsDashboard() {
     return acc;
   }, {} as Record<string, number>) || {};
 
-  const pieColors = ['#64748B', '#94A3B8', '#CBD5E1', '#E2E8F0', '#F1F5F9'];
+  const pieColors = ['#3B82F6', '#60A5FA', '#93C5FD', '#DBEAFE', '#EFF6FF'];
 
   return (
     <div className="max-w-7xl mx-auto p-6">
@@ -164,7 +164,7 @@ export default function AnalyticsDashboard() {
                 <CardDescription>Distribution of client interest levels</CardDescription>
               </CardHeader>
               <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
+                <ResponsiveContainer width="100%" height={350}>
                   <PieChart>
                     <Pie
                       data={Object.entries(followUpData).map(([key, value]) => ({ name: key, value }))}
@@ -172,15 +172,28 @@ export default function AnalyticsDashboard() {
                       cy="50%"
                       labelLine={false}
                       label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                      outerRadius={80}
+                      outerRadius={100}
+                      innerRadius={40}
                       fill="#8884d8"
                       dataKey="value"
+                      stroke="#ffffff"
+                      strokeWidth={2}
                     >
                       {Object.entries(followUpData).map((_, index) => (
-                        <Cell key={`cell-${index}`} fill={pieColors[index % pieColors.length]} />
+                        <Cell 
+                          key={`cell-${index}`} 
+                          fill={pieColors[index % pieColors.length]}
+                        />
                       ))}
                     </Pie>
-                    <Tooltip />
+                    <Tooltip 
+                      contentStyle={{
+                        backgroundColor: 'white',
+                        border: '1px solid #e2e8f0',
+                        borderRadius: '8px',
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                      }}
+                    />
                   </PieChart>
                 </ResponsiveContainer>
               </CardContent>
@@ -192,13 +205,38 @@ export default function AnalyticsDashboard() {
                 <CardDescription>Business performance grades</CardDescription>
               </CardHeader>
               <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
-                  <BarChart data={Object.entries(scoreDistribution).map(([key, value]) => ({ grade: key, count: value }))}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
-                    <XAxis dataKey="grade" stroke="#64748B" />
-                    <YAxis stroke="#64748B" />
-                    <Tooltip />
-                    <Bar dataKey="count" fill="#94A3B8" />
+                <ResponsiveContainer width="100%" height={350}>
+                  <BarChart 
+                    data={Object.entries(scoreDistribution).map(([key, value]) => ({ grade: key, count: value }))}
+                    margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" opacity={0.8} />
+                    <XAxis 
+                      dataKey="grade" 
+                      stroke="#64748B" 
+                      fontSize={12}
+                      tickLine={false}
+                      axisLine={false}
+                    />
+                    <YAxis 
+                      stroke="#64748B" 
+                      fontSize={12}
+                      tickLine={false}
+                      axisLine={false}
+                    />
+                    <Tooltip 
+                      contentStyle={{
+                        backgroundColor: 'white',
+                        border: '1px solid #e2e8f0',
+                        borderRadius: '8px',
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                      }}
+                    />
+                    <Bar 
+                      dataKey="count" 
+                      fill="#3B82F6"
+                      radius={[4, 4, 0, 0]}
+                    />
                   </BarChart>
                 </ResponsiveContainer>
               </CardContent>
@@ -283,13 +321,41 @@ export default function AnalyticsDashboard() {
             </CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={400}>
-                <LineChart data={Object.entries(valuationByMonth).map(([month, count]) => ({ month, count }))}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
-                  <XAxis dataKey="month" stroke="#64748B" />
-                  <YAxis stroke="#64748B" />
-                  <Tooltip />
+                <LineChart 
+                  data={Object.entries(valuationByMonth).map(([month, count]) => ({ month, count }))}
+                  margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" opacity={0.6} />
+                  <XAxis 
+                    dataKey="month" 
+                    stroke="#64748B" 
+                    fontSize={12}
+                    tickLine={false}
+                    axisLine={false}
+                  />
+                  <YAxis 
+                    stroke="#64748B" 
+                    fontSize={12}
+                    tickLine={false}
+                    axisLine={false}
+                  />
+                  <Tooltip 
+                    contentStyle={{
+                      backgroundColor: 'white',
+                      border: '1px solid #e2e8f0',
+                      borderRadius: '8px',
+                      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                    }}
+                  />
                   <Legend />
-                  <Line type="monotone" dataKey="count" stroke="#64748B" strokeWidth={2} />
+                  <Line 
+                    type="monotone" 
+                    dataKey="count" 
+                    stroke="#3B82F6" 
+                    strokeWidth={3}
+                    dot={{ fill: '#3B82F6', strokeWidth: 2, r: 6 }}
+                    activeDot={{ r: 8, stroke: '#3B82F6', strokeWidth: 2, fill: '#ffffff' }}
+                  />
                 </LineChart>
               </ResponsiveContainer>
             </CardContent>
