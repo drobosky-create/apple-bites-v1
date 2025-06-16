@@ -195,6 +195,27 @@
     box-shadow: 0 0 0 2px rgb(var(--meritage-blue) / 0.2) !important;
   }
 
+  /* Force all dialog elements to use proper Meritage Partners styling */
+  [role="dialog"],
+  [data-radix-dialog-content],
+  [data-state="open"][role="dialog"],
+  .dialog-content,
+  .modal,
+  .popup {
+    border-color: rgb(203 213 225) !important;
+    background-color: rgb(255 255 255) !important;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+    outline: none !important;
+  }
+
+  /* Override any yellow/amber dialog borders */
+  .border-yellow-400,
+  .border-amber-400,
+  .border-yellow-300,
+  .border-amber-300 {
+    border-color: rgb(203 213 225) !important;
+  }
+
   /* Override grade selection yellow styling */
   .bg-yellow-500,
   .bg-amber-500,

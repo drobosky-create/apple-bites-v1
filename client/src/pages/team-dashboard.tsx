@@ -194,7 +194,7 @@ export default function TeamDashboard() {
                   Change Password
                 </Button>
               </DialogTrigger>
-              <DialogContent className="sm:max-w-md bg-white">
+              <DialogContent className="sm:max-w-md bg-white border-slate-300 shadow-lg">
                 <DialogHeader>
                   <DialogTitle>Change Password</DialogTitle>
                   <DialogDescription>
