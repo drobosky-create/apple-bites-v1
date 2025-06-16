@@ -20,7 +20,7 @@ export default function Navigation() {
                 className={`flex items-center space-x-2 ${location === "/" ? "bg-[#f5c842] hover:bg-[#e6b63a] text-[#1a2332]" : "text-[#f5c842] hover:text-white hover:bg-[#f5c842]/20"}`}
               >
                 <FileText className="w-4 h-4" />
-                <span>Valuation Form</span>
+                <span className="text-[#f2f4f7] bg-[#d3ae4000]">Valuation Form</span>
               </Button>
             </Link>
             
