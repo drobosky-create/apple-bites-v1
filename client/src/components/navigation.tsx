@@ -7,10 +7,9 @@ export default function Navigation() {
 
   return (
     <header className="bg-[#1a2332] border-b border-[#f5c842]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-[#0b2147]">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
-            <h1 className="text-[#f5c842] text-xl font-bold">Meritage Partners</h1>
           </div>
           
           <nav className="flex space-x-4">
