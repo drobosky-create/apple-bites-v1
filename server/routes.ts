@@ -736,6 +736,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.patch("/api/leads/:id", isAdminAuthenticated, async (req, res) => {
+    try {
+      const leadId = parseInt(req.params.id);
+      const { status } = req.body;
+      
+      const lead = await storage.updateLead(leadId, { leadStatus: status });
+      res.json(lead);
+    } catch (error) {
+      console.error('Error updating lead status:', error);
+      res.status(500).json({ error: "Failed to update lead status" });
+    }
+  });
+
+  app.delete("/api/leads/:id", isAdminAuthenticated, async (req, res) => {
+    try {
+      const leadId = parseInt(req.params.id);
+      
+      // Check if lead exists
+      const lead = await storage.getLeadById(leadId);
+      if (!lead) {
+        return res.status(404).json({ error: "Lead not found" });
+      }
+      
+      await storage.deleteLead(leadId);
+      res.json({ success: true, message: "Lead deleted successfully" });
+    } catch (error) {
+      console.error('Error deleting lead:', error);
+      res.status(500).json({ error: "Failed to delete lead" });
+    }
+  });
+
   app.get("/api/leads/:id/activities", isAdminAuthenticated, async (req, res) => {
     try {
       const leadId = parseInt(req.params.id);

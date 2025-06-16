@@ -29,6 +29,7 @@ export interface IStorage {
   getLeadByEmail(email: string): Promise<Lead | undefined>;
   getLeadById(id: number): Promise<Lead | undefined>;
   updateLead(id: number, updates: Partial<Lead>): Promise<Lead>;
+  deleteLead(id: number): Promise<void>;
   getAllLeads(): Promise<Lead[]>;
   getLeadsByStatus(status: string): Promise<Lead[]>;
   searchLeads(query: string): Promise<Lead[]>;
@@ -133,6 +134,10 @@ export class DatabaseStorage implements IStorage {
       lead.email?.toLowerCase().includes(lowerQuery) ||
       lead.company?.toLowerCase().includes(lowerQuery)
     );
+  }
+
+  async deleteLead(id: number): Promise<void> {
+    await db.delete(leads).where(eq(leads.id, id));
   }
 
   // Lead activity methods

@@ -173,14 +173,34 @@ export default function LeadsDashboard() {
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8 flex justify-between items-center">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Lead Management</h1>
-            <p className="text-gray-600">Track and manage leads from valuation assessments</p>
+          <div className="flex items-center gap-4">
+            <Button 
+              variant="outline" 
+              onClick={() => window.location.href = '/'}
+              className="flex items-center gap-2"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back to Home
+            </Button>
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">Lead Management</h1>
+              <p className="text-gray-600">Track and manage leads from valuation assessments</p>
+            </div>
           </div>
-          <Button variant="outline" onClick={logout} className="flex items-center gap-2">
-            <LogOut className="w-4 h-4" />
-            Logout
-          </Button>
+          <div className="flex gap-2">
+            <Button 
+              variant="outline" 
+              onClick={() => window.location.href = '/valuation-form'}
+              className="flex items-center gap-2"
+            >
+              <ExternalLink className="w-4 h-4" />
+              Valuation Form
+            </Button>
+            <Button variant="outline" onClick={logout} className="flex items-center gap-2">
+              <LogOut className="w-4 h-4" />
+              Logout
+            </Button>
+          </div>
         </div>
 
         {/* Filters */}
