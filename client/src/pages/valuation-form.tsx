@@ -26,32 +26,6 @@ export default function ValuationForm() {
 
   return (
     <div className="font-sans bg-gradient-to-br from-slate-50 to-blue-50 min-h-screen">
-      {/* Header */}
-      <header className="bg-white/95 backdrop-blur-sm shadow-sm border-b border-slate-200/60">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-28">
-            <div className="flex items-center">
-              <div className="flex-shrink-0 flex items-center gap-4">
-                <img 
-                  src="/meritage-logo.png?v=2" 
-                  alt="Meritage Partners" 
-                  className="h-24 w-auto"
-                />
-                <div className="border-l border-slate-300 pl-4">
-                  <h1 className="text-2xl font-bold text-slate-900">Apple Bites Business Assessment</h1>
-                  <p className="text-sm text-slate-500 font-medium">Powered by Meritage Partners</p>
-                </div>
-              </div>
-            </div>
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center text-sm text-slate-600 bg-slate-100/70 px-3 py-2 rounded-lg">
-                <Shield className="w-4 h-4 text-blue-600 mr-2" />
-                <span className="font-medium">Secure Assessment</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {currentStep !== "results" && (
           <div className="mb-8">

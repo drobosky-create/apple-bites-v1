@@ -21,9 +21,24 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
     }).format(parseFloat(value));
   };
 
-  const handleDownloadPDF = () => {
-    if (results.pdfUrl) {
-      window.open(results.pdfUrl, '_blank');
+  const handleDownloadPDF = async () => {
+    try {
+      const response = await fetch(`/api/valuation/${results.id}/download-pdf`);
+      if (response.ok) {
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${results.company || 'Business'}_Valuation_Report.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+      } else {
+        console.error('Failed to download PDF');
+      }
+    } catch (error) {
+      console.error('Error downloading PDF:', error);
     }
   };
 
@@ -74,8 +89,7 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
                 onClick={handleDownloadPDF}
-                className="flex-1 sm:flex-none heritage-gradient text-white px-6 py-3 rounded-lg font-medium flex items-center justify-center shadow-sm hover:shadow-md transition-all duration-200"
-                disabled={!results.pdfUrl}
+                className="flex-1 sm:flex-none bg-slate-600 hover:bg-slate-700 text-white px-6 py-3 rounded-lg font-medium flex items-center justify-center shadow-sm hover:shadow-md transition-all duration-200"
               >
                 <Download className="mr-2 w-4 h-4" />
                 Download Full Report
@@ -92,8 +106,7 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
 
               <Button 
                 onClick={handleScheduleConsultation}
-                variant="outline"
-                className="flex-1 sm:flex-none px-6 py-3 rounded-lg font-medium border-primary text-primary hover:bg-primary/5 flex items-center justify-center"
+                className="flex-1 sm:flex-none px-6 py-3 rounded-lg font-medium bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-center shadow-sm hover:shadow-md transition-all duration-200"
               >
                 <Calendar className="mr-2 w-4 h-4" />
                 Schedule Consultation
@@ -149,12 +162,73 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
           <ValueDriversHeatmap assessment={results} />
         </div>
 
+        {/* Operational Grade Display */}
+        <div className="bg-gradient-to-br from-emerald-50 via-white to-cyan-50 border border-emerald-200 rounded-lg p-8 text-center">
+          <h5 className="text-lg font-semibold text-slate-900 mb-6">Overall Operational Grade</h5>
+          <div className="inline-block bg-white rounded-full p-8 shadow-lg border-2 border-emerald-300">
+            <div className="text-6xl font-bold text-emerald-600">{results.overallScore}</div>
+          </div>
+          <p className="mt-4 text-slate-600 font-medium">With an Operational Grade of {results.overallScore}</p>
+        </div>
+
         {/* Executive Summary */}
         {results.executiveSummary && (
-          <div className="bg-white border border-slate-200 rounded-lg p-6">
-            <h5 className="font-semibold text-slate-900 mb-4">Executive Summary</h5>
-            <div className="prose prose-slate max-w-none">
-              <p className="text-slate-600 leading-relaxed whitespace-pre-line">{results.executiveSummary}</p>
+          <div className="bg-white border border-slate-200 rounded-lg p-8">
+            <div className="mb-8">
+              <h5 className="text-xl font-bold text-slate-900 mb-6 text-center">Schedule Your Strategy Session</h5>
+              <p className="text-center text-slate-600 mb-6 text-lg leading-relaxed">
+                Ready to unlock your business's full potential? Book a complimentary 
+                strategy session with our M&A experts to discuss your valuation 
+                results and explore value enhancement opportunities.
+              </p>
+              <div className="flex justify-center mb-8">
+                <Button 
+                  onClick={handleScheduleConsultation}
+                  className="px-8 py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-200"
+                >
+                  <Calendar className="mr-3 w-5 h-5" />
+                  Schedule Your Strategy Session
+                </Button>
+              </div>
+              <p className="text-center text-slate-500 text-sm">
+                No obligation • 30-minute consultation • Expert M&A guidance
+              </p>
+            </div>
+            
+            <div className="pt-8 border-t border-slate-200">
+              <p className="text-slate-600 leading-relaxed mb-6">
+                This detailed analysis provides insights into your business's current position and 
+                highlights specific areas where strategic improvements could significantly increase 
+                your company's value.
+              </p>
+              
+              <div className="mb-8">
+                <p className="text-slate-800 font-medium mb-4">Best regards,</p>
+                <p className="text-blue-600 font-bold text-lg">The Meritage Partners Team</p>
+                <p className="text-slate-600 mt-2">M&A Advisory & Business Valuation Experts</p>
+                <div className="flex items-center justify-center mt-4 space-x-6">
+                  <a href="mailto:info@meritage-partners.com" className="text-blue-600 hover:text-blue-700 flex items-center space-x-2">
+                    <Mail className="w-4 h-4" />
+                    <span>info@meritage-partners.com</span>
+                  </a>
+                  <span className="text-slate-400">|</span>
+                  <a href="tel:+19495229121" className="text-blue-600 hover:text-blue-700">
+                    (949) 522-9121
+                  </a>
+                </div>
+              </div>
+              
+              <div className="bg-slate-50 rounded-lg p-6">
+                <h6 className="font-semibold text-slate-900 mb-4">Dear {results.firstName},</h6>
+                <div className="prose prose-slate max-w-none">
+                  <p className="text-slate-600 leading-relaxed whitespace-pre-line mb-6">
+                    Thank you for completing our comprehensive business valuation assessment 
+                    for <strong>{results.company}</strong>. We've analyzed your business across multiple value 
+                    drivers and prepared this detailed report with our findings.
+                  </p>
+                  <p className="text-slate-600 leading-relaxed whitespace-pre-line">{results.executiveSummary}</p>
+                </div>
+              </div>
             </div>
           </div>
         )}

@@ -17,7 +17,7 @@ export default function Navigation() {
               <Button 
                 variant={location === "/" ? "default" : "ghost"}
                 size="sm"
-                className={`flex items-center space-x-2 ${location === "/" ? "bg-blue-600 hover:bg-blue-700 text-white" : "text-slate-700 hover:text-slate-900"}`}
+                className={`flex items-center space-x-2 ${location === "/" ? "bg-slate-800 hover:bg-slate-900 text-white" : "text-slate-700 hover:text-slate-900"}`}
               >
                 <FileText className="w-4 h-4" />
                 <span>Valuation Form</span>
@@ -28,7 +28,7 @@ export default function Navigation() {
               <Button 
                 variant={location === "/team" ? "default" : "outline"}
                 size="sm"
-                className={`flex items-center space-x-2 ${location === "/team" ? "bg-blue-600 hover:bg-blue-700 text-white" : "text-slate-700 hover:text-slate-900 border-slate-300"}`}
+                className={`flex items-center space-x-2 ${location === "/team" ? "bg-slate-800 hover:bg-slate-900 text-white" : "text-slate-700 hover:text-slate-900 border-slate-300"}`}
               >
                 <Shield className="w-4 h-4" />
                 <span>Admin Login</span>
