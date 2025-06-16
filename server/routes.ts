@@ -475,36 +475,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // GoHighLevel webhook endpoint for lead capture
-  app.post("/api/ghl/webhook", async (req, res) => {
+  // Admin authentication routes
+  app.post("/api/admin/login", async (req, res) => {
     try {
-      console.log('GoHighLevel webhook received:', req.body);
+      const { username, password } = req.body;
       
-      // Process the webhook data from GHL
-      const webhookData = req.body;
+      // Simple admin credentials check (in production, use proper password hashing)
+      const adminUsername = process.env.ADMIN_USERNAME || 'admin';
+      const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
       
-      // You can add custom processing logic here
-      // For example, sync data back to your database or trigger other actions
-      
-      res.status(200).json({ 
-        success: true, 
-        message: 'Webhook processed successfully' 
-      });
+      if (username === adminUsername && password === adminPassword) {
+        (req.session as any).adminAuthenticated = true;
+        res.json({ success: true, message: 'Authentication successful' });
+      } else {
+        res.status(401).json({ error: 'Invalid credentials' });
+      }
     } catch (error) {
-      console.error('GoHighLevel webhook error:', error);
-      res.status(500).json({ 
-        error: 'Webhook processing failed' 
-      });
+      res.status(500).json({ error: 'Authentication failed' });
     }
-  });
-
-  // Health check endpoint
-  app.get("/api/health", (req, res) => {
-    res.json({ 
-      status: 'healthy', 
-      timestamp: new Date().toISOString(),
-      service: 'Meritage Partners Business Valuation Calculator'
-    });
   });
 
   app.get("/api/admin/status", async (req, res) => {
