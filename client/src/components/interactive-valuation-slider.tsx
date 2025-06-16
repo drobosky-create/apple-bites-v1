@@ -151,7 +151,7 @@ export default function InteractiveValuationSlider() {
         <Card className="border-2 border-slate-200 transition-all duration-300">
           <CardHeader className="text-center">
             <CardTitle className="text-lg">Current Value</CardTitle>
-            <CardDescription>Based on your Operational Grade of {baseGrade}</CardDescription>
+            <CardDescription className="text-sm text-[#080000]">Based on your Operational Grade of {baseGrade}</CardDescription>
           </CardHeader>
           <CardContent className="text-center">
             <div className="text-3xl font-bold text-slate-900 mb-2 transition-all duration-300">
@@ -169,7 +169,7 @@ export default function InteractiveValuationSlider() {
         <Card className="border-2 border-blue-200 bg-blue-50 transition-all duration-300">
           <CardHeader className="text-center">
             <CardTitle className="text-lg text-blue-800">Potential Value</CardTitle>
-            <CardDescription>
+            <CardDescription className="text-sm text-[#080000]">
               With an Operational Grade of {sliderGrade}
             </CardDescription>
           </CardHeader>
