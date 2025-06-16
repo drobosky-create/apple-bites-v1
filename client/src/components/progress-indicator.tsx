@@ -15,14 +15,14 @@ export default function ProgressIndicator({ currentStep }: ProgressIndicatorProp
   const currentStepNumber = steps.find((step) => step.id === currentStep)?.number || 1;
 
   return (
-    <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-slate-200/60 p-6">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
+    <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-slate-200/60 p-3 sm:p-4 lg:p-6">
+      <div className="flex items-center justify-between mb-3 sm:mb-4 lg:mb-6">
+        <h2 className="text-base sm:text-lg lg:text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
           Business Valuation Assessment
         </h2>
-        <div className="flex items-center gap-2">
-          <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-          <span className="text-sm font-medium text-slate-600">Step {currentStepNumber} of 4</span>
+        <div className="flex items-center gap-1 sm:gap-2">
+          <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-blue-500 rounded-full animate-pulse"></div>
+          <span className="text-xs sm:text-sm font-medium text-slate-600">Step {currentStepNumber} of 4</span>
         </div>
       </div>
 
