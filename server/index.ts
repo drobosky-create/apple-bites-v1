@@ -7,6 +7,29 @@ import summaryRoute from './routes/summary';
 const app = express();
 app.use(express.json());
 
+// CORS and iframe embedding headers
+app.use((req, res, next) => {
+  // Allow iframe embedding from any domain
+  res.setHeader('X-Frame-Options', 'ALLOWALL');
+  res.removeHeader('X-Frame-Options');
+  
+  // Set CSP to allow iframe embedding
+  res.setHeader('Content-Security-Policy', "frame-ancestors *;");
+  
+  // CORS headers for API requests
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  
+  // Handle preflight requests
+  if (req.method === 'OPTIONS') {
+    res.sendStatus(200);
+    return;
+  }
+  
+  next();
+});
+
 // Session configuration for admin authentication
 app.use(session({
   secret: process.env.SESSION_SECRET || 'admin-session-secret-key',
