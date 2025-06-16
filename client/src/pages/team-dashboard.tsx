@@ -158,7 +158,7 @@ export default function TeamDashboard() {
               <p className="text-slate-600 text-lg">Manage team members and access controls</p>
             </div>
           </div>
-          <div className="flex items-center gap-4 bg-white rounded-xl shadow-sm border px-4 py-3">
+          <div className="flex items-center gap-4 bg-slate-50 rounded-xl shadow-sm border border-slate-200 px-4 py-3">
             <div className="text-sm text-slate-700">
               <div className="font-medium">Welcome, {user?.firstName} {user?.lastName}</div>
               <div className="flex items-center gap-2 mt-1">
@@ -349,18 +349,18 @@ export default function TeamDashboard() {
                 ) : (
                   <Table>
                     <TableHeader>
-                      <TableRow>
-                        <TableHead>Name</TableHead>
-                        <TableHead>Email</TableHead>
-                        <TableHead>Role</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead>Last Login</TableHead>
-                        <TableHead>Actions</TableHead>
+                      <TableRow className="bg-slate-50 hover:bg-slate-50">
+                        <TableHead className="text-slate-900 bg-slate-50 font-semibold">Name</TableHead>
+                        <TableHead className="text-slate-900 bg-slate-50 font-semibold">Email</TableHead>
+                        <TableHead className="text-slate-900 bg-slate-50 font-semibold">Role</TableHead>
+                        <TableHead className="text-slate-900 bg-slate-50 font-semibold">Status</TableHead>
+                        <TableHead className="text-slate-900 bg-slate-50 font-semibold">Last Login</TableHead>
+                        <TableHead className="text-slate-900 bg-slate-50 font-semibold">Actions</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {teamMembers?.map((member) => (
-                        <TableRow key={member.id}>
+                        <TableRow key={member.id} className="hover:bg-slate-50/50">
                           <TableCell className="font-medium">
                             {member.firstName} {member.lastName}
                           </TableCell>

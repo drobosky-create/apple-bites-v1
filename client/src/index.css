@@ -351,6 +351,28 @@
     background-color: white !important;
     background: white !important;
   }
+
+  /* Force all table elements to use proper styling */
+  table th,
+  table thead th,
+  .table-header th,
+  [role="columnheader"] {
+    background-color: rgb(248 250 252) !important; /* slate-50 */
+    color: rgb(15 23 42) !important; /* slate-900 */
+  }
+
+  /* Override table row highlighting */
+  table tr:hover,
+  tbody tr:hover,
+  .table-row:hover {
+    background-color: rgb(248 250 252) !important; /* slate-50 */
+  }
+
+  /* Force table cells to use proper colors */
+  table td,
+  table th {
+    color: rgb(15 23 42) !important;
+  }
 }
 
 
