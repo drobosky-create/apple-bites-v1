@@ -36,7 +36,7 @@ export default function ValuationForm() {
         {currentStep !== "results" && (
           <div className="flex items-center justify-center mb-8">
             <img 
-              src={appleBitesLogo} 
+              src={_2} 
               alt="Apple Bites Business Assessment" 
               className="h-20 w-auto mr-4"
             />
