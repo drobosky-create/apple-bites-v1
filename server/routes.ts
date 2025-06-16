@@ -771,6 +771,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // PDF download endpoint
+  app.get("/api/valuation/:id/download-pdf", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const assessment = await storage.getValuationAssessment(id);
+      
+      if (!assessment) {
+        return res.status(404).json({ error: "Assessment not found" });
+      }
+
+      // Generate PDF on demand
+      const { generateValuationPDF } = await import("./pdf-generator");
+      const pdfBuffer = await generateValuationPDF(assessment);
+      
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', `attachment; filename="${assessment.company || 'Business'}_Valuation_Report.pdf"`);
+      res.send(pdfBuffer);
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      res.status(500).json({ error: "Failed to generate PDF" });
+    }
+  });
+
   // GET /api/analytics/metrics - Get summary metrics
   app.get("/api/analytics/metrics", async (req, res) => {
     try {

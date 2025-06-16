@@ -53,180 +53,152 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-sm">
-      <div className="p-6 border-b border-slate-200">
+    <div className="bg-white rounded-lg shadow-sm h-screen flex flex-col">
+      <div className="p-3 border-b border-slate-200 flex-shrink-0">
         <div className="flex items-center space-x-3">
-          <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-            <CheckCircle className="w-6 h-6 text-green-600" />
+          <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+            <CheckCircle className="w-4 h-4 text-green-600" />
           </div>
           <div>
-            <h3 className="text-xl font-semibold text-slate-900">Valuation Complete</h3>
-            <p className="text-slate-600">Your business valuation report has been generated successfully.</p>
+            <h3 className="text-base font-semibold text-slate-900">Valuation Complete</h3>
+            <p className="text-xs text-slate-600">Your business valuation report has been generated successfully.</p>
           </div>
         </div>
       </div>
-      <div className="p-6 space-y-6">
+      <div className="flex-1 p-3 space-y-3 overflow-y-auto">
         {/* Valuation Summary */}
-        <div className="bg-gradient-to-r from-primary/5 to-blue-50 rounded-lg p-6 border border-primary/20">
-          <h4 className="text-2xl font-bold text-slate-900 mb-4">Estimated Business Value</h4>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="bg-gradient-to-r from-primary/5 to-blue-50 rounded-lg p-4 border border-primary/20">
+          <h4 className="text-xl font-bold text-slate-900 mb-3">Estimated Business Value</h4>
+          <div className="grid grid-cols-3 gap-4">
             <div className="text-center">
-              <div className="text-3xl font-bold text-[#2563eb]">{formatCurrency(results.lowEstimate)}</div>
-              <div className="text-sm text-slate-600 mt-1">Low Estimate</div>
+              <div className="text-2xl font-bold text-[#2563eb]">{formatCurrency(results.lowEstimate)}</div>
+              <div className="text-xs text-slate-600 mt-1">Low Estimate</div>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold text-slate-900">{formatCurrency(results.midEstimate)}</div>
-              <div className="text-sm text-slate-600 mt-1">Most Likely</div>
+              <div className="text-3xl font-bold text-slate-900">{formatCurrency(results.midEstimate)}</div>
+              <div className="text-xs text-slate-600 mt-1">Most Likely</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-[#2563eb]">{formatCurrency(results.highEstimate)}</div>
-              <div className="text-sm text-slate-600 mt-1">High Estimate</div>
+              <div className="text-2xl font-bold text-[#2563eb]">{formatCurrency(results.highEstimate)}</div>
+              <div className="text-xs text-slate-600 mt-1">High Estimate</div>
             </div>
           </div>
           
           {/* Primary CTAs after valuation */}
-          <div className="mt-6">
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="mt-4">
+            <div className="flex gap-2 justify-center">
               <Button 
                 onClick={handleDownloadPDF}
-                className="flex-1 sm:flex-none bg-slate-600 hover:bg-slate-700 text-white px-6 py-3 rounded-lg font-medium flex items-center justify-center shadow-sm hover:shadow-md transition-all duration-200"
+                className="flex-1 bg-slate-600 hover:bg-slate-700 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center justify-center shadow-sm hover:shadow-md transition-all duration-200"
               >
-                <Download className="mr-2 w-4 h-4" />
+                <Download className="mr-1 w-3 h-3" />
                 Download Full Report
               </Button>
 
               <Button 
                 onClick={handleExploreImprovements}
                 variant="outline"
-                className="flex-1 sm:flex-none px-6 py-3 rounded-lg font-medium border-green-600 text-green-600 hover:bg-green-50 flex items-center justify-center"
+                className="flex-1 px-4 py-2 rounded-lg text-sm font-medium border-green-600 text-green-600 hover:bg-green-50 flex items-center justify-center"
               >
-                <Calculator className="mr-2 w-4 h-4" />
+                <Calculator className="mr-1 w-3 h-3" />
                 Explore Value Improvements
               </Button>
 
               <Button 
                 onClick={handleScheduleConsultation}
-                className="flex-1 sm:flex-none px-6 py-3 rounded-lg font-medium bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-center shadow-sm hover:shadow-md transition-all duration-200"
+                className="flex-1 px-4 py-2 rounded-lg text-sm font-medium bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-center shadow-sm hover:shadow-md transition-all duration-200"
               >
-                <Calendar className="mr-2 w-4 h-4" />
+                <Calendar className="mr-1 w-3 h-3" />
                 Schedule Consultation
               </Button>
             </div>
-            <p className="text-sm text-slate-600 mt-3 text-center">
-              Download your detailed report, explore improvement opportunities, or schedule a consultation
-            </p>
           </div>
-        </div>
-
-        {/* Key Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-slate-50 rounded-lg p-6">
-            <h5 className="font-semibold text-slate-900 mb-4">Financial Summary</h5>
-            <div className="space-y-3">
-              <div className="flex justify-between">
-                <span className="text-slate-600">Adjusted EBITDA</span>
-                <span className="font-medium">{formatCurrency(results.adjustedEbitda)}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-slate-600">Valuation Multiple</span>
-                <span className="font-medium">{results.valuationMultiple}x</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-slate-600">Overall Score</span>
-                <span className="font-medium">{results.overallScore}</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-slate-50 rounded-lg p-6">
-            <h5 className="font-semibold text-slate-900 mb-4">Value Driver Highlights</h5>
-            <div className="space-y-3">
-              <div className="flex justify-between">
-                <span className="text-slate-600">Growth Prospects</span>
-                <span className="text-green-600 font-medium">{results.growthProspects}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-slate-600">Financial Performance</span>
-                <span className="text-primary font-medium">{results.financialPerformance}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-slate-600">Competitive Position</span>
-                <span className="text-primary font-medium">{results.competitivePosition}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Value Drivers Heatmap */}
-        <div className="bg-white border border-slate-200 rounded-lg p-6">
-          <ValueDriversHeatmap assessment={results} />
         </div>
 
         {/* Operational Grade Display */}
-        <div className="bg-gradient-to-br from-emerald-50 via-white to-cyan-50 border border-emerald-200 rounded-lg p-8 text-center">
-          <h5 className="text-lg font-semibold text-slate-900 mb-6">Overall Operational Grade</h5>
-          <div className="inline-block bg-white rounded-full p-8 shadow-lg border-2 border-emerald-300">
-            <div className="text-6xl font-bold text-emerald-600">{results.overallScore}</div>
+        <div className="bg-gradient-to-br from-emerald-50 via-white to-cyan-50 border border-emerald-200 rounded-lg p-4 text-center">
+          <h5 className="text-base font-semibold text-slate-900 mb-3">Overall Operational Grade</h5>
+          <div className="inline-block bg-white rounded-full p-4 shadow-lg border-2 border-emerald-300">
+            <div className="text-4xl font-bold text-emerald-600">{results.overallScore}</div>
           </div>
-          <p className="mt-4 text-slate-600 font-medium">With an Operational Grade of {results.overallScore}</p>
+          <p className="mt-2 text-slate-600 text-sm font-medium">With an Operational Grade of {results.overallScore}</p>
+        </div>
+
+        {/* Key Metrics */}
+        <div className="grid grid-cols-2 gap-3">
+          <div className="bg-slate-50 rounded-lg p-3">
+            <h5 className="font-semibold text-slate-900 mb-2 text-sm">Financial Summary</h5>
+            <div className="space-y-1">
+              <div className="flex justify-between text-xs">
+                <span className="text-slate-600">Adjusted EBITDA</span>
+                <span className="font-medium">{formatCurrency(results.adjustedEbitda)}</span>
+              </div>
+              <div className="flex justify-between text-xs">
+                <span className="text-slate-600">Multiple</span>
+                <span className="font-medium">{results.valuationMultiple}x</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-slate-50 rounded-lg p-3">
+            <h5 className="font-semibold text-slate-900 mb-2 text-sm">Top Drivers</h5>
+            <div className="space-y-1">
+              <div className="flex justify-between text-xs">
+                <span className="text-slate-600">Growth</span>
+                <span className="text-green-600 font-medium">{results.growthProspects}</span>
+              </div>
+              <div className="flex justify-between text-xs">
+                <span className="text-slate-600">Financial</span>
+                <span className="text-primary font-medium">{results.financialPerformance}</span>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Executive Summary */}
         {results.executiveSummary && (
-          <div className="bg-white border border-slate-200 rounded-lg p-8">
-            <div className="mb-8">
-              <h5 className="text-xl font-bold text-slate-900 mb-6 text-center">Schedule Your Strategy Session</h5>
-              <p className="text-center text-slate-600 mb-6 text-lg leading-relaxed">
-                Ready to unlock your business's full potential? Book a complimentary 
-                strategy session with our M&A experts to discuss your valuation 
-                results and explore value enhancement opportunities.
-              </p>
-              <div className="flex justify-center mb-8">
+          <div className="bg-white border border-slate-200 rounded-lg p-4">
+            <div className="mb-4">
+              <h5 className="text-base font-bold text-slate-900 mb-3 text-center">Schedule Your Strategy Session</h5>
+              <div className="flex justify-center mb-3">
                 <Button 
                   onClick={handleScheduleConsultation}
-                  className="px-8 py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-200"
+                  className="px-6 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-semibold text-sm shadow-lg hover:shadow-xl transition-all duration-200"
                 >
-                  <Calendar className="mr-3 w-5 h-5" />
+                  <Calendar className="mr-2 w-4 h-4" />
                   Schedule Your Strategy Session
                 </Button>
               </div>
-              <p className="text-center text-slate-500 text-sm">
+              <p className="text-center text-slate-500 text-xs">
                 No obligation • 30-minute consultation • Expert M&A guidance
               </p>
             </div>
             
-            <div className="pt-8 border-t border-slate-200">
-              <p className="text-slate-600 leading-relaxed mb-6">
-                This detailed analysis provides insights into your business's current position and 
-                highlights specific areas where strategic improvements could significantly increase 
-                your company's value.
-              </p>
+            <div className="pt-3 border-t border-slate-200">
+              <div className="bg-slate-50 rounded-lg p-3">
+                <h6 className="font-semibold text-slate-900 mb-2 text-sm">Dear {results.firstName},</h6>
+                <div className="text-xs text-slate-600 leading-relaxed">
+                  <p className="mb-2">
+                    Thank you for completing our comprehensive business valuation assessment 
+                    for <strong>{results.company}</strong>. We've analyzed your business across multiple value 
+                    drivers and prepared this detailed report with our findings.
+                  </p>
+                </div>
+              </div>
               
-              <div className="mb-8">
-                <p className="text-slate-800 font-medium mb-4">Best regards,</p>
-                <p className="text-blue-600 font-bold text-lg">The Meritage Partners Team</p>
-                <p className="text-slate-600 mt-2">M&A Advisory & Business Valuation Experts</p>
-                <div className="flex items-center justify-center mt-4 space-x-6">
-                  <a href="mailto:info@meritage-partners.com" className="text-blue-600 hover:text-blue-700 flex items-center space-x-2">
-                    <Mail className="w-4 h-4" />
+              <div className="mt-3 text-center">
+                <p className="text-slate-800 font-medium mb-1 text-xs">Best regards,</p>
+                <p className="text-blue-600 font-bold text-sm">The Meritage Partners Team</p>
+                <p className="text-slate-600 text-xs">M&A Advisory & Business Valuation Experts</p>
+                <div className="flex items-center justify-center mt-2 space-x-4 text-xs">
+                  <a href="mailto:info@meritage-partners.com" className="text-blue-600 hover:text-blue-700 flex items-center space-x-1">
+                    <Mail className="w-3 h-3" />
                     <span>info@meritage-partners.com</span>
                   </a>
                   <span className="text-slate-400">|</span>
                   <a href="tel:+19495229121" className="text-blue-600 hover:text-blue-700">
                     (949) 522-9121
                   </a>
-                </div>
-              </div>
-              
-              <div className="bg-slate-50 rounded-lg p-6">
-                <h6 className="font-semibold text-slate-900 mb-4">Dear {results.firstName},</h6>
-                <div className="prose prose-slate max-w-none">
-                  <p className="text-slate-600 leading-relaxed whitespace-pre-line mb-6">
-                    Thank you for completing our comprehensive business valuation assessment 
-                    for <strong>{results.company}</strong>. We've analyzed your business across multiple value 
-                    drivers and prepared this detailed report with our findings.
-                  </p>
-                  <p className="text-slate-600 leading-relaxed whitespace-pre-line">{results.executiveSummary}</p>
                 </div>
               </div>
             </div>
@@ -269,8 +241,7 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
 
             <Button 
               onClick={handleScheduleConsultation}
-              variant="outline"
-              className="flex-1 px-6 py-3 rounded-lg font-medium border-primary text-primary hover:bg-primary/5 flex items-center justify-center"
+              className="flex-1 px-6 py-3 rounded-lg font-medium bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-center shadow-sm hover:shadow-md transition-all duration-200"
             >
               <Calendar className="mr-2 w-4 h-4" />
               Schedule Consultation
