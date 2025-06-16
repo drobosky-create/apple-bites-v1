@@ -34,14 +34,13 @@ export default function ValuationForm() {
         
         {/* Header with Apple Bites Logo */}
         {currentStep !== "results" && (
-          <div className="text-center mb-8">
+          <div className="flex items-center justify-center mb-8">
             <img 
-              src={_2} 
+              src={appleBitesLogo} 
               alt="Apple Bites Business Assessment" 
-              className="mx-auto mb-6 h-32 w-auto"
+              className="h-20 w-auto mr-4"
             />
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Business Valuation Assessment</h1>
-            <p className="text-lg text-gray-600">Discover your company's true value with our comprehensive analysis</p>
+            <h1 className="text-3xl font-bold text-gray-900">Apple Bites Business Assessment</h1>
           </div>
         )}
 
