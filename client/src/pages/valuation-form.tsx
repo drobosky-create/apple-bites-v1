@@ -28,17 +28,7 @@ export default function ValuationForm() {
   return (
     <div className="font-sans bg-gradient-to-br from-slate-50 to-blue-50 min-h-screen">
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Back to Home Button */}
-        <div className="mb-6">
-          <Button 
-            variant="outline" 
-            onClick={() => window.location.href = '/'}
-            className="flex items-center gap-2 text-slate-600 hover:text-slate-800"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back to Home
-          </Button>
-        </div>
+        
 
         {currentStep !== "results" && (
           <div className="mb-8">

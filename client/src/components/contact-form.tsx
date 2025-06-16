@@ -145,7 +145,7 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
 
           <div className="flex justify-between pt-8">
             <div></div>
-            <Button type="submit" className="heritage-gradient text-white px-8 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105">
+            <Button type="submit" className="bg-gradient-to-r from-slate-500 to-slate-600 text-white px-8 py-3 rounded-lg font-medium hover:from-slate-600 hover:to-slate-700 transition-all duration-200 shadow-md hover:shadow-lg">
               Next: EBITDA Information
               <ArrowRight className="ml-2 w-4 h-4" />
             </Button>
