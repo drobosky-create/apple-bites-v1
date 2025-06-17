@@ -1268,10 +1268,10 @@
     </div>
 
     <script>
-        // Configuration - Update these with your actual GoHighLevel credentials
+        // Configuration - GoHighLevel credentials
         const GHL_CONFIG = {
-            apiKey: 'YOUR_GHL_API_KEY_HERE', // Replace with your actual API key
-            webhookUrl: 'YOUR_GHL_WEBHOOK_URL_HERE', // Replace with your webhook URL
+            apiKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2NhdGlvbl9pZCI6IlFORkZyRU5hUnVJMkpobGRGZDBaIiwidmVyc2lvbiI6MSwiaWF0IjoxNzQ4OTc5NzY0Njk3LCJzdWIiOiJSYkNCRjZqSm5FS2lITk91ZU4xdSJ9.xCi3rExCkUUc7F1_UyNaM22-oaubPRUnL2tXc74dmm8',
+            webhookUrl: 'https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhldFd0Z/webhook-trigger/dc1a8a7f-47ee-4c9a-b474-e1aeb21af3e3',
             bookingUrl: 'https://api.leadconnectorhq.com/widget/bookings/applebites'
         };
 
@@ -1284,6 +1284,9 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Real-time EBITDA calculations
             setupEbitdaCalculations();
+            
+            // Setup radio button interactions
+            setupRadioButtonInteractions();
             
             // Next step buttons
             document.querySelectorAll('.next-step').forEach(button => {
@@ -1308,10 +1311,32 @@
                 submitForm();
             });
 
-            // Debug: Check if form exists
-            const form = document.getElementById('valuation-form');
-            console.log('Form found:', form ? 'Yes' : 'No');
+            console.log('Calculator initialized successfully');
         });
+
+        function setupRadioButtonInteractions() {
+            // Handle radio button styling for follow-up section
+            document.querySelectorAll('.radio-option input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    // Remove checked class from all options in the same group
+                    const groupName = this.name;
+                    document.querySelectorAll(`input[name="${groupName}"]`).forEach(r => {
+                        r.closest('.radio-option').classList.remove('checked');
+                    });
+                    
+                    // Add checked class to selected option
+                    this.closest('.radio-option').classList.add('checked');
+                });
+            });
+
+            // Handle grade button interactions
+            document.querySelectorAll('.grade-buttons input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    // Update visual state is handled by CSS
+                    console.log(`${this.name} set to ${this.value}`);
+                });
+            });
+        }
 
         function setupEbitdaCalculations() {
             // EBITDA calculation inputs
@@ -1752,44 +1777,69 @@
         }
 
         function sendToGoHighLevel(formData, results) {
-            // Prepare contact data for GHL
-            const contactData = {
-                firstName: formData.contact_name,
+            // Prepare comprehensive data for GHL webhook
+            const webhookData = {
+                // Contact Information
+                firstName: formData.firstName,
+                lastName: formData.lastName,
                 email: formData.email,
-                phone: formData.phone || '',
-                companyName: formData.company_name,
-                tags: ['business-valuation-lead'],
-                customFields: {
-                    annual_revenue: formData.annual_revenue,
-                    ebitda: formData.ebitda,
-                    industry: formData.industry,
-                    employees: formData.employees,
-                    estimated_value: results.estimatedValue,
-                    overall_grade: results.overallGrade,
-                    valuation_multiplier: results.multiplier
-                }
+                phone: formData.phone,
+                company: formData.company,
+                jobTitle: formData.jobTitle || '',
+                
+                // Financial Data
+                netIncome: formData.netIncome,
+                interest: formData.interest,
+                taxes: formData.taxes,
+                depreciation: formData.depreciation,
+                amortization: formData.amortization,
+                baseEbitda: results.baseEbitda,
+                
+                // Adjustments
+                ownerSalary: formData.ownerSalary || 0,
+                personalExpenses: formData.personalExpenses || 0,
+                oneTimeExpenses: formData.oneTimeExpenses || 0,
+                otherAdjustments: formData.otherAdjustments || 0,
+                adjustedEbitda: results.adjustedEbitda,
+                adjustmentNotes: formData.adjustmentNotes || '',
+                
+                // Value Drivers
+                valueDrivers: results.valueDriverScores,
+                
+                // Valuation Results
+                estimatedValue: results.midEstimate,
+                lowEstimate: results.lowEstimate,
+                highEstimate: results.highEstimate,
+                valuationMultiple: results.valuationMultiple,
+                overallScore: results.overallScore,
+                
+                // Follow-up
+                followUpIntent: formData.followUpIntent,
+                additionalComments: formData.additionalComments || '',
+                
+                // Metadata
+                submissionDate: new Date().toISOString(),
+                source: 'Apple Bites Business Assessment Calculator'
             };
 
-            // Send to GHL (replace with actual API call)
-            if (GHL_CONFIG.apiKey !== 'YOUR_GHL_API_KEY_HERE') {
-                fetch('https://services.leadconnectorhq.com/contacts/', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${GHL_CONFIG.apiKey}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(contactData)
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Successfully sent to GoHighLevel:', data);
-                })
-                .catch(error => {
-                    console.error('Error sending to GoHighLevel:', error);
-                });
-            } else {
-                console.log('GHL API key not configured. Contact data:', contactData);
-            }
+            // Send to GHL webhook
+            fetch(GHL_CONFIG.webhookUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(webhookData)
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log('Successfully sent to GoHighLevel webhook');
+                } else {
+                    console.error('GHL webhook error:', response.status);
+                }
+            })
+            .catch(error => {
+                console.error('Error sending to GoHighLevel:', error);
+            });
         }
 
         function restartCalculator() {
