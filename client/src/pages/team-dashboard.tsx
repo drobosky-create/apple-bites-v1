@@ -18,6 +18,8 @@ import { useTeamAuth } from '@/hooks/use-team-auth';
 import { useToast } from '@/hooks/use-toast';
 import PasswordChangeForm from '@/components/password-change-form';
 
+import _1 from "@assets/1.png";
+
 export default function TeamDashboard() {
   const { user, isAuthenticated, isLoading, hasRole, logout } = useTeamAuth();
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
@@ -150,9 +152,9 @@ export default function TeamDashboard() {
         <div className="mb-6 flex justify-between items-center">
           <div className="flex items-center gap-4">
             <img 
-              src="/meritage-logo.png?v=2" 
+              src={_1} 
               alt="Meritage Partners" 
-              className="h-10 w-auto"
+              className="h-12 w-auto"
             />
             <div className="border-l border-slate-300 pl-4">
               <h1 className="text-2xl font-bold text-slate-900">Team Dashboard</h1>
