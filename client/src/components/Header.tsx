@@ -1,3 +1,5 @@
+import meritageLogoPath from "@assets/image_1750194261736.png";
+
 export function Header() {
   return (
     <header className="bg-[#1e3a5f] text-white shadow-lg">
@@ -9,12 +11,13 @@ export function Header() {
               href="https://www.meritage-partners.com" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="flex items-center space-x-2 hover:opacity-80 transition-opacity"
+              className="hover:opacity-80 transition-opacity"
             >
-              <div className="text-2xl font-bold tracking-wide">
-                <span className="text-white">MERITAGE</span>
-                <div className="text-lg font-medium text-gray-300">PARTNERS</div>
-              </div>
+              <img 
+                src={meritageLogoPath} 
+                alt="Meritage Partners" 
+                className="h-10 w-auto"
+              />
             </a>
           </div>
         </div>

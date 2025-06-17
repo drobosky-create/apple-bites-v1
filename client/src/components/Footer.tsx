@@ -1,4 +1,5 @@
 import { Link } from "wouter";
+import meritageLogoPath from "@assets/image_1750194261736.png";
 
 export function Footer() {
   return (
@@ -7,9 +8,12 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Logo and Description */}
           <div className="space-y-4">
-            <div className="text-2xl font-bold tracking-wide">
-              <span className="text-white">MERITAGE</span>
-              <div className="text-lg font-medium text-gray-300">PARTNERS</div>
+            <div className="flex items-center">
+              <img 
+                src={meritageLogoPath} 
+                alt="Meritage Partners" 
+                className="h-8 w-auto"
+              />
             </div>
             <p className="text-gray-300 text-sm leading-relaxed max-w-md">
               Whether you're scaling, preparing to sell, or exploring strategic partnerships—Meritage Partners is here to guide your next move.
