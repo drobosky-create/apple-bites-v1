@@ -455,7 +455,127 @@
             margin-bottom: 15px;
         }
 
+        .results-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .results-subtitle {
+            color: #64748b;
+            font-size: 1.1rem;
+            margin-top: 10px;
+        }
+
+        .valuation-summary {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .valuation-multiple {
+            font-size: 1rem;
+            color: #64748b;
+            margin-top: 10px;
+        }
+
+        .financial-breakdown {
+            background: #f8fafc;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .financial-breakdown h3 {
+            color: #1e293b;
+            margin-bottom: 20px;
+        }
+
+        .breakdown-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .breakdown-item.total {
+            border-top: 2px solid #1e293b;
+            border-bottom: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #1e293b;
+            margin-top: 10px;
+            grid-column: 1 / -1;
+        }
+
+        .breakdown-label {
+            color: #64748b;
+        }
+
+        .breakdown-value {
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .value-drivers-summary {
+            background: #f8fafc;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .value-drivers-summary h3 {
+            color: #1e293b;
+            margin-bottom: 20px;
+        }
+
+        .drivers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 12px;
+        }
+
+        .driver-summary {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .driver-name {
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .driver-grade {
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
         @media (max-width: 768px) {
+            .valuation-summary {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .breakdown-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .drivers-grid {
+                grid-template-columns: 1fr;
+            }
             .container {
                 padding: 10px;
             }
@@ -1445,25 +1565,82 @@
 
         function showResults(data, results) {
             const gradeColors = {
-                'A': '#dcfce7',
-                'B': '#dbeafe',
-                'C': '#fef3c7',
-                'D': '#fed7aa',
+                'A+': '#dcfce7', 'A': '#dcfce7', 'A-': '#dcfce7',
+                'B+': '#dbeafe', 'B': '#dbeafe', 'B-': '#dbeafe',
+                'C+': '#fef3c7', 'C': '#fef3c7', 'C-': '#fef3c7',
+                'D+': '#fed7aa', 'D': '#fed7aa', 'D-': '#fed7aa',
                 'F': '#fecaca'
             };
 
+            const gradeColor = gradeColors[results.overallScore] || '#fef3c7';
+
             const resultsHTML = `
-                <h2>Your Business Valuation Results</h2>
-                
-                <div class="valuation-display">
-                    <div class="valuation-amount">${formatCurrency(results.estimatedValue)}</div>
-                    <div class="valuation-range">
-                        Range: ${formatCurrency(results.lowRange)} - ${formatCurrency(results.highRange)}
-                    </div>
+                <div class="results-header">
+                    <h2>Your Business Valuation Results</h2>
+                    <p class="results-subtitle">Comprehensive assessment based on ${data.company || 'your business'}</p>
                 </div>
                 
-                <div class="grade-display" style="background-color: ${gradeColors[results.overallGrade]}; color: #1e293b;">
-                    Overall Grade: ${results.overallGrade}
+                <div class="valuation-summary">
+                    <div class="valuation-display">
+                        <div class="valuation-amount">${formatCurrency(results.midEstimate)}</div>
+                        <div class="valuation-range">
+                            Range: ${formatCurrency(results.lowEstimate)} - ${formatCurrency(results.highEstimate)}
+                        </div>
+                        <div class="valuation-multiple">Multiple: ${results.valuationMultiple}x EBITDA</div>
+                    </div>
+                    
+                    <div class="grade-display" style="background-color: ${gradeColor}; color: #1e293b;">
+                        Overall Score: ${results.overallScore}
+                    </div>
+                </div>
+
+                <div class="financial-breakdown">
+                    <h3>Financial Analysis</h3>
+                    <div class="breakdown-grid">
+                        <div class="breakdown-item">
+                            <span class="breakdown-label">Base EBITDA:</span>
+                            <span class="breakdown-value">${formatCurrency(results.baseEbitda)}</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span class="breakdown-label">Adjusted EBITDA:</span>
+                            <span class="breakdown-value">${formatCurrency(results.adjustedEbitda)}</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span class="breakdown-label">Valuation Multiple:</span>
+                            <span class="breakdown-value">${results.valuationMultiple}x</span>
+                        </div>
+                        <div class="breakdown-item total">
+                            <span class="breakdown-label">Estimated Value:</span>
+                            <span class="breakdown-value">${formatCurrency(results.midEstimate)}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="value-drivers-summary">
+                    <h3>Value Driver Assessment</h3>
+                    <div class="drivers-grid">
+                        ${Object.entries(results.valueDriverScores).map(([driver, grade]) => {
+                            const driverLabels = {
+                                'financialPerformance': 'Financial Performance',
+                                'customerConcentration': 'Customer Concentration',
+                                'managementTeam': 'Management Team',
+                                'competitivePosition': 'Competitive Position',
+                                'growthProspects': 'Growth Prospects',
+                                'systemsProcesses': 'Systems & Processes',
+                                'assetQuality': 'Asset Quality',
+                                'industryOutlook': 'Industry Outlook',
+                                'riskFactors': 'Risk Factors',
+                                'ownerDependency': 'Owner Dependency'
+                            };
+                            
+                            return `
+                                <div class="driver-summary">
+                                    <span class="driver-name">${driverLabels[driver]}</span>
+                                    <span class="driver-grade grade-${grade.toLowerCase()}">${grade}</span>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
                 </div>
                 
                 <div class="booking-section">
