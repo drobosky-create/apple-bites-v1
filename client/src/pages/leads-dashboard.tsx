@@ -42,7 +42,7 @@ export default function LeadsDashboard() {
   // Mutation for updating lead status
   const updateLeadMutation = useMutation({
     mutationFn: async ({ id, status }: { id: number; status: string }) => {
-      return apiRequest(`/api/leads/${id}`, 'PATCH', { status });
+      return apiRequest('PATCH', `/api/leads/${id}`, { status });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/leads'] });
@@ -65,7 +65,7 @@ export default function LeadsDashboard() {
   // Mutation for deleting lead
   const deleteLeadMutation = useMutation({
     mutationFn: async (id: number) => {
-      return apiRequest(`/api/leads/${id}`, 'DELETE');
+      return apiRequest('DELETE', `/api/leads/${id}`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/leads'] });
