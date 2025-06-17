@@ -62,24 +62,17 @@ export default function ValueCalculator() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="mb-12 flex items-start justify-between">
-          <div className="flex items-center gap-6">
-            <img 
-              src="/meritage-logo.png?v=2" 
-              alt="Meritage Partners" 
-              className="h-12 w-auto"
-            />
-            <div className="space-y-2">
-              <h1 className="text-4xl font-bold text-slate-900">
-                Value Improvement Calculator
-              </h1>
-              <p className="text-lg text-slate-600 max-w-2xl">
-                Explore how improving your operational grades affects your business valuation and discover opportunities for growth
-              </p>
-            </div>
+          <div className="space-y-2">
+            <h1 className="text-4xl font-bold text-slate-900">
+              Value Improvement Calculator
+            </h1>
+            <p className="text-lg text-slate-600 max-w-2xl">
+              Explore how improving your operational grades affects your business valuation and discover opportunities for growth
+            </p>
           </div>
           <Button
             variant="outline"
-            onClick={() => setLocation('/')}
+            onClick={() => setLocation('/results')}
             className="flex items-center gap-2 bg-white/80 backdrop-blur-sm border-slate-200 hover:bg-white hover:shadow-md transition-all duration-200"
           >
             <ArrowLeft className="w-4 h-4" />
