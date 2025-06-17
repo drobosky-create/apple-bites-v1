@@ -199,172 +199,33 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
             <div></div>
           </div>
 
-          {/* Owner Adjustments Section */}
-          <div className="mt-8">
-            <h4 className="text-lg font-semibold text-slate-900 mb-4 border-b border-slate-200 pb-2">Owner Adjustments</h4>
-            <p className="text-slate-600 mb-6">Add back non-recurring expenses and owner-specific adjustments to normalize EBITDA.</p>
-            
-            <div className="space-y-4">
-              <FormField
-                control={form.control}
-                name="ownerSalary"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Owners Perks and Benefits</FormLabel>
-                    <FormControl>
-                      <div className="relative">
-                        <span className="absolute left-3 top-3 text-slate-400">$</span>
-                        <Input 
-                          {...field} 
-                          type="number" 
-                          placeholder="0" 
-                          className="bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20 pl-8"
-                          onChange={(e) => {
-                            field.onChange(e);
-                            onDataChange(form.getValues());
-                          }}
-                        />
-                      </div>
-                    </FormControl>
-                    <p className="form-help">Amount paid to owner above market rate for the position</p>
-                    <FormMessage className="form-error" />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="personalExpenses"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Personal Expenses</FormLabel>
-                    <FormControl>
-                      <div className="relative">
-                        <span className="absolute left-3 top-3 text-slate-400">$</span>
-                        <Input 
-                          {...field} 
-                          type="number" 
-                          placeholder="0" 
-                          className="bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20 pl-8"
-                          onChange={(e) => {
-                            field.onChange(e);
-                            onDataChange(form.getValues());
-                          }}
-                        />
-                      </div>
-                    </FormControl>
-                    <p className="form-help">Personal expenses run through the business</p>
-                    <FormMessage className="form-error" />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="oneTimeExpenses"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Non-Recurring Expenses</FormLabel>
-                    <FormControl>
-                      <div className="relative">
-                        <span className="absolute left-3 top-3 text-slate-400">$</span>
-                        <Input 
-                          {...field} 
-                          type="number" 
-                          placeholder="0" 
-                          className="bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20 pl-8"
-                          onChange={(e) => {
-                            field.onChange(e);
-                            onDataChange(form.getValues());
-                          }}
-                        />
-                      </div>
-                    </FormControl>
-                    <p className="form-help">Non-recurring expenses (legal fees, consulting, etc.)</p>
-                    <FormMessage className="form-error" />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="otherAdjustments"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Other Adjustments</FormLabel>
-                    <FormControl>
-                      <div className="relative">
-                        <span className="absolute left-3 top-3 text-slate-400">$</span>
-                        <Input 
-                          {...field} 
-                          type="number" 
-                          placeholder="0" 
-                          className="bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20 pl-8"
-                          onChange={(e) => {
-                            field.onChange(e);
-                            onDataChange(form.getValues());
-                          }}
-                        />
-                      </div>
-                    </FormControl>
-                    <p className="form-help">Any other legitimate business adjustments</p>
-                    <FormMessage className="form-error" />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="adjustmentNotes"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Adjustment Notes (Optional)</FormLabel>
-                    <FormControl>
-                      <Textarea 
-                        {...field} 
-                        rows={4}
-                        className="bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20"
-                        placeholder="Describe any adjustments in detail..."
-                        onChange={(e) => {
-                          field.onChange(e);
-                          onDataChange(form.getValues());
-                        }}
-                      />
-                    </FormControl>
-                    <p className="form-help">Provide context for your adjustments to help with valuation accuracy</p>
-                    <FormMessage className="form-error" />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </div>
-
-          <div className="bg-green-50 rounded-lg p-6 border border-green-200">
-            <h4 className="text-lg font-semibold text-slate-900 mb-4">Adjusted EBITDA Calculation</h4>
+          <div className="bg-blue-50 rounded-lg p-6 border border-blue-200">
+            <h4 className="text-lg font-semibold text-slate-900 mb-4">EBITDA Calculation</h4>
             <div className="space-y-3">
               <div className="flex justify-between items-center">
-                <span className="text-slate-600">Base EBITDA</span>
-                <span className="font-medium">{formatCurrency(ebitdaTotal)}</span>
+                <span className="text-slate-600">Net Income</span>
+                <span className="font-medium">{formatCurrency(parseFloat(watchedValues.netIncome || "0"))}</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-slate-600">+ Owner Adjustments</span>
-                <span className="font-medium">{formatCurrency(
-                  parseFloat(watchedValues.ownerSalary || "0") +
-                  parseFloat(watchedValues.personalExpenses || "0") +
-                  parseFloat(watchedValues.oneTimeExpenses || "0") +
-                  parseFloat(watchedValues.otherAdjustments || "0")
-                )}</span>
+                <span className="text-slate-600">+ Interest Expense</span>
+                <span className="font-medium">{formatCurrency(parseFloat(watchedValues.interest || "0"))}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-slate-600">+ Tax Expense</span>
+                <span className="font-medium">{formatCurrency(parseFloat(watchedValues.taxes || "0"))}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-slate-600">+ Depreciation</span>
+                <span className="font-medium">{formatCurrency(parseFloat(watchedValues.depreciation || "0"))}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-slate-600">+ Amortization</span>
+                <span className="font-medium">{formatCurrency(parseFloat(watchedValues.amortization || "0"))}</span>
               </div>
               <hr className="border-slate-300" />
               <div className="flex justify-between items-center text-lg font-semibold">
-                <span className="text-slate-900">Adjusted EBITDA</span>
-                <span className="text-green-600">{formatCurrency(
-                  ebitdaTotal +
-                  parseFloat(watchedValues.ownerSalary || "0") +
-                  parseFloat(watchedValues.personalExpenses || "0") +
-                  parseFloat(watchedValues.oneTimeExpenses || "0") +
-                  parseFloat(watchedValues.otherAdjustments || "0")
-                )}</span>
+                <span className="text-slate-900">EBITDA</span>
+                <span className="text-blue-600">{formatCurrency(ebitdaTotal)}</span>
               </div>
             </div>
           </div>
@@ -380,7 +241,7 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
               Previous
             </Button>
             <Button type="submit" className="bg-gradient-to-r from-slate-500 to-slate-600 text-white px-8 py-3 rounded-lg font-medium hover:from-slate-600 hover:to-slate-700 transition-all duration-200 shadow-md hover:shadow-lg">
-              Next: Value Drivers
+              Next: Adjustments
               <ArrowRight className="ml-2 w-4 h-4" />
             </Button>
           </div>

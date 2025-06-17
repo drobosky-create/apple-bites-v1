@@ -153,7 +153,7 @@ export function useValuationForm() {
 
   const calculateAdjustedEbitda = () => {
     const baseEbitda = calculateEbitda();
-    const { ownerSalary, personalExpenses, oneTimeExpenses, otherAdjustments } = formData.ebitda;
+    const { ownerSalary, personalExpenses, oneTimeExpenses, otherAdjustments } = formData.adjustments;
     return (
       baseEbitda +
       parseFloat(ownerSalary || "0") +

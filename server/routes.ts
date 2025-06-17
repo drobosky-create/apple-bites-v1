@@ -247,6 +247,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Calculate valuation metrics
       const metrics = calculateValuationMetrics(formData);
       
+      let narrativeAnalysis = {
+        narrativeSummary: `Based on the comprehensive analysis of ${assessment.company}, the business demonstrates ${metrics.overallScore} operational performance across key value drivers. With an adjusted EBITDA of $${metrics.adjustedEbitda.toLocaleString()} and an applied multiple of ${metrics.valuationMultiple}x, the estimated valuation range is $${metrics.lowEstimate.toLocaleString()} to $${metrics.highEstimate.toLocaleString()}.`,
+        keyStrengths: ['Established business operations', 'Positive EBITDA performance', 'Market presence'],
+        areasForImprovement: ['Operational efficiency optimization', 'Growth strategy enhancement', 'Risk mitigation'],
+        recommendations: ['Focus on improving value driver scores', 'Consider strategic growth initiatives', 'Enhance operational systems']
+      };
+
       try {
         // Generate AI narrative
         const analysisInput: ValuationAnalysisInput = {
@@ -270,8 +277,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
           additionalComments: assessment.additionalComments || undefined,
         };
 
-        const narrativeAnalysis = await generateValuationNarrative(analysisInput);
+        const aiNarrative = await Promise.race([
+          generateValuationNarrative(analysisInput),
+          new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('AI generation timeout')), 10000)
+          )
+        ]);
+        narrativeAnalysis = aiNarrative;
+      } catch (aiError) {
+        console.error('AI narrative generation failed, using fallback:', aiError);
+        // Use fallback narrative - already set above
+      }
         
+      try {
         // Generate concise executive summary
         const gradeToScore = (grade: string): number => {
           switch (grade) {
