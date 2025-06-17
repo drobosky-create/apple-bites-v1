@@ -10,6 +10,8 @@ import { Users, Mail, Lock } from 'lucide-react';
 import { useMutation } from '@tanstack/react-query';
 import { loginSchema, type LoginCredentials } from '@shared/schema';
 
+import _1 from "@assets/1.png";
+
 interface TeamLoginProps {
   onLoginSuccess: (user: any) => void;
 }
@@ -62,9 +64,9 @@ export default function TeamLogin({ onLoginSuccess }: TeamLoginProps) {
       <Card className="w-full max-w-md p-8 bg-white/80 backdrop-blur-sm border-0 shadow-lg">
         <div className="text-center mb-8">
           <img 
-            src="/meritage-logo.png?v=2" 
+            src={_1} 
             alt="Meritage Partners" 
-            className="h-16 w-auto mx-auto mb-6"
+            className="h-30 w-auto mx-auto mb-6"
           />
           <h1 className="text-2xl font-bold text-slate-900 mb-2">Team Dashboard Access</h1>
           <p className="text-slate-600">Sign in to manage your platform</p>
