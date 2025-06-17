@@ -27,7 +27,7 @@ export function Footer() {
             <h3 className="text-lg font-semibold text-white">Links</h3>
             <div className="space-y-2">
               <a 
-                href="https://meritage.partners/privacy" 
+                href="https://meritage.partners/privacypolicy" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="block text-gray-300 hover:text-white transition-colors text-sm"
