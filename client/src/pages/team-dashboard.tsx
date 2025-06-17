@@ -22,7 +22,7 @@ import appleBitesLogoImage from '@assets/1_1750197353067.png';
 import _2 from "@assets/2.png";
 
 export default function TeamDashboard() {
-  const { user, isAuthenticated, isLoading, hasRole, logout } = useTeamAuth();
+  const { user, isAuthenticated, isLoading, hasRole, logout, login } = useTeamAuth();
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const queryClient = useQueryClient();
   const { toast } = useToast();
@@ -128,8 +128,10 @@ export default function TeamDashboard() {
   // Show login screen if not authenticated
   if (!isAuthenticated) {
     return <TeamLogin onLoginSuccess={(userData) => {
-      // Force refresh of authentication state
-      window.location.reload();
+      // Update auth state properly
+      login(userData);
+      queryClient.invalidateQueries({ queryKey: ['/api/team/me'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/admin/status'] });
     }} />;
   }
 
