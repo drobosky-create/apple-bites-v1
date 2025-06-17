@@ -313,7 +313,7 @@
             font-weight: 600;
         }
 
-        .radio-option:has(input[type="radio"]:checked) {
+        .radio-option.checked {
             border-color: #3b82f6;
             background: #f0f9ff;
         }
@@ -1304,8 +1304,13 @@
             // Form submission
             document.getElementById('valuation-form').addEventListener('submit', function(e) {
                 e.preventDefault();
+                console.log('Form submitted, current step:', currentStep);
                 submitForm();
             });
+
+            // Debug: Check if form exists
+            const form = document.getElementById('valuation-form');
+            console.log('Form found:', form ? 'Yes' : 'No');
         });
 
         function setupEbitdaCalculations() {
@@ -1375,19 +1380,35 @@
 
         function validateCurrentStep() {
             const currentStepElement = document.querySelector(`.form-step[data-step="${currentStep}"]`);
-            const requiredFields = currentStepElement.querySelectorAll('input[required], select[required]');
             
-            for (let field of requiredFields) {
-                if (field.type === 'radio') {
-                    const radioGroup = currentStepElement.querySelectorAll(`input[name="${field.name}"]`);
-                    const isChecked = Array.from(radioGroup).some(radio => radio.checked);
-                    if (!isChecked) {
-                        alert(`Please select an option for ${field.name.replace(/([A-Z])/g, ' $1').toLowerCase()}.`);
-                        return false;
-                    }
-                } else if (!field.value.trim()) {
+            // Check required text inputs
+            const requiredInputs = currentStepElement.querySelectorAll('input[required]:not([type="radio"]), select[required]');
+            for (let field of requiredInputs) {
+                if (!field.value.trim()) {
                     field.focus();
                     alert('Please fill in all required fields.');
+                    return false;
+                }
+            }
+
+            // Check required radio groups
+            const radioGroups = {};
+            const requiredRadios = currentStepElement.querySelectorAll('input[type="radio"][required]');
+            
+            // Group radios by name
+            requiredRadios.forEach(radio => {
+                if (!radioGroups[radio.name]) {
+                    radioGroups[radio.name] = [];
+                }
+                radioGroups[radio.name].push(radio);
+            });
+
+            // Validate each radio group
+            for (let groupName in radioGroups) {
+                const isChecked = radioGroups[groupName].some(radio => radio.checked);
+                if (!isChecked) {
+                    const friendlyName = groupName.replace(/([A-Z])/g, ' $1').toLowerCase();
+                    alert(`Please select an option for ${friendlyName}.`);
                     return false;
                 }
             }
@@ -1405,6 +1426,14 @@
                         alert(`Please rate all value drivers.`);
                         return false;
                     }
+                }
+            }
+
+            // Special validation for follow-up step
+            if (currentStep === 5) {
+                if (!document.querySelector('input[name="followUpIntent"]:checked')) {
+                    alert('Please select your follow-up preference.');
+                    return false;
                 }
             }
 
@@ -1438,15 +1467,26 @@
         }
 
         function submitForm() {
+            console.log('submitForm called, current step:', currentStep);
+            
+            // Validate final step
+            if (!validateCurrentStep()) {
+                console.log('Validation failed');
+                return;
+            }
+            
+            console.log('Validation passed');
+            
             // Show loading
             document.getElementById('loading').classList.add('show');
             
-            // Collect form data
-            const formData = new FormData(document.getElementById('valuation-form'));
-            const data = Object.fromEntries(formData.entries());
+            // Collect all form data manually to ensure we get everything
+            const data = collectAllFormData();
+            console.log('Collected form data:', data);
             
             // Calculate valuation
             const results = calculateValuation(data);
+            console.log('Calculated results:', results);
             
             // Send to GoHighLevel
             sendToGoHighLevel(data, results);
@@ -1457,6 +1497,59 @@
                 showResults(data, results);
                 nextStep();
             }, 2000);
+        }
+
+        function collectAllFormData() {
+            const form = document.getElementById('valuation-form');
+            const formData = new FormData(form);
+            const data = {};
+            
+            // Get all form inputs
+            for (let [key, value] of formData.entries()) {
+                data[key] = value;
+            }
+            
+            // Ensure we have all required fields
+            const requiredFields = [
+                'firstName', 'lastName', 'email', 'phone', 'company',
+                'netIncome', 'interest', 'taxes', 'depreciation', 'amortization',
+                'financialPerformance', 'customerConcentration', 'managementTeam',
+                'competitivePosition', 'growthProspects', 'systemsProcesses',
+                'assetQuality', 'industryOutlook', 'riskFactors', 'ownerDependency',
+                'followUpIntent'
+            ];
+            
+            // Check for missing required fields and try to get them
+            requiredFields.forEach(field => {
+                if (!data[field]) {
+                    const input = form.querySelector(`[name="${field}"]`);
+                    if (input) {
+                        if (input.type === 'radio') {
+                            const checked = form.querySelector(`[name="${field}"]:checked`);
+                            if (checked) {
+                                data[field] = checked.value;
+                            }
+                        } else {
+                            data[field] = input.value;
+                        }
+                    }
+                }
+            });
+            
+            // Optional fields
+            const optionalFields = [
+                'jobTitle', 'ownerSalary', 'personalExpenses', 'oneTimeExpenses', 
+                'otherAdjustments', 'adjustmentNotes', 'additionalComments'
+            ];
+            
+            optionalFields.forEach(field => {
+                const input = form.querySelector(`[name="${field}"]`);
+                if (input && input.value) {
+                    data[field] = input.value;
+                }
+            });
+            
+            return data;
         }
 
         function calculateValuation(data) {
