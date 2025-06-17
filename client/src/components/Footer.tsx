@@ -1,8 +1,6 @@
 import { Link } from "wouter";
 import meritageLogoPath from "@assets/Meritage Logo2.png";
 
-import Meritage_Logo from "@assets/Meritage Logo.png";
-
 export function Footer() {
   return (
     <footer className="bg-[#1e3a5f] text-white">
@@ -12,7 +10,7 @@ export function Footer() {
           <div className="space-y-4">
             <div className="flex items-center">
               <img 
-                src={Meritage_Logo} 
+                src={meritageLogoPath} 
                 alt="Meritage Partners" 
                 className="h-10 w-auto"
               />
@@ -26,15 +24,30 @@ export function Footer() {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-white">Links</h3>
             <div className="space-y-2">
-              <Link href="/privacy" className="block text-gray-300 hover:text-white transition-colors text-sm">
+              <a 
+                href="https://meritage.partners/privacy" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="block text-gray-300 hover:text-white transition-colors text-sm"
+              >
                 Privacy Policy
-              </Link>
-              <Link href="/terms" className="block text-gray-300 hover:text-white transition-colors text-sm">
+              </a>
+              <a 
+                href="https://meritage.partners/termsofuse" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="block text-gray-300 hover:text-white transition-colors text-sm"
+              >
                 Terms of Use
-              </Link>
-              <Link href="/cookies" className="block text-gray-300 hover:text-white transition-colors text-sm">
+              </a>
+              <a 
+                href="https://meritage.partners/cookies" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="block text-gray-300 hover:text-white transition-colors text-sm"
+              >
                 Cookie Policy
-              </Link>
+              </a>
             </div>
           </div>
 
