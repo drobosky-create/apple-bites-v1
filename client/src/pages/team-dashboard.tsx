@@ -17,8 +17,7 @@ import TeamLogin from '@/components/team-login';
 import { useTeamAuth } from '@/hooks/use-team-auth';
 import { useToast } from '@/hooks/use-toast';
 import PasswordChangeForm from '@/components/password-change-form';
-
-import _1 from "@assets/1.png";
+import appleBitesLogoImage from '@assets/1_1750197353067.png';
 
 export default function TeamDashboard() {
   const { user, isAuthenticated, isLoading, hasRole, logout } = useTeamAuth();
@@ -152,8 +151,8 @@ export default function TeamDashboard() {
         <div className="mb-6 flex justify-between items-center">
           <div className="flex items-center gap-4">
             <img 
-              src={_1} 
-              alt="Meritage Partners" 
+              src={appleBitesLogoImage} 
+              alt="Apple Bites Business Assessment" 
               className="h-12 w-auto"
             />
             <div className="border-l border-slate-300 pl-4">
