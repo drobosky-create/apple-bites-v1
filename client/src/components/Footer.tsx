@@ -1,7 +1,5 @@
 import { Link } from "wouter";
-import meritageLogoPath from "@assets/image_1750194261736.png";
-
-import Meritage_Logo from "@assets/Meritage Logo.png";
+import meritageLogoPath from "@assets/Meritage Logo2.png";
 
 export function Footer() {
   return (
@@ -12,7 +10,7 @@ export function Footer() {
           <div className="space-y-4">
             <div className="flex items-center">
               <img 
-                src={Meritage_Logo} 
+                src={meritageLogoPath} 
                 alt="Meritage Partners" 
                 className="h-8 w-auto"
               />
