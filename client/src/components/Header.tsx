@@ -1,5 +1,7 @@
 import meritageLogoPath from "@assets/Meritage Logo2.png";
 
+import Meritage_Logo from "@assets/Meritage Logo.png";
+
 export function Header() {
   return (
     <header className="bg-[#1e3a5f] text-white shadow-lg">
@@ -14,9 +16,9 @@ export function Header() {
               className="hover:opacity-80 transition-opacity"
             >
               <img 
-                src={meritageLogoPath} 
+                src={Meritage_Logo} 
                 alt="Meritage Partners" 
-                className="h-20 w-auto"
+                className="h-12 w-auto"
               />
             </a>
           </div>
