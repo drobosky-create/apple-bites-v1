@@ -282,7 +282,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           new Promise((_, reject) => 
             setTimeout(() => reject(new Error('AI generation timeout')), 10000)
           )
-        ]);
+        ]) as { narrativeSummary: string; keyStrengths: string[]; areasForImprovement: string[]; recommendations: string[]; };
         narrativeAnalysis = aiNarrative;
       } catch (aiError) {
         console.error('AI narrative generation failed, using fallback:', aiError);
@@ -311,26 +311,38 @@ export async function registerRoutes(app: Express): Promise<Server> {
           ownerDependency: gradeToScore(assessment.ownerDependency)
         };
         
-        // Call the summary API internally
-        const summaryResponse = await fetch('http://localhost:5000/api/generate-summary', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            companyName: assessment.company,
-            adjustedEBITDA: metrics.adjustedEbitda,
-            valuationEstimate: metrics.midEstimate,
-            driverScores: driverScores,
-            followUpIntent: assessment.followUpIntent
-          })
-        });
-        
+        // Generate executive summary with timeout
         let executiveSummary = '';
-        if (summaryResponse.ok) {
-          const summaryData = await summaryResponse.json();
-          executiveSummary = summaryData.summary;
-        } else {
-          const gradeLabel = getLabelForGrade(metrics.overallScore);
-          executiveSummary = `Executive Summary: ${assessment.company} shows an adjusted EBITDA of $${metrics.adjustedEbitda.toLocaleString()} with an estimated valuation of $${metrics.midEstimate.toLocaleString()}. Based on your Operational Grade of ${metrics.overallScore} ("${gradeLabel}"), a multiplier of ${metrics.valuationMultiple}x was applied to your Adjusted EBITDA to generate the valuation estimate. The analysis indicates ${metrics.overallScore} overall performance across key business drivers.`;
+        const gradeLabel = getLabelForGrade(metrics.overallScore);
+        const fallbackSummary = `Executive Summary: ${assessment.company} shows an adjusted EBITDA of $${metrics.adjustedEbitda.toLocaleString()} with an estimated valuation of $${metrics.midEstimate.toLocaleString()}. Based on your Operational Grade of ${metrics.overallScore} ("${gradeLabel}"), a multiplier of ${metrics.valuationMultiple}x was applied to your Adjusted EBITDA to generate the valuation estimate. The analysis indicates ${metrics.overallScore} overall performance across key business drivers.`;
+        
+        try {
+          const summaryResponse = await Promise.race([
+            fetch('http://localhost:5000/api/generate-summary', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                companyName: assessment.company,
+                adjustedEBITDA: metrics.adjustedEbitda,
+                valuationEstimate: metrics.midEstimate,
+                driverScores: driverScores,
+                followUpIntent: assessment.followUpIntent
+              })
+            }),
+            new Promise((_, reject) => 
+              setTimeout(() => reject(new Error('Summary generation timeout')), 8000)
+            )
+          ]);
+          
+          if (summaryResponse.ok) {
+            const summaryData = await summaryResponse.json();
+            executiveSummary = summaryData.summary;
+          } else {
+            executiveSummary = fallbackSummary;
+          }
+        } catch (summaryError) {
+          console.error('Summary generation failed, using fallback:', summaryError);
+          executiveSummary = fallbackSummary;
         }
         
         // Update assessment with calculated values, narrative, and summary - validate to prevent overflow
