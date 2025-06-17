@@ -1321,19 +1321,43 @@
                     // Remove checked class from all options in the same group
                     const groupName = this.name;
                     document.querySelectorAll(`input[name="${groupName}"]`).forEach(r => {
-                        r.closest('.radio-option').classList.remove('checked');
+                        const parentOption = r.closest('.radio-option');
+                        if (parentOption) {
+                            parentOption.classList.remove('checked');
+                        }
                     });
                     
                     // Add checked class to selected option
-                    this.closest('.radio-option').classList.add('checked');
+                    const selectedOption = this.closest('.radio-option');
+                    if (selectedOption) {
+                        selectedOption.classList.add('checked');
+                    }
                 });
             });
 
-            // Handle grade button interactions
+            // Handle grade button interactions - fix for all grade selections
             document.querySelectorAll('.grade-buttons input[type="radio"]').forEach(radio => {
                 radio.addEventListener('change', function() {
-                    // Update visual state is handled by CSS
                     console.log(`${this.name} set to ${this.value}`);
+                    
+                    // Remove active state from all buttons in this group
+                    const groupName = this.name;
+                    document.querySelectorAll(`input[name="${groupName}"]`).forEach(r => {
+                        const label = r.nextElementSibling;
+                        if (label && label.classList.contains('grade-btn')) {
+                            label.style.borderColor = '#e5e7eb';
+                            label.style.backgroundColor = '';
+                            label.style.color = '';
+                        }
+                    });
+                    
+                    // Activate selected button
+                    const selectedLabel = this.nextElementSibling;
+                    if (selectedLabel && selectedLabel.classList.contains('grade-btn')) {
+                        selectedLabel.style.borderColor = '#3b82f6';
+                        selectedLabel.style.backgroundColor = '#3b82f6';
+                        selectedLabel.style.color = 'white';
+                    }
                 });
             });
         }
@@ -1386,19 +1410,32 @@
 
         function updateAdjustedEbitdaCalculation() {
             const baseEbitda = updateEbitdaCalculation();
-            const ownerSalary = parseFloat(document.getElementById('ownerSalary').value) || 0;
-            const personalExpenses = parseFloat(document.getElementById('personalExpenses').value) || 0;
-            const oneTimeExpenses = parseFloat(document.getElementById('oneTimeExpenses').value) || 0;
-            const otherAdjustments = parseFloat(document.getElementById('otherAdjustments').value) || 0;
+            
+            // Get adjustment values, handling null/undefined elements
+            const ownerSalaryEl = document.getElementById('ownerSalary');
+            const personalExpensesEl = document.getElementById('personalExpenses');
+            const oneTimeExpensesEl = document.getElementById('oneTimeExpenses');
+            const otherAdjustmentsEl = document.getElementById('otherAdjustments');
+            
+            const ownerSalary = ownerSalaryEl ? (parseFloat(ownerSalaryEl.value) || 0) : 0;
+            const personalExpenses = personalExpensesEl ? (parseFloat(personalExpensesEl.value) || 0) : 0;
+            const oneTimeExpenses = oneTimeExpensesEl ? (parseFloat(oneTimeExpensesEl.value) || 0) : 0;
+            const otherAdjustments = otherAdjustmentsEl ? (parseFloat(otherAdjustmentsEl.value) || 0) : 0;
 
             const adjustedEbitda = baseEbitda + ownerSalary + personalExpenses + oneTimeExpenses + otherAdjustments;
 
-            // Update display
-            document.getElementById('adj-owner-salary').textContent = formatCurrency(ownerSalary);
-            document.getElementById('adj-personal-expenses').textContent = formatCurrency(personalExpenses);
-            document.getElementById('adj-one-time-expenses').textContent = formatCurrency(oneTimeExpenses);
-            document.getElementById('adj-other-adjustments').textContent = formatCurrency(otherAdjustments);
-            document.getElementById('adj-ebitda').textContent = formatCurrency(adjustedEbitda);
+            // Update display - check if elements exist
+            const adjOwnerSalaryEl = document.getElementById('adj-owner-salary');
+            const adjPersonalExpensesEl = document.getElementById('adj-personal-expenses');
+            const adjOneTimeExpensesEl = document.getElementById('adj-one-time-expenses');
+            const adjOtherAdjustmentsEl = document.getElementById('adj-other-adjustments');
+            const adjEbitdaEl = document.getElementById('adj-ebitda');
+            
+            if (adjOwnerSalaryEl) adjOwnerSalaryEl.textContent = formatCurrency(ownerSalary);
+            if (adjPersonalExpensesEl) adjPersonalExpensesEl.textContent = formatCurrency(personalExpenses);
+            if (adjOneTimeExpensesEl) adjOneTimeExpensesEl.textContent = formatCurrency(oneTimeExpenses);
+            if (adjOtherAdjustmentsEl) adjOtherAdjustmentsEl.textContent = formatCurrency(otherAdjustments);
+            if (adjEbitdaEl) adjEbitdaEl.textContent = formatCurrency(adjustedEbitda);
 
             return adjustedEbitda;
         }
@@ -1494,86 +1531,78 @@
         function submitForm() {
             console.log('submitForm called, current step:', currentStep);
             
-            // Validate final step
-            if (!validateCurrentStep()) {
-                console.log('Validation failed');
-                return;
+            try {
+                // Validate final step
+                if (!validateCurrentStep()) {
+                    console.log('Validation failed');
+                    return;
+                }
+                
+                console.log('Validation passed');
+                
+                // Show loading
+                const loadingEl = document.getElementById('loading');
+                if (loadingEl) {
+                    loadingEl.classList.add('show');
+                }
+                
+                // Collect all form data manually to ensure we get everything
+                const data = collectAllFormData();
+                console.log('Collected form data:', data);
+                
+                // Validate required data
+                if (!data.financialPerformance || !data.adjustedEbitda) {
+                    alert('Missing required data. Please complete all previous steps.');
+                    if (loadingEl) loadingEl.classList.remove('show');
+                    return;
+                }
+                
+                // Calculate valuation
+                const results = calculateValuation(data);
+                console.log('Calculated results:', results);
+                
+                // Send to GoHighLevel
+                sendToGoHighLevel(data, results);
+                
+                // Show results
+                setTimeout(() => {
+                    if (loadingEl) loadingEl.classList.remove('show');
+                    showResults(data, results);
+                    nextStep();
+                }, 2000);
+                
+            } catch (error) {
+                console.error('Error in submitForm:', error);
+                alert('An error occurred. Please try again.');
+                const loadingEl = document.getElementById('loading');
+                if (loadingEl) loadingEl.classList.remove('show');
             }
-            
-            console.log('Validation passed');
-            
-            // Show loading
-            document.getElementById('loading').classList.add('show');
-            
-            // Collect all form data manually to ensure we get everything
-            const data = collectAllFormData();
-            console.log('Collected form data:', data);
-            
-            // Calculate valuation
-            const results = calculateValuation(data);
-            console.log('Calculated results:', results);
-            
-            // Send to GoHighLevel
-            sendToGoHighLevel(data, results);
-            
-            // Show results
-            setTimeout(() => {
-                document.getElementById('loading').classList.remove('show');
-                showResults(data, results);
-                nextStep();
-            }, 2000);
         }
 
         function collectAllFormData() {
             const form = document.getElementById('valuation-form');
-            const formData = new FormData(form);
             const data = {};
             
-            // Get all form inputs
-            for (let [key, value] of formData.entries()) {
-                data[key] = value;
-            }
+            // Collect all form inputs manually to ensure we get everything
+            const allInputs = form.querySelectorAll('input, select, textarea');
             
-            // Ensure we have all required fields
-            const requiredFields = [
-                'firstName', 'lastName', 'email', 'phone', 'company',
-                'netIncome', 'interest', 'taxes', 'depreciation', 'amortization',
-                'financialPerformance', 'customerConcentration', 'managementTeam',
-                'competitivePosition', 'growthProspects', 'systemsProcesses',
-                'assetQuality', 'industryOutlook', 'riskFactors', 'ownerDependency',
-                'followUpIntent'
-            ];
-            
-            // Check for missing required fields and try to get them
-            requiredFields.forEach(field => {
-                if (!data[field]) {
-                    const input = form.querySelector(`[name="${field}"]`);
-                    if (input) {
-                        if (input.type === 'radio') {
-                            const checked = form.querySelector(`[name="${field}"]:checked`);
-                            if (checked) {
-                                data[field] = checked.value;
-                            }
-                        } else {
-                            data[field] = input.value;
-                        }
+            allInputs.forEach(input => {
+                if (input.type === 'radio') {
+                    if (input.checked) {
+                        data[input.name] = input.value;
                     }
+                } else if (input.type === 'checkbox') {
+                    data[input.name] = input.checked;
+                } else {
+                    data[input.name] = input.value || '';
                 }
             });
             
-            // Optional fields
-            const optionalFields = [
-                'jobTitle', 'ownerSalary', 'personalExpenses', 'oneTimeExpenses', 
-                'otherAdjustments', 'adjustmentNotes', 'additionalComments'
-            ];
+            // Calculate and add financial metrics
+            data.baseEbitda = updateEbitdaCalculation();
+            data.adjustedEbitda = updateAdjustedEbitdaCalculation();
             
-            optionalFields.forEach(field => {
-                const input = form.querySelector(`[name="${field}"]`);
-                if (input && input.value) {
-                    data[field] = input.value;
-                }
-            });
-            
+            console.log('Final collected data:', data);
             return data;
         }
 
@@ -1857,6 +1886,36 @@
             document.querySelector('.form-step[data-step="1"]').classList.add('active');
             document.querySelector('.step[data-step="1"]').classList.add('active');
         }
+
+        // Debug function to test calculations
+        function debugCalculations() {
+            console.log('=== DEBUGGING CALCULATIONS ===');
+            
+            // Test EBITDA calculation
+            const ebitda = updateEbitdaCalculation();
+            console.log('Base EBITDA:', ebitda);
+            
+            // Test adjustment calculation
+            const adjustedEbitda = updateAdjustedEbitdaCalculation();
+            console.log('Adjusted EBITDA:', adjustedEbitda);
+            
+            // Test form data collection
+            const formData = collectAllFormData();
+            console.log('Form data:', formData);
+            
+            // Test valuation calculation
+            if (formData.financialPerformance) {
+                const results = calculateValuation(formData);
+                console.log('Valuation results:', results);
+            }
+        }
+
+        // Add keyboard shortcut for debugging
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.shiftKey && e.key === 'D') {
+                debugCalculations();
+            }
+        });
     </script>
 </body>
 </html>
