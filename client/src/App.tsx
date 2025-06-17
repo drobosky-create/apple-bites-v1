@@ -6,6 +6,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { AdminAuthProvider } from "@/hooks/use-admin-auth";
 import { TeamAuthProvider } from "@/hooks/use-team-auth";
 import Navigation from "@/components/navigation";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 import ValuationForm from "@/pages/valuation-form";
 import AnalyticsDashboard from "@/pages/analytics-dashboard";
 import ValueCalculator from "@/pages/value-calculator";
@@ -15,16 +17,20 @@ import NotFound from "@/pages/not-found";
 
 function Router() {
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-slate-50 flex flex-col">
+      <Header />
       <Navigation />
-      <Switch>
-        <Route path="/" component={ValuationForm} />
-        <Route path="/value-calculator" component={ValueCalculator} />
-        <Route path="/admin/analytics" component={AnalyticsDashboard} />
-        <Route path="/admin/leads" component={LeadsDashboard} />
-        <Route path="/team" component={TeamDashboard} />
-        <Route component={NotFound} />
-      </Switch>
+      <main className="flex-1">
+        <Switch>
+          <Route path="/" component={ValuationForm} />
+          <Route path="/value-calculator" component={ValueCalculator} />
+          <Route path="/admin/analytics" component={AnalyticsDashboard} />
+          <Route path="/admin/leads" component={LeadsDashboard} />
+          <Route path="/team" component={TeamDashboard} />
+          <Route component={NotFound} />
+        </Switch>
+      </main>
+      <Footer />
     </div>
   );
 }
