@@ -393,8 +393,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
           // Continue with the rest of the flow even if lead creation fails
         }
 
-        // Generate PDF report
-        const pdfBuffer = await generateValuationPDF(assessment);
+        // Generate PDF report with timeout
+        console.log('Starting PDF generation...');
+        const pdfBuffer = await Promise.race([
+          generateValuationPDF(assessment),
+          new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('PDF generation timeout')), 15000)
+          )
+        ]) as Buffer;
+        console.log('PDF generated successfully');
         
         // Save PDF file (in a real app, you'd use cloud storage)
         const pdfDir = path.join(process.cwd(), 'pdfs');
@@ -402,6 +409,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const pdfFileName = `valuation_${assessment.id}_${Date.now()}.pdf`;
         const pdfPath = path.join(pdfDir, pdfFileName);
         await fs.writeFile(pdfPath, pdfBuffer);
+        console.log('PDF saved to:', pdfPath);
         
         // Update with PDF URL
         const pdfUrl = `/api/pdf/${pdfFileName}`;
@@ -409,6 +417,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           pdfUrl,
           isProcessed: true,
         });
+        console.log('Assessment updated with PDF URL');
 
         // Send email through GoHighLevel and create contact
         try {

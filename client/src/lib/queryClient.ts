@@ -14,7 +14,7 @@ export async function apiRequest(
 ): Promise<Response> {
   // Create AbortController for timeout
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+  const timeoutId = setTimeout(() => controller.abort(), 60000); // 60 second timeout for valuation processing
   
   try {
     const res = await fetch(url, {
