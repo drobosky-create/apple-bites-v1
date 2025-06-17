@@ -48,6 +48,16 @@
     font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
     font-weight: 600;
   }
+
+  /* Header */
+  #root .flex header {
+    background-color: #0b2147;
+  }
+
+  /* Footer */
+  #root .flex footer {
+    background-color: #0b2147;
+  }
   
   .font-bold {
     font-weight: 700;
