@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Business Valuation Calculator - Apple Bites</title>
-    <meta name="description" content="Get your comprehensive business valuation report in minutes with Apple Bites professional assessment tool.">
+    <title>Apple Bites Business Assessment - Professional Valuation Calculator</title>
+    <meta name="description" content="Get your comprehensive business valuation report with detailed EBITDA analysis and value driver assessment. Professional business assessment by Apple Bites.">
     
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -151,19 +151,79 @@
         }
 
         .form-group input,
-        .form-group select {
+        .form-group select,
+        .form-group textarea {
             width: 100%;
             padding: 12px 16px;
             border: 2px solid #e5e7eb;
             border-radius: 10px;
             font-size: 1rem;
             transition: border-color 0.2s;
+            background: #f8fafc;
         }
 
         .form-group input:focus,
-        .form-group select:focus {
+        .form-group select:focus,
+        .form-group textarea:focus {
             outline: none;
             border-color: #3b82f6;
+            background: #f1f5f9;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .input-with-prefix {
+            position: relative;
+        }
+
+        .input-with-prefix .prefix {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .input-with-prefix input {
+            padding-left: 32px;
+        }
+
+        .ebitda-calculation {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+
+        .ebitda-calculation h3 {
+            color: #1e293b;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .calculation-display {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .calculation-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .calculation-total {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0 8px 0;
+            border-top: 2px solid #e2e8f0;
+            margin-top: 10px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #1e293b;
         }
 
         .value-drivers {
@@ -214,6 +274,48 @@
             border-color: #3b82f6;
             background: #3b82f6;
             color: white;
+        }
+
+        .driver-description {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-bottom: 10px;
+            font-style: italic;
+        }
+
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            transition: border-color 0.2s;
+        }
+
+        .radio-option:hover {
+            border-color: #3b82f6;
+        }
+
+        .radio-option input[type="radio"] {
+            margin-right: 10px;
+            width: auto;
+        }
+
+        .radio-option input[type="radio"]:checked + .radio-label {
+            font-weight: 600;
+        }
+
+        .radio-option:has(input[type="radio"]:checked) {
+            border-color: #3b82f6;
+            background: #f0f9ff;
         }
 
         .grade-a { background-color: #dcfce7; color: #166534; }
@@ -425,9 +527,11 @@
             <!-- Progress Bar -->
             <div class="progress-bar">
                 <div class="step active" data-step="1">Contact Info</div>
-                <div class="step" data-step="2">Business Details</div>
-                <div class="step" data-step="3">Value Drivers</div>
-                <div class="step" data-step="4">Results</div>
+                <div class="step" data-step="2">EBITDA & Financial</div>
+                <div class="step" data-step="3">Adjustments</div>
+                <div class="step" data-step="4">Value Drivers</div>
+                <div class="step" data-step="5">Follow-Up</div>
+                <div class="step" data-step="6">Results</div>
             </div>
 
             <!-- Form Container -->
@@ -436,24 +540,32 @@
                     <!-- Step 1: Contact Information -->
                     <div class="form-step active" data-step="1">
                         <h2>Contact Information</h2>
-                        <p class="help-text">Let's start with your basic information</p>
+                        <p class="help-text">Please provide your contact details to begin the comprehensive valuation assessment.</p>
                         
                         <div class="form-grid">
                             <div class="form-group">
-                                <label for="contact_name">Full Name *</label>
-                                <input type="text" id="contact_name" name="contact_name" required>
+                                <label for="firstName">First Name *</label>
+                                <input type="text" id="firstName" name="firstName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Last Name *</label>
+                                <input type="text" id="lastName" name="lastName" required>
                             </div>
                             <div class="form-group">
                                 <label for="email">Email Address *</label>
                                 <input type="email" id="email" name="email" required>
                             </div>
                             <div class="form-group">
-                                <label for="phone">Phone Number</label>
-                                <input type="tel" id="phone" name="phone">
+                                <label for="phone">Phone Number *</label>
+                                <input type="tel" id="phone" name="phone" placeholder="(555) 123-4567" required>
                             </div>
                             <div class="form-group">
-                                <label for="company_name">Company Name *</label>
-                                <input type="text" id="company_name" name="company_name" required>
+                                <label for="company">Company Name *</label>
+                                <input type="text" id="company" name="company" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="jobTitle">Job Title</label>
+                                <input type="text" id="jobTitle" name="jobTitle" placeholder="e.g., CEO, Owner, President">
                             </div>
                         </div>
                         
@@ -463,37 +575,162 @@
                         </div>
                     </div>
 
-                    <!-- Step 2: Business Details -->
+                    <!-- Step 2: EBITDA & Financial Details -->
                     <div class="form-step" data-step="2">
-                        <h2>Business Details</h2>
-                        <p class="help-text">Tell us about your business financials and operations</p>
+                        <h2>EBITDA & Financial Information</h2>
+                        <p class="help-text">Please provide your company's financial information for the most recent fiscal year.</p>
                         
                         <div class="form-grid">
                             <div class="form-group">
-                                <label for="annual_revenue">Annual Revenue ($) *</label>
-                                <input type="number" id="annual_revenue" name="annual_revenue" min="0" step="1000" required>
+                                <label for="netIncome">Net Income *</label>
+                                <div class="input-with-prefix">
+                                    <span class="prefix">$</span>
+                                    <input type="number" id="netIncome" name="netIncome" step="1000" required>
+                                </div>
+                                <p class="help-text">Your company's net income for the most recent fiscal year</p>
                             </div>
                             <div class="form-group">
-                                <label for="ebitda">EBITDA ($) *</label>
-                                <input type="number" id="ebitda" name="ebitda" min="0" step="1000" required>
+                                <label for="interest">Interest Expense *</label>
+                                <div class="input-with-prefix">
+                                    <span class="prefix">$</span>
+                                    <input type="number" id="interest" name="interest" step="1000" required>
+                                </div>
+                                <p class="help-text">Total interest expenses paid on loans and debt</p>
                             </div>
                             <div class="form-group">
-                                <label for="industry">Industry</label>
-                                <select id="industry" name="industry">
-                                    <option value="">Select Industry</option>
-                                    <option value="technology">Technology</option>
-                                    <option value="manufacturing">Manufacturing</option>
-                                    <option value="retail">Retail</option>
-                                    <option value="healthcare">Healthcare</option>
-                                    <option value="professional-services">Professional Services</option>
-                                    <option value="construction">Construction</option>
-                                    <option value="food-beverage">Food & Beverage</option>
-                                    <option value="other">Other</option>
-                                </select>
+                                <label for="taxes">Tax Expense *</label>
+                                <div class="input-with-prefix">
+                                    <span class="prefix">$</span>
+                                    <input type="number" id="taxes" name="taxes" step="1000" required>
+                                </div>
+                                <p class="help-text">Income taxes paid to federal, state, and local authorities</p>
                             </div>
                             <div class="form-group">
-                                <label for="employees">Number of Employees</label>
-                                <input type="number" id="employees" name="employees" min="1">
+                                <label for="depreciation">Depreciation *</label>
+                                <div class="input-with-prefix">
+                                    <span class="prefix">$</span>
+                                    <input type="number" id="depreciation" name="depreciation" step="1000" required>
+                                </div>
+                                <p class="help-text">Depreciation expense on equipment, buildings, and other assets</p>
+                            </div>
+                            <div class="form-group">
+                                <label for="amortization">Amortization *</label>
+                                <div class="input-with-prefix">
+                                    <span class="prefix">$</span>
+                                    <input type="number" id="amortization" name="amortization" step="1000" required>
+                                </div>
+                                <p class="help-text">Amortization of intangible assets and goodwill</p>
+                            </div>
+                        </div>
+
+                        <div class="ebitda-calculation">
+                            <h3>Calculated EBITDA</h3>
+                            <div class="calculation-display">
+                                <div class="calculation-row">
+                                    <span>Net Income:</span>
+                                    <span id="calc-net-income">$0</span>
+                                </div>
+                                <div class="calculation-row">
+                                    <span>+ Interest:</span>
+                                    <span id="calc-interest">$0</span>
+                                </div>
+                                <div class="calculation-row">
+                                    <span>+ Taxes:</span>
+                                    <span id="calc-taxes">$0</span>
+                                </div>
+                                <div class="calculation-row">
+                                    <span>+ Depreciation:</span>
+                                    <span id="calc-depreciation">$0</span>
+                                </div>
+                                <div class="calculation-row">
+                                    <span>+ Amortization:</span>
+                                    <span id="calc-amortization">$0</span>
+                                </div>
+                                <div class="calculation-total">
+                                    <span>EBITDA:</span>
+                                    <span id="calc-ebitda">$0</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary prev-step">← Previous</button>
+                            <button type="button" class="btn btn-primary next-step">Next Step →</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Adjustments -->
+                    <div class="form-step" data-step="3">
+                        <h2>EBITDA Adjustments</h2>
+                        <p class="help-text">Add back owner-specific expenses to normalize EBITDA for potential buyers.</p>
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="ownerSalary">Owner's Salary/Benefits</label>
+                                <div class="input-with-prefix">
+                                    <span class="prefix">$</span>
+                                    <input type="number" id="ownerSalary" name="ownerSalary" step="1000">
+                                </div>
+                                <p class="help-text">Total compensation paid to owner(s) above market rate</p>
+                            </div>
+                            <div class="form-group">
+                                <label for="personalExpenses">Personal Expenses</label>
+                                <div class="input-with-prefix">
+                                    <span class="prefix">$</span>
+                                    <input type="number" id="personalExpenses" name="personalExpenses" step="1000">
+                                </div>
+                                <p class="help-text">Personal expenses run through the business</p>
+                            </div>
+                            <div class="form-group">
+                                <label for="oneTimeExpenses">One-Time Expenses</label>
+                                <div class="input-with-prefix">
+                                    <span class="prefix">$</span>
+                                    <input type="number" id="oneTimeExpenses" name="oneTimeExpenses" step="1000">
+                                </div>
+                                <p class="help-text">Non-recurring expenses (legal fees, consulting, etc.)</p>
+                            </div>
+                            <div class="form-group">
+                                <label for="otherAdjustments">Other Adjustments</label>
+                                <div class="input-with-prefix">
+                                    <span class="prefix">$</span>
+                                    <input type="number" id="otherAdjustments" name="otherAdjustments" step="1000">
+                                </div>
+                                <p class="help-text">Other normalizing adjustments</p>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="adjustmentNotes">Adjustment Notes</label>
+                            <textarea id="adjustmentNotes" name="adjustmentNotes" rows="4" placeholder="Explain the nature of these adjustments..."></textarea>
+                        </div>
+
+                        <div class="ebitda-calculation">
+                            <h3>Adjusted EBITDA</h3>
+                            <div class="calculation-display">
+                                <div class="calculation-row">
+                                    <span>Base EBITDA:</span>
+                                    <span id="adj-base-ebitda">$0</span>
+                                </div>
+                                <div class="calculation-row">
+                                    <span>+ Owner Salary:</span>
+                                    <span id="adj-owner-salary">$0</span>
+                                </div>
+                                <div class="calculation-row">
+                                    <span>+ Personal Expenses:</span>
+                                    <span id="adj-personal-expenses">$0</span>
+                                </div>
+                                <div class="calculation-row">
+                                    <span>+ One-Time Expenses:</span>
+                                    <span id="adj-one-time-expenses">$0</span>
+                                </div>
+                                <div class="calculation-row">
+                                    <span>+ Other Adjustments:</span>
+                                    <span id="adj-other-adjustments">$0</span>
+                                </div>
+                                <div class="calculation-total">
+                                    <span>Adjusted EBITDA:</span>
+                                    <span id="adj-ebitda">$0</span>
+                                </div>
                             </div>
                         </div>
                         
@@ -676,8 +913,225 @@
                         </div>
                     </div>
 
-                    <!-- Step 4: Results -->
+                    <!-- Step 4: Value Drivers -->
                     <div class="form-step" data-step="4">
+                        <h2>Business Value Drivers</h2>
+                        <p class="help-text">Rate each area from A (Excellent) to F (Poor) based on your business performance</p>
+                        
+                        <div class="value-drivers">
+                            <div class="driver-group">
+                                <label class="driver-label">Financial Performance</label>
+                                <p class="driver-description">Revenue growth, profitability trends, and financial stability</p>
+                                <div class="grade-buttons">
+                                    <input type="radio" id="financialPerformance_A" name="financialPerformance" value="A" required>
+                                    <label for="financialPerformance_A" class="grade-btn grade-a">A</label>
+                                    <input type="radio" id="financialPerformance_B" name="financialPerformance" value="B">
+                                    <label for="financialPerformance_B" class="grade-btn grade-b">B</label>
+                                    <input type="radio" id="financialPerformance_C" name="financialPerformance" value="C">
+                                    <label for="financialPerformance_C" class="grade-btn grade-c">C</label>
+                                    <input type="radio" id="financialPerformance_D" name="financialPerformance" value="D">
+                                    <label for="financialPerformance_D" class="grade-btn grade-d">D</label>
+                                    <input type="radio" id="financialPerformance_F" name="financialPerformance" value="F">
+                                    <label for="financialPerformance_F" class="grade-btn grade-f">F</label>
+                                </div>
+                            </div>
+
+                            <div class="driver-group">
+                                <label class="driver-label">Customer Concentration</label>
+                                <p class="driver-description">Diversification of customer base and revenue concentration risk</p>
+                                <div class="grade-buttons">
+                                    <input type="radio" id="customerConcentration_A" name="customerConcentration" value="A" required>
+                                    <label for="customerConcentration_A" class="grade-btn grade-a">A</label>
+                                    <input type="radio" id="customerConcentration_B" name="customerConcentration" value="B">
+                                    <label for="customerConcentration_B" class="grade-btn grade-b">B</label>
+                                    <input type="radio" id="customerConcentration_C" name="customerConcentration" value="C">
+                                    <label for="customerConcentration_C" class="grade-btn grade-c">C</label>
+                                    <input type="radio" id="customerConcentration_D" name="customerConcentration" value="D">
+                                    <label for="customerConcentration_D" class="grade-btn grade-d">D</label>
+                                    <input type="radio" id="customerConcentration_F" name="customerConcentration" value="F">
+                                    <label for="customerConcentration_F" class="grade-btn grade-f">F</label>
+                                </div>
+                            </div>
+
+                            <div class="driver-group">
+                                <label class="driver-label">Management Team Strength</label>
+                                <p class="driver-description">Quality and depth of management team, succession planning</p>
+                                <div class="grade-buttons">
+                                    <input type="radio" id="managementTeam_A" name="managementTeam" value="A" required>
+                                    <label for="managementTeam_A" class="grade-btn grade-a">A</label>
+                                    <input type="radio" id="managementTeam_B" name="managementTeam" value="B">
+                                    <label for="managementTeam_B" class="grade-btn grade-b">B</label>
+                                    <input type="radio" id="managementTeam_C" name="managementTeam" value="C">
+                                    <label for="managementTeam_C" class="grade-btn grade-c">C</label>
+                                    <input type="radio" id="managementTeam_D" name="managementTeam" value="D">
+                                    <label for="managementTeam_D" class="grade-btn grade-d">D</label>
+                                    <input type="radio" id="managementTeam_F" name="managementTeam" value="F">
+                                    <label for="managementTeam_F" class="grade-btn grade-f">F</label>
+                                </div>
+                            </div>
+
+                            <div class="driver-group">
+                                <label class="driver-label">Competitive Position</label>
+                                <p class="driver-description">Market share, competitive advantages, and barriers to entry</p>
+                                <div class="grade-buttons">
+                                    <input type="radio" id="competitivePosition_A" name="competitivePosition" value="A" required>
+                                    <label for="competitivePosition_A" class="grade-btn grade-a">A</label>
+                                    <input type="radio" id="competitivePosition_B" name="competitivePosition" value="B">
+                                    <label for="competitivePosition_B" class="grade-btn grade-b">B</label>
+                                    <input type="radio" id="competitivePosition_C" name="competitivePosition" value="C">
+                                    <label for="competitivePosition_C" class="grade-btn grade-c">C</label>
+                                    <input type="radio" id="competitivePosition_D" name="competitivePosition" value="D">
+                                    <label for="competitivePosition_D" class="grade-btn grade-d">D</label>
+                                    <input type="radio" id="competitivePosition_F" name="competitivePosition" value="F">
+                                    <label for="competitivePosition_F" class="grade-btn grade-f">F</label>
+                                </div>
+                            </div>
+
+                            <div class="driver-group">
+                                <label class="driver-label">Growth Prospects</label>
+                                <p class="driver-description">Market growth potential and expansion opportunities</p>
+                                <div class="grade-buttons">
+                                    <input type="radio" id="growthProspects_A" name="growthProspects" value="A" required>
+                                    <label for="growthProspects_A" class="grade-btn grade-a">A</label>
+                                    <input type="radio" id="growthProspects_B" name="growthProspects" value="B">
+                                    <label for="growthProspects_B" class="grade-btn grade-b">B</label>
+                                    <input type="radio" id="growthProspects_C" name="growthProspects" value="C">
+                                    <label for="growthProspects_C" class="grade-btn grade-c">C</label>
+                                    <input type="radio" id="growthProspects_D" name="growthProspects" value="D">
+                                    <label for="growthProspects_D" class="grade-btn grade-d">D</label>
+                                    <input type="radio" id="growthProspects_F" name="growthProspects" value="F">
+                                    <label for="growthProspects_F" class="grade-btn grade-f">F</label>
+                                </div>
+                            </div>
+
+                            <div class="driver-group">
+                                <label class="driver-label">Systems & Processes</label>
+                                <p class="driver-description">Operational systems and documentation</p>
+                                <div class="grade-buttons">
+                                    <input type="radio" id="systemsProcesses_A" name="systemsProcesses" value="A" required>
+                                    <label for="systemsProcesses_A" class="grade-btn grade-a">A</label>
+                                    <input type="radio" id="systemsProcesses_B" name="systemsProcesses" value="B">
+                                    <label for="systemsProcesses_B" class="grade-btn grade-b">B</label>
+                                    <input type="radio" id="systemsProcesses_C" name="systemsProcesses" value="C">
+                                    <label for="systemsProcesses_C" class="grade-btn grade-c">C</label>
+                                    <input type="radio" id="systemsProcesses_D" name="systemsProcesses" value="D">
+                                    <label for="systemsProcesses_D" class="grade-btn grade-d">D</label>
+                                    <input type="radio" id="systemsProcesses_F" name="systemsProcesses" value="F">
+                                    <label for="systemsProcesses_F" class="grade-btn grade-f">F</label>
+                                </div>
+                            </div>
+
+                            <div class="driver-group">
+                                <label class="driver-label">Asset Quality</label>
+                                <p class="driver-description">Condition and value of business assets</p>
+                                <div class="grade-buttons">
+                                    <input type="radio" id="assetQuality_A" name="assetQuality" value="A" required>
+                                    <label for="assetQuality_A" class="grade-btn grade-a">A</label>
+                                    <input type="radio" id="assetQuality_B" name="assetQuality" value="B">
+                                    <label for="assetQuality_B" class="grade-btn grade-b">B</label>
+                                    <input type="radio" id="assetQuality_C" name="assetQuality" value="C">
+                                    <label for="assetQuality_C" class="grade-btn grade-c">C</label>
+                                    <input type="radio" id="assetQuality_D" name="assetQuality" value="D">
+                                    <label for="assetQuality_D" class="grade-btn grade-d">D</label>
+                                    <input type="radio" id="assetQuality_F" name="assetQuality" value="F">
+                                    <label for="assetQuality_F" class="grade-btn grade-f">F</label>
+                                </div>
+                            </div>
+
+                            <div class="driver-group">
+                                <label class="driver-label">Industry Outlook</label>
+                                <p class="driver-description">Industry trends and future prospects</p>
+                                <div class="grade-buttons">
+                                    <input type="radio" id="industryOutlook_A" name="industryOutlook" value="A" required>
+                                    <label for="industryOutlook_A" class="grade-btn grade-a">A</label>
+                                    <input type="radio" id="industryOutlook_B" name="industryOutlook" value="B">
+                                    <label for="industryOutlook_B" class="grade-btn grade-b">B</label>
+                                    <input type="radio" id="industryOutlook_C" name="industryOutlook" value="C">
+                                    <label for="industryOutlook_C" class="grade-btn grade-c">C</label>
+                                    <input type="radio" id="industryOutlook_D" name="industryOutlook" value="D">
+                                    <label for="industryOutlook_D" class="grade-btn grade-d">D</label>
+                                    <input type="radio" id="industryOutlook_F" name="industryOutlook" value="F">
+                                    <label for="industryOutlook_F" class="grade-btn grade-f">F</label>
+                                </div>
+                            </div>
+
+                            <div class="driver-group">
+                                <label class="driver-label">Risk Factors</label>
+                                <p class="driver-description">Overall business risk assessment</p>
+                                <div class="grade-buttons">
+                                    <input type="radio" id="riskFactors_A" name="riskFactors" value="A" required>
+                                    <label for="riskFactors_A" class="grade-btn grade-a">A</label>
+                                    <input type="radio" id="riskFactors_B" name="riskFactors" value="B">
+                                    <label for="riskFactors_B" class="grade-btn grade-b">B</label>
+                                    <input type="radio" id="riskFactors_C" name="riskFactors" value="C">
+                                    <label for="riskFactors_C" class="grade-btn grade-c">C</label>
+                                    <input type="radio" id="riskFactors_D" name="riskFactors" value="D">
+                                    <label for="riskFactors_D" class="grade-btn grade-d">D</label>
+                                    <input type="radio" id="riskFactors_F" name="riskFactors" value="F">
+                                    <label for="riskFactors_F" class="grade-btn grade-f">F</label>
+                                </div>
+                            </div>
+
+                            <div class="driver-group">
+                                <label class="driver-label">Owner Dependency</label>
+                                <p class="driver-description">Business dependence on current owner</p>
+                                <div class="grade-buttons">
+                                    <input type="radio" id="ownerDependency_A" name="ownerDependency" value="A" required>
+                                    <label for="ownerDependency_A" class="grade-btn grade-a">A</label>
+                                    <input type="radio" id="ownerDependency_B" name="ownerDependency" value="B">
+                                    <label for="ownerDependency_B" class="grade-btn grade-b">B</label>
+                                    <input type="radio" id="ownerDependency_C" name="ownerDependency" value="C">
+                                    <label for="ownerDependency_C" class="grade-btn grade-c">C</label>
+                                    <input type="radio" id="ownerDependency_D" name="ownerDependency" value="D">
+                                    <label for="ownerDependency_D" class="grade-btn grade-d">D</label>
+                                    <input type="radio" id="ownerDependency_F" name="ownerDependency" value="F">
+                                    <label for="ownerDependency_F" class="grade-btn grade-f">F</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary prev-step">← Previous</button>
+                            <button type="button" class="btn btn-primary next-step">Next Step →</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 5: Follow-Up -->
+                    <div class="form-step" data-step="5">
+                        <h2>Follow-Up Preferences</h2>
+                        <p class="help-text">Let us know how you'd like to proceed with your valuation results.</p>
+                        
+                        <div class="form-group">
+                            <label>Follow-up Intent</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="followUpIntent" value="yes" required>
+                                    <span class="radio-label">Yes, I'm interested in discussing my results</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="followUpIntent" value="maybe" required>
+                                    <span class="radio-label">Maybe, I'd like to review the results first</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="followUpIntent" value="no" required>
+                                    <span class="radio-label">No, I just want the assessment results</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="additionalComments">Additional Comments</label>
+                            <textarea id="additionalComments" name="additionalComments" rows="4" placeholder="Any additional information about your business or specific areas you'd like to discuss..."></textarea>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary prev-step">← Previous</button>
+                            <button type="submit" class="btn btn-primary">Generate Valuation Report</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 6: Results -->
+                    <div class="form-step" data-step="6">
                         <div id="results-container" class="results">
                             <!-- Results will be populated here -->
                         </div>
@@ -703,10 +1157,14 @@
 
         // Form handling
         let currentStep = 1;
-        const totalSteps = 4;
+        const totalSteps = 6;
+        let formData = {};
 
         // Navigation
         document.addEventListener('DOMContentLoaded', function() {
+            // Real-time EBITDA calculations
+            setupEbitdaCalculations();
+            
             // Next step buttons
             document.querySelectorAll('.next-step').forEach(button => {
                 button.addEventListener('click', function() {
@@ -730,12 +1188,84 @@
             });
         });
 
+        function setupEbitdaCalculations() {
+            // EBITDA calculation inputs
+            const ebitdaInputs = ['netIncome', 'interest', 'taxes', 'depreciation', 'amortization'];
+            ebitdaInputs.forEach(inputName => {
+                const input = document.getElementById(inputName);
+                if (input) {
+                    input.addEventListener('input', updateEbitdaCalculation);
+                }
+            });
+
+            // Adjustment inputs
+            const adjustmentInputs = ['ownerSalary', 'personalExpenses', 'oneTimeExpenses', 'otherAdjustments'];
+            adjustmentInputs.forEach(inputName => {
+                const input = document.getElementById(inputName);
+                if (input) {
+                    input.addEventListener('input', updateAdjustedEbitdaCalculation);
+                }
+            });
+        }
+
+        function updateEbitdaCalculation() {
+            const netIncome = parseFloat(document.getElementById('netIncome').value) || 0;
+            const interest = parseFloat(document.getElementById('interest').value) || 0;
+            const taxes = parseFloat(document.getElementById('taxes').value) || 0;
+            const depreciation = parseFloat(document.getElementById('depreciation').value) || 0;
+            const amortization = parseFloat(document.getElementById('amortization').value) || 0;
+
+            const ebitda = netIncome + interest + taxes + depreciation + amortization;
+
+            // Update display
+            document.getElementById('calc-net-income').textContent = formatCurrency(netIncome);
+            document.getElementById('calc-interest').textContent = formatCurrency(interest);
+            document.getElementById('calc-taxes').textContent = formatCurrency(taxes);
+            document.getElementById('calc-depreciation').textContent = formatCurrency(depreciation);
+            document.getElementById('calc-amortization').textContent = formatCurrency(amortization);
+            document.getElementById('calc-ebitda').textContent = formatCurrency(ebitda);
+
+            // Update adjustments page
+            if (document.getElementById('adj-base-ebitda')) {
+                document.getElementById('adj-base-ebitda').textContent = formatCurrency(ebitda);
+                updateAdjustedEbitdaCalculation();
+            }
+
+            return ebitda;
+        }
+
+        function updateAdjustedEbitdaCalculation() {
+            const baseEbitda = updateEbitdaCalculation();
+            const ownerSalary = parseFloat(document.getElementById('ownerSalary').value) || 0;
+            const personalExpenses = parseFloat(document.getElementById('personalExpenses').value) || 0;
+            const oneTimeExpenses = parseFloat(document.getElementById('oneTimeExpenses').value) || 0;
+            const otherAdjustments = parseFloat(document.getElementById('otherAdjustments').value) || 0;
+
+            const adjustedEbitda = baseEbitda + ownerSalary + personalExpenses + oneTimeExpenses + otherAdjustments;
+
+            // Update display
+            document.getElementById('adj-owner-salary').textContent = formatCurrency(ownerSalary);
+            document.getElementById('adj-personal-expenses').textContent = formatCurrency(personalExpenses);
+            document.getElementById('adj-one-time-expenses').textContent = formatCurrency(oneTimeExpenses);
+            document.getElementById('adj-other-adjustments').textContent = formatCurrency(otherAdjustments);
+            document.getElementById('adj-ebitda').textContent = formatCurrency(adjustedEbitda);
+
+            return adjustedEbitda;
+        }
+
         function validateCurrentStep() {
             const currentStepElement = document.querySelector(`.form-step[data-step="${currentStep}"]`);
             const requiredFields = currentStepElement.querySelectorAll('input[required], select[required]');
             
             for (let field of requiredFields) {
-                if (!field.value.trim()) {
+                if (field.type === 'radio') {
+                    const radioGroup = currentStepElement.querySelectorAll(`input[name="${field.name}"]`);
+                    const isChecked = Array.from(radioGroup).some(radio => radio.checked);
+                    if (!isChecked) {
+                        alert(`Please select an option for ${field.name.replace(/([A-Z])/g, ' $1').toLowerCase()}.`);
+                        return false;
+                    }
+                } else if (!field.value.trim()) {
                     field.focus();
                     alert('Please fill in all required fields.');
                     return false;
@@ -743,11 +1273,11 @@
             }
 
             // Special validation for value drivers step
-            if (currentStep === 3) {
+            if (currentStep === 4) {
                 const valueDrivers = [
-                    'financial_performance', 'customer_concentration', 'management_team',
-                    'competitive_position', 'growth_prospects', 'systems_processes',
-                    'asset_quality', 'industry_outlook', 'risk_factors', 'owner_dependency'
+                    'financialPerformance', 'customerConcentration', 'managementTeam',
+                    'competitivePosition', 'growthProspects', 'systemsProcesses',
+                    'assetQuality', 'industryOutlook', 'riskFactors', 'ownerDependency'
                 ];
                 
                 for (let driver of valueDrivers) {
@@ -810,53 +1340,80 @@
         }
 
         function calculateValuation(data) {
-            // Grade multipliers
-            const gradeMultipliers = {
-                'A': 1.2,
-                'B': 1.0,
-                'C': 0.8,
-                'D': 0.6,
-                'F': 0.4
+            // Use the actual centralized multiplier scale from your app
+            const getMultiplierForGrade = (grade) => {
+                const multipliers = {
+                    'A+': 7.0, 'A': 6.5, 'A-': 6.0,
+                    'B+': 5.5, 'B': 5.0, 'B-': 4.5,
+                    'C+': 4.0, 'C': 3.5, 'C-': 3.0,
+                    'D+': 2.5, 'D': 2.0, 'D-': 1.5,
+                    'F': 1.0
+                };
+                return multipliers[grade] || 3.5;
             };
+
+            // Grade to score conversion
+            const gradeToScoreValue = (grade) => {
+                switch (grade) {
+                    case 'A': return 5;
+                    case 'B': return 4;
+                    case 'C': return 3;
+                    case 'D': return 2;
+                    case 'F': return 1;
+                    default: return 3;
+                }
+            };
+
+            // Score to grade conversion
+            const scoreToGrade = (score) => {
+                if (score >= 4.7) return 'A';
+                if (score >= 3.7) return 'B';
+                if (score >= 2.7) return 'C';
+                if (score >= 1.7) return 'D';
+                return 'F';
+            };
+
+            // Get adjusted EBITDA
+            const adjustedEbitda = updateAdjustedEbitdaCalculation();
 
             // Value drivers
             const valueDrivers = [
-                'financial_performance', 'customer_concentration', 'management_team',
-                'competitive_position', 'growth_prospects', 'systems_processes',
-                'asset_quality', 'industry_outlook', 'risk_factors', 'owner_dependency'
+                'financialPerformance', 'customerConcentration', 'managementTeam',
+                'competitivePosition', 'growthProspects', 'systemsProcesses',
+                'assetQuality', 'industryOutlook', 'riskFactors', 'ownerDependency'
             ];
 
-            // Calculate average multiplier
-            let totalMultiplier = 0;
-            valueDrivers.forEach(driver => {
-                totalMultiplier += gradeMultipliers[data[driver]] || 0.8;
-            });
+            // Calculate weighted average score
+            const scores = valueDrivers.map(driver => gradeToScoreValue(data[driver]));
+            const averageScore = scores.reduce((sum, score) => sum + score, 0) / scores.length;
             
-            const avgMultiplier = totalMultiplier / valueDrivers.length;
+            // Determine overall letter grade
+            const overallGrade = scoreToGrade(averageScore);
             
-            // Base industry multiplier
-            const baseMultiplier = 4.5;
+            // Add grade modifier
+            const gradeModifier = averageScore > (gradeToScoreValue(overallGrade) + 0.3) ? '+' :
+                                 averageScore < (gradeToScoreValue(overallGrade) - 0.3) ? '-' : '';
             
-            // Final multiplier
-            const finalMultiplier = baseMultiplier * avgMultiplier;
+            const finalGrade = overallGrade + gradeModifier;
             
-            // Calculate valuation
-            const ebitda = parseFloat(data.ebitda) || 0;
-            const estimatedValue = ebitda * finalMultiplier;
-            const lowRange = estimatedValue * 0.8;
-            const highRange = estimatedValue * 1.2;
+            // Get valuation multiple
+            const valuationMultiple = getMultiplierForGrade(finalGrade);
             
-            // Calculate overall grade
-            const overallGrade = calculateOverallGrade(valueDrivers.map(d => data[d]));
+            // Calculate valuation estimates (±20% range)
+            const midEstimate = adjustedEbitda * valuationMultiple;
+            const lowEstimate = midEstimate * 0.8;
+            const highEstimate = midEstimate * 1.2;
             
             return {
-                estimatedValue: estimatedValue,
-                lowRange: lowRange,
-                highRange: highRange,
-                multiplier: finalMultiplier,
-                baseMultiplier: baseMultiplier,
-                adjustmentFactor: avgMultiplier,
-                overallGrade: overallGrade
+                baseEbitda: updateEbitdaCalculation(),
+                adjustedEbitda: adjustedEbitda,
+                valuationMultiple: parseFloat(valuationMultiple.toFixed(1)),
+                lowEstimate: Math.round(lowEstimate),
+                midEstimate: Math.round(midEstimate),
+                highEstimate: Math.round(highEstimate),
+                overallScore: finalGrade,
+                averageScore: averageScore,
+                valueDriverScores: Object.fromEntries(valueDrivers.map(driver => [driver, data[driver]]))
             };
         }
 
