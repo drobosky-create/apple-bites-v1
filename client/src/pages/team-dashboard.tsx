@@ -19,6 +19,8 @@ import { useToast } from '@/hooks/use-toast';
 import PasswordChangeForm from '@/components/password-change-form';
 import appleBitesLogoImage from '@assets/1_1750197353067.png';
 
+import _2 from "@assets/2.png";
+
 export default function TeamDashboard() {
   const { user, isAuthenticated, isLoading, hasRole, logout } = useTeamAuth();
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
@@ -151,7 +153,7 @@ export default function TeamDashboard() {
         <div className="mb-6 flex justify-between items-center">
           <div className="flex items-center gap-4">
             <img 
-              src={appleBitesLogoImage} 
+              src={_2} 
               alt="Apple Bites Business Assessment" 
               className="h-12 w-auto"
             />
