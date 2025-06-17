@@ -1,0 +1,25 @@
+WordPress Integration Options for Apple Bites Business Assessment Calculator
+
+OPTION A: Custom Page Template
+1. Create a new page template in your theme:
+   - Copy page.php to page-business-assessment.php
+   - Replace the content area with the calculator HTML
+   - Create a new page with slug "business-assessment"
+
+OPTION B: Custom HTML Block
+1. Create a new page in WordPress
+2. Add a Custom HTML block
+3. Paste the entire calculator HTML code
+4. Publish the page
+
+OPTION C: Plugin Upload
+1. Create a simple plugin file with the calculator
+2. Upload via WordPress admin
+3. Use shortcode to display anywhere
+
+OPTION D: Child Theme Integration
+1. Add calculator as a custom page template
+2. Ensures updates don't overwrite your calculator
+3. Most professional approach
+
+Recommended: Option B (Custom HTML Block) for simplicity
