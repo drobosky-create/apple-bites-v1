@@ -129,11 +129,11 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
             )}
           />
 
-          <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-6 border border-blue-100">
+          <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-4 sm:p-6 border border-blue-100">
             <div className="flex items-start space-x-3">
               <div className="flex-shrink-0">
                 <div className="p-2 bg-blue-100 rounded-lg">
-                  <Shield className="w-5 h-5 text-blue-600" />
+                  <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
                 </div>
               </div>
               <div className="text-sm text-slate-700">
@@ -143,11 +143,11 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
             </div>
           </div>
 
-          <div className="flex justify-between pt-8">
+          <div className="flex justify-between pt-6 sm:pt-8">
             <div></div>
-            <Button type="submit" className="bg-gradient-to-r from-slate-500 to-slate-600 text-white px-8 py-3 rounded-lg font-medium hover:from-slate-600 hover:to-slate-700 transition-all duration-200 shadow-md hover:shadow-lg">
+            <Button type="submit" className="bg-gradient-to-r from-slate-500 to-slate-600 text-white px-6 sm:px-8 py-2 sm:py-3 rounded-lg font-medium hover:from-slate-600 hover:to-slate-700 transition-all duration-200 shadow-md hover:shadow-lg text-sm sm:text-base">
               Next: EBITDA Information
-              <ArrowRight className="ml-2 w-4 h-4" />
+              <ArrowRight className="ml-2 w-3 h-3 sm:w-4 sm:h-4" />
             </Button>
           </div>
         </form>

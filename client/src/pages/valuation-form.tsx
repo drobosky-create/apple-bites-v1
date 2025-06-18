@@ -30,22 +30,22 @@ export default function ValuationForm() {
 
   return (
     <div className="bg-gradient-to-br from-slate-50 to-blue-50 min-h-screen">
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-12">
+      <main className="max-w-4xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-12">
         
         {/* Header with Apple Bites Logo */}
         {currentStep !== "results" && (
-          <div className="flex flex-col sm:flex-row items-center justify-center mb-6 sm:mb-8 text-center sm:text-left">
+          <div className="flex flex-col sm:flex-row items-center justify-center mb-4 sm:mb-8 text-center sm:text-left">
             <img 
               src={_2} 
               alt="Apple Bites Business Assessment" 
-              className="h-16 sm:h-20 w-auto mb-4 sm:mb-0 sm:mr-4"
+              className="h-12 sm:h-20 w-auto mb-3 sm:mb-0 sm:mr-4"
             />
-            <h1 className="text-xl sm:text-3xl font-bold text-gray-900">Apple Bites Business Assessment</h1>
+            <h1 className="text-lg sm:text-3xl font-bold text-gray-900">Apple Bites Business Assessment</h1>
           </div>
         )}
 
         {currentStep !== "results" && (
-          <div className="mb-8">
+          <div className="mb-4 sm:mb-8">
             <ProgressIndicator currentStep={currentStep} />
           </div>
         )}
