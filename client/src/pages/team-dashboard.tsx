@@ -283,7 +283,7 @@ export default function TeamDashboard() {
                       Add Member
                     </Button>
                   </DialogTrigger>
-                  <DialogContent className="sm:max-w-md bg-white">
+                  <DialogContent className="sm:max-w-md bg-white max-w-[95vw] mx-auto">
                     <DialogHeader>
                       <DialogTitle>Add Team Member</DialogTitle>
                       <DialogDescription>
@@ -292,7 +292,7 @@ export default function TeamDashboard() {
                     </DialogHeader>
                     <Form {...form}>
                       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           <FormField
                             control={form.control}
                             name="firstName"
@@ -362,21 +362,22 @@ export default function TeamDashboard() {
                             <FormItem>
                               <FormLabel>Password</FormLabel>
                               <FormControl>
-                                <Input {...field} type="password" className="bg-[#fffff8] border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20" />
+                                <Input {...field} type="password" className="bg-white border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20" />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
                           )}
                         />
-                        <div className="flex justify-end gap-2">
+                        <div className="flex flex-col sm:flex-row justify-end gap-2">
                           <Button
                             type="button"
                             variant="outline"
                             onClick={() => setIsAddDialogOpen(false)}
+                            className="w-full sm:w-auto"
                           >
                             Cancel
                           </Button>
-                          <Button type="submit" disabled={createMemberMutation.isPending}>
+                          <Button type="submit" disabled={createMemberMutation.isPending} className="w-full sm:w-auto">
                             {createMemberMutation.isPending ? 'Creating...' : 'Create Member'}
                           </Button>
                         </div>
