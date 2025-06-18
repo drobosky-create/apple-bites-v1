@@ -678,11 +678,35 @@
     border-color: rgb(37 99 235) !important;
   }
 
-  /* Card component borders */
-  [data-radix-card],
-  .card,
-  .border-2 {
-    border-color: rgb(148 163 184) !important;
+  /* Direct override for ALL possible card elements */
+  div.p-4,
+  div.p-6,
+  div.sm\\:p-6,
+  .space-y-4 div,
+  .bg-white,
+  .rounded-lg,
+  .shadow-sm,
+  .hover\\:shadow-md,
+  .transition-shadow,
+  .overflow-hidden {
+    border: 2px solid rgb(59 130 246) !important;
+  }
+
+  /* Override any potential inline styles */
+  div[style],
+  .space-y-4 > div[style] {
+    border: 2px solid rgb(59 130 246) !important;
+    border-color: rgb(59 130 246) !important;
+  }
+
+  /* Force all div elements with yellow borders to blue */
+  div[style*="border-color: rgb(254, 240, 138)"],
+  div[style*="border-color: rgb(253, 224, 71)"],
+  div[style*="border-color: #fbbf24"],
+  div[style*="border-color: yellow"],
+  div[style*="border: 2px solid rgb(254, 240, 138)"] {
+    border: 2px solid rgb(59 130 246) !important;
+    border-color: rgb(59 130 246) !important;
   }
 
   /* Override all yellow/amber color variants globally */
