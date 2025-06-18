@@ -152,28 +152,28 @@ export default function TeamDashboard() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Top Navigation */}
-        <div className="mb-6 flex justify-between items-center">
+        <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div className="flex items-center gap-4">
             <img 
               src={_2} 
               alt="Apple Bites Business Assessment" 
-              className="h-12 w-auto"
+              className="h-10 sm:h-12 w-auto"
             />
             <div className="border-l border-slate-300 pl-4">
-              <h1 className="text-2xl font-bold text-slate-900">Team Dashboard</h1>
+              <h1 className="text-xl sm:text-2xl font-bold text-slate-900">Team Dashboard</h1>
             </div>
           </div>
-          <div className="flex items-center gap-3">
-            <Link href="/admin/leads">
+          <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
+            <Link href="/admin/leads" className="flex-1 sm:flex-none">
               <Button 
-                className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white"
+                className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white w-full sm:w-auto text-sm"
               >
                 Leads
               </Button>
             </Link>
-            <Link href="/admin/analytics">
+            <Link href="/admin/analytics" className="flex-1 sm:flex-none">
               <Button 
-                className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white"
+                className="flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white w-full sm:w-auto text-sm"
               >
                 Analytics
               </Button>
@@ -182,10 +182,10 @@ export default function TeamDashboard() {
         </div>
 
         {/* User Info and Actions */}
-        <div className="mb-8 flex justify-between items-center">
-          <div className="flex items-center gap-4 bg-slate-50 rounded-xl shadow-sm border border-slate-200 px-6 py-4">
+        <div className="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div className="flex items-center gap-4 bg-slate-50 rounded-xl shadow-sm border border-slate-200 px-4 sm:px-6 py-4 w-full sm:w-auto">
             <div className="text-sm text-slate-700">
-              <div className="font-semibold text-lg">Welcome, {user?.firstName} {user?.lastName}</div>
+              <div className="font-semibold text-base sm:text-lg">Welcome, {user?.firstName} {user?.lastName}</div>
               <div className="flex items-center gap-2 mt-1">
                 <Shield className="w-3 h-3 text-slate-400" />
                 <Badge className={`${getRoleBadgeColor(user?.role || '')} text-xs`}>
@@ -194,12 +194,13 @@ export default function TeamDashboard() {
               </div>
             </div>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
             <Dialog>
               <DialogTrigger asChild>
-                <Button variant="outline" className="flex items-center gap-2">
+                <Button variant="outline" className="flex items-center gap-2 flex-1 sm:flex-none text-sm">
                   <Settings className="w-4 h-4" />
-                  Change Password
+                  <span className="hidden sm:inline">Change Password</span>
+                  <span className="sm:hidden">Password</span>
                 </Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-md bg-white border-slate-300 shadow-lg">
@@ -212,7 +213,7 @@ export default function TeamDashboard() {
                 <PasswordChangeForm userId={user?.id} />
               </DialogContent>
             </Dialog>
-            <Button variant="outline" onClick={logout} className="flex items-center gap-2 hover:bg-red-50 hover:border-red-200">
+            <Button variant="outline" onClick={logout} className="flex items-center gap-2 hover:bg-red-50 hover:border-red-200 flex-1 sm:flex-none text-sm">
               <LogOut className="w-4 h-4" />
               Logout
             </Button>
@@ -223,7 +224,7 @@ export default function TeamDashboard() {
         {hasRole('admin') ? (
           <>
             {/* Admin Dashboard */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 mb-8">
               <Card className="border-0 shadow-sm bg-gradient-to-br from-blue-50 to-blue-100/50 hover:shadow-md transition-all duration-200">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
                   <CardTitle className="text-sm font-medium text-slate-600">Total Members</CardTitle>
@@ -384,22 +385,23 @@ export default function TeamDashboard() {
                   </DialogContent>
                 </Dialog>
               </CardHeader>
-              <CardContent>
+              <CardContent className="p-0">
                 {membersLoading ? (
                   <div className="text-center py-8">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
                     <p>Loading team members...</p>
                   </div>
                 ) : (
-                  <Table>
-                    <TableHeader>
-                      <TableRow className="bg-slate-50 hover:bg-slate-50">
-                        <TableHead className="text-slate-900 bg-slate-50 font-semibold">Name</TableHead>
-                        <TableHead className="text-slate-900 bg-slate-50 font-semibold">Email</TableHead>
-                        <TableHead className="text-slate-900 bg-slate-50 font-semibold">Role</TableHead>
-                        <TableHead className="text-slate-900 bg-slate-50 font-semibold">Status</TableHead>
-                        <TableHead className="text-slate-900 bg-slate-50 font-semibold">Last Login</TableHead>
-                        <TableHead className="text-slate-900 bg-slate-50 font-semibold">Actions</TableHead>
+                  <div className="overflow-x-auto">
+                    <Table>
+                      <TableHeader>
+                        <TableRow className="bg-slate-50 hover:bg-slate-50">
+                          <TableHead className="text-slate-900 bg-slate-50 font-semibold min-w-[120px]">Name</TableHead>
+                          <TableHead className="text-slate-900 bg-slate-50 font-semibold min-w-[200px]">Email</TableHead>
+                          <TableHead className="text-slate-900 bg-slate-50 font-semibold min-w-[100px]">Role</TableHead>
+                          <TableHead className="text-slate-900 bg-slate-50 font-semibold min-w-[100px]">Status</TableHead>
+                          <TableHead className="text-slate-900 bg-slate-50 font-semibold">Last Login</TableHead>
+                          <TableHead className="text-slate-900 bg-slate-50 font-semibold">Actions</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -454,6 +456,7 @@ export default function TeamDashboard() {
                       ))}
                     </TableBody>
                   </Table>
+                  </div>
                 )}
               </CardContent>
             </Card>
