@@ -84,7 +84,7 @@ export default function AnalyticsDashboard() {
         <div className="flex items-center gap-4 w-full sm:w-auto">
           <Button 
             variant="outline" 
-            onClick={() => navigate('/admin')}
+            onClick={() => navigate('/team')}
             className="flex items-center gap-2 text-[#1a2332] hover:text-white hover:bg-[#1a2332] border-[#1a2332]"
           >
             <ArrowLeft className="w-4 h-4" />
