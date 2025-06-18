@@ -227,14 +227,14 @@ export default function InteractiveValuationSlider() {
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="px-2 sm:px-4">
-            <div className="flex justify-between text-xs sm:text-sm text-gray-500 mb-2">
+            <div className="flex justify-between text-xs sm:text-sm text-slate-800 mb-2 bg-white/90 backdrop-blur-sm rounded px-2 py-1 font-semibold">
               <span>F</span>
               <span>D</span>
               <span>C</span>
               <span>B</span>
               <span>A</span>
             </div>
-            <div className="flex justify-between text-xs text-gray-400 mb-4">
+            <div className="flex justify-between text-xs text-slate-600 mb-4 bg-white/80 backdrop-blur-sm rounded px-2 py-1">
               <span>Poor</span>
               <span className="hidden sm:inline">Below Avg</span>
               <span className="hidden sm:inline">Average</span>
