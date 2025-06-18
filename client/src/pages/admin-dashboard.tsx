@@ -10,7 +10,7 @@ export default function AdminDashboard() {
   const [, navigate] = useLocation();
 
   if (!isAuthenticated) {
-    return <AdminLogin />;
+    return <AdminLogin onLoginSuccess={() => {}} />;
   }
 
   return (

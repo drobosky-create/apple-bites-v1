@@ -345,10 +345,10 @@ export default function TeamDashboard() {
                                     <SelectValue placeholder="Select a role" />
                                   </SelectTrigger>
                                 </FormControl>
-                                <SelectContent>
-                                  <SelectItem value="member">Member</SelectItem>
-                                  <SelectItem value="manager">Manager</SelectItem>
-                                  <SelectItem value="admin">Admin</SelectItem>
+                                <SelectContent className="bg-white border-[#1a2332] shadow-lg">
+                                  <SelectItem value="member" className="hover:bg-[#1a2332]/10 focus:bg-[#1a2332]/10">Member</SelectItem>
+                                  <SelectItem value="manager" className="hover:bg-[#1a2332]/10 focus:bg-[#1a2332]/10">Manager</SelectItem>
+                                  <SelectItem value="admin" className="hover:bg-[#1a2332]/10 focus:bg-[#1a2332]/10">Admin</SelectItem>
                                 </SelectContent>
                               </Select>
                               <FormMessage />
@@ -442,14 +442,34 @@ export default function TeamDashboard() {
                                 {member.isActive ? 'Deactivate' : 'Activate'}
                               </Button>
                               {member.id !== user?.id && (
-                                <Button
-                                  size="sm"
-                                  variant="outline"
-                                  onClick={() => deleteMemberMutation.mutate(member.id)}
-                                  className="text-red-600 hover:text-red-700"
-                                >
-                                  <Trash2 className="w-4 h-4" />
-                                </Button>
+                                <AlertDialog>
+                                  <AlertDialogTrigger asChild>
+                                    <Button
+                                      size="sm"
+                                      variant="outline"
+                                      className="text-red-600 hover:text-red-700"
+                                    >
+                                      <Trash2 className="w-4 h-4" />
+                                    </Button>
+                                  </AlertDialogTrigger>
+                                  <AlertDialogContent>
+                                    <AlertDialogHeader>
+                                      <AlertDialogTitle>Are you sure you want to delete this user?</AlertDialogTitle>
+                                      <AlertDialogDescription>
+                                        This action cannot be undone. This will permanently delete {member.firstName} {member.lastName}'s account and remove all of their data from our servers.
+                                      </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                      <AlertDialogAction
+                                        onClick={() => deleteMemberMutation.mutate(member.id)}
+                                        className="bg-red-600 hover:bg-red-700"
+                                      >
+                                        Delete User
+                                      </AlertDialogAction>
+                                    </AlertDialogFooter>
+                                  </AlertDialogContent>
+                                </AlertDialog>
                               )}
                             </div>
                           </TableCell>

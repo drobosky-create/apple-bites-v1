@@ -9,9 +9,11 @@ import { TrendingUp, Users, DollarSign, FileText, Download, Eye, LogOut, ArrowLe
 import { ValuationAssessment } from "@shared/schema";
 import AdminLogin from "@/components/admin-login";
 import { useAdminAuth } from "@/hooks/use-admin-auth";
+import { useLocation } from "wouter";
 
 export default function AnalyticsDashboard() {
   const { isAuthenticated, isLoading: authLoading, login, logout } = useAdminAuth();
+  const [, navigate] = useLocation();
 
   const { data: assessments, isLoading } = useQuery<ValuationAssessment[]>({
     queryKey: ['/api/analytics/assessments'],
@@ -82,7 +84,7 @@ export default function AnalyticsDashboard() {
         <div className="flex items-center gap-4 w-full sm:w-auto">
           <Button 
             variant="outline" 
-            onClick={() => window.location.href = '/admin'}
+            onClick={() => navigate('/admin')}
             className="flex items-center gap-2 text-[#1a2332] hover:text-white hover:bg-[#1a2332] border-[#1a2332]"
           >
             <ArrowLeft className="w-4 h-4" />
