@@ -80,22 +80,23 @@ export default function AnalyticsDashboard() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-      <div className="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div className="flex items-center gap-4 w-full sm:w-auto">
+      <div className="mb-8 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+        <div className="flex items-center gap-4 w-full lg:w-auto">
           <Button 
             variant="outline" 
             onClick={() => navigate('/team')}
-            className="flex items-center gap-2 text-[#1a2332] hover:text-white hover:bg-[#1a2332] border-[#1a2332]"
+            className="flex items-center gap-2 text-[#1a2332] hover:text-white hover:bg-[#1a2332] border-[#1a2332] flex-shrink-0"
           >
             <ArrowLeft className="w-4 h-4" />
-            Back
+            <span className="hidden sm:inline">Back to Dashboard</span>
+            <span className="sm:hidden">Back</span>
           </Button>
-          <div className="flex-1">
-            <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">Analytics Dashboard</h1>
-            <p className="text-slate-600 mt-2 text-sm sm:text-base">Comprehensive insights into business valuations and lead performance</p>
+          <div className="flex-1 min-w-0">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 truncate">Analytics Dashboard</h1>
+            <p className="text-slate-600 mt-2 text-sm sm:text-base lg:text-lg">Comprehensive insights into business valuations and lead performance</p>
           </div>
         </div>
-        <Button variant="outline" onClick={logout} className="flex items-center gap-2 w-full sm:w-auto">
+        <Button variant="outline" onClick={logout} className="flex items-center gap-2 w-full sm:w-auto lg:w-auto flex-shrink-0">
           <LogOut className="w-4 h-4" />
           Logout
         </Button>

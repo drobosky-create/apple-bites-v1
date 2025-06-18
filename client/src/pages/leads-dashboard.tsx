@@ -246,21 +246,23 @@ export default function LeadsDashboard() {
             <Card key={lead.id} className="p-4 sm:p-6 hover:shadow-md transition-shadow overflow-hidden">
               <div className="flex items-start justify-between">
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center flex-wrap gap-2 sm:gap-4 mb-3">
-                    <div className="flex items-center gap-2 min-w-0">
+                  <div className="flex items-center flex-wrap gap-2 sm:gap-4 lg:gap-6 mb-3">
+                    <div className="flex items-center gap-2 min-w-0 flex-1 sm:flex-initial">
                       <User className="w-4 h-4 text-gray-400 flex-shrink-0" />
                       <h3 className="text-lg font-semibold text-gray-900 truncate">
                         {lead.firstName} {lead.lastName}
                       </h3>
                     </div>
-                    <Badge className={`${getStatusColor(lead.leadStatus || 'new')} flex-shrink-0`}>
-                      {lead.leadStatus}
-                    </Badge>
-                    <div className="flex items-center gap-1">
-                      <TrendingUp className="w-4 h-4 text-gray-400" />
-                      <span className={`font-medium ${getScoreColor(lead.leadScore || 0)}`}>
-                        {lead.leadScore}/100
-                      </span>
+                    <div className="flex items-center gap-3 flex-wrap">
+                      <Badge className={`${getStatusColor(lead.leadStatus || 'new')} flex-shrink-0`}>
+                        {lead.leadStatus}
+                      </Badge>
+                      <div className="flex items-center gap-1 flex-shrink-0">
+                        <TrendingUp className="w-4 h-4 text-gray-400" />
+                        <span className={`font-medium ${getScoreColor(lead.leadScore || 0)}`}>
+                          {lead.leadScore}/100
+                        </span>
+                      </div>
                     </div>
                   </div>
 
