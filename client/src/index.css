@@ -358,6 +358,23 @@
     color: white !important;
   }
 
+  /* Fix form labels and text to be dark colored */
+  label,
+  .form-label,
+  [data-slot="label"],
+  .text-sm,
+  p {
+    color: rgb(51 65 85) !important;
+  }
+
+  /* Form inputs should have dark text on light background */
+  input:not([placeholder*="Search"]),
+  textarea,
+  select {
+    color: rgb(51 65 85) !important;
+    background-color: rgb(248 250 252) !important;
+  }
+
   /* Override analytics dashboard tabs and navigation */
   [role="tablist"] button,
   .tabs-trigger,

@@ -60,27 +60,27 @@ export default function ValueCalculator() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="mb-12 flex items-start justify-between">
-          <div className="space-y-2">
-            <h1 className="text-4xl font-bold text-slate-900">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-12">
+        <div className="mb-6 sm:mb-12 flex flex-col sm:flex-row items-start justify-between gap-4">
+          <div className="space-y-2 flex-1">
+            <h1 className="text-2xl sm:text-4xl font-bold text-slate-900">
               Value Improvement Calculator
             </h1>
-            <p className="text-lg text-slate-600 max-w-2xl">
+            <p className="text-sm sm:text-lg text-slate-600 max-w-2xl">
               Explore how improving your operational grades affects your business valuation and discover opportunities for growth
             </p>
           </div>
           <Button
             variant="outline"
-            onClick={() => setLocation('/results')}
-            className="flex items-center gap-2 bg-white/80 backdrop-blur-sm border-slate-200 hover:bg-white hover:shadow-md transition-all duration-200"
+            onClick={() => setLocation('/')}
+            className="flex items-center gap-2 bg-white/80 backdrop-blur-sm border-slate-200 hover:bg-white hover:shadow-md transition-all duration-200 w-full sm:w-auto"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Assessment
           </Button>
         </div>
 
-        <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-slate-200/60 p-8">
+        <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-slate-200/60 p-4 sm:p-8">
           <InteractiveValuationSlider />
         </div>
       </div>

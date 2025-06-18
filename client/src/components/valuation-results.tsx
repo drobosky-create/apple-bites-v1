@@ -53,19 +53,19 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-sm h-screen flex flex-col">
-      <div className="p-3 border-b border-slate-200 flex-shrink-0">
+    <div className="bg-white rounded-lg shadow-sm min-h-screen flex flex-col">
+      <div className="p-4 border-b border-slate-200 flex-shrink-0">
         <div className="flex items-center space-x-3">
           <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
             <CheckCircle className="w-4 h-4 text-green-600" />
           </div>
           <div>
-            <h3 className="text-base font-semibold text-slate-900">Valuation Complete</h3>
-            <p className="text-xs text-slate-600">Your business valuation report has been generated successfully.</p>
+            <h3 className="text-lg font-semibold text-slate-900">Valuation Complete</h3>
+            <p className="text-sm text-slate-600">Your business valuation report has been generated successfully.</p>
           </div>
         </div>
       </div>
-      <div className="flex-1 p-3 space-y-3 overflow-y-auto">
+      <div className="flex-1 p-4 space-y-4 overflow-y-auto">
         {/* Valuation Summary */}
         <div className="bg-gradient-to-r from-primary/5 to-blue-50 rounded-lg p-4 border border-primary/20">
           <h4 className="text-xl font-bold text-slate-900 mb-3">Estimated Business Value</h4>
@@ -85,20 +85,20 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
           </div>
           
           {/* Primary CTAs after valuation */}
-          <div className="mt-4">
-            <div className="flex gap-2 justify-center">
-              <Button 
-                onClick={handleDownloadPDF}
-                className="flex-1 heritage-gradient text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center justify-center shadow-sm hover:shadow-md transition-all duration-200"
-              >
-                <Download className="mr-1 w-3 h-3" />
-                Download Full Report
-              </Button>
+          <div className="mt-4 space-y-3">
+            <Button 
+              onClick={handleDownloadPDF}
+              className="w-full heritage-gradient text-white px-4 py-3 rounded-lg text-sm font-medium flex items-center justify-center shadow-sm hover:shadow-md transition-all duration-200"
+            >
+              <Download className="mr-2 w-4 h-4" />
+              Download Full Report
+            </Button>
 
+            <div className="flex gap-2">
               <Button 
                 onClick={handleExploreImprovements}
                 variant="outline"
-                className="flex-1 px-4 py-2 rounded-lg text-sm font-medium border-[#1a2332] text-[#1a2332] hover:bg-[#1a2332] hover:text-white flex items-center justify-center"
+                className="flex-1 px-3 py-2 rounded-lg text-xs font-medium border-[#1a2332] text-[#1a2332] hover:bg-[#1a2332] hover:text-white flex items-center justify-center"
               >
                 <Calculator className="mr-1 w-3 h-3" />
                 Explore Value Improvements
@@ -106,7 +106,7 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
 
               <Button 
                 onClick={handleScheduleConsultation}
-                className="flex-1 px-4 py-2 rounded-lg text-sm font-medium bg-[#f5c842] hover:bg-[#e6b63a] text-[#1a2332] flex items-center justify-center shadow-sm hover:shadow-md transition-all duration-200"
+                className="flex-1 px-3 py-2 rounded-lg text-xs font-medium bg-[#f5c842] hover:bg-[#e6b63a] text-[#1a2332] flex items-center justify-center shadow-sm hover:shadow-md transition-all duration-200"
               >
                 <Calendar className="mr-1 w-3 h-3" />
                 Schedule Consultation

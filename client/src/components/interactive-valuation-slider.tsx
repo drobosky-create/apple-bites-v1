@@ -214,26 +214,29 @@ export default function InteractiveValuationSlider() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div className="px-4">
-            <div className="flex justify-between text-sm text-gray-500 mb-2">
+          <div className="px-2 sm:px-4">
+            <div className="flex justify-between text-xs sm:text-sm text-gray-500 mb-4">
               <span>F - Poor</span>
-              <span>C - Average</span>
+              <span className="hidden sm:inline">C - Average</span>
+              <span className="sm:hidden">C</span>
               <span>A - Excellent</span>
             </div>
-            <Slider
-              value={[gradeToNumber(sliderGrade)]}
-              onValueChange={(value) => setSliderGrade(numberToGrade(value[0]))}
-              max={4}
-              min={0}
-              step={1}
-              className="w-full"
-            />
-            <div className="flex justify-center mt-4">
+            <div className="px-2">
+              <Slider
+                value={[gradeToNumber(sliderGrade)]}
+                onValueChange={(value) => setSliderGrade(numberToGrade(value[0]))}
+                max={4}
+                min={0}
+                step={1}
+                className="w-full"
+              />
+            </div>
+            <div className="flex justify-center mt-6">
               <div className="text-center">
-                <div className="text-2xl font-bold text-slate-900 transition-all duration-300">
+                <div className="text-2xl sm:text-3xl font-bold text-slate-900 transition-all duration-300">
                   Grade: {sliderGrade}
                 </div>
-                <div className="text-sm text-slate-600">
+                <div className="text-sm text-slate-600 mt-1">
                   Current: {baseGrade}
                 </div>
               </div>
