@@ -97,6 +97,72 @@ export class GoHighLevelService {
     }
   }
 
+  async sendTeamWelcomeEmail(teamMemberData: {
+    email: string;
+    firstName: string;
+    lastName: string;
+    subject: string;
+    emailContent: string;
+    isTeamMember: boolean;
+  }): Promise<{
+    contactCreated: boolean;
+    emailSent: boolean;
+    webhookSent: boolean;
+  }> {
+    try {
+      // Create or update contact for team member
+      const contactData: GoHighLevelContact = {
+        firstName: teamMemberData.firstName,
+        lastName: teamMemberData.lastName,
+        email: teamMemberData.email,
+        tags: ['Team Member', 'Internal User'],
+        customFields: {
+          'user_type': 'team_member',
+          'account_created_date': new Date().toISOString()
+        }
+      };
+
+      const contactResult = await this.createOrUpdateContact(contactData);
+      
+      // Send welcome email
+      const emailData: GoHighLevelEmailPayload = {
+        contactId: contactResult.contactId,
+        email: teamMemberData.email,
+        subject: teamMemberData.subject,
+        htmlContent: teamMemberData.emailContent
+      };
+
+      const emailSent = await this.sendEmail(emailData);
+
+      // Send webhook notification
+      const webhookData = {
+        event: 'team_member_created',
+        teamMember: {
+          email: teamMemberData.email,
+          firstName: teamMemberData.firstName,
+          lastName: teamMemberData.lastName,
+          createdAt: new Date().toISOString()
+        },
+        timestamp: new Date().toISOString()
+      };
+
+      const webhookSent = await this.sendWebhook(webhookData);
+
+      return {
+        contactCreated: !!contactResult,
+        emailSent,
+        webhookSent
+      };
+    } catch (error) {
+      console.error('Error processing team member welcome email:', error);
+      return {
+        contactCreated: false,
+        emailSent: false,
+        webhookSent: false
+      };
+    }
+  }
+
   async sendWebhook(data: any): Promise<boolean> {
     try {
       const response = await fetch(this.webhookUrl, {
