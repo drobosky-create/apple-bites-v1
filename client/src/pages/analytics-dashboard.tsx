@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } from "recharts";
-import { TrendingUp, Users, DollarSign, FileText, Download, Eye, LogOut } from "lucide-react";
+import { TrendingUp, Users, DollarSign, FileText, Download, Eye, LogOut, ArrowLeft } from "lucide-react";
 import { ValuationAssessment } from "@shared/schema";
 import AdminLogin from "@/components/admin-login";
 import { useAdminAuth } from "@/hooks/use-admin-auth";
@@ -79,9 +79,19 @@ export default function AnalyticsDashboard() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
       <div className="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">Analytics Dashboard</h1>
-          <p className="text-slate-600 mt-2 text-sm sm:text-base">Comprehensive insights into business valuations and lead performance</p>
+        <div className="flex items-center gap-4 w-full sm:w-auto">
+          <Button 
+            variant="outline" 
+            onClick={() => window.location.href = '/admin'}
+            className="flex items-center gap-2 text-[#1a2332] hover:text-white hover:bg-[#1a2332] border-[#1a2332]"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back
+          </Button>
+          <div className="flex-1">
+            <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">Analytics Dashboard</h1>
+            <p className="text-slate-600 mt-2 text-sm sm:text-base">Comprehensive insights into business valuations and lead performance</p>
+          </div>
         </div>
         <Button variant="outline" onClick={logout} className="flex items-center gap-2 w-full sm:w-auto">
           <LogOut className="w-4 h-4" />
@@ -89,7 +99,7 @@ export default function AnalyticsDashboard() {
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 mb-8">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Assessments</CardTitle>
