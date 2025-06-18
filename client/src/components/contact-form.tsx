@@ -19,19 +19,19 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
 
   return (
     <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-sm border border-slate-200/60">
-      <div className="p-8 border-b border-slate-200/60 bg-gradient-to-r from-slate-50/80 to-blue-50/40 rounded-t-xl">
+      <div className="p-4 sm:p-8 border-b border-slate-200/60 bg-gradient-to-r from-slate-50/80 to-blue-50/40 rounded-t-xl">
         <div className="flex items-center gap-3 mb-3">
           <div className="p-2 bg-blue-100 rounded-lg">
-            <Shield className="w-5 h-5 text-blue-600" />
+            <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
           </div>
-          <h3 className="text-2xl font-bold text-slate-900">Contact Information</h3>
+          <h3 className="text-xl sm:text-2xl font-bold text-slate-900">Contact Information</h3>
         </div>
-        <p className="text-slate-600 leading-relaxed">Please provide your contact details to begin the comprehensive valuation assessment.</p>
+        <p className="text-sm sm:text-base text-slate-600 leading-relaxed">Please provide your contact details to begin the comprehensive valuation assessment.</p>
       </div>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="p-8 space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="p-4 sm:p-8 space-y-4 sm:space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             <FormField
               control={form.control}
               name="firstName"
@@ -81,7 +81,7 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
             )}
           />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             <FormField
               control={form.control}
               name="phone"
