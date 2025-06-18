@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Link } from 'wouter';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -541,6 +541,23 @@ export default function TeamDashboard() {
           </>
         )}
       </div>
+
+      {/* Password Change Modal */}
+      {user && (
+        <PasswordChangeModal
+          isOpen={showPasswordChangeModal}
+          onSuccess={() => {
+            setShowPasswordChangeModal(false);
+            // Refresh user data to update mustChangePassword flag
+            queryClient.invalidateQueries({ queryKey: ['/api/team/me'] });
+            toast({
+              title: 'Password Updated',
+              description: 'Your password has been successfully changed.',
+            });
+          }}
+          userEmail={user.email}
+        />
+      )}
     </div>
   );
 }
