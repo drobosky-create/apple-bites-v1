@@ -17,7 +17,7 @@ import NotFound from "@/pages/not-found";
 
 function Router() {
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col" style={{ backgroundColor: 'rgb(248 250 252)' }}>
+    <div className="min-h-screen bg-slate-50 flex flex-col" style={{ backgroundColor: 'rgb(248 250 252)', margin: 0, padding: 0, position: 'relative' }}>
       <Header />
       <Navigation />
       <main className="flex-1">

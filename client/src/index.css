@@ -42,17 +42,36 @@
     line-height: 1.5;
     background: rgb(248 250 252) !important;
     background-color: rgb(248 250 252) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    padding-top: 0 !important;
+    -webkit-padding-before: 0 !important;
+    -webkit-margin-before: 0 !important;
   }
   
   html {
     background: rgb(248 250 252) !important;
     background-color: rgb(248 250 252) !important;
+    height: 100%;
+    padding: 0;
+    margin: 0;
   }
   
   #root {
     background: rgb(248 250 252) !important;
     background-color: rgb(248 250 252) !important;
     min-height: 100vh;
+    min-height: 100dvh;
+    padding: 0;
+    margin: 0;
+  }
+
+  /* Handle mobile safe areas */
+  @supports (padding: max(0px)) {
+    #root {
+      padding-top: max(0px, env(safe-area-inset-top));
+      padding-bottom: max(0px, env(safe-area-inset-bottom));
+    }
   }
   
   h1, h2, h3, h4, h5, h6,
