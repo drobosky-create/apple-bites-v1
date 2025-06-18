@@ -42,10 +42,6 @@ const defaultFormData: ValuationFormData = {
     taxes: "",
     depreciation: "",
     amortization: "",
-    ownerSalary: "",
-    personalExpenses: "",
-    oneTimeExpenses: "",
-    otherAdjustments: "",
     adjustmentNotes: "",
   },
   adjustments: {

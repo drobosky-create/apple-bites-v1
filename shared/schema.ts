@@ -250,10 +250,6 @@ export const ebitdaSchema = z.object({
   taxes: z.string().min(1, "Tax expense is required"),
   depreciation: z.string().min(1, "Depreciation is required"),
   amortization: z.string().min(1, "Amortization is required"),
-  ownerSalary: z.string().optional(),
-  personalExpenses: z.string().optional(),
-  oneTimeExpenses: z.string().optional(),
-  otherAdjustments: z.string().optional(),
   adjustmentNotes: z.string().optional(),
 });
 
