@@ -1,0 +1,57 @@
+<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a2332;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2d3748;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#f5c842;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#e6b63a;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGradient)"/>
+  
+  <!-- Apple Logo Symbol -->
+  <circle cx="200" cy="200" r="50" fill="#dc2626"/>
+  <rect x="185" y="140" width="10" height="25" fill="#22c55e"/>
+  <ellipse cx="190" cy="140" rx="8" ry="4" fill="#22c55e"/>
+  
+  <!-- Main Title -->
+  <text x="300" y="200" font-family="Arial, sans-serif" font-size="72" font-weight="bold" fill="white">
+    Apple Bites
+  </text>
+  
+  <!-- Subtitle -->
+  <text x="300" y="260" font-family="Arial, sans-serif" font-size="48" font-weight="600" fill="url(#textGradient)">
+    Business Assessment
+  </text>
+  
+  <!-- Description -->
+  <text x="300" y="320" font-family="Arial, sans-serif" font-size="28" fill="#e2e8f0">
+    Professional Business Valuation Calculator
+  </text>
+  
+  <!-- Value Proposition -->
+  <text x="300" y="380" font-family="Arial, sans-serif" font-size="24" fill="#94a3b8">
+    • Comprehensive EBITDA Analysis
+  </text>
+  <text x="300" y="420" font-family="Arial, sans-serif" font-size="24" fill="#94a3b8">
+    • Expert Valuation Reports
+  </text>
+  <text x="300" y="460" font-family="Arial, sans-serif" font-size="24" fill="#94a3b8">
+    • Growth Opportunity Assessment
+  </text>
+  
+  <!-- CTA -->
+  <rect x="300" y="500" width="300" height="60" rx="30" fill="url(#textGradient)"/>
+  <text x="450" y="540" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#1a2332" text-anchor="middle">
+    Get Your Valuation
+  </text>
+  
+  <!-- Powered by -->
+  <text x="950" y="580" font-family="Arial, sans-serif" font-size="18" fill="#64748b">
+    Powered by Meritage Partners
+  </text>
+</svg>
