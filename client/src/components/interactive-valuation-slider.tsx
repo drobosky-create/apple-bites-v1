@@ -284,34 +284,34 @@ export default function InteractiveValuationSlider() {
               
               {/* Current Grade Indicator */}
               <div 
-                className="absolute top-0 h-12 sm:h-16 flex items-center justify-center transition-all duration-300 z-20"
+                className="absolute -top-6 h-12 sm:h-16 flex items-center justify-center transition-all duration-300 z-20"
                 style={{ 
                   left: `${(gradeToNumber(baseGrade) / 4) * 100}%`,
                   transform: 'translateX(-50%)'
                 }}
               >
                 <div className="flex flex-col items-center">
-                  <div className="w-0.5 h-12 sm:h-16 bg-gray-800 shadow-lg"></div>
-                  <div className="text-xs text-gray-800 mt-1 bg-white px-1 rounded shadow">
+                  <div className="text-xs text-gray-800 bg-white px-2 py-1 rounded shadow border border-gray-300 mb-1">
                     Current
                   </div>
+                  <div className="w-0.5 h-16 sm:h-20 bg-gray-800 shadow-lg"></div>
                 </div>
               </div>
               
               {/* Target Grade Indicator */}
               {sliderGrade !== baseGrade && (
                 <div 
-                  className="absolute top-0 h-12 sm:h-16 flex items-center justify-center transition-all duration-300 z-20"
+                  className="absolute -top-6 h-12 sm:h-16 flex items-center justify-center transition-all duration-300 z-20"
                   style={{ 
                     left: `${(gradeToNumber(sliderGrade) / 4) * 100}%`,
                     transform: 'translateX(-50%)'
                   }}
                 >
                   <div className="flex flex-col items-center">
-                    <div className="w-0.5 h-12 sm:h-16 bg-blue-600 shadow-lg"></div>
-                    <div className="text-xs text-blue-600 mt-1 bg-white px-1 rounded shadow">
+                    <div className="text-xs text-blue-600 bg-white px-2 py-1 rounded shadow border border-blue-300 mb-1">
                       Target
                     </div>
+                    <div className="w-0.5 h-16 sm:h-20 bg-blue-600 shadow-lg"></div>
                   </div>
                 </div>
               )}

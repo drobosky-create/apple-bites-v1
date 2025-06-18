@@ -99,8 +99,14 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
           {/* Primary CTAs after valuation */}
           <div className="mt-4 space-y-3">
             <Button 
-              onClick={handleDownloadPDF}
-              className="w-full heritage-gradient text-white px-4 py-3 rounded-lg text-sm font-medium flex items-center justify-center shadow-sm hover:shadow-md transition-all duration-200"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('PDF download button clicked');
+                handleDownloadPDF();
+              }}
+              type="button"
+              className="w-full heritage-gradient text-white px-4 py-3 rounded-lg text-sm font-medium flex items-center justify-center shadow-sm hover:shadow-md transition-all duration-200 active:scale-95"
             >
               <Download className="mr-2 w-4 h-4" />
               Download Full Report

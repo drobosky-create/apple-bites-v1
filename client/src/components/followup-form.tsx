@@ -136,12 +136,12 @@ export default function FollowUpForm({ form, onSubmit, onPrev, onDataChange, isS
             </div>
           </div>
 
-          <div className="flex justify-between pt-6">
+          <div className="flex flex-col sm:flex-row gap-3 sm:justify-between pt-6 mt-8">
             <Button 
               type="button" 
               variant="ghost" 
               onClick={onPrev}
-              className="bg-gradient-to-r from-slate-500 to-slate-600 text-white px-8 py-3 rounded-lg font-medium hover:from-slate-600 hover:to-slate-700 transition-all duration-200 shadow-md hover:shadow-lg"
+              className="bg-gradient-to-r from-slate-500 to-slate-600 text-white px-6 sm:px-8 py-3 rounded-lg font-medium hover:from-slate-600 hover:to-slate-700 transition-all duration-200 shadow-md hover:shadow-lg order-2 sm:order-1"
               disabled={isSubmitting}
             >
               <ArrowLeft className="mr-2 w-4 h-4" />
@@ -149,7 +149,7 @@ export default function FollowUpForm({ form, onSubmit, onPrev, onDataChange, isS
             </Button>
             <Button 
               type="submit" 
-              className="bg-green-600 text-white px-8 py-3 rounded-lg font-medium hover:bg-green-700 transition-colors focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+              className="bg-green-600 text-white px-6 sm:px-8 py-3 rounded-lg font-medium hover:bg-green-700 transition-colors focus:ring-2 focus:ring-green-500 focus:ring-offset-2 order-1 sm:order-2"
               disabled={isSubmitting}
             >
               <Send className="mr-2 w-4 h-4" />

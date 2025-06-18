@@ -167,17 +167,17 @@ export default function ValueDriversForm({ form, onNext, onPrev, onDataChange }:
             ))}
           </div>
 
-          <div className="flex justify-between pt-6">
+          <div className="flex flex-col sm:flex-row gap-3 sm:justify-between pt-6 mt-8">
             <Button 
               type="button" 
               variant="ghost" 
               onClick={onPrev}
-              className="bg-gradient-to-r from-slate-500 to-slate-600 text-white px-8 py-3 rounded-lg font-medium hover:from-slate-600 hover:to-slate-700 transition-all duration-200 shadow-md hover:shadow-lg"
+              className="bg-gradient-to-r from-slate-500 to-slate-600 text-white px-6 sm:px-8 py-3 rounded-lg font-medium hover:from-slate-600 hover:to-slate-700 transition-all duration-200 shadow-md hover:shadow-lg order-2 sm:order-1"
             >
               <ArrowLeft className="mr-2 w-4 h-4" />
               Previous
             </Button>
-            <Button type="submit" className="heritage-gradient text-white px-8 py-3 rounded-lg font-medium shadow-sm hover:shadow-md transition-all duration-200">
+            <Button type="submit" className="heritage-gradient text-white px-6 sm:px-8 py-3 rounded-lg font-medium shadow-sm hover:shadow-md transition-all duration-200 order-1 sm:order-2">
               Next: Follow-up Preferences
               <ArrowRight className="ml-2 w-4 h-4" />
             </Button>
