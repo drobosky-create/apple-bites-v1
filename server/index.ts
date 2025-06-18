@@ -10,12 +10,14 @@ app.use(express.json());
 // Session configuration for admin authentication
 app.use(session({
   secret: process.env.SESSION_SECRET || 'admin-session-secret-key',
-  resave: false,
+  resave: true,
   saveUninitialized: false,
+  rolling: true,
   cookie: {
-    secure: process.env.NODE_ENV === 'production', // Enable secure cookies in production
+    secure: false, // Set to false for development, true in production with HTTPS
     httpOnly: true,
-    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days to match team session
+    sameSite: 'lax'
   }
 }));
 app.use(express.urlencoded({ extended: false }));
