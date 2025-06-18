@@ -5,6 +5,37 @@
 @tailwind utilities;
 
 @layer base {
+  /* Force application to start at viewport top */
+  * {
+    box-sizing: border-box;
+  }
+
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    height: 100%;
+    width: 100%;
+    position: relative;
+  }
+
+  body {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+    -webkit-margin-before: 0 !important;
+    -webkit-padding-before: 0 !important;
+    -moz-margin-before: 0 !important;
+    -moz-padding-before: 0 !important;
+  }
+
+  #root {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100%;
+    min-height: 100vh;
+    position: relative;
+    top: 0;
+  }
+
   :root {
     /* Meritage Partners Brand Colors - Updated from Website */
     --meritage-navy: 26 35 50; /* #1a2332 - Deep navy from website */
@@ -42,30 +73,6 @@
     line-height: 1.5;
     background: rgb(248 250 252) !important;
     background-color: rgb(248 250 252) !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    padding-top: 0 !important;
-    -webkit-padding-before: 0 !important;
-    -webkit-margin-before: 0 !important;
-  }
-  
-  html {
-    background: rgb(248 250 252) !important;
-    background-color: rgb(248 250 252) !important;
-    height: 100%;
-    padding: 0;
-    margin: 0;
-    padding-top: 0 !important;
-    margin-top: 0 !important;
-  }
-  
-  #root {
-    background: rgb(248 250 252) !important;
-    background-color: rgb(248 250 252) !important;
-    min-height: 100vh;
-    min-height: 100dvh;
-    padding: 0;
-    margin: 0;
   }
 
   /* Handle mobile safe areas */

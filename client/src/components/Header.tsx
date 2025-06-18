@@ -7,7 +7,14 @@ export function Header() {
     <header 
       className="bg-[#0b2147] text-white shadow-lg" 
       style={{ 
-        backgroundColor: '#0b2147'
+        backgroundColor: '#0b2147',
+        position: 'relative',
+        top: 0,
+        left: 0,
+        right: 0,
+        margin: 0,
+        padding: 0,
+        zIndex: 10
       }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
