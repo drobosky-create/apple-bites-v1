@@ -60,6 +60,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const session = await storage.getTeamSession(sessionId);
       if (!session || session.expiresAt < new Date()) {
+        // Clean up expired session
+        if (session) {
+          await storage.deleteTeamSession(sessionId);
+        }
+        (req.session as any).teamSessionId = null;
         return res.status(401).json({ error: 'Session expired' });
       }
 
@@ -68,9 +73,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ error: 'Account inactive' });
       }
 
+      // Extend session on each request
+      const newExpiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
+      await storage.updateTeamSession(sessionId, newExpiresAt);
+
       req.user = teamMember;
       return next();
     } catch (error) {
+      console.error('Authentication middleware error:', error);
       return res.status(401).json({ error: 'Authentication failed' });
     }
   };

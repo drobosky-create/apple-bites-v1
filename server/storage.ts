@@ -47,6 +47,7 @@ export interface IStorage {
   deleteTeamMember(id: number): Promise<void>;
   createTeamSession(teamMemberId: number, sessionId: string, expiresAt: Date): Promise<TeamSession>;
   getTeamSession(sessionId: string): Promise<TeamSession | undefined>;
+  updateTeamSession(sessionId: string, expiresAt: Date): Promise<void>;
   deleteTeamSession(sessionId: string): Promise<void>;
 }
 
@@ -204,6 +205,12 @@ export class DatabaseStorage implements IStorage {
   async getTeamSession(sessionId: string): Promise<TeamSession | undefined> {
     const [session] = await db.select().from(teamSessions).where(eq(teamSessions.id, sessionId));
     return session;
+  }
+
+  async updateTeamSession(sessionId: string, expiresAt: Date): Promise<void> {
+    await db.update(teamSessions)
+      .set({ expiresAt })
+      .where(eq(teamSessions.id, sessionId));
   }
 
   async deleteTeamSession(sessionId: string): Promise<void> {
