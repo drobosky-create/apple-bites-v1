@@ -20,7 +20,7 @@ export default function ValuationForm() {
   const [location] = useLocation();
   
   // Check if we're on the results route and fetch latest assessment
-  const { data: assessments } = useQuery<ValuationAssessment[]>({
+  const { data: assessments, isLoading: assessmentsLoading } = useQuery<ValuationAssessment[]>({
     queryKey: ['/api/analytics/assessments'],
     enabled: location === '/results'
   });
@@ -39,10 +39,39 @@ export default function ValuationForm() {
     forms,
   } = useValuationForm();
 
-  // If we're on /results route and have assessments, show the latest result
-  if (location === '/results' && assessments && assessments.length > 0) {
-    const latestAssessment = assessments[assessments.length - 1];
-    return <ValuationResults results={latestAssessment} />;
+  // If we're on /results route, show loading or latest assessment
+  if (location === '/results') {
+    if (assessmentsLoading) {
+      return (
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <p className="text-slate-600">Loading your assessment results...</p>
+          </div>
+        </div>
+      );
+    }
+    
+    if (assessments && assessments.length > 0) {
+      const latestAssessment = assessments[assessments.length - 1];
+      return <ValuationResults results={latestAssessment} />;
+    }
+    
+    // If no assessments found, redirect to form
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+        <div className="max-w-md mx-auto text-center bg-white rounded-lg shadow-lg p-8">
+          <h2 className="text-2xl font-bold text-slate-900 mb-4">No Assessment Found</h2>
+          <p className="text-slate-600 mb-6">Complete a valuation assessment to view results.</p>
+          <button 
+            onClick={() => window.location.href = '/'}
+            className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+          >
+            Start Assessment
+          </button>
+        </div>
+      </div>
+    );
   }
 
   return (
