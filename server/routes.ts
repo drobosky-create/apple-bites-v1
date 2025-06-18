@@ -833,23 +833,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // PDF download endpoint
   app.get("/api/valuation/:id/download-pdf", async (req, res) => {
     try {
+      console.log(`PDF download requested for assessment ID: ${req.params.id}`);
       const id = parseInt(req.params.id);
+      
+      if (isNaN(id)) {
+        console.log('Invalid assessment ID provided');
+        return res.status(400).json({ error: "Invalid assessment ID" });
+      }
+      
       const assessment = await storage.getValuationAssessment(id);
+      console.log(`Assessment found: ${assessment ? 'Yes' : 'No'}`);
       
       if (!assessment) {
+        console.log(`Assessment with ID ${id} not found`);
         return res.status(404).json({ error: "Assessment not found" });
       }
 
+      console.log(`Generating PDF for company: ${assessment.company}`);
       // Generate PDF on demand
       const { generateValuationPDF } = await import("./pdf-generator");
       const pdfBuffer = await generateValuationPDF(assessment);
       
+      console.log(`PDF generated successfully, buffer size: ${pdfBuffer.length} bytes`);
+      
       res.setHeader('Content-Type', 'application/pdf');
       res.setHeader('Content-Disposition', `attachment; filename="${assessment.company || 'Business'}_Valuation_Report.pdf"`);
       res.send(pdfBuffer);
+      
+      console.log('PDF sent to client successfully');
     } catch (error) {
       console.error("Error generating PDF:", error);
-      res.status(500).json({ error: "Failed to generate PDF" });
+      res.status(500).json({ error: "Failed to generate PDF", details: error instanceof Error ? error.message : 'Unknown error' });
     }
   });
 

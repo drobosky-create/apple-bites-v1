@@ -23,9 +23,16 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
 
   const handleDownloadPDF = async () => {
     try {
+      console.log('Attempting to download PDF for assessment ID:', results.id);
       const response = await fetch(`/api/valuation/${results.id}/download-pdf`);
+      
+      console.log('PDF download response status:', response.status);
+      console.log('PDF download response headers:', Object.fromEntries(response.headers.entries()));
+      
       if (response.ok) {
         const blob = await response.blob();
+        console.log('PDF blob size:', blob.size);
+        
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
@@ -34,11 +41,16 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
         a.click();
         window.URL.revokeObjectURL(url);
         document.body.removeChild(a);
+        
+        console.log('PDF download initiated successfully');
       } else {
-        console.error('Failed to download PDF');
+        const errorText = await response.text();
+        console.error('Failed to download PDF:', response.status, errorText);
+        alert(`Failed to download PDF: ${response.status} - ${errorText}`);
       }
     } catch (error) {
       console.error('Error downloading PDF:', error);
+      alert(`Error downloading PDF: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   };
 
