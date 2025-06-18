@@ -407,77 +407,93 @@ export default function TeamDashboard() {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {teamMembers?.map((member) => (
-                        <TableRow key={member.id} className="hover:bg-slate-50/50 border-b border-blue-200">
-                          <TableCell className="font-medium">
-                            {member.firstName} {member.lastName}
-                          </TableCell>
-                          <TableCell>{member.email}</TableCell>
-                          <TableCell>
-                            <Badge className={getRoleBadgeColor(member.role)}>
-                              {member.role}
-                            </Badge>
-                          </TableCell>
-                          <TableCell>
-                            <Badge variant={member.isActive ? 'default' : 'secondary'}>
-                              {member.isActive ? 'Active' : 'Inactive'}
-                            </Badge>
-                          </TableCell>
-                          <TableCell>
-                            {member.lastLoginAt
-                              ? new Date(member.lastLoginAt).toLocaleDateString()
-                              : 'Never'}
-                          </TableCell>
-                          <TableCell>
-                            <div className="flex flex-col sm:flex-row gap-2 lg:gap-3">
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                onClick={() =>
-                                  updateMemberMutation.mutate({
-                                    id: member.id,
-                                    updates: { isActive: !member.isActive },
-                                  })
-                                }
-                                className="text-xs lg:text-sm whitespace-nowrap"
-                              >
-                                {member.isActive ? 'Deactivate' : 'Activate'}
-                              </Button>
-                              {member.id !== user?.id && (
-                                <AlertDialog>
-                                  <AlertDialogTrigger asChild>
-                                    <Button
-                                      size="sm"
-                                      variant="outline"
-                                      className="text-red-600 hover:text-red-700 text-xs lg:text-sm"
-                                    >
-                                      <Trash2 className="w-4 h-4" />
-                                      <span className="hidden lg:inline ml-1">Delete</span>
-                                    </Button>
-                                  </AlertDialogTrigger>
-                                  <AlertDialogContent>
-                                    <AlertDialogHeader>
-                                      <AlertDialogTitle>Are you sure you want to delete this user?</AlertDialogTitle>
-                                      <AlertDialogDescription>
-                                        This action cannot be undone. This will permanently delete {member.firstName} {member.lastName}'s account and remove all of their data from our servers.
-                                      </AlertDialogDescription>
-                                    </AlertDialogHeader>
-                                    <AlertDialogFooter>
-                                      <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                      <AlertDialogAction
-                                        onClick={() => deleteMemberMutation.mutate(member.id)}
-                                        className="bg-red-600 hover:bg-red-700"
-                                      >
-                                        Delete User
-                                      </AlertDialogAction>
-                                    </AlertDialogFooter>
-                                  </AlertDialogContent>
-                                </AlertDialog>
-                              )}
-                            </div>
+                      {membersLoading ? (
+                        <TableRow>
+                          <TableCell colSpan={6} className="text-center py-8 text-gray-500">
+                            Loading team members...
                           </TableCell>
                         </TableRow>
-                      ))}
+                      ) : !teamMembers || teamMembers.length === 0 ? (
+                        <TableRow>
+                          <TableCell colSpan={6} className="text-center py-8 text-gray-500">
+                            {!isAuthenticated ? 'Please log in to view team members' : 
+                             !hasRole('admin') ? 'Admin access required to view team members' :
+                             'No team members found. Create your first team member to get started.'}
+                          </TableCell>
+                        </TableRow>
+                      ) : (
+                        teamMembers.map((member) => (
+                          <TableRow key={member.id} className="hover:bg-slate-50/50 border-b border-blue-200">
+                            <TableCell className="font-medium">
+                              {member.firstName} {member.lastName}
+                            </TableCell>
+                            <TableCell>{member.email}</TableCell>
+                            <TableCell>
+                              <Badge className={getRoleBadgeColor(member.role)}>
+                                {member.role}
+                              </Badge>
+                            </TableCell>
+                            <TableCell>
+                              <Badge variant={member.isActive ? 'default' : 'secondary'}>
+                                {member.isActive ? 'Active' : 'Inactive'}
+                              </Badge>
+                            </TableCell>
+                            <TableCell>
+                              {member.lastLoginAt
+                                ? new Date(member.lastLoginAt).toLocaleDateString()
+                                : 'Never'}
+                            </TableCell>
+                            <TableCell>
+                              <div className="flex flex-col sm:flex-row gap-2 lg:gap-3">
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() =>
+                                    updateMemberMutation.mutate({
+                                      id: member.id,
+                                      updates: { isActive: !member.isActive },
+                                    })
+                                  }
+                                  className="text-xs lg:text-sm whitespace-nowrap"
+                                >
+                                  {member.isActive ? 'Deactivate' : 'Activate'}
+                                </Button>
+                                {member.id !== user?.id && (
+                                  <AlertDialog>
+                                    <AlertDialogTrigger asChild>
+                                      <Button
+                                        size="sm"
+                                        variant="outline"
+                                        className="text-red-600 hover:text-red-700 text-xs lg:text-sm"
+                                      >
+                                        <Trash2 className="w-4 h-4" />
+                                        <span className="hidden lg:inline ml-1">Delete</span>
+                                      </Button>
+                                    </AlertDialogTrigger>
+                                    <AlertDialogContent>
+                                      <AlertDialogHeader>
+                                        <AlertDialogTitle>Are you sure you want to delete this user?</AlertDialogTitle>
+                                        <AlertDialogDescription>
+                                          This action cannot be undone. This will permanently delete {member.firstName} {member.lastName}'s account and remove all of their data from our servers.
+                                        </AlertDialogDescription>
+                                      </AlertDialogHeader>
+                                      <AlertDialogFooter>
+                                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                        <AlertDialogAction
+                                          onClick={() => deleteMemberMutation.mutate(member.id)}
+                                          className="bg-red-600 hover:bg-red-700"
+                                        >
+                                          Delete User
+                                        </AlertDialogAction>
+                                      </AlertDialogFooter>
+                                    </AlertDialogContent>
+                                  </AlertDialog>
+                                )}
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        ))
+                      )}
                     </TableBody>
                   </Table>
                   </div>
