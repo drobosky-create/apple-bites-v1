@@ -126,7 +126,7 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
               Download Full Report
             </Button>
 
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2">
               <Button 
                 onClick={handleExploreImprovements}
                 variant="outline"

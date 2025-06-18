@@ -17,6 +17,10 @@ export default function FollowUpForm({ form, onSubmit, onPrev, onDataChange, isS
   const handleSubmit = (data: FollowUpData) => {
     onDataChange(data);
     onSubmit();
+    // Scroll to top when generating report
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 100);
   };
 
   return (

@@ -189,19 +189,25 @@ export default function InteractiveValuationSlider() {
             <Badge variant="secondary" className={`${sliderCategory.bgColor} text-white`}>
               {sliderCategory.label}
             </Badge>
-            {potentialIncrease !== 0 && (
-              <div className="mt-3 p-3 bg-white rounded-lg border transition-all duration-300">
-                <div className="text-sm text-gray-600">
-                  {potentialIncrease > 0 ? 'Potential Increase' : 'Potential Decrease'}
+            <div className="mt-3 p-3 bg-white rounded-lg border min-h-[80px] flex flex-col justify-center">
+              {potentialIncrease !== 0 ? (
+                <>
+                  <div className="text-sm text-gray-600">
+                    {potentialIncrease > 0 ? 'Potential Increase' : 'Potential Decrease'}
+                  </div>
+                  <div className={`text-xl font-bold ${potentialIncrease > 0 ? 'text-blue-600' : 'text-red-600'}`}>
+                    {potentialIncrease > 0 ? '+' : ''}${Math.round(potentialIncrease).toLocaleString()}
+                  </div>
+                  <div className={`text-sm ${potentialIncrease > 0 ? 'text-blue-600' : 'text-red-600'}`}>
+                    ({potentialIncrease > 0 ? '+' : ''}{Math.round(percentageIncrease)}% change)
+                  </div>
+                </>
+              ) : (
+                <div className="text-sm text-gray-500 text-center">
+                  Move the slider to see potential value changes
                 </div>
-                <div className={`text-xl font-bold ${potentialIncrease > 0 ? 'text-blue-600' : 'text-red-600'}`}>
-                  {potentialIncrease > 0 ? '+' : ''}${Math.round(potentialIncrease).toLocaleString()}
-                </div>
-                <div className={`text-sm ${potentialIncrease > 0 ? 'text-blue-600' : 'text-red-600'}`}>
-                  ({potentialIncrease > 0 ? '+' : ''}{Math.round(percentageIncrease)}% change)
-                </div>
-              </div>
-            )}
+              )}
+            </div>
           </CardContent>
         </Card>
       </div>

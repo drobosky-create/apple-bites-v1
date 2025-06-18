@@ -152,6 +152,18 @@
     font-style: normal !important;
     font-weight: 400 !important;
   }
+
+  /* Force numeric keypad on mobile for number inputs */
+  input[type="number"] {
+    -webkit-appearance: none;
+    -moz-appearance: textfield;
+  }
+
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
   
   h1, h2, h3, h4, h5, h6,
   .font-heading,
