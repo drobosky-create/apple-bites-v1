@@ -647,45 +647,52 @@ export async function registerRoutes(app: Express): Promise<Server> {
         hashedPassword,
       } as any);
 
-      // Send welcome email to new team member
+      // Send welcome email via GoHighLevel
       try {
-        const welcomeEmailSubject = `Welcome to Apple Bites Business Assessment - Account Created`;
-        const welcomeEmailContent = `
-          <h2>Welcome to Apple Bites Business Assessment</h2>
-          <p>Hello ${memberData.firstName} ${memberData.lastName},</p>
-          <p>Your account has been successfully created with the following details:</p>
-          <ul>
-            <li><strong>Email:</strong> ${memberData.email}</li>
-            <li><strong>Role:</strong> ${memberData.role}</li>
-            <li><strong>Temporary Password:</strong> ${password}</li>
-          </ul>
-          <p>Please log in at your earliest convenience and change your password for security.</p>
-          <p>Best regards,<br>Apple Bites Team</p>
-        `;
+        const welcomeEmailData = {
+          contactId: null, // Will create contact if needed
+          email: memberData.email,
+          firstName: memberData.firstName,
+          lastName: memberData.lastName,
+          phone: '', // Optional for team members
+          subject: 'Welcome to Apple Bites Business Assessment - Team Account Created',
+          emailContent: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+              <h2 style="color: #1e40af;">Welcome to Apple Bites Business Assessment</h2>
+              <p>Hello ${memberData.firstName} ${memberData.lastName},</p>
+              <p>Your team account has been successfully created! You now have access to the Apple Bites Business Assessment admin dashboard.</p>
+              
+              <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                <h3 style="color: #334155; margin-top: 0;">Account Details:</h3>
+                <ul style="list-style: none; padding: 0;">
+                  <li style="margin: 8px 0;"><strong>Email:</strong> ${memberData.email}</li>
+                  <li style="margin: 8px 0;"><strong>Role:</strong> ${memberData.role}</li>
+                  <li style="margin: 8px 0;"><strong>Temporary Password:</strong> ${password}</li>
+                </ul>
+              </div>
+              
+              <div style="background-color: #fef3c7; padding: 15px; border-radius: 8px; border-left: 4px solid #f59e0b;">
+                <p style="margin: 0;"><strong>Important:</strong> Please log in at your earliest convenience and change your password for security. You'll be prompted to update your password on first login.</p>
+              </div>
+              
+              <p style="margin-top: 20px;">You can access the admin dashboard at: <a href="https://applebites.ai/admin" style="color: #1e40af;">https://applebites.ai/admin</a></p>
+              
+              <p>Best regards,<br>
+              <strong>Meritage Partners Team</strong><br>
+              Apple Bites Business Assessment</p>
+            </div>
+          `,
+          isTeamMember: true
+        };
 
-        // Use environment variables for email configuration
-        const nodemailer = require('nodemailer');
-        const transporter = nodemailer.createTransporter({
-          host: process.env.SMTP_HOST || 'smtp.gmail.com',
-          port: process.env.SMTP_PORT || 587,
-          secure: false,
-          auth: {
-            user: process.env.SMTP_USER,
-            pass: process.env.SMTP_PASS
-          }
+        const ghlResult = await goHighLevelService.sendTeamWelcomeEmail(welcomeEmailData);
+        console.log(`Welcome email sent to team member ${memberData.email}:`, {
+          emailSent: ghlResult.emailSent,
+          contactCreated: ghlResult.contactCreated
         });
-
-        if (process.env.SMTP_USER && process.env.SMTP_PASS) {
-          await transporter.sendMail({
-            from: `"Apple Bites" <${process.env.SMTP_USER}>`,
-            to: memberData.email,
-            subject: welcomeEmailSubject,
-            html: welcomeEmailContent
-          });
-        }
       } catch (emailError) {
-        console.log('Email notification failed:', emailError);
-        // Don't fail the user creation if email fails
+        console.error('Failed to send welcome email via GHL:', emailError);
+        // Don't fail the entire operation if email fails
       }
 
       const { hashedPassword: _, ...memberWithoutPassword } = newMember;
