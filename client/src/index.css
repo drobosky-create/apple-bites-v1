@@ -218,15 +218,17 @@
     background-color: rgb(248 250 252) !important;
   }
 
-  /* Prevent yellow overscroll background on mobile */
+  /* Prevent overscroll background on mobile */
   html,
   body {
-    overscroll-behavior: none !important;
+    overscroll-behavior-y: none !important;
     -webkit-overflow-scrolling: touch !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
-  /* Force consistent background across all elements */
-  *, *::before, *::after {
+  /* Force consistent background across all elements except header */
+  *:not(header):not(header *), *:not(header):not(header *)::before, *:not(header):not(header *)::after {
     background-color: inherit;
   }
 
