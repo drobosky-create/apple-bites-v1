@@ -10,10 +10,21 @@ import LoadingModal from "@/components/loading-modal";
 import { Shield, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import appleBitesLogo from "@assets/Apple Bites Business Assessment V2_1750116954168.png";
+import { useLocation } from "wouter";
+import { useQuery } from "@tanstack/react-query";
+import type { ValuationAssessment } from "@shared/schema";
 
 import _2 from "@assets/2.png";
 
 export default function ValuationForm() {
+  const [location] = useLocation();
+  
+  // Check if we're on the results route and fetch latest assessment
+  const { data: assessments } = useQuery<ValuationAssessment[]>({
+    queryKey: ['/api/analytics/assessments'],
+    enabled: location === '/results'
+  });
+
   const {
     currentStep,
     formData,
@@ -27,6 +38,12 @@ export default function ValuationForm() {
     isSubmitting,
     forms,
   } = useValuationForm();
+
+  // If we're on /results route and have assessments, show the latest result
+  if (location === '/results' && assessments && assessments.length > 0) {
+    const latestAssessment = assessments[assessments.length - 1];
+    return <ValuationResults results={latestAssessment} />;
+  }
 
   return (
     <div className="bg-gradient-to-br from-slate-50 to-blue-50 min-h-screen">

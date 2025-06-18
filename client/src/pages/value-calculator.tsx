@@ -72,7 +72,7 @@ export default function ValueCalculator() {
           </div>
           <Button
             variant="outline"
-            onClick={() => setLocation('/')}
+            onClick={() => setLocation('/results')}
             className="flex items-center gap-2 bg-white/80 backdrop-blur-sm border-slate-200 hover:bg-white hover:shadow-md transition-all duration-200 w-full sm:w-auto"
           >
             <ArrowLeft className="w-4 h-4" />

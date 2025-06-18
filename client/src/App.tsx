@@ -23,6 +23,7 @@ function Router() {
       <main className="flex-1">
         <Switch>
           <Route path="/" component={ValuationForm} />
+          <Route path="/results" component={ValuationForm} />
           <Route path="/value-calculator" component={ValueCalculator} />
           <Route path="/admin/analytics" component={AnalyticsDashboard} />
           <Route path="/admin/leads" component={LeadsDashboard} />
