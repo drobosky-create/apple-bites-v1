@@ -183,19 +183,19 @@ export default function TeamDashboard() {
         </div>
 
         {/* User Info and Actions */}
-        <div className="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <div className="flex items-center gap-4 bg-slate-50 rounded-xl shadow-sm border border-slate-200 px-4 sm:px-6 py-4 w-full sm:w-auto">
+        <div className="mb-8 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+          <div className="flex items-center gap-4 bg-slate-50 rounded-xl shadow-sm border border-slate-200 px-4 sm:px-6 lg:px-8 py-4 w-full lg:w-auto flex-1 lg:flex-initial">
             <div className="text-sm text-slate-700">
-              <div className="font-semibold text-base sm:text-lg">Welcome, {user?.firstName} {user?.lastName}</div>
+              <div className="font-semibold text-base sm:text-lg lg:text-xl">Welcome, {user?.firstName} {user?.lastName}</div>
               <div className="flex items-center gap-2 mt-1">
                 <Shield className="w-3 h-3 text-slate-400" />
-                <Badge className={`${getRoleBadgeColor(user?.role || '')} text-xs`}>
+                <Badge className={`${getRoleBadgeColor(user?.role || '')} text-xs lg:text-sm`}>
                   {user?.role?.toUpperCase()}
                 </Badge>
               </div>
             </div>
           </div>
-          <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
+          <div className="flex items-center gap-2 sm:gap-3 lg:gap-4 w-full sm:w-auto lg:w-auto flex-shrink-0">
             <Dialog>
               <DialogTrigger asChild>
                 <Button variant="outline" className="flex items-center gap-2 flex-1 sm:flex-none text-sm">
@@ -225,7 +225,7 @@ export default function TeamDashboard() {
         {hasRole('admin') ? (
           <>
             {/* Admin Dashboard */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 mb-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-8">
               <Card className="border-0 shadow-sm bg-gradient-to-br from-blue-50 to-blue-100/50 hover:shadow-md transition-all duration-200">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
                   <CardTitle className="text-sm font-medium text-slate-600">Total Members</CardTitle>
@@ -398,12 +398,12 @@ export default function TeamDashboard() {
                     <Table>
                       <TableHeader>
                         <TableRow className="bg-slate-50 hover:bg-slate-50">
-                          <TableHead className="text-slate-900 bg-slate-50 font-semibold min-w-[120px]">Name</TableHead>
-                          <TableHead className="text-slate-900 bg-slate-50 font-semibold min-w-[200px]">Email</TableHead>
-                          <TableHead className="text-slate-900 bg-slate-50 font-semibold min-w-[100px]">Role</TableHead>
-                          <TableHead className="text-slate-900 bg-slate-50 font-semibold min-w-[100px]">Status</TableHead>
-                          <TableHead className="text-slate-900 bg-slate-50 font-semibold">Last Login</TableHead>
-                          <TableHead className="text-slate-900 bg-slate-50 font-semibold">Actions</TableHead>
+                          <TableHead className="text-slate-900 bg-slate-50 font-semibold min-w-[120px] lg:w-auto">Name</TableHead>
+                          <TableHead className="text-slate-900 bg-slate-50 font-semibold min-w-[200px] lg:w-auto">Email</TableHead>
+                          <TableHead className="text-slate-900 bg-slate-50 font-semibold min-w-[100px] lg:w-auto">Role</TableHead>
+                          <TableHead className="text-slate-900 bg-slate-50 font-semibold min-w-[100px] lg:w-auto">Status</TableHead>
+                          <TableHead className="text-slate-900 bg-slate-50 font-semibold min-w-[120px] lg:w-auto">Last Login</TableHead>
+                          <TableHead className="text-slate-900 bg-slate-50 font-semibold min-w-[140px] lg:w-auto">Actions</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -429,7 +429,7 @@ export default function TeamDashboard() {
                               : 'Never'}
                           </TableCell>
                           <TableCell>
-                            <div className="flex space-x-2">
+                            <div className="flex flex-col sm:flex-row gap-2 lg:gap-3">
                               <Button
                                 size="sm"
                                 variant="outline"
@@ -439,6 +439,7 @@ export default function TeamDashboard() {
                                     updates: { isActive: !member.isActive },
                                   })
                                 }
+                                className="text-xs lg:text-sm whitespace-nowrap"
                               >
                                 {member.isActive ? 'Deactivate' : 'Activate'}
                               </Button>
@@ -448,9 +449,10 @@ export default function TeamDashboard() {
                                     <Button
                                       size="sm"
                                       variant="outline"
-                                      className="text-red-600 hover:text-red-700"
+                                      className="text-red-600 hover:text-red-700 text-xs lg:text-sm"
                                     >
                                       <Trash2 className="w-4 h-4" />
+                                      <span className="hidden lg:inline ml-1">Delete</span>
                                     </Button>
                                   </AlertDialogTrigger>
                                   <AlertDialogContent>
