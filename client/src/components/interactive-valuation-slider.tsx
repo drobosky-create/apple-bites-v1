@@ -131,23 +131,23 @@ export default function InteractiveValuationSlider() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6 space-y-6">
-      <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold text-slate-900 mb-2">
+    <div className="max-w-4xl mx-auto p-2 sm:p-6 space-y-4 sm:space-y-6">
+      <div className="text-center mb-6 sm:mb-8">
+        <h2 className="text-xl sm:text-3xl font-bold text-slate-900 mb-2">
           Business Value Improvement Calculator
         </h2>
-        <p className="text-slate-600">
+        <p className="text-sm sm:text-base text-slate-600">
           See how improving your business operations translates to increased valuation
         </p>
         {latestAssessment && (
-          <p className="text-sm text-slate-500 mt-2">
+          <p className="text-xs sm:text-sm text-slate-500 mt-2">
             Based on your recent assessment data
           </p>
         )}
       </div>
 
       {/* Current vs Potential Value Cards with Animation */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
         <Card className="border-2 border-slate-200 transition-all duration-300">
           <CardHeader className="text-center">
             <CardTitle className="text-lg">Current Value</CardTitle>
@@ -244,9 +244,9 @@ export default function InteractiveValuationSlider() {
           </div>
 
           {/* Grade Distribution Visualization */}
-          <div className="bg-gray-50 p-4 rounded-lg">
-            <h4 className="font-semibold mb-3 text-center">Distribution of Business Value by Grade</h4>
-            <div className="relative h-16 rounded-lg overflow-hidden border border-gray-200">
+          <div className="bg-gray-50 p-3 sm:p-4 rounded-lg">
+            <h4 className="font-semibold mb-3 text-center text-sm sm:text-base">Distribution of Business Value by Grade</h4>
+            <div className="relative h-12 sm:h-16 rounded-lg overflow-hidden border border-gray-200">
               {/* Grade Segments */}
               {[
                 { grade: 'F', color: 'bg-red-500', multiple: '2.0x', label: 'Poor Operations' },
@@ -257,15 +257,15 @@ export default function InteractiveValuationSlider() {
               ].map((segment, index) => (
                 <div
                   key={segment.grade}
-                  className={`absolute top-0 h-16 ${segment.color} group cursor-pointer transition-all duration-200 hover:brightness-110`}
+                  className={`absolute top-0 h-12 sm:h-16 ${segment.color} group cursor-pointer transition-all duration-200 hover:brightness-110`}
                   style={{
                     left: `${(index / 5) * 100}%`,
                     width: '20%'
                   }}
                   title={`Grade ${segment.grade}: ${segment.multiple} EBITDA Multiple - ${segment.label}`}
                 >
-                  {/* Hover Tooltip */}
-                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
+                  {/* Hover Tooltip - Hidden on mobile */}
+                  <div className="hidden sm:block absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
                     <div className="bg-gray-900 text-white text-xs rounded py-2 px-3 whitespace-nowrap shadow-lg">
                       <div className="font-semibold">Grade {segment.grade}</div>
                       <div>{segment.multiple} Multiple</div>
@@ -277,21 +277,21 @@ export default function InteractiveValuationSlider() {
                   
                   {/* Grade Label */}
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-white font-semibold text-sm">{segment.grade}</span>
+                    <span className="text-white font-semibold text-xs sm:text-sm">{segment.grade}</span>
                   </div>
                 </div>
               ))}
               
               {/* Current Grade Indicator */}
               <div 
-                className="absolute top-0 h-16 flex items-center justify-center transition-all duration-300 z-20"
+                className="absolute top-0 h-12 sm:h-16 flex items-center justify-center transition-all duration-300 z-20"
                 style={{ 
                   left: `${(gradeToNumber(baseGrade) / 4) * 100}%`,
                   transform: 'translateX(-50%)'
                 }}
               >
                 <div className="flex flex-col items-center">
-                  <div className="w-0.5 h-16 bg-gray-800 shadow-lg"></div>
+                  <div className="w-0.5 h-12 sm:h-16 bg-gray-800 shadow-lg"></div>
                   <div className="text-xs text-gray-800 mt-1 bg-white px-1 rounded shadow">
                     Current
                   </div>
@@ -301,14 +301,14 @@ export default function InteractiveValuationSlider() {
               {/* Target Grade Indicator */}
               {sliderGrade !== baseGrade && (
                 <div 
-                  className="absolute top-0 h-16 flex items-center justify-center transition-all duration-300 z-20"
+                  className="absolute top-0 h-12 sm:h-16 flex items-center justify-center transition-all duration-300 z-20"
                   style={{ 
                     left: `${(gradeToNumber(sliderGrade) / 4) * 100}%`,
                     transform: 'translateX(-50%)'
                   }}
                 >
                   <div className="flex flex-col items-center">
-                    <div className="w-0.5 h-16 bg-blue-600 shadow-lg"></div>
+                    <div className="w-0.5 h-12 sm:h-16 bg-blue-600 shadow-lg"></div>
                     <div className="text-xs text-blue-600 mt-1 bg-white px-1 rounded shadow">
                       Target
                     </div>
