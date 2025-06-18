@@ -17,7 +17,7 @@ export function Footer() {
                 className="h-10 w-auto"
               />
             </div>
-            <p className="text-gray-300 text-sm leading-relaxed max-w-md">
+            <p className="text-gray-100 text-sm leading-relaxed max-w-md">
               Whether you're scaling, preparing to sell, or exploring strategic partnerships—Meritage Partners is here to guide your next move.
             </p>
           </div>
@@ -30,7 +30,7 @@ export function Footer() {
                 href="https://meritage.partners/privacypolicy" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="block text-gray-300 hover:text-white transition-colors text-sm"
+                className="block text-gray-100 hover:text-white transition-colors text-sm"
               >
                 Privacy Policy
               </a>
@@ -38,7 +38,7 @@ export function Footer() {
                 href="https://meritage.partners/termsofuse" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="block text-gray-300 hover:text-white transition-colors text-sm"
+                className="block text-gray-100 hover:text-white transition-colors text-sm"
               >
                 Terms of Use
               </a>
@@ -46,7 +46,7 @@ export function Footer() {
                 href="https://meritage.partners/cookies" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="block text-gray-300 hover:text-white transition-colors text-sm"
+                className="block text-gray-100 hover:text-white transition-colors text-sm"
               >
                 Cookie Policy
               </a>
@@ -56,12 +56,12 @@ export function Footer() {
           {/* Contact Information */}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-white">Address:</h3>
-            <div className="space-y-2 text-gray-300 text-sm">
+            <div className="space-y-2 text-gray-100 text-sm">
               <p>2901 West Coast Highway Suite 200, Newport Beach California 92663</p>
               <p className="font-medium">(949) 522-9121</p>
               <a 
                 href="mailto:info@meritage-partners.com" 
-                className="text-gray-300 hover:text-white transition-colors"
+                className="text-gray-100 hover:text-white transition-colors"
               >
                 info@meritage-partners.com
               </a>

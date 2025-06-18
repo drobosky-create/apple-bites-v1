@@ -223,13 +223,13 @@ export default function LeadsDashboard() {
               <SelectTrigger>
                 <SelectValue placeholder="Filter by status" />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Statuses</SelectItem>
-                <SelectItem value="new">New</SelectItem>
-                <SelectItem value="contacted">Contacted</SelectItem>
-                <SelectItem value="qualified">Qualified</SelectItem>
-                <SelectItem value="converted">Converted</SelectItem>
-                <SelectItem value="closed">Closed</SelectItem>
+              <SelectContent className="bg-white border-gray-200 shadow-lg">
+                <SelectItem value="all" className="text-gray-900 hover:bg-blue-50 focus:bg-blue-50 hover:text-blue-900 focus:text-blue-900">All Statuses</SelectItem>
+                <SelectItem value="new" className="text-gray-900 hover:bg-blue-50 focus:bg-blue-50 hover:text-blue-900 focus:text-blue-900">New</SelectItem>
+                <SelectItem value="contacted" className="text-gray-900 hover:bg-blue-50 focus:bg-blue-50 hover:text-blue-900 focus:text-blue-900">Contacted</SelectItem>
+                <SelectItem value="qualified" className="text-gray-900 hover:bg-blue-50 focus:bg-blue-50 hover:text-blue-900 focus:text-blue-900">Qualified</SelectItem>
+                <SelectItem value="converted" className="text-gray-900 hover:bg-blue-50 focus:bg-blue-50 hover:text-blue-900 focus:text-blue-900">Converted</SelectItem>
+                <SelectItem value="closed" className="text-gray-900 hover:bg-blue-50 focus:bg-blue-50 hover:text-blue-900 focus:text-blue-900">Closed</SelectItem>
               </SelectContent>
             </Select>
 
