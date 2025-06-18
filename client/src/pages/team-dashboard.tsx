@@ -407,7 +407,7 @@ export default function TeamDashboard() {
                     </TableHeader>
                     <TableBody>
                       {teamMembers?.map((member) => (
-                        <TableRow key={member.id} className="hover:bg-slate-50/50">
+                        <TableRow key={member.id} className="hover:bg-slate-50/50 border-b border-blue-200">
                           <TableCell className="font-medium">
                             {member.firstName} {member.lastName}
                           </TableCell>

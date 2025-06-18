@@ -77,13 +77,13 @@ export default function AnalyticsDashboard() {
   const pieColors = ['#8B5CF6', '#06B6D4', '#10B981', '#F59E0B', '#EF4444'];
 
   return (
-    <div className="max-w-7xl mx-auto p-6">
-      <div className="mb-8 flex justify-between items-center">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900">Analytics Dashboard</h1>
-          <p className="text-slate-600 mt-2">Comprehensive insights into business valuations and lead performance</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">Analytics Dashboard</h1>
+          <p className="text-slate-600 mt-2 text-sm sm:text-base">Comprehensive insights into business valuations and lead performance</p>
         </div>
-        <Button variant="outline" onClick={logout} className="flex items-center gap-2">
+        <Button variant="outline" onClick={logout} className="flex items-center gap-2 w-full sm:w-auto">
           <LogOut className="w-4 h-4" />
           Logout
         </Button>
@@ -314,7 +314,7 @@ export default function AnalyticsDashboard() {
                 </TableHeader>
                 <TableBody>
                   {assessments?.map((assessment) => (
-                    <TableRow key={assessment.id}>
+                    <TableRow key={assessment.id} className="border-b border-blue-200">
                       <TableCell className="font-medium">{assessment.company}</TableCell>
                       <TableCell>
                         <div>
@@ -329,9 +329,9 @@ export default function AnalyticsDashboard() {
                         ${Math.round(parseFloat(assessment.adjustedEbitda || "0")).toLocaleString()}
                       </TableCell>
                       <TableCell>
-                        <Badge variant={assessment.overallScore?.startsWith('A') ? 'default' : 'secondary'}>
+                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-500 text-white font-bold text-sm">
                           {assessment.overallScore}
-                        </Badge>
+                        </div>
                       </TableCell>
                       <TableCell>
                         <Badge variant={assessment.followUpIntent === 'yes' ? 'default' : 'outline'}>

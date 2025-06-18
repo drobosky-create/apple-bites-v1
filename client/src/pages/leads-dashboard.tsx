@@ -172,31 +172,32 @@ export default function LeadsDashboard() {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8 flex justify-between items-center">
-          <div className="flex items-center gap-4">
+        <div className="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div className="flex items-center gap-4 w-full sm:w-auto">
             <Button 
               variant="outline" 
-              onClick={() => window.location.href = '/'}
+              onClick={() => window.location.href = '/admin'}
               className="flex items-center gap-2 text-[#1a2332] hover:text-white hover:bg-[#1a2332] border-[#1a2332]"
             >
               <ArrowLeft className="w-4 h-4" />
-              Back to Home
+              Back to Dashboard
             </Button>
-            <div>
-              <h1 className="text-3xl font-bold text-[#1a2332] mb-2">Lead Management</h1>
-              <p className="text-[#1a2332]/70">Track and manage leads from valuation assessments</p>
+            <div className="flex-1">
+              <h1 className="text-2xl sm:text-3xl font-bold text-[#1a2332] mb-2">Lead Management</h1>
+              <p className="text-[#1a2332]/70 text-sm sm:text-base">Track and manage leads from valuation assessments</p>
             </div>
           </div>
-          <div className="flex gap-2">
+          <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
             <Button 
               variant="outline" 
               onClick={() => window.location.href = '/valuation-form'}
-              className="flex items-center gap-2"
+              className="flex items-center justify-center gap-2 w-full sm:w-auto"
             >
               <ExternalLink className="w-4 h-4" />
-              Valuation Form
+              <span className="hidden sm:inline">Valuation Form</span>
+              <span className="sm:hidden">Form</span>
             </Button>
-            <Button variant="outline" onClick={logout} className="flex items-center gap-2">
+            <Button variant="outline" onClick={logout} className="flex items-center justify-center gap-2 w-full sm:w-auto">
               <LogOut className="w-4 h-4" />
               Logout
             </Button>
@@ -204,8 +205,8 @@ export default function LeadsDashboard() {
         </div>
 
         {/* Filters */}
-        <div className="bg-white rounded-lg shadow-sm border p-6 mb-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="bg-white rounded-lg shadow-sm border p-4 sm:p-6 mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
               <Input
