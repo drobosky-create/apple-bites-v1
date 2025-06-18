@@ -241,27 +241,14 @@ export default function InteractiveValuationSlider() {
               <span className="hidden sm:inline">Good</span>
               <span>Excellent</span>
             </div>
-            <div className="px-2 relative">
-              {/* Grade markers */}
-              <div className="flex justify-between absolute -top-2 left-2 right-2 pointer-events-none">
-                {['F', 'D', 'C', 'B', 'A'].map((grade, index) => (
-                  <div 
-                    key={grade}
-                    className={`w-3 h-3 rounded-full border-2 ${
-                      gradeToNumber(sliderGrade) === index 
-                        ? 'bg-blue-500 border-blue-500' 
-                        : 'bg-gray-200 border-gray-300'
-                    }`}
-                  />
-                ))}
-              </div>
+            <div className="px-2">
               <Slider
                 value={[gradeToNumber(sliderGrade)]}
                 onValueChange={handleSliderChange}
                 max={4}
                 min={0}
                 step={1}
-                className="w-full mt-4"
+                className="w-full"
               />
             </div>
             <div className="flex justify-center mt-6">
