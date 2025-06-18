@@ -454,29 +454,7 @@
     color: white !important;
   }
 
-  /* Specific overrides for dashboard page elements */
-  .leads-dashboard .search-container,
-  .analytics-dashboard .tabs-container,
-  [data-testid*="search"],
-  [data-testid*="filter"],
-  .search-input-container,
-  .filter-dropdown-container {
-    background-color: rgb(37 99 235) !important;
-    border-color: rgb(37 99 235) !important;
-  }
-
-  /* Override any yellow card borders in dashboard pages */
-  .min-h-screen .bg-white,
-  .dashboard-page .card,
-  .analytics-page .card,
-  .leads-page .card {
-    border-color: rgb(203 213 225) !important;
-  }
-
-  /* Target specific elements from the dashboard screenshots */
-  .bg-yellow-400,
-  [style*="background-color: rgb(250, 204, 21)"],
-  [style*="background-color: #facc15"],
+  /* Clean consolidated overrides for brand consistency */
   .search-container input,
   input[type="search"],
   .relative input[placeholder*="Search"] {
@@ -485,148 +463,39 @@
     color: white !important;
   }
 
-  /* Override tab styling in analytics dashboard */
-  .border-yellow-300,
-  [style*="border-color: rgb(253, 224, 71)"],
-  [style*="border-color: #fde047"],
-  .tabs-list,
-  .tabs-trigger,
-  [role="tab"] {
-    background-color: rgb(37 99 235) !important;
-    border-color: rgb(37 99 235) !important;
-    color: white !important;
-  }
-
-  /* Force override for any remaining yellow borders on cards */
-  .border-yellow-200,
-  [style*="border: 2px solid rgb(254, 240, 138)"],
-  [style*="border-color: rgb(254, 240, 138)"],
-  .card.border-2 {
-    border-color: rgb(203 213 225) !important;
-  }
-
-  /* Comprehensive yellow border elimination */
-  .border,
-  .border-2,
-  .border-4,
-  .rounded-lg,
-  .rounded-xl,
-  .bg-white {
-    border-color: rgb(203 213 225) !important;
-  }
-
-  /* Target specific dashboard card containers */
+  /* Standard card borders */
   .min-h-screen .bg-white,
-  .bg-white.p-6,
-  .bg-white.rounded-lg,
-  .bg-white.border,
-  [data-testid*="card"],
-  .dashboard-card,
-  .lead-card,
-  .analytics-card {
-    border: 1px solid rgb(203 213 225) !important;
-    outline: none !important;
-  }
-
-  /* Override all possible yellow border variants */
-  .border-yellow-50,
-  .border-yellow-100,
-  .border-yellow-200,
-  .border-yellow-300,
-  .border-yellow-400,
-  .border-yellow-500,
-  .border-amber-50,
-  .border-amber-100,
-  .border-amber-200,
-  .border-amber-300,
-  .border-amber-400,
-  .border-amber-500 {
+  .card {
     border-color: rgb(203 213 225) !important;
   }
 
-  /* Target analytics dashboard specific elements */
-  .analytics-dashboard *,
-  [data-testid*="analytics"] *,
-  .recharts-wrapper *,
-  .recharts-surface *,
-  .recharts-pie *,
-  .recharts-sector *,
-  .recharts-cell * {
-    border-color: rgb(203 213 225) !important;
-  }
-
-  /* Override any yellow styling in Recharts components */
-  .recharts-pie-sector[fill="#FFBB28"],
-  .recharts-pie-sector[fill="#FF8042"],
-  .recharts-pie-sector[fill="#FFCA28"],
-  .recharts-cell[fill="#FFBB28"],
-  .recharts-cell[fill="#FF8042"],
-  .recharts-cell[fill="#FFCA28"] {
-    fill: #94A3B8 !important;
-  }
-
-  /* Force all SVG elements in charts to use muted colors */
-  svg path[fill*="#FF"],
-  svg path[fill*="yellow"],
-  svg circle[fill*="#FF"],
-  svg circle[fill*="yellow"],
-  svg rect[fill*="#FF"],
-  svg rect[fill*="yellow"] {
-    fill: #94A3B8 !important;
-  }
-
-  /* Nuclear option: Override ALL yellow/orange/amber colors globally */
-  *[style*="rgb(255, 187, 40)"],
-  *[style*="rgb(255, 128, 66)"],
-  *[style*="rgb(255, 202, 40)"],
-  *[style*="#FFBB28"],
-  *[style*="#FF8042"],
-  *[style*="#FFCA28"],
-  *[fill="#FFBB28"],
-  *[fill="#FF8042"],
-  *[fill="#FFCA28"] {
-    background-color: #94A3B8 !important;
-    border-color: #94A3B8 !important;
-    color: white !important;
-    fill: #94A3B8 !important;
-  }
-
-  /* Eliminate ALL yellow line separators in team dashboard tables */
-  .team-dashboard table tr,
-  .team-dashboard .table-row,
-  [data-testid="team-table"] tr,
-  table tr.border-b,
-  .border-b.border-yellow-200,
-  .border-b.border-yellow-300,
-  .border-b.border-amber-200,
-  .border-b.border-amber-300 {
-    border-bottom: 1px solid rgb(59 130 246) !important; /* blue-500 */
-  }
-
-  /* Force all table separators to blue */
-  table thead tr,
-  table tbody tr,
-  .table-header-row,
-  .table-body-row {
+  /* Consolidated yellow color overrides */
+  .border-yellow-50, .border-yellow-100, .border-yellow-200, .border-yellow-300, .border-yellow-400, .border-yellow-500,
+  .border-amber-50, .border-amber-100, .border-amber-200, .border-amber-300, .border-amber-400, .border-amber-500,
+  [style*="border-color: rgb(254, 240, 138)"],
+  [style*="border-color: rgb(253, 224, 71)"] {
     border-color: rgb(59 130 246) !important;
   }
 
-  /* Target specific Recharts default colors */
-  .recharts-default-tooltip,
-  .recharts-tooltip-wrapper,
-  .recharts-legend-wrapper {
-    background-color: white !important;
-    border-color: rgb(203 213 225) !important;
+  /* Charts color override */
+  .recharts-pie-sector[fill="#FFBB28"],
+  .recharts-pie-sector[fill="#FF8042"],
+  svg *[fill="#FFBB28"],
+  svg *[fill="#FF8042"] {
+    fill: #94A3B8 !important;
   }
 
-  /* Override any remaining yellow backgrounds or borders */
-  .bg-warning,
-  .border-warning,
-  .text-warning,
-  .alert-warning {
-    background-color: rgb(37 99 235) !important;
-    border-color: rgb(37 99 235) !important;
-    color: white !important;
+  /* Table borders */
+  table tr.border-b,
+  table thead tr,
+  table tbody tr {
+    border-color: rgb(59 130 246) !important;
+  }
+
+  /* Recharts tooltips */
+  .recharts-default-tooltip {
+    background-color: white !important;
+    border-color: rgb(203 213 225) !important;
   }
 
   /* Force override Recharts default color palette */
@@ -809,47 +678,10 @@
     border-color: rgb(37 99 235) !important;
   }
 
-  /* Target specific card components with yellow borders */
-  .border-2.border-yellow-200,
-  .border-2.border-yellow-300,
-  .border-2.border-yellow-400,
-  .border-2.border-amber-200,
-  .border-2.border-amber-300,
-  .border-2.border-amber-400 {
-    border-color: rgb(37 99 235) !important;
-  }
-
-  /* Force override for any remaining yellow borders in cards */
-  [class*="border-yellow"],
-  [class*="border-amber"],
-  .border-yellow-200,
-  .border-yellow-300,
-  .border-yellow-400,
-  .border-amber-200,
-  .border-amber-300,
-  .border-amber-400 {
-    border-color: rgb(37 99 235) !important;
-  }
-
-  /* Override inline styles that may be setting yellow borders */
-  *[style*="border: 2px solid rgb(254, 240, 138)"],
-  *[style*="border-color: rgb(254, 240, 138)"],
-  *[style*="border-color: rgb(251, 191, 36)"],
-  *[style*="border-color: rgb(245, 158, 11)"] {
-    border-color: rgb(37 99 235) !important;
-  }
-
-  /* Nuclear option: force ALL borders to be Meritage blue/gray in value calculator */
-  div[class*="value-calculator"] .border-2,
-  div[class*="interactive-valuation"] .border-2,
-  .border-2 {
-    border-color: rgb(148 163 184) !important; /* slate-400 */
-  }
-
-  /* Override all shadcn Card components to prevent yellow borders */
+  /* Card component borders */
   [data-radix-card],
   .card,
-  [class*="card-"] {
+  .border-2 {
     border-color: rgb(148 163 184) !important;
   }
 

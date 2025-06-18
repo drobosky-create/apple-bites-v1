@@ -653,8 +653,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         `;
 
         // Use environment variables for email configuration
-        const nodemailer = require('nodemailer');
-        const transporter = nodemailer.createTransporter({
+        const nodemailer = await import('nodemailer');
+        const transporter = nodemailer.default.createTransporter({
           host: process.env.SMTP_HOST || 'smtp.gmail.com',
           port: process.env.SMTP_PORT || 587,
           secure: false,
