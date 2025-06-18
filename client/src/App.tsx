@@ -13,6 +13,7 @@ import AnalyticsDashboard from "@/pages/analytics-dashboard";
 import ValueCalculator from "@/pages/value-calculator";
 import LeadsDashboard from "@/pages/leads-dashboard";
 import TeamDashboard from "@/pages/team-dashboard";
+import AdminDashboard from "@/pages/admin-dashboard";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -25,6 +26,7 @@ function Router() {
           <Route path="/" component={ValuationForm} />
           <Route path="/results" component={ValuationForm} />
           <Route path="/value-calculator" component={ValueCalculator} />
+          <Route path="/admin" component={AdminDashboard} />
           <Route path="/admin/analytics" component={AnalyticsDashboard} />
           <Route path="/admin/leads" component={LeadsDashboard} />
           <Route path="/team" component={TeamDashboard} />

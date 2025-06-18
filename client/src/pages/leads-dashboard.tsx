@@ -13,6 +13,7 @@ import { apiRequest } from '@/lib/queryClient';
 import type { Lead } from '@shared/schema';
 import AdminLogin from '@/components/admin-login';
 import { useAdminAuth } from '@/hooks/use-admin-auth';
+import { useLocation } from 'wouter';
 
 export default function LeadsDashboard() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -24,6 +25,7 @@ export default function LeadsDashboard() {
   const { isAuthenticated, isLoading, login, logout } = useAdminAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const [, navigate] = useLocation();
 
   const { data: leads, isLoading: leadsLoading } = useQuery<Lead[]>({
     queryKey: ['/api/leads', statusFilter === 'all' ? '' : statusFilter, searchQuery],
@@ -241,17 +243,17 @@ export default function LeadsDashboard() {
         {/* Leads List */}
         <div className="space-y-4">
           {leads?.map((lead) => (
-            <Card key={lead.id} className="p-6 hover:shadow-md transition-shadow">
+            <Card key={lead.id} className="p-4 sm:p-6 hover:shadow-md transition-shadow overflow-hidden">
               <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <div className="flex items-center gap-4 mb-3">
-                    <div className="flex items-center gap-2">
-                      <User className="w-4 h-4 text-gray-400" />
-                      <h3 className="text-lg font-semibold text-gray-900">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center flex-wrap gap-2 sm:gap-4 mb-3">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <User className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                      <h3 className="text-lg font-semibold text-gray-900 truncate">
                         {lead.firstName} {lead.lastName}
                       </h3>
                     </div>
-                    <Badge className={getStatusColor(lead.leadStatus || 'new')}>
+                    <Badge className={`${getStatusColor(lead.leadStatus || 'new')} flex-shrink-0`}>
                       {lead.leadStatus}
                     </Badge>
                     <div className="flex items-center gap-1">
