@@ -13,10 +13,17 @@
   <!-- Background -->
   <rect width="1200" height="630" fill="url(#bgGradient)"/>
   
-  <!-- Apple Logo Symbol -->
-  <circle cx="200" cy="200" r="50" fill="#dc2626"/>
-  <rect x="185" y="140" width="10" height="25" fill="#22c55e"/>
-  <ellipse cx="190" cy="140" rx="8" ry="4" fill="#22c55e"/>
+  <!-- Apple Logo Symbol - Improved -->
+  <g transform="translate(150, 150)">
+    <!-- Apple body -->
+    <path d="M 0 40 Q -30 40 -30 10 Q -30 -20 0 -20 Q 30 -20 30 10 Q 30 40 0 40 Z" fill="#dc2626"/>
+    <!-- Apple bite -->
+    <circle cx="15" cy="0" r="12" fill="#1a2332"/>
+    <!-- Apple stem -->
+    <rect x="-2" y="-35" width="4" height="15" fill="#22c55e"/>
+    <!-- Apple leaf -->
+    <ellipse cx="8" cy="-30" rx="6" ry="3" fill="#22c55e" transform="rotate(20)"/>
+  </g>
   
   <!-- Main Title -->
   <text x="300" y="200" font-family="Arial, sans-serif" font-size="72" font-weight="bold" fill="white">
