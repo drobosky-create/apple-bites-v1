@@ -13,12 +13,26 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
 
   const formatCurrency = (value: string | null) => {
     if (!value) return "$0";
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(parseFloat(value));
+    const numValue = parseFloat(value);
+    
+    // Format for different value ranges
+    if (numValue >= 1000000) {
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+        notation: 'compact',
+        compactDisplay: 'short'
+      }).format(numValue);
+    } else {
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }).format(numValue);
+    }
   };
 
   const handleDownloadPDF = async () => {
@@ -65,7 +79,7 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-sm min-h-screen flex flex-col">
+    <div className="bg-white rounded-lg shadow-sm min-h-screen flex flex-col max-w-full overflow-hidden">
       <div className="p-4 border-b border-slate-200 flex-shrink-0">
         <div className="flex items-center space-x-3">
           <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
@@ -77,21 +91,21 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
           </div>
         </div>
       </div>
-      <div className="flex-1 p-4 space-y-4 overflow-y-auto">
+      <div className="flex-1 p-4 space-y-4 overflow-y-auto max-w-full">
         {/* Valuation Summary */}
         <div className="bg-gradient-to-r from-primary/5 to-blue-50 rounded-lg p-4 border border-primary/20">
           <h4 className="text-xl font-bold text-slate-900 mb-3">Estimated Business Value</h4>
-          <div className="grid grid-cols-3 gap-4">
-            <div className="text-center">
-              <div className="text-2xl font-bold text-[#2563eb]">{formatCurrency(results.lowEstimate)}</div>
+          <div className="grid grid-cols-3 gap-2 sm:gap-4">
+            <div className="text-center min-w-0">
+              <div className="text-sm sm:text-2xl font-bold text-[#2563eb] break-words">{formatCurrency(results.lowEstimate)}</div>
               <div className="text-xs text-slate-600 mt-1">Low Estimate</div>
             </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-slate-900">{formatCurrency(results.midEstimate)}</div>
+            <div className="text-center min-w-0">
+              <div className="text-base sm:text-3xl font-bold text-slate-900 break-words">{formatCurrency(results.midEstimate)}</div>
               <div className="text-xs text-slate-600 mt-1">Most Likely</div>
             </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-[#2563eb]">{formatCurrency(results.highEstimate)}</div>
+            <div className="text-center min-w-0">
+              <div className="text-sm sm:text-2xl font-bold text-[#2563eb] break-words">{formatCurrency(results.highEstimate)}</div>
               <div className="text-xs text-slate-600 mt-1">High Estimate</div>
             </div>
           </div>

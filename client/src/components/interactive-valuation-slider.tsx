@@ -46,6 +46,12 @@ export default function InteractiveValuationSlider() {
   const [sliderGrade, setSliderGrade] = useState<OperationalGrade>(baseGrade);
   const [showBooking, setShowBooking] = useState(false);
 
+  // Handle slider change without auto-scrolling
+  const handleSliderChange = (value: number[]) => {
+    const newGrade = numberToGrade(value[0]);
+    setSliderGrade(newGrade);
+  };
+
   // Update slider when new data loads
   useEffect(() => {
     setSliderGrade(baseGrade);
@@ -224,7 +230,7 @@ export default function InteractiveValuationSlider() {
             <div className="px-2">
               <Slider
                 value={[gradeToNumber(sliderGrade)]}
-                onValueChange={(value) => setSliderGrade(numberToGrade(value[0]))}
+                onValueChange={handleSliderChange}
                 max={4}
                 min={0}
                 step={1}
