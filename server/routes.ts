@@ -133,10 +133,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Calculate valuation metrics
   function calculateValuationMetrics(formData: any) {
-    // Debug: Log the received form data
-    console.log('Form data received:', JSON.stringify(formData, null, 2));
-    console.log('EBITDA section:', formData.ebitda);
-    
     // Calculate base EBITDA
     const baseEbitda = 
       parseFloat(formData.ebitda.netIncome || "0") +
@@ -144,15 +140,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       parseFloat(formData.ebitda.taxes || "0") +
       parseFloat(formData.ebitda.depreciation || "0") +
       parseFloat(formData.ebitda.amortization || "0");
-    
-    console.log('Base EBITDA calculation:', {
-      netIncome: formData.ebitda.netIncome,
-      interest: formData.ebitda.interest,  
-      taxes: formData.ebitda.taxes,
-      depreciation: formData.ebitda.depreciation,
-      amortization: formData.ebitda.amortization,
-      baseEbitda
-    });
 
     // Calculate adjusted EBITDA
     const adjustedEbitda = baseEbitda +
@@ -160,15 +147,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       parseFloat(formData.adjustments.personalExpenses || "0") +
       parseFloat(formData.adjustments.oneTimeExpenses || "0") +
       parseFloat(formData.adjustments.otherAdjustments || "0");
-    
-    console.log('Adjusted EBITDA calculation:', {
-      baseEbitda,
-      ownerSalary: formData.adjustments.ownerSalary,
-      personalExpenses: formData.adjustments.personalExpenses,
-      oneTimeExpenses: formData.adjustments.oneTimeExpenses,
-      otherAdjustments: formData.adjustments.otherAdjustments,
-      adjustedEbitda
-    });
 
     // Convert grades to numeric scores for average calculation
     const gradeToScoreValue = (grade: string): number => {
