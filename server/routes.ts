@@ -588,6 +588,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({ 
         success: true, 
         user: userWithoutPassword,
+        mustChangePassword: teamMember.mustChangePassword,
         message: 'Login successful' 
       });
     } catch (error) {
@@ -755,8 +756,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Hash new password
       const hashedNewPassword = await bcrypt.hash(newPassword, 10);
 
-      // Update password
-      await storage.updateTeamMember(userId, { hashedPassword: hashedNewPassword });
+      // Update password and clear mustChangePassword flag
+      await storage.updateTeamMember(userId, { 
+        hashedPassword: hashedNewPassword,
+        mustChangePassword: false
+      });
 
       res.json({ success: true, message: 'Password changed successfully' });
     } catch (error) {

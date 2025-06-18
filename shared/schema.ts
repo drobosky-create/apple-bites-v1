@@ -189,6 +189,7 @@ export const teamMembers = pgTable("team_members", {
   role: varchar("role", { length: 50 }).notNull().default("member"), // admin, manager, member
   hashedPassword: varchar("hashed_password", { length: 255 }).notNull(),
   isActive: boolean("is_active").default(true),
+  mustChangePassword: boolean("must_change_password").default(true),
   lastLoginAt: timestamp("last_login_at"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
