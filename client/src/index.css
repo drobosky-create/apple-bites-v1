@@ -120,6 +120,38 @@
       padding-bottom: max(0px, env(safe-area-inset-bottom));
     }
   }
+
+  /* Fix Replit editor interference with form inputs */
+  input[type="email"]::placeholder,
+  input[type="tel"]::placeholder,
+  input[type="text"]::placeholder {
+    color: #94a3b8 !important;
+    opacity: 1 !important;
+  }
+
+  /* Prevent Replit code suggestions from appearing in forms */
+  .form-input {
+    position: relative !important;
+    z-index: 10 !important;
+  }
+
+  /* Hide any overlaid text that might appear */
+  input:focus::before,
+  input:focus::after {
+    display: none !important;
+  }
+
+  /* Additional fix for Replit webview interference */
+  input[data-replit-component],
+  input[data-replit-webview] {
+    background: transparent !important;
+  }
+
+  /* Ensure proper placeholder display */
+  input::placeholder {
+    font-style: normal !important;
+    font-weight: 400 !important;
+  }
   
   h1, h2, h3, h4, h5, h6,
   .font-heading,

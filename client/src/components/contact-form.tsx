@@ -74,7 +74,7 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
                   Email Address <span className="text-red-500">*</span>
                 </FormLabel>
                 <FormControl>
-                  <Input {...field} type="email" placeholder="Enter your email address" className="form-input bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20" />
+                  <Input {...field} type="email" placeholder="Enter your email address" className="form-input bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20" autoComplete="email" />
                 </FormControl>
                 <FormMessage className="form-error" />
               </FormItem>
@@ -91,7 +91,7 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
                     Phone Number <span className="text-red-500">*</span>
                   </FormLabel>
                   <FormControl>
-                    <Input {...field} type="tel" placeholder="(555) 123-4567" className="form-input bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20" />
+                    <Input {...field} type="tel" placeholder="(555) 123-4567" className="form-input bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20" autoComplete="tel" />
                   </FormControl>
                   <FormMessage className="form-error" />
                 </FormItem>
