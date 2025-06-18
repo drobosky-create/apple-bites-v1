@@ -636,6 +636,47 @@ export async function registerRoutes(app: Express): Promise<Server> {
         hashedPassword,
       } as any);
 
+      // Send welcome email to new team member
+      try {
+        const welcomeEmailSubject = `Welcome to Apple Bites Business Assessment - Account Created`;
+        const welcomeEmailContent = `
+          <h2>Welcome to Apple Bites Business Assessment</h2>
+          <p>Hello ${memberData.firstName} ${memberData.lastName},</p>
+          <p>Your account has been successfully created with the following details:</p>
+          <ul>
+            <li><strong>Email:</strong> ${memberData.email}</li>
+            <li><strong>Role:</strong> ${memberData.role}</li>
+            <li><strong>Temporary Password:</strong> ${password}</li>
+          </ul>
+          <p>Please log in at your earliest convenience and change your password for security.</p>
+          <p>Best regards,<br>Apple Bites Team</p>
+        `;
+
+        // Use environment variables for email configuration
+        const nodemailer = require('nodemailer');
+        const transporter = nodemailer.createTransporter({
+          host: process.env.SMTP_HOST || 'smtp.gmail.com',
+          port: process.env.SMTP_PORT || 587,
+          secure: false,
+          auth: {
+            user: process.env.SMTP_USER,
+            pass: process.env.SMTP_PASS
+          }
+        });
+
+        if (process.env.SMTP_USER && process.env.SMTP_PASS) {
+          await transporter.sendMail({
+            from: `"Apple Bites" <${process.env.SMTP_USER}>`,
+            to: memberData.email,
+            subject: welcomeEmailSubject,
+            html: welcomeEmailContent
+          });
+        }
+      } catch (emailError) {
+        console.log('Email notification failed:', emailError);
+        // Don't fail the user creation if email fails
+      }
+
       const { hashedPassword: _, ...memberWithoutPassword } = newMember;
       res.status(201).json(memberWithoutPassword);
     } catch (error) {

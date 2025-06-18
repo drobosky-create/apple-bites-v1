@@ -591,6 +591,26 @@
     fill: #94A3B8 !important;
   }
 
+  /* Eliminate ALL yellow line separators in team dashboard tables */
+  .team-dashboard table tr,
+  .team-dashboard .table-row,
+  [data-testid="team-table"] tr,
+  table tr.border-b,
+  .border-b.border-yellow-200,
+  .border-b.border-yellow-300,
+  .border-b.border-amber-200,
+  .border-b.border-amber-300 {
+    border-bottom: 1px solid rgb(59 130 246) !important; /* blue-500 */
+  }
+
+  /* Force all table separators to blue */
+  table thead tr,
+  table tbody tr,
+  .table-header-row,
+  .table-body-row {
+    border-color: rgb(59 130 246) !important;
+  }
+
   /* Target specific Recharts default colors */
   .recharts-default-tooltip,
   .recharts-tooltip-wrapper,
