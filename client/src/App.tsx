@@ -41,8 +41,8 @@ function App() {
       <AdminAuthProvider>
         <TeamAuthProvider>
           <TooltipProvider>
-            <Toaster />
             <Router />
+            <Toaster />
           </TooltipProvider>
         </TeamAuthProvider>
       </AdminAuthProvider>

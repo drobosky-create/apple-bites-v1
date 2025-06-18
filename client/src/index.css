@@ -56,6 +56,24 @@
     display: none !important;
   }
 
+  /* Fix Toaster positioning to prevent white space */
+  [data-sonner-toaster] {
+    position: fixed !important;
+    top: 1rem !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Override any shadcn/ui components that might add top spacing */
+  .fixed {
+    position: fixed !important;
+  }
+
+  /* Ensure toast container doesn't create layout space */
+  [data-sonner-toaster]:empty {
+    display: none !important;
+  }
+
   :root {
     /* Meritage Partners Brand Colors - Updated from Website */
     --meritage-navy: 26 35 50; /* #1a2332 - Deep navy from website */

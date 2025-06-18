@@ -7,8 +7,7 @@ export function Header() {
     <header 
       className="bg-[#0b2147] text-white shadow-lg" 
       style={{ 
-        backgroundColor: '#0b2147',
-        marginTop: '-1px'
+        backgroundColor: '#0b2147'
       }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
