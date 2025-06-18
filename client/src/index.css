@@ -40,6 +40,19 @@
     font-family: 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
     font-weight: 400;
     line-height: 1.5;
+    background: rgb(248 250 252) !important;
+    background-color: rgb(248 250 252) !important;
+  }
+  
+  html {
+    background: rgb(248 250 252) !important;
+    background-color: rgb(248 250 252) !important;
+  }
+  
+  #root {
+    background: rgb(248 250 252) !important;
+    background-color: rgb(248 250 252) !important;
+    min-height: 100vh;
   }
   
   h1, h2, h3, h4, h5, h6,
@@ -191,6 +204,36 @@
   .hover\:bg-yellow-100:hover,
   .hover\:bg-amber-100:hover {
     background-color: rgb(71 85 105 / 0.1) !important;
+  }
+
+  /* Prevent yellow background during mobile pull-to-refresh */
+  * {
+    -webkit-tap-highlight-color: transparent !important;
+  }
+
+  /* Override any webkit or browser default yellow backgrounds */
+  *::-webkit-scrollbar-track,
+  *::-webkit-scrollbar-thumb,
+  *::-webkit-scrollbar {
+    background-color: rgb(248 250 252) !important;
+  }
+
+  /* Prevent yellow overscroll background on mobile */
+  html,
+  body {
+    overscroll-behavior: none !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  /* Force consistent background across all elements */
+  *, *::before, *::after {
+    background-color: inherit;
+  }
+
+  /* Specific override for any potential yellow system backgrounds */
+  :root {
+    background: rgb(248 250 252) !important;
+    background-color: rgb(248 250 252) !important;
   }
 
   /* Fix form input focus states to prevent yellow highlighting */
