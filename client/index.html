@@ -51,6 +51,37 @@
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      // Force numeric keypad on mobile devices
+      document.addEventListener('DOMContentLoaded', function() {
+        function setNumericInputMode() {
+          const numberInputs = document.querySelectorAll('input[type="number"]');
+          numberInputs.forEach(input => {
+            if (!input.hasAttribute('inputmode')) {
+              input.setAttribute('inputmode', 'numeric');
+              input.setAttribute('pattern', '[0-9]*');
+            }
+          });
+        }
+        
+        // Set initially and observe for new inputs
+        setNumericInputMode();
+        
+        // Create observer for dynamically added inputs
+        const observer = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.type === 'childList') {
+              setNumericInputMode();
+            }
+          });
+        });
+        
+        observer.observe(document.body, {
+          childList: true,
+          subtree: true
+        });
+      });
+    </script>
     <script type="module" src="/src/main.tsx"></script>
 
   </body>

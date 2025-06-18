@@ -227,20 +227,41 @@ export default function InteractiveValuationSlider() {
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="px-2 sm:px-4">
-            <div className="flex justify-between text-xs sm:text-sm text-gray-500 mb-4">
-              <span>F - Poor</span>
-              <span className="hidden sm:inline">C - Average</span>
-              <span className="sm:hidden">C</span>
-              <span>A - Excellent</span>
+            <div className="flex justify-between text-xs sm:text-sm text-gray-500 mb-2">
+              <span>F</span>
+              <span>D</span>
+              <span>C</span>
+              <span>B</span>
+              <span>A</span>
             </div>
-            <div className="px-2">
+            <div className="flex justify-between text-xs text-gray-400 mb-4">
+              <span>Poor</span>
+              <span className="hidden sm:inline">Below Avg</span>
+              <span className="hidden sm:inline">Average</span>
+              <span className="hidden sm:inline">Good</span>
+              <span>Excellent</span>
+            </div>
+            <div className="px-2 relative">
+              {/* Grade markers */}
+              <div className="flex justify-between absolute -top-2 left-2 right-2 pointer-events-none">
+                {['F', 'D', 'C', 'B', 'A'].map((grade, index) => (
+                  <div 
+                    key={grade}
+                    className={`w-3 h-3 rounded-full border-2 ${
+                      gradeToNumber(sliderGrade) === index 
+                        ? 'bg-blue-500 border-blue-500' 
+                        : 'bg-gray-200 border-gray-300'
+                    }`}
+                  />
+                ))}
+              </div>
               <Slider
                 value={[gradeToNumber(sliderGrade)]}
                 onValueChange={handleSliderChange}
                 max={4}
                 min={0}
                 step={1}
-                className="w-full"
+                className="w-full mt-4"
               />
             </div>
             <div className="flex justify-center mt-6">

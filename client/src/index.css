@@ -157,6 +157,10 @@
   input[type="number"] {
     -webkit-appearance: none;
     -moz-appearance: textfield;
+  }
+  
+  /* Apply numeric input mode to all number inputs */
+  input[type="number"]:not([inputmode]) {
     inputmode: numeric;
   }
 

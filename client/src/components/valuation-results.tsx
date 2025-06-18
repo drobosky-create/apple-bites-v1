@@ -15,13 +15,22 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
     if (!value) return "$0";
     const numValue = parseFloat(value);
     
-    // Format for different value ranges
+    // Format for different value ranges with decimals
     if (numValue >= 1000000) {
       return new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'USD',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
+        minimumFractionDigits: 1,
+        maximumFractionDigits: 1,
+        notation: 'compact',
+        compactDisplay: 'short'
+      }).format(numValue);
+    } else if (numValue >= 1000) {
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 1,
+        maximumFractionDigits: 1,
         notation: 'compact',
         compactDisplay: 'short'
       }).format(numValue);
