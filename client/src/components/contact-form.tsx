@@ -28,7 +28,6 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
         </div>
         <p className="text-sm sm:text-base text-slate-600 leading-relaxed">Please provide your contact details to begin the comprehensive valuation assessment.</p>
       </div>
-
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="p-4 sm:p-8 space-y-4 sm:space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
@@ -130,7 +129,7 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
           />
 
           <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-4 sm:p-6 border border-blue-100">
-            <div className="flex items-start space-x-3">
+            <div className="flex items-start space-x-3 bg-[#f0f6ff]">
               <div className="flex-shrink-0">
                 <div className="p-2 bg-blue-100 rounded-lg">
                   <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
