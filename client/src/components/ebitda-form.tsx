@@ -41,7 +41,7 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
           </div>
           <h3 className="text-2xl font-bold text-slate-900">EBITDA & Adjustments</h3>
         </div>
-        <p className="text-slate-600 leading-relaxed">Please provide your company's financial information for the most recent fiscal year and any adjustments to normalize EBITDA.</p>
+        <p className="text-slate-600 leading-relaxed bg-[#fafbfd]">Please provide your company's financial information for the most recent fiscal year and any adjustments to normalize EBITDA.</p>
       </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="p-8 space-y-6">
