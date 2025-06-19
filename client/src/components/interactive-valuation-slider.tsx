@@ -234,43 +234,55 @@ export default function InteractiveValuationSlider() {
             Adjust Your Operational Grade
           </CardTitle>
           <CardDescription>
-            Move the slider to see how improving your business operations impacts your valuation
+            Select different operational grades to see how business improvements impact your valuation
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="px-2 sm:px-4">
-            <div className="flex justify-between text-xs sm:text-sm text-slate-800 mb-2 bg-white/90 backdrop-blur-sm rounded px-2 py-1 font-semibold">
-              <span>F</span>
-              <span>D</span>
-              <span>C</span>
-              <span>B</span>
-              <span>A</span>
+            <p className="text-center text-slate-600 mb-6 text-sm">
+              Click on a grade to see how improvements would impact your valuation
+            </p>
+            
+            {/* Interactive Grade Buttons */}
+            <div className="flex flex-wrap justify-center gap-3 mb-6">
+              {[
+                { grade: 'F' as OperationalGrade, label: 'Poor', color: 'bg-red-500 hover:bg-red-600', textColor: 'text-white' },
+                { grade: 'D' as OperationalGrade, label: 'Below Avg', color: 'bg-red-400 hover:bg-red-500', textColor: 'text-white' },
+                { grade: 'C' as OperationalGrade, label: 'Average', color: 'bg-slate-500 hover:bg-slate-600', textColor: 'text-white' },
+                { grade: 'B' as OperationalGrade, label: 'Good', color: 'bg-blue-500 hover:bg-blue-600', textColor: 'text-white' },
+                { grade: 'A' as OperationalGrade, label: 'Excellent', color: 'bg-green-500 hover:bg-green-600', textColor: 'text-white' }
+              ].map((item) => (
+                <button
+                  key={item.grade}
+                  onClick={() => setSliderGrade(item.grade)}
+                  className={`
+                    px-4 py-3 rounded-lg font-semibold text-sm transition-all duration-200 transform hover:scale-105 shadow-md hover:shadow-lg
+                    ${sliderGrade === item.grade 
+                      ? `${item.color} ring-4 ring-blue-300 scale-105` 
+                      : `${item.color} opacity-80`
+                    }
+                    ${item.textColor}
+                  `}
+                >
+                  <div className="text-lg font-bold">{item.grade}</div>
+                  <div className="text-xs mt-1">{item.label}</div>
+                </button>
+              ))}
             </div>
-            <div className="flex justify-between text-xs text-slate-600 mb-4 bg-white/80 backdrop-blur-sm rounded px-2 py-1">
-              <span>Poor</span>
-              <span className="hidden sm:inline">Below Avg</span>
-              <span className="hidden sm:inline">Average</span>
-              <span className="hidden sm:inline">Good</span>
-              <span>Excellent</span>
-            </div>
-            <div className="px-2">
-              <Slider
-                value={[gradeToNumber(sliderGrade)]}
-                onValueChange={handleSliderChange}
-                max={4}
-                min={0}
-                step={1}
-                className="w-full"
-              />
-            </div>
-            <div className="flex justify-center mt-6">
-              <div className="text-center">
+
+            <div className="flex justify-center">
+              <div className="text-center bg-white rounded-lg p-4 shadow-sm border">
                 <div className="text-2xl sm:text-3xl font-bold text-slate-900 transition-all duration-300">
-                  Grade: {sliderGrade}
+                  Selected Grade: {sliderGrade}
                 </div>
                 <div className="text-sm text-slate-600 mt-1">
-                  Current: {baseGrade}
+                  Your Current Grade: {baseGrade}
                 </div>
+                {sliderGrade !== baseGrade && (
+                  <div className="mt-2 text-xs text-blue-600 font-medium">
+                    {gradeToNumber(sliderGrade) > gradeToNumber(baseGrade) ? '↑ Improvement Scenario' : '↓ Decline Scenario'}
+                  </div>
+                )}
               </div>
             </div>
           </div>
