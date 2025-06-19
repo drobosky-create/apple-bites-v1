@@ -20,7 +20,7 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
   return (
     <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-sm border border-slate-200/60">
       <div className="p-4 sm:p-8 border-b border-slate-200/60 bg-gradient-to-r from-slate-50/80 to-blue-50/40 rounded-t-xl">
-        <div className="flex items-center gap-3 mb-3">
+        <div className="flex items-center gap-3 mb-3 bg-[#fafafc]">
           <div className="p-2 bg-blue-100 rounded-lg">
             <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
           </div>
