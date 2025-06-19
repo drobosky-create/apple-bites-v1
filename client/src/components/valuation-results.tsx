@@ -73,18 +73,20 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
         {/* Valuation Summary */}
         <div className="bg-gradient-to-r from-primary/5 to-blue-50 rounded-lg p-4 border border-primary/20">
           <h4 className="text-xl font-bold text-slate-900 mb-3">Estimated Business Value</h4>
-          <div className="grid grid-cols-3 gap-2 sm:gap-4">
-            <div className="text-center min-w-0">
-              <div className="text-sm sm:text-2xl font-bold text-[#2563eb] break-words">{formatCurrency(results.lowEstimate)}</div>
-              <div className="text-xs text-slate-600 mt-1">Low Estimate</div>
-            </div>
-            <div className="text-center min-w-0">
-              <div className="text-base sm:text-3xl font-bold text-slate-900 break-words">{formatCurrency(results.midEstimate)}</div>
-              <div className="text-xs text-slate-600 mt-1">Most Likely</div>
-            </div>
-            <div className="text-center min-w-0">
-              <div className="text-sm sm:text-2xl font-bold text-[#2563eb] break-words">{formatCurrency(results.highEstimate)}</div>
-              <div className="text-xs text-slate-600 mt-1">High Estimate</div>
+          <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-white/50">
+            <div className="grid grid-cols-3 gap-2 sm:gap-4">
+              <div className="text-center min-w-0">
+                <div className="text-sm sm:text-2xl font-bold text-[#2563eb] break-words">{formatCurrency(results.lowEstimate)}</div>
+                <div className="text-xs text-slate-600 mt-1">Low Estimate</div>
+              </div>
+              <div className="text-center min-w-0">
+                <div className="text-base sm:text-3xl font-bold text-slate-900 break-words">{formatCurrency(results.midEstimate)}</div>
+                <div className="text-xs text-slate-600 mt-1">Most Likely</div>
+              </div>
+              <div className="text-center min-w-0">
+                <div className="text-sm sm:text-2xl font-bold text-[#2563eb] break-words">{formatCurrency(results.highEstimate)}</div>
+                <div className="text-xs text-slate-600 mt-1">High Estimate</div>
+              </div>
             </div>
           </div>
           
