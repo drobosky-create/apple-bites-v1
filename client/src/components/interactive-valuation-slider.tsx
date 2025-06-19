@@ -279,34 +279,36 @@ export default function InteractiveValuationSlider() {
                 
                 {/* Current Grade Indicator */}
                 <div 
-                  className="absolute -top-6 h-16 flex items-center justify-center transition-all duration-300 z-20 pointer-events-none"
+                  className="absolute -top-8 h-16 flex items-center justify-center transition-all duration-300 z-20 pointer-events-none"
                   style={{ 
                     left: `${(gradeToNumber(baseGrade) / 4) * 100}%`,
                     transform: 'translateX(-50%)'
                   }}
                 >
                   <div className="flex flex-col items-center">
-                    <div className="text-xs text-gray-800 bg-white px-2 py-1 rounded shadow border border-gray-300 mb-1">
-                      Your Current
+                    <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-3 py-1 rounded-full text-xs font-semibold shadow-lg border-2 border-orange-300">
+                      Current: {baseGrade}
                     </div>
-                    <div className="w-0.5 h-20 bg-gray-800 shadow-lg"></div>
+                    <div className="w-0 h-0 border-l-4 border-r-4 border-t-8 border-transparent border-t-orange-500 mt-1"></div>
+                    <div className="w-1 h-6 bg-orange-500 rounded-full shadow-md"></div>
                   </div>
                 </div>
                 
                 {/* Selected Grade Indicator */}
                 {sliderGrade !== baseGrade && (
                   <div 
-                    className="absolute -top-6 h-16 flex items-center justify-center transition-all duration-300 z-20 pointer-events-none"
+                    className="absolute -top-8 h-16 flex items-center justify-center transition-all duration-300 z-20 pointer-events-none"
                     style={{ 
                       left: `${(gradeToNumber(sliderGrade) / 4) * 100}%`,
                       transform: 'translateX(-50%)'
                     }}
                   >
                     <div className="flex flex-col items-center">
-                      <div className="text-xs text-blue-600 bg-white px-2 py-1 rounded shadow border border-blue-300 mb-1">
-                        Selected
+                      <div className="bg-gradient-to-r from-purple-500 to-purple-600 text-white px-3 py-1 rounded-full text-xs font-semibold shadow-lg border-2 border-purple-300">
+                        Target: {sliderGrade}
                       </div>
-                      <div className="w-0.5 h-20 bg-blue-600 shadow-lg"></div>
+                      <div className="w-0 h-0 border-l-4 border-r-4 border-t-8 border-transparent border-t-purple-500 mt-1"></div>
+                      <div className="w-1 h-6 bg-purple-500 rounded-full shadow-md"></div>
                     </div>
                   </div>
                 )}
