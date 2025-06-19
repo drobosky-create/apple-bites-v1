@@ -55,7 +55,7 @@ export default function AdjustmentsForm({
           </div>
           <h3 className="text-2xl font-bold text-slate-900">Owner Adjustments</h3>
         </div>
-        <p className="text-slate-600 leading-relaxed">Add back non-recurring expenses and owner-specific adjustments to normalize EBITDA.</p>
+        <p className="text-slate-600 leading-relaxed bg-[#f9fbfb]">Add back non-recurring expenses and owner-specific adjustments to normalize EBITDA.</p>
       </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="p-8 space-y-6">
