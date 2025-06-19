@@ -26,7 +26,7 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
           </div>
           <h3 className="text-xl sm:text-2xl font-bold text-slate-900">Contact Information</h3>
         </div>
-        <p className="text-sm sm:text-base text-slate-600 leading-relaxed">Please provide your contact details to begin the comprehensive valuation assessment.</p>
+        <p className="text-sm sm:text-base text-slate-600 leading-relaxed bg-[#fafafc]">Please provide your contact details to begin the comprehensive valuation assessment.</p>
       </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="p-4 sm:p-8 space-y-4 sm:space-y-6">
