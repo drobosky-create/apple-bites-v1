@@ -247,22 +247,34 @@ export default function InteractiveValuationSlider() {
             <div className="bg-gray-50 p-4 rounded-lg">
               <h4 className="font-semibold mb-4 text-center text-base">Business Value Distribution by Operational Grade</h4>
               
-              {/* Interactive Grade Bar */}
-              <div className="relative h-16 rounded-lg overflow-hidden border border-gray-200 mb-4">
+              {/* Current Grade Label Above Scale */}
+              <div className="text-center mb-2">
+                <div 
+                  className="inline-block bg-slate-800 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-lg relative"
+                  style={{ 
+                    marginLeft: `${(gradeToNumber(baseGrade) / 4) * 100 - 50}%`
+                  }}
+                >
+                  Your Current Grade: {baseGrade}
+                  <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-6 border-transparent border-t-slate-800"></div>
+                </div>
+              </div>
+
+              {/* Interactive Grade Bar with Gradient */}
+              <div className="relative h-16 rounded-lg overflow-hidden border border-gray-300 mb-4 bg-gradient-to-r from-red-500 via-yellow-500 via-orange-400 to-green-500">
                 {[
-                  { grade: 'F' as OperationalGrade, color: 'bg-red-500', multiple: '2.0x', label: 'Poor Operations' },
-                  { grade: 'D' as OperationalGrade, color: 'bg-red-400', multiple: '3.0x', label: 'Below Average' },
-                  { grade: 'C' as OperationalGrade, color: 'bg-slate-500', multiple: '4.2x', label: 'Average Operations' },
-                  { grade: 'B' as OperationalGrade, color: 'bg-blue-500', multiple: '5.7x', label: 'Good Operations' },
-                  { grade: 'A' as OperationalGrade, color: 'bg-green-500', multiple: '7.5x', label: 'Excellent Operations' }
+                  { grade: 'F' as OperationalGrade, multiple: '2.0x', label: 'Poor Operations' },
+                  { grade: 'D' as OperationalGrade, multiple: '3.0x', label: 'Below Average' },
+                  { grade: 'C' as OperationalGrade, multiple: '4.2x', label: 'Average Operations' },
+                  { grade: 'B' as OperationalGrade, multiple: '5.7x', label: 'Good Operations' },
+                  { grade: 'A' as OperationalGrade, multiple: '7.5x', label: 'Excellent Operations' }
                 ].map((segment, index) => (
                   <button
                     key={segment.grade}
                     onClick={() => setSliderGrade(segment.grade)}
                     className={`
-                      absolute top-0 h-16 ${segment.color} cursor-pointer transition-all duration-200 
-                      hover:brightness-110 hover:scale-y-105 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-300
-                      ${sliderGrade === segment.grade ? 'ring-4 ring-blue-400 scale-y-105 brightness-110' : ''}
+                      absolute top-0 h-16 cursor-pointer transition-all duration-200 hover:bg-black/20 focus:outline-none
+                      ${sliderGrade === segment.grade ? 'ring-4 ring-blue-600 bg-black/30' : ''}
                     `}
                     style={{
                       left: `${(index / 5) * 100}%`,
@@ -272,50 +284,21 @@ export default function InteractiveValuationSlider() {
                   >
                     {/* Grade Label */}
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="text-white font-bold text-lg">{segment.grade}</span>
+                      <span className="text-white font-bold text-xl drop-shadow-lg">{segment.grade}</span>
                     </div>
                   </button>
                 ))}
                 
-                {/* Current Grade Indicator - Your Actual Grade */}
-                <div 
-                  className="absolute -top-10 h-16 flex items-center justify-center transition-all duration-300 z-20 pointer-events-none"
-                  style={{ 
-                    left: `${(gradeToNumber(baseGrade) / 4) * 100}%`,
-                    transform: 'translateX(-50%)'
-                  }}
-                >
-                  <div className="flex flex-col items-center">
-                    <div className="bg-gradient-to-r from-emerald-600 to-emerald-700 text-white px-3 py-2 rounded-lg text-xs font-bold shadow-lg border-2 border-emerald-400 relative">
-                      <div className="text-center">
-                        <div className="text-[10px] uppercase tracking-wide opacity-90">YOUR GRADE</div>
-                        <div className="text-sm font-black">{baseGrade}</div>
-                      </div>
-                      <div className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-400 rounded-full border border-white"></div>
-                    </div>
-                    <div className="w-0 h-0 border-l-6 border-r-6 border-t-10 border-transparent border-t-emerald-600 mt-1"></div>
-                  </div>
-                </div>
-                
-                {/* Selected Grade Indicator - Interactive Selection */}
+                {/* Selected Grade Marker Within Scale */}
                 {sliderGrade !== baseGrade && (
                   <div 
-                    className="absolute -top-10 h-16 flex items-center justify-center transition-all duration-300 z-20 pointer-events-none"
+                    className="absolute top-1/2 transform -translate-y-1/2 transition-all duration-300 z-30 pointer-events-none"
                     style={{ 
                       left: `${(gradeToNumber(sliderGrade) / 4) * 100}%`,
-                      transform: 'translateX(-50%)'
+                      transform: 'translateX(-50%) translateY(-50%)'
                     }}
                   >
-                    <div className="flex flex-col items-center">
-                      <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-3 py-2 rounded-lg text-xs font-bold shadow-lg border-2 border-blue-400 relative animate-pulse">
-                        <div className="text-center">
-                          <div className="text-[10px] uppercase tracking-wide opacity-90">EXPLORING</div>
-                          <div className="text-sm font-black">{sliderGrade}</div>
-                        </div>
-                        <div className="absolute -top-1 -right-1 w-3 h-3 bg-blue-400 rounded-full border border-white animate-ping"></div>
-                      </div>
-                      <div className="w-0 h-0 border-l-6 border-r-6 border-t-10 border-transparent border-t-blue-600 mt-1"></div>
-                    </div>
+                    <div className="w-6 h-6 bg-white border-4 border-blue-600 rounded-full shadow-lg"></div>
                   </div>
                 )}
               </div>
@@ -346,25 +329,6 @@ export default function InteractiveValuationSlider() {
                   <div className="font-semibold">A</div>
                   <div className="text-green-600 font-medium">7.5x</div>
                   <div className="text-xs">Excellent</div>
-                </div>
-              </div>
-
-              {/* Legend for Markers */}
-              <div className="bg-slate-100 rounded-lg p-3 mb-4">
-                <div className="text-center text-xs font-semibold text-slate-700 mb-2">Marker Legend</div>
-                <div className="flex justify-center gap-6">
-                  <div className="flex items-center gap-2">
-                    <div className="w-6 h-4 bg-gradient-to-r from-emerald-600 to-emerald-700 rounded border border-emerald-400 relative">
-                      <div className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-emerald-400 rounded-full border border-white"></div>
-                    </div>
-                    <span className="text-xs font-medium text-slate-700">Your Current Grade</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-6 h-4 bg-gradient-to-r from-blue-600 to-blue-700 rounded border border-blue-400 relative">
-                      <div className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-blue-400 rounded-full border border-white"></div>
-                    </div>
-                    <span className="text-xs font-medium text-slate-700">Exploring This Grade</span>
-                  </div>
                 </div>
               </div>
 
