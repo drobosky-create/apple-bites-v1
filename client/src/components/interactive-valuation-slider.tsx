@@ -39,7 +39,19 @@ export default function InteractiveValuationSlider() {
 
   // Use most recent assessment data or defaults
   const latestAssessment = assessments?.[assessments.length - 1];
-  const currentEbitda = latestAssessment ? parseFloat(latestAssessment.adjustedEbitda || "0") : 1379841;
+  
+  // Ensure EBITDA is properly parsed from string to number
+  const getEbitdaValue = (assessment: ValuationAssessment | undefined): number => {
+    if (!assessment) return 1379841; // Default fallback
+    
+    const adjustedEbitda = assessment.adjustedEbitda;
+    if (!adjustedEbitda) return 1379841;
+    
+    const parsed = typeof adjustedEbitda === 'string' ? parseFloat(adjustedEbitda) : adjustedEbitda;
+    return !isNaN(parsed) && parsed > 0 ? parsed : 1379841;
+  };
+  
+  const currentEbitda = getEbitdaValue(latestAssessment);
   const baseGrade: OperationalGrade = latestAssessment ? 
     (latestAssessment.overallScore?.charAt(0) as OperationalGrade || 'C') : 'C';
 
