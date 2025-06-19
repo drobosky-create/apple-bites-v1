@@ -30,7 +30,7 @@ export function Footer() {
                 href="https://meritage.partners/privacypolicy" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="block text-white hover:text-blue-200 transition-colors text-sm"
+                className="block hover:text-blue-200 transition-colors text-sm text-[#eef0f5]"
               >
                 Privacy Policy
               </a>
