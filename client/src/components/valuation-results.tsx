@@ -1,6 +1,6 @@
 import { ValuationAssessment } from "@shared/schema";
 import { Button } from "@/components/ui/button";
-import { CheckCircle, Download, Calendar, Mail, Calculator } from "lucide-react";
+import { CheckCircle, Calendar, Calculator } from "lucide-react";
 import { useLocation } from "wouter";
 import ValueDriversHeatmap from "./value-drivers-heatmap";
 
@@ -44,38 +44,7 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
     }
   };
 
-  const handleDownloadPDF = async () => {
-    try {
-      console.log('Attempting to download PDF for assessment ID:', results.id);
-      const response = await fetch(`/api/valuation/${results.id}/download-pdf`);
-      
-      console.log('PDF download response status:', response.status);
-      console.log('PDF download response headers:', Object.fromEntries(response.headers.entries()));
-      
-      if (response.ok) {
-        const blob = await response.blob();
-        console.log('PDF blob size:', blob.size);
-        
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `${results.company || 'Business'}_Valuation_Report.pdf`;
-        document.body.appendChild(a);
-        a.click();
-        window.URL.revokeObjectURL(url);
-        document.body.removeChild(a);
-        
-        console.log('PDF download initiated successfully');
-      } else {
-        const errorText = await response.text();
-        console.error('Failed to download PDF:', response.status, errorText);
-        alert(`Failed to download PDF: ${response.status} - ${errorText}`);
-      }
-    } catch (error) {
-      console.error('Error downloading PDF:', error);
-      alert(`Error downloading PDF: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  };
+
 
   const handleScheduleConsultation = () => {
     // Open GoHighLevel calendar widget in a new window
@@ -121,20 +90,6 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
           
           {/* Primary CTAs after valuation */}
           <div className="mt-4 space-y-3">
-            <Button 
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                console.log('PDF download button clicked');
-                handleDownloadPDF();
-              }}
-              type="button"
-              className="w-full heritage-gradient text-white px-4 py-3 rounded-lg text-sm font-medium flex items-center justify-center shadow-sm hover:shadow-md transition-all duration-200 active:scale-95"
-            >
-              <Download className="mr-2 w-4 h-4" />
-              Download Full Report
-            </Button>
-
             <div className="flex flex-col sm:flex-row gap-2">
               <Button 
                 onClick={handleExploreImprovements}
@@ -232,9 +187,8 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
                 <p className="text-blue-600 font-bold text-sm">The Meritage Partners Team</p>
                 <p className="text-slate-600 text-xs">M&A Advisory & Business Valuation Experts</p>
                 <div className="flex items-center justify-center mt-2 space-x-4 text-xs">
-                  <a href="mailto:info@meritage-partners.com" className="text-blue-600 hover:text-blue-700 flex items-center space-x-1">
-                    <Mail className="w-3 h-3" />
-                    <span>info@meritage-partners.com</span>
+                  <a href="mailto:info@meritage-partners.com" className="text-blue-600 hover:text-blue-700">
+                    info@meritage-partners.com
                   </a>
                   <span className="text-slate-400">|</span>
                   <a href="tel:+19495229121" className="text-blue-600 hover:text-blue-700">
