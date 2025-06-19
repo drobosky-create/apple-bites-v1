@@ -114,7 +114,7 @@ export default function ValueDriversForm({ form, onNext, onPrev, onDataChange }:
   return (
     <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-sm border border-slate-200/60">
       <div className="p-8 border-b border-slate-200/60 bg-gradient-to-r from-slate-50/80 to-blue-50/40 rounded-t-xl">
-        <div className="flex items-center gap-3 mb-3">
+        <div className="flex items-center gap-3 mb-3 bg-[#f8fafc]">
           <div className="p-2 bg-blue-100 rounded-lg">
             <ArrowRight className="w-5 h-5 text-blue-600" />
           </div>
@@ -122,7 +122,6 @@ export default function ValueDriversForm({ form, onNext, onPrev, onDataChange }:
         </div>
         <p className="text-slate-600 leading-relaxed">Rate your business on these key value drivers. Your scores will influence the valuation multiple.</p>
       </div>
-
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="p-8 space-y-6">
           <div className="bg-blue-50 rounded-lg p-4 mb-6">
