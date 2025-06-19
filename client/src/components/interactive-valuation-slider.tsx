@@ -254,6 +254,13 @@ export default function InteractiveValuationSlider() {
                 </div>
               </div>
 
+              {/* Instructions */}
+              <div className="text-center mb-3">
+                <p className="text-sm text-gray-600 font-medium">
+                  👆 Click anywhere on the gradient scale below to explore different performance grades
+                </p>
+              </div>
+
               {/* Interactive Grade Bar with Gradient */}
               <div 
                 className="relative h-16 rounded-lg overflow-hidden border border-gray-300 mb-4 cursor-pointer"
