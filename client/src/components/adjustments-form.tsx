@@ -49,7 +49,7 @@ export default function AdjustmentsForm({
   return (
     <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-sm border border-slate-200/60">
       <div className="p-8 border-b border-slate-200/60 bg-gradient-to-r from-slate-50/80 to-blue-50/40 rounded-t-xl">
-        <div className="flex items-center gap-3 mb-3">
+        <div className="flex items-center gap-3 mb-3 bg-[#f9fbfb]">
           <div className="p-2 bg-blue-100 rounded-lg">
             <ArrowRight className="w-5 h-5 text-blue-600" />
           </div>
@@ -57,7 +57,6 @@ export default function AdjustmentsForm({
         </div>
         <p className="text-slate-600 leading-relaxed">Add back non-recurring expenses and owner-specific adjustments to normalize EBITDA.</p>
       </div>
-
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="p-8 space-y-6">
           <div className="space-y-4">
