@@ -247,16 +247,10 @@ export default function InteractiveValuationSlider() {
             <div className="bg-gray-50 p-4 rounded-lg">
               <h4 className="font-semibold mb-4 text-center text-base">Business Value Distribution by Operational Grade</h4>
               
-              {/* Current Grade Label Above Scale */}
-              <div className="text-center mb-2">
-                <div 
-                  className="inline-block bg-slate-800 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-lg relative"
-                  style={{ 
-                    marginLeft: `${(gradeToNumber(baseGrade) / 4) * 100 - 50}%`
-                  }}
-                >
+              {/* Static Current Grade Label */}
+              <div className="text-center mb-4">
+                <div className="inline-block bg-black text-white px-6 py-3 rounded-lg text-base font-bold shadow-lg border-2 border-gray-300">
                   Your Current Grade: {baseGrade}
-                  <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-6 border-transparent border-t-slate-800"></div>
                 </div>
               </div>
 
@@ -282,10 +276,6 @@ export default function InteractiveValuationSlider() {
                     }}
                     title={`Grade ${segment.grade}: ${segment.multiple} EBITDA Multiple - ${segment.label}`}
                   >
-                    {/* Grade Label */}
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="text-white font-bold text-xl drop-shadow-lg">{segment.grade}</span>
-                    </div>
                   </button>
                 ))}
                 
