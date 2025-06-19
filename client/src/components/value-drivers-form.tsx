@@ -120,7 +120,7 @@ export default function ValueDriversForm({ form, onNext, onPrev, onDataChange }:
           </div>
           <h3 className="text-2xl font-bold text-slate-900">Value Drivers Assessment</h3>
         </div>
-        <p className="text-slate-600 leading-relaxed">Rate your business on these key value drivers. Your scores will influence the valuation multiple.</p>
+        <p className="text-slate-600 leading-relaxed bg-[#f8fafc]">Rate your business on these key value drivers. Your scores will influence the valuation multiple.</p>
       </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="p-8 space-y-6">
