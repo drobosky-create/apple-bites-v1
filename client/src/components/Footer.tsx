@@ -17,7 +17,7 @@ export function Footer() {
                 className="h-10 w-auto"
               />
             </div>
-            <p className="text-white text-sm leading-relaxed max-w-md">
+            <p className="text-sm leading-relaxed max-w-md text-[#ffffff]">
               Whether you're scaling, preparing to sell, or exploring strategic partnerships—Meritage Partners is here to guide your next move.
             </p>
           </div>
