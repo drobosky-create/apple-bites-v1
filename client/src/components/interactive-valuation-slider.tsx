@@ -255,31 +255,32 @@ export default function InteractiveValuationSlider() {
               </div>
 
               {/* Interactive Grade Bar with Gradient */}
-              <div className="relative h-16 rounded-lg overflow-hidden border border-gray-300 mb-4" style={{
-                background: 'linear-gradient(to right, #ef4444 0%, #f97316 25%, #eab308 50%, #22c55e 75%, #16a34a 100%)'
-              }}>
-                {[
-                  { grade: 'F' as OperationalGrade, multiple: '2.0x', label: 'Poor Operations' },
-                  { grade: 'D' as OperationalGrade, multiple: '3.0x', label: 'Below Average' },
-                  { grade: 'C' as OperationalGrade, multiple: '4.2x', label: 'Average Operations' },
-                  { grade: 'B' as OperationalGrade, multiple: '5.7x', label: 'Good Operations' },
-                  { grade: 'A' as OperationalGrade, multiple: '7.5x', label: 'Excellent Operations' }
-                ].map((segment, index) => (
-                  <button
-                    key={segment.grade}
-                    onClick={() => setSliderGrade(segment.grade)}
-                    className={`
-                      absolute top-0 h-16 cursor-pointer transition-all duration-200 hover:bg-black/20 focus:outline-none
-                      ${sliderGrade === segment.grade ? 'ring-4 ring-blue-600 bg-black/30' : ''}
-                    `}
-                    style={{
-                      left: `${(index / 5) * 100}%`,
+              <div 
+                className="relative h-16 rounded-lg overflow-hidden border border-gray-300 mb-4 cursor-pointer"
+                style={{
+                  background: 'linear-gradient(to right, #ef4444 0%, #f97316 25%, #eab308 50%, #22c55e 75%, #16a34a 100%)'
+                }}
+                onClick={(e) => {
+                  const rect = e.currentTarget.getBoundingClientRect();
+                  const x = e.clientX - rect.left;
+                  const percentage = x / rect.width;
+                  const gradeIndex = Math.floor(percentage * 5);
+                  const grades: OperationalGrade[] = ['F', 'D', 'C', 'B', 'A'];
+                  if (gradeIndex >= 0 && gradeIndex < 5) {
+                    setSliderGrade(grades[gradeIndex]);
+                  }
+                }}
+              >
+                {/* Selected Grade Indicator Ring */}
+                {sliderGrade !== baseGrade && (
+                  <div 
+                    className="absolute inset-y-2 transition-all duration-300 border-4 border-white rounded-md bg-black/20"
+                    style={{ 
+                      left: `${(gradeToNumber(sliderGrade) / 5) * 100}%`,
                       width: '20%'
                     }}
-                    title={`Grade ${segment.grade}: ${segment.multiple} EBITDA Multiple - ${segment.label}`}
-                  >
-                  </button>
-                ))}
+                  />
+                )}
                 
                 {/* Selected Grade Marker Within Scale */}
                 {sliderGrade !== baseGrade && (
