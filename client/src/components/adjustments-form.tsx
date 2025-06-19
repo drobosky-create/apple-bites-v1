@@ -95,7 +95,7 @@ export default function AdjustmentsForm({
                   <FormLabel>Personal Expenses</FormLabel>
                   <FormControl>
                     <div className="relative">
-                      <span className="absolute left-3 top-3 text-slate-400">$</span>
+                      <span className="absolute left-3 top-3 text-slate-400 bg-[#f8fafc]">$</span>
                       <Input 
                         {...field} 
                         type="number" 
