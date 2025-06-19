@@ -255,7 +255,9 @@ export default function InteractiveValuationSlider() {
               </div>
 
               {/* Interactive Grade Bar with Gradient */}
-              <div className="relative h-16 rounded-lg overflow-hidden border border-gray-300 mb-4 bg-gradient-to-r from-red-500 via-yellow-500 via-orange-400 to-green-500">
+              <div className="relative h-16 rounded-lg overflow-hidden border border-gray-300 mb-4" style={{
+                background: 'linear-gradient(to right, #ef4444 0%, #f97316 25%, #eab308 50%, #22c55e 75%, #16a34a 100%)'
+              }}>
                 {[
                   { grade: 'F' as OperationalGrade, multiple: '2.0x', label: 'Poor Operations' },
                   { grade: 'D' as OperationalGrade, multiple: '3.0x', label: 'Below Average' },
