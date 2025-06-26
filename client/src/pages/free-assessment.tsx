@@ -108,7 +108,7 @@ export default function FreeAssessment() {
 
         {currentStep !== "results" && (
           <div className="mb-4 sm:mb-8">
-            <ProgressIndicator currentStep={currentStep} />
+            <FreeProgressIndicator currentStep={currentStep} />
           </div>
         )}
 
