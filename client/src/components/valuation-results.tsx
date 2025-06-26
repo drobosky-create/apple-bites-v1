@@ -1,6 +1,6 @@
 import { ValuationAssessment } from "@shared/schema";
 import { Button } from "@/components/ui/button";
-import { CheckCircle, Calendar, Calculator, Download } from "lucide-react";
+import { CheckCircle, Calendar, Calculator } from "lucide-react";
 import { useLocation } from "wouter";
 import ValueDriversHeatmap from "./value-drivers-heatmap";
 
@@ -56,11 +56,6 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
     setLocation(`/value-calculator?grade=${results.overallScore}`);
   };
 
-  const handleDownloadComprehensivePDF = () => {
-    // Download the comprehensive investor-grade PDF report
-    window.open(`/api/comprehensive-pdf/${results.id}`, '_blank');
-  };
-
   return (
     <div className="bg-white rounded-lg shadow-sm min-h-screen flex flex-col max-w-full overflow-hidden">
       <div className="p-4 border-b border-slate-200 flex-shrink-0">
@@ -99,14 +94,6 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
           <div className="mt-4 space-y-3">
             <div className="flex flex-col sm:flex-row gap-2">
               <Button 
-                onClick={handleDownloadComprehensivePDF}
-                className="flex-1 px-3 py-2 rounded-lg text-xs font-medium bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center shadow-sm hover:shadow-md transition-all duration-200"
-              >
-                <Download className="mr-1 w-3 h-3" />
-                Download Full Report
-              </Button>
-
-              <Button 
                 onClick={handleExploreImprovements}
                 variant="outline"
                 className="flex-1 px-3 py-2 rounded-lg text-xs font-medium border-[#1a2332] text-[#1a2332] hover:bg-[#1a2332] hover:text-white flex items-center justify-center"
@@ -114,12 +101,10 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
                 <Calculator className="mr-1 w-3 h-3" />
                 Explore Value Improvements
               </Button>
-            </div>
-            
-            <div className="flex justify-center">
+
               <Button 
                 onClick={handleScheduleConsultation}
-                className="w-full px-3 py-2 rounded-lg text-xs font-medium bg-[#f5c842] hover:bg-[#e6b63a] text-[#1a2332] flex items-center justify-center shadow-sm hover:shadow-md transition-all duration-200"
+                className="flex-1 px-3 py-2 rounded-lg text-xs font-medium bg-[#f5c842] hover:bg-[#e6b63a] text-[#1a2332] flex items-center justify-center shadow-sm hover:shadow-md transition-all duration-200"
               >
                 <Calendar className="mr-1 w-3 h-3" />
                 Schedule Consultation

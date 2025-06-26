@@ -359,14 +359,11 @@ export default function AnalyticsDashboard() {
                           <Button size="sm" variant="outline">
                             <Eye className="h-4 w-4" />
                           </Button>
-                          <Button 
-                            size="sm" 
-                            variant="outline"
-                            onClick={() => window.open(`/api/comprehensive-pdf/${assessment.id}`, '_blank')}
-                            title="Download Comprehensive Report"
-                          >
-                            <Download className="h-4 w-4" />
-                          </Button>
+                          {assessment.pdfUrl && (
+                            <Button size="sm" variant="outline">
+                              <Download className="h-4 w-4" />
+                            </Button>
+                          )}
                         </div>
                       </TableCell>
                     </TableRow>
