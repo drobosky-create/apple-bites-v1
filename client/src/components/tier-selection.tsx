@@ -80,19 +80,20 @@ export default function TierSelection({ assessment, onTierSelect }: TierSelectio
       const response = await apiRequest('POST', '/api/report/generate-enhanced', {
         assessmentId: assessment.id,
         ...paidTierData
-      }) as { success: boolean; downloadUrl?: string; message?: string };
+      });
+      const result = await response.json() as { success: boolean; downloadUrl?: string; message?: string };
 
-      if (response.success && response.downloadUrl) {
+      if (result.success && result.downloadUrl) {
         toast({
           title: "Strategic Report Generated",
           description: "Your comprehensive strategic report is ready for download.",
         });
         
         // Download the PDF
-        window.open(response.downloadUrl, '_blank');
+        window.open(result.downloadUrl, '_blank');
         onTierSelect('paid');
       } else {
-        throw new Error(response.message || 'Failed to generate strategic report');
+        throw new Error(result.message || 'Failed to generate strategic report');
       }
     } catch (error) {
       toast({
