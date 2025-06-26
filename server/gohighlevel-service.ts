@@ -25,6 +25,7 @@ export interface GoHighLevelEmailPayload {
 
 export class GoHighLevelService {
   private apiKey: string;
+  private locationId: string;
   private webhookUrl: string;
   private baseUrl = 'https://services.leadconnectorhq.com';
 
@@ -32,11 +33,15 @@ export class GoHighLevelService {
     if (!process.env.GOHIGHLEVEL_API_KEY) {
       throw new Error("GOHIGHLEVEL_API_KEY environment variable is required");
     }
+    if (!process.env.GOHIGHLEVEL_LOCATION_ID) {
+      throw new Error("GOHIGHLEVEL_LOCATION_ID environment variable is required");
+    }
     if (!process.env.GOHIGHLEVEL_WEBHOOK_URL) {
       throw new Error("GOHIGHLEVEL_WEBHOOK_URL environment variable is required");
     }
     
     this.apiKey = process.env.GOHIGHLEVEL_API_KEY;
+    this.locationId = process.env.GOHIGHLEVEL_LOCATION_ID;
     this.webhookUrl = process.env.GOHIGHLEVEL_WEBHOOK_URL;
   }
 
@@ -65,7 +70,7 @@ export class GoHighLevelService {
     try {
       // First, try to find existing contact by email
       const searchResponse = await this.makeRequest(
-        `/contacts/?email=${encodeURIComponent(contactData.email)}`
+        `/locations/${this.locationId}/contacts/?email=${encodeURIComponent(contactData.email)}`
       );
 
       let contactId: string;
@@ -73,10 +78,10 @@ export class GoHighLevelService {
       if (searchResponse.contacts && searchResponse.contacts.length > 0) {
         // Update existing contact
         contactId = searchResponse.contacts[0].id;
-        await this.makeRequest(`/contacts/${contactId}`, 'PUT', contactData);
+        await this.makeRequest(`/locations/${this.locationId}/contacts/${contactId}`, 'PUT', contactData);
       } else {
         // Create new contact
-        const createResponse = await this.makeRequest('/contacts/', 'POST', contactData);
+        const createResponse = await this.makeRequest(`/locations/${this.locationId}/contacts/`, 'POST', contactData);
         contactId = createResponse.contact.id;
       }
 
@@ -87,9 +92,19 @@ export class GoHighLevelService {
     }
   }
 
+  async getAllContacts(): Promise<any[]> {
+    try {
+      const response = await this.makeRequest(`/locations/${this.locationId}/contacts/`);
+      return response.contacts || [];
+    } catch (error) {
+      console.error('Error fetching all GoHighLevel contacts:', error);
+      throw error;
+    }
+  }
+
   async sendEmail(emailData: GoHighLevelEmailPayload): Promise<boolean> {
     try {
-      await this.makeRequest('/emails/', 'POST', emailData);
+      await this.makeRequest(`/locations/${this.locationId}/emails/`, 'POST', emailData);
       return true;
     } catch (error) {
       console.error('Error sending email via GoHighLevel:', error);

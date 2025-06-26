@@ -1162,22 +1162,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       console.log('Starting manual GoHighLevel sync...');
       
-      // Test the GHL connection first
-      const connectionTest = await fetch('https://services.leadconnectorhq.com/contacts/', {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${process.env.GOHIGHLEVEL_API_KEY}`,
-          'Content-Type': 'application/json',
-          'Version': '2021-07-28'
-        }
-      });
-      
-      if (!connectionTest.ok) {
-        throw new Error(`GHL API error: ${connectionTest.status}`);
-      }
-      
-      const ghlData = await connectionTest.json();
-      console.log('Retrieved GHL contacts:', ghlData.contacts?.length || 0);
+      // Use the GoHighLevel service to get all contacts
+      const ghlContacts = await goHighLevelService.getAllContacts();
+      console.log('Retrieved GHL contacts:', ghlContacts.length);
       
       let syncStats = {
         total: 0,
@@ -1187,8 +1174,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         errors: 0
       };
       
-      if (ghlData.contacts && ghlData.contacts.length > 0) {
-        for (const contact of ghlData.contacts) {
+      if (ghlContacts && ghlContacts.length > 0) {
+        for (const contact of ghlContacts) {
           syncStats.total++;
           
           try {

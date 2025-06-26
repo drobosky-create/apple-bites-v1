@@ -85,26 +85,7 @@ export default function LeadsDashboard() {
     }
   });
 
-  // Mutation for syncing GoHighLevel contacts
-  const syncGhlMutation = useMutation({
-    mutationFn: async () => {
-      return apiRequest('POST', '/api/sync/gohighlevel');
-    },
-    onSuccess: (data: any) => {
-      queryClient.invalidateQueries({ queryKey: ['/api/leads'] });
-      toast({
-        title: "Sync Complete",
-        description: `GoHighLevel sync finished. Created: ${data.stats?.created || 0}, Updated: ${data.stats?.updated || 0}`,
-      });
-    },
-    onError: (error: Error) => {
-      toast({
-        title: "Sync Failed",
-        description: error.message,
-        variant: "destructive",
-      });
-    }
-  });
+
 
   // Handler functions
   const handleViewDetails = (lead: Lead) => {
@@ -211,16 +192,6 @@ export default function LeadsDashboard() {
             </div>
           </div>
           <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-            <Button 
-              variant="outline" 
-              onClick={() => syncGhlMutation.mutate()}
-              disabled={syncGhlMutation.isPending}
-              className="flex items-center justify-center gap-2 w-full sm:w-auto text-green-600 border-green-600 hover:bg-green-600 hover:text-white"
-            >
-              <RefreshCw className={`w-4 h-4 ${syncGhlMutation.isPending ? 'animate-spin' : ''}`} />
-              <span className="hidden sm:inline">{syncGhlMutation.isPending ? 'Syncing...' : 'Sync GHL'}</span>
-              <span className="sm:hidden">{syncGhlMutation.isPending ? 'Sync...' : 'Sync'}</span>
-            </Button>
             <Button 
               variant="outline" 
               onClick={() => window.location.href = '/valuation-form'}
