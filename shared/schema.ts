@@ -13,6 +13,17 @@ export const valuationAssessments = pgTable("valuation_assessments", {
   phone: text("phone").notNull(),
   company: text("company").notNull(),
   jobTitle: text("job_title"),
+  foundingYear: integer("founding_year"),
+  
+  // Industry Classification (for paid tier)
+  naicsCode: text("naics_code"),
+  sicCode: text("sic_code"),
+  industryDescription: text("industry_description"),
+  
+  // Tier Information
+  reportTier: text("report_tier").notNull().default("free"), // "free" or "paid"
+  paymentStatus: text("payment_status").default("pending"), // "pending", "completed", "failed"
+  stripePaymentId: text("stripe_payment_id"),
   
   // EBITDA Components
   netIncome: decimal("net_income", { precision: 15, scale: 2 }).notNull(),

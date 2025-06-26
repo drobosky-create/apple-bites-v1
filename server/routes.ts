@@ -4,6 +4,8 @@ import { storage } from "./storage";
 import { insertValuationAssessmentSchema, type ValuationAssessment, loginSchema, insertTeamMemberSchema, type LoginCredentials, type InsertTeamMember, type TeamMember } from "@shared/schema";
 import { generateValuationNarrative, type ValuationAnalysisInput } from "./openai";
 import { generateValuationPDF } from "./pdf-generator";
+import { generateEnhancedValuationPDF } from "./pdf-generator-enhanced";
+import { getMultiplierByNAICS, calculateWeightedMultiplier } from "./config/naicsMultipliers";
 import { emailService } from "./email-service";
 import { goHighLevelService } from "./gohighlevel-service";
 import { getMultiplierForGrade, getLabelForGrade, scoreToGrade } from "./config/multiplierScale";
