@@ -117,6 +117,8 @@ Preferred communication style: Simple, everyday language.
 
 - **June 26, 2025 - Interactive Valuation Slider Enhanced**: Updated slider with static grade labels, improved gradient scale design, and better visual contrast for user experience.
 
+- **June 26, 2025 - Two-Tier Platform Architecture Implemented**: Created separate assessment paths with upfront tier selection. Free tier maintains original Apple Bites assessment (5 steps, general multipliers). Paid tier ($395) features completely new Strategic Assessment with industry-specific NAICS codes, 6-step process including industry classification, and enhanced value analysis. Both tiers generate appropriate PDF reports with tier-specific features.
+
 ## Changelog
 
 Changelog:

@@ -1,5 +1,5 @@
 import { useValuationForm } from "@/hooks/use-valuation-form";
-import FreeProgressIndicator from "@/components/free-progress-indicator";
+import ProgressIndicator from "@/components/progress-indicator";
 import ContactForm from "@/components/contact-form";
 import EbitdaForm from "@/components/ebitda-form";
 import AdjustmentsForm from "@/components/adjustments-form";
@@ -108,7 +108,7 @@ export default function FreeAssessment() {
 
         {currentStep !== "results" && (
           <div className="mb-4 sm:mb-8">
-            <FreeProgressIndicator currentStep={currentStep} />
+            <ProgressIndicator currentStep={currentStep} />
           </div>
         )}
 
