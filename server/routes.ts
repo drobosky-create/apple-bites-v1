@@ -1177,6 +1177,113 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
 
 
+  // POST /api/report/generate-enhanced - Generate paid tier PDF with NAICS-specific multipliers
+  app.post("/api/report/generate-enhanced", async (req, res) => {
+    try {
+      const { assessmentId, naicsCode, sicCode, industryDescription, foundingYear } = req.body;
+      
+      const assessment = await storage.getValuationAssessment(assessmentId);
+      if (!assessment) {
+        return res.status(404).json({ message: "Assessment not found" });
+      }
+
+      // Update assessment with industry data for paid tier
+      const updatedData: any = {
+        reportTier: 'paid',
+        naicsCode,
+        sicCode,
+        industryDescription,
+        foundingYear
+      };
+
+      // For paid tier, recalculate with NAICS-specific multipliers
+      if (naicsCode) {
+        const multiplierData = getMultiplierByNAICS(naicsCode);
+        
+        // Convert grade to numeric score for calculation
+        const gradeToScore = { 'A': 90, 'B': 80, 'C': 70, 'D': 60, 'F': 50 };
+        const overallGrade = assessment.overallScore || 'C';
+        const gradeScore = gradeToScore[overallGrade as keyof typeof gradeToScore] || 70;
+        
+        const enhancedMultiple = calculateWeightedMultiplier(multiplierData, gradeScore, 'paid');
+        
+        // Recalculate valuation with industry-specific multiplier
+        const adjustedEbitda = parseFloat(assessment.adjustedEbitda || '0');
+        const lowEstimate = adjustedEbitda * multiplierData.lowMultiple;
+        const midEstimate = adjustedEbitda * enhancedMultiple;
+        const highEstimate = adjustedEbitda * multiplierData.highMultiple;
+        
+        updatedData.valuationMultiple = enhancedMultiple.toFixed(2);
+        updatedData.lowEstimate = lowEstimate.toFixed(2);
+        updatedData.midEstimate = midEstimate.toFixed(2);
+        updatedData.highEstimate = highEstimate.toFixed(2);
+      }
+      
+      // Update assessment with enhanced data
+      await storage.updateValuationAssessment(assessmentId, updatedData);
+      
+      // Get refreshed assessment
+      const enhancedAssessment = await storage.getValuationAssessment(assessmentId);
+      if (!enhancedAssessment) {
+        return res.status(404).json({ message: "Assessment not found after update" });
+      }
+      
+      // Generate enhanced PDF
+      const pdfBuffer = await generateEnhancedValuationPDF(enhancedAssessment, 'paid');
+      
+      // Save PDF to filesystem
+      const pdfDir = path.join(process.cwd(), 'pdfs');
+      await fs.mkdir(pdfDir, { recursive: true });
+      const pdfFileName = `strategic_valuation_${enhancedAssessment.id}_${Date.now()}.pdf`;
+      const pdfPath = path.join(pdfDir, pdfFileName);
+      await fs.writeFile(pdfPath, pdfBuffer);
+      
+      // Update assessment with PDF URL
+      await storage.updateValuationAssessment(assessmentId, {
+        pdfUrl: `/api/pdf/${pdfFileName}`
+      });
+      
+      res.json({
+        success: true,
+        pdfUrl: `/api/pdf/${pdfFileName}`,
+        downloadUrl: `/api/pdf/${pdfFileName}`,
+        message: "Strategic report generated successfully"
+      });
+      
+    } catch (error) {
+      console.error("Error generating enhanced PDF:", error);
+      res.status(500).json({ message: "Error generating strategic report" });
+    }
+  });
+
+  // POST /api/report/generate-free - Generate free tier PDF (current system)
+  app.post("/api/report/generate-free", async (req, res) => {
+    try {
+      const { assessmentId } = req.body;
+      
+      const assessment = await storage.getValuationAssessment(assessmentId);
+      if (!assessment) {
+        return res.status(404).json({ message: "Assessment not found" });
+      }
+
+      // Mark as free tier
+      await storage.updateValuationAssessment(assessmentId, {
+        reportTier: 'free'
+      });
+      
+      // Generate free tier PDF using enhanced generator
+      const pdfBuffer = await generateEnhancedValuationPDF(assessment, 'free');
+      
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', `attachment; filename="${assessment.company}_Starter_Valuation_Report.pdf"`);
+      res.send(pdfBuffer);
+      
+    } catch (error) {
+      console.error("Error generating free PDF:", error);
+      res.status(500).json({ message: "Error generating starter report" });
+    }
+  });
+
   // Test endpoint for GoHighLevel integration
   app.post("/api/test-gohighlevel", async (req, res) => {
     try {
