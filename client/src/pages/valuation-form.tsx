@@ -5,6 +5,7 @@ import EbitdaForm from "@/components/ebitda-form";
 import AdjustmentsForm from "@/components/adjustments-form";
 import ValueDriversForm from "@/components/value-drivers-form";
 import FollowUpForm from "@/components/followup-form";
+import TierSelection from "@/components/tier-selection";
 import ValuationResults from "@/components/valuation-results";
 import LoadingModal from "@/components/loading-modal";
 import { Shield, ArrowLeft } from "lucide-react";
@@ -137,10 +138,30 @@ export default function ValuationForm() {
         {currentStep === "followUp" && (
           <FollowUpForm
             form={forms.followUp}
-            onSubmit={submitAssessment}
+            onSubmit={() => {
+              // Don't submit assessment yet, move to tier selection
+              nextStep();
+            }}
             onPrev={prevStep}
             onDataChange={(data) => updateFormData("followUp", data)}
-            isSubmitting={isSubmitting}
+            isSubmitting={false}
+          />
+        )}
+
+        {currentStep === "tierSelection" && (
+          <TierSelection
+            formData={formData}
+            onFreeReport={() => {
+              // Submit assessment with free tier
+              const submissionData = { ...formData, tier: 'free' };
+              submitAssessment(submissionData);
+            }}
+            onPaidReport={() => {
+              // Submit assessment with paid tier  
+              const submissionData = { ...formData, tier: 'paid' };
+              submitAssessment(submissionData);
+            }}
+            onPrev={prevStep}
           />
         )}
 

@@ -17,7 +17,7 @@ import {
   type ValuationAssessment,
 } from "@shared/schema";
 
-export type FormStep = "contact" | "ebitda" | "adjustments" | "valueDrivers" | "followUp" | "results";
+export type FormStep = "contact" | "ebitda" | "adjustments" | "valueDrivers" | "followUp" | "tierSelection" | "results";
 
 export interface ValuationFormData {
   contact: ContactInfo;
@@ -121,7 +121,7 @@ export function useValuationForm() {
   };
 
   const nextStep = () => {
-    const steps: FormStep[] = ["contact", "ebitda", "adjustments", "valueDrivers", "followUp"];
+    const steps: FormStep[] = ["contact", "ebitda", "adjustments", "valueDrivers", "followUp", "tierSelection"];
     const currentIndex = steps.indexOf(currentStep);
     if (currentIndex < steps.length - 1) {
       setCurrentStep(steps[currentIndex + 1]);
@@ -133,7 +133,7 @@ export function useValuationForm() {
   };
 
   const prevStep = () => {
-    const steps: FormStep[] = ["contact", "ebitda", "adjustments", "valueDrivers", "followUp"];
+    const steps: FormStep[] = ["contact", "ebitda", "adjustments", "valueDrivers", "followUp", "tierSelection"];
     const currentIndex = steps.indexOf(currentStep);
     if (currentIndex > 0) {
       setCurrentStep(steps[currentIndex - 1]);
