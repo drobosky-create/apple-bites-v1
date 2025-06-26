@@ -1081,6 +1081,175 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Webhook endpoint to receive data FROM GoHighLevel
+  app.post("/api/webhook/gohighlevel", async (req, res) => {
+    try {
+      console.log('Received GoHighLevel webhook:', JSON.stringify(req.body, null, 2));
+      
+      const webhookData = req.body;
+      
+      // Extract contact information from webhook payload
+      const contactData = {
+        firstName: webhookData.contact?.first_name || webhookData.first_name || webhookData.firstName,
+        lastName: webhookData.contact?.last_name || webhookData.last_name || webhookData.lastName,
+        email: webhookData.contact?.email || webhookData.email,
+        phone: webhookData.contact?.phone || webhookData.phone,
+        company: webhookData.contact?.company_name || webhookData.company || webhookData.companyName,
+        jobTitle: webhookData.contact?.job_title || webhookData.jobTitle || '',
+        leadSource: 'GoHighLevel Webhook',
+        leadStatus: 'new'
+      };
+
+      // Only process if we have valid contact data
+      if (!contactData.email) {
+        console.log('No email found in webhook data, skipping...');
+        return res.status(200).json({ message: 'No email provided, skipped' });
+      }
+
+      // Check if lead already exists by email
+      const existingLead = await storage.getLeadByEmail(contactData.email);
+
+      if (existingLead) {
+        console.log(`Lead already exists for ${contactData.email}, updating...`);
+        // Update existing lead with any new information
+        const updatedLead = await storage.updateLead(existingLead.id, {
+          firstName: contactData.firstName,
+          lastName: contactData.lastName,
+          phone: contactData.phone,
+          company: contactData.company,
+          jobTitle: contactData.jobTitle,
+          notes: `${existingLead.notes || ''}\n[${new Date().toISOString()}] Updated via GoHighLevel webhook`.trim()
+        });
+        
+        return res.status(200).json({ 
+          message: 'Lead updated successfully', 
+          leadId: updatedLead.id,
+          action: 'updated'
+        });
+      } else {
+        console.log(`Creating new lead for ${contactData.email}...`);
+        // Create new lead
+        const newLead = await storage.createLead({
+          firstName: contactData.firstName,
+          lastName: contactData.lastName,
+          email: contactData.email,
+          phone: contactData.phone,
+          company: contactData.company,
+          jobTitle: contactData.jobTitle,
+          leadSource: contactData.leadSource,
+          leadStatus: contactData.leadStatus,
+          notes: `[${new Date().toISOString()}] Created via GoHighLevel webhook`
+        });
+        
+        return res.status(200).json({ 
+          message: 'Lead created successfully', 
+          leadId: newLead.id,
+          action: 'created'
+        });
+      }
+      
+    } catch (error) {
+      console.error('GoHighLevel webhook processing failed:', error);
+      res.status(500).json({
+        error: 'Webhook processing failed',
+        message: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+  });
+
+  // Manual sync endpoint to pull existing contacts from GoHighLevel
+  app.post("/api/sync/gohighlevel", isAdminAuthenticated, async (req, res) => {
+    try {
+      console.log('Starting manual GoHighLevel sync...');
+      
+      // Test the GHL connection first
+      const connectionTest = await fetch('https://services.leadconnectorhq.com/contacts/', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${process.env.GOHIGHLEVEL_API_KEY}`,
+          'Content-Type': 'application/json',
+          'Version': '2021-07-28'
+        }
+      });
+      
+      if (!connectionTest.ok) {
+        throw new Error(`GHL API error: ${connectionTest.status}`);
+      }
+      
+      const ghlData = await connectionTest.json();
+      console.log('Retrieved GHL contacts:', ghlData.contacts?.length || 0);
+      
+      let syncStats = {
+        total: 0,
+        created: 0,
+        updated: 0,
+        skipped: 0,
+        errors: 0
+      };
+      
+      if (ghlData.contacts && ghlData.contacts.length > 0) {
+        for (const contact of ghlData.contacts) {
+          syncStats.total++;
+          
+          try {
+            // Skip contacts without email
+            if (!contact.email) {
+              syncStats.skipped++;
+              continue;
+            }
+            
+            // Check if lead already exists
+            const existingLead = await storage.getLeadByEmail(contact.email);
+            
+            if (existingLead) {
+              await storage.updateLead(existingLead.id, {
+                firstName: contact.firstName || contact.first_name || '',
+                lastName: contact.lastName || contact.last_name || '',
+                phone: contact.phone || '',
+                company: contact.companyName || contact.company_name || '',
+                jobTitle: contact.jobTitle || '',
+                notes: `${existingLead.notes || ''}\n[${new Date().toISOString()}] Updated via manual GHL sync`.trim()
+              });
+              syncStats.updated++;
+            } else {
+              await storage.createLead({
+                firstName: contact.firstName || contact.first_name || '',
+                lastName: contact.lastName || contact.last_name || '',
+                email: contact.email,
+                phone: contact.phone || '',
+                company: contact.companyName || contact.company_name || '',
+                jobTitle: contact.jobTitle || '',
+                leadSource: 'GoHighLevel Manual Sync',
+                leadStatus: 'new',
+                notes: `[${new Date().toISOString()}] Created via manual GHL sync`
+              });
+              syncStats.created++;
+            }
+            
+          } catch (contactError) {
+            console.error(`Error syncing contact ${contact.email}:`, contactError);
+            syncStats.errors++;
+          }
+        }
+      }
+      
+      console.log('Manual sync completed:', syncStats);
+      
+      res.json({
+        success: true,
+        message: 'Manual sync completed',
+        stats: syncStats
+      });
+      
+    } catch (error) {
+      console.error('Manual GoHighLevel sync failed:', error);
+      res.status(500).json({
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+  });
+
   // Test endpoint for GoHighLevel integration
   app.post("/api/test-gohighlevel", async (req, res) => {
     try {
