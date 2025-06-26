@@ -1097,15 +1097,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       const isValuationLead = hasValuationEvent || hasValuationTag || hasValuationSource;
       
-      console.log('Webhook validation:', {
-        hasValuationEvent,
-        hasValuationTag,
-        hasValuationSource,
-        isValuationLead,
-        tags: webhookData.contact?.tags || webhookData.tags,
-        event: webhookData.event,
-        leadSource: webhookData.contact?.leadSource || webhookData.leadSource
-      });
+
       
       if (!isValuationLead) {
         console.log('Not a valuation lead, skipping webhook processing...');

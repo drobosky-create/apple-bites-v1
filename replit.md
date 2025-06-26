@@ -107,7 +107,13 @@ This is a business valuation calculator application built as a full-stack web pl
 
 Preferred communication style: Simple, everyday language.
 
+## Recent Changes
+
+- **June 26, 2025 - GoHighLevel Integration Fixed**: Resolved webhook authentication issues by adding Location ID to API requests. Implemented selective lead filtering to only process valuation form submissions, not all GoHighLevel contacts. Removed manual sync functionality per user requirements.
+
+- **June 26, 2025 - Interactive Valuation Slider Enhanced**: Updated slider with static grade labels, improved gradient scale design, and better visual contrast for user experience.
+
 ## Changelog
 
 Changelog:
-- June 26, 2025. Initial setup
+- June 26, 2025. Initial setup and GoHighLevel integration fixes
