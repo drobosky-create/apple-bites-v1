@@ -180,7 +180,7 @@ export default function TierSelection({ assessment, onTierSelect }: TierSelectio
           <div className="text-center mb-6 mt-4">
             <Badge variant="outline" className="mb-4 border-[#f5c842] text-[#f5c842]">STRATEGIC REPORT</Badge>
             <h2 className="text-2xl font-bold text-[#1a2332] mb-2">Professional Analysis</h2>
-            <div className="text-3xl font-bold text-[#1a2332] mb-1">$197</div>
+            <div className="text-3xl font-bold text-[#1a2332] mb-1">$395</div>
             <p className="text-sm text-gray-500 mb-4">One-time payment</p>
             <p className="text-gray-600">Comprehensive industry-specific valuation analysis</p>
           </div>
