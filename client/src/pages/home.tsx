@@ -93,7 +93,7 @@ export default function Home() {
             {/* Paid Tier */}
             <Card className="border-2 border-[#f5c842] hover:border-yellow-400 transition-all duration-300 hover:shadow-xl relative">
               <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                <Badge className="bg-[#f5c842] text-[#1a2332] hover:bg-[#f5c842] px-4 py-1 text-sm font-bold">
+                <Badge className="bg-[#f5c842] text-[#1a2332] hover:bg-[#f5c842] px-4 py-1 text-sm font-bold ml-[-15px] mr-[-15px]">
                   <Star className="w-4 h-4 mr-1" />
                   RECOMMENDED
                 </Badge>
@@ -107,7 +107,7 @@ export default function Home() {
                 <div className="text-4xl font-bold text-[#1a2332] mt-2">$395</div>
                 <p className="text-gray-600 mt-2">Comprehensive industry-specific valuation</p>
               </CardHeader>
-              <CardContent className="pt-0">
+              <CardContent className="pt-0 bg-[#f8fafc]">
                 <div className="space-y-4 mb-8">
                   <div className="flex items-start">
                     <CheckCircle className="w-5 h-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
