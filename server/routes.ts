@@ -6,6 +6,7 @@ import { generateValuationNarrative, type ValuationAnalysisInput } from "./opena
 import { generateValuationPDF } from "./pdf-generator";
 import { generateEnhancedValuationPDF } from "./pdf-generator-enhanced";
 import { getMultiplierByNAICS, calculateWeightedMultiplier } from "./config/naicsMultipliers";
+import { resendEmailService } from "./resend-service";
 import { emailService } from "./email-service";
 import { goHighLevelService } from "./gohighlevel-service";
 import { getMultiplierForGrade, getLabelForGrade, scoreToGrade } from "./config/multiplierScale";
@@ -1180,7 +1181,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // POST /api/report/generate-enhanced - Generate paid tier PDF with NAICS-specific multipliers
   app.post("/api/report/generate-enhanced", async (req, res) => {
     try {
-      const { assessmentId, naicsCode, sicCode, industryDescription, foundingYear } = req.body;
+      const { assessmentId, naicsCode, sicCode, industryDescription, foundingYear, sendEmail = false } = req.body;
       
       const assessment = await storage.getValuationAssessment(assessmentId);
       if (!assessment) {
@@ -1243,11 +1244,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
         pdfUrl: `/api/pdf/${pdfFileName}`
       });
       
+      // Send email if requested
+      let emailResult = null;
+      if (sendEmail) {
+        emailResult = await resendEmailService.sendValuationReport({
+          assessment: enhancedAssessment,
+          pdfBuffer,
+          tier: 'paid'
+        });
+      }
+      
       res.json({
         success: true,
         pdfUrl: `/api/pdf/${pdfFileName}`,
         downloadUrl: `/api/pdf/${pdfFileName}`,
-        message: "Strategic report generated successfully"
+        message: "Strategic report generated successfully",
+        emailSent: emailResult?.success || false,
+        emailMessageId: emailResult?.messageId
       });
       
     } catch (error) {
@@ -1259,7 +1272,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // POST /api/report/generate-free - Generate free tier PDF (current system)
   app.post("/api/report/generate-free", async (req, res) => {
     try {
-      const { assessmentId } = req.body;
+      const { assessmentId, sendEmail = false } = req.body;
       
       const assessment = await storage.getValuationAssessment(assessmentId);
       if (!assessment) {
@@ -1274,6 +1287,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Generate free tier PDF using enhanced generator
       const pdfBuffer = await generateEnhancedValuationPDF(assessment, 'free');
       
+      // Send email if requested
+      if (sendEmail) {
+        const emailResult = await resendEmailService.sendValuationReport({
+          assessment,
+          pdfBuffer,
+          tier: 'free'
+        });
+        
+        return res.json({
+          success: true,
+          message: "Starter report generated and emailed successfully",
+          emailSent: emailResult.success,
+          emailMessageId: emailResult.messageId
+        });
+      }
+      
       res.setHeader('Content-Type', 'application/pdf');
       res.setHeader('Content-Disposition', `attachment; filename="${assessment.company}_Starter_Valuation_Report.pdf"`);
       res.send(pdfBuffer);
@@ -1281,6 +1310,79 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error generating free PDF:", error);
       res.status(500).json({ message: "Error generating starter report" });
+    }
+  });
+
+  // POST /api/email/send-report - Send existing report via email
+  app.post("/api/email/send-report", async (req, res) => {
+    try {
+      const { assessmentId, tier = 'free', recipientEmail } = req.body;
+      
+      const assessment = await storage.getValuationAssessment(assessmentId);
+      if (!assessment) {
+        return res.status(404).json({ message: "Assessment not found" });
+      }
+
+      // Generate PDF for email
+      const pdfBuffer = await generateEnhancedValuationPDF(assessment, tier);
+      
+      // Send email
+      const emailResult = await resendEmailService.sendValuationReport({
+        assessment,
+        pdfBuffer,
+        tier,
+        recipientEmail
+      });
+      
+      if (emailResult.success) {
+        res.json({
+          success: true,
+          message: "Report sent successfully",
+          messageId: emailResult.messageId
+        });
+      } else {
+        res.status(500).json({
+          success: false,
+          message: "Failed to send email",
+          error: emailResult.error
+        });
+      }
+      
+    } catch (error) {
+      console.error("Error sending report email:", error);
+      res.status(500).json({ message: "Error sending report email" });
+    }
+  });
+
+  // POST /api/email/send-follow-up - Send follow-up email
+  app.post("/api/email/send-follow-up", async (req, res) => {
+    try {
+      const { assessmentId, followUpType } = req.body;
+      
+      const assessment = await storage.getValuationAssessment(assessmentId);
+      if (!assessment) {
+        return res.status(404).json({ message: "Assessment not found" });
+      }
+
+      const emailResult = await resendEmailService.sendFollowUpEmail(assessment, followUpType);
+      
+      if (emailResult.success) {
+        res.json({
+          success: true,
+          message: "Follow-up email sent successfully",
+          messageId: emailResult.messageId
+        });
+      } else {
+        res.status(500).json({
+          success: false,
+          message: "Failed to send follow-up email",
+          error: emailResult.error
+        });
+      }
+      
+    } catch (error) {
+      console.error("Error sending follow-up email:", error);
+      res.status(500).json({ message: "Error sending follow-up email" });
     }
   });
 

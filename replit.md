@@ -109,6 +109,10 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- **June 26, 2025 - Two-Tier Valuation Platform Implemented**: Built comprehensive free and paid tier system with NAICS-specific multipliers, enhanced PDF generation, and Resend email delivery. Free tier provides basic reports with general multipliers, while paid tier ($197) offers industry-specific analysis, AI insights, and professional presentations.
+
+- **June 26, 2025 - Email Delivery System Added**: Integrated Resend service for professional email delivery of PDF reports with branded templates, automated follow-ups, and delivery tracking. Supports both tier types with appropriate messaging and upgrade prompts.
+
 - **June 26, 2025 - GoHighLevel Integration Fixed**: Resolved webhook authentication issues by adding Location ID to API requests. Implemented selective lead filtering to only process valuation form submissions, not all GoHighLevel contacts. Removed manual sync functionality per user requirements.
 
 - **June 26, 2025 - Interactive Valuation Slider Enhanced**: Updated slider with static grade labels, improved gradient scale design, and better visual contrast for user experience.
