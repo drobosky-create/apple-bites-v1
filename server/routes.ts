@@ -1081,12 +1081,36 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Webhook endpoint to receive data FROM GoHighLevel
+  // Webhook endpoint to receive valuation assessment data FROM GoHighLevel
   app.post("/api/webhook/gohighlevel", async (req, res) => {
     try {
       console.log('Received GoHighLevel webhook:', JSON.stringify(req.body, null, 2));
       
       const webhookData = req.body;
+      
+      // Only process valuation-related contacts (check for specific tags or event types)
+      const hasValuationEvent = webhookData.event === 'valuation_completed';
+      const hasValuationTag = (webhookData.contact?.tags && Array.isArray(webhookData.contact.tags) && webhookData.contact.tags.includes('Business Valuation Lead')) ||
+                             (webhookData.tags && Array.isArray(webhookData.tags) && webhookData.tags.includes('Business Valuation Lead'));
+      const hasValuationSource = webhookData.contact?.leadSource === 'valuation_form' ||
+                                 webhookData.leadSource === 'valuation_form';
+      
+      const isValuationLead = hasValuationEvent || hasValuationTag || hasValuationSource;
+      
+      console.log('Webhook validation:', {
+        hasValuationEvent,
+        hasValuationTag,
+        hasValuationSource,
+        isValuationLead,
+        tags: webhookData.contact?.tags || webhookData.tags,
+        event: webhookData.event,
+        leadSource: webhookData.contact?.leadSource || webhookData.leadSource
+      });
+      
+      if (!isValuationLead) {
+        console.log('Not a valuation lead, skipping webhook processing...');
+        return res.status(200).json({ message: 'Not a valuation lead, skipped' });
+      }
       
       // Extract contact information from webhook payload
       const contactData = {
@@ -1096,7 +1120,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         phone: webhookData.contact?.phone || webhookData.phone,
         company: webhookData.contact?.company_name || webhookData.company || webhookData.companyName,
         jobTitle: webhookData.contact?.job_title || webhookData.jobTitle || '',
-        leadSource: 'GoHighLevel Webhook',
+        leadSource: 'valuation_form',
         leadStatus: 'new'
       };
 
@@ -1157,85 +1181,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Manual sync endpoint to pull existing contacts from GoHighLevel
-  app.post("/api/sync/gohighlevel", isAdminAuthenticated, async (req, res) => {
-    try {
-      console.log('Starting manual GoHighLevel sync...');
-      
-      // Use the GoHighLevel service to get all contacts
-      const ghlContacts = await goHighLevelService.getAllContacts();
-      console.log('Retrieved GHL contacts:', ghlContacts.length);
-      
-      let syncStats = {
-        total: 0,
-        created: 0,
-        updated: 0,
-        skipped: 0,
-        errors: 0
-      };
-      
-      if (ghlContacts && ghlContacts.length > 0) {
-        for (const contact of ghlContacts) {
-          syncStats.total++;
-          
-          try {
-            // Skip contacts without email
-            if (!contact.email) {
-              syncStats.skipped++;
-              continue;
-            }
-            
-            // Check if lead already exists
-            const existingLead = await storage.getLeadByEmail(contact.email);
-            
-            if (existingLead) {
-              await storage.updateLead(existingLead.id, {
-                firstName: contact.firstName || contact.first_name || '',
-                lastName: contact.lastName || contact.last_name || '',
-                phone: contact.phone || '',
-                company: contact.companyName || contact.company_name || '',
-                jobTitle: contact.jobTitle || '',
-                notes: `${existingLead.notes || ''}\n[${new Date().toISOString()}] Updated via manual GHL sync`.trim()
-              });
-              syncStats.updated++;
-            } else {
-              await storage.createLead({
-                firstName: contact.firstName || contact.first_name || '',
-                lastName: contact.lastName || contact.last_name || '',
-                email: contact.email,
-                phone: contact.phone || '',
-                company: contact.companyName || contact.company_name || '',
-                jobTitle: contact.jobTitle || '',
-                leadSource: 'GoHighLevel Manual Sync',
-                leadStatus: 'new',
-                notes: `[${new Date().toISOString()}] Created via manual GHL sync`
-              });
-              syncStats.created++;
-            }
-            
-          } catch (contactError) {
-            console.error(`Error syncing contact ${contact.email}:`, contactError);
-            syncStats.errors++;
-          }
-        }
-      }
-      
-      console.log('Manual sync completed:', syncStats);
-      
-      res.json({
-        success: true,
-        message: 'Manual sync completed',
-        stats: syncStats
-      });
-      
-    } catch (error) {
-      console.error('Manual GoHighLevel sync failed:', error);
-      res.status(500).json({
-        success: false,
-        error: error instanceof Error ? error.message : 'Unknown error'
-      });
-    }
-  });
+
 
   // Test endpoint for GoHighLevel integration
   app.post("/api/test-gohighlevel", async (req, res) => {
