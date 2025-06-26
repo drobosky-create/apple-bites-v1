@@ -1054,6 +1054,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // GET /api/comprehensive-pdf/:id - Generate and serve comprehensive investor-grade PDF report
+  app.get("/api/comprehensive-pdf/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const assessment = await storage.getValuationAssessment(id);
+      
+      if (!assessment) {
+        return res.status(404).json({ message: "Assessment not found" });
+      }
+      
+      console.log(`Generating comprehensive PDF report for assessment ${id}`);
+      const pdfBuffer = await generateComprehensiveValuationPDF(assessment);
+      
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', `attachment; filename="comprehensive-valuation-report-${assessment.company.replace(/[^a-zA-Z0-9]/g, '-')}-${id}.pdf"`);
+      res.send(pdfBuffer);
+    } catch (error) {
+      console.error("Error generating comprehensive PDF:", error);
+      res.status(500).json({ message: "Error generating comprehensive PDF report" });
+    }
+  });
+
   // GET /api/assessments - Get all assessments (for admin/debugging)
   app.get("/api/assessments", async (req, res) => {
     try {

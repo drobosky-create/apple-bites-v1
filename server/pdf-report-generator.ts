@@ -147,7 +147,7 @@ function generateValuationSliderSVG(overallScore: string | null): string {
 }
 
 function generateBellCurveSVG(valuationMultiple: string | null): string {
-  const multiple = parseFloat(valuationMultiple) || 3.0;
+  const multiple = valuationMultiple ? parseFloat(valuationMultiple) || 3.0 : 3.0;
   
   return `<svg width="400" height="200" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
     <defs>
@@ -679,7 +679,7 @@ function generateInvestorGradeHTML(assessment: ReportData): string {
             <div class="section">
                 <h2>Industry Benchmark Analysis</h2>
                 <div class="chart-container">
-                    ${generateBellCurveSVG(assessment.valuationMultiple)}
+                    ${generateBellCurveSVG(assessment.valuationMultiple || "3.0")}
                 </div>
                 <p style="text-align: center; margin-top: 15px; color: #6b7280;">
                     Your valuation multiple of ${assessment.valuationMultiple}x compared to industry standards. This chart shows the distribution of typical valuation multiples for businesses in your sector.
