@@ -398,5 +398,6 @@ export function getNAICSBySector(sector: string): NAICSIndustry[] {
 }
 
 export function getAllSectors(): string[] {
-  return [...new Set(naicsDatabase.map(industry => industry.sector))].sort();
+  const sectors = naicsDatabase.map(industry => industry.sector);
+  return Array.from(new Set(sectors)).sort();
 }

@@ -1,6 +1,7 @@
-import { useValuationForm } from "@/hooks/use-valuation-form";
+import { usePaidValuationForm } from "@/hooks/use-paid-valuation-form";
 import ProgressIndicator from "@/components/progress-indicator";
 import ContactForm from "@/components/contact-form";
+import IndustryForm from "@/components/industry-form";
 import EbitdaForm from "@/components/ebitda-form";
 import AdjustmentsForm from "@/components/adjustments-form";
 import ValueDriversForm from "@/components/value-drivers-form";
@@ -50,7 +51,7 @@ export default function PaidAssessment() {
     results,
     isSubmitting,
     forms,
-  } = useValuationForm();
+  } = usePaidValuationForm();
 
   // If we're on /results route, show loading or latest assessment
   if (location === '/results') {
