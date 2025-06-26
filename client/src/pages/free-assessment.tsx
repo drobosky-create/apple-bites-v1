@@ -1,0 +1,176 @@
+import { useValuationForm } from "@/hooks/use-valuation-form";
+import FreeProgressIndicator from "@/components/free-progress-indicator";
+import ContactForm from "@/components/contact-form";
+import EbitdaForm from "@/components/ebitda-form";
+import AdjustmentsForm from "@/components/adjustments-form";
+import ValueDriversForm from "@/components/value-drivers-form";
+import FollowUpForm from "@/components/followup-form";
+import ValuationResults from "@/components/valuation-results";
+import LoadingModal from "@/components/loading-modal";
+import { ArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import appleBitesLogo from "@assets/Apple Bites Business Assessment V2_1750116954168.png";
+import { useLocation } from "wouter";
+import { useQuery } from "@tanstack/react-query";
+import type { ValuationAssessment } from "@shared/schema";
+
+import _2 from "@assets/2.png";
+
+export default function FreeAssessment() {
+  const [location] = useLocation();
+  
+  // Check if we're on the results route and fetch latest assessment
+  const { data: assessments, isLoading: assessmentsLoading } = useQuery<ValuationAssessment[]>({
+    queryKey: ['/api/analytics/assessments'],
+    enabled: location === '/results'
+  });
+
+  const {
+    currentStep,
+    formData,
+    updateFormData,
+    nextStep,
+    prevStep,
+    calculateEbitda,
+    calculateAdjustedEbitda,
+    submitAssessment,
+    results,
+    isSubmitting,
+    forms,
+  } = useValuationForm();
+
+  // If we're on /results route, show loading or latest assessment
+  if (location === '/results') {
+    if (assessmentsLoading) {
+      return (
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <p className="text-slate-600">Loading your assessment results...</p>
+          </div>
+        </div>
+      );
+    }
+
+    const latestAssessment = assessments?.[0];
+    if (!latestAssessment) {
+      return (
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+          <div className="text-center">
+            <p className="text-slate-600">No assessment found. Please complete an assessment first.</p>
+            <Button 
+              onClick={() => window.location.href = '/'}
+              className="mt-4"
+            >
+              Start New Assessment
+            </Button>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-4">
+        <div className="container mx-auto px-4">
+          <ValuationResults results={latestAssessment} />
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-4">
+      <main className="container mx-auto px-4 max-w-4xl">
+        <Button
+          variant="ghost"
+          onClick={() => window.history.back()}
+          className="mb-6 text-slate-600 hover:text-slate-900"
+        >
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Back to Home
+        </Button>
+        
+        {/* Header with Apple Bites Logo */}
+        {currentStep !== "results" && (
+          <div className="flex flex-col sm:flex-row items-center justify-center mb-4 sm:mb-8 text-center sm:text-left">
+            <img 
+              src={_2} 
+              alt="Apple Bites Business Assessment" 
+              className="h-12 sm:h-20 w-auto mb-3 sm:mb-0 sm:mr-4"
+            />
+            <div>
+              <h1 className="text-lg sm:text-3xl font-bold text-gray-900">Apple Bites Business Assessment</h1>
+              <Badge className="mt-2 bg-blue-100 text-blue-800">Free Basic Analysis</Badge>
+            </div>
+          </div>
+        )}
+
+        {currentStep !== "results" && (
+          <div className="mb-4 sm:mb-8">
+            <ProgressIndicator currentStep={currentStep} />
+          </div>
+        )}
+
+        {currentStep === "contact" && (
+          <ContactForm
+            form={forms.contact}
+            onNext={nextStep}
+            onDataChange={(data) => updateFormData("contact", data)}
+          />
+        )}
+
+        {currentStep === "ebitda" && (
+          <EbitdaForm
+            form={forms.ebitda}
+            onNext={nextStep}
+            onPrev={prevStep}
+            onDataChange={(data) => updateFormData("ebitda", data)}
+            calculateEbitda={calculateEbitda}
+          />
+        )}
+
+        {currentStep === "adjustments" && (
+          <AdjustmentsForm
+            form={forms.adjustments}
+            onNext={nextStep}
+            onPrev={prevStep}
+            onDataChange={(data) => updateFormData("adjustments", data)}
+            calculateAdjustedEbitda={calculateAdjustedEbitda}
+            baseEbitda={calculateEbitda()}
+          />
+        )}
+
+        {currentStep === "valueDrivers" && (
+          <ValueDriversForm
+            form={forms.valueDrivers}
+            onNext={nextStep}
+            onPrev={prevStep}
+            onDataChange={(data) => updateFormData("valueDrivers", data)}
+          />
+        )}
+
+        {currentStep === "followUp" && (
+          <FollowUpForm
+            form={forms.followUp}
+            onSubmit={() => {
+              // Submit assessment with free tier
+              submitAssessment();
+            }}
+            onPrev={prevStep}
+            onDataChange={(data) => updateFormData("followUp", data)}
+            isSubmitting={isSubmitting}
+          />
+        )}
+
+        {currentStep === "results" && results && (
+          <ValuationResults results={results} />
+        )}
+      </main>
+      <LoadingModal 
+        isVisible={isSubmitting} 
+        message="Analyzing your business data and calculating valuation..."
+      />
+    </div>
+  );
+}

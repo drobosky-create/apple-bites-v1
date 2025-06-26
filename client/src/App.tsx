@@ -8,7 +8,10 @@ import { TeamAuthProvider } from "@/hooks/use-team-auth";
 import Navigation from "@/components/navigation";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import Home from "@/pages/home";
 import ValuationForm from "@/pages/valuation-form";
+import FreeAssessment from "@/pages/free-assessment";
+import PaidAssessment from "@/pages/paid-assessment";
 import AnalyticsDashboard from "@/pages/analytics-dashboard";
 import ValueCalculator from "@/pages/value-calculator";
 import LeadsDashboard from "@/pages/leads-dashboard";
@@ -23,7 +26,10 @@ function Router() {
       <Navigation />
       <main className="flex-1">
         <Switch>
-          <Route path="/" component={ValuationForm} />
+          <Route path="/" component={Home} />
+          <Route path="/assessment/free" component={FreeAssessment} />
+          <Route path="/assessment/paid" component={PaidAssessment} />
+          <Route path="/valuation" component={ValuationForm} />
           <Route path="/results" component={ValuationForm} />
           <Route path="/results/:id" component={ValuationForm} />
           <Route path="/report-selection/:id" component={ReportSelectionPage} />
