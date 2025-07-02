@@ -405,7 +405,7 @@ function StrategicAssessment() {
             variant="outline"
             onClick={prevStep}
             disabled={currentStep === 1}
-            className="px-6"
+            className="px-6 border-blue-600 text-blue-600 hover:bg-blue-50 hover:border-blue-700 hover:text-blue-700"
           >
             Previous
           </Button>
