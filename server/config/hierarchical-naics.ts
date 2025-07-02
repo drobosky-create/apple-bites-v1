@@ -52,6 +52,50 @@ export const hierarchicalNAICS: HierarchicalNAICS[] = [
   { code: "237110", title: "Water and Sewer Line and Related Structures Construction", level: 6, parentCode: "23711", multiplier: 3.8 },
   { code: "237120", title: "Oil and Gas Pipeline and Related Structures Construction", level: 6, parentCode: "23712", multiplier: 4.2 },
   { code: "237130", title: "Power and Communication Line and Related Structures Construction", level: 6, parentCode: "23713", multiplier: 3.6 },
+
+  // 5-digit industries for Land Subdivision (2372)
+  { code: "23721", title: "Land Subdivision", level: 5, parentCode: "2372" },
+  
+  // 6-digit national industries for Land Subdivision
+  { code: "237210", title: "Land Subdivision", level: 6, parentCode: "23721", multiplier: 3.3 },
+
+  // 5-digit industries for Highway, Street, and Bridge Construction (2373)
+  { code: "23731", title: "Highway, Street, and Bridge Construction", level: 5, parentCode: "2373" },
+  
+  // 6-digit national industries for Highway, Street, and Bridge Construction
+  { code: "237310", title: "Highway, Street, and Bridge Construction", level: 6, parentCode: "23731", multiplier: 3.7 },
+
+  // 5-digit industries for Other Heavy and Civil Engineering Construction (2379)
+  { code: "23799", title: "Other Heavy and Civil Engineering Construction", level: 5, parentCode: "2379" },
+  
+  // 6-digit national industries for Other Heavy and Civil Engineering Construction
+  { code: "237990", title: "Other Heavy and Civil Engineering Construction", level: 6, parentCode: "23799", multiplier: 3.4 },
+
+  // 4-digit industry groups for Specialty Trade Contractors (238)
+  { code: "2381", title: "Foundation, Structure, and Building Exterior Contractors", level: 4, parentCode: "238" },
+  { code: "2382", title: "Building Equipment Contractors", level: 4, parentCode: "238" },
+  { code: "2383", title: "Building Finishing Contractors", level: 4, parentCode: "238" },
+  { code: "2389", title: "Other Specialty Trade Contractors", level: 4, parentCode: "238" },
+
+  // 5-digit industries for Foundation, Structure, and Building Exterior Contractors (2381)
+  { code: "23811", title: "Poured Concrete Foundation and Structure Contractors", level: 5, parentCode: "2381" },
+  { code: "23812", title: "Structural Steel and Precast Concrete Contractors", level: 5, parentCode: "2381" },
+  { code: "23813", title: "Framing Contractors", level: 5, parentCode: "2381" },
+  { code: "23814", title: "Masonry Contractors", level: 5, parentCode: "2381" },
+  { code: "23815", title: "Glass and Glazing Contractors", level: 5, parentCode: "2381" },
+  { code: "23816", title: "Roofing Contractors", level: 5, parentCode: "2381" },
+  { code: "23817", title: "Siding Contractors", level: 5, parentCode: "2381" },
+  { code: "23819", title: "Other Foundation, Structure, and Building Exterior Contractors", level: 5, parentCode: "2381" },
+
+  // 6-digit national industries for Foundation, Structure, and Building Exterior Contractors
+  { code: "238110", title: "Poured Concrete Foundation and Structure Contractors", level: 6, parentCode: "23811", multiplier: 2.9 },
+  { code: "238120", title: "Structural Steel and Precast Concrete Contractors", level: 6, parentCode: "23812", multiplier: 3.1 },
+  { code: "238130", title: "Framing Contractors", level: 6, parentCode: "23813", multiplier: 2.7 },
+  { code: "238140", title: "Masonry Contractors", level: 6, parentCode: "23814", multiplier: 2.8 },
+  { code: "238150", title: "Glass and Glazing Contractors", level: 6, parentCode: "23815", multiplier: 3.0 },
+  { code: "238160", title: "Roofing Contractors", level: 6, parentCode: "23816", multiplier: 2.6 },
+  { code: "238170", title: "Siding Contractors", level: 6, parentCode: "23817", multiplier: 2.5 },
+  { code: "238190", title: "Other Foundation, Structure, and Building Exterior Contractors", level: 6, parentCode: "23819", multiplier: 2.8 },
   
   // Agriculture Sector Hierarchy
   { code: "11", title: "Agriculture", level: 2 },
