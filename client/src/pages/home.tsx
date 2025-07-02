@@ -107,7 +107,7 @@ export default function Home() {
                 <div className="text-4xl font-bold text-[#1a2332] mt-2">$395</div>
                 <p className="text-gray-600 mt-2">Comprehensive industry-specific valuation</p>
               </CardHeader>
-              <CardContent className="pt-0 bg-[#f8fafc]">
+              <CardContent className="p-6 bg-[#f8fafc] pt-[14px] pb-[14px]">
                 <div className="space-y-4 mb-8">
                   <div className="flex items-start">
                     <CheckCircle className="w-5 h-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
@@ -119,7 +119,7 @@ export default function Home() {
                   <div className="flex items-start">
                     <CheckCircle className="w-5 h-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
                     <div>
-                      <div className="font-medium">AI-Powered Strategic Insights</div>
+                      <div className="font-medium text-[#2563eb]">AI-Powered Strategic Insights</div>
                       <div className="text-sm text-gray-600">Detailed analysis and improvement recommendations</div>
                     </div>
                   </div>
