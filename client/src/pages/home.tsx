@@ -112,7 +112,7 @@ export default function Home() {
                   <div className="flex items-start">
                     <CheckCircle className="w-5 h-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
                     <div>
-                      <div className="font-medium">Industry-Specific NAICS Multipliers</div>
+                      <div className="font-medium text-[#2563eb]">Industry-Specific NAICS Multipliers</div>
                       <div className="text-sm text-gray-600">Precise multipliers based on your exact industry</div>
                     </div>
                   </div>
@@ -180,13 +180,7 @@ export default function Home() {
                 <div className="text-gray-600">Satisfaction Rate</div>
               </div>
               
-              <div className="flex flex-col items-center">
-                <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-4">
-                  <Users className="w-6 h-6 text-purple-600" />
-                </div>
-                <div className="text-2xl font-bold text-gray-900 mb-2">24/7</div>
-                <div className="text-gray-600">Expert Support</div>
-              </div>
+              
             </div>
           </div>
         </div>
