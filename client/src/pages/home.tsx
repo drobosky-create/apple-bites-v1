@@ -79,6 +79,13 @@ export default function Home() {
                       <div className="text-sm text-gray-700">Instant delivery to your inbox</div>
                     </div>
                   </div>
+                  <div className="flex items-start">
+                    <CheckCircle className="w-5 h-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <div className="font-medium text-[#1a2332]">Business Insights</div>
+                      <div className="text-sm text-gray-700">Key improvement areas and recommendations</div>
+                    </div>
+                  </div>
                 </div>
                 
                 <Button 
@@ -99,7 +106,7 @@ export default function Home() {
                 </Badge>
               </div>
               
-              <CardHeader className="text-center pb-4 pt-8">
+              <CardHeader className="text-center pb-4 pt-8 ml-[9px] mr-[9px]">
                 <Badge variant="outline" className="w-fit mx-auto mb-4 border-[#f5c842] text-[#f5c842]">
                   STRATEGIC REPORT
                 </Badge>
