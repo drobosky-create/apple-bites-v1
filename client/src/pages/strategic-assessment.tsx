@@ -32,28 +32,28 @@ function StrategicAssessment() {
   });
 
   // Fetch industries for selected sector (3-digit level)
-  const { data: sectorIndustries = [], isLoading: industriesLoading } = useQuery<{code: string, title: string, description: string, sector: string, multiplier: number, parentCode?: string, level?: number}[]>({
+  const { data: sectorIndustries = [], isLoading: industriesLoading } = useQuery<{code: string, title: string, level: number, parentCode?: string, multiplier?: number}[]>({
     queryKey: ['/api/naics/industries', selectedSector],
     queryFn: () => selectedSector ? fetch(`/api/naics/industries/${encodeURIComponent(selectedSector)}`).then(res => res.json()) : Promise.resolve([]),
     enabled: !!selectedSector
   });
 
   // Fetch sub-industries for selected industry (4-digit level)
-  const { data: subIndustries = [], isLoading: subIndustriesLoading } = useQuery<{code: string, title: string, description: string, sector: string, multiplier: number, parentCode?: string, level?: number}[]>({
+  const { data: subIndustries = [], isLoading: subIndustriesLoading } = useQuery<{code: string, title: string, level: number, parentCode?: string, multiplier?: number}[]>({
     queryKey: ['/api/naics/by-parent', selectedIndustry],
     queryFn: () => selectedIndustry ? fetch(`/api/naics/by-parent/${encodeURIComponent(selectedIndustry)}`).then(res => res.json()) : Promise.resolve([]),
     enabled: !!selectedIndustry
   });
 
   // Fetch industry groups for selected sub-industry (5-digit level)
-  const { data: industryGroups = [], isLoading: industryGroupsLoading } = useQuery<{code: string, title: string, description: string, sector: string, multiplier: number, parentCode?: string, level?: number}[]>({
+  const { data: industryGroups = [], isLoading: industryGroupsLoading } = useQuery<{code: string, title: string, level: number, parentCode?: string, multiplier?: number}[]>({
     queryKey: ['/api/naics/by-parent', selectedSubIndustry],
     queryFn: () => selectedSubIndustry ? fetch(`/api/naics/by-parent/${encodeURIComponent(selectedSubIndustry)}`).then(res => res.json()) : Promise.resolve([]),
     enabled: !!selectedSubIndustry
   });
 
   // Fetch final NAICS codes for selected industry group (6-digit level)
-  const { data: finalNAICS = [], isLoading: finalNAICSLoading } = useQuery<{code: string, title: string, description: string, sector: string, multiplier: number, parentCode?: string, level?: number}[]>({
+  const { data: finalNAICS = [], isLoading: finalNAICSLoading } = useQuery<{code: string, title: string, level: number, parentCode?: string, multiplier?: number}[]>({
     queryKey: ['/api/naics/by-parent', selectedIndustryGroup],
     queryFn: () => selectedIndustryGroup ? fetch(`/api/naics/by-parent/${encodeURIComponent(selectedIndustryGroup)}`).then(res => res.json()) : Promise.resolve([]),
     enabled: !!selectedIndustryGroup

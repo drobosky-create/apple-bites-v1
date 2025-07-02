@@ -11,6 +11,7 @@ import { emailService } from "./email-service";
 import { goHighLevelService } from "./gohighlevel-service";
 import { getMultiplierForGrade, getLabelForGrade, scoreToGrade } from "./config/multiplierScale";
 import { naicsDatabase, getNAICSBySector, getAllSectors, getNAICSByParentCode, getNAICSByLevel } from "./config/naics-database";
+import { hierarchicalNAICS, getSectorCodes, getSubsectorsBySector, getIndustryGroupsBySubsector, getIndustriesByIndustryGroup, getNationalIndustriesByIndustry, getChildrenByParentCode, findNAICSByCode } from "./config/hierarchical-naics";
 import fs from 'fs/promises';
 import path from 'path';
 import bcrypt from 'bcryptjs';
@@ -1427,7 +1428,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // NAICS Industry Data API endpoints
   app.get("/api/naics/sectors", async (req, res) => {
     try {
-      const sectors = getAllSectors();
+      // Use hierarchical NAICS for sectors
+      const sectorCodes = getSectorCodes();
+      const sectors = sectorCodes.map(code => {
+        const sector = findNAICSByCode(code);
+        return sector ? sector.title : code;
+      });
       res.json(sectors);
     } catch (error) {
       console.error('Error fetching NAICS sectors:', error);
@@ -1437,9 +1443,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get("/api/naics/industries/:sector", async (req, res) => {
     try {
-      const sector = req.params.sector;
-      const industries = getNAICSBySector(sector);
-      res.json(industries);
+      const sectorTitle = req.params.sector;
+      // Find sector code by title
+      const sectorCode = getSectorCodes().find(code => {
+        const sector = findNAICSByCode(code);
+        return sector?.title === sectorTitle;
+      });
+      
+      if (sectorCode) {
+        const subsectors = getSubsectorsBySector(sectorCode);
+        res.json(subsectors);
+      } else {
+        res.json([]);
+      }
     } catch (error) {
       console.error('Error fetching NAICS industries:', error);
       res.status(500).json({ error: "Failed to fetch NAICS industries" });
@@ -1458,7 +1474,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/naics/by-parent/:parentCode", async (req, res) => {
     try {
       const parentCode = req.params.parentCode;
-      const childIndustries = getNAICSByParentCode(parentCode);
+      const childIndustries = getChildrenByParentCode(parentCode);
       res.json(childIndustries);
     } catch (error) {
       console.error('Error fetching NAICS by parent code:', error);
