@@ -134,11 +134,40 @@ function StrategicAssessment() {
               </div>
               <div>
                 <label className="block text-sm font-medium mb-2">Specific Industry (NAICS Code)</label>
-                <input 
-                  type="text" 
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="e.g., 541211 - Offices of Certified Public Accountants"
-                />
+                <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  <option value="">Select your specific industry...</option>
+                  <option value="111">111 - Crop Production</option>
+                  <option value="112">112 - Animal Production and Aquaculture</option>
+                  <option value="211">211 - Oil and Gas Extraction</option>
+                  <option value="212">212 - Mining (except Oil and Gas)</option>
+                  <option value="236">236 - Construction of Buildings</option>
+                  <option value="311">311 - Food Manufacturing</option>
+                  <option value="312">312 - Beverage and Tobacco Product Manufacturing</option>
+                  <option value="423">423 - Merchant Wholesalers, Durable Goods</option>
+                  <option value="424">424 - Merchant Wholesalers, Nondurable Goods</option>
+                  <option value="441">441 - Motor Vehicle and Parts Dealers</option>
+                  <option value="442">442 - Furniture and Home Furnishings Stores</option>
+                  <option value="481">481 - Air Transportation</option>
+                  <option value="482">482 - Rail Transportation</option>
+                  <option value="518">518 - Data Processing, Hosting, and Related Services</option>
+                  <option value="519">519 - Other Information Services</option>
+                  <option value="522">522 - Credit Intermediation and Related Activities</option>
+                  <option value="523">523 - Securities, Commodity Contracts, and Other Financial Investments</option>
+                  <option value="531">531 - Real Estate</option>
+                  <option value="532">532 - Rental and Leasing Services</option>
+                  <option value="541">541 - Professional, Scientific, and Technical Services</option>
+                  <option value="5413">5413 - Architectural, Engineering, and Related Services</option>
+                  <option value="5415">5415 - Computer Systems Design and Related Services</option>
+                  <option value="621">621 - Ambulatory Health Care Services</option>
+                  <option value="622">622 - Hospitals</option>
+                  <option value="623">623 - Nursing and Residential Care Facilities</option>
+                  <option value="711">711 - Performing Arts, Spectator Sports, and Related Industries</option>
+                  <option value="712">712 - Museums, Historical Sites, and Similar Institutions</option>
+                  <option value="721">721 - Accommodation</option>
+                  <option value="722">722 - Food Services and Drinking Places</option>
+                  <option value="811">811 - Repair and Maintenance</option>
+                  <option value="812">812 - Personal and Laundry Services</option>
+                </select>
               </div>
               <div>
                 <label className="block text-sm font-medium mb-2">Business Description *</label>
