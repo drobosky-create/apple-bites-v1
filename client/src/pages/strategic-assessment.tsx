@@ -135,7 +135,7 @@ function StrategicAssessment() {
               <div>
                 <label className="block text-sm font-medium mb-2">Primary Industry Sector *</label>
                 <select 
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                   value={selectedSector}
                   onChange={(e) => filterSpecificIndustries(e.target.value)}
                   disabled={sectorsLoading}
@@ -151,7 +151,7 @@ function StrategicAssessment() {
               <div>
                 <label className="block text-sm font-medium mb-2">Specific Industry (NAICS Code)</label>
                 <select 
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                   disabled={!selectedSector || industriesLoading}
                 >
                   {!selectedSector ? (
@@ -173,7 +173,7 @@ function StrategicAssessment() {
               <div>
                 <label className="block text-sm font-medium mb-2">Business Description *</label>
                 <textarea 
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 h-24 resize-none"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 h-24 resize-none text-gray-900 bg-white"
                   placeholder="Describe your business operations, products/services, and target market..."
                 />
               </div>
@@ -182,7 +182,7 @@ function StrategicAssessment() {
                   <label className="block text-sm font-medium mb-2">Years in Business</label>
                   <input 
                     type="number" 
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                     placeholder="5"
                   />
                 </div>
@@ -190,7 +190,7 @@ function StrategicAssessment() {
                   <label className="block text-sm font-medium mb-2">Number of Employees</label>
                   <input 
                     type="number" 
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                     placeholder="25"
                   />
                 </div>
