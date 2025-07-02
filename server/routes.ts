@@ -10,6 +10,7 @@ import { resendEmailService } from "./resend-service";
 import { emailService } from "./email-service";
 import { goHighLevelService } from "./gohighlevel-service";
 import { getMultiplierForGrade, getLabelForGrade, scoreToGrade } from "./config/multiplierScale";
+import { naicsDatabase, getNAICSBySector, getAllSectors } from "./config/naics-database";
 import fs from 'fs/promises';
 import path from 'path';
 import bcrypt from 'bcryptjs';
@@ -1420,6 +1421,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
         success: false,
         error: error instanceof Error ? error.message : "Unknown error"
       });
+    }
+  });
+
+  // NAICS Industry Data API endpoints
+  app.get("/api/naics/sectors", async (req, res) => {
+    try {
+      const sectors = getAllSectors();
+      res.json(sectors);
+    } catch (error) {
+      console.error('Error fetching NAICS sectors:', error);
+      res.status(500).json({ error: "Failed to fetch NAICS sectors" });
+    }
+  });
+
+  app.get("/api/naics/industries/:sector", async (req, res) => {
+    try {
+      const sector = req.params.sector;
+      const industries = getNAICSBySector(sector);
+      res.json(industries);
+    } catch (error) {
+      console.error('Error fetching NAICS industries:', error);
+      res.status(500).json({ error: "Failed to fetch NAICS industries" });
+    }
+  });
+
+  app.get("/api/naics/all", async (req, res) => {
+    try {
+      res.json(naicsDatabase);
+    } catch (error) {
+      console.error('Error fetching NAICS database:', error);
+      res.status(500).json({ error: "Failed to fetch NAICS database" });
     }
   });
 
