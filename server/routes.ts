@@ -10,8 +10,8 @@ import { resendEmailService } from "./resend-service";
 import { emailService } from "./email-service";
 import { goHighLevelService } from "./gohighlevel-service";
 import { getMultiplierForGrade, getLabelForGrade, scoreToGrade } from "./config/multiplierScale";
-import { naicsDatabase, getNAICSBySector, getAllSectors, getNAICSByParentCode, getNAICSByLevel } from "./config/naics-database";
-import { hierarchicalNAICS, getSectorCodes, getSubsectorsBySector, getIndustryGroupsBySubsector, getIndustriesByIndustryGroup, getNationalIndustriesByIndustry, getChildrenByParentCode, findNAICSByCode } from "./config/hierarchical-naics";
+import { naicsDatabase, getNAICSBySector, getNAICSByParentCode, getNAICSByLevel } from "./config/naics-database";
+import { completeNAICSDatabase, getAllSectors, getChildrenByParentCode as getCompleteChildrenByParentCode, getNAICSByCode as getCompleteNAICSByCode, getSectorByCode } from "./config/complete-naics-database";
 import fs from 'fs/promises';
 import path from 'path';
 import bcrypt from 'bcryptjs';
@@ -1428,13 +1428,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // NAICS Industry Data API endpoints
   app.get("/api/naics/sectors", async (req, res) => {
     try {
-      // Use hierarchical NAICS for sectors
-      const sectorCodes = getSectorCodes();
-      const sectors = sectorCodes.map(code => {
-        const sector = findNAICSByCode(code);
-        return sector ? sector.title : code;
-      });
-      res.json(sectors);
+      // Use complete official NAICS database for sectors
+      const sectors = getAllSectors();
+      const sectorTitles = sectors.map(sector => sector.title);
+      res.json(sectorTitles);
     } catch (error) {
       console.error('Error fetching NAICS sectors:', error);
       res.status(500).json({ error: "Failed to fetch NAICS sectors" });
@@ -1444,14 +1441,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/naics/industries/:sector", async (req, res) => {
     try {
       const sectorTitle = req.params.sector;
-      // Find sector code by title
-      const sectorCode = getSectorCodes().find(code => {
-        const sector = findNAICSByCode(code);
-        return sector?.title === sectorTitle;
-      });
+      // Find sector by title in complete database
+      const allSectors = getAllSectors();
+      const sector = allSectors.find(s => s.title === sectorTitle);
       
-      if (sectorCode) {
-        const subsectors = getSubsectorsBySector(sectorCode);
+      if (sector) {
+        const subsectors = getCompleteChildrenByParentCode(sector.code);
         res.json(subsectors);
       } else {
         res.json([]);
@@ -1474,7 +1469,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/naics/by-parent/:parentCode", async (req, res) => {
     try {
       const parentCode = req.params.parentCode;
-      const childIndustries = getChildrenByParentCode(parentCode);
+      const childIndustries = getCompleteChildrenByParentCode(parentCode);
       res.json(childIndustries);
     } catch (error) {
       console.error('Error fetching NAICS by parent code:', error);
