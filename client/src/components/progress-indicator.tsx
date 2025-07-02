@@ -10,7 +10,6 @@ const steps = [
   { id: "adjustments", label: "EBITDA Adjustments", number: 3 },
   { id: "valueDrivers", label: "Value Drivers", number: 4 },
   { id: "followUp", label: "Follow-up", number: 5 },
-  { id: "tierSelection", label: "Report Selection", number: 6 },
 ];
 
 export default function ProgressIndicator({ currentStep }: ProgressIndicatorProps) {
@@ -22,7 +21,7 @@ export default function ProgressIndicator({ currentStep }: ProgressIndicatorProp
         <h2 className="text-lg sm:text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent mb-2 sm:mb-0">Apple Bites Business Assessment</h2>
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-          <span className="text-sm font-medium text-slate-600">Step {currentStepNumber} of 6</span>
+          <span className="text-sm font-medium text-slate-600">Step {currentStepNumber} of 5</span>
         </div>
       </div>
       

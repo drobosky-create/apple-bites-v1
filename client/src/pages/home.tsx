@@ -41,7 +41,7 @@ export default function Home() {
           <div className="grid md:grid-cols-2 gap-8 mb-12">
             {/* Free Tier */}
             <Card className="border-2 border-slate-200 hover:border-blue-300 transition-all duration-300 hover:shadow-lg">
-              <CardHeader className="text-center pb-4">
+              <CardHeader className="flex flex-col space-y-1.5 p-6 text-center ml-[0px] mr-[0px] pl-[24px] pr-[24px] pt-[23px] pb-[23px]">
                 <Badge variant="outline" className="w-fit mx-auto mb-4 border-blue-200 text-blue-600">
                   BASIC REPORT
                 </Badge>
@@ -110,7 +110,7 @@ export default function Home() {
                 <Badge variant="outline" className="w-fit mx-auto mb-4 border-[#f5c842] text-[#f5c842]">
                   STRATEGIC REPORT
                 </Badge>
-                <CardTitle className="text-2xl text-[#1a2332]">Professional Analysis</CardTitle>
+                <CardTitle className="text-2xl text-[#fcfcfc]">Professional Analysis</CardTitle>
                 <div className="text-4xl font-bold text-[#1a2332] mt-2">$395</div>
                 <p className="text-gray-600 mt-2">Comprehensive industry-specific valuation</p>
               </CardHeader>
