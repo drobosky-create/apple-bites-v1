@@ -111,7 +111,7 @@ export default function Home() {
                   STRATEGIC REPORT
                 </Badge>
                 <CardTitle className="text-2xl text-[#fcfcfc]">Professional Analysis</CardTitle>
-                <div className="text-4xl font-bold text-[#1a2332] mt-2">$395</div>
+                <div className="text-4xl font-bold mt-2 text-[#f5c842]">$395</div>
                 <p className="text-gray-600 mt-2">Comprehensive industry-specific valuation</p>
               </CardHeader>
               <CardContent className="p-6 bg-[#f8fafc] pt-[14px] pb-[14px] rounded-lg">
