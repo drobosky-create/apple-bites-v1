@@ -28,6 +28,7 @@ function StrategicAssessment() {
   // Fetch industries for selected sector
   const { data: sectorIndustries = [], isLoading: industriesLoading } = useQuery<{code: string, title: string, description: string, sector: string, multiplier: number}[]>({
     queryKey: ['/api/naics/industries', selectedSector],
+    queryFn: () => selectedSector ? fetch(`/api/naics/industries/${encodeURIComponent(selectedSector)}`).then(res => res.json()) : Promise.resolve([]),
     enabled: !!selectedSector
   });
 
