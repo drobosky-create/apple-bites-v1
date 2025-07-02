@@ -11,7 +11,7 @@ import { emailService } from "./email-service";
 import { goHighLevelService } from "./gohighlevel-service";
 import { getMultiplierForGrade, getLabelForGrade, scoreToGrade } from "./config/multiplierScale";
 import { naicsDatabase, getNAICSBySector, getNAICSByParentCode, getNAICSByLevel } from "./config/naics-database";
-import { completeNAICSDatabase, getAllSectors, getChildrenByParentCode as getCompleteChildrenByParentCode, getNAICSByCode as getCompleteNAICSByCode, getSectorByCode } from "./config/complete-naics-database";
+import { completeNAICSDatabase, getAllSectors, getChildrenByParentCode as getCompleteChildrenByParentCode, getNAICSByCode as getCompleteNAICSByCode, getSectorByCode, getChildrenWithEnhancedTitles } from "./config/complete-naics-database";
 import fs from 'fs/promises';
 import path from 'path';
 import bcrypt from 'bcryptjs';
@@ -1446,7 +1446,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const sector = allSectors.find(s => s.title === sectorTitle);
       
       if (sector) {
-        const subsectors = getCompleteChildrenByParentCode(sector.code);
+        const subsectors = getChildrenWithEnhancedTitles(sector.code);
         res.json(subsectors);
       } else {
         res.json([]);
@@ -1469,7 +1469,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/naics/by-parent/:parentCode", async (req, res) => {
     try {
       const parentCode = req.params.parentCode;
-      const childIndustries = getCompleteChildrenByParentCode(parentCode);
+      const childIndustries = getChildrenWithEnhancedTitles(parentCode);
       res.json(childIndustries);
     } catch (error) {
       console.error('Error fetching NAICS by parent code:', error);

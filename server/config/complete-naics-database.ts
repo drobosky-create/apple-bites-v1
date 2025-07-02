@@ -236,6 +236,16 @@ export function getAllSectors(): { code: string; title: string }[] {
     .sort((a, b) => a.code.localeCompare(b.code));
 }
 
+// Enhanced function to get children with better display titles
+export function getChildrenWithEnhancedTitles(parentCode: string): CompleteNAICS[] {
+  const children = getChildrenByParentCode(parentCode);
+  
+  return children.map(child => ({
+    ...child,
+    title: `${child.code} - ${child.title}${child.level === 6 && child.multiplier ? ` (${child.multiplier}x)` : ''}`
+  }));
+}
+
 // Get subsectors for a given sector
 export function getSubsectorsBySector(sectorCode: string): CompleteNAICS[] {
   return completeNAICSDatabase
