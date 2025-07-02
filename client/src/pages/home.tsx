@@ -49,7 +49,7 @@ export default function Home() {
                 <div className="text-4xl font-bold text-[#1a2332] mt-2">Free</div>
                 <p className="text-gray-600 mt-2">Perfect for initial business insights</p>
               </CardHeader>
-              <CardContent className="p-6 bg-white pt-[14px] pb-[14px]">
+              <CardContent className="p-6 bg-white pt-[14px] pb-[14px] rounded-b-lg">
                 <div className="space-y-4 mb-8">
                   <div className="flex items-start">
                     <CheckCircle className="w-5 h-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
@@ -107,7 +107,7 @@ export default function Home() {
                 <div className="text-4xl font-bold text-[#1a2332] mt-2">$395</div>
                 <p className="text-gray-600 mt-2">Comprehensive industry-specific valuation</p>
               </CardHeader>
-              <CardContent className="p-6 bg-[#f8fafc] pt-[14px] pb-[14px]">
+              <CardContent className="p-6 bg-[#f8fafc] pt-[14px] pb-[14px] rounded-b-lg">
                 <div className="space-y-4 mb-8">
                   <div className="flex items-start">
                     <CheckCircle className="w-5 h-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
