@@ -10,7 +10,7 @@ import { resendEmailService } from "./resend-service";
 import { emailService } from "./email-service";
 import { goHighLevelService } from "./gohighlevel-service";
 import { getMultiplierForGrade, getLabelForGrade, scoreToGrade } from "./config/multiplierScale";
-import { naicsDatabase, getNAICSBySector, getAllSectors } from "./config/naics-database";
+import { naicsDatabase, getNAICSBySector, getAllSectors, getNAICSByParentCode, getNAICSByLevel } from "./config/naics-database";
 import fs from 'fs/promises';
 import path from 'path';
 import bcrypt from 'bcryptjs';
@@ -1452,6 +1452,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error('Error fetching NAICS database:', error);
       res.status(500).json({ error: "Failed to fetch NAICS database" });
+    }
+  });
+
+  app.get("/api/naics/by-parent/:parentCode", async (req, res) => {
+    try {
+      const parentCode = req.params.parentCode;
+      const childIndustries = getNAICSByParentCode(parentCode);
+      res.json(childIndustries);
+    } catch (error) {
+      console.error('Error fetching NAICS by parent code:', error);
+      res.status(500).json({ error: "Failed to fetch NAICS industries by parent code" });
+    }
+  });
+
+  app.get("/api/naics/by-level/:level", async (req, res) => {
+    try {
+      const level = parseInt(req.params.level);
+      const industries = getNAICSByLevel(level);
+      res.json(industries);
+    } catch (error) {
+      console.error('Error fetching NAICS by level:', error);
+      res.status(500).json({ error: "Failed to fetch NAICS industries by level" });
     }
   });
 

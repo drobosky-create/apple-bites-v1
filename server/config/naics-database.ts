@@ -7,10 +7,13 @@ export interface NAICSIndustry {
   description: string;
   riskFactors: string[];
   keyMetrics: string[];
+  parentCode?: string; // For hierarchical structure
+  level?: number; // 2-digit, 3-digit, 4-digit, 5-digit, or 6-digit
 }
 
 export const naicsDatabase: NAICSIndustry[] = [
   // Agriculture, Forestry, Fishing and Hunting (11)
+  // 3-digit level
   {
     code: "111",
     title: "Crop Production",
@@ -18,8 +21,91 @@ export const naicsDatabase: NAICSIndustry[] = [
     multiplier: 2.1,
     description: "Establishments primarily engaged in growing crops, plants, vines, and trees",
     riskFactors: ["Weather dependency", "Commodity price volatility", "Seasonal operations"],
-    keyMetrics: ["Acres under cultivation", "Crop yield per acre", "Equipment utilization"]
+    keyMetrics: ["Acres under cultivation", "Crop yield per acre", "Equipment utilization"],
+    level: 3
   },
+  // 4-digit level
+  {
+    code: "1111",
+    title: "Oilseed and Grain Farming",
+    sector: "Agriculture",
+    multiplier: 2.0,
+    description: "Establishments primarily engaged in growing oilseed and/or grain crops",
+    riskFactors: ["Weather dependency", "Commodity price volatility", "International trade policies"],
+    keyMetrics: ["Yield per acre", "Storage capacity", "Forward contract percentages"],
+    parentCode: "111",
+    level: 4
+  },
+  {
+    code: "1112",
+    title: "Vegetable and Melon Farming",
+    sector: "Agriculture",
+    multiplier: 2.2,
+    description: "Establishments primarily engaged in growing vegetables and melons",
+    riskFactors: ["Perishability", "Labor availability", "Weather conditions"],
+    keyMetrics: ["Production volume", "Quality grades", "Distribution channels"],
+    parentCode: "111",
+    level: 4
+  },
+  // 5-digit level
+  {
+    code: "11111",
+    title: "Soybean Farming",
+    sector: "Agriculture",
+    multiplier: 1.9,
+    description: "Establishments primarily engaged in growing soybeans",
+    riskFactors: ["Export demand", "Weather patterns", "GMO regulations"],
+    keyMetrics: ["Bushels per acre", "Protein content", "Export contracts"],
+    parentCode: "1111",
+    level: 5
+  },
+  {
+    code: "11112",
+    title: "Oilseed (except Soybean) Farming",
+    sector: "Agriculture",
+    multiplier: 2.1,
+    description: "Establishments primarily engaged in growing oilseeds except soybeans",
+    riskFactors: ["Market demand", "Processing capacity", "Storage requirements"],
+    keyMetrics: ["Oil content", "Processing contracts", "Quality premiums"],
+    parentCode: "1111",
+    level: 5
+  },
+  // 6-digit level
+  {
+    code: "111110",
+    title: "Soybean Farming",
+    sector: "Agriculture",
+    multiplier: 1.9,
+    description: "Establishments primarily engaged in growing soybeans",
+    riskFactors: ["Export demand", "Weather patterns", "GMO regulations"],
+    keyMetrics: ["Bushels per acre", "Protein content", "Export contracts"],
+    parentCode: "11111",
+    level: 6
+  },
+  {
+    code: "111120",
+    title: "Oilseed (except Soybean) Farming",
+    sector: "Agriculture",
+    multiplier: 2.1,
+    description: "Establishments primarily engaged in growing oilseeds except soybeans",
+    riskFactors: ["Market demand", "Processing capacity", "Storage requirements"],
+    keyMetrics: ["Oil content", "Processing contracts", "Quality premiums"],
+    parentCode: "11112",
+    level: 6
+  },
+  {
+    code: "111130",
+    title: "Dry Pea and Bean Farming",
+    sector: "Agriculture",
+    multiplier: 2.0,
+    description: "Establishments primarily engaged in growing dry peas, beans, and lentils",
+    riskFactors: ["Market volatility", "Disease pressure", "International competition"],
+    keyMetrics: ["Protein levels", "Test weight", "Export quality"],
+    parentCode: "11113",
+    level: 6
+  },
+
+  // 3-digit level
   {
     code: "112",
     title: "Animal Production and Aquaculture",
@@ -27,7 +113,54 @@ export const naicsDatabase: NAICSIndustry[] = [
     multiplier: 2.3,
     description: "Establishments primarily engaged in raising/breeding animals and aquatic animals",
     riskFactors: ["Disease outbreaks", "Feed cost volatility", "Regulatory compliance"],
-    keyMetrics: ["Livestock headcount", "Feed conversion ratios", "Mortality rates"]
+    keyMetrics: ["Livestock headcount", "Feed conversion ratios", "Mortality rates"],
+    level: 3
+  },
+  // 4-digit level
+  {
+    code: "1121",
+    title: "Cattle Ranching and Farming",
+    sector: "Agriculture",
+    multiplier: 2.4,
+    description: "Establishments primarily engaged in raising cattle",
+    riskFactors: ["Feed costs", "Disease management", "Market price volatility"],
+    keyMetrics: ["Head count", "Weight gain", "Calving rates"],
+    parentCode: "112",
+    level: 4
+  },
+  {
+    code: "1122",
+    title: "Hog and Pig Farming",
+    sector: "Agriculture",
+    multiplier: 2.2,
+    description: "Establishments primarily engaged in raising hogs and pigs",
+    riskFactors: ["Disease outbreaks", "Feed costs", "Environmental regulations"],
+    keyMetrics: ["Litters per sow", "Feed conversion", "Mortality rates"],
+    parentCode: "112",
+    level: 4
+  },
+  // 6-digit level examples
+  {
+    code: "112111",
+    title: "Beef Cattle Ranching and Farming",
+    sector: "Agriculture",
+    multiplier: 2.5,
+    description: "Establishments primarily engaged in raising cattle for beef production",
+    riskFactors: ["Feed costs", "Weather conditions", "Market price volatility"],
+    keyMetrics: ["Average daily gain", "Feed efficiency", "Breeding success"],
+    parentCode: "1121",
+    level: 6
+  },
+  {
+    code: "112112",
+    title: "Cattle Feedlots",
+    sector: "Agriculture",
+    multiplier: 2.3,
+    description: "Establishments primarily engaged in feeding cattle for fattening",
+    riskFactors: ["Feed cost volatility", "Disease management", "Environmental compliance"],
+    keyMetrics: ["Feed conversion ratios", "Daily weight gain", "Health management"],
+    parentCode: "1121",
+    level: 6
   },
   
   // Mining, Quarrying, and Oil and Gas Extraction (21)
@@ -400,4 +533,12 @@ export function getNAICSBySector(sector: string): NAICSIndustry[] {
 export function getAllSectors(): string[] {
   const sectors = naicsDatabase.map(industry => industry.sector);
   return Array.from(new Set(sectors)).sort();
+}
+
+export function getNAICSByParentCode(parentCode: string): NAICSIndustry[] {
+  return naicsDatabase.filter(industry => industry.parentCode === parentCode);
+}
+
+export function getNAICSByLevel(level: number): NAICSIndustry[] {
+  return naicsDatabase.filter(industry => industry.level === level);
 }
