@@ -9,7 +9,179 @@ function StrategicAssessment() {
   const [, setLocation] = useLocation();
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({});
+  const [selectedSector, setSelectedSector] = useState("");
+  const [availableIndustries, setAvailableIndustries] = useState<{code: string, title: string}[]>([]);
   const totalSteps = 6;
+
+  const industryData = {
+    "11": [
+      {code: "111", title: "Crop Production"},
+      {code: "1111", title: "Oilseed and Grain Farming"},
+      {code: "1112", title: "Vegetable and Melon Farming"},
+      {code: "1113", title: "Fruit and Tree Nut Farming"},
+      {code: "1114", title: "Greenhouse, Nursery, and Floriculture Production"},
+      {code: "1119", title: "Other Crop Farming"},
+      {code: "112", title: "Animal Production and Aquaculture"},
+      {code: "1121", title: "Cattle Ranching and Farming"},
+      {code: "1122", title: "Hog and Pig Farming"},
+      {code: "1123", title: "Poultry and Egg Production"},
+      {code: "1124", title: "Sheep and Goat Farming"},
+      {code: "1125", title: "Aquaculture"},
+      {code: "1129", title: "Other Animal Production"},
+      {code: "113", title: "Forestry and Logging"},
+      {code: "114", title: "Fishing, Hunting and Trapping"},
+      {code: "115", title: "Support Activities for Agriculture and Forestry"}
+    ],
+    "21": [
+      {code: "211", title: "Oil and Gas Extraction"},
+      {code: "212", title: "Mining (except Oil and Gas)"},
+      {code: "213", title: "Support Activities for Mining"}
+    ],
+    "22": [
+      {code: "221", title: "Utilities"}
+    ],
+    "23": [
+      {code: "236", title: "Construction of Buildings"},
+      {code: "237", title: "Heavy and Civil Engineering Construction"},
+      {code: "238", title: "Specialty Trade Contractors"}
+    ],
+    "31-33": [
+      {code: "311", title: "Food Manufacturing"},
+      {code: "312", title: "Beverage and Tobacco Product Manufacturing"},
+      {code: "313", title: "Textile Mills"},
+      {code: "314", title: "Textile Product Mills"},
+      {code: "315", title: "Apparel Manufacturing"},
+      {code: "316", title: "Leather and Allied Product Manufacturing"},
+      {code: "321", title: "Wood Product Manufacturing"},
+      {code: "322", title: "Paper Manufacturing"},
+      {code: "323", title: "Printing and Related Support Activities"},
+      {code: "324", title: "Petroleum and Coal Products Manufacturing"},
+      {code: "325", title: "Chemical Manufacturing"},
+      {code: "326", title: "Plastics and Rubber Products Manufacturing"},
+      {code: "327", title: "Nonmetallic Mineral Product Manufacturing"},
+      {code: "331", title: "Primary Metal Manufacturing"},
+      {code: "332", title: "Fabricated Metal Product Manufacturing"},
+      {code: "333", title: "Machinery Manufacturing"},
+      {code: "334", title: "Computer and Electronic Product Manufacturing"},
+      {code: "335", title: "Electrical Equipment, Appliance, and Component Manufacturing"},
+      {code: "336", title: "Transportation Equipment Manufacturing"},
+      {code: "337", title: "Furniture and Related Product Manufacturing"},
+      {code: "339", title: "Miscellaneous Manufacturing"}
+    ],
+    "42": [
+      {code: "423", title: "Merchant Wholesalers, Durable Goods"},
+      {code: "424", title: "Merchant Wholesalers, Nondurable Goods"},
+      {code: "425", title: "Wholesale Electronic Markets and Agents and Brokers"}
+    ],
+    "44-45": [
+      {code: "441", title: "Motor Vehicle and Parts Dealers"},
+      {code: "442", title: "Furniture and Home Furnishings Stores"},
+      {code: "443", title: "Electronics and Appliance Stores"},
+      {code: "444", title: "Building Material and Garden Equipment and Supplies Dealers"},
+      {code: "445", title: "Food and Beverage Stores"},
+      {code: "446", title: "Health and Personal Care Stores"},
+      {code: "447", title: "Gasoline Stations"},
+      {code: "448", title: "Clothing and Clothing Accessories Stores"},
+      {code: "451", title: "Sporting Goods, Hobby, Musical Instrument, and Book Stores"},
+      {code: "452", title: "General Merchandise Stores"},
+      {code: "453", title: "Miscellaneous Store Retailers"},
+      {code: "454", title: "Nonstore Retailers"}
+    ],
+    "48-49": [
+      {code: "481", title: "Air Transportation"},
+      {code: "482", title: "Rail Transportation"},
+      {code: "483", title: "Water Transportation"},
+      {code: "484", title: "Truck Transportation"},
+      {code: "485", title: "Transit and Ground Passenger Transportation"},
+      {code: "486", title: "Pipeline Transportation"},
+      {code: "487", title: "Scenic and Sightseeing Transportation"},
+      {code: "488", title: "Support Activities for Transportation"},
+      {code: "491", title: "Postal Service"},
+      {code: "492", title: "Couriers and Messengers"},
+      {code: "493", title: "Warehousing and Storage"}
+    ],
+    "51": [
+      {code: "511", title: "Publishing Industries (except Internet)"},
+      {code: "512", title: "Motion Picture and Sound Recording Industries"},
+      {code: "515", title: "Broadcasting (except Internet)"},
+      {code: "517", title: "Telecommunications"},
+      {code: "518", title: "Data Processing, Hosting, and Related Services"},
+      {code: "519", title: "Other Information Services"}
+    ],
+    "52": [
+      {code: "521", title: "Monetary Authorities-Central Bank"},
+      {code: "522", title: "Credit Intermediation and Related Activities"},
+      {code: "523", title: "Securities, Commodity Contracts, and Other Financial Investments"},
+      {code: "524", title: "Insurance Carriers and Related Activities"},
+      {code: "525", title: "Funds, Trusts, and Other Financial Vehicles"}
+    ],
+    "53": [
+      {code: "531", title: "Real Estate"},
+      {code: "532", title: "Rental and Leasing Services"},
+      {code: "533", title: "Lessors of Nonfinancial Intangible Assets"}
+    ],
+    "54": [
+      {code: "541", title: "Professional, Scientific, and Technical Services"},
+      {code: "5411", title: "Legal Services"},
+      {code: "5412", title: "Accounting, Tax Preparation, Bookkeeping, and Payroll Services"},
+      {code: "5413", title: "Architectural, Engineering, and Related Services"},
+      {code: "5414", title: "Specialized Design Services"},
+      {code: "5415", title: "Computer Systems Design and Related Services"},
+      {code: "5416", title: "Management, Scientific, and Technical Consulting Services"},
+      {code: "5417", title: "Scientific Research and Development Services"},
+      {code: "5418", title: "Advertising, Public Relations, and Related Services"},
+      {code: "5419", title: "Other Professional, Scientific, and Technical Services"}
+    ],
+    "55": [
+      {code: "551", title: "Management of Companies and Enterprises"}
+    ],
+    "56": [
+      {code: "561", title: "Administrative and Support Services"},
+      {code: "562", title: "Waste Management and Remediation Services"}
+    ],
+    "61": [
+      {code: "611", title: "Educational Services"}
+    ],
+    "62": [
+      {code: "621", title: "Ambulatory Health Care Services"},
+      {code: "622", title: "Hospitals"},
+      {code: "623", title: "Nursing and Residential Care Facilities"},
+      {code: "624", title: "Social Assistance"}
+    ],
+    "71": [
+      {code: "711", title: "Performing Arts, Spectator Sports, and Related Industries"},
+      {code: "712", title: "Museums, Historical Sites, and Similar Institutions"},
+      {code: "713", title: "Amusement, Gambling, and Recreation Industries"}
+    ],
+    "72": [
+      {code: "721", title: "Accommodation"},
+      {code: "722", title: "Food Services and Drinking Places"}
+    ],
+    "81": [
+      {code: "811", title: "Repair and Maintenance"},
+      {code: "812", title: "Personal and Laundry Services"},
+      {code: "813", title: "Religious, Grantmaking, Civic, Professional, and Similar Organizations"}
+    ],
+    "92": [
+      {code: "921", title: "Executive, Legislative, and Other General Government Support"},
+      {code: "922", title: "Justice, Public Order, and Safety Activities"},
+      {code: "923", title: "Administration of Human Resource Programs"},
+      {code: "924", title: "Administration of Environmental Quality Programs"},
+      {code: "925", title: "Administration of Housing Programs, Urban Planning, and Community Development"},
+      {code: "926", title: "Administration of Economic Programs"},
+      {code: "927", title: "Space Research and Technology"},
+      {code: "928", title: "National Security and International Affairs"}
+    ]
+  };
+
+  const filterSpecificIndustries = (sectorCode: string) => {
+    setSelectedSector(sectorCode);
+    if (sectorCode && industryData[sectorCode as keyof typeof industryData]) {
+      setAvailableIndustries(industryData[sectorCode as keyof typeof industryData]);
+    } else {
+      setAvailableIndustries([]);
+    }
+  };
 
   const handleBack = () => {
     setLocation("/");
@@ -116,8 +288,8 @@ function StrategicAssessment() {
               <div>
                 <label className="block text-sm font-medium mb-2">Primary Industry Sector *</label>
                 <select 
-                  id="primarySector"
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={selectedSector}
                   onChange={(e) => filterSpecificIndustries(e.target.value)}
                 >
                   <option value="">Select your industry sector</option>
@@ -146,204 +318,23 @@ function StrategicAssessment() {
               <div>
                 <label className="block text-sm font-medium mb-2">Specific Industry (NAICS Code)</label>
                 <select 
-                  id="specificIndustry"
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  disabled
+                  disabled={!selectedSector}
                 >
-                  <option value="">First select a primary sector above...</option>
+                  {!selectedSector ? (
+                    <option value="">First select a primary sector above...</option>
+                  ) : (
+                    <>
+                      <option value="">Select your specific industry...</option>
+                      {availableIndustries.map(industry => (
+                        <option key={industry.code} value={industry.code}>
+                          {industry.code} - {industry.title}
+                        </option>
+                      ))}
+                    </>
+                  )}
                 </select>
               </div>
-
-              <script dangerouslySetInnerHTML={{__html: `
-                const industryData = {
-                  "11": [
-                    {code: "111", title: "Crop Production"},
-                    {code: "1111", title: "Oilseed and Grain Farming"},
-                    {code: "1112", title: "Vegetable and Melon Farming"},
-                    {code: "1113", title: "Fruit and Tree Nut Farming"},
-                    {code: "1114", title: "Greenhouse, Nursery, and Floriculture Production"},
-                    {code: "1119", title: "Other Crop Farming"},
-                    {code: "112", title: "Animal Production and Aquaculture"},
-                    {code: "1121", title: "Cattle Ranching and Farming"},
-                    {code: "1122", title: "Hog and Pig Farming"},
-                    {code: "1123", title: "Poultry and Egg Production"},
-                    {code: "1124", title: "Sheep and Goat Farming"},
-                    {code: "1125", title: "Aquaculture"},
-                    {code: "1129", title: "Other Animal Production"},
-                    {code: "113", title: "Forestry and Logging"},
-                    {code: "114", title: "Fishing, Hunting and Trapping"},
-                    {code: "115", title: "Support Activities for Agriculture and Forestry"}
-                  ],
-                  "21": [
-                    {code: "211", title: "Oil and Gas Extraction"},
-                    {code: "212", title: "Mining (except Oil and Gas)"},
-                    {code: "213", title: "Support Activities for Mining"}
-                  ],
-                  "22": [
-                    {code: "221", title: "Utilities"}
-                  ],
-                  "23": [
-                    {code: "236", title: "Construction of Buildings"},
-                    {code: "237", title: "Heavy and Civil Engineering Construction"},
-                    {code: "238", title: "Specialty Trade Contractors"}
-                  ],
-                  "31-33": [
-                    {code: "311", title: "Food Manufacturing"},
-                    {code: "312", title: "Beverage and Tobacco Product Manufacturing"},
-                    {code: "313", title: "Textile Mills"},
-                    {code: "314", title: "Textile Product Mills"},
-                    {code: "315", title: "Apparel Manufacturing"},
-                    {code: "316", title: "Leather and Allied Product Manufacturing"},
-                    {code: "321", title: "Wood Product Manufacturing"},
-                    {code: "322", title: "Paper Manufacturing"},
-                    {code: "323", title: "Printing and Related Support Activities"},
-                    {code: "324", title: "Petroleum and Coal Products Manufacturing"},
-                    {code: "325", title: "Chemical Manufacturing"},
-                    {code: "326", title: "Plastics and Rubber Products Manufacturing"},
-                    {code: "327", title: "Nonmetallic Mineral Product Manufacturing"},
-                    {code: "331", title: "Primary Metal Manufacturing"},
-                    {code: "332", title: "Fabricated Metal Product Manufacturing"},
-                    {code: "333", title: "Machinery Manufacturing"},
-                    {code: "334", title: "Computer and Electronic Product Manufacturing"},
-                    {code: "335", title: "Electrical Equipment, Appliance, and Component Manufacturing"},
-                    {code: "336", title: "Transportation Equipment Manufacturing"},
-                    {code: "337", title: "Furniture and Related Product Manufacturing"},
-                    {code: "339", title: "Miscellaneous Manufacturing"}
-                  ],
-                  "42": [
-                    {code: "423", title: "Merchant Wholesalers, Durable Goods"},
-                    {code: "424", title: "Merchant Wholesalers, Nondurable Goods"},
-                    {code: "425", title: "Wholesale Electronic Markets and Agents and Brokers"}
-                  ],
-                  "44-45": [
-                    {code: "441", title: "Motor Vehicle and Parts Dealers"},
-                    {code: "442", title: "Furniture and Home Furnishings Stores"},
-                    {code: "443", title: "Electronics and Appliance Stores"},
-                    {code: "444", title: "Building Material and Garden Equipment and Supplies Dealers"},
-                    {code: "445", title: "Food and Beverage Stores"},
-                    {code: "446", title: "Health and Personal Care Stores"},
-                    {code: "447", title: "Gasoline Stations"},
-                    {code: "448", title: "Clothing and Clothing Accessories Stores"},
-                    {code: "451", title: "Sporting Goods, Hobby, Musical Instrument, and Book Stores"},
-                    {code: "452", title: "General Merchandise Stores"},
-                    {code: "453", title: "Miscellaneous Store Retailers"},
-                    {code: "454", title: "Nonstore Retailers"}
-                  ],
-                  "48-49": [
-                    {code: "481", title: "Air Transportation"},
-                    {code: "482", title: "Rail Transportation"},
-                    {code: "483", title: "Water Transportation"},
-                    {code: "484", title: "Truck Transportation"},
-                    {code: "485", title: "Transit and Ground Passenger Transportation"},
-                    {code: "486", title: "Pipeline Transportation"},
-                    {code: "487", title: "Scenic and Sightseeing Transportation"},
-                    {code: "488", title: "Support Activities for Transportation"},
-                    {code: "491", title: "Postal Service"},
-                    {code: "492", title: "Couriers and Messengers"},
-                    {code: "493", title: "Warehousing and Storage"}
-                  ],
-                  "51": [
-                    {code: "511", title: "Publishing Industries (except Internet)"},
-                    {code: "512", title: "Motion Picture and Sound Recording Industries"},
-                    {code: "515", title: "Broadcasting (except Internet)"},
-                    {code: "517", title: "Telecommunications"},
-                    {code: "518", title: "Data Processing, Hosting, and Related Services"},
-                    {code: "519", title: "Other Information Services"}
-                  ],
-                  "52": [
-                    {code: "521", title: "Monetary Authorities-Central Bank"},
-                    {code: "522", title: "Credit Intermediation and Related Activities"},
-                    {code: "523", title: "Securities, Commodity Contracts, and Other Financial Investments"},
-                    {code: "524", title: "Insurance Carriers and Related Activities"},
-                    {code: "525", title: "Funds, Trusts, and Other Financial Vehicles"}
-                  ],
-                  "53": [
-                    {code: "531", title: "Real Estate"},
-                    {code: "532", title: "Rental and Leasing Services"},
-                    {code: "533", title: "Lessors of Nonfinancial Intangible Assets"}
-                  ],
-                  "54": [
-                    {code: "541", title: "Professional, Scientific, and Technical Services"},
-                    {code: "5411", title: "Legal Services"},
-                    {code: "5412", title: "Accounting, Tax Preparation, Bookkeeping, and Payroll Services"},
-                    {code: "5413", title: "Architectural, Engineering, and Related Services"},
-                    {code: "5414", title: "Specialized Design Services"},
-                    {code: "5415", title: "Computer Systems Design and Related Services"},
-                    {code: "5416", title: "Management, Scientific, and Technical Consulting Services"},
-                    {code: "5417", title: "Scientific Research and Development Services"},
-                    {code: "5418", title: "Advertising, Public Relations, and Related Services"},
-                    {code: "5419", title: "Other Professional, Scientific, and Technical Services"}
-                  ],
-                  "55": [
-                    {code: "551", title: "Management of Companies and Enterprises"}
-                  ],
-                  "56": [
-                    {code: "561", title: "Administrative and Support Services"},
-                    {code: "562", title: "Waste Management and Remediation Services"}
-                  ],
-                  "61": [
-                    {code: "611", title: "Educational Services"}
-                  ],
-                  "62": [
-                    {code: "621", title: "Ambulatory Health Care Services"},
-                    {code: "622", title: "Hospitals"},
-                    {code: "623", title: "Nursing and Residential Care Facilities"},
-                    {code: "624", title: "Social Assistance"}
-                  ],
-                  "71": [
-                    {code: "711", title: "Performing Arts, Spectator Sports, and Related Industries"},
-                    {code: "712", title: "Museums, Historical Sites, and Similar Institutions"},
-                    {code: "713", title: "Amusement, Gambling, and Recreation Industries"}
-                  ],
-                  "72": [
-                    {code: "721", title: "Accommodation"},
-                    {code: "722", title: "Food Services and Drinking Places"}
-                  ],
-                  "81": [
-                    {code: "811", title: "Repair and Maintenance"},
-                    {code: "812", title: "Personal and Laundry Services"},
-                    {code: "813", title: "Religious, Grantmaking, Civic, Professional, and Similar Organizations"}
-                  ],
-                  "92": [
-                    {code: "921", title: "Executive, Legislative, and Other General Government Support"},
-                    {code: "922", title: "Justice, Public Order, and Safety Activities"},
-                    {code: "923", title: "Administration of Human Resource Programs"},
-                    {code: "924", title: "Administration of Environmental Quality Programs"},
-                    {code: "925", title: "Administration of Housing Programs, Urban Planning, and Community Development"},
-                    {code: "926", title: "Administration of Economic Programs"},
-                    {code: "927", title: "Space Research and Technology"},
-                    {code: "928", title: "National Security and International Affairs"}
-                  ]
-                };
-
-                window.filterSpecificIndustries = function(sectorCode) {
-                  const specificSelect = document.getElementById('specificIndustry');
-                  
-                  // Clear existing options
-                  specificSelect.innerHTML = '';
-                  
-                  if (!sectorCode) {
-                    specificSelect.disabled = true;
-                    specificSelect.innerHTML = '<option value="">First select a primary sector above...</option>';
-                    return;
-                  }
-                  
-                  // Enable the select and add placeholder
-                  specificSelect.disabled = false;
-                  specificSelect.innerHTML = '<option value="">Select your specific industry...</option>';
-                  
-                  // Get industries for the selected sector
-                  const industries = industryData[sectorCode] || [];
-                  
-                  // Add industry options
-                  industries.forEach(industry => {
-                    const option = document.createElement('option');
-                    option.value = industry.code;
-                    option.textContent = \`\${industry.code} - \${industry.title}\`;
-                    specificSelect.appendChild(option);
-                  });
-                };
-              `}}></script>
               <div>
                 <label className="block text-sm font-medium mb-2">Business Description *</label>
                 <textarea 
