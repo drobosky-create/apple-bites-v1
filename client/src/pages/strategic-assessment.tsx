@@ -9,7 +9,13 @@ import { useQuery } from "@tanstack/react-query";
 function StrategicAssessment() {
   const [, setLocation] = useLocation();
   const [currentStep, setCurrentStep] = useState(1);
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    primarySector: "",
+    specificIndustry: "",
+    businessDescription: "",
+    yearsInBusiness: "",
+    numberOfEmployees: ""
+  });
   const [selectedSector, setSelectedSector] = useState("");
   const totalSteps = 6;
 
@@ -27,7 +33,11 @@ function StrategicAssessment() {
 
   const filterSpecificIndustries = (sectorCode: string) => {
     setSelectedSector(sectorCode);
-    // Industries will be automatically updated via the useEffect hook when sectorIndustries changes
+    setFormData(prev => ({ ...prev, primarySector: sectorCode, specificIndustry: "" }));
+  };
+
+  const handleFormChange = (field: string, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
   };
 
   const handleBack = () => {
@@ -136,7 +146,7 @@ function StrategicAssessment() {
                 <label className="block text-sm font-medium mb-2">Primary Industry Sector *</label>
                 <select 
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
-                  value={selectedSector}
+                  value={formData.primarySector}
                   onChange={(e) => filterSpecificIndustries(e.target.value)}
                   disabled={sectorsLoading}
                 >
@@ -153,6 +163,8 @@ function StrategicAssessment() {
                 <select 
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                   disabled={!selectedSector || industriesLoading}
+                  value={formData.specificIndustry}
+                  onChange={(e) => handleFormChange('specificIndustry', e.target.value)}
                 >
                   {!selectedSector ? (
                     <option value="">First select a primary sector above...</option>
@@ -175,6 +187,8 @@ function StrategicAssessment() {
                 <textarea 
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 h-24 resize-none text-gray-900 bg-white"
                   placeholder="Describe your business operations, products/services, and target market..."
+                  value={formData.businessDescription}
+                  onChange={(e) => handleFormChange('businessDescription', e.target.value)}
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
@@ -184,6 +198,8 @@ function StrategicAssessment() {
                     type="number" 
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                     placeholder="5"
+                    value={formData.yearsInBusiness}
+                    onChange={(e) => handleFormChange('yearsInBusiness', e.target.value)}
                   />
                 </div>
                 <div>
@@ -192,6 +208,8 @@ function StrategicAssessment() {
                     type="number" 
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                     placeholder="25"
+                    value={formData.numberOfEmployees}
+                    onChange={(e) => handleFormChange('numberOfEmployees', e.target.value)}
                   />
                 </div>
               </div>
