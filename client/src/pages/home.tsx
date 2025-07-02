@@ -112,22 +112,22 @@ export default function Home() {
                   <div className="flex items-start">
                     <CheckCircle className="w-5 h-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
                     <div>
-                      <div className="font-medium text-[#2563eb]">Industry-Specific NAICS Multipliers</div>
-                      <div className="text-sm text-gray-600">Precise multipliers based on your exact industry</div>
+                      <div className="font-medium text-[#1a2332]">Industry-Specific NAICS Multipliers</div>
+                      <div className="text-sm text-gray-700">Precise multipliers based on your exact industry</div>
                     </div>
                   </div>
                   <div className="flex items-start">
                     <CheckCircle className="w-5 h-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
                     <div>
-                      <div className="font-medium text-[#2563eb]">AI-Powered Strategic Insights</div>
-                      <div className="text-sm text-gray-600">Detailed analysis and improvement recommendations</div>
+                      <div className="font-medium text-[#1a2332]">AI-Powered Strategic Insights</div>
+                      <div className="text-sm text-gray-700">Detailed analysis and improvement recommendations</div>
                     </div>
                   </div>
                   <div className="flex items-start">
                     <CheckCircle className="w-5 h-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
                     <div>
-                      <div className="font-medium">Market Positioning Analysis</div>
-                      <div className="text-sm text-gray-600">See where you stand against industry benchmarks</div>
+                      <div className="font-medium text-[#1a2332]">Market Positioning Analysis</div>
+                      <div className="text-sm text-gray-700">See where you stand against industry benchmarks</div>
                     </div>
                   </div>
                   <div className="flex items-start">
