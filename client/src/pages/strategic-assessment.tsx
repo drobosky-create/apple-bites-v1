@@ -20,13 +20,13 @@ function StrategicAssessment() {
   const totalSteps = 6;
 
   // Fetch sectors from API
-  const { data: sectors = [], isLoading: sectorsLoading } = useQuery<{code: string, title: string}[]>({
+  const { data: sectors = [], isLoading: sectorsLoading } = useQuery<string[]>({
     queryKey: ['/api/naics/sectors'],
     enabled: true
   });
 
   // Fetch industries for selected sector
-  const { data: sectorIndustries = [], isLoading: industriesLoading } = useQuery<{code: string, title: string}[]>({
+  const { data: sectorIndustries = [], isLoading: industriesLoading } = useQuery<{code: string, title: string, description: string, sector: string, multiplier: number}[]>({
     queryKey: ['/api/naics/industries', selectedSector],
     enabled: !!selectedSector
   });
@@ -152,8 +152,8 @@ function StrategicAssessment() {
                 >
                   <option value="">{sectorsLoading ? 'Loading sectors...' : 'Select your industry sector'}</option>
                   {sectors.map((sector) => (
-                    <option key={sector.code} value={sector.code}>
-                      {sector.title}
+                    <option key={sector} value={sector}>
+                      {sector}
                     </option>
                   ))}
                 </select>
