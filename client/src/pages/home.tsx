@@ -49,34 +49,34 @@ export default function Home() {
                 <div className="text-4xl font-bold text-[#1a2332] mt-2">Free</div>
                 <p className="text-gray-600 mt-2">Perfect for initial business insights</p>
               </CardHeader>
-              <CardContent className="pt-0">
+              <CardContent className="p-6 bg-white pt-[14px] pb-[14px]">
                 <div className="space-y-4 mb-8">
                   <div className="flex items-start">
                     <CheckCircle className="w-5 h-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
                     <div>
-                      <div className="font-medium">General EBITDA Multipliers</div>
-                      <div className="text-sm text-gray-600">Standard 3x-8x range based on performance grades</div>
+                      <div className="font-medium text-[#1a2332]">General EBITDA Multipliers</div>
+                      <div className="text-sm text-gray-700">Standard 3x-8x range based on performance grades</div>
                     </div>
                   </div>
                   <div className="flex items-start">
                     <CheckCircle className="w-5 h-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
                     <div>
-                      <div className="font-medium">Value Driver Assessment</div>
-                      <div className="text-sm text-gray-600">A-F grades across 10 key business factors</div>
+                      <div className="font-medium text-[#1a2332]">Value Driver Assessment</div>
+                      <div className="text-sm text-gray-700">A-F grades across 10 key business factors</div>
                     </div>
                   </div>
                   <div className="flex items-start">
                     <CheckCircle className="w-5 h-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
                     <div>
-                      <div className="font-medium">Basic PDF Report</div>
-                      <div className="text-sm text-gray-600">Clean, professional valuation summary</div>
+                      <div className="font-medium text-[#1a2332]">Basic PDF Report</div>
+                      <div className="text-sm text-gray-700">Clean, professional valuation summary</div>
                     </div>
                   </div>
                   <div className="flex items-start">
                     <CheckCircle className="w-5 h-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
                     <div>
-                      <div className="font-medium">Email Delivery</div>
-                      <div className="text-sm text-gray-600">Instant delivery to your inbox</div>
+                      <div className="font-medium text-[#1a2332]">Email Delivery</div>
+                      <div className="text-sm text-gray-700">Instant delivery to your inbox</div>
                     </div>
                   </div>
                 </div>
@@ -133,15 +133,15 @@ export default function Home() {
                   <div className="flex items-start">
                     <CheckCircle className="w-5 h-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
                     <div>
-                      <div className="font-medium">Professional Presentation PDF</div>
-                      <div className="text-sm text-gray-600">Investor-ready report with charts and visuals</div>
+                      <div className="font-medium text-[#1a2332]">Professional Presentation PDF</div>
+                      <div className="text-sm text-gray-700">Investor-ready report with charts and visuals</div>
                     </div>
                   </div>
                   <div className="flex items-start">
                     <CheckCircle className="w-5 h-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
                     <div>
-                      <div className="font-medium">Executive Summary & Action Plan</div>
-                      <div className="text-sm text-gray-600">Clear roadmap for value improvement</div>
+                      <div className="font-medium text-[#1a2332]">Executive Summary & Action Plan</div>
+                      <div className="text-sm text-gray-700">Clear roadmap for value improvement</div>
                     </div>
                   </div>
                 </div>
@@ -159,28 +159,26 @@ export default function Home() {
           {/* Trust Indicators */}
           <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-slate-200/60 p-8">
             <div className="text-center mb-8">
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Trusted by Business Owners</h3>
-              <p className="text-gray-600">Join thousands who have valued their business with our platform</p>
+              <h3 className="text-2xl font-bold text-[#1a2332] mb-4">Trusted by Business Owners</h3>
+              <p className="text-gray-700">Join thousands who have valued their business with our platform</p>
             </div>
             
-            <div className="grid md:grid-cols-3 gap-8 text-center">
+            <div className="grid md:grid-cols-2 gap-12 text-center max-w-lg mx-auto">
               <div className="flex flex-col items-center">
-                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-                  <TrendingUp className="w-6 h-6 text-blue-600" />
+                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                  <TrendingUp className="w-8 h-8 text-blue-600" />
                 </div>
-                <div className="text-2xl font-bold text-gray-900 mb-2">5,000+</div>
-                <div className="text-gray-600">Businesses Valued</div>
+                <div className="text-3xl font-bold text-[#1a2332] mb-2">5,000+</div>
+                <div className="text-gray-700 font-medium">Businesses Valued</div>
               </div>
               
               <div className="flex flex-col items-center">
-                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
-                  <FileText className="w-6 h-6 text-green-600" />
+                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                  <FileText className="w-8 h-8 text-green-600" />
                 </div>
-                <div className="text-2xl font-bold text-gray-900 mb-2">98%</div>
-                <div className="text-gray-600">Satisfaction Rate</div>
+                <div className="text-3xl font-bold text-[#1a2332] mb-2">98%</div>
+                <div className="text-gray-700 font-medium">Satisfaction Rate</div>
               </div>
-              
-              
             </div>
           </div>
         </div>
