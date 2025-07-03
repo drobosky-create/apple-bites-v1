@@ -12,6 +12,7 @@ import { goHighLevelService } from "./gohighlevel-service";
 import { getMultiplierForGrade, getLabelForGrade, scoreToGrade } from "./config/multiplierScale";
 import { naicsDatabase, getNAICSBySector, getNAICSByParentCode, getNAICSByLevel } from "./config/naics-database";
 import { completeNAICSDatabase, getAllSectors, getChildrenByParentCode as getCompleteChildrenByParentCode, getNAICSByCode as getCompleteNAICSByCode, getSectorByCode, getChildrenWithEnhancedTitles } from "./config/complete-naics-database";
+import { curatedNAICSDatabase, getCuratedNAICsBySector, getCuratedSectors, getCuratedNAICSByCode } from "./config/curated-naics-database";
 import fs from 'fs/promises';
 import path from 'path';
 import bcrypt from 'bcryptjs';
@@ -1477,33 +1478,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // New endpoint for sectors with codes
+  // New endpoint for sectors with codes (using curated database)
   app.get("/api/naics/sectors-with-codes", async (req, res) => {
     try {
-      const allSectors = getAllSectors();
-      res.json(allSectors);
+      const curatedSectors = getCuratedSectors();
+      res.json(curatedSectors);
     } catch (error) {
       console.error('Error fetching NAICS sectors with codes:', error);
       res.status(500).json({ error: "Failed to fetch NAICS sectors with codes" });
     }
   });
 
-  // New endpoint for 6-digit industries by 2-digit sector
+  // New endpoint for 6-digit industries by 2-digit sector (using curated database)
   app.get("/api/naics/by-sector/:sectorCode", async (req, res) => {
     try {
       const sectorCode = req.params.sectorCode;
       
-      // Get all 6-digit industries that belong to this 2-digit sector
-      const sixDigitIndustries = completeNAICSDatabase.filter(item => 
-        item.level === 6 && item.code.startsWith(sectorCode)
-      );
+      // Get curated 6-digit industries for this sector
+      const curatedIndustries = getCuratedNAICsBySector(sectorCode);
       
-      const enhancedIndustries = sixDigitIndustries.map(industry => ({
-        ...industry,
-        title: `${industry.code} – ${industry.title}`
+      const formattedIndustries = curatedIndustries.map(industry => ({
+        code: industry.code,
+        title: `${industry.code} – ${industry.label}`,
+        label: industry.label,
+        multiplier: industry.multiplier,
+        level: 6,
+        sectorCode: sectorCode
       }));
       
-      res.json(enhancedIndustries);
+      res.json(formattedIndustries);
     } catch (error) {
       console.error('Error fetching NAICS industries by sector:', error);
       res.status(500).json({ error: "Failed to fetch NAICS industries by sector" });
