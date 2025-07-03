@@ -13,6 +13,7 @@ import { getMultiplierForGrade, getLabelForGrade, scoreToGrade } from "./config/
 import { naicsDatabase, getNAICSBySector, getNAICSByParentCode, getNAICSByLevel } from "./config/naics-database";
 import { completeNAICSDatabase, getAllSectors, getChildrenByParentCode as getCompleteChildrenByParentCode, getNAICSByCode as getCompleteNAICSByCode, getSectorByCode, getChildrenWithEnhancedTitles } from "./config/complete-naics-database";
 import { curatedNAICSDatabase, getCuratedNAICsBySector, getCuratedSectors, getCuratedNAICSByCode, calculateMultiplierFromGrade } from "./config/curated-naics-database";
+import { comprehensiveNAICSMultipliers, getComprehensiveNAICSByCode, getComprehensiveNAICsBySector, getAllComprehensiveSectors, calculateComprehensiveMultiplierFromGrade } from "./config/comprehensive-naics-multipliers";
 import fs from 'fs/promises';
 import path from 'path';
 import bcrypt from 'bcryptjs';
@@ -1200,33 +1201,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
         foundingYear
       };
 
-      // For paid tier, recalculate with NAICS-specific multipliers
+      // For paid tier, recalculate with comprehensive NAICS-specific multipliers
       if (naicsCode) {
-        const curatedNAICS = getCuratedNAICSByCode(naicsCode);
+        const comprehensiveNAICS = getComprehensiveNAICSByCode(naicsCode);
         
-        if (curatedNAICS) {
+        if (comprehensiveNAICS) {
           // Convert grade to numeric score for calculation
           const gradeToScore = { 'A': 95, 'B': 85, 'C': 75, 'D': 65, 'F': 50 };
           const overallGrade = assessment.overallScore || 'C';
           const gradeScore = gradeToScore[overallGrade as keyof typeof gradeToScore] || 75;
           
-          // Calculate multiplier based on grade and range
-          const enhancedMultiple = calculateMultiplierFromGrade(curatedNAICS.multiplier, gradeScore);
+          // Calculate multiplier based on grade and comprehensive range
+          const enhancedMultiple = calculateComprehensiveMultiplierFromGrade(comprehensiveNAICS, gradeScore);
           
           // Recalculate valuation with industry-specific multiplier
           const adjustedEbitda = parseFloat(assessment.adjustedEbitda || '0');
-          const lowEstimate = adjustedEbitda * curatedNAICS.multiplier.min;
+          const lowEstimate = adjustedEbitda * comprehensiveNAICS.minMultiplier;
           const midEstimate = adjustedEbitda * enhancedMultiple;
-          const highEstimate = adjustedEbitda * curatedNAICS.multiplier.max;
+          const highEstimate = adjustedEbitda * comprehensiveNAICS.maxMultiplier;
           
           updatedData.valuationMultiple = enhancedMultiple.toFixed(2);
           updatedData.lowEstimate = lowEstimate.toFixed(2);
           updatedData.midEstimate = midEstimate.toFixed(2);
           updatedData.highEstimate = highEstimate.toFixed(2);
         } else {
-          // Fallback to default multipliers if NAICS not found
+          // Fallback to default multipliers if NAICS not found in comprehensive database
           const adjustedEbitda = parseFloat(assessment.adjustedEbitda || '0');
-          const defaultMultiplier = 3.5;
+          const defaultMultiplier = 4.0;
           const midEstimate = adjustedEbitda * defaultMultiplier;
           const lowEstimate = midEstimate * 0.8;
           const highEstimate = midEstimate * 1.2;
@@ -1539,6 +1540,67 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // API endpoints for comprehensive NAICS database
+  app.get("/api/naics/comprehensive/sectors", async (req, res) => {
+    try {
+      const sectors = getAllComprehensiveSectors();
+      res.json(sectors);
+    } catch (error) {
+      console.error('Error fetching comprehensive NAICS sectors:', error);
+      res.status(500).json({ error: "Failed to fetch comprehensive NAICS sectors" });
+    }
+  });
+
+  app.get("/api/naics/comprehensive/by-sector/:sectorCode", async (req, res) => {
+    try {
+      const sectorCode = req.params.sectorCode;
+      const industries = getComprehensiveNAICsBySector(sectorCode);
+      
+      const formattedIndustries = industries.map(industry => ({
+        code: industry.code,
+        title: `${industry.code} – ${industry.label}`,
+        label: industry.label,
+        multiplier: {
+          min: industry.minMultiplier,
+          avg: industry.avgMultiplier,
+          max: industry.maxMultiplier
+        },
+        level: 6,
+        sectorCode: industry.sectorCode
+      }));
+      
+      res.json(formattedIndustries);
+    } catch (error) {
+      console.error('Error fetching comprehensive NAICS by sector:', error);
+      res.status(500).json({ error: "Failed to fetch comprehensive NAICS by sector" });
+    }
+  });
+
+  app.get("/api/naics/comprehensive/:code", async (req, res) => {
+    try {
+      const code = req.params.code;
+      const industry = getComprehensiveNAICSByCode(code);
+      
+      if (!industry) {
+        return res.status(404).json({ error: "NAICS code not found" });
+      }
+      
+      res.json({
+        code: industry.code,
+        label: industry.label,
+        sectorCode: industry.sectorCode,
+        multiplier: {
+          min: industry.minMultiplier,
+          avg: industry.avgMultiplier,
+          max: industry.maxMultiplier
+        }
+      });
+    } catch (error) {
+      console.error('Error fetching comprehensive NAICS by code:', error);
+      res.status(500).json({ error: "Failed to fetch comprehensive NAICS by code" });
+    }
+  });
+
   // Test endpoint for multiplier ranges
   app.get("/api/test/multiplier-ranges", async (req, res) => {
     try {
@@ -1575,6 +1637,48 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error('Error testing multiplier ranges:', error);
       res.status(500).json({ error: "Failed to test multiplier ranges" });
+    }
+  });
+
+  // Test endpoint for comprehensive multiplier ranges
+  app.get("/api/test/comprehensive-multipliers", async (req, res) => {
+    try {
+      const testResults = [];
+      
+      // Test comprehensive NAICS codes with different grades
+      const grades = ['A', 'B', 'C', 'D', 'F'];
+      
+      for (const industry of comprehensiveNAICSMultipliers.slice(0, 10)) { // Limit for testing
+        const gradeResults = grades.map(grade => {
+          const multiplier = calculateComprehensiveMultiplierFromGrade(industry, grade);
+          return { grade, multiplier: parseFloat(multiplier.toFixed(3)) };
+        });
+        
+        testResults.push({
+          sector: industry.sectorCode,
+          code: industry.code,
+          label: industry.label,
+          range: {
+            min: industry.minMultiplier,
+            avg: industry.avgMultiplier,
+            max: industry.maxMultiplier
+          },
+          gradeResults
+        });
+      }
+      
+      res.json({
+        success: true,
+        testResults,
+        summary: {
+          totalIndustries: comprehensiveNAICSMultipliers.length,
+          sectors: getAllComprehensiveSectors().length,
+          tested: testResults.length
+        }
+      });
+    } catch (error) {
+      console.error('Error testing comprehensive multiplier ranges:', error);
+      res.status(500).json({ error: "Failed to test comprehensive multiplier ranges" });
     }
   });
 

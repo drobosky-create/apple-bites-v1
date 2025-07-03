@@ -22,17 +22,17 @@ function StrategicAssessment() {
   const [selectedSectorCode, setSelectedSectorCode] = useState("");
   const totalSteps = 6;
 
-  // Fetch all 2-digit sectors from API
+  // Fetch all 2-digit sectors from comprehensive API
   const { data: sectors = [], isLoading: sectorsLoading } = useQuery<{code: string, title: string}[]>({
-    queryKey: ['/api/naics/sectors-with-codes'],
-    queryFn: () => fetch('/api/naics/sectors-with-codes').then(res => res.json()),
+    queryKey: ['/api/naics/comprehensive/sectors'],
+    queryFn: () => fetch('/api/naics/comprehensive/sectors').then(res => res.json()),
     enabled: true
   });
 
-  // Fetch 4-digit industries for selected 2-digit sector
-  const { data: sectorIndustries = [], isLoading: industriesLoading } = useQuery<{code: string, title: string, level: number, parentCode?: string, multiplier?: number}[]>({
-    queryKey: ['/api/naics/by-sector', selectedSectorCode],
-    queryFn: () => selectedSectorCode ? fetch(`/api/naics/by-sector/${encodeURIComponent(selectedSectorCode)}`).then(res => res.json()) : Promise.resolve([]),
+  // Fetch 6-digit industries for selected 2-digit sector from comprehensive database
+  const { data: sectorIndustries = [], isLoading: industriesLoading } = useQuery<{code: string, title: string, level: number, parentCode?: string, multiplier?: {min: number, avg: number, max: number}}[]>({
+    queryKey: ['/api/naics/comprehensive/by-sector', selectedSectorCode],
+    queryFn: () => selectedSectorCode ? fetch(`/api/naics/comprehensive/by-sector/${encodeURIComponent(selectedSectorCode)}`).then(res => res.json()) : Promise.resolve([]),
     enabled: !!selectedSectorCode
   });
 
