@@ -12,7 +12,7 @@ import { goHighLevelService } from "./gohighlevel-service";
 import { getMultiplierForGrade, getLabelForGrade, scoreToGrade } from "./config/multiplierScale";
 import { naicsDatabase, getNAICSBySector, getNAICSByParentCode, getNAICSByLevel } from "./config/naics-database";
 import { completeNAICSDatabase, getAllSectors, getChildrenByParentCode as getCompleteChildrenByParentCode, getNAICSByCode as getCompleteNAICSByCode, getSectorByCode, getChildrenWithEnhancedTitles } from "./config/complete-naics-database";
-import { curatedNAICSDatabase, getCuratedNAICsBySector, getCuratedSectors, getCuratedNAICSByCode } from "./config/curated-naics-database";
+import { curatedNAICSDatabase, getCuratedNAICsBySector, getCuratedSectors, getCuratedNAICSByCode, calculateMultiplierFromGrade } from "./config/curated-naics-database";
 import fs from 'fs/promises';
 import path from 'path';
 import bcrypt from 'bcryptjs';
@@ -1202,25 +1202,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // For paid tier, recalculate with NAICS-specific multipliers
       if (naicsCode) {
-        const multiplierData = getMultiplierByNAICS(naicsCode);
+        const curatedNAICS = getCuratedNAICSByCode(naicsCode);
         
-        // Convert grade to numeric score for calculation
-        const gradeToScore = { 'A': 90, 'B': 80, 'C': 70, 'D': 60, 'F': 50 };
-        const overallGrade = assessment.overallScore || 'C';
-        const gradeScore = gradeToScore[overallGrade as keyof typeof gradeToScore] || 70;
-        
-        const enhancedMultiple = calculateWeightedMultiplier(multiplierData, gradeScore, 'paid');
-        
-        // Recalculate valuation with industry-specific multiplier
-        const adjustedEbitda = parseFloat(assessment.adjustedEbitda || '0');
-        const lowEstimate = adjustedEbitda * multiplierData.lowMultiple;
-        const midEstimate = adjustedEbitda * enhancedMultiple;
-        const highEstimate = adjustedEbitda * multiplierData.highMultiple;
-        
-        updatedData.valuationMultiple = enhancedMultiple.toFixed(2);
-        updatedData.lowEstimate = lowEstimate.toFixed(2);
-        updatedData.midEstimate = midEstimate.toFixed(2);
-        updatedData.highEstimate = highEstimate.toFixed(2);
+        if (curatedNAICS) {
+          // Convert grade to numeric score for calculation
+          const gradeToScore = { 'A': 95, 'B': 85, 'C': 75, 'D': 65, 'F': 50 };
+          const overallGrade = assessment.overallScore || 'C';
+          const gradeScore = gradeToScore[overallGrade as keyof typeof gradeToScore] || 75;
+          
+          // Calculate multiplier based on grade and range
+          const enhancedMultiple = calculateMultiplierFromGrade(curatedNAICS.multiplier, gradeScore);
+          
+          // Recalculate valuation with industry-specific multiplier
+          const adjustedEbitda = parseFloat(assessment.adjustedEbitda || '0');
+          const lowEstimate = adjustedEbitda * curatedNAICS.multiplier.min;
+          const midEstimate = adjustedEbitda * enhancedMultiple;
+          const highEstimate = adjustedEbitda * curatedNAICS.multiplier.max;
+          
+          updatedData.valuationMultiple = enhancedMultiple.toFixed(2);
+          updatedData.lowEstimate = lowEstimate.toFixed(2);
+          updatedData.midEstimate = midEstimate.toFixed(2);
+          updatedData.highEstimate = highEstimate.toFixed(2);
+        } else {
+          // Fallback to default multipliers if NAICS not found
+          const adjustedEbitda = parseFloat(assessment.adjustedEbitda || '0');
+          const defaultMultiplier = 3.5;
+          const midEstimate = adjustedEbitda * defaultMultiplier;
+          const lowEstimate = midEstimate * 0.8;
+          const highEstimate = midEstimate * 1.2;
+          
+          updatedData.valuationMultiple = defaultMultiplier.toFixed(2);
+          updatedData.lowEstimate = lowEstimate.toFixed(2);
+          updatedData.midEstimate = midEstimate.toFixed(2);
+          updatedData.highEstimate = highEstimate.toFixed(2);
+        }
       }
       
       // Update assessment with enhanced data
@@ -1521,6 +1536,45 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error('Error fetching NAICS by level:', error);
       res.status(500).json({ error: "Failed to fetch NAICS industries by level" });
+    }
+  });
+
+  // Test endpoint for multiplier ranges
+  app.get("/api/test/multiplier-ranges", async (req, res) => {
+    try {
+      const testResults = [];
+      
+      // Test all curated NAICS codes with different grades
+      const grades = ['A', 'B', 'C', 'D', 'F'];
+      
+      for (const [sectorCode, industries] of Object.entries(curatedNAICSDatabase)) {
+        for (const industry of industries) {
+          const gradeResults = grades.map(grade => {
+            const multiplier = calculateMultiplierFromGrade(industry.multiplier, grade);
+            return { grade, multiplier: parseFloat(multiplier.toFixed(3)) };
+          });
+          
+          testResults.push({
+            sector: sectorCode,
+            code: industry.code,
+            label: industry.label,
+            range: industry.multiplier,
+            gradeResults
+          });
+        }
+      }
+      
+      res.json({
+        success: true,
+        testResults,
+        summary: {
+          totalIndustries: testResults.length,
+          sectors: Object.keys(curatedNAICSDatabase).length
+        }
+      });
+    } catch (error) {
+      console.error('Error testing multiplier ranges:', error);
+      res.status(500).json({ error: "Failed to test multiplier ranges" });
     }
   });
 

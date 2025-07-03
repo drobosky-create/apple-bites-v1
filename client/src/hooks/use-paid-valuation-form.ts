@@ -171,22 +171,38 @@ export function usePaidValuationForm() {
   };
 
   const getIndustryMultiplier = (naicsCode?: string): number => {
-    // This would lookup the actual multiplier from the NAICS database
-    // For now, return a default multiplier
-    const multipliers: { [key: string]: number } = {
-      "311": 4.2, // Food Manufacturing
-      "541": 4.7, // Professional Services
-      "621": 4.4, // Healthcare Services
-      "722": 2.2, // Food Services
-      "236": 2.8, // Construction
+    if (!naicsCode) return 3.5; // Default multiplier
+    
+    // This would be replaced with actual API call to fetch multiplier ranges
+    // For now, using the curated database structure
+    const multiplierRanges: { [key: string]: { min: number; avg: number; max: number } } = {
+      "111110": { min: 2.0, avg: 2.5, max: 3.0 },
+      "111120": { min: 2.0, avg: 2.5, max: 3.0 },
+      "211120": { min: 3.5, avg: 4.2, max: 5.0 },
+      "212110": { min: 2.5, avg: 3.1, max: 3.8 },
+      "236110": { min: 2.0, avg: 2.5, max: 3.0 },
+      "237210": { min: 2.0, avg: 2.5, max: 3.0 },
+      "311810": { min: 2.7, avg: 3.2, max: 3.8 },
+      "423610": { min: 2.3, avg: 2.8, max: 3.3 },
+      "441110": { min: 1.8, avg: 2.3, max: 2.8 },
+      "541611": { min: 3.2, avg: 3.8, max: 4.5 },
+      "611310": { min: 2.0, avg: 2.5, max: 3.0 },
+      "722511": { min: 1.7, avg: 2.1, max: 2.5 },
     };
     
-    return multipliers[naicsCode || ""] || 3.5; // Default multiplier
+    const multiplierRange = multiplierRanges[naicsCode];
+    if (!multiplierRange) return 3.5; // Default if not found
+    
+    // Calculate average score from value drivers
+    const averageGrade = calculateAverageGrade();
+    
+    // Apply grade-based multiplier calculation
+    return calculateMultiplierFromGrade(multiplierRange, averageGrade);
   };
 
-  const calculateValueDriverMultiplier = (): number => {
-    if (!formData.valueDrivers) return 1.0;
-
+  const calculateAverageGrade = (): number => {
+    if (!formData.valueDrivers) return 75; // Default to C grade
+    
     const grades = [
       formData.valueDrivers.financialPerformance,
       formData.valueDrivers.growthPotential,
@@ -197,21 +213,44 @@ export function usePaidValuationForm() {
       formData.valueDrivers.industryTrends,
       formData.valueDrivers.competitiveAdvantage,
     ];
-
+    
     const totalScore = grades.reduce((sum, grade) => {
       const gradeValues: { [key: string]: number } = {
-        "A": 5, "B": 4, "C": 3, "D": 2, "F": 1
+        "A": 95, "B": 85, "C": 75, "D": 65, "F": 50
       };
-      return sum + (gradeValues[grade || "C"] || 3);
+      return sum + (gradeValues[grade || "C"] || 75);
     }, 0);
-
-    const averageScore = totalScore / grades.length;
     
-    // Convert average score to multiplier adjustment
-    // Score of 5 (all A's) = 1.3x multiplier
-    // Score of 3 (all C's) = 1.0x multiplier  
-    // Score of 1 (all F's) = 0.7x multiplier
-    return 0.7 + (averageScore - 1) * 0.15;
+    return totalScore / grades.length;
+  };
+
+  const calculateMultiplierFromGrade = (
+    multiplierRange: { min: number; avg: number; max: number },
+    gradeScore: number
+  ): number => {
+    // Map grade score to multiplier range
+    if (gradeScore >= 90) {
+      // A grades get max multiplier
+      return multiplierRange.max;
+    } else if (gradeScore >= 80) {
+      // B grades get high-end multiplier
+      return multiplierRange.avg + (multiplierRange.max - multiplierRange.avg) * 0.7;
+    } else if (gradeScore >= 70) {
+      // C grades get average multiplier
+      return multiplierRange.avg;
+    } else if (gradeScore >= 60) {
+      // D grades get below average
+      return multiplierRange.avg - (multiplierRange.avg - multiplierRange.min) * 0.5;
+    } else {
+      // F grades get minimum multiplier
+      return multiplierRange.min;
+    }
+  };
+
+  const calculateValueDriverMultiplier = (): number => {
+    // Value drivers are now incorporated into the industry multiplier calculation
+    // This function returns 1.0 since the grade-based adjustment is handled in getIndustryMultiplier
+    return 1.0;
   };
 
   const resetForm = () => {
