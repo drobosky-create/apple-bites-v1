@@ -242,7 +242,7 @@ export function getChildrenWithEnhancedTitles(parentCode: string): CompleteNAICS
   
   return children.map(child => ({
     ...child,
-    title: `${child.code} - ${child.title}${child.level === 6 && child.multiplier ? ` (${child.multiplier}x)` : ''}`
+    title: `${child.code} - ${child.title}`
   }));
 }
 
