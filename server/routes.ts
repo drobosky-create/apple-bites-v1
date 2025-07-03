@@ -1477,6 +1477,39 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // New endpoint for sectors with codes
+  app.get("/api/naics/sectors-with-codes", async (req, res) => {
+    try {
+      const allSectors = getAllSectors();
+      res.json(allSectors);
+    } catch (error) {
+      console.error('Error fetching NAICS sectors with codes:', error);
+      res.status(500).json({ error: "Failed to fetch NAICS sectors with codes" });
+    }
+  });
+
+  // New endpoint for 4-digit industries by 2-digit sector
+  app.get("/api/naics/by-sector/:sectorCode", async (req, res) => {
+    try {
+      const sectorCode = req.params.sectorCode;
+      
+      // Get all 4-digit industries that belong to this 2-digit sector
+      const fourDigitIndustries = completeNAICSDatabase.filter(item => 
+        item.level === 4 && item.code.startsWith(sectorCode)
+      );
+      
+      const enhancedIndustries = fourDigitIndustries.map(industry => ({
+        ...industry,
+        title: `${industry.code} - ${industry.title}`
+      }));
+      
+      res.json(enhancedIndustries);
+    } catch (error) {
+      console.error('Error fetching NAICS industries by sector:', error);
+      res.status(500).json({ error: "Failed to fetch NAICS industries by sector" });
+    }
+  });
+
   app.get("/api/naics/by-level/:level", async (req, res) => {
     try {
       const level = parseInt(req.params.level);

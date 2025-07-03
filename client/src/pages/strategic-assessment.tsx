@@ -12,102 +12,56 @@ function StrategicAssessment() {
   const [formData, setFormData] = useState({
     primarySector: "",
     specificIndustry: "",
-    subIndustry: "",
-    industryGroup: "",
-    finalNAICS: "",
+    naicsCode: "",
+    sectorCode: "",
     businessDescription: "",
     yearsInBusiness: "",
     numberOfEmployees: ""
   });
   const [selectedSector, setSelectedSector] = useState("");
-  const [selectedIndustry, setSelectedIndustry] = useState("");
-  const [selectedSubIndustry, setSelectedSubIndustry] = useState("");
-  const [selectedIndustryGroup, setSelectedIndustryGroup] = useState("");
+  const [selectedSectorCode, setSelectedSectorCode] = useState("");
   const totalSteps = 6;
 
-  // Fetch sectors from API
-  const { data: sectors = [], isLoading: sectorsLoading } = useQuery<string[]>({
-    queryKey: ['/api/naics/sectors'],
+  // Fetch all 2-digit sectors from API
+  const { data: sectors = [], isLoading: sectorsLoading } = useQuery<{code: string, title: string}[]>({
+    queryKey: ['/api/naics/sectors-with-codes'],
+    queryFn: () => fetch('/api/naics/sectors-with-codes').then(res => res.json()),
     enabled: true
   });
 
-  // Fetch industries for selected sector (3-digit level)
+  // Fetch 4-digit industries for selected 2-digit sector
   const { data: sectorIndustries = [], isLoading: industriesLoading } = useQuery<{code: string, title: string, level: number, parentCode?: string, multiplier?: number}[]>({
-    queryKey: ['/api/naics/industries', selectedSector],
-    queryFn: () => selectedSector ? fetch(`/api/naics/industries/${encodeURIComponent(selectedSector)}`).then(res => res.json()) : Promise.resolve([]),
-    enabled: !!selectedSector
+    queryKey: ['/api/naics/by-sector', selectedSectorCode],
+    queryFn: () => selectedSectorCode ? fetch(`/api/naics/by-sector/${encodeURIComponent(selectedSectorCode)}`).then(res => res.json()) : Promise.resolve([]),
+    enabled: !!selectedSectorCode
   });
 
-  // Fetch sub-industries for selected industry (4-digit level)
-  const { data: subIndustries = [], isLoading: subIndustriesLoading } = useQuery<{code: string, title: string, level: number, parentCode?: string, multiplier?: number}[]>({
-    queryKey: ['/api/naics/by-parent', selectedIndustry],
-    queryFn: () => selectedIndustry ? fetch(`/api/naics/by-parent/${encodeURIComponent(selectedIndustry)}`).then(res => res.json()) : Promise.resolve([]),
-    enabled: !!selectedIndustry
-  });
-
-  // Fetch industry groups for selected sub-industry (5-digit level)
-  const { data: industryGroups = [], isLoading: industryGroupsLoading } = useQuery<{code: string, title: string, level: number, parentCode?: string, multiplier?: number}[]>({
-    queryKey: ['/api/naics/by-parent', selectedSubIndustry],
-    queryFn: () => selectedSubIndustry ? fetch(`/api/naics/by-parent/${encodeURIComponent(selectedSubIndustry)}`).then(res => res.json()) : Promise.resolve([]),
-    enabled: !!selectedSubIndustry
-  });
-
-  // Fetch final NAICS codes for selected industry group (6-digit level)
-  const { data: finalNAICS = [], isLoading: finalNAICSLoading } = useQuery<{code: string, title: string, level: number, parentCode?: string, multiplier?: number}[]>({
-    queryKey: ['/api/naics/by-parent', selectedIndustryGroup],
-    queryFn: () => selectedIndustryGroup ? fetch(`/api/naics/by-parent/${encodeURIComponent(selectedIndustryGroup)}`).then(res => res.json()) : Promise.resolve([]),
-    enabled: !!selectedIndustryGroup
-  });
-
-  const filterSpecificIndustries = (sectorCode: string) => {
-    setSelectedSector(sectorCode);
-    // Reset all dependent selections when sector changes
-    setSelectedIndustry("");
-    setSelectedSubIndustry("");
-    setSelectedIndustryGroup("");
-    setFormData(prev => ({ 
-      ...prev, 
-      primarySector: sectorCode, 
-      specificIndustry: "",
-      subIndustry: "",
-      industryGroup: "",
-      finalNAICS: ""
-    }));
+  const handleSectorChange = (sectorValue: string) => {
+    // Parse the sector value to extract both code and title
+    const sector = sectors.find(s => s.code === sectorValue);
+    if (sector) {
+      setSelectedSector(sector.title);
+      setSelectedSectorCode(sector.code);
+      // Reset industry selection when sector changes
+      setFormData(prev => ({ 
+        ...prev, 
+        primarySector: sector.title,
+        specificIndustry: ""
+      }));
+    }
   };
 
   const handleIndustryChange = (industryCode: string) => {
-    setSelectedIndustry(industryCode);
-    // Reset all dependent selections
-    setSelectedSubIndustry("");
-    setSelectedIndustryGroup("");
-    setFormData(prev => ({ 
-      ...prev, 
-      specificIndustry: industryCode,
-      subIndustry: "",
-      industryGroup: "",
-      finalNAICS: ""
-    }));
-  };
-
-  const handleSubIndustryChange = (subIndustryCode: string) => {
-    setSelectedSubIndustry(subIndustryCode);
-    // Reset dependent selections
-    setSelectedIndustryGroup("");
-    setFormData(prev => ({ 
-      ...prev, 
-      subIndustry: subIndustryCode,
-      industryGroup: "",
-      finalNAICS: ""
-    }));
-  };
-
-  const handleIndustryGroupChange = (industryGroupCode: string) => {
-    setSelectedIndustryGroup(industryGroupCode);
-    setFormData(prev => ({ 
-      ...prev, 
-      industryGroup: industryGroupCode,
-      finalNAICS: ""
-    }));
+    // Find the selected industry to get its title
+    const industry = sectorIndustries.find(i => i.code === industryCode);
+    if (industry) {
+      setFormData(prev => ({ 
+        ...prev, 
+        specificIndustry: industry.title,
+        naicsCode: industryCode, // Store the 4-digit code
+        sectorCode: selectedSectorCode // Store the 2-digit sector code
+      }));
+    }
   };
 
   const handleFormChange = (field: string, value: string) => {
@@ -220,111 +174,36 @@ function StrategicAssessment() {
                 <label className="block text-sm font-medium mb-2">Primary Industry Sector *</label>
                 <select 
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
-                  value={formData.primarySector}
-                  onChange={(e) => filterSpecificIndustries(e.target.value)}
+                  value={selectedSectorCode}
+                  onChange={(e) => handleSectorChange(e.target.value)}
                   disabled={sectorsLoading}
                 >
                   <option value="">{sectorsLoading ? 'Loading sectors...' : 'Select your industry sector'}</option>
                   {sectors.map((sector) => (
-                    <option key={sector} value={sector}>
-                      {sector}
+                    <option key={sector.code} value={sector.code}>
+                      {sector.code} – {sector.title}
                     </option>
                   ))}
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2">Specific Industry (NAICS Code)</label>
+                <label className="block text-sm font-medium mb-2">Specific Industry (4-digit NAICS)</label>
                 <select 
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
-                  disabled={!selectedSector || industriesLoading}
-                  value={formData.specificIndustry}
+                  disabled={!selectedSectorCode || industriesLoading}
+                  value={formData.naicsCode || ""}
                   onChange={(e) => handleIndustryChange(e.target.value)}
                 >
-                  {!selectedSector ? (
+                  {!selectedSectorCode ? (
                     <option value="">First select a primary sector above...</option>
                   ) : industriesLoading ? (
                     <option value="">Loading industries...</option>
                   ) : (
                     <>
-                      <option value="">Select your industry (3-digit NAICS)...</option>
+                      <option value="">Select your specific industry (4-digit NAICS)...</option>
                       {sectorIndustries.map(industry => (
                         <option key={industry.code} value={industry.code}>
-                          {industry.code} - {industry.title}
-                        </option>
-                      ))}
-                    </>
-                  )}
-                </select>
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium mb-2">Sub-Industry (4-digit NAICS)</label>
-                <select 
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
-                  disabled={!selectedIndustry || subIndustriesLoading}
-                  value={formData.subIndustry}
-                  onChange={(e) => handleSubIndustryChange(e.target.value)}
-                >
-                  {!selectedIndustry ? (
-                    <option value="">First select an industry above...</option>
-                  ) : subIndustriesLoading ? (
-                    <option value="">Loading sub-industries...</option>
-                  ) : (
-                    <>
-                      <option value="">Select your sub-industry...</option>
-                      {subIndustries.map(industry => (
-                        <option key={industry.code} value={industry.code}>
-                          {industry.code} - {industry.title}
-                        </option>
-                      ))}
-                    </>
-                  )}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium mb-2">Industry Group (5-digit NAICS)</label>
-                <select 
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
-                  disabled={!selectedSubIndustry || industryGroupsLoading}
-                  value={formData.industryGroup}
-                  onChange={(e) => handleIndustryGroupChange(e.target.value)}
-                >
-                  {!selectedSubIndustry ? (
-                    <option value="">First select a sub-industry above...</option>
-                  ) : industryGroupsLoading ? (
-                    <option value="">Loading industry groups...</option>
-                  ) : (
-                    <>
-                      <option value="">Select your industry group...</option>
-                      {industryGroups.map(industry => (
-                        <option key={industry.code} value={industry.code}>
-                          {industry.code} - {industry.title}
-                        </option>
-                      ))}
-                    </>
-                  )}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium mb-2">Final NAICS Code (6-digit)</label>
-                <select 
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
-                  disabled={!selectedIndustryGroup || finalNAICSLoading}
-                  value={formData.finalNAICS}
-                  onChange={(e) => handleFormChange('finalNAICS', e.target.value)}
-                >
-                  {!selectedIndustryGroup ? (
-                    <option value="">First select an industry group above...</option>
-                  ) : finalNAICSLoading ? (
-                    <option value="">Loading final NAICS codes...</option>
-                  ) : (
-                    <>
-                      <option value="">Select your specific NAICS code...</option>
-                      {finalNAICS.map(industry => (
-                        <option key={industry.code} value={industry.code}>
-                          {industry.code} - {industry.title}
+                          {industry.title}
                         </option>
                       ))}
                     </>
