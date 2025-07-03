@@ -6,6 +6,25 @@ import { ArrowLeft, Shield, Star, Building2, TrendingUp, DollarSign, FileText, C
 import { useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 
+// Type definitions for NAICS data
+interface NAICSIndustry {
+  code: string;
+  title: string;
+  label: string;
+  multiplier: {
+    min: number;
+    avg: number;
+    max: number;
+  };
+  level: number;
+  sectorCode: string;
+}
+
+interface NAICSSector {
+  code: string;
+  title: string;
+}
+
 function StrategicAssessment() {
   const [, setLocation] = useLocation();
   const [currentStep, setCurrentStep] = useState(1);
@@ -23,23 +42,31 @@ function StrategicAssessment() {
   const totalSteps = 6;
 
   // Fetch all 2-digit sectors from comprehensive API
-  const { data: sectors = [], isLoading: sectorsLoading } = useQuery<{code: string, title: string}[]>({
+  const { data: sectors = [], isLoading: sectorsLoading } = useQuery<NAICSSector[]>({
     queryKey: ['/api/naics/comprehensive/sectors'],
     queryFn: () => fetch('/api/naics/comprehensive/sectors').then(res => res.json()),
     enabled: true
   });
 
   // Fetch 6-digit industries for selected 2-digit sector from comprehensive database
-  const { data: sectorIndustries = [], isLoading: industriesLoading } = useQuery<{code: string, title: string, level: number, parentCode?: string, multiplier?: {min: number, avg: number, max: number}}[]>({
+  const { data: sectorIndustries = [], isLoading: industriesLoading } = useQuery<NAICSIndustry[]>({
     queryKey: ['/api/naics/comprehensive/by-sector', selectedSectorCode],
     queryFn: () => selectedSectorCode ? fetch(`/api/naics/comprehensive/by-sector/${encodeURIComponent(selectedSectorCode)}`).then(res => res.json()) : Promise.resolve([]),
     enabled: !!selectedSectorCode
   });
 
+  // Debug logging for industries
+  useEffect(() => {
+    if (sectorIndustries && sectorIndustries.length > 0) {
+      console.log('Fetched industries for sector', selectedSectorCode, ':', sectorIndustries.length, 'industries');
+    }
+  }, [sectorIndustries, selectedSectorCode]);
+
   const handleSectorChange = (sectorValue: string) => {
     // Parse the sector value to extract both code and title
     const sector = sectors.find(s => s.code === sectorValue);
     if (sector) {
+      console.log('Selected sector:', sector.code, sector.title);
       setSelectedSector(sector.title);
       setSelectedSectorCode(sector.code);
       // Reset industry selection when sector changes
@@ -53,7 +80,7 @@ function StrategicAssessment() {
 
   const handleIndustryChange = (industryCode: string) => {
     // Find the selected industry to get its title
-    const industry = sectorIndustries.find(i => i.code === industryCode);
+    const industry = sectorIndustries.find((i: NAICSIndustry) => i.code === industryCode);
     if (industry) {
       setFormData(prev => ({ 
         ...prev, 
@@ -201,7 +228,7 @@ function StrategicAssessment() {
                   ) : (
                     <>
                       <option value="">Select your industry...</option>
-                      {sectorIndustries.map(industry => (
+                      {sectorIndustries.map((industry: NAICSIndustry) => (
                         <option key={industry.code} value={industry.code}>
                           {industry.title}
                         </option>
