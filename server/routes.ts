@@ -1488,19 +1488,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // New endpoint for 4-digit industries by 2-digit sector
+  // New endpoint for 6-digit industries by 2-digit sector
   app.get("/api/naics/by-sector/:sectorCode", async (req, res) => {
     try {
       const sectorCode = req.params.sectorCode;
       
-      // Get all 4-digit industries that belong to this 2-digit sector
-      const fourDigitIndustries = completeNAICSDatabase.filter(item => 
-        item.level === 4 && item.code.startsWith(sectorCode)
+      // Get all 6-digit industries that belong to this 2-digit sector
+      const sixDigitIndustries = completeNAICSDatabase.filter(item => 
+        item.level === 6 && item.code.startsWith(sectorCode)
       );
       
-      const enhancedIndustries = fourDigitIndustries.map(industry => ({
+      const enhancedIndustries = sixDigitIndustries.map(industry => ({
         ...industry,
-        title: `${industry.code} - ${industry.title}`
+        title: `${industry.code} – ${industry.title}`
       }));
       
       res.json(enhancedIndustries);

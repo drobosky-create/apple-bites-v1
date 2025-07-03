@@ -12,8 +12,8 @@ function StrategicAssessment() {
   const [formData, setFormData] = useState({
     primarySector: "",
     specificIndustry: "",
-    naicsCode: "",
-    sectorCode: "",
+    naicsCode: "", // Will store the full 6-digit NAICS code
+    sectorCode: "", // Will store the 2-digit sector code
     businessDescription: "",
     yearsInBusiness: "",
     numberOfEmployees: ""
@@ -171,14 +171,14 @@ function StrategicAssessment() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-2">Primary Industry Sector *</label>
+                <label className="block text-sm font-medium mb-2">Primary Sector *</label>
                 <select 
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                   value={selectedSectorCode}
                   onChange={(e) => handleSectorChange(e.target.value)}
                   disabled={sectorsLoading}
                 >
-                  <option value="">{sectorsLoading ? 'Loading sectors...' : 'Select your industry sector'}</option>
+                  <option value="">{sectorsLoading ? 'Loading sectors...' : 'Select a sector...'}</option>
                   {sectors.map((sector) => (
                     <option key={sector.code} value={sector.code}>
                       {sector.code} – {sector.title}
@@ -187,7 +187,7 @@ function StrategicAssessment() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2">Specific Industry (4-digit NAICS)</label>
+                <label className="block text-sm font-medium mb-2">Specific Industry</label>
                 <select 
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                   disabled={!selectedSectorCode || industriesLoading}
@@ -195,12 +195,12 @@ function StrategicAssessment() {
                   onChange={(e) => handleIndustryChange(e.target.value)}
                 >
                   {!selectedSectorCode ? (
-                    <option value="">First select a primary sector above...</option>
+                    <option value="">First select a sector above...</option>
                   ) : industriesLoading ? (
                     <option value="">Loading industries...</option>
                   ) : (
                     <>
-                      <option value="">Select your specific industry (4-digit NAICS)...</option>
+                      <option value="">Select your industry...</option>
                       {sectorIndustries.map(industry => (
                         <option key={industry.code} value={industry.code}>
                           {industry.title}
