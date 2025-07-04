@@ -35,7 +35,17 @@ function StrategicAssessment() {
     sectorCode: "", // Will store the 2-digit sector code
     businessDescription: "",
     yearsInBusiness: "",
-    numberOfEmployees: ""
+    numberOfEmployees: "",
+    valueDrivers: {
+      financialPerformance: "",
+      growthPotential: "",
+      marketPosition: "",
+      managementTeam: "",
+      customerBase: "",
+      operationalEfficiency: "",
+      industryTrends: "",
+      competitiveAdvantage: ""
+    }
   });
   const [selectedSector, setSelectedSector] = useState("");
   const [selectedSectorCode, setSelectedSectorCode] = useState("");
@@ -109,6 +119,63 @@ function StrategicAssessment() {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
     }
+  };
+
+  // Helper functions for Value Drivers step
+  const handleValueDriverChange = (driverKey: string, grade: string) => {
+    setFormData(prev => ({
+      ...prev,
+      valueDrivers: {
+        ...prev.valueDrivers,
+        [driverKey]: grade
+      }
+    }));
+  };
+
+  const calculateBaseMultiplier = () => {
+    if (!formData.naicsCode) return "4.0";
+    
+    // This would typically fetch from the comprehensive NAICS database
+    // For now, return a realistic base multiplier
+    return "4.5";
+  };
+
+  const calculateStrategicMultiplier = () => {
+    if (!formData.valueDrivers) return "0.0";
+    
+    const grades = Object.values(formData.valueDrivers);
+    if (grades.length === 0) return "0.0";
+    
+    // Calculate average grade value (A=5, B=4, C=3, D=2, F=1)
+    const gradeValues = grades.map(grade => {
+      switch(grade) {
+        case 'A': return 5;
+        case 'B': return 4;
+        case 'C': return 3;
+        case 'D': return 2;
+        case 'F': return 1;
+        default: return 0;
+      }
+    });
+    
+    const totalValue = gradeValues.reduce((sum: number, val: number) => sum + val, 0);
+    const averageGrade = totalValue / gradeValues.length;
+    
+    // Strategic adjustment based on average grade
+    const adjustment = ((averageGrade - 3) * 0.3).toFixed(1);
+    return adjustment;
+  };
+
+  const calculateFinalMultiplier = () => {
+    const baseMultiplier = parseFloat(calculateBaseMultiplier());
+    const strategicAdjustment = parseFloat(calculateStrategicMultiplier());
+    const finalMultiplier = baseMultiplier + strategicAdjustment;
+    return Math.max(finalMultiplier, 1.0).toFixed(1);
+  };
+
+  const getValueDriversProgress = () => {
+    if (!formData.valueDrivers) return 0;
+    return Object.values(formData.valueDrivers).filter(val => val && val.length > 0).length;
   };
 
   const renderProgressBar = () => {
@@ -386,36 +453,80 @@ function StrategicAssessment() {
             </CardHeader>
             <CardContent className="space-y-6">
               {[
-                "Financial Performance",
-                "Growth Potential", 
-                "Market Position",
-                "Management Team",
-                "Customer Base",
-                "Operational Efficiency",
-                "Industry Trends",
-                "Competitive Advantage"
-              ].map((driver, index) => (
-                <div key={index} className="space-y-2">
-                  <label className="block text-sm font-medium">{driver}</label>
-                  <div className="flex space-x-2">
-                    {["A", "B", "C", "D", "F"].map((grade) => (
-                      <button
-                        key={grade}
-                        className="w-12 h-12 rounded-full border-2 border-gray-300 hover:border-blue-500 flex items-center justify-center font-bold transition-colors"
-                      >
-                        {grade}
-                      </button>
-                    ))}
+                { key: "financialPerformance", label: "Financial Performance", description: "Revenue growth, profitability, cash flow management" },
+                { key: "growthPotential", label: "Growth Potential", description: "Market expansion opportunities, scalability, innovation" },
+                { key: "marketPosition", label: "Market Position", description: "Market share, brand recognition, competitive standing" },
+                { key: "managementTeam", label: "Management Team", description: "Leadership quality, experience, succession planning" },
+                { key: "customerBase", label: "Customer Base", description: "Diversification, loyalty, retention rates" },
+                { key: "operationalEfficiency", label: "Operational Efficiency", description: "Process optimization, technology adoption, productivity" },
+                { key: "industryTrends", label: "Industry Trends", description: "Sector outlook, regulatory environment, market dynamics" },
+                { key: "competitiveAdvantage", label: "Competitive Advantage", description: "Unique value proposition, barriers to entry, differentiation" }
+              ].map((driver, index) => {
+                const currentValue = formData.valueDrivers?.[driver.key as keyof typeof formData.valueDrivers] || "";
+                
+                return (
+                  <div key={index} className="space-y-3">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-900">{driver.label}</label>
+                      <p className="text-xs text-gray-600">{driver.description}</p>
+                    </div>
+                    <div className="flex space-x-2">
+                      {["A", "B", "C", "D", "F"].map((grade) => (
+                        <button
+                          key={grade}
+                          type="button"
+                          onClick={() => handleValueDriverChange(driver.key as keyof typeof formData.valueDrivers, grade)}
+                          className={`w-12 h-12 rounded-full border-2 flex items-center justify-center font-bold transition-all ${
+                            currentValue === grade
+                              ? "border-indigo-500 bg-indigo-500 text-white shadow-lg"
+                              : "border-gray-300 hover:border-indigo-400 hover:bg-indigo-50"
+                          }`}
+                        >
+                          {grade}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
+              
+              {/* Real-time Multiplier Preview */}
+              <div className="bg-gradient-to-r from-indigo-50 to-purple-50 p-6 rounded-lg border">
+                <div className="flex items-center mb-3">
+                  <Calculator className="w-5 h-5 text-indigo-600 mr-2" />
+                  <span className="font-medium text-indigo-900">Strategic Multiplier Preview</span>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <span className="text-sm text-gray-600">Base Industry Multiple:</span>
+                    <div className="text-lg font-bold text-indigo-600">{calculateBaseMultiplier()}x</div>
+                  </div>
+                  <div>
+                    <span className="text-sm text-gray-600">Strategic Adjustment:</span>
+                    <div className="text-lg font-bold text-purple-600">{calculateStrategicMultiplier()}x</div>
                   </div>
                 </div>
-              ))}
-              <div className="bg-indigo-50 p-4 rounded-lg">
-                <div className="flex items-center mb-2">
-                  <Calculator className="w-5 h-5 text-indigo-600 mr-2" />
-                  <span className="font-medium text-indigo-900">Multiplier Preview</span>
+                <div className="mt-4 pt-4 border-t border-indigo-200">
+                  <span className="text-sm text-gray-600">Final Valuation Multiple:</span>
+                  <div className="text-2xl font-bold text-green-600">{calculateFinalMultiplier()}x</div>
+                  <p className="text-xs text-gray-600 mt-1">
+                    Based on {formData.primarySector || "your industry"} and current strategic ratings
+                  </p>
                 </div>
-                <div className="text-lg font-bold text-indigo-600">4.2x Industry Multiple</div>
-                <p className="text-sm text-indigo-700">Based on your industry and current ratings</p>
+              </div>
+              
+              {/* Progress Indicator */}
+              <div className="bg-blue-50 p-4 rounded-lg">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium text-blue-900">Assessment Progress</span>
+                  <span className="text-sm text-blue-700">{getValueDriversProgress()}/8 completed</span>
+                </div>
+                <div className="mt-2 bg-blue-200 rounded-full h-2">
+                  <div 
+                    className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                    style={{ width: `${(getValueDriversProgress() / 8) * 100}%` }}
+                  />
+                </div>
               </div>
             </CardContent>
           </Card>
