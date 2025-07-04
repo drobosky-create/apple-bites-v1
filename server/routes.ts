@@ -13,7 +13,7 @@ import { getMultiplierForGrade, getLabelForGrade, scoreToGrade } from "./config/
 import { naicsDatabase, getNAICSBySector, getNAICSByParentCode, getNAICSByLevel } from "./config/naics-database";
 import { completeNAICSDatabase, getAllSectors, getChildrenByParentCode as getCompleteChildrenByParentCode, getNAICSByCode as getCompleteNAICSByCode, getSectorByCode, getChildrenWithEnhancedTitles } from "./config/complete-naics-database";
 import { curatedNAICSDatabase, getCuratedNAICsBySector, getCuratedSectors, getCuratedNAICSByCode, calculateMultiplierFromGrade } from "./config/curated-naics-database";
-import { comprehensiveNAICSMultipliers, getComprehensiveNAICSByCode, getComprehensiveNAICsBySector, getAllComprehensiveSectors, calculateComprehensiveMultiplierFromGrade } from "./config/comprehensive-naics-multipliers";
+import { comprehensiveNAICSMultipliers, getComprehensiveNAICSByCode, getComprehensiveNAICsBySector, getComprehensiveSectors, calculateComprehensiveMultiplierFromGrade } from "./config/comprehensive-naics-multipliers";
 import fs from 'fs/promises';
 import path from 'path';
 import bcrypt from 'bcryptjs';
@@ -1543,7 +1543,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // API endpoints for comprehensive NAICS database
   app.get("/api/naics/comprehensive/sectors", async (req, res) => {
     try {
-      const sectors = getAllComprehensiveSectors();
+      const sectors = getComprehensiveSectors();
       res.json(sectors);
     } catch (error) {
       console.error('Error fetching comprehensive NAICS sectors:', error);

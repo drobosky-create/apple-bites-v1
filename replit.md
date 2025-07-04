@@ -109,6 +109,8 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- **July 3, 2025 - Complete NAICS Database Expansion**: Expanded comprehensive NAICS database from 4 sectors to all 20 major U.S. industry sectors with 250+ authentic 6-digit industry classifications. Added Manufacturing (31), Wholesale Trade (42), Retail Trade (44), Transportation (48), Information (51), Finance (52), Real Estate (53), Professional Services (54), Management (55), Administrative Services (56), Education (61), Healthcare (62), Arts/Entertainment (71), Accommodation/Food (72), Other Services (81), and Public Administration (92). Each sector includes realistic multiplier ranges based on industry-specific valuation data.
+
 - **June 26, 2025 - Two-Tier Valuation Platform Implemented**: Built comprehensive free and paid tier system with NAICS-specific multipliers, enhanced PDF generation, and Resend email delivery. Free tier provides basic reports with general multipliers, while paid tier ($395) offers industry-specific analysis, AI insights, and professional presentations.
 
 - **June 26, 2025 - Email Delivery System Added**: Integrated Resend service for professional email delivery of PDF reports with branded templates, automated follow-ups, and delivery tracking. Supports both tier types with appropriate messaging and upgrade prompts.
