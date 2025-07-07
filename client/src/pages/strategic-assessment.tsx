@@ -1268,7 +1268,7 @@ function GrowthExitAssessment() {
             variant="outline"
             onClick={prevStep}
             disabled={currentStep === 1}
-            className="px-6 border-blue-600 text-blue-600 hover:bg-blue-50 hover:border-blue-700 hover:text-blue-700"
+            className="px-6 border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400 bg-white"
           >
             Previous
           </Button>
