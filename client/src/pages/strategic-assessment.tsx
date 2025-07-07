@@ -1043,7 +1043,6 @@ function StrategicAssessment() {
                         </div>
                       </div>
                     </div>
-                    
                     {/* Industry Comparison Chart */}
                     <div className="bg-white p-6 rounded-lg border">
                       <div className="text-center mb-6">
@@ -1059,7 +1058,7 @@ function StrategicAssessment() {
                         <p className="text-sm text-gray-600 mb-2">
                           Industry: {formData.naicsCode} – {selectedIndustry?.title || 'Industry Classification'}
                         </p>
-                        <h4 className="text-lg font-bold text-gray-800 mb-4">Industry-Based Valuation Range</h4>
+                        <h4 className="text-lg font-bold text-gray-800 mt-[48px] mb-[48px] pt-[0px] pb-[0px]">Industry-Based Valuation Range</h4>
                         
                         {/* Gradient Bar with Indicators */}
                         <div className="relative mb-4">
