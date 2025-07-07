@@ -13,17 +13,17 @@ export function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-start items-center h-16">
           {/* Logo - Links to Meritage Partners homepage */}
-          <div className="flex-shrink-0">
+          <div className="flex-shrink-0 flex items-center justify-center">
             <a 
               href="https://www.meritage-partners.com" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="hover:opacity-80 transition-opacity"
+              className="hover:opacity-80 transition-opacity flex items-center justify-center"
             >
               <img 
                 src={Meritage_Logo} 
                 alt="Meritage Partners" 
-                className="h-12 w-auto"
+                className="h-10 w-auto"
               />
             </a>
           </div>
