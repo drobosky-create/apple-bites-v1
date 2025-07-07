@@ -1056,7 +1056,7 @@ function StrategicAssessment() {
                       
                       <div className="mb-6">
                         <p className="text-sm text-gray-600 mb-2">
-                          Industry: {formData.naicsCode} – {selectedIndustry?.title || 'Industry Classification'}
+                          Industry: {selectedIndustry?.title || `${formData.naicsCode} – Industry Classification`}
                         </p>
                         <h4 className="text-lg font-bold text-gray-800 mt-[48px] mb-[48px] pt-[0px] pb-[0px]">Industry-Based Valuation Range</h4>
                         
