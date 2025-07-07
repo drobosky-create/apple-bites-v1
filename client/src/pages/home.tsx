@@ -5,16 +5,34 @@ import { Badge } from '@/components/ui/badge';
 import { CheckCircle, Star, TrendingUp, FileText, BarChart3, Users } from 'lucide-react';
 import { useLocation } from 'wouter';
 import appleBitesLogo from "@assets/Apple Bites Business Assessment V2_1750116954168.png";
+import EmailCaptureModal from "@/components/email-capture-modal";
 
 export default function Home() {
   const [, setLocation] = useLocation();
+  const [emailModalOpen, setEmailModalOpen] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const handleFreeTierStart = () => {
     setLocation('/assessment/free');
   };
 
   const handlePaidTierStart = () => {
-    setLocation('/assessment/paid');
+    setEmailModalOpen(true);
+  };
+
+  const handleEmailSubmit = async (email: string) => {
+    setIsProcessing(true);
+    
+    try {
+      // Store email in localStorage for post-purchase access
+      localStorage.setItem('purchaseEmail', email);
+      
+      // Redirect to Apple Bites checkout
+      window.location.href = 'https://products.applebites.ai/product-details/product/686c2e0f5f2f1191edb09737';
+    } catch (error) {
+      console.error('Error processing email:', error);
+      setIsProcessing(false);
+    }
   };
 
   return (
@@ -190,6 +208,13 @@ export default function Home() {
           </div>
         </div>
       </div>
+      
+      <EmailCaptureModal
+        isOpen={emailModalOpen}
+        onClose={() => setEmailModalOpen(false)}
+        onSubmit={handleEmailSubmit}
+        isLoading={isProcessing}
+      />
     </div>
   );
 }
