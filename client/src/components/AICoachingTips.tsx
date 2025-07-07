@@ -157,7 +157,7 @@ const AICoachingTips: React.FC<AICoachingTipsProps> = ({ financialData }) => {
                   <p className="text-sm text-gray-600">{tip.category}</p>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <p className="text-gray-700">{tip.description}</p>
+                  <p className="text-gray-700 no-underline" style={{ textDecoration: 'none' }}>{tip.description}</p>
                   
                   <div>
                     <h4 className="font-medium text-gray-800 mb-2">Action Items:</h4>

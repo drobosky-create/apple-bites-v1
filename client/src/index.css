@@ -9,6 +9,13 @@
   * {
     box-sizing: border-box;
   }
+  
+  /* Remove spell-check underlines and text decoration */
+  p, span, div, h1, h2, h3, h4, h5, h6, li, td, th {
+    text-decoration: none !important;
+    -webkit-text-decoration-line: none !important;
+    text-decoration-line: none !important;
+  }
 
   html {
     margin: 0 !important;
