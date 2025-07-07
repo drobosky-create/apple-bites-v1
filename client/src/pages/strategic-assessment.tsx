@@ -1002,7 +1002,7 @@ function StrategicAssessment() {
             <CardContent className="space-y-6">
               {(() => {
                 const valuationResults = getValuationResults();
-                const selectedIndustry = naicsData?.industries?.find(i => i.code === formData.naicsCode);
+                const selectedIndustry = sectorIndustries?.find(i => i.code === formData.naicsCode);
                 const userMultiple = valuationResults.ebitda > 0 ? 
                   (valuationResults.valuation.mean / valuationResults.ebitda) : 0;
                 
