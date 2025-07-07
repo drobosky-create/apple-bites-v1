@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Shield, Star, Building2, TrendingUp, DollarSign, FileText, Calculator, Zap } from "lucide-react";
 import { useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
+import calculateValuation from "@/utils/valuationEngine";
 
 // Type definitions for NAICS data
 interface NAICSIndustry {
@@ -36,6 +37,17 @@ function StrategicAssessment() {
     businessDescription: "",
     yearsInBusiness: "",
     numberOfEmployees: "",
+    financials: {
+      annualRevenue: "",
+      costOfGoodsSold: "",
+      operatingExpenses: ""
+    },
+    adjustments: {
+      ownerSalary: "",
+      personalExpenses: "",
+      oneTimeExpenses: "",
+      otherAdjustments: ""
+    },
     valueDrivers: {
       financialPerformance: "",
       recurringRevenue: "",
@@ -164,9 +176,50 @@ function StrategicAssessment() {
     return Math.max(finalMultiplier, 1.0).toFixed(1);
   };
 
+  const getValuationResults = () => {
+    // Prepare responses array for valuation engine
+    const responses = [
+      // Financial data
+      { id: 'financial-1', value: parseFloat(formData.financials.annualRevenue) || 0, valueDriver: 'Financial Performance', weight: 0 },
+      { id: 'financial-2', value: parseFloat(formData.financials.costOfGoodsSold) || 0, valueDriver: 'Financial Performance', weight: 0 },
+      { id: 'financial-3', value: parseFloat(formData.financials.operatingExpenses) || 0, valueDriver: 'Financial Performance', weight: 0 },
+      
+      // Adjustments
+      { id: 'adjustments-1', value: parseFloat(formData.adjustments.ownerSalary) || 0, valueDriver: 'Financial Performance', weight: 0 },
+      { id: 'adjustments-2', value: parseFloat(formData.adjustments.personalExpenses) || 0, valueDriver: 'Financial Performance', weight: 0 },
+      { id: 'adjustments-3', value: parseFloat(formData.adjustments.oneTimeExpenses) || 0, valueDriver: 'Financial Performance', weight: 0 },
+      { id: 'adjustments-4', value: parseFloat(formData.adjustments.otherAdjustments) || 0, valueDriver: 'Financial Performance', weight: 0 },
+      
+      // Value drivers
+      { id: 'driver-financial-performance-1', valueDriver: 'Financial Performance', weight: parseInt(formData.valueDrivers.financialPerformance) || 0 },
+      { id: 'driver-recurring-revenue-1', valueDriver: 'Recurring Revenue', weight: parseInt(formData.valueDrivers.recurringRevenue) || 0 },
+      { id: 'driver-growth-potential-1', valueDriver: 'Growth Potential', weight: parseInt(formData.valueDrivers.growthPotential) || 0 },
+      { id: 'driver-owner-dependency-1', valueDriver: 'Owner Dependency', weight: parseInt(formData.valueDrivers.ownerDependency) || 0 }
+    ];
+
+    return calculateValuation(responses);
+  };
+
   const getValueDriversProgress = () => {
     if (!formData.valueDrivers) return 0;
     return Object.values(formData.valueDrivers).filter(val => val && val.length > 0).length;
+  };
+
+  const calculateEBITDA = () => {
+    const revenue = parseFloat(formData.financials.annualRevenue) || 0;
+    const cogs = parseFloat(formData.financials.costOfGoodsSold) || 0;
+    const opex = parseFloat(formData.financials.operatingExpenses) || 0;
+    return revenue - cogs - opex;
+  };
+
+  const calculateAdjustedEBITDA = () => {
+    const baseEBITDA = calculateEBITDA();
+    const ownerSalary = parseFloat(formData.adjustments.ownerSalary) || 0;
+    const personalExpenses = parseFloat(formData.adjustments.personalExpenses) || 0;
+    const oneTimeExpenses = parseFloat(formData.adjustments.oneTimeExpenses) || 0;
+    const otherAdjustments = parseFloat(formData.adjustments.otherAdjustments) || 0;
+    
+    return baseEBITDA + ownerSalary + personalExpenses + oneTimeExpenses + otherAdjustments;
   };
 
   const renderProgressBar = () => {
@@ -345,6 +398,11 @@ function StrategicAssessment() {
                 <label className="block text-sm font-medium mb-2">Annual Revenue (Last 12 Months) *</label>
                 <input 
                   type="number" 
+                  value={formData.financials.annualRevenue}
+                  onChange={(e) => setFormData(prev => ({
+                    ...prev,
+                    financials: { ...prev.financials, annualRevenue: e.target.value }
+                  }))}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="1000000"
                 />
@@ -353,6 +411,11 @@ function StrategicAssessment() {
                 <label className="block text-sm font-medium mb-2">Cost of Goods Sold (COGS)</label>
                 <input 
                   type="number" 
+                  value={formData.financials.costOfGoodsSold}
+                  onChange={(e) => setFormData(prev => ({
+                    ...prev,
+                    financials: { ...prev.financials, costOfGoodsSold: e.target.value }
+                  }))}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="400000"
                 />
@@ -361,6 +424,11 @@ function StrategicAssessment() {
                 <label className="block text-sm font-medium mb-2">Total Operating Expenses *</label>
                 <input 
                   type="number" 
+                  value={formData.financials.operatingExpenses}
+                  onChange={(e) => setFormData(prev => ({
+                    ...prev,
+                    financials: { ...prev.financials, operatingExpenses: e.target.value }
+                  }))}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="350000"
                 />
@@ -370,7 +438,9 @@ function StrategicAssessment() {
                   <Calculator className="w-5 h-5 text-blue-600 mr-2" />
                   <span className="font-medium text-blue-900">Calculated EBITDA</span>
                 </div>
-                <div className="text-2xl font-bold text-blue-600">$250,000</div>
+                <div className="text-2xl font-bold text-blue-600">
+                  ${calculateEBITDA().toLocaleString()}
+                </div>
                 <p className="text-sm text-blue-700">This will be refined with your adjustments</p>
               </div>
             </CardContent>
@@ -392,6 +462,11 @@ function StrategicAssessment() {
                 <label className="block text-sm font-medium mb-2">Owner's Salary Above Market Rate</label>
                 <input 
                   type="number" 
+                  value={formData.adjustments.ownerSalary}
+                  onChange={(e) => setFormData(prev => ({
+                    ...prev,
+                    adjustments: { ...prev.adjustments, ownerSalary: e.target.value }
+                  }))}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="50000"
                 />
@@ -400,6 +475,11 @@ function StrategicAssessment() {
                 <label className="block text-sm font-medium mb-2">Personal Expenses Run Through Business</label>
                 <input 
                   type="number" 
+                  value={formData.adjustments.personalExpenses}
+                  onChange={(e) => setFormData(prev => ({
+                    ...prev,
+                    adjustments: { ...prev.adjustments, personalExpenses: e.target.value }
+                  }))}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="25000"
                 />
@@ -408,6 +488,11 @@ function StrategicAssessment() {
                 <label className="block text-sm font-medium mb-2">One-Time Expenses</label>
                 <input 
                   type="number" 
+                  value={formData.adjustments.oneTimeExpenses}
+                  onChange={(e) => setFormData(prev => ({
+                    ...prev,
+                    adjustments: { ...prev.adjustments, oneTimeExpenses: e.target.value }
+                  }))}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="15000"
                 />
@@ -416,6 +501,11 @@ function StrategicAssessment() {
                 <label className="block text-sm font-medium mb-2">Other Adjustments</label>
                 <input 
                   type="number" 
+                  value={formData.adjustments.otherAdjustments}
+                  onChange={(e) => setFormData(prev => ({
+                    ...prev,
+                    adjustments: { ...prev.adjustments, otherAdjustments: e.target.value }
+                  }))}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="10000"
                 />
@@ -425,7 +515,9 @@ function StrategicAssessment() {
                   <TrendingUp className="w-5 h-5 text-green-600 mr-2" />
                   <span className="font-medium text-green-900">Adjusted EBITDA</span>
                 </div>
-                <div className="text-2xl font-bold text-green-600">$350,000</div>
+                <div className="text-2xl font-bold text-green-600">
+                  ${calculateAdjustedEBITDA().toLocaleString()}
+                </div>
                 <p className="text-sm text-green-700">Ready for value driver analysis</p>
               </div>
             </CardContent>
@@ -567,29 +659,54 @@ function StrategicAssessment() {
                 </div>
               </div>
               
-              {/* Real-time Multiplier Preview */}
+              {/* Real-time Valuation Preview using Valuation Engine */}
               <div className="bg-gradient-to-r from-indigo-50 to-purple-50 p-6 rounded-lg border">
                 <div className="flex items-center mb-3">
                   <Calculator className="w-5 h-5 text-indigo-600 mr-2" />
-                  <span className="font-medium text-indigo-900">Strategic Assessment Score</span>
+                  <span className="font-medium text-indigo-900">Live Valuation Analysis</span>
                 </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <span className="text-sm text-gray-600">Total Score:</span>
-                    <div className="text-lg font-bold text-indigo-600">{calculateTotalScore()}/20</div>
-                  </div>
-                  <div>
-                    <span className="text-sm text-gray-600">Multiplier Adjustment:</span>
-                    <div className="text-lg font-bold text-purple-600">{calculateMultiplierAdjustment()}x</div>
-                  </div>
-                </div>
-                <div className="mt-4 pt-4 border-t border-indigo-200">
-                  <span className="text-sm text-gray-600">Final Valuation Multiple:</span>
-                  <div className="text-2xl font-bold text-green-600">{calculateFinalMultiplier()}x</div>
-                  <p className="text-xs text-gray-600 mt-1">
-                    Based on {formData.primarySector || "your industry"} and strategic assessment
-                  </p>
-                </div>
+                {(() => {
+                  const valuationResults = getValuationResults();
+                  return (
+                    <>
+                      <div className="grid grid-cols-3 gap-4 mb-4">
+                        <div>
+                          <span className="text-sm text-gray-600">Overall Score:</span>
+                          <div className="text-lg font-bold text-indigo-600">{valuationResults.overallScore}/100</div>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-600">Adjusted EBITDA:</span>
+                          <div className="text-lg font-bold text-purple-600">${valuationResults.ebitda?.toLocaleString() || "0"}</div>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-600">Value Range:</span>
+                          <div className="text-lg font-bold text-green-600">
+                            ${valuationResults.valuation?.low?.toLocaleString() || "0"} - ${valuationResults.valuation?.high?.toLocaleString() || "0"}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="pt-4 border-t border-indigo-200">
+                        <span className="text-sm text-gray-600">Estimated Business Value:</span>
+                        <div className="text-3xl font-bold text-green-600">
+                          ${valuationResults.valuation?.mean?.toLocaleString() || "0"}
+                        </div>
+                        <p className="text-xs text-gray-600 mt-1">
+                          Based on comprehensive financial and strategic analysis
+                        </p>
+                      </div>
+                      {valuationResults.recommendations && valuationResults.recommendations.length > 0 && (
+                        <div className="mt-4 pt-4 border-t border-indigo-200">
+                          <span className="text-sm font-medium text-indigo-900">Improvement Areas:</span>
+                          <ul className="text-xs text-gray-600 mt-1 space-y-1">
+                            {valuationResults.recommendations.slice(0, 2).map((rec, idx) => (
+                              <li key={idx}>• {rec}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </>
+                  );
+                })()}
               </div>
               
               {/* Progress Indicator */}
