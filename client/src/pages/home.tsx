@@ -42,7 +42,7 @@ export default function Home() {
             {/* Free Tier */}
             <Card className="border-2 border-slate-200 hover:border-blue-300 transition-all duration-300 hover:shadow-lg">
               <CardHeader className="flex flex-col space-y-1.5 p-6 text-center ml-[0px] mr-[0px] pl-[24px] pr-[24px] pt-[23px] pb-[23px]">
-                <Badge variant="outline" className="w-fit mx-auto mb-4 border-blue-200 text-blue-600">
+                <Badge variant="outline" className="w-fit mx-auto mb-4 border-blue-200 text-blue-600 text-[20px]">
                   BASIC REPORT
                 </Badge>
                 <CardTitle className="text-2xl text-[#1a2332]">Standard Analysis</CardTitle>
