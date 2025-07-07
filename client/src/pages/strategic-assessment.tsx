@@ -7,6 +7,7 @@ import { useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import calculateValuation from "@/utils/valuationEngine";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
+import AICoachingTips from '@/components/AICoachingTips';
 
 // Type definitions for NAICS data
 interface NAICSIndustry {
@@ -1171,6 +1172,24 @@ function StrategicAssessment() {
                         </ul>
                       </div>
                     </div>
+                    
+                    {/* AI Coaching Tips */}
+                    <AICoachingTips 
+                      financialData={{
+                        revenue: parseFloat(formData.financials.annualRevenue) || 0,
+                        ebitda: calculateEBITDA(),
+                        adjustedEbitda: calculateAdjustedEBITDA(),
+                        naicsCode: formData.naicsCode || '',
+                        industryTitle: selectedIndustry?.title || 'Industry Classification',
+                        valueDriverScores: getValueDriversScores(),
+                        userMultiple: userMultiple,
+                        industryAverage: getIndustryComparisonData().find(d => d.name === 'Industry Average')?.value || 4.0,
+                        companySize: parseFloat(formData.financials.annualRevenue) > 10000000 ? 'large' : 
+                                   parseFloat(formData.financials.annualRevenue) > 1000000 ? 'medium' : 'small',
+                        businessAge: formData.contact.foundingYear ? `${new Date().getFullYear() - parseInt(formData.contact.foundingYear)} years` : undefined,
+                        employeeCount: parseInt(formData.contact.employeeCount) || undefined
+                      }}
+                    />
                   </>
                 );
               })()}

@@ -3,6 +3,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertValuationAssessmentSchema, type ValuationAssessment, loginSchema, insertTeamMemberSchema, type LoginCredentials, type InsertTeamMember, type TeamMember } from "@shared/schema";
 import { generateValuationNarrative, type ValuationAnalysisInput } from "./openai";
+import { generateFinancialCoachingTips, generateContextualInsights, type FinancialCoachingData } from "./services/aiCoaching";
 import { generateValuationPDF } from "./pdf-generator";
 import { generateEnhancedValuationPDF } from "./pdf-generator-enhanced";
 import { getMultiplierByNAICS, calculateWeightedMultiplier } from "./config/naicsMultipliers";
@@ -1439,6 +1440,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
         success: false,
         error: error instanceof Error ? error.message : "Unknown error"
       });
+    }
+  });
+
+  // AI Coaching API endpoints
+  app.post("/api/ai-coaching/tips", async (req, res) => {
+    try {
+      const coachingData: FinancialCoachingData = req.body;
+      
+      // Validate required fields
+      if (!coachingData.revenue || !coachingData.ebitda || !coachingData.naicsCode) {
+        return res.status(400).json({ error: "Missing required financial data" });
+      }
+      
+      const tips = await generateFinancialCoachingTips(coachingData);
+      res.json({ tips });
+    } catch (error) {
+      console.error("Error generating coaching tips:", error);
+      res.status(500).json({ error: "Failed to generate coaching tips" });
+    }
+  });
+
+  app.post("/api/ai-coaching/insights", async (req, res) => {
+    try {
+      const coachingData: FinancialCoachingData = req.body;
+      
+      // Validate required fields
+      if (!coachingData.revenue || !coachingData.ebitda || !coachingData.naicsCode) {
+        return res.status(400).json({ error: "Missing required financial data" });
+      }
+      
+      const insights = await generateContextualInsights(coachingData);
+      res.json({ insights });
+    } catch (error) {
+      console.error("Error generating contextual insights:", error);
+      res.status(500).json({ error: "Failed to generate contextual insights" });
     }
   });
 
