@@ -25,6 +25,10 @@ export const valuationAssessments = pgTable("valuation_assessments", {
   paymentStatus: text("payment_status").default("pending"), // "pending", "completed", "failed"
   stripePaymentId: text("stripe_payment_id"),
   
+  // Assessment Data Storage (for post-purchase access)
+  assessmentData: text("assessment_data"), // JSON string of form data
+  accessToken: text("access_token"), // Unique token for accessing results
+  
   // EBITDA Components
   netIncome: decimal("net_income", { precision: 15, scale: 2 }).notNull(),
   interest: decimal("interest", { precision: 15, scale: 2 }).notNull(),

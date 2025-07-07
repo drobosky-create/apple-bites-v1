@@ -291,9 +291,34 @@ function GrowthExitAssessment() {
     }
   };
 
-  const handlePaygateClick = () => {
-    // Save assessment data to localStorage for later processing
-    localStorage.setItem('growthExitAssessmentData', JSON.stringify(formData));
+  const handlePaygateClick = async () => {
+    // Save assessment data to localStorage and backend for later processing
+    const assessmentWithTimestamp = {
+      ...formData,
+      timestamp: new Date().toISOString(),
+      email: formData.email || '', // Ensure email is included
+    };
+    
+    localStorage.setItem('growthExitAssessmentData', JSON.stringify(assessmentWithTimestamp));
+    
+    // Also save to backend if possible (for better reliability)
+    try {
+      // Save assessment data to backend with pending payment status
+      await fetch('/api/save-assessment-data', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.email || '',
+          assessmentData: assessmentWithTimestamp,
+          paymentStatus: 'pending'
+        }),
+      });
+    } catch (error) {
+      console.error('Error saving to backend:', error);
+      // Continue with localStorage only
+    }
     
     // Open Apple Bites checkout link for Growth & Exit Assessment
     const checkoutLink = 'https://products.applebites.ai/product-details/product/686c2e0f5f2f1191edb09737';

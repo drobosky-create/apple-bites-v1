@@ -19,6 +19,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import bcrypt from 'bcryptjs';
 import { nanoid } from 'nanoid';
+import { registerAssessmentAccessRoutes } from './routes/assessment-access';
 
 // Extend Express Request interface
 declare global {
@@ -1717,6 +1718,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ error: "Failed to test comprehensive multiplier ranges" });
     }
   });
+
+  // Register assessment access routes
+  registerAssessmentAccessRoutes(app);
 
   const httpServer = createServer(app);
   return httpServer;

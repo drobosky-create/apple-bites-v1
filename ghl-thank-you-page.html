@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You - Growth & Exit Assessment | Meritage Partners</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .logo {
+            margin-bottom: 30px;
+        }
+        
+        .success-icon {
+            width: 64px;
+            height: 64px;
+            background: #10b981;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+        
+        .checkmark {
+            color: white;
+            font-size: 32px;
+            font-weight: bold;
+        }
+        
+        h1 {
+            color: #1f2937;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        
+        .subtitle {
+            color: #6b7280;
+            font-size: 16px;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+        
+        .access-box {
+            background: #f0f9ff;
+            border: 2px solid #0ea5e9;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 30px;
+        }
+        
+        .access-title {
+            color: #0369a1;
+            font-weight: 600;
+            font-size: 18px;
+            margin-bottom: 12px;
+        }
+        
+        .access-description {
+            color: #0369a1;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        
+        .email-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .email-input {
+            padding: 12px 16px;
+            border: 2px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        
+        .email-input:focus {
+            border-color: #0ea5e9;
+        }
+        
+        .continue-btn {
+            background: #0ea5e9;
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .continue-btn:hover {
+            background: #0284c7;
+        }
+        
+        .continue-btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+        
+        .help-text {
+            color: #6b7280;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+        
+        .help-link {
+            color: #0ea5e9;
+            text-decoration: none;
+        }
+        
+        .help-link:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 24px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <div style="background: linear-gradient(135deg, #1f294f 0%, #2563eb 100%); padding: 3px; border-radius: 8px; display: inline-block;">
+                <div style="background: white; padding: 8px 16px; border-radius: 6px;">
+                    <span style="background: linear-gradient(135deg, #1f294f 0%, #2563eb 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; font-size: 16px;">MERITAGE PARTNERS</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="success-icon">
+            <div class="checkmark">✓</div>
+        </div>
+        
+        <h1>Payment Successful!</h1>
+        <p class="subtitle">
+            Thank you for purchasing the Growth & Exit Assessment. Your comprehensive business valuation analysis is ready.
+        </p>
+        
+        <div class="access-box">
+            <div class="access-title">Continue Your Assessment</div>
+            <p class="access-description">
+                Enter the email address you used at checkout to access your detailed results and professional report.
+            </p>
+            
+            <form class="email-form" id="accessForm">
+                <input 
+                    type="email" 
+                    class="email-input" 
+                    placeholder="Enter your email address"
+                    required
+                    id="emailInput"
+                >
+                <button type="submit" class="continue-btn" id="continueBtn">
+                    Access My Assessment Results
+                </button>
+            </form>
+        </div>
+        
+        <p class="help-text">
+            Having trouble? 
+            <a href="mailto:support@meritage-partners.com" class="help-link">Contact Support</a>
+        </p>
+    </div>
+
+    <script>
+        document.getElementById('accessForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('emailInput').value;
+            const btn = document.getElementById('continueBtn');
+            
+            if (!email || !email.includes('@')) {
+                alert('Please enter a valid email address.');
+                return;
+            }
+            
+            // Disable button and show loading state
+            btn.disabled = true;
+            btn.textContent = 'Redirecting...';
+            
+            // Redirect to assessment access page with email parameter
+            const assessmentUrl = `https://your-replit-app-url.replit.app/assessment-access?email=${encodeURIComponent(email)}`;
+            window.location.href = assessmentUrl;
+        });
+        
+        // Auto-fill email if available in URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const emailParam = urlParams.get('email');
+        if (emailParam) {
+            document.getElementById('emailInput').value = emailParam;
+        }
+    </script>
+</body>
+</html>

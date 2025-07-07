@@ -49,6 +49,11 @@ export interface IStorage {
   getTeamSession(sessionId: string): Promise<TeamSession | undefined>;
   updateTeamSession(sessionId: string, expiresAt: Date): Promise<void>;
   deleteTeamSession(sessionId: string): Promise<void>;
+
+  // Assessment data methods for post-purchase access
+  saveAssessmentData(data: { email: string; assessmentData: string; paymentStatus: string; timestamp: string }): Promise<void>;
+  getAssessmentDataByEmail(email: string): Promise<{ assessmentData: string; paymentStatus: string } | null>;
+  updatePaymentStatus(email: string, paymentStatus: string, paymentId?: string): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -215,6 +220,78 @@ export class DatabaseStorage implements IStorage {
 
   async deleteTeamSession(sessionId: string): Promise<void> {
     await db.delete(teamSessions).where(eq(teamSessions.id, sessionId));
+  }
+
+  // Assessment data methods for post-purchase access
+  async saveAssessmentData(data: { email: string; assessmentData: string; paymentStatus: string; timestamp: string }): Promise<void> {
+    // Check if assessment data already exists for this email
+    const existing = await db.select()
+      .from(valuationAssessments)
+      .where(eq(valuationAssessments.email, data.email))
+      .limit(1);
+
+    if (existing.length > 0) {
+      // Update existing record
+      await db.update(valuationAssessments)
+        .set({
+          assessmentData: data.assessmentData,
+          paymentStatus: data.paymentStatus,
+          updatedAt: new Date()
+        })
+        .where(eq(valuationAssessments.email, data.email));
+    } else {
+      // Create new record with minimal required data
+      await db.insert(valuationAssessments).values({
+        firstName: 'Pending',
+        lastName: 'User',
+        email: data.email,
+        phone: '',
+        company: '',
+        reportTier: 'paid',
+        paymentStatus: data.paymentStatus,
+        assessmentData: data.assessmentData,
+        netIncome: '0',
+        interest: '0',
+        taxes: '0',
+        depreciation: '0',
+        amortization: '0',
+        financialPerformance: 'C',
+        customerConcentration: 'C',
+        managementTeam: 'C',
+        competitivePosition: 'C',
+        growthProspects: 'C',
+        systemsProcesses: 'C',
+        assetQuality: 'C',
+        industryOutlook: 'C'
+      });
+    }
+  }
+
+  async getAssessmentDataByEmail(email: string): Promise<{ assessmentData: string; paymentStatus: string } | null> {
+    const result = await db.select({
+      assessmentData: valuationAssessments.assessmentData,
+      paymentStatus: valuationAssessments.paymentStatus
+    })
+    .from(valuationAssessments)
+    .where(eq(valuationAssessments.email, email))
+    .limit(1);
+
+    return result.length > 0 ? result[0] : null;
+  }
+
+  async updatePaymentStatus(email: string, paymentStatus: string, paymentId?: string): Promise<void> {
+    const updateData: any = {
+      paymentStatus,
+      updatedAt: new Date()
+    };
+    
+    if (paymentId) {
+      updateData.stripePaymentId = paymentId;
+    }
+
+    await db.update(valuationAssessments)
+      .set(updateData)
+      .where(eq(valuationAssessments.email, email));
   }
 }
 

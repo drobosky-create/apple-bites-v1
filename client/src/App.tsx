@@ -18,6 +18,8 @@ import LeadsDashboard from "@/pages/leads-dashboard";
 import TeamDashboard from "@/pages/team-dashboard";
 import ReportSelectionPage from "@/pages/report-selection";
 import NotFound from "@/pages/not-found";
+import AssessmentAccess from "@/pages/assessment-access";
+import AssessmentResults from "@/pages/assessment-results";
 
 function Router() {
   return (
@@ -29,6 +31,8 @@ function Router() {
           <Route path="/" component={Home} />
           <Route path="/assessment/free" component={FreeAssessment} />
           <Route path="/assessment/paid" component={GrowthExitAssessment} />
+          <Route path="/assessment-access" component={AssessmentAccess} />
+          <Route path="/strategic-assessment/results" component={AssessmentResults} />
           <Route path="/valuation" component={ValuationForm} />
           <Route path="/results" component={ValuationForm} />
           <Route path="/results/:id" component={ValuationForm} />
