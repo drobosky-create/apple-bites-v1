@@ -298,7 +298,7 @@ export default function IndustryForm({ form, onNext, onPrev, onDataChange }: Ind
                 type="button"
                 variant="outline"
                 onClick={onPrev}
-                className="px-8"
+                className="px-8 border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400"
               >
                 Previous
               </Button>
