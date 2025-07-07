@@ -44,18 +44,15 @@ const AICoachingTips: React.FC<AICoachingTipsProps> = ({ financialData }) => {
     try {
       // Fetch both coaching tips and insights simultaneously
       const [tipsResponse, insightsResponse] = await Promise.all([
-        apiRequest('/api/ai-coaching/tips', {
-          method: 'POST',
-          body: JSON.stringify(financialData),
-        }),
-        apiRequest('/api/ai-coaching/insights', {
-          method: 'POST',
-          body: JSON.stringify(financialData),
-        })
+        apiRequest('POST', '/api/ai-coaching/tips', financialData),
+        apiRequest('POST', '/api/ai-coaching/insights', financialData)
       ]);
 
-      setTips(tipsResponse.tips || []);
-      setInsights(insightsResponse.insights || '');
+      const tipsData = await tipsResponse.json();
+      const insightsData = await insightsResponse.json();
+      
+      setTips(tipsData.tips || []);
+      setInsights(insightsData.insights || '');
     } catch (err) {
       setError('Failed to generate AI coaching recommendations. Please try again.');
       console.error('Error fetching coaching data:', err);
