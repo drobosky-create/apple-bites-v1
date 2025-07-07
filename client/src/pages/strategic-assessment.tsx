@@ -503,7 +503,7 @@ function StrategicAssessment() {
     };
     
     const industryMult = getIndustryMultiplier(formData.naicsCode);
-    const selectedIndustry = naicsData?.industries?.find(i => i.code === formData.naicsCode);
+    const selectedIndustry = sectorIndustries?.find(i => i.code === formData.naicsCode);
     
     return [
       {
