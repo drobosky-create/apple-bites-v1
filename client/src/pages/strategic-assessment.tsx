@@ -38,13 +38,9 @@ function StrategicAssessment() {
     numberOfEmployees: "",
     valueDrivers: {
       financialPerformance: "",
+      recurringRevenue: "",
       growthPotential: "",
-      marketPosition: "",
-      managementTeam: "",
-      customerBase: "",
-      operationalEfficiency: "",
-      industryTrends: "",
-      competitiveAdvantage: ""
+      ownerDependency: ""
     }
   });
   const [selectedSector, setSelectedSector] = useState("");
@@ -140,36 +136,31 @@ function StrategicAssessment() {
     return "4.5";
   };
 
-  const calculateStrategicMultiplier = () => {
-    if (!formData.valueDrivers) return "0.0";
+  const calculateTotalScore = () => {
+    if (!formData.valueDrivers) return 0;
     
-    const grades = Object.values(formData.valueDrivers);
-    if (grades.length === 0) return "0.0";
+    const scores = Object.values(formData.valueDrivers);
+    return scores.reduce((sum: number, score: string) => {
+      const numericScore = parseInt(score) || 0;
+      return sum + numericScore;
+    }, 0);
+  };
+
+  const calculateMultiplierAdjustment = () => {
+    const totalScore = calculateTotalScore();
+    const maxScore = 20; // 4 questions × 5 points each
+    const scorePercentage = totalScore / maxScore;
     
-    // Calculate average grade value (A=5, B=4, C=3, D=2, F=1)
-    const gradeValues = grades.map(grade => {
-      switch(grade) {
-        case 'A': return 5;
-        case 'B': return 4;
-        case 'C': return 3;
-        case 'D': return 2;
-        case 'F': return 1;
-        default: return 0;
-      }
-    });
-    
-    const totalValue = gradeValues.reduce((sum: number, val: number) => sum + val, 0);
-    const averageGrade = totalValue / gradeValues.length;
-    
-    // Strategic adjustment based on average grade
-    const adjustment = ((averageGrade - 3) * 0.3).toFixed(1);
-    return adjustment;
+    // Convert percentage to multiplier adjustment
+    // 0% = -1.0x, 50% = 0.0x, 100% = +1.0x
+    const adjustment = (scorePercentage - 0.5) * 2;
+    return adjustment.toFixed(1);
   };
 
   const calculateFinalMultiplier = () => {
     const baseMultiplier = parseFloat(calculateBaseMultiplier());
-    const strategicAdjustment = parseFloat(calculateStrategicMultiplier());
-    const finalMultiplier = baseMultiplier + strategicAdjustment;
+    const adjustment = parseFloat(calculateMultiplierAdjustment());
+    const finalMultiplier = baseMultiplier + adjustment;
     return Math.max(finalMultiplier, 1.0).toFixed(1);
   };
 
@@ -449,68 +440,154 @@ function StrategicAssessment() {
                 <Star className="w-8 h-8 text-indigo-600" />
               </div>
               <CardTitle className="text-2xl">Strategic Value Drivers</CardTitle>
-              <p className="text-gray-600">Rate your business across key value dimensions</p>
+              <p className="text-gray-600">Answer these questions to assess your business value</p>
             </CardHeader>
-            <CardContent className="space-y-6">
-              {[
-                { key: "financialPerformance", label: "Financial Performance", description: "Revenue growth, profitability, cash flow management" },
-                { key: "growthPotential", label: "Growth Potential", description: "Market expansion opportunities, scalability, innovation" },
-                { key: "marketPosition", label: "Market Position", description: "Market share, brand recognition, competitive standing" },
-                { key: "managementTeam", label: "Management Team", description: "Leadership quality, experience, succession planning" },
-                { key: "customerBase", label: "Customer Base", description: "Diversification, loyalty, retention rates" },
-                { key: "operationalEfficiency", label: "Operational Efficiency", description: "Process optimization, technology adoption, productivity" },
-                { key: "industryTrends", label: "Industry Trends", description: "Sector outlook, regulatory environment, market dynamics" },
-                { key: "competitiveAdvantage", label: "Competitive Advantage", description: "Unique value proposition, barriers to entry, differentiation" }
-              ].map((driver, index) => {
-                const currentValue = formData.valueDrivers?.[driver.key as keyof typeof formData.valueDrivers] || "";
-                
-                return (
-                  <div key={index} className="space-y-3">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-900">{driver.label}</label>
-                      <p className="text-xs text-gray-600">{driver.description}</p>
-                    </div>
-                    <div className="flex space-x-2">
-                      {["A", "B", "C", "D", "F"].map((grade) => (
-                        <button
-                          key={grade}
-                          type="button"
-                          onClick={() => handleValueDriverChange(driver.key as keyof typeof formData.valueDrivers, grade)}
-                          className={`w-12 h-12 rounded-full border-2 flex items-center justify-center font-bold transition-all ${
-                            currentValue === grade
-                              ? "border-indigo-500 bg-indigo-500 text-white shadow-lg"
-                              : "border-gray-300 hover:border-indigo-400 hover:bg-indigo-50"
-                          }`}
-                        >
-                          {grade}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                );
-              })}
+            <CardContent className="space-y-8">
+              {/* Financial Performance Question */}
+              <div className="space-y-4">
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Financial Performance</h3>
+                  <label className="block text-sm font-medium text-gray-700">
+                    How profitable is your business compared to industry benchmarks?
+                  </label>
+                </div>
+                <div className="space-y-2">
+                  {[
+                    { value: "0", label: "Not profitable", weight: 0 },
+                    { value: "1", label: "Below average", weight: 1 },
+                    { value: "2", label: "Average", weight: 2 },
+                    { value: "3", label: "Above average", weight: 3 },
+                    { value: "5", label: "Top-tier", weight: 5 }
+                  ].map((option) => (
+                    <label key={option.value} className="flex items-center space-x-3 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="financial-performance"
+                        value={option.value}
+                        checked={formData.valueDrivers.financialPerformance === option.value}
+                        onChange={(e) => handleValueDriverChange("financialPerformance", e.target.value)}
+                        className="w-4 h-4 text-indigo-600 border-gray-300 focus:ring-indigo-500"
+                      />
+                      <span className="text-sm text-gray-700">{option.label}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Recurring Revenue Question */}
+              <div className="space-y-4">
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Recurring Revenue</h3>
+                  <label className="block text-sm font-medium text-gray-700">
+                    What percentage of your revenue is recurring (contracts, subscriptions)?
+                  </label>
+                </div>
+                <div className="space-y-2">
+                  {[
+                    { value: "0", label: "0%", weight: 0 },
+                    { value: "1", label: "1–25%", weight: 1 },
+                    { value: "2", label: "26–50%", weight: 2 },
+                    { value: "3", label: "51–75%", weight: 3 },
+                    { value: "5", label: "76–100%", weight: 5 }
+                  ].map((option) => (
+                    <label key={option.value} className="flex items-center space-x-3 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="recurring-revenue"
+                        value={option.value}
+                        checked={formData.valueDrivers.recurringRevenue === option.value}
+                        onChange={(e) => handleValueDriverChange("recurringRevenue", e.target.value)}
+                        className="w-4 h-4 text-indigo-600 border-gray-300 focus:ring-indigo-500"
+                      />
+                      <span className="text-sm text-gray-700">{option.label}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Growth Potential Question */}
+              <div className="space-y-4">
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Growth Potential</h3>
+                  <label className="block text-sm font-medium text-gray-700">
+                    How much do you expect your revenue to grow in the next 12 months?
+                  </label>
+                </div>
+                <div className="space-y-2">
+                  {[
+                    { value: "0", label: "Decrease", weight: 0 },
+                    { value: "1", label: "Flat", weight: 1 },
+                    { value: "2", label: "1–10%", weight: 2 },
+                    { value: "3", label: "11–30%", weight: 3 },
+                    { value: "5", label: "Over 30%", weight: 5 }
+                  ].map((option) => (
+                    <label key={option.value} className="flex items-center space-x-3 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="growth-potential"
+                        value={option.value}
+                        checked={formData.valueDrivers.growthPotential === option.value}
+                        onChange={(e) => handleValueDriverChange("growthPotential", e.target.value)}
+                        className="w-4 h-4 text-indigo-600 border-gray-300 focus:ring-indigo-500"
+                      />
+                      <span className="text-sm text-gray-700">{option.label}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Owner Dependency Question */}
+              <div className="space-y-4">
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Owner Dependency</h3>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Could your business run for 90 days without your involvement?
+                  </label>
+                </div>
+                <div className="space-y-2">
+                  {[
+                    { value: "0", label: "No", weight: 0 },
+                    { value: "1", label: "Barely", weight: 1 },
+                    { value: "2", label: "Somewhat", weight: 2 },
+                    { value: "3", label: "Mostly", weight: 3 },
+                    { value: "5", label: "Yes, seamlessly", weight: 5 }
+                  ].map((option) => (
+                    <label key={option.value} className="flex items-center space-x-3 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="owner-dependency"
+                        value={option.value}
+                        checked={formData.valueDrivers.ownerDependency === option.value}
+                        onChange={(e) => handleValueDriverChange("ownerDependency", e.target.value)}
+                        className="w-4 h-4 text-indigo-600 border-gray-300 focus:ring-indigo-500"
+                      />
+                      <span className="text-sm text-gray-700">{option.label}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
               
               {/* Real-time Multiplier Preview */}
               <div className="bg-gradient-to-r from-indigo-50 to-purple-50 p-6 rounded-lg border">
                 <div className="flex items-center mb-3">
                   <Calculator className="w-5 h-5 text-indigo-600 mr-2" />
-                  <span className="font-medium text-indigo-900">Strategic Multiplier Preview</span>
+                  <span className="font-medium text-indigo-900">Strategic Assessment Score</span>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <span className="text-sm text-gray-600">Base Industry Multiple:</span>
-                    <div className="text-lg font-bold text-indigo-600">{calculateBaseMultiplier()}x</div>
+                    <span className="text-sm text-gray-600">Total Score:</span>
+                    <div className="text-lg font-bold text-indigo-600">{calculateTotalScore()}/20</div>
                   </div>
                   <div>
-                    <span className="text-sm text-gray-600">Strategic Adjustment:</span>
-                    <div className="text-lg font-bold text-purple-600">{calculateStrategicMultiplier()}x</div>
+                    <span className="text-sm text-gray-600">Multiplier Adjustment:</span>
+                    <div className="text-lg font-bold text-purple-600">{calculateMultiplierAdjustment()}x</div>
                   </div>
                 </div>
                 <div className="mt-4 pt-4 border-t border-indigo-200">
                   <span className="text-sm text-gray-600">Final Valuation Multiple:</span>
                   <div className="text-2xl font-bold text-green-600">{calculateFinalMultiplier()}x</div>
                   <p className="text-xs text-gray-600 mt-1">
-                    Based on {formData.primarySector || "your industry"} and current strategic ratings
+                    Based on {formData.primarySector || "your industry"} and strategic assessment
                   </p>
                 </div>
               </div>
@@ -519,12 +596,12 @@ function StrategicAssessment() {
               <div className="bg-blue-50 p-4 rounded-lg">
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium text-blue-900">Assessment Progress</span>
-                  <span className="text-sm text-blue-700">{getValueDriversProgress()}/8 completed</span>
+                  <span className="text-sm text-blue-700">{getValueDriversProgress()}/4 completed</span>
                 </div>
                 <div className="mt-2 bg-blue-200 rounded-full h-2">
                   <div 
                     className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                    style={{ width: `${(getValueDriversProgress() / 8) * 100}%` }}
+                    style={{ width: `${(getValueDriversProgress() / 4) * 100}%` }}
                   />
                 </div>
               </div>
