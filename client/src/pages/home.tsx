@@ -107,7 +107,7 @@ export default function Home() {
               </div>
               
               <CardHeader className="text-center pb-4 pt-8 ml-[9px] mr-[9px]">
-                <Badge variant="outline" className="w-fit mx-auto mb-4 border-[#f5c842] text-[#f5c842]">
+                <Badge variant="outline" className="w-fit mx-auto mb-4 border-[#f5c842] text-[#f5c842] text-[20px]">
                   GROWTH & EXIT ASSESSMENT
                 </Badge>
                 <CardTitle className="text-2xl text-[#fcfcfc]">Professional Analysis</CardTitle>
