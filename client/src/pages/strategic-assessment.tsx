@@ -292,11 +292,15 @@ function StrategicAssessment() {
   };
 
   const handlePaygateClick = () => {
-    // Save assessment data to localStorage or session storage
+    // Save assessment data to localStorage for later processing
     localStorage.setItem('strategicAssessmentData', JSON.stringify(formData));
     
-    // Redirect to payment page/checkout
-    setLocation('/checkout');
+    // TODO: Replace with actual GHL Stripe payment link
+    // Placeholder - will be updated with real link when provided
+    const ghlPaymentLink = 'https://your-ghl-stripe-link-here.com';
+    
+    // Open payment link in new window/tab
+    window.open(ghlPaymentLink, '_blank');
   };
 
   // Helper functions for Value Drivers step
