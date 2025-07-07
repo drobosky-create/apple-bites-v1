@@ -821,12 +821,12 @@ function StrategicAssessment() {
               <div className="bg-blue-50 p-4 rounded-lg">
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium text-blue-900">Assessment Progress</span>
-                  <span className="text-sm text-blue-700">{getValueDriversProgress()}/4 completed</span>
+                  <span className="text-sm text-blue-700">{Object.values(formData.valueDrivers).filter(v => v !== "").length}/{valuationQuestions.length} completed</span>
                 </div>
-                <div className="mt-2 bg-blue-200 rounded-full h-2">
+                <div className="mt-2 bg-blue-200 rounded-full h-2 overflow-hidden">
                   <div 
                     className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                    style={{ width: `${(getValueDriversProgress() / 4) * 100}%` }}
+                    style={{ width: `${Math.min(100, (Object.values(formData.valueDrivers).filter(v => v !== "").length / valuationQuestions.length) * 100)}%` }}
                   />
                 </div>
               </div>
