@@ -1032,42 +1032,130 @@ function StrategicAssessment() {
                     
                     {/* Industry Comparison Chart */}
                     <div className="bg-white p-6 rounded-lg border">
-                      <div className="flex items-center mb-4">
-                        <BarChart3 className="w-5 h-5 text-indigo-600 mr-2" />
-                        <h3 className="text-lg font-bold">Industry Comparison</h3>
+                      <div className="text-center mb-6">
+                        <h3 className="text-xl font-bold text-gray-800 mb-2">Estimated Business Value</h3>
+                        <div className="space-y-1 text-gray-700">
+                          <p>Low Estimate: <strong className="text-lg">${valuationResults.valuation?.low?.toLocaleString() || "0"}</strong></p>
+                          <p>High Estimate: <strong className="text-lg">${valuationResults.valuation?.high?.toLocaleString() || "0"}</strong></p>
+                          <p>Mean Estimate: <strong className="text-xl text-indigo-600">${valuationResults.valuation?.mean?.toLocaleString() || "0"}</strong></p>
+                        </div>
                       </div>
-                      <div className="mb-4">
+                      
+                      <div className="mb-6">
                         <p className="text-sm text-gray-600 mb-2">
-                          <strong>Your Industry:</strong> {selectedIndustry?.title || formData.naicsCode}
+                          Industry: {formData.naicsCode} – {selectedIndustry?.title || 'Industry Classification'}
                         </p>
-                        <p className="text-sm text-gray-600">
-                          How your business compares to industry EBITDA multiples:
-                        </p>
-                      </div>
-                      <div className="h-64">
-                        <ResponsiveContainer width="100%" height="100%">
-                          <BarChart data={getIndustryComparisonData()} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="name" tick={{ fontSize: 12 }} />
-                            <YAxis label={{ value: 'EBITDA Multiple', angle: -90, position: 'insideLeft' }} />
-                            <Tooltip formatter={(value) => [`${value}x`, 'Multiple']} />
-                            <Bar dataKey="value" radius={[4, 4, 0, 0]}>
-                              {getIndustryComparisonData().map((entry, index) => (
-                                <Cell key={`cell-${index}`} fill={entry.fill} />
-                              ))}
-                            </Bar>
-                          </BarChart>
-                        </ResponsiveContainer>
-                      </div>
-                      <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
-                        <div className="flex items-center">
-                          <div className="w-3 h-3 bg-green-500 rounded mr-2"></div>
-                          <span>Your Business: {userMultiple.toFixed(1)}x</span>
+                        <h4 className="text-lg font-bold text-gray-800 mb-4">Industry-Based Valuation Range</h4>
+                        
+                        {/* Gradient Bar with Indicators */}
+                        <div className="relative mb-4">
+                          <div 
+                            className="h-8 rounded-lg"
+                            style={{
+                              background: 'linear-gradient(to right, #f44336 0%, #ff9800 25%, #ffc107 50%, #4caf50 75%, #2e7d32 100%)'
+                            }}
+                          ></div>
+                          
+                          {/* Indicators */}
+                          {(() => {
+                            const industryMult = getIndustryComparisonData().find(d => d.name === 'Industry Average')?.value || 4.0;
+                            const userPos = Math.min(Math.max(((userMultiple - 2) / (6 - 2)) * 100, 0), 100);
+                            const avgPos = Math.min(Math.max(((industryMult - 2) / (6 - 2)) * 100, 0), 100);
+                            const strategicPos = 80; // Strategic target at 80% position
+                            
+                            return (
+                              <>
+                                {/* You indicator */}
+                                <div 
+                                  className="absolute -top-6 transform -translate-x-1/2"
+                                  style={{ left: `${userPos}%` }}
+                                >
+                                  <div className="w-0.5 h-14 bg-black"></div>
+                                  <div className="absolute -top-5 left-1/2 transform -translate-x-1/2 text-xs font-semibold text-black">
+                                    ▲ You
+                                  </div>
+                                </div>
+                                
+                                {/* Average indicator */}
+                                <div 
+                                  className="absolute -top-6 transform -translate-x-1/2"
+                                  style={{ left: `${avgPos}%` }}
+                                >
+                                  <div className="w-0.5 h-14 bg-blue-600"></div>
+                                  <div className="absolute -top-5 left-1/2 transform -translate-x-1/2 text-xs font-semibold text-blue-600">
+                                    Avg
+                                  </div>
+                                </div>
+                                
+                                {/* Strategic indicator */}
+                                <div 
+                                  className="absolute -top-6 transform -translate-x-1/2"
+                                  style={{ left: `${strategicPos}%` }}
+                                >
+                                  <div className="w-0.5 h-14 bg-green-800"></div>
+                                  <div className="absolute -top-5 left-1/2 transform -translate-x-1/2 text-xs font-semibold text-green-800">
+                                    Strategic
+                                  </div>
+                                </div>
+                              </>
+                            );
+                          })()}
                         </div>
-                        <div className="flex items-center">
-                          <div className="w-3 h-3 bg-blue-500 rounded mr-2"></div>
-                          <span>Industry Average: {getIndustryComparisonData().find(d => d.name === 'Industry Average')?.value}x</span>
+                        
+                        {/* Range Labels */}
+                        <div className="flex justify-between text-sm text-gray-600 mt-2">
+                          <span>Low: 2.0x</span>
+                          <span>Avg: {getIndustryComparisonData().find(d => d.name === 'Industry Average')?.value}x</span>
+                          <span>High: 6.0x</span>
                         </div>
+                      </div>
+                      
+                      {/* Value Driver Breakdown */}
+                      <div className="mb-6">
+                        <h4 className="text-lg font-bold text-gray-800 mb-4">Value Driver Breakdown</h4>
+                        <div className="space-y-3">
+                          {(() => {
+                            const driverScores = getValueDriversScores();
+                            const driverNames = {
+                              'Financial Performance': 'Financial Performance',
+                              'Growth Potential': 'Growth Potential', 
+                              'Market Position': 'Market Position',
+                              'Operational Excellence': 'Operational Excellence'
+                            };
+                            
+                            return Object.entries(driverScores).map(([driver, score]) => {
+                              const percentage = Math.round((score / 5) * 100);
+                              const getBarColor = (pct) => {
+                                if (pct >= 75) return 'bg-green-500';
+                                if (pct >= 50) return 'bg-yellow-500';
+                                return 'bg-red-500';
+                              };
+                              
+                              return (
+                                <div key={driver} className="relative">
+                                  <div className="bg-gray-200 rounded-full h-6 overflow-hidden">
+                                    <div 
+                                      className={`h-full ${getBarColor(percentage)} flex items-center text-white text-sm font-medium px-3`}
+                                      style={{ width: `${percentage}%` }}
+                                    >
+                                      {driverNames[driver] || driver}: {percentage}
+                                    </div>
+                                  </div>
+                                </div>
+                              );
+                            });
+                          })()}
+                        </div>
+                      </div>
+                      
+                      {/* Key Opportunities */}
+                      <div className="mb-6">
+                        <h4 className="text-lg font-bold text-gray-800 mb-4">Key Opportunities to Improve</h4>
+                        <ul className="space-y-2 text-sm text-gray-700">
+                          <li>• Enhance your recurring revenue through contracts or subscriptions</li>
+                          <li>• Clarify what makes your offering unique or defensible</li>
+                          <li>• Explore new geographies or client segments to drive growth</li>
+                        </ul>
                       </div>
                     </div>
                   </>
