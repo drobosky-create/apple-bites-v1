@@ -550,6 +550,20 @@ function StrategicAssessment() {
     return categories;
   };
 
+  const getValueDriversScores = () => {
+    const categories = getValueDriversByCategory();
+    const scores = {};
+    
+    Object.keys(categories).forEach(category => {
+      const questions = categories[category];
+      const totalScore = questions.reduce((sum, q) => sum + q.weight, 0);
+      const avgScore = questions.length > 0 ? totalScore / questions.length : 0;
+      scores[category] = avgScore;
+    });
+    
+    return scores;
+  };
+
   const calculateEBITDA = () => {
     const revenue = parseFloat(formData.financials.annualRevenue) || 0;
     const cogs = parseFloat(formData.financials.costOfGoodsSold) || 0;
