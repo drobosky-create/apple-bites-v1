@@ -11,7 +11,7 @@ import { Footer } from "@/components/Footer";
 import Home from "@/pages/home";
 import ValuationForm from "@/pages/valuation-form";
 import FreeAssessment from "@/pages/free-assessment";
-import StrategicAssessment from "@/pages/strategic-assessment";
+import GrowthExitAssessment from "@/pages/strategic-assessment";
 import AnalyticsDashboard from "@/pages/analytics-dashboard";
 import ValueCalculator from "@/pages/value-calculator";
 import LeadsDashboard from "@/pages/leads-dashboard";
@@ -28,7 +28,7 @@ function Router() {
         <Switch>
           <Route path="/" component={Home} />
           <Route path="/assessment/free" component={FreeAssessment} />
-          <Route path="/assessment/paid" component={StrategicAssessment} />
+          <Route path="/assessment/paid" component={GrowthExitAssessment} />
           <Route path="/valuation" component={ValuationForm} />
           <Route path="/results" component={ValuationForm} />
           <Route path="/results/:id" component={ValuationForm} />

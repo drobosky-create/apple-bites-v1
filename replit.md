@@ -109,7 +109,9 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
-- **July 7, 2025 - AI-Powered Financial Coaching Implementation**: Integrated OpenAI GPT-4o powered financial coaching system into strategic assessment. Features personalized business recommendations based on financial data, industry benchmarks, and value driver performance. Provides contextual insights, actionable improvement strategies, priority-based tips, and potential impact analysis. Users can generate AI coaching on the final assessment step with one-click access to professional business advice.
+- **July 7, 2025 - Growth & Exit Assessment Rebranding**: Updated naming from "Strategic Assessment" to "Growth & Exit Assessment" to align with Tier 2 pricing structure. Updated pricing from $395 to $795 to match new tier pricing. Implemented GHL Stripe payment integration with external payment link redirection instead of built-in checkout.
+
+- **July 7, 2025 - AI-Powered Financial Coaching Implementation**: Integrated OpenAI GPT-4o powered financial coaching system into growth & exit assessment. Features personalized business recommendations based on financial data, industry benchmarks, and value driver performance. Provides contextual insights, actionable improvement strategies, priority-based tips, and potential impact analysis. Users can generate AI coaching on the final assessment step with one-click access to professional business advice.
 
 - **July 7, 2025 - Industry Comparison Chart Implementation**: Added comprehensive industry comparison chart to final assessment page before paygate. Chart displays user's calculated EBITDA multiple against authentic industry benchmarks (low, average, high) for their specific NAICS code. Uses real market data to show competitive positioning within industry standards. Includes visual bar chart with color-coded comparison and professional styling.
 

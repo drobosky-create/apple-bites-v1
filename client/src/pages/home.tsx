@@ -108,10 +108,10 @@ export default function Home() {
               
               <CardHeader className="text-center pb-4 pt-8 ml-[9px] mr-[9px]">
                 <Badge variant="outline" className="w-fit mx-auto mb-4 border-[#f5c842] text-[#f5c842]">
-                  STRATEGIC REPORT
+                  GROWTH & EXIT ASSESSMENT
                 </Badge>
                 <CardTitle className="text-2xl text-[#fcfcfc]">Professional Analysis</CardTitle>
-                <div className="text-4xl font-bold mt-2 text-[#f5c842]">$395</div>
+                <div className="text-4xl font-bold mt-2 text-[#f5c842]">$795</div>
                 <p className="mt-2 text-[#f8fafc]">Comprehensive industry-specific valuation</p>
               </CardHeader>
               <CardContent className="p-6 bg-[#f8fafc] pt-[14px] pb-[14px] rounded-lg">
@@ -126,7 +126,7 @@ export default function Home() {
                   <div className="flex items-start">
                     <CheckCircle className="w-5 h-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
                     <div>
-                      <div className="font-medium text-[#1a2332]">AI-Powered Strategic Insights</div>
+                      <div className="font-medium text-[#1a2332]">AI-Powered Growth Insights</div>
                       <div className="text-sm text-gray-700">Detailed analysis and improvement recommendations</div>
                     </div>
                   </div>
@@ -157,7 +157,7 @@ export default function Home() {
                   onClick={handlePaidTierStart}
                   className="w-full bg-[#f5c842] text-[#1a2332] hover:bg-yellow-400 h-12 text-lg font-bold"
                 >
-                  Get Strategic Report - $395
+                  Get Growth & Exit Assessment - $795
                 </Button>
               </CardContent>
             </Card>

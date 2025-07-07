@@ -28,7 +28,7 @@ interface NAICSSector {
   title: string;
 }
 
-function StrategicAssessment() {
+function GrowthExitAssessment() {
   const [, setLocation] = useLocation();
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
@@ -293,7 +293,7 @@ function StrategicAssessment() {
 
   const handlePaygateClick = () => {
     // Save assessment data to localStorage for later processing
-    localStorage.setItem('strategicAssessmentData', JSON.stringify(formData));
+    localStorage.setItem('growthExitAssessmentData', JSON.stringify(formData));
     
     // TODO: Replace with actual GHL Stripe payment link
     // Placeholder - will be updated with real link when provided
@@ -903,7 +903,7 @@ function StrategicAssessment() {
               <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Star className="w-8 h-8 text-indigo-600" />
               </div>
-              <CardTitle className="text-2xl">Strategic Value Drivers</CardTitle>
+              <CardTitle className="text-2xl">Growth & Exit Value Drivers</CardTitle>
               <p className="text-gray-600">Answer these questions to assess your business value</p>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -1120,7 +1120,7 @@ function StrategicAssessment() {
                                 >
                                   <div className="w-0.5 h-14 bg-green-800"></div>
                                   <div className="absolute -top-5 left-1/2 transform -translate-x-1/2 text-xs font-semibold text-green-800">
-                                    Strategic
+                                    Target
                                   </div>
                                 </div>
                               </>
@@ -1224,7 +1224,7 @@ function StrategicAssessment() {
                   onClick={handlePaygateClick}
                   className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 text-lg font-bold"
                 >
-                  Get Strategic Report - $795
+                  Get Growth & Exit Assessment - $795
                 </Button>
                 <p className="text-sm text-gray-500 mt-2">
                   Secure payment processed by Stripe • Includes 60-minute Discovery Call
@@ -1292,4 +1292,4 @@ function StrategicAssessment() {
   );
 }
 
-export default StrategicAssessment;
+export default GrowthExitAssessment;
