@@ -1146,14 +1146,20 @@ function StrategicAssessment() {
                               };
                               
                               return (
-                                <div key={driver} className="relative">
-                                  <div className="bg-gray-200 rounded-full h-6 overflow-hidden">
+                                <div key={driver} className="relative mb-2">
+                                  <div className="flex items-center justify-between mb-1">
+                                    <span className="text-sm font-medium text-gray-700">
+                                      {driverNames[driver] || driver}
+                                    </span>
+                                    <span className="text-sm font-medium text-gray-600">
+                                      {percentage}%
+                                    </span>
+                                  </div>
+                                  <div className="bg-gray-200 rounded-full h-4 overflow-hidden">
                                     <div 
-                                      className={`h-full ${getBarColor(percentage)} flex items-center text-white text-sm font-medium px-3`}
-                                      style={{ width: `${percentage}%` }}
-                                    >
-                                      {driverNames[driver] || driver}: {percentage}
-                                    </div>
+                                      className={`h-full ${getBarColor(percentage)} transition-all duration-300`}
+                                      style={{ width: `${Math.max(percentage, 5)}%` }}
+                                    ></div>
                                   </div>
                                 </div>
                               );
