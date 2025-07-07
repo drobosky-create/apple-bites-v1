@@ -291,6 +291,14 @@ function StrategicAssessment() {
     }
   };
 
+  const handlePaygateClick = () => {
+    // Save assessment data to localStorage or session storage
+    localStorage.setItem('strategicAssessmentData', JSON.stringify(formData));
+    
+    // Redirect to payment page/checkout
+    setLocation('/checkout');
+  };
+
   // Helper functions for Value Drivers step
   const handleValueDriverChange = (questionId: string, value: string) => {
     setFormData(prev => ({
@@ -1208,11 +1216,14 @@ function StrategicAssessment() {
               </div>
 
               <div className="text-center">
-                <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 text-lg font-bold">
-                  Generate Strategic Report - $395
+                <Button 
+                  onClick={handlePaygateClick}
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 text-lg font-bold"
+                >
+                  Get Strategic Report - $795
                 </Button>
                 <p className="text-sm text-gray-500 mt-2">
-                  Secure payment processed by Stripe
+                  Secure payment processed by Stripe • Includes 60-minute Discovery Call
                 </p>
               </div>
             </CardContent>
