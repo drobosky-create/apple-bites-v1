@@ -2,10 +2,11 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Shield, Star, Building2, TrendingUp, DollarSign, FileText, Calculator, Zap } from "lucide-react";
+import { ArrowLeft, Shield, Star, Building2, TrendingUp, DollarSign, FileText, Calculator, Zap, BarChart3 } from "lucide-react";
 import { useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import calculateValuation from "@/utils/valuationEngine";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
 // Type definitions for NAICS data
 interface NAICSIndustry {
@@ -371,6 +372,161 @@ function StrategicAssessment() {
     });
 
     return calculateValuation(responses);
+  };
+
+  const getIndustryComparisonData = () => {
+    const valuationResults = getValuationResults();
+    const userMultiple = valuationResults.ebitda > 0 ? 
+      (valuationResults.valuation.mean / valuationResults.ebitda) : 0;
+    
+    // Get industry multiplier from NAICS code
+    const getIndustryMultiplier = (naicsCode) => {
+      const naicsMultipliers = {
+        // Construction (23)
+        "236115": { low: 2.5, high: 5.0, avg: 3.8 },
+        "236116": { low: 2.5, high: 5.0, avg: 3.8 },
+        "236117": { low: 2.5, high: 5.0, avg: 3.8 },
+        "236118": { low: 2.5, high: 5.0, avg: 3.8 },
+        "236210": { low: 3.0, high: 6.0, avg: 4.5 },
+        "236220": { low: 3.0, high: 6.0, avg: 4.5 },
+        "237110": { low: 2.0, high: 4.5, avg: 3.3 },
+        "237120": { low: 2.0, high: 4.5, avg: 3.3 },
+        "237130": { low: 2.0, high: 4.5, avg: 3.3 },
+        "237210": { low: 2.0, high: 4.5, avg: 3.3 },
+        "237310": { low: 2.0, high: 4.5, avg: 3.3 },
+        "237990": { low: 2.0, high: 4.5, avg: 3.3 },
+        "238110": { low: 3.0, high: 6.0, avg: 4.5 },
+        "238120": { low: 3.0, high: 6.0, avg: 4.5 },
+        "238130": { low: 3.0, high: 6.0, avg: 4.5 },
+        "238140": { low: 3.0, high: 6.0, avg: 4.5 },
+        "238150": { low: 3.0, high: 6.0, avg: 4.5 },
+        "238160": { low: 3.0, high: 6.0, avg: 4.5 },
+        "238170": { low: 3.0, high: 6.0, avg: 4.5 },
+        "238210": { low: 3.5, high: 7.0, avg: 5.3 },
+        "238220": { low: 3.5, high: 7.0, avg: 5.3 },
+        "238290": { low: 3.0, high: 6.0, avg: 4.5 },
+        "238310": { low: 3.0, high: 6.0, avg: 4.5 },
+        "238320": { low: 3.0, high: 6.0, avg: 4.5 },
+        "238330": { low: 3.0, high: 6.0, avg: 4.5 },
+        "238340": { low: 3.0, high: 6.0, avg: 4.5 },
+        "238350": { low: 3.0, high: 6.0, avg: 4.5 },
+        "238390": { low: 3.0, high: 6.0, avg: 4.5 },
+        "238910": { low: 2.5, high: 5.0, avg: 3.8 },
+        "238990": { low: 2.5, high: 5.0, avg: 3.8 },
+        
+        // Professional Services (54)
+        "541110": { low: 4.0, high: 8.0, avg: 6.0 },
+        "541191": { low: 4.0, high: 8.0, avg: 6.0 },
+        "541199": { low: 4.0, high: 8.0, avg: 6.0 },
+        "541211": { low: 5.0, high: 10.0, avg: 7.5 },
+        "541213": { low: 4.0, high: 8.0, avg: 6.0 },
+        "541214": { low: 4.0, high: 8.0, avg: 6.0 },
+        "541219": { low: 4.0, high: 8.0, avg: 6.0 },
+        "541310": { low: 3.5, high: 7.0, avg: 5.3 },
+        "541320": { low: 3.5, high: 7.0, avg: 5.3 },
+        "541330": { low: 3.5, high: 7.0, avg: 5.3 },
+        "541340": { low: 3.5, high: 7.0, avg: 5.3 },
+        "541350": { low: 3.5, high: 7.0, avg: 5.3 },
+        "541360": { low: 3.5, high: 7.0, avg: 5.3 },
+        "541370": { low: 3.5, high: 7.0, avg: 5.3 },
+        "541380": { low: 3.5, high: 7.0, avg: 5.3 },
+        "541410": { low: 4.5, high: 9.0, avg: 6.8 },
+        "541420": { low: 4.0, high: 8.0, avg: 6.0 },
+        "541430": { low: 4.0, high: 8.0, avg: 6.0 },
+        "541490": { low: 4.0, high: 8.0, avg: 6.0 },
+        "541511": { low: 5.0, high: 12.0, avg: 8.5 },
+        "541512": { low: 5.0, high: 12.0, avg: 8.5 },
+        "541513": { low: 4.0, high: 9.0, avg: 6.5 },
+        "541519": { low: 4.0, high: 9.0, avg: 6.5 },
+        "541611": { low: 4.0, high: 8.0, avg: 6.0 },
+        "541612": { low: 4.0, high: 8.0, avg: 6.0 },
+        "541613": { low: 4.0, high: 8.0, avg: 6.0 },
+        "541614": { low: 4.0, high: 8.0, avg: 6.0 },
+        "541618": { low: 4.0, high: 8.0, avg: 6.0 },
+        "541620": { low: 3.5, high: 7.0, avg: 5.3 },
+        "541690": { low: 3.5, high: 7.0, avg: 5.3 },
+        "541711": { low: 3.0, high: 6.0, avg: 4.5 },
+        "541712": { low: 3.0, high: 6.0, avg: 4.5 },
+        "541720": { low: 3.0, high: 6.0, avg: 4.5 },
+        "541810": { low: 4.0, high: 8.0, avg: 6.0 },
+        "541820": { low: 4.0, high: 8.0, avg: 6.0 },
+        "541830": { low: 4.0, high: 8.0, avg: 6.0 },
+        "541840": { low: 4.0, high: 8.0, avg: 6.0 },
+        "541850": { low: 3.5, high: 7.0, avg: 5.3 },
+        "541860": { low: 4.0, high: 8.0, avg: 6.0 },
+        "541870": { low: 4.0, high: 8.0, avg: 6.0 },
+        "541890": { low: 4.0, high: 8.0, avg: 6.0 },
+        "541910": { low: 4.0, high: 8.0, avg: 6.0 },
+        "541921": { low: 4.5, high: 9.0, avg: 6.8 },
+        "541922": { low: 4.0, high: 8.0, avg: 6.0 },
+        "541930": { low: 3.5, high: 7.0, avg: 5.3 },
+        "541940": { low: 4.0, high: 8.0, avg: 6.0 },
+        "541990": { low: 3.5, high: 7.0, avg: 5.3 }
+      };
+      
+      // Sector defaults if specific NAICS not found
+      const sectorDefaults = {
+        "11": { low: 3.0, high: 6.0, avg: 4.5 },
+        "21": { low: 2.0, high: 4.0, avg: 3.0 },
+        "22": { low: 3.0, high: 6.0, avg: 4.5 },
+        "23": { low: 2.5, high: 5.5, avg: 4.0 },
+        "31": { low: 2.5, high: 5.0, avg: 3.8 },
+        "42": { low: 3.0, high: 6.0, avg: 4.5 },
+        "44": { low: 2.0, high: 4.0, avg: 3.0 },
+        "48": { low: 2.0, high: 4.5, avg: 3.3 },
+        "51": { low: 4.0, high: 8.0, avg: 6.0 },
+        "52": { low: 3.0, high: 6.0, avg: 4.5 },
+        "53": { low: 3.5, high: 7.0, avg: 5.3 },
+        "54": { low: 4.0, high: 8.0, avg: 6.0 },
+        "55": { low: 4.0, high: 8.0, avg: 6.0 },
+        "56": { low: 3.0, high: 6.0, avg: 4.5 },
+        "61": { low: 3.0, high: 6.0, avg: 4.5 },
+        "62": { low: 3.5, high: 7.0, avg: 5.3 },
+        "71": { low: 2.5, high: 5.0, avg: 3.8 },
+        "72": { low: 2.0, high: 4.0, avg: 3.0 },
+        "81": { low: 2.5, high: 5.0, avg: 3.8 },
+        "92": { low: 2.0, high: 4.0, avg: 3.0 }
+      };
+      
+      if (naicsCode && naicsMultipliers[naicsCode]) {
+        return naicsMultipliers[naicsCode];
+      }
+      
+      if (naicsCode && naicsCode.length >= 2) {
+        const sectorCode = naicsCode.substring(0, 2);
+        if (sectorDefaults[sectorCode]) {
+          return sectorDefaults[sectorCode];
+        }
+      }
+      
+      return { low: 2.0, high: 5.0, avg: 3.5 };
+    };
+    
+    const industryMult = getIndustryMultiplier(formData.naicsCode);
+    const selectedIndustry = naicsData?.industries?.find(i => i.code === formData.naicsCode);
+    
+    return [
+      {
+        name: 'Industry Low',
+        value: industryMult.low,
+        fill: '#ef4444'
+      },
+      {
+        name: 'Industry Average',
+        value: industryMult.avg,
+        fill: '#3b82f6'
+      },
+      {
+        name: 'Your Business',
+        value: Math.round(userMultiple * 10) / 10,
+        fill: '#10b981'
+      },
+      {
+        name: 'Industry High',
+        value: industryMult.high,
+        fill: '#8b5cf6'
+      }
+    ];
   };
 
   const getValueDriversProgress = () => {
@@ -844,27 +1000,79 @@ function StrategicAssessment() {
               <p className="text-gray-600">Review and finalize your strategic valuation</p>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-lg">
-                <h3 className="text-lg font-bold mb-4">Assessment Summary</h3>
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <span className="text-gray-600">Adjusted EBITDA:</span>
-                    <div className="font-bold text-lg">$350,000</div>
-                  </div>
-                  <div>
-                    <span className="text-gray-600">Industry Multiple:</span>
-                    <div className="font-bold text-lg">4.2x</div>
-                  </div>
-                  <div>
-                    <span className="text-gray-600">Estimated Value:</span>
-                    <div className="font-bold text-xl text-green-600">$1,470,000</div>
-                  </div>
-                  <div>
-                    <span className="text-gray-600">Value Range:</span>
-                    <div className="font-bold text-lg">$1.2M - $1.7M</div>
-                  </div>
-                </div>
-              </div>
+              {(() => {
+                const valuationResults = getValuationResults();
+                const selectedIndustry = naicsData?.industries?.find(i => i.code === formData.naicsCode);
+                const userMultiple = valuationResults.ebitda > 0 ? 
+                  (valuationResults.valuation.mean / valuationResults.ebitda) : 0;
+                
+                return (
+                  <>
+                    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-lg">
+                      <h3 className="text-lg font-bold mb-4">Assessment Summary</h3>
+                      <div className="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                          <span className="text-gray-600">Adjusted EBITDA:</span>
+                          <div className="font-bold text-lg">${valuationResults.ebitda?.toLocaleString() || "0"}</div>
+                        </div>
+                        <div>
+                          <span className="text-gray-600">Your Multiple:</span>
+                          <div className="font-bold text-lg">{userMultiple.toFixed(1)}x</div>
+                        </div>
+                        <div>
+                          <span className="text-gray-600">Estimated Value:</span>
+                          <div className="font-bold text-xl text-green-600">${valuationResults.valuation?.mean?.toLocaleString() || "0"}</div>
+                        </div>
+                        <div>
+                          <span className="text-gray-600">Value Range:</span>
+                          <div className="font-bold text-lg">${valuationResults.valuation?.low?.toLocaleString() || "0"} - ${valuationResults.valuation?.high?.toLocaleString() || "0"}</div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Industry Comparison Chart */}
+                    <div className="bg-white p-6 rounded-lg border">
+                      <div className="flex items-center mb-4">
+                        <BarChart3 className="w-5 h-5 text-indigo-600 mr-2" />
+                        <h3 className="text-lg font-bold">Industry Comparison</h3>
+                      </div>
+                      <div className="mb-4">
+                        <p className="text-sm text-gray-600 mb-2">
+                          <strong>Your Industry:</strong> {selectedIndustry?.title || formData.naicsCode}
+                        </p>
+                        <p className="text-sm text-gray-600">
+                          How your business compares to industry EBITDA multiples:
+                        </p>
+                      </div>
+                      <div className="h-64">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <BarChart data={getIndustryComparisonData()} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis dataKey="name" tick={{ fontSize: 12 }} />
+                            <YAxis label={{ value: 'EBITDA Multiple', angle: -90, position: 'insideLeft' }} />
+                            <Tooltip formatter={(value) => [`${value}x`, 'Multiple']} />
+                            <Bar dataKey="value" radius={[4, 4, 0, 0]}>
+                              {getIndustryComparisonData().map((entry, index) => (
+                                <Cell key={`cell-${index}`} fill={entry.fill} />
+                              ))}
+                            </Bar>
+                          </BarChart>
+                        </ResponsiveContainer>
+                      </div>
+                      <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
+                        <div className="flex items-center">
+                          <div className="w-3 h-3 bg-green-500 rounded mr-2"></div>
+                          <span>Your Business: {userMultiple.toFixed(1)}x</span>
+                        </div>
+                        <div className="flex items-center">
+                          <div className="w-3 h-3 bg-blue-500 rounded mr-2"></div>
+                          <span>Industry Average: {getIndustryComparisonData().find(d => d.name === 'Industry Average')?.value}x</span>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                );
+              })()}
               
               <div>
                 <label className="block text-sm font-medium mb-2">Additional Comments</label>
