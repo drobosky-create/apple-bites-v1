@@ -339,6 +339,9 @@ function StrategicAssessment() {
   const getValuationResults = () => {
     // Prepare responses array for valuation engine
     const responses = [
+      // NAICS code for industry-specific multipliers
+      { id: 'naics-code', value: formData.naicsCode, valueDriver: 'Industry', weight: 0 },
+      
       // Financial data
       { id: 'financial-1', value: parseFloat(formData.financials.annualRevenue) || 0, valueDriver: 'Financial Performance', weight: 0 },
       { id: 'financial-2', value: parseFloat(formData.financials.costOfGoodsSold) || 0, valueDriver: 'Financial Performance', weight: 0 },
@@ -348,14 +351,24 @@ function StrategicAssessment() {
       { id: 'adjustments-1', value: parseFloat(formData.adjustments.ownerSalary) || 0, valueDriver: 'Financial Performance', weight: 0 },
       { id: 'adjustments-2', value: parseFloat(formData.adjustments.personalExpenses) || 0, valueDriver: 'Financial Performance', weight: 0 },
       { id: 'adjustments-3', value: parseFloat(formData.adjustments.oneTimeExpenses) || 0, valueDriver: 'Financial Performance', weight: 0 },
-      { id: 'adjustments-4', value: parseFloat(formData.adjustments.otherAdjustments) || 0, valueDriver: 'Financial Performance', weight: 0 },
-      
-      // Value drivers
-      { id: 'driver-financial-performance-1', valueDriver: 'Financial Performance', weight: parseInt(formData.valueDrivers.financialPerformance) || 0 },
-      { id: 'driver-recurring-revenue-1', valueDriver: 'Recurring Revenue', weight: parseInt(formData.valueDrivers.recurringRevenue) || 0 },
-      { id: 'driver-growth-potential-1', valueDriver: 'Growth Potential', weight: parseInt(formData.valueDrivers.growthPotential) || 0 },
-      { id: 'driver-owner-dependency-1', valueDriver: 'Owner Dependency', weight: parseInt(formData.valueDrivers.ownerDependency) || 0 }
+      { id: 'adjustments-4', value: parseFloat(formData.adjustments.otherAdjustments) || 0, valueDriver: 'Financial Performance', weight: 0 }
     ];
+    
+    // Add all 20 value driver responses
+    Object.keys(formData.valueDrivers).forEach(driverId => {
+      const value = formData.valueDrivers[driverId];
+      if (value) {
+        const question = valuationQuestions.find(q => q.id === driverId);
+        if (question) {
+          responses.push({
+            id: driverId,
+            valueDriver: question.valueDriver,
+            weight: parseInt(value),
+            value: parseInt(value)
+          });
+        }
+      }
+    });
 
     return calculateValuation(responses);
   };
