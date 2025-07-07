@@ -295,12 +295,11 @@ function GrowthExitAssessment() {
     // Save assessment data to localStorage for later processing
     localStorage.setItem('growthExitAssessmentData', JSON.stringify(formData));
     
-    // TODO: Replace with actual GHL Stripe payment link
-    // Placeholder - will be updated with real link when provided
-    const ghlPaymentLink = 'https://your-ghl-stripe-link-here.com';
+    // Open Apple Bites checkout link for Growth & Exit Assessment
+    const checkoutLink = 'https://products.applebites.ai/product-details/product/686c2e0f5f2f1191edb09737';
     
     // Open payment link in new window/tab
-    window.open(ghlPaymentLink, '_blank');
+    window.open(checkoutLink, '_blank');
   };
 
   // Helper functions for Value Drivers step
