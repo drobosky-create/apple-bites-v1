@@ -155,7 +155,7 @@ export default function Home() {
                 
                 <Button 
                   onClick={handlePaidTierStart}
-                  className="w-full bg-[#f5c842] text-[#1a2332] hover:bg-yellow-400 h-12 text-lg font-bold"
+                  className="w-full bg-[#f5c842] text-[#1a2332] hover:bg-[#e6b63a] h-12 text-lg font-bold"
                 >
                   Get Growth & Exit Assessment - $795
                 </Button>

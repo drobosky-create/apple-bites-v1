@@ -1153,7 +1153,7 @@ function GrowthExitAssessment() {
                               const percentage = Math.round((score / 5) * 100);
                               const getBarColor = (pct) => {
                                 if (pct >= 75) return 'bg-green-500';
-                                if (pct >= 50) return 'bg-yellow-500';
+                                if (pct >= 50) return 'bg-blue-500';
                                 return 'bg-red-500';
                               };
                               

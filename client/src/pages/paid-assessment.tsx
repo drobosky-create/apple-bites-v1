@@ -268,7 +268,7 @@ export default function PaidAssessment() {
                 <Button
                   onClick={handleIndustryDataSubmit}
                   disabled={isSubmitting}
-                  className="flex-1 bg-[#f5c842] text-[#1a2332] hover:bg-yellow-400 font-semibold"
+                  className="flex-1 bg-[#f5c842] text-[#1a2332] hover:bg-[#e6b63a] font-semibold"
                 >
                   Generate Strategic Report - $395
                 </Button>

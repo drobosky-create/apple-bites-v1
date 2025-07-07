@@ -120,7 +120,7 @@ export default function TierSelectionForm({
             
             <Button 
               onClick={onPaidReport}
-              className="w-full bg-[#f5c842] text-[#1a2332] hover:bg-yellow-400 font-semibold"
+              className="w-full bg-[#f5c842] text-[#1a2332] hover:bg-[#e6b63a] font-semibold"
             >
               Get Strategic Report - $395
             </Button>
