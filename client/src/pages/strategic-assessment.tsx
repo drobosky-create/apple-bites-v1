@@ -1176,7 +1176,7 @@ function StrategicAssessment() {
                     {/* AI Coaching Tips */}
                     <AICoachingTips 
                       financialData={{
-                        revenue: parseFloat(formData.financials.annualRevenue) || 0,
+                        revenue: parseFloat(formData.financials?.annualRevenue) || 0,
                         ebitda: calculateEBITDA(),
                         adjustedEbitda: calculateAdjustedEBITDA(),
                         naicsCode: formData.naicsCode || '',
@@ -1184,10 +1184,10 @@ function StrategicAssessment() {
                         valueDriverScores: getValueDriversScores(),
                         userMultiple: userMultiple,
                         industryAverage: getIndustryComparisonData().find(d => d.name === 'Industry Average')?.value || 4.0,
-                        companySize: parseFloat(formData.financials.annualRevenue) > 10000000 ? 'large' : 
-                                   parseFloat(formData.financials.annualRevenue) > 1000000 ? 'medium' : 'small',
-                        businessAge: formData.contact.foundingYear ? `${new Date().getFullYear() - parseInt(formData.contact.foundingYear)} years` : undefined,
-                        employeeCount: parseInt(formData.contact.employeeCount) || undefined
+                        companySize: parseFloat(formData.financials?.annualRevenue || '0') > 10000000 ? 'large' : 
+                                   parseFloat(formData.financials?.annualRevenue || '0') > 1000000 ? 'medium' : 'small',
+                        businessAge: formData.contact?.foundingYear ? `${new Date().getFullYear() - parseInt(formData.contact.foundingYear)} years` : undefined,
+                        employeeCount: parseInt(formData.contact?.employeeCount || '0') || undefined
                       }}
                     />
                   </>
