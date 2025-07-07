@@ -98,8 +98,8 @@
     --secondary-foreground: 26 35 50; /* Navy text on gold */
     --muted: 241 245 249; /* Light muted */
     --muted-foreground: 71 85 105; /* Muted text */
-    --accent: 245 200 66; /* Gold accent */
-    --accent-foreground: 26 35 50; /* Navy text on gold */
+    --accent: 241 245 249; /* Light grey accent */
+    --accent-foreground: 71 85 105; /* Muted text on grey */
     --destructive: 239 68 68; /* Red for destructive actions */
     --destructive-foreground: 248 250 252;
     --border: 226 232 240; /* Light border */
