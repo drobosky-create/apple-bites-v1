@@ -728,7 +728,6 @@ function StrategicAssessment() {
               {valuationQuestions.map((question, index) => (
                 <div key={question.id} className="space-y-4">
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">{question.valueDriver}</h3>
                     <label className="block text-sm font-medium text-gray-700">
                       {question.question}
                     </label>
