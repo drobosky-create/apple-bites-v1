@@ -49,15 +49,175 @@ function StrategicAssessment() {
       otherAdjustments: ""
     },
     valueDrivers: {
-      financialPerformance: "",
-      recurringRevenue: "",
-      growthPotential: "",
-      ownerDependency: ""
+      "driver-financial-performance-1": "",
+      "driver-financial-performance-2": "",
+      "driver-recurring-revenue-1": "",
+      "driver-recurring-revenue-2": "",
+      "driver-growth-potential-1": "",
+      "driver-growth-potential-2": "",
+      "driver-owner-dependency-1": "",
+      "driver-owner-dependency-2": "",
+      "driver-revenue-diversity-1": "",
+      "driver-revenue-diversity-2": "",
+      "driver-customer-satisfaction-1": "",
+      "driver-customer-satisfaction-2": "",
+      "driver-operational-independence-1": "",
+      "driver-operational-independence-2": "",
+      "driver-scalability-1": "",
+      "driver-scalability-2": "",
+      "driver-team-talent-1": "",
+      "driver-team-talent-2": "",
+      "driver-differentiation-1": "",
+      "driver-differentiation-2": ""
     }
   });
   const [selectedSector, setSelectedSector] = useState("");
   const [selectedSectorCode, setSelectedSectorCode] = useState("");
   const totalSteps = 6;
+
+  // Comprehensive Value Driver Questions (10 drivers, 2 questions each)
+  const valuationQuestions = [
+    {
+      id: "driver-financial-performance-1",
+      question: "How profitable is your business compared to industry benchmarks?",
+      options: ["Not profitable", "Below average", "Average", "Above average", "Top-tier"],
+      weights: [0, 1, 2, 3, 5],
+      valueDriver: "Financial Performance"
+    },
+    {
+      id: "driver-financial-performance-2",
+      question: "What is your adjusted net profit margin?",
+      options: ["< 5%", "5–10%", "11–15%", "16–20%", "> 20%"],
+      weights: [0, 1, 2, 3, 5],
+      valueDriver: "Financial Performance"
+    },
+    {
+      id: "driver-recurring-revenue-1",
+      question: "What percentage of your revenue is recurring (contracts, subscriptions)?",
+      options: ["0%", "1–25%", "26–50%", "51–75%", "76–100%"],
+      weights: [0, 1, 2, 3, 5],
+      valueDriver: "Recurring Revenue"
+    },
+    {
+      id: "driver-recurring-revenue-2",
+      question: "How secure are your recurring revenue contracts?",
+      options: ["No contracts", "Month-to-month", "Annual, not auto-renew", "Annual with auto-renew", "Multi-year, auto-renew"],
+      weights: [0, 1, 2, 3, 5],
+      valueDriver: "Recurring Revenue"
+    },
+    {
+      id: "driver-growth-potential-1",
+      question: "How much do you expect your revenue to grow in the next 12 months?",
+      options: ["Decrease", "Flat", "1–10%", "11–30%", "Over 30%"],
+      weights: [0, 1, 2, 3, 5],
+      valueDriver: "Growth Potential"
+    },
+    {
+      id: "driver-growth-potential-2",
+      question: "How many new customers can you reasonably acquire this year?",
+      options: ["None", "1–10", "11–50", "51–100", "Over 100"],
+      weights: [0, 1, 2, 3, 5],
+      valueDriver: "Growth Potential"
+    },
+    {
+      id: "driver-owner-dependency-1",
+      question: "Could your business run for 90 days without your involvement?",
+      options: ["No", "Barely", "Somewhat", "Mostly", "Yes, seamlessly"],
+      weights: [0, 1, 2, 3, 5],
+      valueDriver: "Owner Dependency"
+    },
+    {
+      id: "driver-owner-dependency-2",
+      question: "How often do customers request to work directly with the owner?",
+      options: ["Always", "Often", "Sometimes", "Rarely", "Never"],
+      weights: [0, 1, 2, 3, 5],
+      valueDriver: "Owner Dependency"
+    },
+    {
+      id: "driver-revenue-diversity-1",
+      question: "What % of your revenue comes from your single largest customer?",
+      options: [">50%", "26–50%", "11–25%", "6–10%", "<5%"],
+      weights: [0, 1, 2, 3, 5],
+      valueDriver: "Revenue Diversity"
+    },
+    {
+      id: "driver-revenue-diversity-2",
+      question: "How many different customer segments do you serve?",
+      options: ["1", "2", "3", "4", "5 or more"],
+      weights: [0, 1, 2, 3, 5],
+      valueDriver: "Revenue Diversity"
+    },
+    {
+      id: "driver-customer-satisfaction-1",
+      question: "What percentage of your customers are 'very satisfied'?",
+      options: ["<25%", "25–50%", "51–75%", "76–90%", ">90%"],
+      weights: [0, 1, 2, 3, 5],
+      valueDriver: "Customer Satisfaction"
+    },
+    {
+      id: "driver-customer-satisfaction-2",
+      question: "How often do customers refer others to your company?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weights: [0, 1, 2, 3, 5],
+      valueDriver: "Customer Satisfaction"
+    },
+    {
+      id: "driver-operational-independence-1",
+      question: "How standardized are your internal processes and SOPs?",
+      options: ["None exist", "Some documentation", "Basic SOPs exist", "Well-documented", "Automated and trained"],
+      weights: [0, 1, 2, 3, 5],
+      valueDriver: "Operational Independence"
+    },
+    {
+      id: "driver-operational-independence-2",
+      question: "How easily can you delegate critical business functions?",
+      options: ["Impossible", "Very difficult", "Somewhat difficult", "Fairly easy", "Very easy"],
+      weights: [0, 1, 2, 3, 5],
+      valueDriver: "Operational Independence"
+    },
+    {
+      id: "driver-scalability-1",
+      question: "If demand grew 5x, how easily could your company fulfill it?",
+      options: ["Impossible", "Very difficult", "Fairly difficult", "Fairly easy", "Very easy"],
+      weights: [0, 1, 2, 3, 5],
+      valueDriver: "Scalability"
+    },
+    {
+      id: "driver-scalability-2",
+      question: "How easily could your business be replicated in another market?",
+      options: ["Impossible", "Very difficult", "Fairly difficult", "Fairly easy", "Very easy"],
+      weights: [0, 1, 2, 3, 5],
+      valueDriver: "Scalability"
+    },
+    {
+      id: "driver-team-talent-1",
+      question: "How strong is your current leadership team?",
+      options: ["None", "1 manager", "A few informal leaders", "Defined department heads", "Full team with long-term incentives"],
+      weights: [0, 1, 2, 3, 5],
+      valueDriver: "Team & Talent"
+    },
+    {
+      id: "driver-team-talent-2",
+      question: "How difficult would it be to replace your top-performing team member?",
+      options: ["Impossible", "Very difficult", "Fairly difficult", "Fairly easy", "Very easy"],
+      weights: [0, 1, 2, 3, 5],
+      valueDriver: "Team & Talent"
+    },
+    {
+      id: "driver-differentiation-1",
+      question: "How unique is your core product or service?",
+      options: ["Commodity", "Some competitors", "Moderately unique", "Very unique", "One-of-a-kind"],
+      weights: [0, 1, 2, 3, 5],
+      valueDriver: "Differentiation & Brand Strength"
+    },
+    {
+      id: "driver-differentiation-2",
+      question: "How well recognized is your brand in the market?",
+      options: ["Not at all", "Somewhat", "Recognized locally", "Known regionally", "Category leader"],
+      weights: [0, 1, 2, 3, 5],
+      valueDriver: "Differentiation & Brand Strength"
+    }
+  ];
 
   // Fetch all 2-digit sectors from comprehensive API
   const { data: sectors = [], isLoading: sectorsLoading } = useQuery<NAICSSector[]>({
@@ -130,12 +290,12 @@ function StrategicAssessment() {
   };
 
   // Helper functions for Value Drivers step
-  const handleValueDriverChange = (driverKey: string, grade: string) => {
+  const handleValueDriverChange = (questionId: string, value: string) => {
     setFormData(prev => ({
       ...prev,
       valueDrivers: {
         ...prev.valueDrivers,
-        [driverKey]: grade
+        [questionId]: value
       }
     }));
   };
@@ -203,6 +363,22 @@ function StrategicAssessment() {
   const getValueDriversProgress = () => {
     if (!formData.valueDrivers) return 0;
     return Object.values(formData.valueDrivers).filter(val => val && val.length > 0).length;
+  };
+
+  const getValueDriversByCategory = () => {
+    const categories = {};
+    valuationQuestions.forEach(question => {
+      if (!categories[question.valueDriver]) {
+        categories[question.valueDriver] = [];
+      }
+      categories[question.valueDriver].push({
+        id: question.id,
+        question: question.question,
+        value: formData.valueDrivers[question.id] || "",
+        weight: parseInt(formData.valueDrivers[question.id]) || 0
+      });
+    });
+    return categories;
   };
 
   const calculateEBITDA = () => {
@@ -534,128 +710,47 @@ function StrategicAssessment() {
               <CardTitle className="text-2xl">Strategic Value Drivers</CardTitle>
               <p className="text-gray-600">Answer these questions to assess your business value</p>
             </CardHeader>
-            <CardContent className="space-y-8">
-              {/* Financial Performance Question */}
-              <div className="space-y-4">
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Financial Performance</h3>
-                  <label className="block text-sm font-medium text-gray-700">
-                    How profitable is your business compared to industry benchmarks?
-                  </label>
-                </div>
-                <div className="space-y-2">
-                  {[
-                    { value: "0", label: "Not profitable", weight: 0 },
-                    { value: "1", label: "Below average", weight: 1 },
-                    { value: "2", label: "Average", weight: 2 },
-                    { value: "3", label: "Above average", weight: 3 },
-                    { value: "5", label: "Top-tier", weight: 5 }
-                  ].map((option) => (
-                    <label key={option.value} className="flex items-center space-x-3 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="financial-performance"
-                        value={option.value}
-                        checked={formData.valueDrivers.financialPerformance === option.value}
-                        onChange={(e) => handleValueDriverChange("financialPerformance", e.target.value)}
-                        className="w-4 h-4 text-indigo-600 border-gray-300 focus:ring-indigo-500"
-                      />
-                      <span className="text-sm text-gray-700">{option.label}</span>
+            <CardContent className="space-y-6">
+              {/* Dynamic comprehensive questionnaire */}
+              {valuationQuestions.map((question, index) => (
+                <div key={question.id} className="space-y-4">
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">{question.valueDriver}</h3>
+                    <label className="block text-sm font-medium text-gray-700">
+                      {question.question}
                     </label>
-                  ))}
+                  </div>
+                  <div className="space-y-2">
+                    {question.options.map((option, optionIndex) => (
+                      <label key={`${question.id}-${optionIndex}`} className="flex items-center space-x-3 cursor-pointer">
+                        <input
+                          type="radio"
+                          name={question.id}
+                          value={question.weights[optionIndex].toString()}
+                          checked={formData.valueDrivers[question.id] === question.weights[optionIndex].toString()}
+                          onChange={(e) => handleValueDriverChange(question.id, e.target.value)}
+                          className="w-4 h-4 text-indigo-600 border-gray-300 focus:ring-indigo-500"
+                        />
+                        <span className="text-sm text-gray-700">{option}</span>
+                      </label>
+                    ))}
+                  </div>
                 </div>
-              </div>
-
-              {/* Recurring Revenue Question */}
-              <div className="space-y-4">
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Recurring Revenue</h3>
-                  <label className="block text-sm font-medium text-gray-700">
-                    What percentage of your revenue is recurring (contracts, subscriptions)?
-                  </label>
+              ))}
+              
+              {/* Progress indicator */}
+              <div className="mt-6 p-4 bg-gray-50 rounded-lg">
+                <div className="flex items-center mb-2">
+                  <Calculator className="w-5 h-5 text-gray-600 mr-2" />
+                  <span className="text-sm font-medium text-gray-700">
+                    Progress: {Object.values(formData.valueDrivers).filter(v => v !== "").length} of {valuationQuestions.length} questions completed
+                  </span>
                 </div>
-                <div className="space-y-2">
-                  {[
-                    { value: "0", label: "0%", weight: 0 },
-                    { value: "1", label: "1–25%", weight: 1 },
-                    { value: "2", label: "26–50%", weight: 2 },
-                    { value: "3", label: "51–75%", weight: 3 },
-                    { value: "5", label: "76–100%", weight: 5 }
-                  ].map((option) => (
-                    <label key={option.value} className="flex items-center space-x-3 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="recurring-revenue"
-                        value={option.value}
-                        checked={formData.valueDrivers.recurringRevenue === option.value}
-                        onChange={(e) => handleValueDriverChange("recurringRevenue", e.target.value)}
-                        className="w-4 h-4 text-indigo-600 border-gray-300 focus:ring-indigo-500"
-                      />
-                      <span className="text-sm text-gray-700">{option.label}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              {/* Growth Potential Question */}
-              <div className="space-y-4">
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Growth Potential</h3>
-                  <label className="block text-sm font-medium text-gray-700">
-                    How much do you expect your revenue to grow in the next 12 months?
-                  </label>
-                </div>
-                <div className="space-y-2">
-                  {[
-                    { value: "0", label: "Decrease", weight: 0 },
-                    { value: "1", label: "Flat", weight: 1 },
-                    { value: "2", label: "1–10%", weight: 2 },
-                    { value: "3", label: "11–30%", weight: 3 },
-                    { value: "5", label: "Over 30%", weight: 5 }
-                  ].map((option) => (
-                    <label key={option.value} className="flex items-center space-x-3 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="growth-potential"
-                        value={option.value}
-                        checked={formData.valueDrivers.growthPotential === option.value}
-                        onChange={(e) => handleValueDriverChange("growthPotential", e.target.value)}
-                        className="w-4 h-4 text-indigo-600 border-gray-300 focus:ring-indigo-500"
-                      />
-                      <span className="text-sm text-gray-700">{option.label}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              {/* Owner Dependency Question */}
-              <div className="space-y-4">
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Owner Dependency</h3>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Could your business run for 90 days without your involvement?
-                  </label>
-                </div>
-                <div className="space-y-2">
-                  {[
-                    { value: "0", label: "No", weight: 0 },
-                    { value: "1", label: "Barely", weight: 1 },
-                    { value: "2", label: "Somewhat", weight: 2 },
-                    { value: "3", label: "Mostly", weight: 3 },
-                    { value: "5", label: "Yes, seamlessly", weight: 5 }
-                  ].map((option) => (
-                    <label key={option.value} className="flex items-center space-x-3 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="owner-dependency"
-                        value={option.value}
-                        checked={formData.valueDrivers.ownerDependency === option.value}
-                        onChange={(e) => handleValueDriverChange("ownerDependency", e.target.value)}
-                        className="w-4 h-4 text-indigo-600 border-gray-300 focus:ring-indigo-500"
-                      />
-                      <span className="text-sm text-gray-700">{option.label}</span>
-                    </label>
-                  ))}
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div 
+                    className="bg-indigo-600 h-2 rounded-full transition-all duration-300"
+                    style={{ width: `${(Object.values(formData.valueDrivers).filter(v => v !== "").length / valuationQuestions.length) * 100}%` }}
+                  />
                 </div>
               </div>
               
