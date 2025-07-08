@@ -1571,6 +1571,73 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Test webhook sender to GHL endpoint
+  app.post("/api/test-send-webhook", async (req, res) => {
+    try {
+      const { webhookUrl, testType } = req.body;
+      
+      if (!webhookUrl) {
+        return res.status(400).json({ error: "webhookUrl is required" });
+      }
+      
+      // Generate test data based on type
+      const isGrowth = testType === 'growth';
+      const testData = {
+        ghlContactId: `test_contact_${isGrowth ? 'growth' : 'basic'}_${Date.now()}`,
+        score: isGrowth ? 5.2 : 2.3,
+        valuationRange: isGrowth ? "$4,200,000 – $6,300,000" : "$1,800,000 – $2,700,000",
+        driverGrades: {
+          financialPerformance: isGrowth ? "A" : "B",
+          customerConcentration: isGrowth ? "A" : "C",
+          managementTeam: isGrowth ? "A" : "B",
+          competitivePosition: isGrowth ? "B" : "B",
+          growthProspects: isGrowth ? "A" : "B",
+          systemsProcesses: isGrowth ? "A" : "C",
+          assetQuality: isGrowth ? "B" : "B",
+          industryOutlook: isGrowth ? "A" : "B",
+          riskFactors: isGrowth ? "B" : "C",
+          ownerDependency: isGrowth ? "C" : "C"
+        },
+        type: isGrowth ? "growth" : "basic",
+        assessmentUrl: `https://applebites.ai/api/pdf/test-${isGrowth ? 'growth' : 'basic'}-report.pdf`,
+        completedAt: new Date().toISOString(),
+        name: `Test ${isGrowth ? 'Growth' : 'Basic'} Assessment`,
+        email: `test-${isGrowth ? 'growth' : 'basic'}@example.com`,
+        phone: isGrowth ? "555-GROWTH-001" : "555-BASIC-001",
+        company: `Test ${isGrowth ? 'Growth' : 'Basic'} Company`,
+        followUpIntent: true
+      };
+      
+      console.log(`📤 Sending ${testType || 'basic'} test data to webhook:`, webhookUrl);
+      console.log("Test payload:", JSON.stringify(testData, null, 2));
+      
+      // Send to webhook
+      const response = await fetch(webhookUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(testData)
+      });
+      
+      const responseText = await response.text();
+      
+      res.json({
+        success: true,
+        webhookResponse: {
+          status: response.status,
+          statusText: response.statusText,
+          body: responseText
+        },
+        sentData: testData
+      });
+      
+    } catch (error) {
+      console.error('Webhook send test failed:', error);
+      res.status(500).json({ error: error instanceof Error ? error.message : 'Unknown error' });
+    }
+  });
+
   // Test basic webhook callback endpoint
   app.post("/api/test-basic-webhook", async (req, res) => {
     try {
