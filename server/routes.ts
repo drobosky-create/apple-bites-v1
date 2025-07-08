@@ -2121,20 +2121,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       }
       
-      // More flexible validation - allow any string token type but normalize it
-      // GHL Assessment Tier field values: "basic", "growth", or custom values
-      let normalizedTokenType = 'basic'; // default
-      if (tokenType && typeof tokenType === 'string') {
-        const lowerType = tokenType.toLowerCase().trim();
-        if (lowerType === 'growth' || lowerType.includes('growth') || lowerType.includes('premium') || lowerType.includes('paid') || lowerType.includes('exit')) {
-          normalizedTokenType = 'growth';
-        } else if (lowerType === 'basic' || lowerType.includes('basic') || lowerType.includes('free')) {
-          normalizedTokenType = 'basic';
-        } else {
-          // If it's not explicitly basic or growth, default to basic
-          normalizedTokenType = 'basic';
-        }
-      }
+      // Only support growth tokens now - all assessments are growth tier
+      let normalizedTokenType = 'growth'; // Always use growth
+      
+      // Log the original token type for debugging but always use growth
+      console.log(`📋 Original token type: "${tokenType}" → Using: "growth"`);
+      
+      // Note: All assessment tokens are now growth tier ($795 value)
+      // This removes the free/basic tier distinction
       
       console.log(`📋 Normalized token type: "${normalizedTokenType}" (from "${tokenType}")`);
       
