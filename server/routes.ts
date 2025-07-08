@@ -1169,6 +1169,52 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // GHL webhook endpoint for token generation
+  app.post("/api/webhook/ghl", async (req, res) => {
+    try {
+      console.log('Received GHL webhook for token generation:', JSON.stringify(req.body, null, 2));
+      
+      const webhookData = req.body;
+      const contact = webhookData.contact;
+      
+      if (!contact || !contact.id) {
+        console.log('Invalid webhook data - missing contact ID');
+        return res.status(400).json({ error: 'Invalid webhook data' });
+      }
+      
+      // Extract assessment tier from custom fields
+      let assessmentTier = 'growth'; // Default to growth
+      if (contact.customFields && Array.isArray(contact.customFields)) {
+        const tierField = contact.customFields.find(field => field.key === 'assessment_tier');
+        if (tierField && tierField.value) {
+          assessmentTier = tierField.value;
+        }
+      }
+      
+      // Generate access token
+      const tokenData = await storage.generateAccessToken(assessmentTier, contact.id);
+      
+      const assessmentUrl = `https://applebites.ai/assessment/growth?token=${tokenData.token}`;
+      
+      console.log('Generated token for GHL contact:', {
+        contactId: contact.id,
+        tier: assessmentTier,
+        token: tokenData.token.substring(0, 20) + '...',
+        url: assessmentUrl
+      });
+      
+      res.json({
+        success: true,
+        token: tokenData.token,
+        assessmentUrl: assessmentUrl,
+        expiresAt: tokenData.expiresAt
+      });
+    } catch (error) {
+      console.error('Error processing GHL webhook:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
   // Webhook endpoint to receive valuation assessment data FROM GoHighLevel
   app.post("/api/webhook/gohighlevel", async (req, res) => {
     try {
