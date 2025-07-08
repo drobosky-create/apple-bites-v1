@@ -1942,20 +1942,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.log("Request body:", JSON.stringify(req.body, null, 2));
       console.log("Request headers:", JSON.stringify(req.headers, null, 2));
       
-      // Handle multiple field name formats from GHL
-      const type = req.body.token_type || req.body.type || req.body.assessment_type;
-      const ghlContactId = req.body.ghlContactId || req.body.contact_id;
+      // Handle multiple field name formats with fallback default
+      const tokenType = req.body?.type || req.body?.token_type || req.body?.assessment_type || 'basic';
+      const ghlContactId = req.body?.ghlContactId || req.body?.contact_id;
       
-      console.log(`📋 Extracted values - type: "${type}", ghlContactId: "${ghlContactId}"`);
+      console.log(`📋 Extracted values - tokenType: "${tokenType}", ghlContactId: "${ghlContactId}"`);
       
-      if (!type || !["basic", "growth"].includes(type)) {
-        console.error(`❌ Invalid token type received: "${type}"`);
-        return res.status(400).json({ error: `Invalid token type. Must be 'basic' or 'growth'. Received: "${type}"` });
+      if (!tokenType || !["basic", "growth"].includes(tokenType)) {
+        console.error(`❌ Invalid token type received: "${tokenType}"`);
+        return res.status(400).json({ error: `Invalid token type. Must be 'basic' or 'growth'. Received: "${tokenType}"` });
       }
       
-      console.log(`✅ Valid token type: ${type}`);
+      console.log(`✅ Valid token type: ${tokenType}`);
       
-      const accessToken = await storage.generateAccessToken(type, ghlContactId);
+      const accessToken = await storage.generateAccessToken(tokenType, ghlContactId);
       
       console.log(`🎯 Token generated successfully: ${accessToken.token.substring(0, 20)}...`);
       
@@ -1963,7 +1963,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         token: accessToken.token,
         type: accessToken.type,
         expiresAt: accessToken.expiresAt,
-        assessmentUrl: `${req.protocol}://${req.get('host')}/assessment/${type}?token=${accessToken.token}`
+        assessmentUrl: `${req.protocol}://${req.get('host')}/assessment/${tokenType}?token=${accessToken.token}`
       };
       
       console.log("📤 Response:", JSON.stringify(response, null, 2));
