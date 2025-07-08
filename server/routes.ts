@@ -2087,8 +2087,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.log("Request headers:", JSON.stringify(req.headers, null, 2));
       
       // Handle multiple field name formats with fallback default
-      // GHL sends token_type with {{contact.Assessment Tier}} template variable
-      const tokenType = req.body?.token_type || req.body?.type || req.body?.assessment_type || 'basic';
+      // GHL sends assessment_tier with {{contact.assessment_tier}} template variable
+      const tokenType = req.body?.assessment_tier || req.body?.token_type || req.body?.type || req.body?.assessment_type || 'basic';
       
       // Extract ghlContactId from multiple possible field names, including GHL's default fields
       // GHL sends ghlContactId with {{contact.id}} template variable
@@ -2096,7 +2096,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       console.log(`📋 Extracted values - tokenType: "${tokenType}", ghlContactId: "${ghlContactId}"`);
       console.log(`📋 All request body keys: ${Object.keys(req.body || {}).join(', ')}`);
-      console.log(`📋 Raw body values - ghlContactId: "${req.body?.ghlContactId}", contact_id: "${req.body?.contact_id}", id: "${req.body?.id}"`);
+      console.log(`📋 Raw body values:`);
+      console.log(`   - assessment_tier: "${req.body?.assessment_tier}"`);
+      console.log(`   - token_type: "${req.body?.token_type}"`);
+      console.log(`   - type: "${req.body?.type}"`);
+      console.log(`   - ghlContactId: "${req.body?.ghlContactId}"`);
+      console.log(`   - contact_id: "${req.body?.contact_id}"`);
+      console.log(`   - id: "${req.body?.id}"`);
       
       // If no contact ID found, try to extract from any available field
       if (!ghlContactId) {
