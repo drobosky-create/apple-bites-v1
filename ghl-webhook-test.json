@@ -1,0 +1,21 @@
+{
+  "basic_assessment_payload": {
+    "type": "basic",
+    "ghlContactId": "{{contact.id}}"
+  },
+  "growth_assessment_payload": {
+    "type": "growth", 
+    "ghlContactId": "{{contact.id}}"
+  },
+  "webhook_url": "https://applebites.ai/api/generate-token",
+  "method": "POST",
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "expected_response": {
+    "token": "string",
+    "type": "basic|growth",
+    "expiresAt": "timestamp",
+    "assessmentUrl": "https://applebites.ai/assessment/basic?token=..."
+  }
+}
