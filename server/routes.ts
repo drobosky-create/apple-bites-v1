@@ -572,7 +572,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
         console.log('Sending GHL webhook callback data:', JSON.stringify(ghlWebhookData, null, 2));
         
-        const ghlWebhookResponse = await fetch('https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhIdFd0Z/webhook-trigger/016d7395-74cf-4bd0-9c13-263f55efe657', {
+        const ghlWebhookResponse = await fetch('https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhIdFd0Z/webhook-trigger/0bdb4be6-432a-469b-9296-5b14d8fcfdc7', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(ghlWebhookData)
@@ -1634,7 +1634,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       console.log('Testing enhanced webhook callback:', JSON.stringify(enhancedWebhookData, null, 2));
       
-      const webhookResponse = await fetch('https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhIdFd0Z/webhook-trigger/016d7395-74cf-4bd0-9c13-263f55efe657', {
+      const webhookResponse = await fetch('https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhIdFd0Z/webhook-trigger/0bdb4be6-432a-469b-9296-5b14d8fcfdc7', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(enhancedWebhookData)
