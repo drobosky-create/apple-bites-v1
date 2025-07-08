@@ -2079,6 +2079,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Debug route to check tokens in database
+  app.get("/api/debug/tokens", async (req, res) => {
+    try {
+      const tokens = await storage.getAllAccessTokens();
+      res.json({
+        count: tokens.length,
+        tokens: tokens.map(token => ({
+          id: token.id,
+          token: token.token.substring(0, 20) + "...",
+          fullToken: token.token,
+          type: token.type,
+          isUsed: token.isUsed,
+          expiresAt: token.expiresAt,
+          createdAt: token.createdAt,
+          usedAt: token.usedAt,
+          ghlContactId: token.ghlContactId,
+          expired: token.expiresAt < new Date()
+        }))
+      });
+    } catch (error) {
+      console.error("Error fetching tokens:", error);
+      res.status(500).json({ error: "Failed to fetch tokens" });
+    }
+  });
+
   // Token generation endpoint for GHL - NEVER REJECTS REQUESTS
   app.post("/api/generate-token", async (req, res) => {
     try {
