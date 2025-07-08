@@ -493,7 +493,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
         console.log('Sending webhook data:', JSON.stringify(webhookData, null, 2));
         
-        const webhookResponse = await fetch('https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhldFd0Z/webhook-trigger/dc1a8a7f-47ee-4c9a-b474-e1aeb21af3e3', {
+        const webhookResponse = await fetch('https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhIdFd0Z/webhook-trigger/016d7395-74cf-4bd0-9c13-263f55efe657', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(webhookData)
@@ -504,6 +504,42 @@ export async function registerRoutes(app: Express): Promise<Server> {
         console.log(`Lead data sent to CRM for ${assessment.email}`);
       } catch (webhookError) {
         console.error('Failed to send lead data to CRM, but continuing:', webhookError);
+        // Don't fail the entire request if webhook fails
+      }
+
+      // Send formatted data to GoHighLevel webhook callback
+      try {
+        const ghlWebhookData = {
+          name: `${assessment.firstName} ${assessment.lastName}`,
+          email: assessment.email,
+          phone: assessment.phone,
+          company: assessment.company,
+          valuation_range: `$${metrics.lowEstimate.toLocaleString()} – $${metrics.highEstimate.toLocaleString()}`,
+          valuation_score: parseFloat(((metrics.lowEstimate + metrics.highEstimate) / 2 / 1000000).toFixed(1)), // Convert to millions
+          value_drivers: {
+            Financials: assessment.financialPerformance,
+            Growth: assessment.growthProspects,
+            Operations: assessment.systemsProcesses,
+            Team: assessment.managementTeam,
+            Market: assessment.industryOutlook
+          },
+          summary: assessment.executiveSummary?.substring(0, 150) + '...' || narrativeAnalysis.narrativeSummary.substring(0, 150) + '...',
+          opted_for_follow_up: assessment.followUpIntent === 'yes'
+        };
+
+        console.log('Sending GHL webhook callback data:', JSON.stringify(ghlWebhookData, null, 2));
+        
+        const ghlWebhookResponse = await fetch('https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhIdFd0Z/webhook-trigger/016d7395-74cf-4bd0-9c13-263f55efe657', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(ghlWebhookData)
+        });
+        
+        console.log('GHL webhook callback response status:', ghlWebhookResponse.status);
+        console.log('GHL webhook callback response:', await ghlWebhookResponse.text());
+        console.log(`GHL webhook callback sent for ${assessment.email}`);
+      } catch (ghlWebhookError) {
+        console.error('Failed to send GHL webhook callback, but continuing:', ghlWebhookError);
         // Don't fail the entire request if webhook fails
       }
 
