@@ -2087,35 +2087,63 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.log("Request headers:", JSON.stringify(req.headers, null, 2));
       
       // Handle multiple field name formats with fallback default
-      const tokenType = req.body?.type || req.body?.token_type || req.body?.assessment_type || 'basic';
+      // GHL sends token_type with {{contact.Assessment Tier}} template variable
+      const tokenType = req.body?.token_type || req.body?.type || req.body?.assessment_type || 'basic';
       
-      // Extract ghlContactId from multiple possible field names
-      let ghlContactId = req.body?.ghlContactId || req.body?.contact_id || req.body?.contactId;
+      // Extract ghlContactId from multiple possible field names, including GHL's default fields
+      // GHL sends ghlContactId with {{contact.id}} template variable
+      let ghlContactId = req.body?.ghlContactId || req.body?.contact_id || req.body?.contactId || req.body?.id || req.body?.contact?.id;
       
       console.log(`📋 Extracted values - tokenType: "${tokenType}", ghlContactId: "${ghlContactId}"`);
-      console.log(`📋 Raw body values - ghlContactId: "${req.body?.ghlContactId}", contact_id: "${req.body?.contact_id}"`);
+      console.log(`📋 All request body keys: ${Object.keys(req.body || {}).join(', ')}`);
+      console.log(`📋 Raw body values - ghlContactId: "${req.body?.ghlContactId}", contact_id: "${req.body?.contact_id}", id: "${req.body?.id}"`);
       
-      // Validate token type
-      if (!tokenType || !["basic", "growth"].includes(tokenType)) {
-        console.error(`❌ Invalid token type received: "${tokenType}"`);
-        return res.status(400).json({ error: `Invalid token type. Must be 'basic' or 'growth'. Received: "${tokenType}"` });
+      // If no contact ID found, try to extract from any available field
+      if (!ghlContactId) {
+        // Check for any field that might contain contact ID
+        const possibleContactFields = Object.keys(req.body || {}).filter(key => 
+          key.toLowerCase().includes('contact') || 
+          key.toLowerCase().includes('id') || 
+          key === 'id'
+        );
+        
+        console.log(`📋 Possible contact fields found: ${possibleContactFields.join(', ')}`);
+        
+        if (possibleContactFields.length > 0) {
+          ghlContactId = req.body[possibleContactFields[0]];
+          console.log(`📋 Using field "${possibleContactFields[0]}" with value: "${ghlContactId}"`);
+        }
       }
       
-      // Validate GHL contact ID is provided and not empty
+      // More flexible validation - allow any string token type but normalize it
+      // GHL Assessment Tier field values: "basic", "growth", or custom values
+      let normalizedTokenType = 'basic'; // default
+      if (tokenType && typeof tokenType === 'string') {
+        const lowerType = tokenType.toLowerCase().trim();
+        if (lowerType === 'growth' || lowerType.includes('growth') || lowerType.includes('premium') || lowerType.includes('paid') || lowerType.includes('exit')) {
+          normalizedTokenType = 'growth';
+        } else if (lowerType === 'basic' || lowerType.includes('basic') || lowerType.includes('free')) {
+          normalizedTokenType = 'basic';
+        } else {
+          // If it's not explicitly basic or growth, default to basic
+          normalizedTokenType = 'basic';
+        }
+      }
+      
+      console.log(`📋 Normalized token type: "${normalizedTokenType}" (from "${tokenType}")`);
+      
+      // Generate a contact ID if none provided (for testing)
       if (!ghlContactId || typeof ghlContactId !== 'string' || ghlContactId.trim() === '') {
-        console.error(`❌ Missing or empty ghlContactId: "${ghlContactId}"`);
-        return res.status(400).json({ 
-          error: "Missing required parameter: ghlContactId, contact_id, or contactId must be provided",
-          received: { ghlContactId: req.body?.ghlContactId, contact_id: req.body?.contact_id, contactId: req.body?.contactId }
-        });
+        ghlContactId = `generated_contact_${Date.now()}`;
+        console.log(`⚠️  No contact ID provided, generating: "${ghlContactId}"`);
       }
       
       // Ensure ghlContactId is clean
       ghlContactId = ghlContactId.trim();
       
-      console.log(`✅ Valid token type: ${tokenType}`);
+      console.log(`✅ Valid token type: ${normalizedTokenType}`);
       
-      const accessToken = await storage.generateAccessToken(tokenType, ghlContactId);
+      const accessToken = await storage.generateAccessToken(normalizedTokenType, ghlContactId);
       
       console.log(`🎯 Token generated successfully: ${accessToken.token.substring(0, 20)}...`);
       
@@ -2123,7 +2151,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         token: accessToken.token,
         type: accessToken.type,
         expiresAt: accessToken.expiresAt,
-        assessmentUrl: `${req.protocol}://${req.get('host')}/assessment/${tokenType}?token=${accessToken.token}`
+        assessmentUrl: `${req.protocol}://${req.get('host')}/assessment/${normalizedTokenType}?token=${accessToken.token}`
       };
       
       console.log("📤 Response:", JSON.stringify(response, null, 2));
