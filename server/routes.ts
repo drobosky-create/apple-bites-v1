@@ -1571,6 +1571,83 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Test basic webhook callback endpoint
+  app.post("/api/test-basic-webhook", async (req, res) => {
+    try {
+      // Generate a test token first
+      const testToken = await storage.generateAccessToken('basic', 'test_contact_basic');
+      
+      // Create test basic assessment data
+      const testAssessment = {
+        id: 888,
+        firstName: "Basic",
+        lastName: "Assessment Test",
+        email: "basic@test.com",
+        phone: "555-BASIC-001",
+        company: "Test Basic Company",
+        financialPerformance: "B",
+        customerConcentration: "C",
+        managementTeam: "B",
+        competitivePosition: "B",
+        growthProspects: "B",
+        systemsProcesses: "C",
+        assetQuality: "B",
+        industryOutlook: "B",
+        riskFactors: "C",
+        ownerDependency: "C",
+        followUpIntent: "yes",
+        pdfUrl: "/api/pdf/test-basic-report.pdf"
+      };
+      
+      const testMetrics = {
+        lowEstimate: 1800000,
+        highEstimate: 2700000,
+        midEstimate: 2250000
+      };
+      
+      // Simulate the basic webhook callback data
+      const basicWebhookData = {
+        ghlContactId: testToken.ghlContactId,
+        score: parseFloat(((testMetrics.lowEstimate + testMetrics.highEstimate) / 2 / 1000000).toFixed(1)),
+        valuationRange: `$${testMetrics.lowEstimate.toLocaleString()} – $${testMetrics.highEstimate.toLocaleString()}`,
+        driverGrades: {
+          financialPerformance: testAssessment.financialPerformance,
+          customerConcentration: testAssessment.customerConcentration,
+          managementTeam: testAssessment.managementTeam,
+          competitivePosition: testAssessment.competitivePosition,
+          growthProspects: testAssessment.growthProspects,
+          systemsProcesses: testAssessment.systemsProcesses,
+          assetQuality: testAssessment.assetQuality,
+          industryOutlook: testAssessment.industryOutlook,
+          riskFactors: testAssessment.riskFactors,
+          ownerDependency: testAssessment.ownerDependency
+        },
+        type: testToken.type,
+        assessmentUrl: `https://applebites.ai${testAssessment.pdfUrl}`,
+        completedAt: new Date().toISOString(),
+        name: `${testAssessment.firstName} ${testAssessment.lastName}`,
+        email: testAssessment.email,
+        phone: testAssessment.phone,
+        company: testAssessment.company,
+        followUpIntent: testAssessment.followUpIntent === 'yes'
+      };
+      
+      console.log('Testing basic webhook callback:', basicWebhookData);
+      
+      // Send to a basic webhook endpoint (if it exists)
+      // For now, we'll just return the payload structure
+      res.json({
+        success: true,
+        payload: basicWebhookData,
+        tokenUsed: testToken.token
+      });
+      
+    } catch (error) {
+      console.error('Basic webhook test failed:', error);
+      res.status(500).json({ error: error instanceof Error ? error.message : 'Unknown error' });
+    }
+  });
+
   // Test enhanced webhook callback endpoint
   app.post("/api/test-enhanced-webhook", async (req, res) => {
     try {
