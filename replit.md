@@ -117,6 +117,8 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- **July 8, 2025 - Enhanced GHL Webhook Callback System**: Upgraded the GoHighLevel webhook callback system with comprehensive assessment data transmission. The enhanced webhook callback now includes detailed assessment results with `ghlContactId`, `score` (calculated valuation in millions), `valuationRange` (formatted currency range), `driverGrades` (all 10 value driver scores A-F), `type` (basic/growth), `assessmentUrl` (direct PDF link), `completedAt` (ISO timestamp), and complete contact information. Token information is properly captured during assessment submission and used to populate the GHL contact ID for accurate bi-directional integration.
+
 - **July 8, 2025 - GHL Token-Based Access System Implementation**: Replaced Apple Bites checkout with comprehensive GoHighLevel token-based access control system. Features secure token generation API endpoints, token validation middleware, protected assessment routes, and direct URL access from GHL automations. Users receive assessment URLs with embedded tokens, eliminating checkout/return friction. Token system supports both basic (free) and growth ($795) tier access with automatic expiration and usage tracking.
 
 - **July 7, 2025 - Post-Purchase Access System Implementation**: Built comprehensive email-gated access system for Growth & Exit Assessment completion after external Apple Bites checkout. Features assessment data persistence, email verification for purchase validation, dedicated access and results pages, and localStorage/backend data bridging. Users complete assessment → redirect to checkout → return via email verification → access full results.

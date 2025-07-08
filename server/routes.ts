@@ -204,6 +204,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const formData = req.body;
       
+      // Check for access token in headers
+      const accessToken = req.headers['x-access-token'] as string;
+      let tokenInfo = null;
+      
+      if (accessToken) {
+        try {
+          tokenInfo = await storage.getAccessTokenByToken(accessToken);
+          
+          // Mark token as used when assessment is submitted
+          if (tokenInfo) {
+            await storage.markTokenAsUsed(accessToken, req.ip, req.get('User-Agent'));
+          }
+        } catch (error) {
+          console.error('Error processing access token:', error);
+        }
+      }
+      
       // Validate the request structure
       if (!formData.contact || !formData.ebitda || !formData.valueDrivers || !formData.followUp) {
         return res.status(400).json({ message: "Missing required form data sections" });
@@ -509,22 +526,48 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Send formatted data to GoHighLevel webhook callback
       try {
+        // Try to get the access token info to determine GHL contact ID and type
+        let ghlContactId = null;
+        let assessmentType = 'direct'; // Default for direct submissions
+        
+        // Check if this assessment came from a token-based access
+        if (req.headers['x-access-token']) {
+          try {
+            const accessToken = await storage.getAccessTokenByToken(req.headers['x-access-token'] as string);
+            if (accessToken) {
+              ghlContactId = accessToken.ghlContactId;
+              assessmentType = accessToken.type;
+            }
+          } catch (tokenError) {
+            console.log('Could not retrieve access token info:', tokenError);
+          }
+        }
+
         const ghlWebhookData = {
+          ghlContactId: ghlContactId,
+          score: parseFloat(((metrics.lowEstimate + metrics.highEstimate) / 2 / 1000000).toFixed(1)), // Convert to millions
+          valuationRange: `$${metrics.lowEstimate.toLocaleString()} – $${metrics.highEstimate.toLocaleString()}`,
+          driverGrades: {
+            financialPerformance: assessment.financialPerformance,
+            customerConcentration: assessment.customerConcentration,
+            managementTeam: assessment.managementTeam,
+            competitivePosition: assessment.competitivePosition,
+            growthProspects: assessment.growthProspects,
+            systemsProcesses: assessment.systemsProcesses,
+            assetQuality: assessment.assetQuality,
+            industryOutlook: assessment.industryOutlook,
+            riskFactors: assessment.riskFactors,
+            ownerDependency: assessment.ownerDependency
+          },
+          type: assessmentType,
+          assessmentUrl: assessment.pdfUrl ? `${req.protocol}://${req.get('host')}${assessment.pdfUrl}` : null,
+          completedAt: new Date().toISOString(),
+          // Additional contact info for reference
           name: `${assessment.firstName} ${assessment.lastName}`,
           email: assessment.email,
           phone: assessment.phone,
           company: assessment.company,
-          valuation_range: `$${metrics.lowEstimate.toLocaleString()} – $${metrics.highEstimate.toLocaleString()}`,
-          valuation_score: parseFloat(((metrics.lowEstimate + metrics.highEstimate) / 2 / 1000000).toFixed(1)), // Convert to millions
-          value_drivers: {
-            Financials: assessment.financialPerformance,
-            Growth: assessment.growthProspects,
-            Operations: assessment.systemsProcesses,
-            Team: assessment.managementTeam,
-            Market: assessment.industryOutlook
-          },
-          summary: assessment.executiveSummary?.substring(0, 150) + '...' || narrativeAnalysis.narrativeSummary.substring(0, 150) + '...',
-          opted_for_follow_up: assessment.followUpIntent === 'yes'
+          followUpIntent: assessment.followUpIntent === 'yes'
         };
 
         console.log('Sending GHL webhook callback data:', JSON.stringify(ghlWebhookData, null, 2));
@@ -1521,6 +1564,95 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     } catch (error) {
       console.error('Webhook payload test failed:', error);
+      res.status(500).json({ 
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error' 
+      });
+    }
+  });
+
+  // Test enhanced webhook callback endpoint
+  app.post("/api/test-enhanced-webhook", async (req, res) => {
+    try {
+      // Generate a test token first
+      const testToken = await storage.generateAccessToken('growth', 'test_contact_enhanced');
+      
+      // Create test assessment data
+      const testAssessment = {
+        id: 999,
+        firstName: "Enhanced",
+        lastName: "Webhook Test",
+        email: "enhanced@test.com",
+        phone: "555-TEST-001",
+        company: "Test Enhanced Company",
+        financialPerformance: "A",
+        customerConcentration: "B",
+        managementTeam: "A",
+        competitivePosition: "B",
+        growthProspects: "A",
+        systemsProcesses: "C",
+        assetQuality: "B",
+        industryOutlook: "A",
+        riskFactors: "B",
+        ownerDependency: "C",
+        followUpIntent: "yes",
+        pdfUrl: "/api/pdf/test-enhanced-report.pdf"
+      };
+      
+      const testMetrics = {
+        lowEstimate: 2400000,
+        highEstimate: 3600000,
+        midEstimate: 3000000
+      };
+
+      // Simulate the enhanced webhook callback data
+      const enhancedWebhookData = {
+        ghlContactId: testToken.ghlContactId,
+        score: parseFloat(((testMetrics.lowEstimate + testMetrics.highEstimate) / 2 / 1000000).toFixed(1)),
+        valuationRange: `$${testMetrics.lowEstimate.toLocaleString()} – $${testMetrics.highEstimate.toLocaleString()}`,
+        driverGrades: {
+          financialPerformance: testAssessment.financialPerformance,
+          customerConcentration: testAssessment.customerConcentration,
+          managementTeam: testAssessment.managementTeam,
+          competitivePosition: testAssessment.competitivePosition,
+          growthProspects: testAssessment.growthProspects,
+          systemsProcesses: testAssessment.systemsProcesses,
+          assetQuality: testAssessment.assetQuality,
+          industryOutlook: testAssessment.industryOutlook,
+          riskFactors: testAssessment.riskFactors,
+          ownerDependency: testAssessment.ownerDependency
+        },
+        type: testToken.type,
+        assessmentUrl: `https://applebites.ai${testAssessment.pdfUrl}`,
+        completedAt: new Date().toISOString(),
+        name: `${testAssessment.firstName} ${testAssessment.lastName}`,
+        email: testAssessment.email,
+        phone: testAssessment.phone,
+        company: testAssessment.company,
+        followUpIntent: testAssessment.followUpIntent === 'yes'
+      };
+
+      console.log('Testing enhanced webhook callback:', JSON.stringify(enhancedWebhookData, null, 2));
+      
+      const webhookResponse = await fetch('https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhIdFd0Z/webhook-trigger/016d7395-74cf-4bd0-9c13-263f55efe657', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(enhancedWebhookData)
+      });
+      
+      const responseText = await webhookResponse.text();
+      console.log('Enhanced webhook test response status:', webhookResponse.status);
+      console.log('Enhanced webhook test response:', responseText);
+      
+      res.json({
+        success: webhookResponse.ok,
+        status: webhookResponse.status,
+        response: responseText,
+        payload: enhancedWebhookData,
+        tokenUsed: testToken.token
+      });
+    } catch (error) {
+      console.error('Enhanced webhook test failed:', error);
       res.status(500).json({ 
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error' 

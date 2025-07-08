@@ -62,6 +62,7 @@ export interface IStorage {
   // Access token management
   generateAccessToken(type: "basic" | "growth", ghlContactId?: string): Promise<AccessToken>;
   validateAccessToken(token: string): Promise<AccessToken | undefined>;
+  getAccessTokenByToken(token: string): Promise<AccessToken | undefined>;
   markTokenAsUsed(token: string, ipAddress?: string, userAgent?: string): Promise<void>;
   getAllAccessTokens(): Promise<AccessToken[]>;
   revokeAccessToken(token: string): Promise<void>;
@@ -330,8 +331,7 @@ export class DatabaseStorage implements IStorage {
       .from(accessTokens)
       .where(and(
         eq(accessTokens.token, token),
-        eq(accessTokens.isUsed, false),
-        desc(accessTokens.expiresAt) // Check if not expired
+        eq(accessTokens.isUsed, false)
       ))
       .limit(1);
     
@@ -340,6 +340,16 @@ export class DatabaseStorage implements IStorage {
     }
     
     return accessToken;
+  }
+
+  async getAccessTokenByToken(token: string): Promise<AccessToken | undefined> {
+    const [accessToken] = await db
+      .select()
+      .from(accessTokens)
+      .where(eq(accessTokens.token, token))
+      .limit(1);
+    
+    return accessToken || undefined;
   }
 
   async markTokenAsUsed(token: string, ipAddress?: string, userAgent?: string): Promise<void> {
