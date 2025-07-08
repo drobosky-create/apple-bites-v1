@@ -60,6 +60,8 @@ This is a business valuation calculator application built as a full-stack web pl
 
 ### External Integrations
 - **GoHighLevel CRM**: Token-based access control, contact synchronization, and webhook notifications
+  - **Post-Purchase Webhook URL**: `https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhldFd0Z/webhook-trigger/016d7395-74cf-4bd0-9c13-263f55efe657`
+  - **Purpose**: Receives assessment completion data and triggers GHL automation workflows
 - **SendGrid**: Email delivery and campaign management
 - **OpenAI**: AI-powered business analysis and recommendations
 

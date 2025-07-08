@@ -8,6 +8,7 @@
     "ghlContactId": "{{contact.id}}"
   },
   "webhook_url": "https://applebites.ai/api/generate-token",
+  "post_purchase_webhook_url": "https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhldFd0Z/webhook-trigger/016d7395-74cf-4bd0-9c13-263f55efe657",
   "method": "POST",
   "headers": {
     "Content-Type": "application/json"
