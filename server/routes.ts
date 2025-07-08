@@ -1719,6 +1719,56 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Token generation endpoint for GHL
+  app.post("/api/generate-token", async (req, res) => {
+    try {
+      const { type, ghlContactId } = req.body;
+      
+      if (!type || !["basic", "growth"].includes(type)) {
+        return res.status(400).json({ error: "Invalid token type. Must be 'basic' or 'growth'" });
+      }
+      
+      const accessToken = await storage.generateAccessToken(type, ghlContactId);
+      
+      res.json({
+        token: accessToken.token,
+        type: accessToken.type,
+        expiresAt: accessToken.expiresAt,
+        assessmentUrl: `${req.protocol}://${req.get('host')}/assessment/${type}?token=${accessToken.token}`
+      });
+    } catch (error) {
+      console.error("Error generating access token:", error);
+      res.status(500).json({ error: "Failed to generate access token" });
+    }
+  });
+
+  // Token validation endpoint
+  app.post("/api/validate-token", async (req, res) => {
+    try {
+      const { token } = req.body;
+      
+      if (!token) {
+        return res.status(400).json({ valid: false, error: "Token is required" });
+      }
+      
+      const accessToken = await storage.validateAccessToken(token);
+      
+      if (!accessToken) {
+        return res.status(401).json({ valid: false, error: "Invalid or expired token" });
+      }
+      
+      res.json({
+        valid: true,
+        type: accessToken.type,
+        expiresAt: accessToken.expiresAt,
+        ghlContactId: accessToken.ghlContactId
+      });
+    } catch (error) {
+      console.error("Error validating token:", error);
+      res.status(500).json({ valid: false, error: "Failed to validate token" });
+    }
+  });
+
   // Register assessment access routes
   registerAssessmentAccessRoutes(app);
 

@@ -45,6 +45,13 @@ This is a business valuation calculator application built as a full-stack web pl
 - Forced password changes for new accounts
 - Team member management with CRUD operations
 
+### Token-Based Access System
+- Secure token generation for basic and growth tier assessments
+- Time-based token expiration with 1-hour validity
+- Single-use token validation with IP and user agent tracking
+- Protected assessment routes with middleware authentication
+- Direct URL access from GHL automations
+
 ### PDF Report Generation
 - Professional valuation reports using Puppeteer
 - Branded templates with company logos and styling
@@ -52,7 +59,7 @@ This is a business valuation calculator application built as a full-stack web pl
 - Embedded charts and financial summaries
 
 ### External Integrations
-- **GoHighLevel CRM**: Contact synchronization and webhook notifications
+- **GoHighLevel CRM**: Token-based access control, contact synchronization, and webhook notifications
 - **SendGrid**: Email delivery and campaign management
 - **OpenAI**: AI-powered business analysis and recommendations
 
@@ -62,6 +69,7 @@ This is a business valuation calculator application built as a full-stack web pl
 2. **Lead Processing**: Form submission → Database storage → CRM sync → Email automation
 3. **Admin Workflow**: Login → Dashboard access → Lead management → Analytics review
 4. **Report Generation**: Data validation → AI analysis → PDF creation → Email delivery
+5. **Token-Based Access**: GHL automation → Token generation → URL distribution → Assessment access → Results delivery
 
 ## External Dependencies
 
@@ -108,6 +116,8 @@ This is a business valuation calculator application built as a full-stack web pl
 Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
+
+- **July 8, 2025 - GHL Token-Based Access System Implementation**: Replaced Apple Bites checkout with comprehensive GoHighLevel token-based access control system. Features secure token generation API endpoints, token validation middleware, protected assessment routes, and direct URL access from GHL automations. Users receive assessment URLs with embedded tokens, eliminating checkout/return friction. Token system supports both basic (free) and growth ($795) tier access with automatic expiration and usage tracking.
 
 - **July 7, 2025 - Post-Purchase Access System Implementation**: Built comprehensive email-gated access system for Growth & Exit Assessment completion after external Apple Bites checkout. Features assessment data persistence, email verification for purchase validation, dedicated access and results pages, and localStorage/backend data bridging. Users complete assessment → redirect to checkout → return via email verification → access full results.
 

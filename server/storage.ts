@@ -4,6 +4,7 @@ import {
   leadActivities,
   teamMembers,
   teamSessions,
+  accessTokens,
   type ValuationAssessment, 
   type InsertValuationAssessment,
   type Lead,
@@ -12,10 +13,13 @@ import {
   type InsertLeadActivity,
   type TeamMember,
   type InsertTeamMember,
-  type TeamSession
+  type TeamSession,
+  type AccessToken,
+  type InsertAccessToken
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, desc, and } from "drizzle-orm";
+import { eq, desc, and, lt } from "drizzle-orm";
+import crypto from "crypto";
 
 export interface IStorage {
   // Valuation Assessment methods
@@ -54,6 +58,14 @@ export interface IStorage {
   saveAssessmentData(data: { email: string; assessmentData: string; paymentStatus: string; timestamp: string }): Promise<void>;
   getAssessmentDataByEmail(email: string): Promise<{ assessmentData: string; paymentStatus: string } | null>;
   updatePaymentStatus(email: string, paymentStatus: string, paymentId?: string): Promise<void>;
+  
+  // Access token management
+  generateAccessToken(type: "basic" | "growth", ghlContactId?: string): Promise<AccessToken>;
+  validateAccessToken(token: string): Promise<AccessToken | undefined>;
+  markTokenAsUsed(token: string, ipAddress?: string, userAgent?: string): Promise<void>;
+  getAllAccessTokens(): Promise<AccessToken[]>;
+  revokeAccessToken(token: string): Promise<void>;
+  cleanupExpiredTokens(): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -292,6 +304,74 @@ export class DatabaseStorage implements IStorage {
     await db.update(valuationAssessments)
       .set(updateData)
       .where(eq(valuationAssessments.email, email));
+  }
+
+  // Access token management methods
+  async generateAccessToken(type: "basic" | "growth", ghlContactId?: string): Promise<AccessToken> {
+    const token = crypto.randomBytes(32).toString('hex');
+    const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour from now
+    
+    const [accessToken] = await db
+      .insert(accessTokens)
+      .values({
+        token,
+        type,
+        ghlContactId,
+        expiresAt
+      })
+      .returning();
+    
+    return accessToken;
+  }
+
+  async validateAccessToken(token: string): Promise<AccessToken | undefined> {
+    const [accessToken] = await db
+      .select()
+      .from(accessTokens)
+      .where(and(
+        eq(accessTokens.token, token),
+        eq(accessTokens.isUsed, false),
+        desc(accessTokens.expiresAt) // Check if not expired
+      ))
+      .limit(1);
+    
+    if (!accessToken || accessToken.expiresAt < new Date()) {
+      return undefined;
+    }
+    
+    return accessToken;
+  }
+
+  async markTokenAsUsed(token: string, ipAddress?: string, userAgent?: string): Promise<void> {
+    await db
+      .update(accessTokens)
+      .set({
+        isUsed: true,
+        usedAt: new Date(),
+        ipAddress,
+        userAgent
+      })
+      .where(eq(accessTokens.token, token));
+  }
+
+  async getAllAccessTokens(): Promise<AccessToken[]> {
+    return await db
+      .select()
+      .from(accessTokens)
+      .orderBy(desc(accessTokens.createdAt));
+  }
+
+  async revokeAccessToken(token: string): Promise<void> {
+    await db
+      .update(accessTokens)
+      .set({ isUsed: true, usedAt: new Date() })
+      .where(eq(accessTokens.token, token));
+  }
+
+  async cleanupExpiredTokens(): Promise<void> {
+    await db
+      .delete(accessTokens)
+      .where(lt(accessTokens.expiresAt, new Date()));
   }
 }
 

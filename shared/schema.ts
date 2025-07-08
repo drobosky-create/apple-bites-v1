@@ -249,6 +249,25 @@ export type TeamMember = typeof teamMembers.$inferSelect;
 export type TeamSession = typeof teamSessions.$inferSelect;
 export type LoginCredentials = z.infer<typeof loginSchema>;
 
+// Access Tokens Table for GHL integration
+export const accessTokens = pgTable("access_tokens", {
+  id: serial("id").primaryKey(),
+  token: text("token").notNull().unique(),
+  type: text("type").notNull(), // "basic" or "growth"
+  isUsed: boolean("is_used").default(false),
+  expiresAt: timestamp("expires_at").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+  usedAt: timestamp("used_at"),
+  ghlContactId: text("ghl_contact_id"), // Optional GHL contact reference
+  ipAddress: text("ip_address"), // Track usage IP
+  userAgent: text("user_agent") // Track usage device
+});
+
+// Access token schemas
+export type AccessToken = typeof accessTokens.$inferSelect;
+export const insertAccessTokenSchema = createInsertSchema(accessTokens);
+export type InsertAccessToken = z.infer<typeof insertAccessTokenSchema>;
+
 // Form step schemas for validation
 export const contactInfoSchema = z.object({
   firstName: z.string().min(1, "First name is required"),

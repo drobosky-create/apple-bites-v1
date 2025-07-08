@@ -20,6 +20,9 @@ import ReportSelectionPage from "@/pages/report-selection";
 import NotFound from "@/pages/not-found";
 import AssessmentAccess from "@/pages/assessment-access";
 import AssessmentResults from "@/pages/assessment-results";
+import BasicAssessment from "@/pages/basic-assessment";
+import GrowthAssessment from "@/pages/growth-assessment";
+import TestTokens from "@/pages/test-tokens";
 
 function Router() {
   return (
@@ -31,6 +34,9 @@ function Router() {
           <Route path="/" component={Home} />
           <Route path="/assessment/free" component={FreeAssessment} />
           <Route path="/assessment/paid" component={GrowthExitAssessment} />
+          <Route path="/assessment/basic" component={BasicAssessment} />
+          <Route path="/assessment/growth" component={GrowthAssessment} />
+          <Route path="/test-tokens" component={TestTokens} />
           <Route path="/assessment-access" component={AssessmentAccess} />
           <Route path="/strategic-assessment/results" component={AssessmentResults} />
           <Route path="/valuation" component={ValuationForm} />

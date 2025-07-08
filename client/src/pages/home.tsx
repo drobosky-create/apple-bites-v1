@@ -17,22 +17,8 @@ export default function Home() {
   };
 
   const handlePaidTierStart = () => {
-    setEmailModalOpen(true);
-  };
-
-  const handleEmailSubmit = async (email: string) => {
-    setIsProcessing(true);
-    
-    try {
-      // Store email in localStorage for post-purchase access
-      localStorage.setItem('purchaseEmail', email);
-      
-      // Redirect to Apple Bites checkout
-      window.location.href = 'https://products.applebites.ai/product-details/product/686c2e0f5f2f1191edb09737';
-    } catch (error) {
-      console.error('Error processing email:', error);
-      setIsProcessing(false);
-    }
+    // For now, show a message that this requires GHL integration
+    alert('This assessment requires a valid access token from GoHighLevel. Please contact your administrator.');
   };
 
   return (
@@ -209,12 +195,7 @@ export default function Home() {
         </div>
       </div>
       
-      <EmailCaptureModal
-        isOpen={emailModalOpen}
-        onClose={() => setEmailModalOpen(false)}
-        onSubmit={handleEmailSubmit}
-        isLoading={isProcessing}
-      />
+
     </div>
   );
 }
