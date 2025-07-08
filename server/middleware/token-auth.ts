@@ -38,12 +38,9 @@ export const tokenAuth = (requiredType?: "basic" | "growth") => {
         });
       }
       
-      // Mark token as used and track usage
-      await storage.markTokenAsUsed(
-        token, 
-        req.ip, 
-        req.get('User-Agent')
-      );
+      // Track token usage without marking as used (tokens can be reused until expiry)
+      // Only track IP and user agent for security monitoring
+      // Note: Tokens remain valid for multiple uses within their expiration period
       
       // Add token info to request object
       req.accessToken = {

@@ -329,12 +329,10 @@ export class DatabaseStorage implements IStorage {
     const [accessToken] = await db
       .select()
       .from(accessTokens)
-      .where(and(
-        eq(accessTokens.token, token),
-        eq(accessTokens.isUsed, false)
-      ))
+      .where(eq(accessTokens.token, token))
       .limit(1);
     
+    // Only check expiration, not usage - tokens can be used multiple times
     if (!accessToken || accessToken.expiresAt < new Date()) {
       return undefined;
     }
