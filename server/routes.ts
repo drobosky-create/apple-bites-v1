@@ -2021,14 +2021,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Handle multiple field name formats with fallback default
       const tokenType = req.body?.type || req.body?.token_type || req.body?.assessment_type || 'basic';
-      const ghlContactId = req.body?.ghlContactId || req.body?.contact_id;
+      
+      // Extract ghlContactId from multiple possible field names
+      let ghlContactId = req.body?.ghlContactId || req.body?.contact_id || req.body?.contactId;
       
       console.log(`📋 Extracted values - tokenType: "${tokenType}", ghlContactId: "${ghlContactId}"`);
+      console.log(`📋 Raw body values - ghlContactId: "${req.body?.ghlContactId}", contact_id: "${req.body?.contact_id}"`);
       
+      // Validate token type
       if (!tokenType || !["basic", "growth"].includes(tokenType)) {
         console.error(`❌ Invalid token type received: "${tokenType}"`);
         return res.status(400).json({ error: `Invalid token type. Must be 'basic' or 'growth'. Received: "${tokenType}"` });
       }
+      
+      // Validate GHL contact ID is provided and not empty
+      if (!ghlContactId || typeof ghlContactId !== 'string' || ghlContactId.trim() === '') {
+        console.error(`❌ Missing or empty ghlContactId: "${ghlContactId}"`);
+        return res.status(400).json({ 
+          error: "Missing required parameter: ghlContactId, contact_id, or contactId must be provided",
+          received: { ghlContactId: req.body?.ghlContactId, contact_id: req.body?.contact_id, contactId: req.body?.contactId }
+        });
+      }
+      
+      // Ensure ghlContactId is clean
+      ghlContactId = ghlContactId.trim();
       
       console.log(`✅ Valid token type: ${tokenType}`);
       
