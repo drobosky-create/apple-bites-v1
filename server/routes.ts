@@ -1480,6 +1480,54 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Test webhook payload endpoint
+  app.post("/api/test-webhook-payload", async (req, res) => {
+    try {
+      const testPayload = {
+        name: "Webhook Mapping Test",
+        email: "test@example.com",
+        phone: "1234567890",
+        company: "Test Company",
+        valuation_range: "$1M – $2M",
+        valuation_score: 5.5,
+        value_drivers: {
+          Financials: "C",
+          Growth: "B",
+          Operations: "D",
+          Team: "B",
+          Market: "A"
+        },
+        summary: "Sample mapping test to enable reference.",
+        opted_for_follow_up: false
+      };
+
+      console.log('Testing webhook payload:', JSON.stringify(testPayload, null, 2));
+      
+      const webhookResponse = await fetch('https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhIdFd0Z/webhook-trigger/016d7395-74cf-4bd0-9c13-263f55efe657', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(testPayload)
+      });
+      
+      const responseText = await webhookResponse.text();
+      console.log('Webhook test response status:', webhookResponse.status);
+      console.log('Webhook test response:', responseText);
+      
+      res.json({
+        success: webhookResponse.ok,
+        status: webhookResponse.status,
+        response: responseText,
+        payload: testPayload
+      });
+    } catch (error) {
+      console.error('Webhook payload test failed:', error);
+      res.status(500).json({ 
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error' 
+      });
+    }
+  });
+
   // AI Coaching API endpoints
   app.post("/api/ai-coaching/tips", async (req, res) => {
     try {
