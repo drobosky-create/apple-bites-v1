@@ -1942,8 +1942,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.log("Request body:", JSON.stringify(req.body, null, 2));
       console.log("Request headers:", JSON.stringify(req.headers, null, 2));
       
-      // Handle both field name formats from GHL
-      const type = req.body.type || req.body.assessment_type;
+      // Handle multiple field name formats from GHL
+      const type = req.body.token_type || req.body.type || req.body.assessment_type;
       const ghlContactId = req.body.ghlContactId || req.body.contact_id;
       
       console.log(`📋 Extracted values - type: "${type}", ghlContactId: "${ghlContactId}"`);
