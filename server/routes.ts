@@ -1938,22 +1938,39 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Token generation endpoint for GHL
   app.post("/api/generate-token", async (req, res) => {
     try {
-      const { type, ghlContactId } = req.body;
+      console.log("🔍 GHL Token Generation Request:");
+      console.log("Request body:", JSON.stringify(req.body, null, 2));
+      console.log("Request headers:", JSON.stringify(req.headers, null, 2));
+      
+      // Handle both field name formats from GHL
+      const type = req.body.type || req.body.assessment_type;
+      const ghlContactId = req.body.ghlContactId || req.body.contact_id;
+      
+      console.log(`📋 Extracted values - type: "${type}", ghlContactId: "${ghlContactId}"`);
       
       if (!type || !["basic", "growth"].includes(type)) {
-        return res.status(400).json({ error: "Invalid token type. Must be 'basic' or 'growth'" });
+        console.error(`❌ Invalid token type received: "${type}"`);
+        return res.status(400).json({ error: `Invalid token type. Must be 'basic' or 'growth'. Received: "${type}"` });
       }
+      
+      console.log(`✅ Valid token type: ${type}`);
       
       const accessToken = await storage.generateAccessToken(type, ghlContactId);
       
-      res.json({
+      console.log(`🎯 Token generated successfully: ${accessToken.token.substring(0, 20)}...`);
+      
+      const response = {
         token: accessToken.token,
         type: accessToken.type,
         expiresAt: accessToken.expiresAt,
         assessmentUrl: `${req.protocol}://${req.get('host')}/assessment/${type}?token=${accessToken.token}`
-      });
+      };
+      
+      console.log("📤 Response:", JSON.stringify(response, null, 2));
+      
+      res.json(response);
     } catch (error) {
-      console.error("Error generating access token:", error);
+      console.error("❌ Error generating access token:", error);
       res.status(500).json({ error: "Failed to generate access token" });
     }
   });
