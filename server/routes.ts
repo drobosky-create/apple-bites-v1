@@ -1169,7 +1169,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // GHL webhook endpoint for token generation
+  // GHL webhook endpoint for token generation - matches GHL field requirements
   app.post("/api/webhook/ghl", async (req, res) => {
     try {
       console.log('Received GHL webhook for token generation:', JSON.stringify(req.body, null, 2));
@@ -1191,26 +1191,62 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       }
       
-      // Generate access token
+      // Generate tokens
       const tokenData = await storage.generateAccessToken(assessmentTier, contact.id);
-      
-      const assessmentUrl = `https://applebites.ai/assessment/growth?token=${tokenData.token}`;
+      const assessmentToken = tokenData.token;
+      const accessToken = tokenData.token; // Use same token for both fields
+      const assessmentUrl = `https://applebites.ai/assessment/growth?token=${assessmentToken}`;
       
       console.log('Generated token for GHL contact:', {
         contactId: contact.id,
         tier: assessmentTier,
-        token: tokenData.token.substring(0, 20) + '...',
+        token: assessmentToken.substring(0, 20) + '...',
+        url: assessmentUrl
+      });
+      
+      // Return response in exact format GHL expects for merge tags
+      res.json({
+        access_token: accessToken,
+        assessment_token: assessmentToken,
+        assessment_url: assessmentUrl
+      });
+    } catch (error) {
+      console.error('Error processing GHL webhook:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+  // Alternative endpoint matching your exact example format
+  app.post("/api/generate-token", async (req, res) => {
+    try {
+      console.log('Received generate token request:', JSON.stringify(req.body, null, 2));
+      
+      const { token_type, ghlContactId } = req.body;
+      
+      if (!ghlContactId) {
+        return res.status(400).json({ error: 'Missing ghlContactId' });
+      }
+      
+      // Generate tokens
+      const tokenData = await storage.generateAccessToken(token_type || 'growth', ghlContactId);
+      const assessmentToken = tokenData.token;
+      const accessToken = tokenData.token;
+      const assessmentUrl = `https://applebites.ai/assessment/growth?token=${assessmentToken}`;
+      
+      console.log('Generated token via /api/generate-token:', {
+        contactId: ghlContactId,
+        type: token_type || 'growth',
+        token: assessmentToken.substring(0, 20) + '...',
         url: assessmentUrl
       });
       
       res.json({
-        success: true,
-        token: tokenData.token,
-        assessmentUrl: assessmentUrl,
-        expiresAt: tokenData.expiresAt
+        access_token: accessToken,
+        assessment_token: assessmentToken,
+        assessment_url: assessmentUrl
       });
     } catch (error) {
-      console.error('Error processing GHL webhook:', error);
+      console.error('Error generating token:', error);
       res.status(500).json({ error: 'Internal server error' });
     }
   });
@@ -2218,12 +2254,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       console.log(`🎯 Token generated: ${accessToken.token.substring(0, 20)}...`);
       
-      // Build response - always successful
+      // Build response in GHL format - always successful
       const response = {
-        token: accessToken.token,
-        type: accessToken.type,
-        expiresAt: accessToken.expiresAt,
-        assessmentUrl: `${req.protocol}://${req.get('host')}/assessment/${normalizedTokenType}?token=${accessToken.token}`
+        access_token: accessToken.token,
+        assessment_token: accessToken.token,
+        assessment_url: `https://applebites.ai/assessment/${normalizedTokenType}?token=${accessToken.token}`
       };
       
       console.log("📤 SUCCESS Response:", JSON.stringify(response, null, 2));
@@ -2235,11 +2270,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Even if there's an error, try to provide a fallback response
       // This ensures GHL webhook never fails completely
       try {
+        const fallbackToken = `fallback_${Date.now()}_${Math.random().toString(36).substring(2, 10)}`;
         const fallbackResponse = {
-          token: `fallback_${Date.now()}_${Math.random().toString(36).substring(2, 10)}`,
-          type: 'growth',
-          expiresAt: new Date(Date.now() + 60 * 60 * 1000).toISOString(),
-          assessmentUrl: `${req.protocol}://${req.get('host')}/assessment/growth?token=fallback_${Date.now()}`
+          access_token: fallbackToken,
+          assessment_token: fallbackToken,
+          assessment_url: `https://applebites.ai/assessment/growth?token=${fallbackToken}`
         };
         
         console.log("🔄 Sending fallback response:", JSON.stringify(fallbackResponse, null, 2));
