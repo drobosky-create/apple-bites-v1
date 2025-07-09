@@ -310,7 +310,7 @@ export class DatabaseStorage implements IStorage {
   // Access token management methods
   async generateAccessToken(type: "basic" | "growth", ghlContactId?: string): Promise<AccessToken> {
     const token = crypto.randomBytes(32).toString('hex');
-    const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour from now
+    const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days from now
     
     const [accessToken] = await db
       .insert(accessTokens)

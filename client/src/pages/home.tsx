@@ -115,7 +115,7 @@ export default function Home() {
                   GROWTH & EXIT ASSESSMENT
                 </Badge>
                 <CardTitle className="text-2xl text-[#fcfcfc]">Professional Analysis</CardTitle>
-                <div className="text-4xl font-bold mt-2 text-[#f5c842]">$795</div>
+                <div className="text-4xl font-bold mt-2 text-[#f5c842]">Professional</div>
                 <p className="mt-2 text-[#f8fafc]">Comprehensive industry-specific valuation</p>
               </CardHeader>
               <CardContent className="p-6 bg-[#f8fafc] pt-[14px] pb-[14px] rounded-lg">
@@ -161,7 +161,7 @@ export default function Home() {
                   onClick={handlePaidTierStart}
                   className="w-full bg-[#f5c842] text-[#1a2332] hover:bg-[#e6b63a] h-12 text-lg font-bold"
                 >
-                  Get Growth & Exit Assessment - $795
+                  Access Growth & Exit Assessment
                 </Button>
               </CardContent>
             </Card>

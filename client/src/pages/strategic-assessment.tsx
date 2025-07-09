@@ -291,42 +291,6 @@ function GrowthExitAssessment() {
     }
   };
 
-  const handlePaygateClick = async () => {
-    // Save assessment data to localStorage and backend for later processing
-    const assessmentWithTimestamp = {
-      ...formData,
-      timestamp: new Date().toISOString(),
-      email: formData.email || '', // Ensure email is included
-    };
-    
-    localStorage.setItem('growthExitAssessmentData', JSON.stringify(assessmentWithTimestamp));
-    
-    // Also save to backend if possible (for better reliability)
-    try {
-      // Save assessment data to backend with pending payment status
-      await fetch('/api/save-assessment-data', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: formData.email || '',
-          assessmentData: assessmentWithTimestamp,
-          paymentStatus: 'pending'
-        }),
-      });
-    } catch (error) {
-      console.error('Error saving to backend:', error);
-      // Continue with localStorage only
-    }
-    
-    // Open Apple Bites checkout link for Growth & Exit Assessment
-    const checkoutLink = 'https://products.applebites.ai/product-details/product/686c2e0f5f2f1191edb09737';
-    
-    // Open payment link in new window/tab
-    window.open(checkoutLink, '_blank');
-  };
-
   // Helper functions for Value Drivers step
   const handleValueDriverChange = (questionId: string, value: string) => {
     setFormData(prev => ({
@@ -1244,14 +1208,11 @@ function GrowthExitAssessment() {
               </div>
 
               <div className="text-center">
-                <Button 
-                  onClick={handlePaygateClick}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 text-lg font-bold"
-                >
-                  Get Growth & Exit Assessment - $795
-                </Button>
-                <p className="text-sm text-gray-500 mt-2">
-                  Secure payment processed by Stripe • Includes 60-minute Discovery Call
+                <p className="text-lg font-medium text-gray-700 mb-4">
+                  Your Growth & Exit Assessment is ready to continue
+                </p>
+                <p className="text-sm text-gray-500">
+                  Complete your assessment to receive your comprehensive business valuation report
                 </p>
               </div>
             </CardContent>
