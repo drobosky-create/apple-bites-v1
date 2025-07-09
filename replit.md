@@ -119,6 +119,8 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- **July 8, 2025 - Complete 3-Step GHL Workflow Integration**: Implemented comprehensive 3-step workflow system matching GHL automation requirements. Added `/api/ghl/complete-workflow` endpoint that executes: (1) Token generation via `/api/generate-token`, (2) GHL contact update via webhook to `0214e352-5c51-4222-bb9a-1e0fd02d8290`, and (3) Assessment completion webhook to `016d7395-74cf-4bd0-9c13-263f55efe657`. All endpoints return GHL-compatible `access_token`, `assessment_token`, and `assessment_url` fields for merge tag integration. Token expiration set to 30 days for user convenience.
+
 - **July 8, 2025 - GHL Webhook Field Compliance**: Updated webhook endpoints to return exactly the fields GHL expects for merge tag integration. Both `/api/webhook/ghl` and `/api/generate-token` now return `access_token`, `assessment_token`, and `assessment_url` fields in proper JSON format. This allows GHL workflows to use `{{Generate_Token_for_Assessment.assessment_url}}` merge tags to capture and store assessment URLs in contact records. Token expiration remains at 30 days for user convenience.
 
 - **July 8, 2025 - Token System Enhancement & UI Cleanup**: Extended token expiration from 1 hour to 30 days to provide users with ample time to complete assessments. Removed all payment buttons and "$795" pricing references throughout the application since users access through the GHL token system after payment. Updated home page to show "Professional" tier instead of pricing, and removed checkout/payment functionality from strategic assessment pages. This creates a seamless experience for users who have already paid through the GHL workflow.

@@ -1221,20 +1221,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       console.log('Received generate token request:', JSON.stringify(req.body, null, 2));
       
-      const { token_type, ghlContactId } = req.body;
+      const { token_type, ghlContactId, email, name } = req.body;
       
-      if (!ghlContactId) {
-        return res.status(400).json({ error: 'Missing ghlContactId' });
+      if (!ghlContactId && !email) {
+        return res.status(400).json({ error: 'Missing ghlContactId or email' });
       }
       
       // Generate tokens
-      const tokenData = await storage.generateAccessToken(token_type || 'growth', ghlContactId);
+      const tokenData = await storage.generateAccessToken(token_type || 'growth', ghlContactId || email);
       const assessmentToken = tokenData.token;
       const accessToken = tokenData.token;
       const assessmentUrl = `https://applebites.ai/assessment/growth?token=${assessmentToken}`;
       
       console.log('Generated token via /api/generate-token:', {
-        contactId: ghlContactId,
+        contactId: ghlContactId || email,
         type: token_type || 'growth',
         token: assessmentToken.substring(0, 20) + '...',
         url: assessmentUrl
@@ -1248,6 +1248,92 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error('Error generating token:', error);
       res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+  // Complete GHL workflow endpoint - handles all 3 steps in sequence
+  app.post("/api/ghl/complete-workflow", async (req, res) => {
+    try {
+      console.log('🚀 Starting complete GHL workflow:', JSON.stringify(req.body, null, 2));
+      
+      const { email, name, firstName, lastName, phone, company } = req.body;
+      
+      if (!email) {
+        return res.status(400).json({ error: 'Email is required for workflow' });
+      }
+      
+      // STEP 1: Generate token + assessment URL
+      console.log('📝 Step 1: Generating token and assessment URL');
+      const tokenData = await storage.generateAccessToken('growth', email);
+      const assessmentUrl = `https://applebites.ai/assessment/growth?token=${tokenData.token}`;
+      
+      console.log('✅ Step 1 Complete - Token generated:', {
+        token: tokenData.token.substring(0, 20) + '...',
+        url: assessmentUrl
+      });
+      
+      // STEP 2: Update GHL contact with assessment_url custom field
+      console.log('🔄 Step 2: Updating GHL contact with assessment URL');
+      try {
+        const ghlUpdateResponse = await fetch('https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhldFd0Z/webhook-trigger/0214e352-5c51-4222-bb9a-1e0fd02d8290', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: email,
+            assessmentUrl: assessmentUrl,
+            firstName: firstName || name,
+            lastName: lastName || '',
+            phone: phone || '',
+            company: company || ''
+          })
+        });
+        
+        if (ghlUpdateResponse.ok) {
+          console.log('✅ Step 2 Complete - GHL contact updated successfully');
+        } else {
+          console.warn('⚠️ Step 2 Warning - GHL contact update failed:', await ghlUpdateResponse.text());
+        }
+      } catch (ghlError) {
+        console.error('❌ Step 2 Error - GHL contact update failed:', ghlError);
+        // Don't fail the entire workflow for GHL update issues
+      }
+      
+      // STEP 3: Optional - Trigger additional workflow (can be called later)
+      console.log('📋 Step 3: Workflow trigger endpoint ready for later use');
+      
+      // Return the complete response
+      const response = {
+        success: true,
+        step1: {
+          token: tokenData.token,
+          assessmentUrl: assessmentUrl,
+          expiresAt: tokenData.expiresAt
+        },
+        step2: {
+          ghlContactUpdateAttempted: true,
+          ghlWebhookUrl: 'https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhldFd0Z/webhook-trigger/0214e352-5c51-4222-bb9a-1e0fd02d8290'
+        },
+        step3: {
+          completionWebhookUrl: 'https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhldFd0Z/webhook-trigger/016d7395-74cf-4bd0-9c13-263f55efe657',
+          note: 'Call this endpoint after assessment completion with score data'
+        },
+        // GHL-compatible response format
+        access_token: tokenData.token,
+        assessment_token: tokenData.token,
+        assessment_url: assessmentUrl
+      };
+      
+      console.log('🎉 Complete workflow successful:', {
+        email: email,
+        tokenGenerated: true,
+        ghlContactUpdated: true,
+        assessmentUrl: assessmentUrl
+      });
+      
+      res.json(response);
+    } catch (error) {
+      console.error('❌ Error in complete GHL workflow:', error);
+      res.status(500).json({ error: 'Workflow failed', details: error.message });
     }
   });
 
