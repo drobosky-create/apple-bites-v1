@@ -1274,27 +1274,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // STEP 2: Update GHL contact with assessment_url custom field
       console.log('🔄 Step 2: Updating GHL contact with assessment URL');
+      console.log('📤 Sending webhook to:', 'https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhldFd0Z/webhook-trigger/0214e352-5c51-4222-bb9a-1e0fd02d8290');
+      
+      const webhookPayload = {
+        email: email,
+        assessment_url: assessmentUrl,
+        firstName: firstName || name,
+        lastName: lastName || '',
+        phone: phone || '',
+        company: company || ''
+      };
+      
+      console.log('📋 Webhook payload:', JSON.stringify(webhookPayload, null, 2));
+      
       try {
         const ghlUpdateResponse = await fetch('https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhldFd0Z/webhook-trigger/0214e352-5c51-4222-bb9a-1e0fd02d8290', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            email: email,
-            assessment_url: assessmentUrl,
-            firstName: firstName || name,
-            lastName: lastName || '',
-            phone: phone || '',
-            company: company || ''
-          })
+          body: JSON.stringify(webhookPayload)
         });
+        
+        const responseText = await ghlUpdateResponse.text();
+        console.log('📨 GHL Webhook Response Status:', ghlUpdateResponse.status);
+        console.log('📨 GHL Webhook Response Body:', responseText);
+        console.log('📨 GHL Webhook Response Headers:', Object.fromEntries(ghlUpdateResponse.headers.entries()));
         
         if (ghlUpdateResponse.ok) {
           console.log('✅ Step 2 Complete - GHL contact updated successfully');
         } else {
-          console.warn('⚠️ Step 2 Warning - GHL contact update failed:', await ghlUpdateResponse.text());
+          console.warn('⚠️ Step 2 Warning - GHL contact update failed with status:', ghlUpdateResponse.status);
+          console.warn('⚠️ Response details:', responseText);
         }
       } catch (ghlError) {
         console.error('❌ Step 2 Error - GHL contact update failed:', ghlError);
+        console.error('❌ Error stack:', ghlError instanceof Error ? ghlError.stack : 'No stack trace');
         // Don't fail the entire workflow for GHL update issues
       }
       
