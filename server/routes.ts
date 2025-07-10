@@ -1306,7 +1306,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         success: true,
         step1: {
           token: tokenData.token,
-          assessmentUrl: assessmentUrl,
+          assessment_url: assessmentUrl,
           expiresAt: tokenData.expiresAt
         },
         step2: {
@@ -1327,7 +1327,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         email: email,
         tokenGenerated: true,
         ghlContactUpdated: true,
-        assessmentUrl: assessmentUrl
+        assessment_url: assessmentUrl
       });
       
       res.json(response);
