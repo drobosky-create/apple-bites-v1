@@ -46,7 +46,7 @@ export class GoHighLevelService {
     this.locationId = process.env.GOHIGHLEVEL_LOCATION_ID;
     this.webhookUrls = {
       freeResults: process.env.GHL_WEBHOOK_FREE_RESULTS || 'https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhldFd0Z/webhook-trigger/dc1a8a7f-47ee-4c9a-b474-e1aeb21af3e3',
-      growthPurchase: process.env.GHL_WEBHOOK_GROWTH_PURCHASE || 'https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhldFd0Z/webhook-trigger/3c15954e-9d4b-4fde-b064-8b47193d1fcb',
+      growthPurchase: 'https://applebites.ai/api/webhook/growth-purchase', // Incoming webhook endpoint
       growthResults: process.env.GHL_WEBHOOK_GROWTH_RESULTS || 'https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhldFd0Z/webhook-trigger/016d7395-74cf-4bd0-9c13-263f55efe657',
       capitalPurchase: process.env.GHL_WEBHOOK_CAPITAL_PURCHASE || 'https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhldFd0Z/webhook-trigger/3c15954e-9d4b-4fde-b064-8b47193d1fcb'
     };

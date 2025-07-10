@@ -1137,6 +1137,88 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Webhook endpoint to receive growth purchase data FROM GoHighLevel
+  app.post("/api/webhook/growth-purchase", async (req, res) => {
+    try {
+      console.log('Received Growth Purchase webhook:', JSON.stringify(req.body, null, 2));
+      
+      const webhookData = req.body;
+      
+      // Extract purchase information from webhook payload
+      const purchaseData = {
+        firstName: webhookData.contact?.first_name || webhookData.first_name || webhookData.firstName,
+        lastName: webhookData.contact?.last_name || webhookData.last_name || webhookData.lastName,
+        email: webhookData.contact?.email || webhookData.email,
+        phone: webhookData.contact?.phone || webhookData.phone,
+        company: webhookData.contact?.company_name || webhookData.company || webhookData.companyName,
+        amount: webhookData.amount || webhookData.purchase_amount || 795, // Default growth tier price
+        transactionId: webhookData.transaction_id || webhookData.transactionId || webhookData.id,
+        tier: 'growth' as const
+      };
+
+      // Only process if we have valid purchase data
+      if (!purchaseData.email) {
+        console.log('No email found in growth purchase webhook data, skipping...');
+        return res.status(200).json({ message: 'No email provided, skipped' });
+      }
+
+      // Check if lead already exists by email
+      const existingLead = await storage.getLeadByEmail(purchaseData.email);
+      
+      if (existingLead) {
+        // Update existing lead with purchase information
+        await storage.updateLead(existingLead.id, {
+          leadStatus: 'purchased',
+          tags: [...(existingLead.tags || []), 'Growth Tier Purchase'],
+          notes: `${existingLead.notes || ''}\n[${new Date().toISOString()}] Growth tier purchased via GoHighLevel webhook - Amount: $${purchaseData.amount}`.trim()
+        });
+        
+        console.log(`Updated existing lead ${existingLead.id} with growth purchase data`);
+      } else {
+        // Create new lead for the purchase
+        const newLead = await storage.createLead({
+          firstName: purchaseData.firstName || '',
+          lastName: purchaseData.lastName || '',
+          email: purchaseData.email,
+          phone: purchaseData.phone || '',
+          company: purchaseData.company || '',
+          leadSource: 'growth_tier_purchase',
+          leadStatus: 'purchased',
+          tags: ['Growth Tier Purchase'],
+          notes: `[${new Date().toISOString()}] Growth tier purchased via GoHighLevel webhook - Amount: $${purchaseData.amount}`
+        });
+        
+        console.log(`Created new lead ${newLead.id} for growth purchase`);
+      }
+
+      // Log the purchase activity
+      const leadId = existingLead?.id || (await storage.getLeadByEmail(purchaseData.email))?.id;
+      if (leadId) {
+        await storage.createLeadActivity({
+          leadId,
+          activityType: 'purchase',
+          description: `Growth tier purchased - Amount: $${purchaseData.amount}`,
+          metadata: {
+            tier: 'growth',
+            amount: purchaseData.amount,
+            transactionId: purchaseData.transactionId,
+            source: 'gohighlevel_webhook'
+          }
+        });
+      }
+
+      res.status(200).json({ 
+        message: 'Growth purchase webhook processed successfully',
+        leadId: leadId,
+        purchaseAmount: purchaseData.amount
+      });
+      
+    } catch (error) {
+      console.error('Growth purchase webhook processing failed:', error);
+      res.status(500).json({ error: 'Failed to process growth purchase webhook' });
+    }
+  });
+
   // Webhook endpoint to receive valuation assessment data FROM GoHighLevel
   app.post("/api/webhook/gohighlevel", async (req, res) => {
     try {

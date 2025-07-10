@@ -12,10 +12,10 @@ Successfully implemented a tier-based webhook system for GoHighLevel integration
 - **Status**: Functional and connected
 
 ### 2. Growth Purchase (2.0) ✅ Implemented
-- **Environment Variable**: `GHL_WEBHOOK_GROWTH_PURCHASE` 
-- **URL**: `3c15954e-9d4b-4fde-b064-8b47193d1fcb`
-- **Purpose**: Handles growth tier purchase events
-- **Status**: Implemented with `processPurchaseEvent()` method
+- **Incoming Webhook URL**: `https://applebites.ai/api/webhook/growth-purchase`
+- **Purpose**: Receives growth tier purchase events FROM GoHighLevel
+- **Status**: Implemented as incoming webhook endpoint
+- **Function**: Creates/updates leads with purchase status and logs activities
 
 ### 3. Growth Results (2.1) ✅ Ready
 - **Environment Variable**: `GHL_WEBHOOK_GROWTH_RESULTS`
