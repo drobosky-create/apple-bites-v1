@@ -560,7 +560,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             ownerDependency: assessment.ownerDependency
           },
           type: assessmentType,
-          assessmentUrl: assessment.pdfUrl ? `${req.protocol}://${req.get('host')}${assessment.pdfUrl}` : null,
+          assessment_url: assessment.pdfUrl ? `${req.protocol}://${req.get('host')}${assessment.pdfUrl}` : null,
           completedAt: new Date().toISOString(),
           // Additional contact info for reference
           name: `${assessment.firstName} ${assessment.lastName}`,
@@ -1767,7 +1767,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           ownerDependency: isGrowth ? "C" : "C"
         },
         type: isGrowth ? "growth" : "basic",
-        assessmentUrl: `https://applebites.ai/api/pdf/test-${isGrowth ? 'growth' : 'basic'}-report.pdf`,
+        assessment_url: `https://applebites.ai/api/pdf/test-${isGrowth ? 'growth' : 'basic'}-report.pdf`,
         completedAt: new Date().toISOString(),
         name: `Test ${isGrowth ? 'Growth' : 'Basic'} Assessment`,
         email: `test-${isGrowth ? 'growth' : 'basic'}@example.com`,
@@ -1858,7 +1858,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           ownerDependency: testAssessment.ownerDependency
         },
         type: testToken.type,
-        assessmentUrl: `https://applebites.ai${testAssessment.pdfUrl}`,
+        assessment_url: `https://applebites.ai${testAssessment.pdfUrl}`,
         completedAt: new Date().toISOString(),
         name: `${testAssessment.firstName} ${testAssessment.lastName}`,
         email: testAssessment.email,
@@ -1935,7 +1935,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           ownerDependency: testAssessment.ownerDependency
         },
         type: testToken.type,
-        assessmentUrl: `https://applebites.ai${testAssessment.pdfUrl}`,
+        assessment_url: `https://applebites.ai${testAssessment.pdfUrl}`,
         completedAt: new Date().toISOString(),
         name: `${testAssessment.firstName} ${testAssessment.lastName}`,
         email: testAssessment.email,
