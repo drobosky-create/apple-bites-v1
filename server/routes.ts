@@ -1204,6 +1204,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
         url: assessmentUrl
       });
       
+      // STEP 2: Update GHL contact with assessment_url custom field (same as complete workflow)
+      console.log('🔄 Step 2: Updating GHL contact with assessment URL from /api/webhook/ghl');
+      console.log('📤 Sending webhook to:', 'https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhldFd0Z/webhook-trigger/0214e352-5c51-4222-bb9a-1e0fd02d8290');
+      
+      const webhookPayload = {
+        email: contact.email,
+        assessment_url: assessmentUrl,
+        firstName: contact.firstName || contact.first_name || '',
+        lastName: contact.lastName || contact.last_name || '',
+        phone: contact.phone || '',
+        company: contact.companyName || contact.company_name || ''
+      };
+      
+      console.log('📋 Webhook payload from /api/webhook/ghl:', JSON.stringify(webhookPayload, null, 2));
+      
+      try {
+        const ghlUpdateResponse = await fetch('https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhldFd0Z/webhook-trigger/0214e352-5c51-4222-bb9a-1e0fd02d8290', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(webhookPayload)
+        });
+        
+        const responseText = await ghlUpdateResponse.text();
+        console.log('📨 GHL Webhook Response Status:', ghlUpdateResponse.status);
+        console.log('📨 GHL Webhook Response Body:', responseText);
+        
+        if (ghlUpdateResponse.ok) {
+          console.log('✅ Step 2 Complete - GHL contact updated successfully from /api/webhook/ghl');
+        } else {
+          console.warn('⚠️ Step 2 Warning - GHL contact update failed with status:', ghlUpdateResponse.status);
+        }
+      } catch (ghlError) {
+        console.error('❌ Step 2 Error - GHL contact update failed:', ghlError);
+      }
+      
       // Return response in exact format GHL expects for merge tags
       res.json({
         access_token: accessToken,
