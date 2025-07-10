@@ -26,7 +26,12 @@ export interface GoHighLevelEmailPayload {
 export class GoHighLevelService {
   private apiKey: string;
   private locationId: string;
-  private webhookUrl: string;
+  private webhookUrls: {
+    freeResults: string;
+    growthPurchase: string;
+    growthResults: string;
+    capitalPurchase: string;
+  };
   private baseUrl = 'https://services.leadconnectorhq.com';
 
   constructor() {
@@ -36,13 +41,15 @@ export class GoHighLevelService {
     if (!process.env.GOHIGHLEVEL_LOCATION_ID) {
       throw new Error("GOHIGHLEVEL_LOCATION_ID environment variable is required");
     }
-    if (!process.env.GOHIGHLEVEL_WEBHOOK_URL) {
-      throw new Error("GOHIGHLEVEL_WEBHOOK_URL environment variable is required");
-    }
     
     this.apiKey = process.env.GOHIGHLEVEL_API_KEY;
     this.locationId = process.env.GOHIGHLEVEL_LOCATION_ID;
-    this.webhookUrl = process.env.GOHIGHLEVEL_WEBHOOK_URL;
+    this.webhookUrls = {
+      freeResults: process.env.GHL_WEBHOOK_FREE_RESULTS || 'https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhldFd0Z/webhook-trigger/dc1a8a7f-47ee-4c9a-b474-e1aeb21af3e3',
+      growthPurchase: process.env.GHL_WEBHOOK_GROWTH_PURCHASE || 'https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhldFd0Z/webhook-trigger/3c15954e-9d4b-4fde-b064-8b47193d1fcb',
+      growthResults: process.env.GHL_WEBHOOK_GROWTH_RESULTS || 'https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhldFd0Z/webhook-trigger/016d7395-74cf-4bd0-9c13-263f55efe657',
+      capitalPurchase: process.env.GHL_WEBHOOK_CAPITAL_PURCHASE || 'https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhldFd0Z/webhook-trigger/3c15954e-9d4b-4fde-b064-8b47193d1fcb'
+    };
   }
 
   private async makeRequest(endpoint: string, method: string = 'GET', data?: any) {
@@ -161,7 +168,7 @@ export class GoHighLevelService {
         timestamp: new Date().toISOString()
       };
 
-      const webhookSent = await this.sendWebhook(webhookData);
+      const webhookSent = await this.sendWebhook(webhookData, 'freeResults'); // Team member notifications use free results webhook
 
       return {
         contactCreated: !!contactResult,
@@ -178,9 +185,10 @@ export class GoHighLevelService {
     }
   }
 
-  async sendWebhook(data: any): Promise<boolean> {
+  async sendWebhook(data: any, webhookType: 'freeResults' | 'growthPurchase' | 'growthResults' | 'capitalPurchase' = 'freeResults'): Promise<boolean> {
     try {
-      const response = await fetch(this.webhookUrl, {
+      const webhookUrl = this.webhookUrls[webhookType];
+      const response = await fetch(webhookUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -188,10 +196,86 @@ export class GoHighLevelService {
         body: JSON.stringify(data)
       });
 
+      console.log(`Webhook sent to ${webhookType} (${webhookUrl}):`, response.status);
       return response.ok;
     } catch (error) {
-      console.error('Error sending webhook to GoHighLevel:', error);
+      console.error(`Error sending webhook to GoHighLevel (${webhookType}):`, error);
       return false;
+    }
+  }
+
+  async processPurchaseEvent(purchaseData: {
+    email: string;
+    firstName?: string;
+    lastName?: string;
+    phone?: string;
+    company?: string;
+    tier: 'growth' | 'capital';
+    amount: number;
+    transactionId?: string;
+  }): Promise<{
+    contactCreated: boolean;
+    webhookSent: boolean;
+  }> {
+    try {
+      // Create contact data for purchase
+      const contactData: GoHighLevelContact = {
+        firstName: purchaseData.firstName || undefined,
+        lastName: purchaseData.lastName || undefined,
+        email: purchaseData.email,
+        phone: purchaseData.phone || undefined,
+        companyName: purchaseData.company || undefined,
+        tags: [
+          'Business Valuation Purchase',
+          `Tier: ${purchaseData.tier}`,
+          `Amount: $${purchaseData.amount}`
+        ],
+        customFields: {
+          'purchase_tier': purchaseData.tier,
+          'purchase_amount': purchaseData.amount,
+          'transaction_id': purchaseData.transactionId || '',
+          'purchase_date': new Date().toISOString()
+        }
+      };
+
+      // Create or update contact
+      const contactResult = await this.createOrUpdateContact(contactData);
+
+      // Prepare purchase webhook data
+      const webhookData = {
+        event: 'tier_purchase',
+        tier: purchaseData.tier,
+        contact: {
+          first_name: purchaseData.firstName || '',
+          last_name: purchaseData.lastName || '',
+          email: purchaseData.email,
+          phone: purchaseData.phone || '',
+          company_name: purchaseData.company || ''
+        },
+        purchase: {
+          tier: purchaseData.tier,
+          amount: purchaseData.amount,
+          transaction_id: purchaseData.transactionId || '',
+          purchase_date: new Date().toISOString()
+        },
+        timestamp: new Date().toISOString()
+      };
+
+      // Determine webhook type based on tier
+      const webhookType = purchaseData.tier === 'growth' ? 'growthPurchase' : 'capitalPurchase';
+      const webhookSent = await this.sendWebhook(webhookData, webhookType);
+
+      return {
+        contactCreated: true,
+        webhookSent
+      };
+
+    } catch (error) {
+      console.error('Error processing purchase event in GoHighLevel:', error);
+      return {
+        contactCreated: false,
+        webhookSent: false
+      };
     }
   }
 
@@ -256,9 +340,20 @@ export class GoHighLevelService {
       // Send email
       const emailSent = await this.sendEmail(emailData);
 
+      // Determine webhook type based on assessment tier
+      let webhookType: 'freeResults' | 'growthPurchase' | 'growthResults' | 'capitalPurchase' = 'freeResults';
+      
+      // Check if this is a paid assessment (Growth or Capital tier)
+      if (assessment.tier === 'growth' || assessment.tier === 'paid') {
+        webhookType = 'growthResults';
+      } else if (assessment.tier === 'capital') {
+        webhookType = 'capitalPurchase'; // Capital tier uses same webhook as purchase for now
+      }
+      
       // Send webhook with full assessment data including pre-formatted values
       const webhookData = {
         event: 'valuation_completed',
+        tier: assessment.tier || 'free',
         contact: {
           first_name: assessment.firstName || '',
           last_name: assessment.lastName || '',
@@ -299,7 +394,7 @@ export class GoHighLevelService {
         }
       };
 
-      const webhookSent = await this.sendWebhook(webhookData);
+      const webhookSent = await this.sendWebhook(webhookData, webhookType);
 
       return {
         contactCreated: true,

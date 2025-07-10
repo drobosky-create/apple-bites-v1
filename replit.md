@@ -109,6 +109,8 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- **July 10, 2025 - Tier-Based Webhook System Implementation**: Restructured GoHighLevel webhook integration to support tier-specific webhook URLs. Implemented environment variable-based webhook configuration with GHL_WEBHOOK_FREE_RESULTS, GHL_WEBHOOK_GROWTH_PURCHASE, GHL_WEBHOOK_GROWTH_RESULTS, and GHL_WEBHOOK_CAPITAL_PURCHASE. Added processPurchaseEvent method for handling tier purchases. Removed all references to deleted webhook (0214e352-5c51-4222-bb9a-1e0fd02d8290). Enhanced webhook system with automatic tier detection and appropriate webhook routing based on assessment type.
+
 - **July 7, 2025 - Growth & Exit Assessment Rebranding**: Updated naming from "Strategic Assessment" to "Growth & Exit Assessment" to align with Tier 2 pricing structure. Updated pricing from $395 to $795 to match new tier pricing. Implemented external Apple Bites checkout integration with direct link redirection (https://products.applebites.ai/product-details/product/686c2e0f5f2f1191edb09737).
 
 - **July 7, 2025 - AI-Powered Financial Coaching Implementation**: Integrated OpenAI GPT-4o powered financial coaching system into growth & exit assessment. Features personalized business recommendations based on financial data, industry benchmarks, and value driver performance. Provides contextual insights, actionable improvement strategies, priority-based tips, and potential impact analysis. Users can generate AI coaching on the final assessment step with one-click access to professional business advice.

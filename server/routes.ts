@@ -460,14 +460,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      // Send lead data to CRM webhook (moved outside PDF try-catch)
+      // Send additional webhook for legacy compatibility (direct webhook call)
       try {
+        // Determine which webhook URL to use based on assessment tier
+        let webhookUrl = process.env.GHL_WEBHOOK_FREE_RESULTS; // Default to free results
+        
+        if (assessment.tier === 'growth' || assessment.tier === 'paid') {
+          webhookUrl = process.env.GHL_WEBHOOK_GROWTH_RESULTS;
+        } else if (assessment.tier === 'capital') {
+          webhookUrl = process.env.GHL_WEBHOOK_CAPITAL_PURCHASE;
+        }
+
         const webhookData = {
           name: `${assessment.firstName} ${assessment.lastName}`,
           email: assessment.email,
           phone: assessment.phone,
           company: assessment.company,
           jobTitle: assessment.jobTitle || '',
+          tier: assessment.tier || 'free',
           adjustedEBITDA: metrics.adjustedEbitda,
           valuationEstimate: metrics.midEstimate,
           valuationLow: metrics.lowEstimate,
@@ -490,17 +500,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
           pdfLink: assessment.pdfUrl ? `${req.protocol}://${req.get('host')}${assessment.pdfUrl}` : null
         };
 
-        console.log('Sending webhook data:', JSON.stringify(webhookData, null, 2));
+        console.log(`Sending webhook data to ${assessment.tier || 'free'} tier:`, JSON.stringify(webhookData, null, 2));
         
-        const webhookResponse = await fetch('https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhldFd0Z/webhook-trigger/dc1a8a7f-47ee-4c9a-b474-e1aeb21af3e3', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(webhookData)
-        });
-        
-        console.log('Webhook response status:', webhookResponse.status);
-        console.log('Webhook response:', await webhookResponse.text());
-        console.log(`Lead data sent to CRM for ${assessment.email}`);
+        if (webhookUrl) {
+          const webhookResponse = await fetch(webhookUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(webhookData)
+          });
+          
+          console.log('Webhook response status:', webhookResponse.status);
+          console.log('Webhook response:', await webhookResponse.text());
+          console.log(`Lead data sent to CRM for ${assessment.email} (${assessment.tier || 'free'} tier)`);
+        } else {
+          console.error('No webhook URL configured for tier:', assessment.tier || 'free');
+        }
       } catch (webhookError) {
         console.error('Failed to send lead data to CRM, but continuing:', webhookError);
         // Don't fail the entire request if webhook fails
@@ -970,7 +984,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       console.log('Testing NEW webhook with complete field data:', JSON.stringify(testData, null, 2));
       
-      const webhookResponse = await fetch('https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhldFd0Z/webhook-trigger/dc1a8a7f-47ee-4c9a-b474-e1aeb21af3e3', {
+      const webhookUrl = process.env.GHL_WEBHOOK_FREE_RESULTS || 'https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhldFd0Z/webhook-trigger/dc1a8a7f-47ee-4c9a-b474-e1aeb21af3e3';
+      const webhookResponse = await fetch(webhookUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(testData)
@@ -988,6 +1003,38 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     } catch (error) {
       console.error('NEW webhook test failed:', error);
+      res.status(500).json({ error: error instanceof Error ? error.message : 'Unknown error' });
+    }
+  });
+
+  // GET /api/test-webhook-purchase - Test purchase webhook
+  app.get("/api/test-webhook-purchase", async (req, res) => {
+    try {
+      const { tier = 'growth' } = req.query;
+      
+      const testPurchaseData = {
+        email: "test-purchase@example.com",
+        firstName: "Test",
+        lastName: "Purchaser",
+        phone: "555-0123",
+        company: "Test Purchase Company",
+        tier: tier as 'growth' | 'capital',
+        amount: tier === 'capital' ? 2500 : 795,
+        transactionId: `test_${Date.now()}`
+      };
+
+      console.log(`Testing ${tier} purchase webhook:`, JSON.stringify(testPurchaseData, null, 2));
+      
+      const result = await goHighLevelService.processPurchaseEvent(testPurchaseData);
+      
+      res.json({
+        success: true,
+        tier,
+        result,
+        testData: testPurchaseData
+      });
+    } catch (error) {
+      console.error('Purchase webhook test failed:', error);
       res.status(500).json({ error: error instanceof Error ? error.message : 'Unknown error' });
     }
   });
@@ -1018,7 +1065,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       console.log('Testing webhook with complete field data:', JSON.stringify(testData, null, 2));
       
-      const webhookResponse = await fetch('https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhldFd0Z/webhook-trigger/8b5475d9-3027-471a-8dcb-d6ab9dabedb8', {
+      const webhookUrl = process.env.GHL_WEBHOOK_FREE_RESULTS || 'https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhldFd0Z/webhook-trigger/dc1a8a7f-47ee-4c9a-b474-e1aeb21af3e3';
+      const webhookResponse = await fetch(webhookUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(testData)
