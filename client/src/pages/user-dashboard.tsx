@@ -71,26 +71,27 @@ export default function UserDashboard() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2" style={{ borderBottomColor: 'rgb(26, 35, 50)' }}></div>
       </div>
     );
   }
 
   if (error || !user) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-        <Card className="w-full max-w-md">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center p-4">
+        <Card className="w-full max-w-md shadow-xl border-slate-200">
           <CardHeader>
-            <CardTitle className="text-center">Authentication Required</CardTitle>
-            <CardDescription className="text-center">
+            <CardTitle className="text-center" style={{ color: 'rgb(26, 35, 50)' }}>Authentication Required</CardTitle>
+            <CardDescription className="text-center text-slate-600">
               Please log in to access your dashboard.
             </CardDescription>
           </CardHeader>
           <CardContent>
             <Button 
               onClick={() => setLocation('/login')} 
-              className="w-full"
+              className="w-full text-white font-medium"
+              style={{ backgroundColor: 'rgb(26, 35, 50)' }}
             >
               Go to Login
             </Button>
@@ -106,7 +107,7 @@ export default function UserDashboard() {
         return {
           name: 'Growth & Exit Assessment',
           icon: TrendingUp,
-          color: 'bg-blue-500',
+          color: 'bg-blue-600',
           description: 'Professional industry-specific analysis with AI insights',
           price: '$795',
         };
@@ -114,7 +115,7 @@ export default function UserDashboard() {
         return {
           name: 'Capital Readiness Assessment',
           icon: Crown,
-          color: 'bg-purple-500',
+          color: 'bg-indigo-600',
           description: 'Comprehensive capital readiness analysis and strategic planning',
           price: '$2,500',
         };
@@ -133,7 +134,7 @@ export default function UserDashboard() {
   const TierIcon = tierInfo.icon;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4">
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Header */}
         <Card>
