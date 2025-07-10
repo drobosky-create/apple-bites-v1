@@ -1137,10 +1137,161 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Webhook endpoint to receive growth purchase data FROM GoHighLevel
+  // User Authentication and Management Routes
+
+  // POST /api/auth/login - User login with email/password
+  app.post("/api/auth/login", async (req, res) => {
+    try {
+      const { email, password } = req.body;
+
+      if (!email || !password) {
+        return res.status(400).json({ error: "Email and password are required" });
+      }
+
+      // Get user by email
+      const user = await storage.getUserByEmail(email);
+      if (!user) {
+        return res.status(401).json({ error: "Invalid email or password" });
+      }
+
+      // Check if user needs to create password
+      if (!user.passwordHash) {
+        return res.status(200).json({ 
+          needsPasswordCreation: true,
+          userId: user.id,
+          email: user.email,
+          tier: user.tier
+        });
+      }
+
+      // Verify password
+      const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
+      if (!isPasswordValid) {
+        return res.status(401).json({ error: "Invalid email or password" });
+      }
+
+      // Create session
+      req.session.userId = user.id;
+      req.session.userEmail = user.email;
+      req.session.userTier = user.tier;
+
+      res.json({
+        success: true,
+        user: {
+          id: user.id,
+          email: user.email,
+          fullName: user.fullName,
+          tier: user.tier,
+          resultReady: user.resultReady
+        },
+        redirectTo: `/dashboard/${user.tier}`
+      });
+
+    } catch (error) {
+      console.error('Login error:', error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  });
+
+  // POST /api/auth/create-password - Create password for new user
+  app.post("/api/auth/create-password", async (req, res) => {
+    try {
+      const { email, password, confirmPassword } = req.body;
+
+      if (!email || !password || !confirmPassword) {
+        return res.status(400).json({ error: "All fields are required" });
+      }
+
+      if (password !== confirmPassword) {
+        return res.status(400).json({ error: "Passwords don't match" });
+      }
+
+      if (password.length < 8) {
+        return res.status(400).json({ error: "Password must be at least 8 characters" });
+      }
+
+      // Get user by email
+      const user = await storage.getUserByEmail(email);
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      if (user.passwordHash) {
+        return res.status(400).json({ error: "User already has a password" });
+      }
+
+      // Hash password and update user
+      const passwordHash = await bcrypt.hash(password, 12);
+      await storage.updateUser(user.id, {
+        passwordHash,
+        awaitingPasswordCreation: false
+      });
+
+      // Create session
+      req.session.userId = user.id;
+      req.session.userEmail = user.email;
+      req.session.userTier = user.tier;
+
+      res.json({
+        success: true,
+        user: {
+          id: user.id,
+          email: user.email,
+          fullName: user.fullName,
+          tier: user.tier,
+          resultReady: user.resultReady
+        },
+        redirectTo: `/dashboard/${user.tier}`
+      });
+
+    } catch (error) {
+      console.error('Create password error:', error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  });
+
+  // GET /api/auth/me - Get current user info
+  app.get("/api/auth/me", async (req, res) => {
+    try {
+      if (!req.session.userId) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+
+      const user = await storage.getUserById(req.session.userId);
+      if (!user) {
+        return res.status(401).json({ error: "User not found" });
+      }
+
+      res.json({
+        id: user.id,
+        email: user.email,
+        fullName: user.fullName,
+        tier: user.tier,
+        resultReady: user.resultReady,
+        awaitingPasswordCreation: user.awaitingPasswordCreation
+      });
+
+    } catch (error) {
+      console.error('Get user error:', error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  });
+
+  // POST /api/auth/logout - Logout user
+  app.post("/api/auth/logout", (req, res) => {
+    req.session.destroy((err) => {
+      if (err) {
+        console.error('Logout error:', err);
+        return res.status(500).json({ error: "Failed to logout" });
+      }
+      res.json({ success: true });
+    });
+  });
+
+  // Webhook endpoint to receive growth purchase data FROM GoHighLevel (v2.0)
   app.post("/api/webhook/growth-purchase", async (req, res) => {
     try {
-      console.log('Received Growth Purchase webhook:', JSON.stringify(req.body, null, 2));
+      console.log('Received Growth Purchase webhook (v2.0):', JSON.stringify(req.body, null, 2));
       
       const webhookData = req.body;
       
@@ -1151,8 +1302,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         email: webhookData.contact?.email || webhookData.email,
         phone: webhookData.contact?.phone || webhookData.phone,
         company: webhookData.contact?.company_name || webhookData.company || webhookData.companyName,
-        amount: webhookData.amount || webhookData.purchase_amount || 795, // Default growth tier price
+        amount: webhookData.amount || webhookData.purchase_amount || 795,
         transactionId: webhookData.transaction_id || webhookData.transactionId || webhookData.id,
+        ghlContactId: webhookData.contact?.id || webhookData.ghl_contact_id,
         tier: 'growth' as const
       };
 
@@ -1162,20 +1314,46 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(200).json({ message: 'No email provided, skipped' });
       }
 
-      // Check if lead already exists by email
+      // Check if user already exists
+      const existingUser = await storage.getUserByEmail(purchaseData.email);
+      
+      if (existingUser) {
+        // Update existing user with purchase information
+        await storage.updateUser(existingUser.id, {
+          tier: 'growth',
+          ghlContactId: purchaseData.ghlContactId,
+          resultReady: false, // Will be set to true when results are processed
+          awaitingPasswordCreation: !existingUser.passwordHash
+        });
+        
+        console.log(`Updated existing user ${existingUser.id} with growth purchase`);
+      } else {
+        // Create new user for the purchase
+        const fullName = `${purchaseData.firstName || ''} ${purchaseData.lastName || ''}`.trim();
+        const newUser = await storage.createUser({
+          email: purchaseData.email,
+          fullName: fullName || purchaseData.email,
+          passwordHash: null,
+          tier: 'growth',
+          ghlContactId: purchaseData.ghlContactId,
+          awaitingPasswordCreation: true,
+          resultReady: false
+        });
+        
+        console.log(`Created new user ${newUser.id} for growth purchase`);
+      }
+
+      // Also create/update lead record for tracking
       const existingLead = await storage.getLeadByEmail(purchaseData.email);
+      let leadId = existingLead?.id;
       
       if (existingLead) {
-        // Update existing lead with purchase information
         await storage.updateLead(existingLead.id, {
           leadStatus: 'purchased',
           tags: [...(existingLead.tags || []), 'Growth Tier Purchase'],
           notes: `${existingLead.notes || ''}\n[${new Date().toISOString()}] Growth tier purchased via GoHighLevel webhook - Amount: $${purchaseData.amount}`.trim()
         });
-        
-        console.log(`Updated existing lead ${existingLead.id} with growth purchase data`);
       } else {
-        // Create new lead for the purchase
         const newLead = await storage.createLead({
           firstName: purchaseData.firstName || '',
           lastName: purchaseData.lastName || '',
@@ -1187,12 +1365,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
           tags: ['Growth Tier Purchase'],
           notes: `[${new Date().toISOString()}] Growth tier purchased via GoHighLevel webhook - Amount: $${purchaseData.amount}`
         });
-        
-        console.log(`Created new lead ${newLead.id} for growth purchase`);
+        leadId = newLead.id;
       }
 
       // Log the purchase activity
-      const leadId = existingLead?.id || (await storage.getLeadByEmail(purchaseData.email))?.id;
       if (leadId) {
         await storage.createLeadActivity({
           leadId,
@@ -1209,6 +1385,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       res.status(200).json({ 
         message: 'Growth purchase webhook processed successfully',
+        userCreated: !existingUser,
         leadId: leadId,
         purchaseAmount: purchaseData.amount
       });
@@ -1216,6 +1393,114 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error('Growth purchase webhook processing failed:', error);
       res.status(500).json({ error: 'Failed to process growth purchase webhook' });
+    }
+  });
+
+  // Webhook endpoint to receive capital purchase data FROM GoHighLevel (v3.0)
+  app.post("/api/webhook/capital-purchase", async (req, res) => {
+    try {
+      console.log('Received Capital Purchase webhook (v3.0):', JSON.stringify(req.body, null, 2));
+      
+      const webhookData = req.body;
+      
+      // Extract purchase information from webhook payload
+      const purchaseData = {
+        firstName: webhookData.contact?.first_name || webhookData.first_name || webhookData.firstName,
+        lastName: webhookData.contact?.last_name || webhookData.last_name || webhookData.lastName,
+        email: webhookData.contact?.email || webhookData.email,
+        phone: webhookData.contact?.phone || webhookData.phone,
+        company: webhookData.contact?.company_name || webhookData.company || webhookData.companyName,
+        amount: webhookData.amount || webhookData.purchase_amount || 2500,
+        transactionId: webhookData.transaction_id || webhookData.transactionId || webhookData.id,
+        ghlContactId: webhookData.contact?.id || webhookData.ghl_contact_id,
+        tier: 'capital' as const
+      };
+
+      // Only process if we have valid purchase data
+      if (!purchaseData.email) {
+        console.log('No email found in capital purchase webhook data, skipping...');
+        return res.status(200).json({ message: 'No email provided, skipped' });
+      }
+
+      // Check if user already exists
+      const existingUser = await storage.getUserByEmail(purchaseData.email);
+      
+      if (existingUser) {
+        // Update existing user with purchase information
+        await storage.updateUser(existingUser.id, {
+          tier: 'capital',
+          ghlContactId: purchaseData.ghlContactId,
+          resultReady: false,
+          awaitingPasswordCreation: !existingUser.passwordHash
+        });
+        
+        console.log(`Updated existing user ${existingUser.id} with capital purchase`);
+      } else {
+        // Create new user for the purchase
+        const fullName = `${purchaseData.firstName || ''} ${purchaseData.lastName || ''}`.trim();
+        const newUser = await storage.createUser({
+          email: purchaseData.email,
+          fullName: fullName || purchaseData.email,
+          passwordHash: null,
+          tier: 'capital',
+          ghlContactId: purchaseData.ghlContactId,
+          awaitingPasswordCreation: true,
+          resultReady: false
+        });
+        
+        console.log(`Created new user ${newUser.id} for capital purchase`);
+      }
+
+      // Also create/update lead record for tracking
+      const existingLead = await storage.getLeadByEmail(purchaseData.email);
+      let leadId = existingLead?.id;
+      
+      if (existingLead) {
+        await storage.updateLead(existingLead.id, {
+          leadStatus: 'purchased',
+          tags: [...(existingLead.tags || []), 'Capital Tier Purchase'],
+          notes: `${existingLead.notes || ''}\n[${new Date().toISOString()}] Capital tier purchased via GoHighLevel webhook - Amount: $${purchaseData.amount}`.trim()
+        });
+      } else {
+        const newLead = await storage.createLead({
+          firstName: purchaseData.firstName || '',
+          lastName: purchaseData.lastName || '',
+          email: purchaseData.email,
+          phone: purchaseData.phone || '',
+          company: purchaseData.company || '',
+          leadSource: 'capital_tier_purchase',
+          leadStatus: 'purchased',
+          tags: ['Capital Tier Purchase'],
+          notes: `[${new Date().toISOString()}] Capital tier purchased via GoHighLevel webhook - Amount: $${purchaseData.amount}`
+        });
+        leadId = newLead.id;
+      }
+
+      // Log the purchase activity
+      if (leadId) {
+        await storage.createLeadActivity({
+          leadId,
+          activityType: 'purchase',
+          description: `Capital tier purchased - Amount: $${purchaseData.amount}`,
+          metadata: {
+            tier: 'capital',
+            amount: purchaseData.amount,
+            transactionId: purchaseData.transactionId,
+            source: 'gohighlevel_webhook'
+          }
+        });
+      }
+
+      res.status(200).json({ 
+        message: 'Capital purchase webhook processed successfully',
+        userCreated: !existingUser,
+        leadId: leadId,
+        purchaseAmount: purchaseData.amount
+      });
+      
+    } catch (error) {
+      console.error('Capital purchase webhook processing failed:', error);
+      res.status(500).json({ error: 'Failed to process capital purchase webhook' });
     }
   });
 

@@ -4,6 +4,7 @@ import {
   leadActivities,
   teamMembers,
   teamSessions,
+  users,
   type ValuationAssessment, 
   type InsertValuationAssessment,
   type Lead,
@@ -12,7 +13,9 @@ import {
   type InsertLeadActivity,
   type TeamMember,
   type InsertTeamMember,
-  type TeamSession
+  type TeamSession,
+  type User,
+  type InsertUser
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, and } from "drizzle-orm";
@@ -37,6 +40,13 @@ export interface IStorage {
   // Lead activity methods
   createLeadActivity(activity: InsertLeadActivity): Promise<LeadActivity>;
   getLeadActivities(leadId: number): Promise<LeadActivity[]>;
+
+  // User management methods
+  createUser(user: InsertUser): Promise<User>;
+  getUserByEmail(email: string): Promise<User | undefined>;
+  getUserById(id: number): Promise<User | undefined>;
+  updateUser(id: number, updates: Partial<User>): Promise<User>;
+  deleteUser(id: number): Promise<void>;
 
   // Team management methods
   createTeamMember(member: InsertTeamMember & { hashedPassword: string }): Promise<TeamMember>;
@@ -156,6 +166,43 @@ export class DatabaseStorage implements IStorage {
       .from(leadActivities)
       .where(eq(leadActivities.leadId, leadId))
       .orderBy(desc(leadActivities.createdAt));
+  }
+
+  // User management methods
+  async createUser(insertUser: InsertUser): Promise<User> {
+    const [user] = await db
+      .insert(users)
+      .values(insertUser)
+      .returning();
+    return user;
+  }
+
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.email, email));
+    return user || undefined;
+  }
+
+  async getUserById(id: number): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user || undefined;
+  }
+
+  async updateUser(id: number, updates: Partial<User>): Promise<User> {
+    const [user] = await db
+      .update(users)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(users.id, id))
+      .returning();
+    
+    if (!user) {
+      throw new Error(`User with id ${id} not found`);
+    }
+    
+    return user;
+  }
+
+  async deleteUser(id: number): Promise<void> {
+    await db.delete(users).where(eq(users.id, id));
   }
 
   // Team management methods

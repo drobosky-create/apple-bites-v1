@@ -3,6 +3,20 @@ import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 import { relations } from "drizzle-orm";
 
+// User management table for AppleBites dashboard access
+export const users = pgTable("users", {
+  id: serial("id").primaryKey(),
+  email: text("email").notNull().unique(),
+  fullName: text("full_name").notNull(),
+  passwordHash: text("password_hash"), // NULL when awaiting password creation
+  tier: text("tier").notNull().default("free"), // "free", "growth", "capital"
+  ghlContactId: text("ghl_contact_id"),
+  awaitingPasswordCreation: boolean("awaiting_password_creation").default(false),
+  resultReady: boolean("result_ready").default(false),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 export const valuationAssessments = pgTable("valuation_assessments", {
   id: serial("id").primaryKey(),
   
@@ -235,15 +249,32 @@ export const insertTeamMemberSchema = createInsertSchema(teamMembers).omit({
   password: z.string().min(8, "Password must be at least 8 characters"),
 });
 
+export const insertUserSchema = createInsertSchema(users).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
 export const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
   password: z.string().min(1, "Password is required"),
 });
 
+export const createPasswordSchema = z.object({
+  password: z.string().min(8, "Password must be at least 8 characters"),
+  confirmPassword: z.string().min(1, "Please confirm your password"),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Passwords don't match",
+  path: ["confirmPassword"],
+});
+
 export type InsertTeamMember = z.infer<typeof insertTeamMemberSchema>;
+export type InsertUser = z.infer<typeof insertUserSchema>;
 export type TeamMember = typeof teamMembers.$inferSelect;
 export type TeamSession = typeof teamSessions.$inferSelect;
+export type User = typeof users.$inferSelect;
 export type LoginCredentials = z.infer<typeof loginSchema>;
+export type CreatePasswordData = z.infer<typeof createPasswordSchema>;
 
 // Form step schemas for validation
 export const contactInfoSchema = z.object({
