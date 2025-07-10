@@ -1280,7 +1280,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             email: email,
-            assessmentUrl: assessmentUrl,
+            assessment_url: assessmentUrl,
             firstName: firstName || name,
             lastName: lastName || '',
             phone: phone || '',
