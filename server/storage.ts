@@ -4,7 +4,6 @@ import {
   leadActivities,
   teamMembers,
   teamSessions,
-  accessTokens,
   type ValuationAssessment, 
   type InsertValuationAssessment,
   type Lead,
@@ -13,13 +12,10 @@ import {
   type InsertLeadActivity,
   type TeamMember,
   type InsertTeamMember,
-  type TeamSession,
-  type AccessToken,
-  type InsertAccessToken
+  type TeamSession
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, desc, and, lt } from "drizzle-orm";
-import crypto from "crypto";
+import { eq, desc, and } from "drizzle-orm";
 
 export interface IStorage {
   // Valuation Assessment methods
@@ -53,20 +49,6 @@ export interface IStorage {
   getTeamSession(sessionId: string): Promise<TeamSession | undefined>;
   updateTeamSession(sessionId: string, expiresAt: Date): Promise<void>;
   deleteTeamSession(sessionId: string): Promise<void>;
-
-  // Assessment data methods for post-purchase access
-  saveAssessmentData(data: { email: string; assessmentData: string; paymentStatus: string; timestamp: string }): Promise<void>;
-  getAssessmentDataByEmail(email: string): Promise<{ assessmentData: string; paymentStatus: string } | null>;
-  updatePaymentStatus(email: string, paymentStatus: string, paymentId?: string): Promise<void>;
-  
-  // Access token management
-  generateAccessToken(type: "basic" | "growth", ghlContactId?: string): Promise<AccessToken>;
-  validateAccessToken(token: string): Promise<AccessToken | undefined>;
-  getAccessTokenByToken(token: string): Promise<AccessToken | undefined>;
-  markTokenAsUsed(token: string, ipAddress?: string, userAgent?: string): Promise<void>;
-  getAllAccessTokens(): Promise<AccessToken[]>;
-  revokeAccessToken(token: string): Promise<void>;
-  cleanupExpiredTokens(): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -233,153 +215,6 @@ export class DatabaseStorage implements IStorage {
 
   async deleteTeamSession(sessionId: string): Promise<void> {
     await db.delete(teamSessions).where(eq(teamSessions.id, sessionId));
-  }
-
-  // Assessment data methods for post-purchase access
-  async saveAssessmentData(data: { email: string; assessmentData: string; paymentStatus: string; timestamp: string }): Promise<void> {
-    // Check if assessment data already exists for this email
-    const existing = await db.select()
-      .from(valuationAssessments)
-      .where(eq(valuationAssessments.email, data.email))
-      .limit(1);
-
-    if (existing.length > 0) {
-      // Update existing record
-      await db.update(valuationAssessments)
-        .set({
-          assessmentData: data.assessmentData,
-          paymentStatus: data.paymentStatus,
-          updatedAt: new Date()
-        })
-        .where(eq(valuationAssessments.email, data.email));
-    } else {
-      // Create new record with minimal required data
-      await db.insert(valuationAssessments).values({
-        firstName: 'Pending',
-        lastName: 'User',
-        email: data.email,
-        phone: '',
-        company: '',
-        reportTier: 'paid',
-        paymentStatus: data.paymentStatus,
-        assessmentData: data.assessmentData,
-        netIncome: '0',
-        interest: '0',
-        taxes: '0',
-        depreciation: '0',
-        amortization: '0',
-        financialPerformance: 'C',
-        customerConcentration: 'C',
-        managementTeam: 'C',
-        competitivePosition: 'C',
-        growthProspects: 'C',
-        systemsProcesses: 'C',
-        assetQuality: 'C',
-        industryOutlook: 'C'
-      });
-    }
-  }
-
-  async getAssessmentDataByEmail(email: string): Promise<{ assessmentData: string; paymentStatus: string } | null> {
-    const result = await db.select({
-      assessmentData: valuationAssessments.assessmentData,
-      paymentStatus: valuationAssessments.paymentStatus
-    })
-    .from(valuationAssessments)
-    .where(eq(valuationAssessments.email, email))
-    .limit(1);
-
-    return result.length > 0 ? result[0] : null;
-  }
-
-  async updatePaymentStatus(email: string, paymentStatus: string, paymentId?: string): Promise<void> {
-    const updateData: any = {
-      paymentStatus,
-      updatedAt: new Date()
-    };
-    
-    if (paymentId) {
-      updateData.stripePaymentId = paymentId;
-    }
-
-    await db.update(valuationAssessments)
-      .set(updateData)
-      .where(eq(valuationAssessments.email, email));
-  }
-
-  // Access token management methods
-  async generateAccessToken(type: "basic" | "growth", ghlContactId?: string): Promise<AccessToken> {
-    const token = crypto.randomBytes(32).toString('hex');
-    const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days from now
-    
-    const [accessToken] = await db
-      .insert(accessTokens)
-      .values({
-        token,
-        type,
-        ghlContactId,
-        expiresAt
-      })
-      .returning();
-    
-    return accessToken;
-  }
-
-  async validateAccessToken(token: string): Promise<AccessToken | undefined> {
-    const [accessToken] = await db
-      .select()
-      .from(accessTokens)
-      .where(eq(accessTokens.token, token))
-      .limit(1);
-    
-    // Only check expiration, not usage - tokens can be used multiple times
-    if (!accessToken || accessToken.expiresAt < new Date()) {
-      return undefined;
-    }
-    
-    return accessToken;
-  }
-
-  async getAccessTokenByToken(token: string): Promise<AccessToken | undefined> {
-    const [accessToken] = await db
-      .select()
-      .from(accessTokens)
-      .where(eq(accessTokens.token, token))
-      .limit(1);
-    
-    return accessToken || undefined;
-  }
-
-  async markTokenAsUsed(token: string, ipAddress?: string, userAgent?: string): Promise<void> {
-    await db
-      .update(accessTokens)
-      .set({
-        isUsed: true,
-        usedAt: new Date(),
-        ipAddress,
-        userAgent
-      })
-      .where(eq(accessTokens.token, token));
-  }
-
-  async getAllAccessTokens(): Promise<AccessToken[]> {
-    return await db
-      .select()
-      .from(accessTokens)
-      .orderBy(desc(accessTokens.createdAt));
-  }
-
-  async revokeAccessToken(token: string): Promise<void> {
-    await db
-      .update(accessTokens)
-      .set({ isUsed: true, usedAt: new Date() })
-      .where(eq(accessTokens.token, token));
-  }
-
-  async cleanupExpiredTokens(): Promise<void> {
-    await db
-      .delete(accessTokens)
-      .where(lt(accessTokens.expiresAt, new Date()));
   }
 }
 

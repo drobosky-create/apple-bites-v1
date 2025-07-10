@@ -45,13 +45,6 @@ This is a business valuation calculator application built as a full-stack web pl
 - Forced password changes for new accounts
 - Team member management with CRUD operations
 
-### Token-Based Access System
-- Secure token generation for basic and growth tier assessments
-- Time-based token expiration with 1-hour validity
-- Single-use token validation with IP and user agent tracking
-- Protected assessment routes with middleware authentication
-- Direct URL access from GHL automations
-
 ### PDF Report Generation
 - Professional valuation reports using Puppeteer
 - Branded templates with company logos and styling
@@ -59,9 +52,7 @@ This is a business valuation calculator application built as a full-stack web pl
 - Embedded charts and financial summaries
 
 ### External Integrations
-- **GoHighLevel CRM**: Token-based access control, contact synchronization, and webhook notifications
-  - **Post-Purchase Webhook URL**: `https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhldFd0Z/webhook-trigger/016d7395-74cf-4bd0-9c13-263f55efe657`
-  - **Purpose**: Receives assessment completion data and triggers GHL automation workflows
+- **GoHighLevel CRM**: Contact synchronization and webhook notifications
 - **SendGrid**: Email delivery and campaign management
 - **OpenAI**: AI-powered business analysis and recommendations
 
@@ -71,7 +62,6 @@ This is a business valuation calculator application built as a full-stack web pl
 2. **Lead Processing**: Form submission → Database storage → CRM sync → Email automation
 3. **Admin Workflow**: Login → Dashboard access → Lead management → Analytics review
 4. **Report Generation**: Data validation → AI analysis → PDF creation → Email delivery
-5. **Token-Based Access**: GHL automation → Token generation → URL distribution → Assessment access → Results delivery
 
 ## External Dependencies
 
@@ -118,20 +108,6 @@ This is a business valuation calculator application built as a full-stack web pl
 Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
-
-- **July 10, 2025 - GHL Field Naming Fix & Workflow Verification**: Fixed critical field naming issue from `assessmentUrl` to `assessment_url` in all webhook payloads to match GoHighLevel's expected format. Added comprehensive webhook debugging with detailed logging showing successful webhook execution (status 200, response ID tracking). Verified complete 3-step workflow: (1) Token generation, (2) GHL contact field update via webhook `0214e352-5c51-4222-bb9a-1e0fd02d8290`, (3) Workflow trigger execution. GHL execution logs confirm successful "Update contact field" and "Add to workflow" actions.
-
-- **July 8, 2025 - Complete 3-Step GHL Workflow Integration**: Implemented comprehensive 3-step workflow system matching GHL automation requirements. Added `/api/ghl/complete-workflow` endpoint that executes: (1) Token generation via `/api/generate-token`, (2) GHL contact update via webhook to `0214e352-5c51-4222-bb9a-1e0fd02d8290`, and (3) Assessment completion webhook to `016d7395-74cf-4bd0-9c13-263f55efe657`. All endpoints return GHL-compatible `access_token`, `assessment_token`, and `assessment_url` fields for merge tag integration. Token expiration set to 30 days for user convenience.
-
-- **July 8, 2025 - GHL Webhook Field Compliance**: Updated webhook endpoints to return exactly the fields GHL expects for merge tag integration. Both `/api/webhook/ghl` and `/api/generate-token` now return `access_token`, `assessment_token`, and `assessment_url` fields in proper JSON format. This allows GHL workflows to use `{{Generate_Token_for_Assessment.assessment_url}}` merge tags to capture and store assessment URLs in contact records. Token expiration remains at 30 days for user convenience.
-
-- **July 8, 2025 - Token System Enhancement & UI Cleanup**: Extended token expiration from 1 hour to 30 days to provide users with ample time to complete assessments. Removed all payment buttons and "$795" pricing references throughout the application since users access through the GHL token system after payment. Updated home page to show "Professional" tier instead of pricing, and removed checkout/payment functionality from strategic assessment pages. This creates a seamless experience for users who have already paid through the GHL workflow.
-
-- **July 8, 2025 - Enhanced GHL Webhook Callback System**: Upgraded the GoHighLevel webhook callback system with comprehensive assessment data transmission. The enhanced webhook callback now includes detailed assessment results with `ghlContactId`, `score` (calculated valuation in millions), `valuationRange` (formatted currency range), `driverGrades` (all 10 value driver scores A-F), `type` (basic/growth), `assessmentUrl` (direct PDF link), `completedAt` (ISO timestamp), and complete contact information. Token information is properly captured during assessment submission and used to populate the GHL contact ID for accurate bi-directional integration. Updated webhook URL to: `https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhIdFd0Z/webhook-trigger/0bdb4be6-432a-469b-9296-5b14d8fcfdc7` for Growth assessment results.
-
-- **July 8, 2025 - GHL Token-Based Access System Implementation**: Replaced Apple Bites checkout with comprehensive GoHighLevel token-based access control system. Features secure token generation API endpoints, token validation middleware, protected assessment routes, and direct URL access from GHL automations. Users receive assessment URLs with embedded tokens, eliminating checkout/return friction. Token system supports both basic (free) and growth ($795) tier access with automatic expiration and usage tracking.
-
-- **July 7, 2025 - Post-Purchase Access System Implementation**: Built comprehensive email-gated access system for Growth & Exit Assessment completion after external Apple Bites checkout. Features assessment data persistence, email verification for purchase validation, dedicated access and results pages, and localStorage/backend data bridging. Users complete assessment → redirect to checkout → return via email verification → access full results.
 
 - **July 7, 2025 - Growth & Exit Assessment Rebranding**: Updated naming from "Strategic Assessment" to "Growth & Exit Assessment" to align with Tier 2 pricing structure. Updated pricing from $395 to $795 to match new tier pricing. Implemented external Apple Bites checkout integration with direct link redirection (https://products.applebites.ai/product-details/product/686c2e0f5f2f1191edb09737).
 

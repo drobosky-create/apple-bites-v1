@@ -5,20 +5,16 @@ import { Badge } from '@/components/ui/badge';
 import { CheckCircle, Star, TrendingUp, FileText, BarChart3, Users } from 'lucide-react';
 import { useLocation } from 'wouter';
 import appleBitesLogo from "@assets/Apple Bites Business Assessment V2_1750116954168.png";
-import EmailCaptureModal from "@/components/email-capture-modal";
 
 export default function Home() {
   const [, setLocation] = useLocation();
-  const [emailModalOpen, setEmailModalOpen] = useState(false);
-  const [isProcessing, setIsProcessing] = useState(false);
 
   const handleFreeTierStart = () => {
     setLocation('/assessment/free');
   };
 
   const handlePaidTierStart = () => {
-    // For now, show a message that this requires GHL integration
-    alert('This assessment requires a valid access token from GoHighLevel. Please contact your administrator.');
+    setLocation('/assessment/paid');
   };
 
   return (
@@ -115,7 +111,7 @@ export default function Home() {
                   GROWTH & EXIT ASSESSMENT
                 </Badge>
                 <CardTitle className="text-2xl text-[#fcfcfc]">Professional Analysis</CardTitle>
-                <div className="text-4xl font-bold mt-2 text-[#f5c842]">Professional</div>
+                <div className="text-4xl font-bold mt-2 text-[#f5c842]">$795</div>
                 <p className="mt-2 text-[#f8fafc]">Comprehensive industry-specific valuation</p>
               </CardHeader>
               <CardContent className="p-6 bg-[#f8fafc] pt-[14px] pb-[14px] rounded-lg">
@@ -161,7 +157,7 @@ export default function Home() {
                   onClick={handlePaidTierStart}
                   className="w-full bg-[#f5c842] text-[#1a2332] hover:bg-[#e6b63a] h-12 text-lg font-bold"
                 >
-                  Access Growth & Exit Assessment
+                  Get Growth & Exit Assessment - $795
                 </Button>
               </CardContent>
             </Card>
@@ -194,8 +190,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-      
-
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
@@ -73,16 +73,6 @@ export function useValuationForm() {
   const [currentStep, setCurrentStep] = useState<FormStep>("contact");
   const [formData, setFormData] = useState<ValuationFormData>(defaultFormData);
   const [results, setResults] = useState<ValuationAssessment | null>(null);
-  const [accessToken, setAccessToken] = useState<string | null>(null);
-
-  // Check for token in URL on mount
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get('token');
-    if (token) {
-      setAccessToken(token);
-    }
-  }, []);
 
   const contactForm = useForm<ContactInfo>({
     resolver: zodResolver(contactInfoSchema),
@@ -111,21 +101,7 @@ export function useValuationForm() {
 
   const submitMutation = useMutation({
     mutationFn: async (data: ValuationFormData) => {
-      const headers: Record<string, string> = {
-        'Content-Type': 'application/json',
-      };
-      
-      // Add access token to headers if available
-      if (accessToken) {
-        headers['x-access-token'] = accessToken;
-      }
-      
-      const response = await fetch('/api/valuation', {
-        method: 'POST',
-        headers,
-        body: JSON.stringify(data),
-      });
-      
+      const response = await apiRequest("POST", "/api/valuation", data);
       return response.json();
     },
     onSuccess: (data: ValuationAssessment) => {
