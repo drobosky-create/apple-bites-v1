@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { CheckCircle, Star, TrendingUp, FileText, BarChart3, Users } from 'lucide-react';
 import { useLocation } from 'wouter';
-import appleBitesLogo from "@assets/Apple Bites Business Assessment V2_1750116954168.png";
+import appleBitesLogo from "@assets/Apple Bites_1752266454888.png";
 
 export default function Home() {
   const [, setLocation] = useLocation();

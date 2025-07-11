@@ -10,12 +10,10 @@ import LoadingModal from "@/components/loading-modal";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import appleBitesLogo from "@assets/Apple Bites Business Assessment V2_1750116954168.png";
+import appleBitesLogo from "@assets/Apple Bites_1752266454888.png";
 import { useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import type { ValuationAssessment } from "@shared/schema";
-
-import _2 from "@assets/2.png";
 
 export default function FreeAssessment() {
   const [location] = useLocation();
@@ -95,9 +93,9 @@ export default function FreeAssessment() {
         {currentStep !== "results" && (
           <div className="flex flex-col sm:flex-row items-center justify-center mb-4 sm:mb-8 text-center sm:text-left">
             <img 
-              src={_2} 
+              src={appleBitesLogo} 
               alt="Apple Bites Business Assessment" 
-              className="h-12 sm:h-20 w-auto mb-3 sm:mb-0 sm:mr-4"
+              className="h-15 sm:h-20 w-auto mb-3 sm:mb-0 sm:mr-4"
             />
             <div>
               <h1 className="text-lg sm:text-3xl font-bold text-white">Apple Bites Business Assessment</h1>

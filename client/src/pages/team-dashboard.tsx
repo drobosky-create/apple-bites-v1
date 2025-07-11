@@ -19,9 +19,7 @@ import { useTeamAuth } from '@/hooks/use-team-auth';
 import { useToast } from '@/hooks/use-toast';
 import PasswordChangeForm from '@/components/password-change-form';
 import PasswordChangeModal from '@/components/password-change-modal';
-import appleBitesLogoImage from '@assets/1_1750197353067.png';
-
-import _2 from "@assets/2.png";
+import appleBitesLogoImage from '@assets/Apple Bites_1752266454888.png';
 
 export default function TeamDashboard() {
   const { user, isAuthenticated, isLoading, hasRole, logout, login } = useTeamAuth();

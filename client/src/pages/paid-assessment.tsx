@@ -15,13 +15,11 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import appleBitesLogo from "@assets/Apple Bites Business Assessment V2_1750116954168.png";
+import appleBitesLogo from "@assets/Apple Bites_1752266454888.png";
 import { useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import type { ValuationAssessment } from "@shared/schema";
-
-import _2 from "@assets/2.png";
 
 export default function PaidAssessment() {
   const [location] = useLocation();
@@ -118,7 +116,7 @@ export default function PaidAssessment() {
         {currentStep !== "results" && (
           <div className="flex flex-col sm:flex-row items-center justify-center mb-4 sm:mb-8 text-center sm:text-left">
             <img 
-              src={_2} 
+              src={appleBitesLogo} 
               alt="Apple Bites Business Assessment" 
               className="h-12 sm:h-20 w-auto mb-3 sm:mb-0 sm:mr-4"
             />
