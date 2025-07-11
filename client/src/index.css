@@ -7,12 +7,12 @@
 /* GHL Brand Tokens - Complete Brand System */
 :root {
   /* Primary Brand Colors */
-  --primary: #37ca37;
-  --primary-light: #4ade80;
-  --primary-dark: #22a322;
-  --secondary: #188bf6;
-  --secondary-light: #3b82f6;
-  --secondary-dark: #1976d2;
+  --primary: #81e5d8;
+  --primary-light: #9debd2;
+  --primary-dark: #65dfce;
+  --secondary: #4493de;
+  --secondary-light: #5ba3e4;
+  --secondary-dark: #3583d8;
   
   /* Brand Neutrals */
   --white: #ffffff;
@@ -59,12 +59,12 @@
 /* GHL Dark Theme */
 .dark {
   /* GHL Dark Theme Brand Colors */
-  --primary: #37ca37;
-  --primary-light: #4ade80;
-  --primary-dark: #22a322;
-  --secondary: #188bf6;
-  --secondary-light: #3b82f6;
-  --secondary-dark: #1976d2;
+  --primary: #81e5d8;
+  --primary-light: #9debd2;
+  --primary-dark: #65dfce;
+  --secondary: #4493de;
+  --secondary-light: #5ba3e4;
+  --secondary-dark: #3583d8;
   
   /* Dark Theme Backgrounds */
   --background: #0a1e3d;
@@ -230,23 +230,23 @@
 @layer components {
   /* GHL Brand Component Styles */
   .ghl-primary-button {
-    background-color: #37ca37;
+    background-color: #81e5d8;
     @apply text-white border-0 px-6 py-3 rounded-lg font-semibold transition-all duration-300 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2;
   }
   
   .ghl-secondary-button {
-    background-color: #188bf6;
+    background-color: #4493de;
     @apply text-white border-0 px-6 py-3 rounded-lg font-semibold transition-all duration-300 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2;
   }
   
   .ghl-outline-button {
     @apply bg-transparent border-2 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2;
-    border-color: #37ca37;
-    color: #37ca37;
+    border-color: #81e5d8;
+    color: #81e5d8;
   }
   
   .ghl-outline-button:hover {
-    background-color: #37ca37;
+    background-color: #81e5d8;
     color: white;
   }
   
@@ -267,7 +267,7 @@
   }
   
   .ghl-link {
-    color: #188bf6;
+    color: #4493de;
     @apply font-medium transition-colors duration-300 hover:underline;
   }
   
@@ -282,8 +282,8 @@
   }
   
   .ghl-input:focus {
-    border-color: #37ca37;
-    ring-color: #37ca37;
+    border-color: #81e5d8;
+    ring-color: #81e5d8;
   }
   
   .ghl-textarea {
@@ -296,8 +296,8 @@
   }
   
   .ghl-textarea:focus {
-    border-color: #37ca37;
-    ring-color: #37ca37;
+    border-color: #81e5d8;
+    ring-color: #81e5d8;
   }
   
   .ghl-select {
@@ -306,8 +306,8 @@
   }
   
   .ghl-select:focus {
-    border-color: #37ca37;
-    ring-color: #37ca37;
+    border-color: #81e5d8;
+    ring-color: #81e5d8;
   }
   
   .ghl-tab-trigger {
@@ -315,26 +315,26 @@
   }
   
   .ghl-tab-trigger:hover {
-    border-color: #37ca37;
-    color: #37ca37;
+    border-color: #81e5d8;
+    color: #81e5d8;
   }
   
   .ghl-tab-trigger[data-state="active"] {
-    border-color: #37ca37;
-    color: #37ca37;
+    border-color: #81e5d8;
+    color: #81e5d8;
   }
   
   .ghl-badge {
     @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium;
-    background-color: #37ca37;
+    background-color: #81e5d8;
     color: white;
   }
   
   .ghl-alert-success {
     @apply border p-4 rounded-lg;
-    border-color: #37ca37;
-    background-color: #f0fff4;
-    color: #15803d;
+    border-color: #81e5d8;
+    background-color: #f0fffe;
+    color: #0f7e6b;
   }
   
   .ghl-alert-error {

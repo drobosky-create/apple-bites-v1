@@ -47,13 +47,13 @@ export function GHLThemeDemo() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="text-center">
               <div className="w-24 h-24 bg-ghl-primary rounded-full mx-auto mb-4 shadow-lg"></div>
-              <h3 className="font-heading font-semibold text-lg mb-2">Primary Green</h3>
-              <p className="text-sm text-muted-foreground">#37ca37</p>
+              <h3 className="font-heading font-semibold text-lg mb-2">Primary Teal</h3>
+              <p className="text-sm text-muted-foreground">#81e5d8</p>
             </div>
             <div className="text-center">
               <div className="w-24 h-24 bg-ghl-secondary rounded-full mx-auto mb-4 shadow-lg"></div>
               <h3 className="font-heading font-semibold text-lg mb-2">Secondary Blue</h3>
-              <p className="text-sm text-muted-foreground">#188bf6</p>
+              <p className="text-sm text-muted-foreground">#4493de</p>
             </div>
             <div className="text-center">
               <div className="w-24 h-24 bg-ghl-navy rounded-full mx-auto mb-4 shadow-lg"></div>
