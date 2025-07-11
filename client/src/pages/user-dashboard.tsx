@@ -262,7 +262,7 @@ export default function UserDashboard() {
                 </Button>
                 <Button 
                   variant="outline" 
-                  onClick={() => setLocation('/assessment')}
+                  onClick={() => setLocation('/assessment/free')}
                   className="w-full sm:w-auto bg-[#415A77] text-white hover:bg-[#1B263B]"
                 >
                   <FileText className="h-4 w-4 mr-2" />
@@ -279,7 +279,7 @@ export default function UserDashboard() {
                 </div>
                 <Button 
                   variant="outline" 
-                  onClick={() => setLocation('/assessment')}
+                  onClick={() => setLocation('/assessment/free')}
                   className="w-full sm:w-auto bg-[#415A77] text-white hover:bg-[#1B263B]"
                 >
                   <FileText className="h-4 w-4 mr-2" />
