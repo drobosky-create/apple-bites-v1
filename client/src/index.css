@@ -412,14 +412,14 @@
   button[data-state]:hover,
   .tab-trigger:hover,
   [role="tab"]:hover {
-    background-color: rgba(224, 225, 221, 0.8) !important;
-    color: #0D1B2A !important;
+    background-color: rgba(224, 225, 221, 0.9) !important;
+    color: #000000 !important;
   }
 
   /* Specific override for Radix UI TabsTrigger components */
   [data-radix-collection-item]:hover {
-    background-color: rgba(224, 225, 221, 0.8) !important;
-    color: #0D1B2A !important;
+    background-color: rgba(224, 225, 221, 0.9) !important;
+    color: #000000 !important;
   }
 
   /* =========================== */
