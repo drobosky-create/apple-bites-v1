@@ -260,6 +260,14 @@ export default function UserDashboard() {
                   <Mail className="h-4 w-4 mr-2" />
                   Email Results
                 </Button>
+                <Button 
+                  variant="outline" 
+                  onClick={() => setLocation('/assessment')}
+                  className="w-full sm:w-auto bg-[#415A77] text-white hover:bg-[#1B263B]"
+                >
+                  <FileText className="h-4 w-4 mr-2" />
+                  Take Free Assessment
+                </Button>
               </div>
             ) : (
               <div className="space-y-3">
@@ -269,6 +277,14 @@ export default function UserDashboard() {
                     Your assessment is being processed. Results will be available shortly.
                   </span>
                 </div>
+                <Button 
+                  variant="outline" 
+                  onClick={() => setLocation('/assessment')}
+                  className="w-full sm:w-auto bg-[#415A77] text-white hover:bg-[#1B263B]"
+                >
+                  <FileText className="h-4 w-4 mr-2" />
+                  Take Free Assessment
+                </Button>
                 <Button 
                   variant="outline" 
                   onClick={() => window.open('https://products.applebites.ai/', '_blank')}
