@@ -9,6 +9,7 @@ import { useAuth } from "@/hooks/useAuth";
 import Navigation from "@/components/navigation";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { GHLThemeDemo } from "@/components/ghl-theme-demo";
 import Landing from "@/pages/landing";
 import RedirectHome from "@/pages/redirect-home";
 import UserLogin from "@/pages/user-login";
@@ -41,6 +42,7 @@ function Router() {
         )}
         <Route path="/login" component={UserLogin} />
         <Route path="/redirect" component={RedirectHome} />
+        <Route path="/ghl-demo" component={GHLThemeDemo} />
         
         {/* Pages with header/navigation */}
         <Route path="/assessment/free">

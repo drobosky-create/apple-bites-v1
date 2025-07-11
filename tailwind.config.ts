@@ -16,23 +16,43 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       colors: {
-        // GHL Brand Colors
+        // GHL Brand Colors - Primary Palette
+        primary: {
+          DEFAULT: '#37ca37',
+          50: '#f0fdf4',
+          100: '#dcfce7',
+          500: '#37ca37',
+          600: '#2db92d',
+          700: '#22a322',
+          900: '#14532d',
+        },
+        secondary: {
+          DEFAULT: '#188bf6',
+          50: '#eff6ff',
+          100: '#dbeafe',
+          500: '#188bf6',
+          600: '#1976d2',
+          700: '#1565c0',
+          900: '#0d47a1',
+        },
         ghl: {
           primary: '#37ca37',
           secondary: '#188bf6',
-          white: '#ffffff',
-          black: '#000000',
+          navy: '#0b2147',
           gray: '#cbd5e0',
           yellow: '#faf089',
+          white: '#ffffff',
+          black: '#000000',
           overlay: 'rgba(0, 0, 0, 0.5)',
-          deepNavy: '#0b2147',
         },
-        // Direct color mappings for easier use
-        brandPrimary: '#37ca37',
-        brandSecondary: '#188bf6',
-        brandGray: '#cbd5e0',
-        brandYellow: '#faf089',
-        deepNavy: '#0b2147',
+        // Semantic color mappings
+        'brand-primary': '#37ca37',
+        'brand-secondary': '#188bf6',
+        'brand-gray': '#cbd5e0',
+        'brand-yellow': '#faf089',
+        'deep-navy': '#0b2147',
+        'navy-dark': '#0a1e3d',
+        'navy-light': '#1a2e52',
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {
