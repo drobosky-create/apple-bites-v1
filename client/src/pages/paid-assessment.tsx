@@ -21,6 +21,12 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import type { ValuationAssessment } from "@shared/schema";
 
+// Helper function to get step number  
+const getStepNumber = (step: string): number => {
+  const steps = ["contact", "ebitda", "adjustments", "valueDrivers", "industry", "followup"];
+  return steps.indexOf(step) + 1;
+};
+
 export default function PaidAssessment() {
   const [location] = useLocation();
   const [industryData, setIndustryData] = useState({
@@ -101,8 +107,8 @@ export default function PaidAssessment() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-4">
-      <main className="container mx-auto px-4 max-w-4xl">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-6">
+      <main className="max-w-4xl mx-auto px-6 sm:px-12 lg:px-20">
         <Button
           variant="ghost"
           onClick={() => window.history.back()}
@@ -112,24 +118,39 @@ export default function PaidAssessment() {
           Back to Home
         </Button>
         
-        {/* Header with Apple Bites Logo */}
+        {/* Header with Apple Bites Logo and Progress Navigation */}
         {currentStep !== "results" && (
-          <div className="flex flex-col sm:flex-row items-center justify-center mb-4 sm:mb-8 text-center sm:text-left">
-            <img 
-              src={appleBitesLogo} 
-              alt="Apple Bites Business Assessment" 
-              className="h-12 sm:h-20 w-auto mb-3 sm:mb-0 sm:mr-4"
-            />
-            <div>
-              <h1 className="text-lg sm:text-3xl font-bold text-gray-900">Strategic Business Assessment</h1>
-              <Badge className="mt-2 bg-[#415A77] text-white">Professional Analysis - $395</Badge>
+          <div className="mb-8">
+            {/* Logo Section */}
+            <div className="flex flex-col sm:flex-row items-center justify-center mb-6 text-center sm:text-left">
+              <img 
+                src={appleBitesLogo} 
+                alt="Apple Bites Business Assessment" 
+                className="h-12 sm:h-20 w-auto mb-3 sm:mb-0 sm:mr-4"
+              />
+              <div>
+                <h1 className="text-lg sm:text-3xl font-bold text-gray-900">Strategic Business Assessment</h1>
+                <Badge className="mt-2 bg-[#415A77] text-white">Professional Analysis - $395</Badge>
+              </div>
             </div>
-          </div>
-        )}
-
-        {currentStep !== "results" && (
-          <div className="mb-4 sm:mb-8">
-            <ProgressIndicator currentStep={currentStep} />
+            
+            {/* Progress Navigation in 2-column grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-center justify-between">
+              <div className="text-left">
+                <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+                  Assessment Progress
+                </h2>
+                <div className="text-gray-600 text-sm">
+                  Complete each step to get your professional business analysis
+                </div>
+              </div>
+              <div className="text-right">
+                <div className="text-sm text-gray-500 mb-2">
+                  Step {getStepNumber(currentStep)} of 6
+                </div>
+                <ProgressIndicator currentStep={currentStep} />
+              </div>
+            </div>
           </div>
         )}
 
