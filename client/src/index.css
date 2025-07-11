@@ -328,6 +328,98 @@
     color: rgb(var(--meritage-navy)) !important;
   }
 
+  /* CRITICAL: Override any remaining yellow colors anywhere in the app */
+  *[style*="background-color: yellow"],
+  *[style*="background: yellow"],
+  *[style*="border-color: yellow"],
+  *[style*="color: yellow"],
+  *[class*="yellow"],
+  *[style*="color: #ffff00"],
+  *[style*="color: #FFFF00"],
+  *[style*="background: #ffff00"],
+  *[style*="background: #FFFF00"],
+  *[style*="background-color: #ffff00"],
+  *[style*="background-color: #FFFF00"] {
+    color: rgb(var(--meritage-navy)) !important;
+    background-color: rgb(var(--meritage-blue)) !important;
+  }
+
+  /* Force override for CardTitle and other text elements that might be yellow */
+  h1, h2, h3, h4, h5, h6,
+  .text-yellow-500,
+  .text-yellow-400,
+  .text-yellow-600,
+  .text-yellow-300,
+  .text-yellow-200,
+  .text-yellow-100,
+  .text-yellow-700,
+  .text-yellow-800,
+  .text-yellow-900,
+  [data-slot="title"],
+  [data-slot="title"] *,
+  .card-title,
+  .card-title *,
+  .CardTitle,
+  .CardTitle *,
+  /* Target specific shadcn-ui CardTitle component */
+  .group.rounded-lg.border.border-border.bg-card.text-card-foreground.shadow-sm h3,
+  .group.rounded-lg.border.border-border.bg-card.text-card-foreground.shadow-sm h3 *,
+  .text-2xl,
+  .text-xl,
+  .text-lg,
+  .font-bold,
+  .font-semibold,
+  .font-medium,
+  /* Target by CSS class patterns */
+  [class*="text-2xl"],
+  [class*="text-xl"],
+  [class*="text-lg"],
+  [class*="font-bold"],
+  [class*="font-semibold"] {
+    color: rgb(var(--meritage-navy)) !important;
+  }
+
+  /* Fix shadcn primary colors that may be yellow */
+  .text-primary,
+  .bg-primary,
+  .border-primary,
+  [style*="border-color: yellow"],
+  [style*="color: yellow"] {
+    color: rgb(var(--meritage-navy)) !important;
+    background-color: rgb(var(--meritage-blue)) !important;
+    border-color: rgb(var(--meritage-blue)) !important;
+  }
+
+  /* NUCLEAR OPTION: Override ALL potential yellow text anywhere */
+  * {
+    color: inherit !important;
+  }
+
+  /* Then specifically set text colors for main containers */
+  .min-h-screen,
+  .container,
+  .max-w-4xl,
+  .mx-auto,
+  .p-4,
+  .space-y-6,
+  .bg-gradient-to-br,
+  [class*="bg-gradient"] {
+    color: rgb(var(--meritage-navy)) !important;
+  }
+
+  /* Specific override for user dashboard card titles */
+  .min-h-screen.bg-gradient-to-br.from-blue-50.to-blue-100 h3,
+  .min-h-screen.bg-gradient-to-br.from-blue-50.to-blue-100 h4,
+  .min-h-screen.bg-gradient-to-br.from-blue-50.to-blue-100 h5,
+  .min-h-screen.bg-gradient-to-br.from-blue-50.to-blue-100 .text-2xl,
+  .min-h-screen.bg-gradient-to-br.from-blue-50.to-blue-100 .text-xl,
+  .min-h-screen.bg-gradient-to-br.from-blue-50.to-blue-100 .text-lg,
+  .min-h-screen.bg-gradient-to-br.from-blue-50.to-blue-100 .font-bold,
+  .min-h-screen.bg-gradient-to-br.from-blue-50.to-blue-100 .font-semibold,
+  .min-h-screen.bg-gradient-to-br.from-blue-50.to-blue-100 .font-medium {
+    color: rgb(var(--meritage-navy)) !important;
+  }
+
   /* Override shadcn button hover states to prevent yellow highlighting */
   .hover\:bg-accent:hover,
   button:hover {
