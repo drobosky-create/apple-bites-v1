@@ -1,8 +1,31 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Lato:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Manrope:wght@300;400;500;600;700&family=Lato:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* GHL Brand Tokens */
+:root {
+  --primary: #37ca37;
+  --secondary: #188bf6;
+  --white: #ffffff;
+  --black: #000000;
+  --gray: #cbd5e0;
+  --yellow: #faf089;
+  --overlay: rgba(0, 0, 0, 0.5);
+
+  --font-primary: 'Montserrat', sans-serif;
+  --font-content: 'Manrope', sans-serif;
+
+  /* GHL brand-specific additions */
+  --color-mctknad1: #0b2147; /* Used for header backgrounds */
+  --text-color: var(--white);
+  --link-color: #188bf6;
+  --placeholder-color: #cbd5e0;
+  
+  /* Radius for consistent rounded corners */
+  --radius: 0.5rem;
+}
 
 @layer base {
   /* Targeted white space elimination */
@@ -112,15 +135,15 @@
   }
   
   * {
-    font-family: 'Inter', 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
   }
   
   body {
-    font-family: 'Inter', 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
     font-weight: 400;
     line-height: 1.5;
-    background: rgb(var(--background)) !important;
-    background-color: rgb(var(--background)) !important;
+    background: white !important;
+    background-color: white !important;
   }
 
   /* Force all main containers to have white background */
@@ -160,7 +183,7 @@
   input[type="email"]::placeholder,
   input[type="tel"]::placeholder,
   input[type="text"]::placeholder {
-    color: #E0E1DD !important;
+    color: #cbd5e0 !important;
     opacity: 1 !important;
   }
 
@@ -241,12 +264,79 @@
 }
 
 @layer components {
+  /* GHL Brand Component Styles */
+  .ghl-primary-button {
+    background-color: var(--primary);
+    color: var(--white);
+    border: none;
+    padding: 12px 24px;
+    border-radius: var(--radius);
+    font-family: var(--font-primary);
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+  
+  .ghl-primary-button:hover {
+    background-color: #2db92d;
+    transform: translateY(-1px);
+  }
+  
+  .ghl-secondary-button {
+    background-color: var(--secondary);
+    color: var(--white);
+    border: none;
+    padding: 12px 24px;
+    border-radius: var(--radius);
+    font-family: var(--font-primary);
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+  
+  .ghl-secondary-button:hover {
+    background-color: #1976d2;
+    transform: translateY(-1px);
+  }
+  
+  .ghl-navy-header {
+    background-color: var(--color-mctknad1);
+    color: var(--text-color);
+    padding: 1rem;
+    font-family: var(--font-primary);
+    font-weight: 600;
+  }
+  
+  .ghl-card {
+    background: var(--white);
+    border: 1px solid var(--gray);
+    border-radius: var(--radius);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+  
+  .ghl-card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+  }
+  
+  .ghl-link {
+    color: var(--link-color);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+  }
+  
+  .ghl-link:hover {
+    color: #1976d2;
+    text-decoration: underline;
+  }
+  
+  /* Legacy heritage styles for backward compatibility */
   .heritage-gradient {
-    background: linear-gradient(135deg, rgb(59 130 246) 0%, rgb(37 99 235) 100%);
+    background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
   }
   
   .heritage-text-gradient {
-    background: linear-gradient(135deg, rgb(59 130 246) 0%, rgb(37 99 235) 100%);
+    background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -255,8 +345,8 @@
   .heritage-card {
     background: rgba(255, 255, 255, 0.9);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(var(--meritage-navy), 0.1);
-    box-shadow: 0 4px 6px -1px rgba(var(--meritage-navy), 0.1);
+    border: 1px solid var(--gray);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   }
 
   /* Blue/Grey form styling */
@@ -546,7 +636,7 @@
   /* GLOBAL PLACEHOLDER STYLING */
   /* =========================== */
   
-  /* Universal placeholder override using Apple Bites brand color */
+  /* Universal placeholder override using GHL brand color */
   input::placeholder,
   textarea::placeholder,
   select::placeholder,
@@ -562,22 +652,22 @@
   input:-ms-input-placeholder,
   textarea:-ms-input-placeholder,
   select:-ms-input-placeholder {
-    color: #E0E1DD !important;
+    color: #cbd5e0 !important;
     opacity: 1 !important;
     font-style: normal !important;
     font-weight: 400 !important;
   }
   
   /* Specific override for Tailwind placeholder classes */
-  .placeholder-\[#E0E1DD\]::placeholder,
-  .placeholder-\[#E0E1DD\]::-webkit-input-placeholder,
-  .placeholder-\[#E0E1DD\]::-moz-placeholder,
+  .placeholder-\[#cbd5e0\]::placeholder,
+  .placeholder-\[#cbd5e0\]::-webkit-input-placeholder,
+  .placeholder-\[#cbd5e0\]::-moz-placeholder,
   .placeholder-gray-500::placeholder,
   .placeholder-gray-400::placeholder,
   .placeholder-slate-500::placeholder,
   .placeholder-slate-400::placeholder,
   .placeholder\:text-muted-foreground::placeholder {
-    color: #E0E1DD !important;
+    color: #cbd5e0 !important;
     opacity: 1 !important;
   }
 
@@ -588,7 +678,7 @@
   /* Override shadcn Input component placeholder styling */
   .flex.h-10.w-full.rounded-md.border.border-input::placeholder,
   input.flex.h-10.w-full.rounded-md.border.border-input::placeholder {
-    color: #E0E1DD !important;
+    color: #cbd5e0 !important;
     opacity: 1 !important;
   }
 
@@ -599,7 +689,7 @@
   .form-field input::placeholder,
   .form-field textarea::placeholder,
   .form-field select::placeholder {
-    color: #E0E1DD !important;
+    color: #cbd5e0 !important;
     opacity: 1 !important;
   }
 
@@ -607,7 +697,7 @@
   /* BROWSER AUTOFILL OVERRIDES */
   /* =========================== */
 
-  /* Webkit (Chrome, Safari, Edge) autofill styling */
+  /* Webkit (Chrome, Safari, Edge) autofill styling using GHL brand colors */
   input:-webkit-autofill,
   input:-webkit-autofill:hover,
   input:-webkit-autofill:focus,
@@ -620,34 +710,34 @@
   select:-webkit-autofill:hover,
   select:-webkit-autofill:focus,
   select:-webkit-autofill:active {
-    -webkit-text-fill-color: white !important;
-    -webkit-box-shadow: 0 0 0 30px #1B263B inset !important;
+    -webkit-text-fill-color: #000000 !important;
+    -webkit-box-shadow: 0 0 0 30px #ffffff inset !important;
     transition: background-color 5000s ease-in-out 0s !important;
-    background-color: #1B263B !important;
-    color: white !important;
+    background-color: #ffffff !important;
+    color: #000000 !important;
   }
 
   /* Autofill placeholder text */
   input:-webkit-autofill::placeholder,
   textarea:-webkit-autofill::placeholder,
   select:-webkit-autofill::placeholder {
-    color: #E0E1DD !important;
+    color: #cbd5e0 !important;
     opacity: 1 !important;
-    -webkit-text-fill-color: #E0E1DD !important;
+    -webkit-text-fill-color: #cbd5e0 !important;
   }
 
-  /* Firefox autofill */
+  /* Firefox autofill using GHL brand colors */
   input:-moz-autofill,
   textarea:-moz-autofill,
   select:-moz-autofill {
-    background-color: #1B263B !important;
-    color: white !important;
+    background-color: #ffffff !important;
+    color: #000000 !important;
   }
 
   input:-moz-autofill::placeholder,
   textarea:-moz-autofill::placeholder,
   select:-moz-autofill::placeholder {
-    color: #E0E1DD !important;
+    color: #cbd5e0 !important;
     opacity: 1 !important;
   }
 

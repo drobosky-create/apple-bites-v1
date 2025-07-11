@@ -7,6 +7,8 @@ export default {
     extend: {
       fontFamily: {
         sans: ['Clear Sans', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', 'sans-serif'],
+        heading: ['Montserrat', 'sans-serif'],
+        body: ['Manrope', 'sans-serif'],
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -14,6 +16,23 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       colors: {
+        // GHL Brand Colors
+        ghl: {
+          primary: '#37ca37',
+          secondary: '#188bf6',
+          white: '#ffffff',
+          black: '#000000',
+          gray: '#cbd5e0',
+          yellow: '#faf089',
+          overlay: 'rgba(0, 0, 0, 0.5)',
+          deepNavy: '#0b2147',
+        },
+        // Direct color mappings for easier use
+        brandPrimary: '#37ca37',
+        brandSecondary: '#188bf6',
+        brandGray: '#cbd5e0',
+        brandYellow: '#faf089',
+        deepNavy: '#0b2147',
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {
