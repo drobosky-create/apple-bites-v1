@@ -129,9 +129,9 @@ export default function LeadsDashboard() {
   const getStatusColor = (status: string) => {
     const colors: Record<string, string> = {
       'new': 'bg-[#1a2332]/10 text-[#1a2332] border border-[#1a2332]/20',
-      'contacted': 'bg-[#f5c842]/20 text-[#1a2332] border border-[#f5c842]/40',
+      'contacted': 'bg-[#415A77]/20 text-[#1a2332] border border-[#415A77]/40',
       'qualified': 'bg-green-100 text-green-800 border border-green-200',
-      'converted': 'bg-[#f5c842]/30 text-[#1a2332] border border-[#f5c842]/50',
+      'converted': 'bg-[#415A77]/30 text-[#1a2332] border border-[#415A77]/50',
       'closed': 'bg-gray-100 text-gray-800 border border-gray-200',
     };
     return colors[status] || 'bg-gray-100 text-gray-800 border border-gray-200';

@@ -170,16 +170,16 @@ export default function TierSelection({ assessment, onTierSelect }: TierSelectio
         </Card>
 
         {/* Paid Tier */}
-        <Card className="p-6 border-2 border-[#f5c842] hover:border-[#f5c842]/80 transition-colors relative">
+        <Card className="p-6 border-2 border-[#415A77] hover:border-[#1B263B] transition-colors relative">
           <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-            <Badge className="bg-[#f5c842] text-[#1a2332] font-bold px-4 py-1">
+            <Badge className="bg-[#415A77] text-white font-bold px-4 py-1">
               <Star className="w-4 h-4 mr-1" />
               MOST POPULAR
             </Badge>
           </div>
           
           <div className="text-center mb-6 mt-4">
-            <Badge variant="outline" className="mb-4 border-[#f5c842] text-[#f5c842]">STRATEGIC REPORT</Badge>
+            <Badge variant="outline" className="mb-4 border-[#415A77] text-[#415A77]">STRATEGIC REPORT</Badge>
             <h2 className="text-2xl font-bold text-[#1a2332] mb-2">Professional Analysis</h2>
             <div className="text-3xl font-bold text-[#1a2332] mb-1">$395</div>
             <p className="text-sm text-gray-500 mb-4">One-time payment</p>
@@ -192,19 +192,19 @@ export default function TierSelection({ assessment, onTierSelect }: TierSelectio
               <span className="font-medium">Everything in Starter Report, plus:</span>
             </div>
             <div className="flex items-center gap-3">
-              <TrendingUp className="w-5 h-5 text-[#f5c842]" />
+              <TrendingUp className="w-5 h-5 text-[#415A77]" />
               <span>NAICS/SIC industry-specific multipliers</span>
             </div>
             <div className="flex items-center gap-3">
-              <Zap className="w-5 h-5 text-[#f5c842]" />
+              <Zap className="w-5 h-5 text-[#415A77]" />
               <span>AI-powered strategic narrative & insights</span>
             </div>
             <div className="flex items-center gap-3">
-              <FileText className="w-5 h-5 text-[#f5c842]" />
+              <FileText className="w-5 h-5 text-[#415A77]" />
               <span>Professional presentation-ready PDF</span>
             </div>
             <div className="flex items-center gap-3">
-              <TrendingUp className="w-5 h-5 text-[#f5c842]" />
+              <TrendingUp className="w-5 h-5 text-[#415A77]" />
               <span>Industry valuation bell curve analysis</span>
             </div>
             <div className="flex items-center gap-3">
@@ -263,7 +263,7 @@ export default function TierSelection({ assessment, onTierSelect }: TierSelectio
             <Button 
               onClick={handlePaidTierGenerate}
               disabled={isGenerating || !paidTierData.naicsCode || !paidTierData.industryDescription}
-              className="w-full bg-[#f5c842] hover:bg-[#f5c842]/90 text-[#1a2332] font-bold"
+              className="w-full bg-[#415A77] hover:bg-[#1B263B] text-white font-bold"
             >
               <TrendingUp className="w-4 h-4 mr-2" />
               {isGenerating ? 'Generating Strategic Report...' : 'Generate Strategic Report'}
@@ -271,7 +271,7 @@ export default function TierSelection({ assessment, onTierSelect }: TierSelectio
           ) : (
             <Button 
               onClick={() => setSelectedTier('paid')}
-              className="w-full bg-[#f5c842] hover:bg-[#f5c842]/90 text-[#1a2332] font-bold"
+              className="w-full bg-[#415A77] hover:bg-[#1B263B] text-white font-bold"
             >
               Upgrade to Strategic Report
             </Button>

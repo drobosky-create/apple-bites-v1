@@ -124,7 +124,7 @@ export default function PaidAssessment() {
             />
             <div>
               <h1 className="text-lg sm:text-3xl font-bold text-gray-900">Strategic Business Assessment</h1>
-              <Badge className="mt-2 bg-[#f5c842] text-[#1a2332]">Professional Analysis - $395</Badge>
+              <Badge className="mt-2 bg-[#415A77] text-white">Professional Analysis - $395</Badge>
             </div>
           </div>
         )}
@@ -187,8 +187,8 @@ export default function PaidAssessment() {
         )}
 
         {currentStep === "tierSelection" && (
-          <Card className="border-2 border-[#f5c842] shadow-lg">
-            <CardHeader className="bg-gradient-to-r from-[#f5c842]/10 to-yellow-100/50">
+          <Card className="border-2 border-[#415A77] shadow-lg">
+            <CardHeader className="bg-gradient-to-r from-[#415A77]/10 to-blue-100/50">
               <CardTitle className="text-2xl text-[#1a2332] flex items-center gap-2">
                 <Shield className="w-6 h-6" />
                 Strategic Analysis Details
@@ -268,7 +268,7 @@ export default function PaidAssessment() {
                 <Button
                   onClick={handleIndustryDataSubmit}
                   disabled={isSubmitting}
-                  className="flex-1 bg-[#f5c842] text-[#1a2332] hover:bg-[#e6b63a] font-semibold"
+                  className="flex-1 bg-[#415A77] text-white hover:bg-[#1B263B] font-semibold"
                 >
                   Generate Strategic Report - $395
                 </Button>

@@ -127,7 +127,7 @@ const AICoachingTips: React.FC<AICoachingTipsProps> = ({ financialData }) => {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Lightbulb className="w-5 h-5 text-yellow-500" />
+              <Lightbulb className="w-5 h-5 text-blue-500" />
               Business Analysis Insights
             </CardTitle>
           </CardHeader>

@@ -98,20 +98,20 @@ export default function Home() {
             </Card>
 
             {/* Paid Tier */}
-            <Card className="border-2 border-[#f5c842] hover:border-yellow-400 transition-all duration-300 hover:shadow-xl relative">
+            <Card className="border-2 border-[#415A77] hover:border-[#1B263B] transition-all duration-300 hover:shadow-xl relative">
               <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                <Badge className="bg-[#f5c842] text-[#1a2332] hover:bg-[#f5c842] px-4 py-1 text-sm font-bold ml-[-15px] mr-[-15px]">
+                <Badge className="bg-[#415A77] text-white hover:bg-[#1B263B] px-4 py-1 text-sm font-bold ml-[-15px] mr-[-15px]">
                   <Star className="w-4 h-4 mr-1" />
                   RECOMMENDED
                 </Badge>
               </div>
               
               <CardHeader className="text-center pb-4 pt-8 ml-[9px] mr-[9px]">
-                <Badge variant="outline" className="w-fit mx-auto border-[#f5c842] text-[#f5c842] text-[20px] mt-[9px] mb-[9px]">
+                <Badge variant="outline" className="w-fit mx-auto border-[#415A77] text-[#415A77] text-[20px] mt-[9px] mb-[9px]">
                   GROWTH & EXIT ASSESSMENT
                 </Badge>
                 <CardTitle className="text-2xl text-[#fcfcfc]">Professional Analysis</CardTitle>
-                <div className="text-4xl font-bold mt-2 text-[#f5c842]">$795</div>
+                <div className="text-4xl font-bold mt-2 text-[#415A77]">$795</div>
                 <p className="mt-2 text-[#f8fafc]">Comprehensive industry-specific valuation</p>
               </CardHeader>
               <CardContent className="p-6 bg-[#f8fafc] pt-[14px] pb-[14px] rounded-lg">
@@ -155,7 +155,7 @@ export default function Home() {
                 
                 <Button 
                   onClick={handlePaidTierStart}
-                  className="w-full bg-[#f5c842] text-[#1a2332] hover:bg-[#e6b63a] h-12 text-lg font-bold"
+                  className="w-full bg-[#415A77] text-white hover:bg-[#1B263B] h-12 text-lg font-bold"
                 >
                   Get Growth & Exit Assessment - $795
                 </Button>

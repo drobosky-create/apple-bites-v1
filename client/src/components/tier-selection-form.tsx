@@ -78,9 +78,9 @@ export default function TierSelectionForm({
         </Card>
 
         {/* Paid Tier */}
-        <Card className="border-2 border-[#f5c842] hover:border-yellow-400 transition-colors relative">
+        <Card className="border-2 border-[#415A77] hover:border-[#1B263B] transition-colors relative">
           <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-            <Badge className="bg-[#f5c842] text-[#1a2332] hover:bg-[#f5c842]">
+            <Badge className="bg-[#415A77] text-white hover:bg-[#1B263B]">
               <Star className="w-3 h-3 mr-1" />
               RECOMMENDED
             </Badge>
@@ -88,7 +88,7 @@ export default function TierSelectionForm({
           
           <CardContent className="p-6">
             <div className="text-center mb-6 mt-4">
-              <Badge variant="outline" className="mb-4 border-[#f5c842] text-[#f5c842]">STRATEGIC REPORT</Badge>
+              <Badge variant="outline" className="mb-4 border-[#415A77] text-[#415A77]">STRATEGIC REPORT</Badge>
               <h3 className="text-xl font-bold text-[#1a2332] mb-2">Professional Analysis</h3>
               <div className="text-3xl font-bold text-[#1a2332] mb-1">$395</div>
               <p className="text-sm text-gray-500 mb-4">One-time payment</p>
@@ -120,7 +120,7 @@ export default function TierSelectionForm({
             
             <Button 
               onClick={onPaidReport}
-              className="w-full bg-[#f5c842] text-[#1a2332] hover:bg-[#e6b63a] font-semibold"
+              className="w-full bg-[#415A77] text-white hover:bg-[#1B263B] font-semibold"
             >
               Get Strategic Report - $395
             </Button>

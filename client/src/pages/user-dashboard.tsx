@@ -169,9 +169,9 @@ export default function UserDashboard() {
                 </>
               ) : (
                 <>
-                  <Clock className="h-5 w-5 text-yellow-500" />
-                  <span className="text-yellow-700 font-medium">Processing</span>
-                  <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">
+                  <Clock className="h-5 w-5 text-blue-500" />
+                  <span className="text-blue-700 font-medium">Processing</span>
+                  <Badge variant="secondary" className="bg-blue-100 text-blue-800">
                     In Progress
                   </Badge>
                 </>

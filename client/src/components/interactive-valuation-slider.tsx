@@ -184,7 +184,7 @@ export default function InteractiveValuationSlider() {
           </CardContent>
         </Card>
 
-        <Card className="border-2 border-[#f5c842] bg-white transition-all duration-300">
+        <Card className="border-2 border-[#415A77] bg-white transition-all duration-300">
           <CardHeader className="text-center">
             <CardTitle className="text-lg text-slate-900">Potential Value</CardTitle>
             <CardDescription className="text-sm text-slate-600">

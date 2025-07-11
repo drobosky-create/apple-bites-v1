@@ -104,7 +104,7 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
 
               <Button 
                 onClick={handleScheduleConsultation}
-                className="flex-1 px-3 py-2 rounded-lg text-xs font-medium bg-[#f5c842] hover:bg-[#e6b63a] text-[#1a2332] flex items-center justify-center shadow-sm hover:shadow-md transition-all duration-200"
+                className="flex-1 px-3 py-2 rounded-lg text-xs font-medium bg-[#415A77] hover:bg-[#1B263B] text-white flex items-center justify-center shadow-sm hover:shadow-md transition-all duration-200"
               >
                 <Calendar className="mr-1 w-3 h-3" />
                 Schedule Consultation
@@ -114,9 +114,9 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
         </div>
 
         {/* Operational Grade Display */}
-        <div className="bg-gradient-to-br from-[#f5c842]/10 via-white to-[#1a2332]/5 border border-[#f5c842]/30 rounded-lg p-4 text-center">
+        <div className="bg-gradient-to-br from-[#415A77]/10 via-white to-[#1a2332]/5 border border-[#415A77]/30 rounded-lg p-4 text-center">
           <h5 className="text-base font-semibold text-[#1a2332] mb-3">Overall Operational Grade</h5>
-          <div className="inline-block bg-white rounded-full p-4 shadow-lg border-2 border-[#f5c842]">
+          <div className="inline-block bg-white rounded-full p-4 shadow-lg border-2 border-[#415A77]">
             <div className="text-4xl font-bold text-[#1a2332]">{results.overallScore}</div>
           </div>
           <p className="mt-2 text-[#1a2332]/70 text-sm font-medium">With an Operational Grade of {results.overallScore}</p>
