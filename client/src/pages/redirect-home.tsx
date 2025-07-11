@@ -15,9 +15,15 @@ export default function RedirectHome() {
         
         <div className="space-y-3">
           <Link href="/login">
-            <a className="block w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors">
+            <div className="block w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors cursor-pointer">
               Go to Login Page
-            </a>
+            </div>
+          </Link>
+          
+          <Link href="/assessment/free">
+            <div className="block w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors cursor-pointer">
+              Go to Free Assessment
+            </div>
           </Link>
           
           <a 
