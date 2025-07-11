@@ -425,6 +425,13 @@
   /* Handle active state hover with higher specificity */
   [data-state='active']:hover {
     color: #0D1B2A !important;
+    background-color: rgba(224, 225, 221, 0.9) !important;
+  }
+
+  /* Tailwind-friendly utility for active tab hover */
+  .tab-active-hover:hover[data-state='active'] {
+    color: #0D1B2A !important;
+    background-color: rgba(224, 225, 221, 0.9) !important;
   }
 
   /* =========================== */
