@@ -15,12 +15,6 @@ import { useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import type { ValuationAssessment } from "@shared/schema";
 
-// Helper function to get step number
-const getStepNumber = (step: string): number => {
-  const steps = ["contact", "ebitda", "adjustments", "valueDrivers", "followup"];
-  return steps.indexOf(step) + 1;
-};
-
 export default function ValuationForm() {
   const [location] = useLocation();
   
@@ -80,39 +74,24 @@ export default function ValuationForm() {
   }
 
   return (
-    <div className="bg-gradient-to-br from-slate-50 to-blue-50 min-h-screen py-6">
-      <main className="max-w-4xl mx-auto px-6 sm:px-12 lg:px-20">
+    <div className="bg-gradient-to-br from-slate-50 to-blue-50 min-h-screen">
+      <main className="max-w-4xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-12">
         
-        {/* Header with Apple Bites Logo and Progress Navigation */}
+        {/* Header with Apple Bites Logo */}
         {currentStep !== "results" && (
-          <div className="mb-8">
-            {/* Logo Section */}
-            <div className="flex flex-col sm:flex-row items-center justify-center mb-6 text-center sm:text-left">
-              <img 
-                src={appleBitesLogo} 
-                alt="Apple Bites Business Assessment" 
-                className="h-12 sm:h-20 w-auto mb-3 sm:mb-0 sm:mr-4"
-              />
-              <h1 className="text-lg sm:text-3xl font-bold text-gray-900">Apple Bites Business Assessment</h1>
-            </div>
-            
-            {/* Progress Navigation in 2-column grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-center justify-between">
-              <div className="text-left">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-                  Assessment Progress
-                </h2>
-                <div className="text-gray-600 text-sm">
-                  Complete each step to get your business valuation
-                </div>
-              </div>
-              <div className="text-right">
-                <div className="text-sm text-gray-500 mb-2">
-                  Step {getStepNumber(currentStep)} of 5
-                </div>
-                <ProgressIndicator currentStep={currentStep} />
-              </div>
-            </div>
+          <div className="flex flex-col sm:flex-row items-center justify-center mb-4 sm:mb-8 text-center sm:text-left">
+            <img 
+              src={appleBitesLogo} 
+              alt="Apple Bites Business Assessment" 
+              className="h-12 sm:h-20 w-auto mb-3 sm:mb-0 sm:mr-4"
+            />
+            <h1 className="text-lg sm:text-3xl font-bold text-gray-900">Apple Bites Business Assessment</h1>
+          </div>
+        )}
+
+        {currentStep !== "results" && (
+          <div className="mb-4 sm:mb-8">
+            <ProgressIndicator currentStep={currentStep} />
           </div>
         )}
 
