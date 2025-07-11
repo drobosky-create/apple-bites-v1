@@ -18,6 +18,12 @@ const loginSchema = z.object({
   password: z.string().min(1, "Password is required"),
 });
 
+const createAccountSchema = z.object({
+  fullName: z.string().min(1, "Full name is required"),
+  email: z.string().email("Please enter a valid email address"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
+});
+
 const createPasswordSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
   password: z.string().min(8, "Password must be at least 8 characters"),
@@ -28,6 +34,7 @@ const createPasswordSchema = z.object({
 });
 
 type LoginFormData = z.infer<typeof loginSchema>;
+type CreateAccountFormData = z.infer<typeof createAccountSchema>;
 type CreatePasswordFormData = z.infer<typeof createPasswordSchema>;
 
 export default function UserLogin() {
@@ -46,12 +53,51 @@ export default function UserLogin() {
     },
   });
 
+  const createAccountForm = useForm<CreateAccountFormData>({
+    resolver: zodResolver(createAccountSchema),
+    defaultValues: {
+      fullName: "",
+      email: "",
+      password: "",
+    },
+  });
+
   const createPasswordForm = useForm<CreatePasswordFormData>({
     resolver: zodResolver(createPasswordSchema),
     defaultValues: {
       email: "",
       password: "",
       confirmPassword: "",
+    },
+  });
+
+  const createAccountMutation = useMutation({
+    mutationFn: async (data: CreateAccountFormData) => {
+      const response = await apiRequest("/api/auth/register", {
+        method: "POST",
+        body: JSON.stringify(data),
+      });
+      
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Account creation failed");
+      }
+      
+      return response.json();
+    },
+    onSuccess: (data) => {
+      toast({
+        title: "Account created successfully!",
+        description: "Welcome to Apple Bites! You now have access to the free assessment.",
+      });
+      setLocation(`/dashboard/free`);
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Account creation failed",
+        description: error.message,
+        variant: "destructive",
+      });
     },
   });
 
@@ -124,6 +170,10 @@ export default function UserLogin() {
       });
     },
   });
+
+  const onCreateAccountSubmit = (data: CreateAccountFormData) => {
+    createAccountMutation.mutate(data);
+  };
 
   const onLoginSubmit = (data: LoginFormData) => {
     loginMutation.mutate(data);
@@ -238,42 +288,56 @@ export default function UserLogin() {
             <Apple className="h-8 w-8 text-white mr-2" />
             <span className="text-2xl font-bold text-white">Apple Bites</span>
           </div>
-          <CardTitle className="text-3xl font-bold text-center text-white" style={{ fontFamily: 'Inter, Poppins, sans-serif' }}>Welcome Back to Apple Bites</CardTitle>
+          <CardTitle className="text-3xl font-bold text-center text-white" style={{ fontFamily: 'Inter, Poppins, sans-serif' }}>Welcome to Apple Bites</CardTitle>
           <CardDescription className="text-center text-[#E0E1DD] text-base">
-            Access your valuation dashboard below
+            Create your account to access business valuation tools
           </CardDescription>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="login" className="w-full">
             <TabsList className="grid w-full grid-cols-2 bg-[#1B263B] border-[#415A77] rounded-lg">
-              <TabsTrigger value="login" className="tab-active-hover inline-flex items-center justify-center whitespace-nowrap px-3 py-1.5 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:text-[#0D1B2A] hover:bg-[#E0E1DD]/80 data-[state=active]:bg-[#415A77] data-[state=active]:text-white data-[state=active]:shadow-sm border-0 rounded-lg font-medium transition-colors text-[#E0E1DD]">Login</TabsTrigger>
-              <TabsTrigger value="info" className="tab-active-hover inline-flex items-center justify-center whitespace-nowrap px-3 py-1.5 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:text-[#0D1B2A] hover:bg-[#E0E1DD]/80 data-[state=active]:bg-[#415A77] data-[state=active]:text-white data-[state=active]:shadow-sm border-0 rounded-lg font-medium transition-colors text-[#E0E1DD]">Need an Account?</TabsTrigger>
+              <TabsTrigger value="login" className="tab-active-hover inline-flex items-center justify-center whitespace-nowrap px-3 py-1.5 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:text-[#0D1B2A] hover:bg-[#E0E1DD]/80 data-[state=active]:bg-[#415A77] data-[state=active]:text-white data-[state=active]:shadow-sm border-0 rounded-lg font-medium transition-colors text-[#E0E1DD]">Create Account</TabsTrigger>
+              <TabsTrigger value="info" className="tab-active-hover inline-flex items-center justify-center whitespace-nowrap px-3 py-1.5 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:text-[#0D1B2A] hover:bg-[#E0E1DD]/80 data-[state=active]:bg-[#415A77] data-[state=active]:text-white data-[state=active]:shadow-sm border-0 rounded-lg font-medium transition-colors text-[#E0E1DD]">Existing User?</TabsTrigger>
             </TabsList>
             
             <TabsContent value="login" className="space-y-4 bg-transparent p-6 rounded-lg mt-4 border border-[#415A77]">
-              <form onSubmit={loginForm.handleSubmit(onLoginSubmit)} className="space-y-4">
+              <form onSubmit={createAccountForm.handleSubmit(onCreateAccountSubmit)} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="fullName" className="text-white font-medium">Full Name</Label>
+                  <Input
+                    id="fullName"
+                    type="text"
+                    {...createAccountForm.register("fullName")}
+                    placeholder="Enter your full name"
+                    className="bg-[#1B263B] border border-[#415A77] text-white placeholder-[#E0E1DD] rounded-lg focus:ring-2 focus:ring-[#778DA9]"
+                  />
+                  {createAccountForm.formState.errors.fullName && (
+                    <p className="text-sm text-red-200">{createAccountForm.formState.errors.fullName.message}</p>
+                  )}
+                </div>
+                
                 <div className="space-y-2">
                   <Label htmlFor="email" className="text-white font-medium">Email</Label>
                   <Input
                     id="email"
                     type="email"
-                    {...loginForm.register("email")}
+                    {...createAccountForm.register("email")}
                     placeholder="Enter your email address"
                     className="bg-[#1B263B] border border-[#415A77] text-white placeholder-[#E0E1DD] rounded-lg focus:ring-2 focus:ring-[#778DA9]"
                   />
-                  {loginForm.formState.errors.email && (
-                    <p className="text-sm text-red-200">{loginForm.formState.errors.email.message}</p>
+                  {createAccountForm.formState.errors.email && (
+                    <p className="text-sm text-red-200">{createAccountForm.formState.errors.email.message}</p>
                   )}
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="password" className="text-white font-medium">Password</Label>
+                  <Label htmlFor="password" className="text-white font-medium">Create Password</Label>
                   <div className="relative rounded-lg overflow-hidden">
                     <Input
                       id="password"
                       type={showPassword ? "text" : "password"}
-                      {...loginForm.register("password")}
-                      placeholder="Enter your password"
+                      {...createAccountForm.register("password")}
+                      placeholder="Create a secure password"
                       className="bg-[#1B263B] border border-[#415A77] text-white placeholder-[#E0E1DD] rounded-lg focus:ring-2 focus:ring-[#778DA9] pr-12"
                     />
                     <Button
@@ -290,43 +354,60 @@ export default function UserLogin() {
                       )}
                     </Button>
                   </div>
-                  {loginForm.formState.errors.password && (
-                    <p className="text-sm text-red-200">{loginForm.formState.errors.password.message}</p>
+                  {createAccountForm.formState.errors.password && (
+                    <p className="text-sm text-red-200">{createAccountForm.formState.errors.password.message}</p>
                   )}
                 </div>
 
                 <Button 
                   type="submit" 
                   className="w-full text-white font-semibold bg-gradient-to-r from-[#415A77] to-[#778DA9] hover:from-[#778DA9] hover:to-[#415A77] transition-all duration-300 rounded-lg border-0 shadow-lg hover:shadow-xl" 
-                  disabled={loginMutation.isPending}
+                  disabled={createAccountMutation.isPending}
                 >
-                  {loginMutation.isPending ? "Signing In..." : "Sign In"}
+                  {createAccountMutation.isPending ? "Creating Account..." : "Create Account"}
                   <LogIn className="ml-2 h-4 w-4" />
                 </Button>
               </form>
             </TabsContent>
             
             <TabsContent value="info" className="space-y-4 bg-transparent p-6 rounded-lg mt-4 border border-[#415A77]">
-              <div className="text-center space-y-4">
-                <div className="bg-transparent border border-[#415A77] rounded-lg p-4">
-                  <h3 className="font-semibold mb-2 text-white">How to Get Access</h3>
-                  <p className="text-sm text-[#E0E1DD] mb-3">
-                    Purchase a Growth ($795) or Capital ($2,500) tier assessment to get your account automatically created.
+              <div className="space-y-4">
+                <div className="text-center">
+                  <h3 className="font-semibold mb-2 text-white">Already have an account?</h3>
+                  <p className="text-sm text-[#E0E1DD] mb-4">
+                    Sign in with your existing credentials
                   </p>
-                  <Button 
-                    onClick={() => window.open('https://products.applebites.ai/', '_blank')}
-                    className="w-full text-white font-semibold bg-gradient-to-r from-[#0D1B2A] to-[#1B263B] hover:from-[#1B263B] hover:to-[#0D1B2A] transition-all duration-300 rounded-lg border border-[#415A77] shadow-md hover:shadow-lg"
-                  >
-                    Purchase Assessment
-                  </Button>
                 </div>
                 
-                <div className="bg-transparent border border-[#415A77] rounded-lg p-4">
-                  <h3 className="font-semibold mb-2 text-white">Already Purchased?</h3>
-                  <p className="text-sm text-[#E0E1DD]">
-                    If you've already purchased an assessment, try logging in with your email. You'll be guided through password creation if needed.
-                  </p>
-                </div>
+                <form className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="loginEmail" className="text-white font-medium">Email</Label>
+                    <Input
+                      id="loginEmail"
+                      type="email"
+                      placeholder="Enter your email address"
+                      className="bg-[#1B263B] border border-[#415A77] text-white placeholder-[#E0E1DD] rounded-lg focus:ring-2 focus:ring-[#778DA9]"
+                    />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="loginPassword" className="text-white font-medium">Password</Label>
+                    <Input
+                      id="loginPassword"
+                      type="password"
+                      placeholder="Enter your password"
+                      className="bg-[#1B263B] border border-[#415A77] text-white placeholder-[#E0E1DD] rounded-lg focus:ring-2 focus:ring-[#778DA9]"
+                    />
+                  </div>
+
+                  <Button 
+                    type="submit" 
+                    className="w-full text-white font-semibold bg-gradient-to-r from-[#415A77] to-[#778DA9] hover:from-[#778DA9] hover:to-[#415A77] transition-all duration-300 rounded-lg border-0 shadow-lg hover:shadow-xl"
+                  >
+                    Sign In
+                    <LogIn className="ml-2 h-4 w-4" />
+                  </Button>
+                </form>
               </div>
             </TabsContent>
           </Tabs>
