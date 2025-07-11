@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Lato:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Lato:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -85,42 +85,42 @@
   }
 
   :root {
-    /* Meritage Partners Brand Colors - Updated from Website */
-    --meritage-navy: 26 35 50; /* #1a2332 - Deep navy from website */
-    --meritage-gold: 245 200 66; /* #f5c842 - Gold accent from website */
-    --meritage-blue: 59 130 246; /* #3B82F6 - Professional blue */
-    --meritage-light-blue: 220 235 251; /* #DCEBFB */
-    --meritage-dark-blue: 15 23 42; /* #0F172A */
+    /* Apple Bites Brand Colors */
+    --apple-bites-navy: 13 27 42; /* #0D1B2A - Deep navy background */
+    --apple-bites-dark-blue: 27 38 59; /* #1B263B - Form container */
+    --apple-bites-light-blue: 65 90 119; /* #415A77 - Hover state */
+    --apple-bites-light-gray: 248 249 250; /* #F8F9FA - Input fields */
+    --apple-bites-text-light: 224 225 221; /* #E0E1DD - Secondary text */
     
-    /* Updated color palette based on Meritage Partners website branding */
-    --background: 248 250 252; /* Light background */
-    --foreground: 26 35 50; /* Navy text */
-    --primary: 26 35 50; /* Navy primary */
-    --primary-foreground: 255 255 255; /* White text on navy */
-    --secondary: 245 200 66; /* Gold secondary */
-    --secondary-foreground: 26 35 50; /* Navy text on gold */
-    --muted: 241 245 249; /* Light muted */
-    --muted-foreground: 71 85 105; /* Muted text */
-    --accent: 241 245 249; /* Light grey accent */
-    --accent-foreground: 71 85 105; /* Muted text on grey */
+    /* Updated color palette for Apple Bites branding */
+    --background: 13 27 42; /* Deep navy background */
+    --foreground: 255 255 255; /* White text */
+    --primary: 27 38 59; /* Dark blue primary */
+    --primary-foreground: 255 255 255; /* White text on dark blue */
+    --secondary: 65 90 119; /* Light blue secondary */
+    --secondary-foreground: 255 255 255; /* White text on light blue */
+    --muted: 27 38 59; /* Dark blue muted */
+    --muted-foreground: 224 225 221; /* Light gray text */
+    --accent: 27 38 59; /* Dark blue accent */
+    --accent-foreground: 255 255 255; /* White text on dark blue */
     --destructive: 239 68 68; /* Red for destructive actions */
-    --destructive-foreground: 248 250 252;
-    --border: 226 232 240; /* Light border */
-    --input: 241 245 249; /* Input background */
-    --ring: 26 35 50; /* Navy focus ring */
+    --destructive-foreground: 255 255 255;
+    --border: 65 90 119; /* Light blue border */
+    --input: 248 249 250; /* Light gray input background */
+    --ring: 65 90 119; /* Light blue focus ring */
     --radius: 0.75rem;
   }
   
   * {
-    font-family: 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    font-family: 'Inter', 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
   }
   
   body {
-    font-family: 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    font-family: 'Inter', 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
     font-weight: 400;
     line-height: 1.5;
-    background: white !important;
-    background-color: white !important;
+    background: rgb(var(--background)) !important;
+    background-color: rgb(var(--background)) !important;
   }
 
   /* Force all main containers to have white background */

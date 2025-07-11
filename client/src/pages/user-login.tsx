@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { Eye, EyeOff, LogIn, UserPlus } from "lucide-react";
+import { Eye, EyeOff, LogIn, UserPlus, Apple } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 
 const loginSchema = z.object({
@@ -135,41 +135,52 @@ export default function UserLogin() {
 
   if (needsPasswordCreation) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center p-4">
-        <Card className="w-full max-w-md shadow-xl border-blue-200">
-          <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold text-center text-gray-800">Create Your Password</CardTitle>
-            <CardDescription className="text-center text-gray-600">
+      <div className="min-h-screen bg-gradient-to-br from-[#0D1B2A] via-[#1B263B] to-[#0D1B2A] flex items-center justify-center p-4 relative overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0 bg-repeat" style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+          }}></div>
+        </div>
+        <Card className="w-full max-w-md shadow-2xl border-[#415A77] bg-[#1B263B]/90 backdrop-blur-sm rounded-xl relative z-10">
+          <CardHeader className="space-y-1 relative">
+            <div className="flex items-center justify-center mb-4">
+              <Apple className="h-8 w-8 text-white mr-2" />
+              <span className="text-2xl font-bold text-white">Apple Bites</span>
+            </div>
+            <CardTitle className="text-2xl font-bold text-center text-white" style={{ fontFamily: 'Inter, Poppins, sans-serif' }}>Create Your Password</CardTitle>
+            <CardDescription className="text-center text-[#E0E1DD]">
               Welcome to Apple Bites! Please create a secure password for your account.
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={createPasswordForm.handleSubmit(onCreatePasswordSubmit)} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email" className="text-white font-medium">Email</Label>
                 <Input
                   id="email"
                   type="email"
                   value={userEmail}
                   disabled
-                  className="bg-gray-50"
+                  className="bg-[#F8F9FA] border-[#415A77] text-gray-900 placeholder-[#E0E1DD]"
                 />
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="password">New Password</Label>
+                <Label htmlFor="password" className="text-white font-medium">New Password</Label>
                 <div className="relative">
                   <Input
                     id="password"
                     type={showCreatePassword ? "text" : "password"}
                     {...createPasswordForm.register("password")}
                     placeholder="Enter at least 8 characters"
+                    className="bg-[#F8F9FA] border-[#415A77] text-gray-900 placeholder-[#E0E1DD]"
                   />
                   <Button
                     type="button"
                     variant="ghost"
                     size="sm"
-                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent text-gray-600"
                     onClick={() => setShowCreatePassword(!showCreatePassword)}
                   >
                     {showCreatePassword ? (
@@ -180,27 +191,27 @@ export default function UserLogin() {
                   </Button>
                 </div>
                 {createPasswordForm.formState.errors.password && (
-                  <p className="text-sm text-red-500">{createPasswordForm.formState.errors.password.message}</p>
+                  <p className="text-sm text-red-200">{createPasswordForm.formState.errors.password.message}</p>
                 )}
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="confirmPassword">Confirm Password</Label>
+                <Label htmlFor="confirmPassword" className="text-white font-medium">Confirm Password</Label>
                 <Input
                   id="confirmPassword"
                   type="password"
                   {...createPasswordForm.register("confirmPassword")}
                   placeholder="Confirm your password"
+                  className="bg-[#F8F9FA] border-[#415A77] text-gray-900 placeholder-[#E0E1DD]"
                 />
                 {createPasswordForm.formState.errors.confirmPassword && (
-                  <p className="text-sm text-red-500">{createPasswordForm.formState.errors.confirmPassword.message}</p>
+                  <p className="text-sm text-red-200">{createPasswordForm.formState.errors.confirmPassword.message}</p>
                 )}
               </div>
 
               <Button 
                 type="submit" 
-                className="w-full text-white font-medium" 
-                style={{ backgroundColor: '#4F83F7' }}
+                className="w-full text-white font-medium bg-[#1B263B] hover:bg-[#415A77] transition-colors duration-200 rounded-lg" 
                 disabled={createPasswordMutation.isPending}
               >
                 {createPasswordMutation.isPending ? "Creating Account..." : "Create Password & Login"}
@@ -214,22 +225,32 @@ export default function UserLogin() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md shadow-xl border-blue-200">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center text-gray-800">Welcome to Apple Bites</CardTitle>
-          <CardDescription className="text-center text-gray-600">
-            Access your business valuation dashboard
+    <div className="min-h-screen bg-gradient-to-br from-[#0D1B2A] via-[#1B263B] to-[#0D1B2A] flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 opacity-10">
+        <div className="absolute inset-0 bg-repeat" style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+        }}></div>
+      </div>
+      <Card className="w-full max-w-md shadow-2xl border-[#415A77] bg-[#1B263B]/90 backdrop-blur-sm rounded-xl relative z-10">
+        <CardHeader className="space-y-1 relative">
+          <div className="flex items-center justify-center mb-4">
+            <Apple className="h-8 w-8 text-white mr-2" />
+            <span className="text-2xl font-bold text-white">Apple Bites</span>
+          </div>
+          <CardTitle className="text-3xl font-bold text-center text-white" style={{ fontFamily: 'Inter, Poppins, sans-serif' }}>Welcome Back to Apple Bites</CardTitle>
+          <CardDescription className="text-center text-[#E0E1DD] text-base">
+            Access your valuation dashboard below
           </CardDescription>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="login" className="w-full">
-            <TabsList className="grid w-full grid-cols-2" style={{ backgroundColor: '#4F83F7' }}>
-              <TabsTrigger value="login" className="text-white data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-sm border-0">Login</TabsTrigger>
-              <TabsTrigger value="info" className="text-white data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-sm border-0">Need an Account?</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-2 bg-[#1B263B] border-[#415A77] rounded-lg">
+              <TabsTrigger value="login" className="text-[#E0E1DD] data-[state=active]:bg-[#415A77] data-[state=active]:text-white data-[state=active]:shadow-sm border-0 rounded-lg font-medium">Login</TabsTrigger>
+              <TabsTrigger value="info" className="text-[#E0E1DD] data-[state=active]:bg-[#415A77] data-[state=active]:text-white data-[state=active]:shadow-sm border-0 rounded-lg font-medium">Need an Account?</TabsTrigger>
             </TabsList>
             
-            <TabsContent value="login" className="space-y-4" style={{ backgroundColor: '#4F83F7', padding: '1rem', borderRadius: '0.5rem' }}>
+            <TabsContent value="login" className="space-y-4 bg-[#1B263B] p-6 rounded-lg mt-4 border border-[#415A77]">
               <form onSubmit={loginForm.handleSubmit(onLoginSubmit)} className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="email" className="text-white font-medium">Email</Label>
@@ -238,10 +259,10 @@ export default function UserLogin() {
                     type="email"
                     {...loginForm.register("email")}
                     placeholder="Enter your email address"
-                    className="bg-white border-0 text-gray-900 placeholder-gray-500"
+                    className="bg-[#F8F9FA] border-[#415A77] text-gray-900 placeholder-[#E0E1DD] rounded-lg focus:ring-2 focus:ring-[#415A77]"
                   />
                   {loginForm.formState.errors.email && (
-                    <p className="text-sm text-red-100">{loginForm.formState.errors.email.message}</p>
+                    <p className="text-sm text-red-200">{loginForm.formState.errors.email.message}</p>
                   )}
                 </div>
                 
@@ -253,7 +274,7 @@ export default function UserLogin() {
                       type={showPassword ? "text" : "password"}
                       {...loginForm.register("password")}
                       placeholder="Enter your password"
-                      className="bg-white border-0 text-gray-900 placeholder-gray-500"
+                      className="bg-[#F8F9FA] border-[#415A77] text-gray-900 placeholder-[#E0E1DD] rounded-lg focus:ring-2 focus:ring-[#415A77]"
                     />
                     <Button
                       type="button"
@@ -270,13 +291,13 @@ export default function UserLogin() {
                     </Button>
                   </div>
                   {loginForm.formState.errors.password && (
-                    <p className="text-sm text-red-100">{loginForm.formState.errors.password.message}</p>
+                    <p className="text-sm text-red-200">{loginForm.formState.errors.password.message}</p>
                   )}
                 </div>
 
                 <Button 
                   type="submit" 
-                  className="w-full text-white font-medium hover:bg-blue-700 border-0 bg-[#2b3245]" 
+                  className="w-full text-white font-medium bg-[#1B263B] hover:bg-[#415A77] transition-colors duration-200 border-0 rounded-lg" 
                   disabled={loginMutation.isPending}
                 >
                   {loginMutation.isPending ? "Signing In..." : "Sign In"}
@@ -285,25 +306,24 @@ export default function UserLogin() {
               </form>
             </TabsContent>
             
-            <TabsContent value="info" className="space-y-4">
+            <TabsContent value="info" className="space-y-4 bg-[#1B263B] p-6 rounded-lg mt-4 border border-[#415A77]">
               <div className="text-center space-y-4">
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                  <h3 className="font-semibold mb-2 text-blue-900">How to Get Access</h3>
-                  <p className="text-sm text-blue-700 mb-3">
+                <div className="bg-[#1B263B] border border-[#415A77] rounded-lg p-4">
+                  <h3 className="font-semibold mb-2 text-white">How to Get Access</h3>
+                  <p className="text-sm text-[#E0E1DD] mb-3">
                     Purchase a Growth ($795) or Capital ($2,500) tier assessment to get your account automatically created.
                   </p>
                   <Button 
                     onClick={() => window.open('https://products.applebites.ai/', '_blank')}
-                    className="w-full text-white font-medium"
-                    style={{ backgroundColor: '#4F83F7' }}
+                    className="w-full text-white font-medium bg-[#1B263B] hover:bg-[#415A77] transition-colors duration-200 rounded-lg"
                   >
                     Purchase Assessment
                   </Button>
                 </div>
                 
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                  <h3 className="font-semibold mb-2 text-blue-900">Already Purchased?</h3>
-                  <p className="text-sm text-blue-700">
+                <div className="bg-[#1B263B] border border-[#415A77] rounded-lg p-4">
+                  <h3 className="font-semibold mb-2 text-white">Already Purchased?</h3>
+                  <p className="text-sm text-[#E0E1DD]">
                     If you've already purchased an assessment, try logging in with your email. You'll be guided through password creation if needed.
                   </p>
                 </div>
