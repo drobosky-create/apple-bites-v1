@@ -162,7 +162,7 @@ export default function UserLogin() {
                   type="email"
                   value={userEmail}
                   disabled
-                  className="bg-[#F8F9FA] border-[#415A77] text-gray-900 placeholder-[#E0E1DD]"
+                  className="bg-[#1B263B] border border-[#415A77] text-white placeholder-[#E0E1DD] rounded-lg opacity-75"
                 />
               </div>
               
@@ -174,13 +174,13 @@ export default function UserLogin() {
                     type={showCreatePassword ? "text" : "password"}
                     {...createPasswordForm.register("password")}
                     placeholder="Enter at least 8 characters"
-                    className="bg-[#F8F9FA] border-[#415A77] text-gray-900 placeholder-[#E0E1DD]"
+                    className="bg-[#1B263B] border border-[#415A77] text-white placeholder-[#E0E1DD] rounded-lg focus:ring-2 focus:ring-[#778DA9]"
                   />
                   <Button
                     type="button"
                     variant="ghost"
                     size="sm"
-                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent text-gray-600"
+                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent text-white"
                     onClick={() => setShowCreatePassword(!showCreatePassword)}
                   >
                     {showCreatePassword ? (
@@ -202,7 +202,7 @@ export default function UserLogin() {
                   type="password"
                   {...createPasswordForm.register("confirmPassword")}
                   placeholder="Confirm your password"
-                  className="bg-[#F8F9FA] border-[#415A77] text-gray-900 placeholder-[#E0E1DD]"
+                  className="bg-[#1B263B] border border-[#415A77] text-white placeholder-[#E0E1DD] rounded-lg focus:ring-2 focus:ring-[#778DA9]"
                 />
                 {createPasswordForm.formState.errors.confirmPassword && (
                   <p className="text-sm text-red-200">{createPasswordForm.formState.errors.confirmPassword.message}</p>
@@ -211,7 +211,7 @@ export default function UserLogin() {
 
               <Button 
                 type="submit" 
-                className="w-full text-white font-medium bg-[#1B263B] hover:bg-[#415A77] transition-colors duration-200 rounded-lg" 
+                className="w-full text-white font-semibold bg-[#415A77] hover:bg-[#778DA9] transition duration-200 rounded-lg border-0" 
                 disabled={createPasswordMutation.isPending}
               >
                 {createPasswordMutation.isPending ? "Creating Account..." : "Create Password & Login"}
@@ -250,7 +250,7 @@ export default function UserLogin() {
               <TabsTrigger value="info" className="text-[#E0E1DD] data-[state=active]:bg-[#415A77] data-[state=active]:text-white data-[state=active]:shadow-sm border-0 rounded-lg font-medium">Need an Account?</TabsTrigger>
             </TabsList>
             
-            <TabsContent value="login" className="space-y-4 bg-[#1B263B] p-6 rounded-lg mt-4 border border-[#415A77]">
+            <TabsContent value="login" className="space-y-4 bg-transparent p-6 rounded-lg mt-4 border border-[#415A77]">
               <form onSubmit={loginForm.handleSubmit(onLoginSubmit)} className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="email" className="text-white font-medium">Email</Label>
@@ -259,7 +259,7 @@ export default function UserLogin() {
                     type="email"
                     {...loginForm.register("email")}
                     placeholder="Enter your email address"
-                    className="bg-[#F8F9FA] border-[#415A77] text-gray-900 placeholder-[#E0E1DD] rounded-lg focus:ring-2 focus:ring-[#415A77]"
+                    className="bg-[#1B263B] border border-[#415A77] text-white placeholder-[#E0E1DD] rounded-lg focus:ring-2 focus:ring-[#778DA9]"
                   />
                   {loginForm.formState.errors.email && (
                     <p className="text-sm text-red-200">{loginForm.formState.errors.email.message}</p>
@@ -274,13 +274,13 @@ export default function UserLogin() {
                       type={showPassword ? "text" : "password"}
                       {...loginForm.register("password")}
                       placeholder="Enter your password"
-                      className="bg-[#F8F9FA] border-[#415A77] text-gray-900 placeholder-[#E0E1DD] rounded-lg focus:ring-2 focus:ring-[#415A77]"
+                      className="bg-[#1B263B] border border-[#415A77] text-white placeholder-[#E0E1DD] rounded-lg focus:ring-2 focus:ring-[#778DA9]"
                     />
                     <Button
                       type="button"
                       variant="ghost"
                       size="sm"
-                      className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent text-gray-600"
+                      className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent text-white"
                       onClick={() => setShowPassword(!showPassword)}
                     >
                       {showPassword ? (
@@ -297,7 +297,7 @@ export default function UserLogin() {
 
                 <Button 
                   type="submit" 
-                  className="w-full text-white font-medium bg-[#1B263B] hover:bg-[#415A77] transition-colors duration-200 border-0 rounded-lg" 
+                  className="w-full text-white font-semibold bg-[#415A77] hover:bg-[#778DA9] transition duration-200 rounded-lg border-0" 
                   disabled={loginMutation.isPending}
                 >
                   {loginMutation.isPending ? "Signing In..." : "Sign In"}
@@ -306,22 +306,22 @@ export default function UserLogin() {
               </form>
             </TabsContent>
             
-            <TabsContent value="info" className="space-y-4 bg-[#1B263B] p-6 rounded-lg mt-4 border border-[#415A77]">
+            <TabsContent value="info" className="space-y-4 bg-transparent p-6 rounded-lg mt-4 border border-[#415A77]">
               <div className="text-center space-y-4">
-                <div className="bg-[#1B263B] border border-[#415A77] rounded-lg p-4">
+                <div className="bg-transparent border border-[#415A77] rounded-lg p-4">
                   <h3 className="font-semibold mb-2 text-white">How to Get Access</h3>
                   <p className="text-sm text-[#E0E1DD] mb-3">
                     Purchase a Growth ($795) or Capital ($2,500) tier assessment to get your account automatically created.
                   </p>
                   <Button 
                     onClick={() => window.open('https://products.applebites.ai/', '_blank')}
-                    className="w-full text-white font-medium bg-[#1B263B] hover:bg-[#415A77] transition-colors duration-200 rounded-lg"
+                    className="w-full text-white font-semibold bg-[#415A77] hover:bg-[#778DA9] transition duration-200 rounded-lg"
                   >
                     Purchase Assessment
                   </Button>
                 </div>
                 
-                <div className="bg-[#1B263B] border border-[#415A77] rounded-lg p-4">
+                <div className="bg-transparent border border-[#415A77] rounded-lg p-4">
                   <h3 className="font-semibold mb-2 text-white">Already Purchased?</h3>
                   <p className="text-sm text-[#E0E1DD]">
                     If you've already purchased an assessment, try logging in with your email. You'll be guided through password creation if needed.
