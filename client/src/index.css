@@ -160,7 +160,7 @@
   input[type="email"]::placeholder,
   input[type="tel"]::placeholder,
   input[type="text"]::placeholder {
-    color: #94a3b8 !important;
+    color: #E0E1DD !important;
     opacity: 1 !important;
   }
 
@@ -182,11 +182,7 @@
     background: transparent !important;
   }
 
-  /* Ensure proper placeholder display */
-  input::placeholder {
-    font-style: normal !important;
-    font-weight: 400 !important;
-  }
+  /* Ensure proper placeholder display - handled by global rules above */
 
   /* Force numeric keypad on mobile for number inputs */
   input[type="number"] {
@@ -279,7 +275,7 @@
   }
   
   .form-input::placeholder {
-    color: rgb(100 116 139) !important;
+    color: #E0E1DD !important;
   }
 
   /* Override any yellow/gold/brown colors with professional blue-gray scheme */
@@ -411,24 +407,111 @@
     box-shadow: 0 0 0 2px rgb(var(--meritage-blue) / 0.2) !important;
   }
 
-  /* Apple Bites Login Form Specific Overrides */
+  /* =========================== */
+  /* GLOBAL PLACEHOLDER STYLING */
+  /* =========================== */
+  
+  /* Universal placeholder override using Apple Bites brand color */
+  input::placeholder,
+  textarea::placeholder,
+  select::placeholder,
+  input::-webkit-input-placeholder,
+  textarea::-webkit-input-placeholder,
+  select::-webkit-input-placeholder,
+  input::-moz-placeholder,
+  textarea::-moz-placeholder,
+  select::-moz-placeholder,
+  input:-moz-placeholder,
+  textarea:-moz-placeholder,
+  select:-moz-placeholder,
+  input:-ms-input-placeholder,
+  textarea:-ms-input-placeholder,
+  select:-ms-input-placeholder {
+    color: #E0E1DD !important;
+    opacity: 1 !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+  }
+  
+  /* Specific override for Tailwind placeholder classes */
   .placeholder-\[#E0E1DD\]::placeholder,
   .placeholder-\[#E0E1DD\]::-webkit-input-placeholder,
-  .placeholder-\[#E0E1DD\]::-moz-placeholder {
+  .placeholder-\[#E0E1DD\]::-moz-placeholder,
+  .placeholder-gray-500::placeholder,
+  .placeholder-gray-400::placeholder,
+  .placeholder-slate-500::placeholder,
+  .placeholder-slate-400::placeholder,
+  .placeholder\:text-muted-foreground::placeholder {
     color: #E0E1DD !important;
     opacity: 1 !important;
   }
 
-  /* Override any system autofill styling */
+  /* =========================== */
+  /* SHADCN/UI COMPONENT OVERRIDES */
+  /* =========================== */
+
+  /* Override shadcn Input component placeholder styling */
+  .flex.h-10.w-full.rounded-md.border.border-input::placeholder,
+  input.flex.h-10.w-full.rounded-md.border.border-input::placeholder {
+    color: #E0E1DD !important;
+    opacity: 1 !important;
+  }
+
+  /* Override React Hook Form and form library placeholders */
+  form input::placeholder,
+  form textarea::placeholder,
+  form select::placeholder,
+  .form-field input::placeholder,
+  .form-field textarea::placeholder,
+  .form-field select::placeholder {
+    color: #E0E1DD !important;
+    opacity: 1 !important;
+  }
+
+  /* =========================== */
+  /* BROWSER AUTOFILL OVERRIDES */
+  /* =========================== */
+
+  /* Webkit (Chrome, Safari, Edge) autofill styling */
   input:-webkit-autofill,
   input:-webkit-autofill:hover,
-  input:-webkit-autofill:focus {
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active,
+  textarea:-webkit-autofill,
+  textarea:-webkit-autofill:hover,
+  textarea:-webkit-autofill:focus,
+  textarea:-webkit-autofill:active,
+  select:-webkit-autofill,
+  select:-webkit-autofill:hover,
+  select:-webkit-autofill:focus,
+  select:-webkit-autofill:active {
     -webkit-text-fill-color: white !important;
     -webkit-box-shadow: 0 0 0 30px #1B263B inset !important;
     transition: background-color 5000s ease-in-out 0s !important;
+    background-color: #1B263B !important;
+    color: white !important;
   }
 
-  input:-webkit-autofill::placeholder {
+  /* Autofill placeholder text */
+  input:-webkit-autofill::placeholder,
+  textarea:-webkit-autofill::placeholder,
+  select:-webkit-autofill::placeholder {
+    color: #E0E1DD !important;
+    opacity: 1 !important;
+    -webkit-text-fill-color: #E0E1DD !important;
+  }
+
+  /* Firefox autofill */
+  input:-moz-autofill,
+  textarea:-moz-autofill,
+  select:-moz-autofill {
+    background-color: #1B263B !important;
+    color: white !important;
+  }
+
+  input:-moz-autofill::placeholder,
+  textarea:-moz-autofill::placeholder,
+  select:-moz-autofill::placeholder {
     color: #E0E1DD !important;
     opacity: 1 !important;
   }
