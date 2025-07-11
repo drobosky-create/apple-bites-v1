@@ -44,10 +44,10 @@ export default function FreeAssessment() {
   if (location === '/results') {
     if (assessmentsLoading) {
       return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+        <div className="min-h-screen bg-gradient-to-br from-ghl-navy to-ghl-navy-dark flex items-center justify-center">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-            <p className="text-slate-600">Loading your assessment results...</p>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-ghl-primary mx-auto mb-4"></div>
+            <p className="text-white/80">Loading your assessment results...</p>
           </div>
         </div>
       );
@@ -56,12 +56,12 @@ export default function FreeAssessment() {
     const latestAssessment = assessments?.[0];
     if (!latestAssessment) {
       return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+        <div className="min-h-screen bg-gradient-to-br from-ghl-navy to-ghl-navy-dark flex items-center justify-center">
           <div className="text-center">
-            <p className="text-slate-600">No assessment found. Please complete an assessment first.</p>
+            <p className="text-white/80">No assessment found. Please complete an assessment first.</p>
             <Button 
               onClick={() => window.location.href = '/'}
-              className="mt-4"
+              className="mt-4 ghl-primary-button"
             >
               Start New Assessment
             </Button>
@@ -71,7 +71,7 @@ export default function FreeAssessment() {
     }
 
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-4">
+      <div className="min-h-screen bg-gradient-to-br from-ghl-navy to-ghl-navy-dark py-4">
         <div className="container mx-auto px-4">
           <ValuationResults results={latestAssessment} />
         </div>
@@ -80,12 +80,12 @@ export default function FreeAssessment() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-4">
+    <div className="min-h-screen bg-gradient-to-br from-ghl-navy to-ghl-navy-dark py-4">
       <main className="container mx-auto px-4 max-w-4xl">
         <Button
           variant="ghost"
           onClick={() => window.history.back()}
-          className="mb-6 text-slate-600 hover:text-slate-900"
+          className="mb-6 text-white/70 hover:text-white hover:bg-white/10 transition-all duration-300"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to Home
@@ -100,8 +100,8 @@ export default function FreeAssessment() {
               className="h-12 sm:h-20 w-auto mb-3 sm:mb-0 sm:mr-4"
             />
             <div>
-              <h1 className="text-lg sm:text-3xl font-bold text-gray-900">Apple Bites Business Assessment</h1>
-              <Badge className="mt-2 bg-blue-100 text-blue-800">Free Basic Analysis</Badge>
+              <h1 className="text-lg sm:text-3xl font-bold text-white">Apple Bites Business Assessment</h1>
+              <Badge className="mt-2 bg-ghl-primary text-white">Free Basic Analysis</Badge>
             </div>
           </div>
         )}
