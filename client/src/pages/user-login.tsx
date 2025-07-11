@@ -268,19 +268,19 @@ export default function UserLogin() {
                 
                 <div className="space-y-2">
                   <Label htmlFor="password" className="text-white font-medium">Password</Label>
-                  <div className="relative">
+                  <div className="relative rounded-lg overflow-hidden">
                     <Input
                       id="password"
                       type={showPassword ? "text" : "password"}
                       {...loginForm.register("password")}
                       placeholder="Enter your password"
-                      className="bg-[#1B263B] border border-[#415A77] text-white placeholder-[#E0E1DD] rounded-lg focus:ring-2 focus:ring-[#778DA9]"
+                      className="bg-[#1B263B] border border-[#415A77] text-white placeholder-[#E0E1DD] rounded-lg focus:ring-2 focus:ring-[#778DA9] pr-12"
                     />
                     <Button
                       type="button"
                       variant="ghost"
                       size="sm"
-                      className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent text-white"
+                      className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 p-0 hover:bg-[#415A77]/20 text-[#E0E1DD] hover:text-white rounded-md transition-colors"
                       onClick={() => setShowPassword(!showPassword)}
                     >
                       {showPassword ? (
@@ -297,7 +297,7 @@ export default function UserLogin() {
 
                 <Button 
                   type="submit" 
-                  className="w-full text-white font-semibold bg-[#415A77] hover:bg-[#778DA9] transition duration-200 rounded-lg border-0" 
+                  className="w-full text-white font-semibold bg-gradient-to-r from-[#415A77] to-[#778DA9] hover:from-[#778DA9] hover:to-[#415A77] transition-all duration-300 rounded-lg border-0 shadow-lg hover:shadow-xl" 
                   disabled={loginMutation.isPending}
                 >
                   {loginMutation.isPending ? "Signing In..." : "Sign In"}
@@ -315,7 +315,7 @@ export default function UserLogin() {
                   </p>
                   <Button 
                     onClick={() => window.open('https://products.applebites.ai/', '_blank')}
-                    className="w-full text-white font-semibold bg-[#415A77] hover:bg-[#778DA9] transition duration-200 rounded-lg"
+                    className="w-full text-white font-semibold bg-gradient-to-r from-[#0D1B2A] to-[#1B263B] hover:from-[#1B263B] hover:to-[#0D1B2A] transition-all duration-300 rounded-lg border border-[#415A77] shadow-md hover:shadow-lg"
                   >
                     Purchase Assessment
                   </Button>
