@@ -422,6 +422,11 @@
     color: #000000 !important;
   }
 
+  /* Handle active state hover with higher specificity */
+  [data-state='active']:hover {
+    color: #0D1B2A !important;
+  }
+
   /* =========================== */
   /* GLOBAL PLACEHOLDER STYLING */
   /* =========================== */
