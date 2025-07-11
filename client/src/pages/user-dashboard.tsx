@@ -124,10 +124,7 @@ export default function UserDashboard() {
           <CardHeader>
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
-                <div className={`p-3 rounded-full ${tierInfo.color} text-white`}>
-                  <TierIcon className="h-6 w-6" />
-                </div>
-                <div>
+                <div></div>
                   <CardTitle className="text-2xl">Welcome, {user.firstName} {user.lastName}</CardTitle>
                   <CardDescription className="flex items-center space-x-2">
                     <span>{user.email}</span>
