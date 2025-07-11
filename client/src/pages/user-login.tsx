@@ -246,8 +246,8 @@ export default function UserLogin() {
         <CardContent>
           <Tabs defaultValue="login" className="w-full">
             <TabsList className="grid w-full grid-cols-2 bg-[#1B263B] border-[#415A77] rounded-lg">
-              <TabsTrigger value="login" className="text-[#E0E1DD] hover:text-white hover:bg-[#415A77]/60 data-[state=active]:bg-[#415A77] data-[state=active]:text-white data-[state=active]:shadow-sm border-0 rounded-lg font-medium transition-colors">Login</TabsTrigger>
-              <TabsTrigger value="info" className="text-[#E0E1DD] hover:text-white hover:bg-[#415A77]/60 data-[state=active]:bg-[#415A77] data-[state=active]:text-white data-[state=active]:shadow-sm border-0 rounded-lg font-medium transition-colors">Need an Account?</TabsTrigger>
+              <TabsTrigger value="login" className="text-[#E0E1DD] hover:text-[#0D1B2A] hover:bg-[#E0E1DD]/80 data-[state=active]:bg-[#415A77] data-[state=active]:text-white data-[state=active]:shadow-sm border-0 rounded-lg font-medium transition-colors">Login</TabsTrigger>
+              <TabsTrigger value="info" className="text-[#E0E1DD] hover:text-[#0D1B2A] hover:bg-[#E0E1DD]/80 data-[state=active]:bg-[#415A77] data-[state=active]:text-white data-[state=active]:shadow-sm border-0 rounded-lg font-medium transition-colors">Need an Account?</TabsTrigger>
             </TabsList>
             
             <TabsContent value="login" className="space-y-4 bg-transparent p-6 rounded-lg mt-4 border border-[#415A77]">
