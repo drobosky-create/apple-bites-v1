@@ -1,17 +1,28 @@
-import { pgTable, text, varchar, serial, integer, decimal, timestamp, boolean } from "drizzle-orm/pg-core";
+import { pgTable, text, varchar, serial, integer, decimal, timestamp, boolean, jsonb, index } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 import { relations } from "drizzle-orm";
 
-// User management table for AppleBites dashboard access
+// Session storage table for Replit Auth
+export const sessions = pgTable(
+  "sessions",
+  {
+    sid: varchar("sid").primaryKey(),
+    sess: jsonb("sess").notNull(),
+    expire: timestamp("expire").notNull(),
+  },
+  (table) => [index("IDX_session_expire").on(table.expire)],
+);
+
+// User storage table for Replit Auth
 export const users = pgTable("users", {
-  id: serial("id").primaryKey(),
-  email: text("email").notNull().unique(),
-  fullName: text("full_name").notNull(),
-  passwordHash: text("password_hash"), // NULL when awaiting password creation
+  id: varchar("id").primaryKey().notNull(), // Replit user ID
+  email: varchar("email").unique(),
+  firstName: varchar("first_name"),
+  lastName: varchar("last_name"),
+  profileImageUrl: varchar("profile_image_url"),
   tier: text("tier").notNull().default("free"), // "free", "growth", "capital"
   ghlContactId: text("ghl_contact_id"),
-  awaitingPasswordCreation: boolean("awaiting_password_creation").default(false),
   resultReady: boolean("result_ready").default(false),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
@@ -270,6 +281,7 @@ export const createPasswordSchema = z.object({
 
 export type InsertTeamMember = z.infer<typeof insertTeamMemberSchema>;
 export type InsertUser = z.infer<typeof insertUserSchema>;
+export type UpsertUser = typeof users.$inferInsert;
 export type TeamMember = typeof teamMembers.$inferSelect;
 export type TeamSession = typeof teamSessions.$inferSelect;
 export type User = typeof users.$inferSelect;

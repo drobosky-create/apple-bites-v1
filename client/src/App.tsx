@@ -5,9 +5,11 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AdminAuthProvider } from "@/hooks/use-admin-auth";
 import { TeamAuthProvider } from "@/hooks/use-team-auth";
+import { useAuth } from "@/hooks/useAuth";
 import Navigation from "@/components/navigation";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import Landing from "@/pages/landing";
 import RedirectHome from "@/pages/redirect-home";
 import UserLogin from "@/pages/user-login";
 import ValuationForm from "@/pages/valuation-form";
@@ -22,14 +24,23 @@ import UserDashboard from "@/pages/user-dashboard";
 import NotFound from "@/pages/not-found";
 
 function Router() {
+  const { isAuthenticated, isLoading } = useAuth();
+  
   return (
     <div className="min-h-screen bg-white flex flex-col" style={{ backgroundColor: 'white', margin: 0, padding: 0 }}>
       <Switch>
         {/* Standalone pages without header/navigation */}
-        <Route path="/" component={RedirectHome} />
+        {isLoading || !isAuthenticated ? (
+          <Route path="/" component={Landing} />
+        ) : (
+          <>
+            <Route path="/" component={UserDashboard} />
+            <Route path="/dashboard/:tier" component={UserDashboard} />
+            <Route path="/dashboard" component={UserDashboard} />
+          </>
+        )}
         <Route path="/login" component={UserLogin} />
-        <Route path="/dashboard/:tier" component={UserDashboard} />
-        <Route path="/dashboard" component={UserDashboard} />
+        <Route path="/redirect" component={RedirectHome} />
         
         {/* Pages with header/navigation */}
         <Route path="/assessment/free">

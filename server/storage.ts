@@ -15,7 +15,8 @@ import {
   type InsertTeamMember,
   type TeamSession,
   type User,
-  type InsertUser
+  type InsertUser,
+  type UpsertUser
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, and } from "drizzle-orm";
@@ -41,12 +42,12 @@ export interface IStorage {
   createLeadActivity(activity: InsertLeadActivity): Promise<LeadActivity>;
   getLeadActivities(leadId: number): Promise<LeadActivity[]>;
 
-  // User management methods
-  createUser(user: InsertUser): Promise<User>;
+  // User management methods (for Replit Auth)
+  getUser(id: string): Promise<User | undefined>;
+  upsertUser(user: UpsertUser): Promise<User>;
   getUserByEmail(email: string): Promise<User | undefined>;
-  getUserById(id: number): Promise<User | undefined>;
-  updateUser(id: number, updates: Partial<User>): Promise<User>;
-  deleteUser(id: number): Promise<void>;
+  updateUser(id: string, updates: Partial<User>): Promise<User>;
+  deleteUser(id: string): Promise<void>;
 
   // Team management methods
   createTeamMember(member: InsertTeamMember & { hashedPassword: string }): Promise<TeamMember>;
@@ -168,11 +169,23 @@ export class DatabaseStorage implements IStorage {
       .orderBy(desc(leadActivities.createdAt));
   }
 
-  // User management methods
-  async createUser(insertUser: InsertUser): Promise<User> {
+  // User management methods (for Replit Auth)
+  async getUser(id: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user || undefined;
+  }
+
+  async upsertUser(userData: UpsertUser): Promise<User> {
     const [user] = await db
       .insert(users)
-      .values(insertUser)
+      .values(userData)
+      .onConflictDoUpdate({
+        target: users.id,
+        set: {
+          ...userData,
+          updatedAt: new Date(),
+        },
+      })
       .returning();
     return user;
   }
@@ -182,12 +195,7 @@ export class DatabaseStorage implements IStorage {
     return user || undefined;
   }
 
-  async getUserById(id: number): Promise<User | undefined> {
-    const [user] = await db.select().from(users).where(eq(users.id, id));
-    return user || undefined;
-  }
-
-  async updateUser(id: number, updates: Partial<User>): Promise<User> {
+  async updateUser(id: string, updates: Partial<User>): Promise<User> {
     const [user] = await db
       .update(users)
       .set({ ...updates, updatedAt: new Date() })
@@ -201,7 +209,7 @@ export class DatabaseStorage implements IStorage {
     return user;
   }
 
-  async deleteUser(id: number): Promise<void> {
+  async deleteUser(id: string): Promise<void> {
     await db.delete(users).where(eq(users.id, id));
   }
 

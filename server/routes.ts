@@ -1,6 +1,7 @@
 import type { Express, Request } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
+import { setupAuth, isAuthenticated } from "./replitAuth";
 import { insertValuationAssessmentSchema, type ValuationAssessment, loginSchema, insertTeamMemberSchema, type LoginCredentials, type InsertTeamMember, type TeamMember } from "@shared/schema";
 import { generateValuationNarrative, type ValuationAnalysisInput } from "./openai";
 import { generateFinancialCoachingTips, generateContextualInsights, type FinancialCoachingData } from "./services/aiCoaching";
@@ -31,6 +32,21 @@ declare global {
 
 export async function registerRoutes(app: Express): Promise<Server> {
   
+  // Setup Replit Auth
+  await setupAuth(app);
+
+  // Replit Auth user route
+  app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      res.json(user);
+    } catch (error) {
+      console.error("Error fetching user:", error);
+      res.status(500).json({ message: "Failed to fetch user" });
+    }
+  });
+
   // Admin authentication middleware - also allows team members
   const isAdminAuthenticated = async (req: any, res: any, next: any) => {
     // Check if admin is authenticated via admin login

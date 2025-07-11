@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import { useLocation } from "wouter";
+import { useAuth } from "@/hooks/useAuth";
 import { 
   Crown, 
   TrendingUp, 
@@ -20,56 +21,38 @@ import {
 import { apiRequest } from "@/lib/queryClient";
 
 interface User {
-  id: number;
+  id: string;
   email: string;
-  fullName: string;
+  firstName: string;
+  lastName: string;
+  profileImageUrl: string;
   tier: 'free' | 'growth' | 'capital';
   resultReady: boolean;
-  awaitingPasswordCreation: boolean;
 }
 
 export default function UserDashboard() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
+  const { user: authUser, isLoading: authLoading } = useAuth();
 
   const { data: user, isLoading, error } = useQuery({
-    queryKey: ['/api/auth/me'],
-    queryFn: async () => {
-      const response = await apiRequest('/api/auth/me');
-      if (!response.ok) {
-        throw new Error('Not authenticated');
-      }
-      return response.json();
-    },
+    queryKey: ['/api/auth/user'],
+    enabled: !!authUser,
   });
 
   const logoutMutation = useMutation({
     mutationFn: async () => {
-      const response = await apiRequest('/api/auth/logout', {
-        method: 'POST',
-      });
-      if (!response.ok) {
-        throw new Error('Logout failed');
-      }
-      return response.json();
+      window.location.href = '/api/logout';
     },
     onSuccess: () => {
       toast({
-        title: "Logged out successfully",
-        description: "You have been logged out of your account.",
-      });
-      setLocation('/login');
-    },
-    onError: (error: Error) => {
-      toast({
-        title: "Logout failed",
-        description: error.message,
-        variant: "destructive",
+        title: "Logging out...",
+        description: "You are being logged out of your account.",
       });
     },
   });
 
-  if (isLoading) {
+  if (authLoading || isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2" style={{ borderBottomColor: '#4F83F7' }}></div>
@@ -145,7 +128,7 @@ export default function UserDashboard() {
                   <TierIcon className="h-6 w-6" />
                 </div>
                 <div>
-                  <CardTitle className="text-2xl">Welcome, {user.fullName}</CardTitle>
+                  <CardTitle className="text-2xl">Welcome, {user.firstName} {user.lastName}</CardTitle>
                   <CardDescription className="flex items-center space-x-2">
                     <span>{user.email}</span>
                     <Badge variant="secondary" className="ml-2">
