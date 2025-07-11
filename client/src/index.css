@@ -422,14 +422,30 @@
     color: #000000 !important;
   }
 
-  /* Handle active state hover with higher specificity */
-  [data-state='active']:hover {
+  /* Handle active state hover with higher specificity - multiple selectors for reliability */
+  [data-state='active']:hover,
+  button[data-state='active']:hover,
+  [role="tab"][data-state='active']:hover {
     color: #0D1B2A !important;
     background-color: rgba(224, 225, 221, 0.9) !important;
   }
 
   /* Tailwind-friendly utility for active tab hover */
-  .tab-active-hover:hover[data-state='active'] {
+  .tab-active-hover:hover[data-state='active'],
+  .tab-active-hover[data-state='active']:hover {
+    color: #0D1B2A !important;
+    background-color: rgba(224, 225, 221, 0.9) !important;
+  }
+
+  /* Force override for Radix UI TabsTrigger active hover */
+  [data-radix-collection-item][data-state='active']:hover {
+    color: #0D1B2A !important;
+    background-color: rgba(224, 225, 221, 0.9) !important;
+  }
+
+  /* Comprehensive active tab hover override - catches all cases */
+  *[data-state='active']:hover,
+  *:hover[data-state='active'] {
     color: #0D1B2A !important;
     background-color: rgba(224, 225, 221, 0.9) !important;
   }
