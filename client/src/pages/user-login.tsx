@@ -135,11 +135,11 @@ export default function UserLogin() {
 
   if (needsPasswordCreation) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center p-4">
-        <Card className="w-full max-w-md shadow-xl border-slate-200">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center p-4">
+        <Card className="w-full max-w-md shadow-xl border-blue-200">
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold text-center" style={{ color: 'rgb(26, 35, 50)' }}>Create Your Password</CardTitle>
-            <CardDescription className="text-center text-slate-600">
+            <CardTitle className="text-2xl font-bold text-center text-gray-800">Create Your Password</CardTitle>
+            <CardDescription className="text-center text-gray-600">
               Welcome to Apple Bites! Please create a secure password for your account.
             </CardDescription>
           </CardHeader>
@@ -200,7 +200,7 @@ export default function UserLogin() {
               <Button 
                 type="submit" 
                 className="w-full text-white font-medium" 
-                style={{ backgroundColor: 'rgb(26, 35, 50)' }}
+                style={{ backgroundColor: '#4F83F7' }}
                 disabled={createPasswordMutation.isPending}
               >
                 {createPasswordMutation.isPending ? "Creating Account..." : "Create Password & Login"}
@@ -214,19 +214,19 @@ export default function UserLogin() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md shadow-xl border-slate-200">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center p-4">
+      <Card className="w-full max-w-md shadow-xl border-blue-200">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center" style={{ color: 'rgb(26, 35, 50)' }}>Welcome to Apple Bites</CardTitle>
-          <CardDescription className="text-center text-slate-600">
+          <CardTitle className="text-2xl font-bold text-center text-gray-800">Welcome to Apple Bites</CardTitle>
+          <CardDescription className="text-center text-gray-600">
             Access your business valuation dashboard
           </CardDescription>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="login" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 bg-slate-100">
-              <TabsTrigger value="login" className="text-slate-700 data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm">Login</TabsTrigger>
-              <TabsTrigger value="info" className="text-slate-700 data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm">Need an Account?</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-2" style={{ backgroundColor: '#4F83F7' }}>
+              <TabsTrigger value="login" className="text-white data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm">Login</TabsTrigger>
+              <TabsTrigger value="info" className="text-white data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm">Need an Account?</TabsTrigger>
             </TabsList>
             
             <TabsContent value="login" className="space-y-4">
@@ -275,7 +275,7 @@ export default function UserLogin() {
                 <Button 
                   type="submit" 
                   className="w-full text-white font-medium" 
-                  style={{ backgroundColor: 'rgb(26, 35, 50)' }}
+                  style={{ backgroundColor: '#4F83F7' }}
                   disabled={loginMutation.isPending}
                 >
                   {loginMutation.isPending ? "Signing In..." : "Sign In"}
@@ -286,23 +286,23 @@ export default function UserLogin() {
             
             <TabsContent value="info" className="space-y-4">
               <div className="text-center space-y-4">
-                <div className="bg-slate-50 border border-slate-200 rounded-lg p-4">
-                  <h3 className="font-semibold mb-2" style={{ color: 'rgb(26, 35, 50)' }}>How to Get Access</h3>
-                  <p className="text-sm text-slate-600 mb-3">
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <h3 className="font-semibold mb-2 text-blue-900">How to Get Access</h3>
+                  <p className="text-sm text-blue-700 mb-3">
                     Purchase a Growth ($795) or Capital ($2,500) tier assessment to get your account automatically created.
                   </p>
                   <Button 
                     onClick={() => window.open('https://products.applebites.ai/', '_blank')}
                     className="w-full text-white font-medium"
-                    style={{ backgroundColor: 'rgb(26, 35, 50)' }}
+                    style={{ backgroundColor: '#4F83F7' }}
                   >
                     Purchase Assessment
                   </Button>
                 </div>
                 
-                <div className="bg-slate-50 border border-slate-200 rounded-lg p-4">
-                  <h3 className="font-semibold mb-2" style={{ color: 'rgb(26, 35, 50)' }}>Already Purchased?</h3>
-                  <p className="text-sm text-slate-600">
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <h3 className="font-semibold mb-2 text-blue-900">Already Purchased?</h3>
+                  <p className="text-sm text-blue-700">
                     If you've already purchased an assessment, try logging in with your email. You'll be guided through password creation if needed.
                   </p>
                 </div>
