@@ -411,6 +411,28 @@
     box-shadow: 0 0 0 2px rgb(var(--meritage-blue) / 0.2) !important;
   }
 
+  /* Apple Bites Login Form Specific Overrides */
+  .placeholder-\[#E0E1DD\]::placeholder,
+  .placeholder-\[#E0E1DD\]::-webkit-input-placeholder,
+  .placeholder-\[#E0E1DD\]::-moz-placeholder {
+    color: #E0E1DD !important;
+    opacity: 1 !important;
+  }
+
+  /* Override any system autofill styling */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus {
+    -webkit-text-fill-color: white !important;
+    -webkit-box-shadow: 0 0 0 30px #1B263B inset !important;
+    transition: background-color 5000s ease-in-out 0s !important;
+  }
+
+  input:-webkit-autofill::placeholder {
+    color: #E0E1DD !important;
+    opacity: 1 !important;
+  }
+
   /* Force all dialog elements to use proper Meritage Partners styling */
   [role="dialog"],
   [data-radix-dialog-content],
