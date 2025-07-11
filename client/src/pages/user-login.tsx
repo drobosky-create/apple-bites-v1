@@ -225,39 +225,41 @@ export default function UserLogin() {
         <CardContent>
           <Tabs defaultValue="login" className="w-full">
             <TabsList className="grid w-full grid-cols-2" style={{ backgroundColor: '#4F83F7' }}>
-              <TabsTrigger value="login" className="text-white data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm">Login</TabsTrigger>
-              <TabsTrigger value="info" className="text-white data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm">Need an Account?</TabsTrigger>
+              <TabsTrigger value="login" className="text-white data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-sm border-0">Login</TabsTrigger>
+              <TabsTrigger value="info" className="text-white data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-sm border-0">Need an Account?</TabsTrigger>
             </TabsList>
             
-            <TabsContent value="login" className="space-y-4">
+            <TabsContent value="login" className="space-y-4" style={{ backgroundColor: '#4F83F7', padding: '1rem', borderRadius: '0.5rem' }}>
               <form onSubmit={loginForm.handleSubmit(onLoginSubmit)} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
+                  <Label htmlFor="email" className="text-white font-medium">Email</Label>
                   <Input
                     id="email"
                     type="email"
                     {...loginForm.register("email")}
                     placeholder="Enter your email address"
+                    className="bg-white border-0 text-gray-900 placeholder-gray-500"
                   />
                   {loginForm.formState.errors.email && (
-                    <p className="text-sm text-red-500">{loginForm.formState.errors.email.message}</p>
+                    <p className="text-sm text-red-100">{loginForm.formState.errors.email.message}</p>
                   )}
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="password">Password</Label>
+                  <Label htmlFor="password" className="text-white font-medium">Password</Label>
                   <div className="relative">
                     <Input
                       id="password"
                       type={showPassword ? "text" : "password"}
                       {...loginForm.register("password")}
                       placeholder="Enter your password"
+                      className="bg-white border-0 text-gray-900 placeholder-gray-500"
                     />
                     <Button
                       type="button"
                       variant="ghost"
                       size="sm"
-                      className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                      className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent text-gray-600"
                       onClick={() => setShowPassword(!showPassword)}
                     >
                       {showPassword ? (
@@ -268,14 +270,13 @@ export default function UserLogin() {
                     </Button>
                   </div>
                   {loginForm.formState.errors.password && (
-                    <p className="text-sm text-red-500">{loginForm.formState.errors.password.message}</p>
+                    <p className="text-sm text-red-100">{loginForm.formState.errors.password.message}</p>
                   )}
                 </div>
 
                 <Button 
                   type="submit" 
-                  className="w-full text-white font-medium" 
-                  style={{ backgroundColor: '#4F83F7' }}
+                  className="w-full text-white font-medium bg-blue-600 hover:bg-blue-700 border-0" 
                   disabled={loginMutation.isPending}
                 >
                   {loginMutation.isPending ? "Signing In..." : "Sign In"}
