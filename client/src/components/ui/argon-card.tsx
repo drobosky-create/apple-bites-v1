@@ -1,34 +1,47 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
-import { argonColors, argonShadows } from './argon-theme';
 
-interface ArgonCardProps {
+interface ArgonCardProps extends React.HTMLAttributes<HTMLDivElement> {
+  variant?: 'light' | 'dark' | 'gradient';
+  gradient?: 'primary' | 'info' | 'success' | 'warning' | 'error';
+  shadow?: 'sm' | 'md' | 'lg' | 'xl' | 'none';
   children: React.ReactNode;
-  className?: string;
-  shadow?: keyof typeof argonShadows;
-  variant?: 'default' | 'gradient';
-  color?: 'primary' | 'secondary' | 'info' | 'success' | 'warning' | 'error';
 }
 
-export const ArgonCard = React.forwardRef<HTMLDivElement, ArgonCardProps>(
-  ({ children, className, shadow = 'md', variant = 'default', color = 'primary', ...props }, ref) => {
-    const cardStyles: React.CSSProperties = {
-      backgroundColor: argonColors.white.main,
-      borderRadius: '0.75rem',
-      boxShadow: argonShadows[shadow],
+const ArgonCard = React.forwardRef<HTMLDivElement, ArgonCardProps>(
+  ({ 
+    className, 
+    variant = 'light', 
+    gradient,
+    shadow = 'lg',
+    children, 
+    ...props 
+  }, ref) => {
+    const baseClasses = "argon-card";
+    
+    const variantClasses = {
+      light: "bg-white",
+      dark: "argon-card-dark",
+      gradient: gradient ? `argon-gradient-${gradient}` : "argon-gradient-primary"
     };
 
-    if (variant === 'gradient') {
-      const gradientColors = argonColors.gradients[color];
-      cardStyles.background = `linear-gradient(310deg, ${gradientColors.main}, ${gradientColors.state})`;
-      cardStyles.color = '#ffffff';
-    }
+    const shadowClasses = {
+      sm: "argon-shadow-sm",
+      md: "argon-shadow-md", 
+      lg: "argon-shadow-lg",
+      xl: "argon-shadow-xl",
+      none: ""
+    };
 
     return (
       <div
+        className={cn(
+          baseClasses,
+          variantClasses[variant],
+          shadowClasses[shadow],
+          className
+        )}
         ref={ref}
-        className={cn('relative overflow-hidden', className)}
-        style={cardStyles}
         {...props}
       >
         {children}
@@ -37,46 +50,71 @@ export const ArgonCard = React.forwardRef<HTMLDivElement, ArgonCardProps>(
   }
 );
 
-ArgonCard.displayName = 'ArgonCard';
+ArgonCard.displayName = "ArgonCard";
 
-export const ArgonCardHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ children, className, ...props }, ref) => (
-    <div
-      ref={ref}
-      className={cn('p-6 pb-0', className)}
-      {...props}
-    >
-      {children}
-    </div>
-  )
+interface ArgonCardHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
+  gradient?: boolean;
+  children: React.ReactNode;
+}
+
+const ArgonCardHeader = React.forwardRef<HTMLDivElement, ArgonCardHeaderProps>(
+  ({ className, gradient = false, children, ...props }, ref) => {
+    return (
+      <div
+        className={cn(
+          "p-6 pb-0",
+          gradient && "argon-gradient-primary text-white",
+          className
+        )}
+        ref={ref}
+        {...props}
+      >
+        {children}
+      </div>
+    );
+  }
 );
 
-ArgonCardHeader.displayName = 'ArgonCardHeader';
+ArgonCardHeader.displayName = "ArgonCardHeader";
 
-export const ArgonCardContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ children, className, ...props }, ref) => (
-    <div
-      ref={ref}
-      className={cn('p-6', className)}
-      {...props}
-    >
-      {children}
-    </div>
-  )
+interface ArgonCardContentProps extends React.HTMLAttributes<HTMLDivElement> {
+  children: React.ReactNode;
+}
+
+const ArgonCardContent = React.forwardRef<HTMLDivElement, ArgonCardContentProps>(
+  ({ className, children, ...props }, ref) => {
+    return (
+      <div
+        className={cn("p-6 pt-2", className)}
+        ref={ref}
+        {...props}
+      >
+        {children}
+      </div>
+    );
+  }
 );
 
-ArgonCardContent.displayName = 'ArgonCardContent';
+ArgonCardContent.displayName = "ArgonCardContent";
 
-export const ArgonCardFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ children, className, ...props }, ref) => (
-    <div
-      ref={ref}
-      className={cn('p-6 pt-0', className)}
-      {...props}
-    >
-      {children}
-    </div>
-  )
+interface ArgonCardFooterProps extends React.HTMLAttributes<HTMLDivElement> {
+  children: React.ReactNode;
+}
+
+const ArgonCardFooter = React.forwardRef<HTMLDivElement, ArgonCardFooterProps>(
+  ({ className, children, ...props }, ref) => {
+    return (
+      <div
+        className={cn("p-6 pt-0", className)}
+        ref={ref}
+        {...props}
+      >
+        {children}
+      </div>
+    );
+  }
 );
 
-ArgonCardFooter.displayName = 'ArgonCardFooter';
+ArgonCardFooter.displayName = "ArgonCardFooter";
+
+export { ArgonCard, ArgonCardHeader, ArgonCardContent, ArgonCardFooter };
