@@ -329,7 +329,7 @@ export default function UserDashboardArgon() {
                       <Download className="h-4 w-4 mr-2" />
                       Download Results
                     </ArgonButton>
-                    <ArgonButton variant="outlined" color="secondary" size="large" className="w-full sm:w-auto">
+                    <ArgonButton variant="outlined" color="secondary" size="large" className="w-full sm:w-auto ml-[50px] mr-[50px]">
                       <Mail className="h-4 w-4 mr-2" />
                       Email Results
                     </ArgonButton>
