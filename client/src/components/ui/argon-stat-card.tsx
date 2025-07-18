@@ -1,110 +1,104 @@
-import { ReactNode } from "react";
-import { Card } from "@/components/ui/card";
-import { TrendingUp, TrendingDown, Minus } from "lucide-react";
+import React from 'react';
+import { cn } from '@/lib/utils';
+import { ArgonCard, ArgonCardContent } from './argon-card';
+import { ArgonTypography } from './argon-typography';
 
 interface ArgonStatCardProps {
   title: string;
   value: string | number;
+  icon?: React.ReactNode;
+  color?: 'primary' | 'info' | 'success' | 'warning' | 'error';
   subtitle?: string;
   trend?: {
     value: string;
     direction: 'up' | 'down' | 'neutral';
     label: string;
   };
-  icon?: ReactNode;
-  color?: 'primary' | 'success' | 'info' | 'warning' | 'danger';
-  gradient?: boolean;
+  className?: string;
 }
 
-export function ArgonStatCard({ 
-  title, 
-  value, 
-  subtitle, 
-  trend, 
-  icon, 
+const ArgonStatCard: React.FC<ArgonStatCardProps> = ({
+  title,
+  value,
+  icon,
   color = 'primary',
-  gradient = false 
-}: ArgonStatCardProps) {
-  const getColorClasses = () => {
-    if (gradient) {
-      return {
-        background: `bg-gradient-${color}`,
-        text: 'text-white',
-        icon: 'text-white/80',
-        trend: 'text-white/70'
-      };
-    }
-    
-    return {
-      background: 'bg-white',
-      text: 'text-gray-900',
-      icon: `text-argon-${color}`,
-      trend: 'text-gray-600'
-    };
+  subtitle,
+  trend,
+  className
+}) => {
+  const colorClasses = {
+    primary: 'text-purple-600',
+    info: 'text-blue-500', 
+    success: 'text-green-500',
+    warning: 'text-orange-500',
+    error: 'text-red-500'
   };
 
-  const colors = getColorClasses();
-  
-  const getTrendIcon = () => {
-    if (!trend) return null;
-    
-    switch (trend.direction) {
-      case 'up':
-        return <TrendingUp className="w-4 h-4" />;
-      case 'down':
-        return <TrendingDown className="w-4 h-4" />;
-      default:
-        return <Minus className="w-4 h-4" />;
-    }
+  const gradientClasses = {
+    primary: 'argon-gradient-primary',
+    info: 'argon-gradient-info',
+    success: 'argon-gradient-success', 
+    warning: 'argon-gradient-warning',
+    error: 'argon-gradient-error'
   };
 
-  const getTrendColor = () => {
-    if (gradient) return 'text-white/70';
-    
-    switch (trend?.direction) {
-      case 'up':
-        return 'text-green-600';
-      case 'down':
-        return 'text-red-600';
-      default:
-        return 'text-gray-600';
-    }
-  };
+  const trendIcon = trend?.direction === 'up' ? '↗' : trend?.direction === 'down' ? '↘' : '→';
+  const trendColor = trend?.direction === 'up' ? 'text-green-500' : trend?.direction === 'down' ? 'text-red-500' : 'text-gray-500';
 
   return (
-    <Card className={`${colors.background} ${gradient ? 'text-white' : ''} border-0 shadow-argon hover:shadow-argon-lg transition-all duration-300`}>
-      <div className="p-6">
+    <ArgonCard className={cn('relative overflow-hidden', className)}>
+      <ArgonCardContent className="p-6">
         <div className="flex items-center justify-between mb-4">
-          <div>
-            <p className={`text-sm font-medium ${gradient ? 'text-white/80' : 'text-gray-600'} uppercase tracking-wide`}>
+          <div className="flex-1">
+            <ArgonTypography 
+              variant="caption" 
+              color="text"
+              className="text-gray-600 uppercase tracking-wide font-medium mb-1"
+            >
               {title}
-            </p>
-            <h3 className={`text-2xl font-bold ${colors.text} mt-1`}>
+            </ArgonTypography>
+            <ArgonTypography 
+              variant="h4" 
+              color="dark"
+              fontWeight="bold"
+              className="mb-1"
+            >
               {value}
-            </h3>
+            </ArgonTypography>
             {subtitle && (
-              <p className={`text-sm ${gradient ? 'text-white/70' : 'text-gray-500'} mt-1`}>
+              <ArgonTypography 
+                variant="caption" 
+                color="text"
+                className="text-gray-500"
+              >
                 {subtitle}
-              </p>
+              </ArgonTypography>
             )}
           </div>
+          
           {icon && (
-            <div className={`flex-shrink-0 ${colors.icon}`}>
-              <div className="w-12 h-12 flex items-center justify-center rounded-lg bg-white/10">
-                {icon}
-              </div>
+            <div className={cn(
+              'w-12 h-12 rounded-lg flex items-center justify-center text-white',
+              gradientClasses[color]
+            )}>
+              {icon}
             </div>
           )}
         </div>
-        
+
         {trend && (
-          <div className={`flex items-center text-sm ${getTrendColor()}`}>
-            {getTrendIcon()}
-            <span className="ml-1 font-medium">{trend.value}</span>
-            <span className="ml-1">{trend.label}</span>
+          <div className="flex items-center space-x-2">
+            <span className={cn('text-sm font-medium', trendColor)}>
+              {trendIcon} {trend.value}
+            </span>
+            <span className="text-sm text-gray-500">
+              {trend.label}
+            </span>
           </div>
         )}
-      </div>
-    </Card>
+      </ArgonCardContent>
+    </ArgonCard>
   );
-}
+};
+
+export { ArgonStatCard };

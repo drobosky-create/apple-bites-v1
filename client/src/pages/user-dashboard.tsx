@@ -60,32 +60,37 @@ export default function UserDashboard() {
 
   if (authLoading || isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-argon-primary"></div>
+      <div className="min-h-screen" style={{ background: 'var(--argon-background-default)' }}>
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+        </div>
       </div>
     );
   }
 
   if (error || !user) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center p-4">
-        <Card className="w-full max-w-md shadow-xl border-blue-200">
-          <CardHeader>
-            <CardTitle className="text-center text-gray-800">Authentication Required</CardTitle>
-            <CardDescription className="text-center text-gray-600">
+      <div className="min-h-screen flex items-center justify-center p-4" style={{ background: 'var(--argon-background-default)' }}>
+        <ArgonCard className="w-full max-w-md">
+          <ArgonCardHeader>
+            <ArgonTypography variant="h5" color="white" className="text-center mb-2">
+              Authentication Required
+            </ArgonTypography>
+            <ArgonTypography variant="body2" color="white" className="text-center opacity-75">
               Please log in to access your dashboard.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button 
+            </ArgonTypography>
+          </ArgonCardHeader>
+          <ArgonCardContent>
+            <ArgonButton 
               onClick={() => setLocation('/login')} 
-              className="w-full text-white font-medium"
-              style={{ backgroundColor: '#4F83F7' }}
+              color="info"
+              className="w-full"
+              size="large"
             >
               Go to Login
-            </Button>
-          </CardContent>
-        </Card>
+            </ArgonButton>
+          </ArgonCardContent>
+        </ArgonCard>
       </div>
     );
   }
