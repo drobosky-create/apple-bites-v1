@@ -298,32 +298,19 @@ export default function UserLogin() {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#f8f9fa' }}>
-      {/* Header */}
-      <div
-        className="relative py-3 bg-gradient-to-r from-blue-600 to-blue-700"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-center">
-            <div className="flex items-center space-x-3">
-              <img 
-                src="/apple-bites-logo.png" 
-                alt="Apple Bites Business Assessment" 
-                className="h-12 w-auto"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* Main Content */}
       <ArgonBox py={6} px={3} className="bg-transparent">
         <div className="max-w-md mx-auto">
           <div className="bg-white rounded-xl shadow-lg border border-gray-100">
             <ArgonBox p={4}>
               <div className="text-center mb-6">
-                <ArgonTypography variant="h4" color="dark" fontWeight="bold" className="mb-2">
-                  Welcome to Apple Bites
-                </ArgonTypography>
+                <div className="flex justify-center mb-4">
+                  <img 
+                    src="/apple-bites-logo-new.png" 
+                    alt="Apple Bites Business Assessment" 
+                    className="h-20 w-auto"
+                  />
+                </div>
                 <ArgonTypography variant="body2" color="text">
                   Create your account to access business valuation tools
                 </ArgonTypography>
