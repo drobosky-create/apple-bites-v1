@@ -212,13 +212,13 @@ export default function FreeTierDemo() {
                     Your assessment is being processed. Results will be available shortly.
                   </ArgonTypography>
                 </div>
-                <div className="flex flex-col sm:flex-row justify-start gap-2 sm:gap-4">
+                <div className="flex flex-col sm:flex-row gap-3">
                   <ArgonButton 
                     variant="gradient"
                     color="info"
                     size="large"
                     onClick={() => setLocation('/assessment/free')}
-                    className="w-full sm:w-auto"
+                    className="flex-shrink-0"
                   >
                     <FileText className="h-4 w-4 mr-2" />
                     Take Free Assessment
@@ -228,7 +228,7 @@ export default function FreeTierDemo() {
                     color="secondary"
                     size="large"
                     onClick={() => window.open('https://products.applebites.ai/', '_blank')}
-                    className="w-full sm:w-auto"
+                    className="flex-shrink-0"
                   >
                     <ExternalLink className="h-4 w-4 mr-2" />
                     Purchase Additional Assessments
@@ -247,7 +247,7 @@ export default function FreeTierDemo() {
               <ArgonTypography variant="body2" color="text" className="mb-4">
                 If you have questions about your assessment or need assistance, our team is here to help.
               </ArgonTypography>
-              <ArgonButton variant="gradient" color="success">
+              <ArgonButton variant="gradient" color="success" className="flex-shrink-0">
                 <Mail className="h-4 w-4 mr-2" />
                 Contact Support
               </ArgonButton>
