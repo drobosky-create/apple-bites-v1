@@ -56,7 +56,7 @@ export default function FreeTierDemo() {
                 <img 
                   src="/apple-bites-logo.png" 
                   alt="Apple Bites Business Assessment" 
-                  className="h-12 w-auto"
+                  className="h-20 w-auto"
                 />
               </div>
               <ArgonBox>
@@ -85,7 +85,7 @@ export default function FreeTierDemo() {
       </ArgonBox>
 
       {/* Authentic Argon Statistics Cards - Positioned over gradient header */}
-      <ArgonBox mt={-3} mb={3} px={3} className="bg-transparent mt-[14px] mb-[14px]">
+      <ArgonBox mt={3} mb={3} px={3} className="bg-transparent" style={{ marginTop: '14px', marginBottom: '14px' }}>
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <DetailedStatisticsCard
