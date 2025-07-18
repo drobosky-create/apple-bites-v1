@@ -72,7 +72,7 @@ export default function ArgonDemo() {
         </div>
       </ArgonBox>
       {/* Authentic Argon Statistics Cards - Positioned over gradient header */}
-      <ArgonBox mt={-3} mb={3} px={3} className="bg-transparent pt-[1px] pb-[1px] pl-[21px] pr-[21px] mt-[16px] mb-[16px]">
+      <ArgonBox mt={3} mb={3} px={3} className="bg-transparent pt-[1px] pb-[1px] pl-[21px] pr-[21px] mt-[16px] mb-[16px]">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <DetailedStatisticsCard
@@ -188,7 +188,7 @@ export default function ArgonDemo() {
                 Actions
               </ArgonTypography>
               <div className="space-y-4">
-                <div className="flex flex-col sm:flex-row justify-between gap-2 sm:gap-1">
+                <div className="flex flex-col sm:flex-row justify-left items-center gap-4 sm:gap-6">
                   <ArgonButton variant="gradient" color="primary" size="large" className="w-full sm:w-auto">
                     <Download className="h-4 w-4 mr-2" />
                     Download Results

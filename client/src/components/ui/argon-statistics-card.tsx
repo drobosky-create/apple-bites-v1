@@ -49,49 +49,52 @@ const DetailedStatisticsCard: React.FC<DetailedStatisticsCardProps> = ({
       className
     )}>
       <ArgonBox p={3}>
-        <div className="flex items-center justify-between">
-          <div className="flex-1">
-            <ArgonTypography
-              variant="button"
-              color="text"
-              textTransform="uppercase"
-              fontWeight="bold"
-              className="text-gray-600 text-xs mb-1 opacity-70"
-            >
-              {title}
-            </ArgonTypography>
-            <ArgonTypography
-              variant="h4"
-              color="dark"
-              fontWeight="bold"
-              className="mb-0"
-            >
-              {count}
-            </ArgonTypography>
-            {percentage && (
-              <div className="flex items-center mt-2">
-                <ArgonTypography
-                  variant="button"
-                  className={cn(
-                    'font-bold mr-1',
-                    percentageColorClasses[percentage.color]
-                  )}
-                >
-                  {percentage.count}
-                </ArgonTypography>
-                <ArgonTypography variant="caption" color="text">
-                  {percentage.text}
-                </ArgonTypography>
-              </div>
-            )}
+        <div className="flex flex-col h-full justify-between">
+          <div className="h-[80px] flex items-center justify-between">
+            <div className="flex-1">
+              <ArgonTypography
+                variant="button"
+                color="text"
+                textTransform="uppercase"
+                fontWeight="bold"
+                className="text-gray-600 text-xs mb-1 opacity-70"
+              >
+                {title}
+              </ArgonTypography>
+              <ArgonTypography
+                variant="h4"
+                color="dark"
+                fontWeight="bold"
+                className="mb-0"
+              >
+                {count}
+              </ArgonTypography>
+            </div>
+            
+            <div className={cn(
+              'w-12 h-12 rounded-lg flex items-center justify-center text-white ml-4',
+              iconColorClasses[icon.color]
+            )}>
+              {icon.component}
+            </div>
           </div>
-          
-          <div className={cn(
-            'w-12 h-12 rounded-lg flex items-center justify-center text-white ml-4',
-            iconColorClasses[icon.color]
-          )}>
-            {icon.component}
-          </div>
+
+          {percentage && (
+            <div className="flex items-center mt-auto">
+              <ArgonTypography
+                variant="button"
+                className={cn(
+                  'font-bold mr-1',
+                  percentageColorClasses[percentage.color]
+                )}
+              >
+                {percentage.count}
+              </ArgonTypography>
+              <ArgonTypography variant="caption" color="text">
+                {percentage.text}
+              </ArgonTypography>
+            </div>
+          )}
         </div>
       </ArgonBox>
     </div>
@@ -128,7 +131,7 @@ const MiniStatisticsCard: React.FC<MiniStatisticsCardProps> = ({
 }) => {
   const bgColorClasses = {
     white: 'bg-white',
-    primary: 'bg-gradient-to-r from-purple-600 to-blue-600',
+    primary: 'bg-gradient-to-r from-[#0b2147] to-blue-600',
     secondary: 'bg-gray-600',
     info: 'bg-blue-500',
     success: 'bg-green-500',
@@ -138,7 +141,7 @@ const MiniStatisticsCard: React.FC<MiniStatisticsCardProps> = ({
   };
 
   const iconColorClasses = {
-    primary: bgColor === 'white' ? 'bg-gradient-to-r from-purple-600 to-blue-600' : 'bg-white',
+    primary: bgColor === 'white' ? 'bg-gradient-to-r from-[#0b2147] to-blue-600' : 'bg-white',
     secondary: bgColor === 'white' ? 'bg-gray-600' : 'bg-white',
     info: bgColor === 'white' ? 'bg-blue-500' : 'bg-white',
     success: bgColor === 'white' ? 'bg-green-500' : 'bg-white',
