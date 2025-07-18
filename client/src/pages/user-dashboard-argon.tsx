@@ -126,16 +126,16 @@ export default function UserDashboardArgon() {
       <ArgonBox
         variant="gradient"
         bgGradient="primary"
-        py={20}
+        py={6}
         className="relative"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
             <ArgonBox>
-              <ArgonTypography variant="h3" color="white" fontWeight="bold" className="mb-1">
+              <ArgonTypography variant="h4" color="white" fontWeight="bold" className="mb-1">
                 Welcome, {user.firstName} {user.lastName}
               </ArgonTypography>
-              <ArgonTypography variant="body1" color="white" opacity={0.8} className="mb-3">
+              <ArgonTypography variant="body2" color="white" opacity={0.8} className="mb-2">
                 {user.email}
               </ArgonTypography>
               <Badge className="bg-white/20 text-white border-white/30 font-medium">
@@ -157,7 +157,7 @@ export default function UserDashboardArgon() {
       </ArgonBox>
 
       {/* Authentic Argon Statistics Cards - Positioned over gradient header */}
-      <ArgonBox mt={-8} mb={3} px={3}>
+      <ArgonBox mt={-4} mb={3} px={3}>
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <DetailedStatisticsCard
