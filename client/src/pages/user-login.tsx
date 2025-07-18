@@ -24,7 +24,8 @@ export default function UserLogin() {
   const registerForm = useForm<RegisterUser>({
     resolver: zodResolver(registerUserSchema),
     defaultValues: {
-      fullName: "",
+      firstName: "",
+      lastName: "",
       email: "",
       password: "",
     },
@@ -137,7 +138,7 @@ export default function UserLogin() {
                   <img 
                     src="/apple-bites-logo-new.png" 
                     alt="Apple Bites Business Assessment" 
-                    className="h-20 w-auto"
+                    className="h-50 w-auto"
                   />
                 </div>
                 <ArgonTypography variant="body2" color="text">
@@ -221,18 +222,33 @@ export default function UserLogin() {
                   </div>
 
                   <form onSubmit={registerForm.handleSubmit(onRegisterSubmit)} className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="fullName" className="text-gray-700 font-medium">Full Name</Label>
-                      <Input
-                        id="fullName"
-                        type="text"
-                        {...registerForm.register("fullName")}
-                        placeholder="Enter your full name"
-                        className="bg-white border border-gray-200 text-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500"
-                      />
-                      {registerForm.formState.errors.fullName && (
-                        <p className="text-sm text-red-500">{registerForm.formState.errors.fullName.message}</p>
-                      )}
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-2">
+                        <Label htmlFor="firstName" className="text-gray-700 font-medium">First Name</Label>
+                        <Input
+                          id="firstName"
+                          type="text"
+                          {...registerForm.register("firstName")}
+                          placeholder="First name"
+                          className="bg-white border border-gray-200 text-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        />
+                        {registerForm.formState.errors.firstName && (
+                          <p className="text-sm text-red-500">{registerForm.formState.errors.firstName.message}</p>
+                        )}
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="lastName" className="text-gray-700 font-medium">Last Name</Label>
+                        <Input
+                          id="lastName"
+                          type="text"
+                          {...registerForm.register("lastName")}
+                          placeholder="Last name"
+                          className="bg-white border border-gray-200 text-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        />
+                        {registerForm.formState.errors.lastName && (
+                          <p className="text-sm text-red-500">{registerForm.formState.errors.lastName.message}</p>
+                        )}
+                      </div>
                     </div>
                     
                     <div className="space-y-2">
@@ -272,6 +288,16 @@ export default function UserLogin() {
                             <Eye className="h-4 w-4" />
                           )}
                         </ArgonButton>
+                      </div>
+                      <div className="text-xs text-gray-600 space-y-1">
+                        <p>Password must contain:</p>
+                        <ul className="list-disc list-inside space-y-0.5 text-xs">
+                          <li>At least 8 characters</li>
+                          <li>One uppercase letter (A-Z)</li>
+                          <li>One lowercase letter (a-z)</li>
+                          <li>One number (0-9)</li>
+                          <li>One special character (!@#$%^&*)</li>
+                        </ul>
                       </div>
                       {registerForm.formState.errors.password && (
                         <p className="text-sm text-red-500">{registerForm.formState.errors.password.message}</p>

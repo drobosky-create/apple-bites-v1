@@ -106,7 +106,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Create user
       const user = await storage.createCustomUser({
-        fullName: validatedData.fullName,
+        firstName: validatedData.firstName,
+        lastName: validatedData.lastName,
         email: validatedData.email,
         passwordHash,
       });
@@ -119,7 +120,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         user: {
           id: user.id,
           email: user.email,
-          fullName: user.fullName,
+          firstName: user.firstName,
+          lastName: user.lastName,
           tier: user.tier,
           authProvider: user.authProvider,
         },
@@ -148,7 +150,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         user: {
           id: user.id,
           email: user.email,
-          fullName: user.fullName,
+          firstName: user.firstName,
+          lastName: user.lastName,
           tier: user.tier,
           authProvider: user.authProvider,
         },

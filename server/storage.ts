@@ -48,7 +48,7 @@ export interface IStorage {
   getUserByEmail(email: string): Promise<User | undefined>;
   updateUser(id: string, updates: Partial<User>): Promise<User>;
   deleteUser(id: string): Promise<void>;
-  createCustomUser(userData: { fullName: string; email: string; passwordHash: string }): Promise<User>;
+  createCustomUser(userData: { firstName: string; lastName: string; email: string; passwordHash: string }): Promise<User>;
   validateUserCredentials(email: string, password: string): Promise<User | null>;
 
   // Team management methods
@@ -275,7 +275,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   // Custom user authentication methods
-  async createCustomUser(userData: { fullName: string; email: string; passwordHash: string }): Promise<User> {
+  async createCustomUser(userData: { firstName: string; lastName: string; email: string; passwordHash: string }): Promise<User> {
     const userId = `custom_${Date.now()}_${Math.random().toString(36).substring(7)}`;
     
     const [user] = await db
@@ -283,7 +283,8 @@ export class DatabaseStorage implements IStorage {
       .values({
         id: userId,
         email: userData.email,
-        fullName: userData.fullName,
+        firstName: userData.firstName,
+        lastName: userData.lastName,
         passwordHash: userData.passwordHash,
         authProvider: 'custom',
         emailVerified: false,
