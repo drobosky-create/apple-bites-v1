@@ -189,12 +189,9 @@ export default function UserLogin() {
   if (needsPasswordCreation) {
     return (
       <div className="min-h-screen" style={{ backgroundColor: '#f8f9fa' }}>
-        {/* Argon Header */}
-        <ArgonBox
-          variant="gradient"
-          bgGradient="primary"
-          py={3}
-          className="relative"
+        {/* Header */}
+        <div
+          className="relative py-3 bg-gradient-to-r from-blue-600 to-blue-700"
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-center">
@@ -207,7 +204,7 @@ export default function UserLogin() {
               </div>
             </div>
           </div>
-        </ArgonBox>
+        </div>
 
         {/* Main Content */}
         <ArgonBox py={6} px={3} className="bg-transparent">
@@ -301,12 +298,9 @@ export default function UserLogin() {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#f8f9fa' }}>
-      {/* Argon Header */}
-      <ArgonBox
-        variant="gradient"
-        bgGradient="primary"
-        py={3}
-        className="relative"
+      {/* Header */}
+      <div
+        className="relative py-3 bg-gradient-to-r from-blue-600 to-blue-700"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-center">
@@ -319,7 +313,7 @@ export default function UserLogin() {
             </div>
           </div>
         </div>
-      </ArgonBox>
+      </div>
 
       {/* Main Content */}
       <ArgonBox py={6} px={3} className="bg-transparent">
