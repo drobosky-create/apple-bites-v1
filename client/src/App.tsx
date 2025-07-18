@@ -35,12 +35,16 @@ function Router() {
       <Switch>
         {/* Standalone pages without header/navigation */}
         {isLoading || !isAuthenticated ? (
-          <Route path="/" component={Landing} />
+          <>
+            <Route path="/" component={Landing} />
+            <Route path="/dashboard" component={UserLogin} />
+            <Route path="/dashboard/:tier" component={UserLogin} />
+          </>
         ) : (
           <>
             <Route path="/" component={FreeTierDemo} />
             <Route path="/dashboard/:tier" component={UserDashboardArgon} />
-            <Route path="/dashboard" component={UserDashboardArgon} />
+            <Route path="/dashboard" component={FreeTierDemo} />
           </>
         )}
         <Route path="/login" component={UserLogin} />
