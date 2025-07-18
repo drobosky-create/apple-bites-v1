@@ -22,6 +22,7 @@ import LeadsDashboard from "@/pages/leads-dashboard";
 import TeamDashboard from "@/pages/team-dashboard";
 import ReportSelectionPage from "@/pages/report-selection";
 import UserDashboardArgon from "@/pages/user-dashboard-argon";
+import ArgonDemo from "@/pages/argon-demo";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -43,6 +44,7 @@ function Router() {
         <Route path="/login" component={UserLogin} />
         <Route path="/redirect" component={RedirectHome} />
         <Route path="/ghl-demo" component={GHLThemeDemo} />
+        <Route path="/argon-demo" component={ArgonDemo} />
         
         {/* Pages with header/navigation */}
         <Route path="/assessment/free">
