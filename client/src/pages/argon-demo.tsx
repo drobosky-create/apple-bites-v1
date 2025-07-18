@@ -201,7 +201,7 @@ export default function ArgonDemo() {
                     variant="gradient"
                     color="info"
                     size="large"
-                    className="w-full sm:w-auto"
+                    className="w-full sm:w-auto ml-[50px] mr-[50px]"
                   >
                     <FileText className="h-4 w-4 mr-2" />
                     Take Free Assessment
