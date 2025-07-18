@@ -15,6 +15,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
+import _3 from "@assets/3.png";
+
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
   password: z.string().min(1, "Password is required"),
@@ -303,14 +305,12 @@ export default function UserLogin() {
         <div className="max-w-md mx-auto">
           <div className="bg-white rounded-xl shadow-lg border border-gray-100">
             <ArgonBox p={4}>
-              <div className="text-center mb-6">
-                <div className="flex justify-center mb-4">
-                  <img 
-                    src="/apple-bites-logo-new.png" 
-                    alt="Apple Bites Business Assessment" 
-                    className="h-20 w-auto"
-                  />
-                </div>
+              <div className="text-center mb-6 flex flex-col items-center">
+                <img
+                  src={_3}
+                  alt="Apple Bites Business Assessment"
+                  className="mx-auto w-full max-w-[220px] sm:max-w-[260px] md:max-w-[300px] mb-4"
+                />
                 <ArgonTypography variant="body2" color="text">
                   Create your account to access business valuation tools
                 </ArgonTypography>
