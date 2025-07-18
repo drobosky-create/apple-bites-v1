@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { ArgonStatCard } from "@/components/ui/argon-stat-card";
 import { useToast } from "@/hooks/use-toast";
 import { useLocation } from "wouter";
 import { useAuth } from "@/hooks/useAuth";
@@ -16,7 +17,11 @@ import {
   Mail,
   CheckCircle,
   Clock,
-  AlertCircle
+  AlertCircle,
+  DollarSign,
+  Users,
+  BarChart3,
+  Target
 } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 
@@ -54,8 +59,8 @@ export default function UserDashboard() {
 
   if (authLoading || isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2" style={{ borderBottomColor: '#4F83F7' }}></div>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-argon-primary"></div>
       </div>
     );
   }
@@ -117,69 +122,116 @@ export default function UserDashboard() {
   const TierIcon = tierInfo.icon;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 p-4">
-      <div className="max-w-4xl mx-auto space-y-6">
-        {/* Header */}
-        <Card>
-          <CardHeader>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-200 relative">
+      {/* Argon Background Elements */}
+      <div className="absolute inset-0 bg-gradient-to-r from-blue-600/5 to-purple-600/5"></div>
+      
+      <div className="relative">
+        {/* Header with Gradient Background */}
+        <div className="bg-gradient-primary pt-20 pb-32 mb-8">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <div>
-                  <CardTitle className="text-2xl">Welcome, {user.firstName} {user.lastName}</CardTitle>
-                  <CardDescription className="flex items-center space-x-2">
-                    <span>{user.email}</span>
-                    <Badge variant="secondary" className="ml-2">
-                      {tierInfo.name}
-                    </Badge>
-                  </CardDescription>
-                </div>
+              <div>
+                <h1 className="text-3xl font-bold text-white mb-2">Welcome, {user.firstName} {user.lastName}</h1>
+                <p className="text-white/80 text-lg mb-4">{user.email}</p>
+                <Badge className="bg-white/20 text-white border-white/30 font-medium">
+                  {tierInfo.name}
+                </Badge>
               </div>
               <Button 
                 variant="outline" 
                 onClick={() => logoutMutation.mutate()}
                 disabled={logoutMutation.isPending}
+                className="bg-white/10 border-white/30 text-white hover:bg-white/20"
               >
                 <LogOut className="h-4 w-4 mr-2" />
                 Logout
               </Button>
             </div>
-          </CardHeader>
-        </Card>
+          </div>
+        </div>
 
-        {/* Assessment Status */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Assessment Status</CardTitle>
-            <CardDescription>
-              Your {tierInfo.name} ({tierInfo.price})
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center space-x-3">
-              {user.resultReady ? (
-                <>
-                  <CheckCircle className="h-5 w-5 text-green-500" />
-                  <span className="text-green-700 font-medium">Results Ready</span>
-                  <Badge variant="default" className="bg-green-100 text-green-800">
-                    Complete
-                  </Badge>
-                </>
-              ) : (
-                <>
-                  <Clock className="h-5 w-5 text-blue-500" />
-                  <span className="text-blue-700 font-medium">Processing</span>
-                  <Badge variant="secondary" className="bg-blue-100 text-blue-800">
-                    In Progress
-                  </Badge>
-                </>
-              )}
-            </div>
+        {/* Stats Cards Section - Positioned over gradient header */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-16 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <ArgonStatCard
+              title="Account Status"
+              value={user.resultReady ? "Active" : "Processing"}
+              icon={user.resultReady ? <CheckCircle className="w-6 h-6" /> : <Clock className="w-6 h-6" />}
+              color={user.resultReady ? "success" : "info"}
+              trend={{
+                value: user.resultReady ? "100%" : "75%",
+                direction: "up",
+                label: "complete"
+              }}
+            />
+            
+            <ArgonStatCard
+              title="Assessment Tier"
+              value={tierInfo.price}
+              icon={<TierIcon className="w-6 h-6" />}
+              color="primary"
+              subtitle={tierInfo.name}
+            />
+            
+            <ArgonStatCard
+              title="Reports Generated"
+              value={user.resultReady ? "1" : "0"}
+              icon={<FileText className="w-6 h-6" />}
+              color="warning"
+              trend={{
+                value: user.resultReady ? "+1" : "0",
+                direction: user.resultReady ? "up" : "neutral",
+                label: "this month"
+              }}
+            />
+            
+            <ArgonStatCard
+              title="Business Value"
+              value="Calculated"
+              icon={<DollarSign className="w-6 h-6" />}
+              color="success"
+              subtitle={user.resultReady ? "Results available" : "Processing..."}
+            />
+          </div>
+        </div>
 
-            <Separator />
+        {/* Main Content */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+          {/* Assessment Status */}
+          <Card className="shadow-argon">
+            <CardHeader>
+              <CardTitle>Assessment Status</CardTitle>
+              <CardDescription>
+                Your {tierInfo.name} ({tierInfo.price})
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-center space-x-3">
+                {user.resultReady ? (
+                  <>
+                    <CheckCircle className="h-5 w-5 text-green-500" />
+                    <span className="text-green-700 font-medium">Results Ready</span>
+                    <Badge variant="default" className="bg-green-100 text-green-800">
+                      Complete
+                    </Badge>
+                  </>
+                ) : (
+                  <>
+                    <Clock className="h-5 w-5 text-blue-500" />
+                    <span className="text-blue-700 font-medium">Processing</span>
+                    <Badge variant="secondary" className="bg-blue-100 text-blue-800">
+                      In Progress
+                    </Badge>
+                  </>
+                )}
+              </div>
 
-            <div className="space-y-3">
-              <h4 className="font-medium">What's Included:</h4>
-              <ul className="space-y-2 text-sm text-gray-600">
+              <Separator />
+
+              <div className="space-y-3">
+                <h4 className="font-medium">What's Included:</h4>
+                <ul className="space-y-2 text-sm text-gray-600">
                 {user.tier === 'growth' && (
                   <>
                     <li className="flex items-center space-x-2">
@@ -236,80 +288,81 @@ export default function UserDashboard() {
                     </li>
                   </>
                 )}
-              </ul>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Actions */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Actions</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {user.resultReady ? (
-              <div className="space-y-3">
-                <Button className="w-full sm:w-auto" size="lg">
-                  <Download className="h-4 w-4 mr-2" />
-                  Download Results
-                </Button>
-                <Button variant="outline" className="w-full sm:w-auto" size="lg">
-                  <Mail className="h-4 w-4 mr-2" />
-                  Email Results
-                </Button>
-                <Button 
-                  variant="outline" 
-                  onClick={() => setLocation('/assessment/free')}
-                  className="w-full sm:w-auto bg-[#415A77] text-white hover:bg-[#1B263B]"
-                >
-                  <FileText className="h-4 w-4 mr-2" />
-                  Take Free Assessment
-                </Button>
+                </ul>
               </div>
-            ) : (
-              <div className="space-y-3">
-                <div className="flex items-center space-x-2 text-gray-600">
-                  <AlertCircle className="h-4 w-4" />
-                  <span className="text-sm">
-                    Your assessment is being processed. Results will be available shortly.
-                  </span>
+            </CardContent>
+          </Card>
+
+          {/* Actions */}
+          <Card className="shadow-argon">
+            <CardHeader>
+              <CardTitle>Actions</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {user.resultReady ? (
+                <div className="space-y-3">
+                  <Button className="w-full sm:w-auto bg-gradient-primary text-white" size="lg">
+                    <Download className="h-4 w-4 mr-2" />
+                    Download Results
+                  </Button>
+                  <Button variant="outline" className="w-full sm:w-auto" size="lg">
+                    <Mail className="h-4 w-4 mr-2" />
+                    Email Results
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    onClick={() => setLocation('/assessment/free')}
+                    className="w-full sm:w-auto bg-gradient-info text-white"
+                  >
+                    <FileText className="h-4 w-4 mr-2" />
+                    Take Free Assessment
+                  </Button>
                 </div>
-                <Button 
-                  variant="outline" 
-                  onClick={() => setLocation('/assessment/free')}
-                  className="w-full sm:w-auto bg-[#415A77] text-white hover:bg-[#1B263B]"
-                >
-                  <FileText className="h-4 w-4 mr-2" />
-                  Take Free Assessment
-                </Button>
-                <Button 
-                  variant="outline" 
-                  onClick={() => window.open('https://products.applebites.ai/', '_blank')}
-                  className="w-full sm:w-auto"
-                >
-                  <ExternalLink className="h-4 w-4 mr-2" />
-                  Purchase Additional Assessments
-                </Button>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+              ) : (
+                <div className="space-y-3">
+                  <div className="flex items-center space-x-2 text-gray-600">
+                    <AlertCircle className="h-4 w-4" />
+                    <span className="text-sm">
+                      Your assessment is being processed. Results will be available shortly.
+                    </span>
+                  </div>
+                  <Button 
+                    variant="outline" 
+                    onClick={() => setLocation('/assessment/free')}
+                    className="w-full sm:w-auto bg-gradient-info text-white"
+                  >
+                    <FileText className="h-4 w-4 mr-2" />
+                    Take Free Assessment
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    onClick={() => window.open('https://products.applebites.ai/', '_blank')}
+                    className="w-full sm:w-auto"
+                  >
+                    <ExternalLink className="h-4 w-4 mr-2" />
+                    Purchase Additional Assessments
+                  </Button>
+                </div>
+              )}
+            </CardContent>
+          </Card>
 
-        {/* Support */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Need Help?</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-gray-600 mb-3">
-              If you have questions about your assessment or need assistance, our team is here to help.
-            </p>
-            <Button variant="outline">
-              <Mail className="h-4 w-4 mr-2" />
-              Contact Support
-            </Button>
-          </CardContent>
-        </Card>
+          {/* Support */}
+          <Card className="shadow-argon">
+            <CardHeader>
+              <CardTitle>Need Help?</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-gray-600 mb-3">
+                If you have questions about your assessment or need assistance, our team is here to help.
+              </p>
+              <Button variant="outline" className="bg-gradient-success text-white">
+                <Mail className="h-4 w-4 mr-2" />
+                Contact Support
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );

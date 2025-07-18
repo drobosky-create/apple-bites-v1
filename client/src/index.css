@@ -4,15 +4,21 @@
 @tailwind components;
 @tailwind utilities;
 
-/* GHL Brand Tokens - Complete Brand System */
+/* Argon Dashboard Design System */
 :root {
-  /* Primary Brand Colors */
-  --primary: #81e5d8;
-  --primary-light: #9debd2;
-  --primary-dark: #65dfce;
-  --secondary: #4493de;
-  --secondary-light: #5ba3e4;
-  --secondary-dark: #3583d8;
+  /* Argon Primary Colors */
+  --primary: #5e72e4;
+  --primary-light: #7c8ce6;
+  --primary-dark: #5060e2;
+  --secondary: #f7fafc;
+  --secondary-light: #f9fbfc;
+  --secondary-dark: #e9ecef;
+  
+  /* Argon Status Colors */
+  --success: #2dce89;
+  --info: #11cdef;
+  --warning: #fb6340;
+  --danger: #f5365c;
   
   /* Brand Neutrals */
   --white: #ffffff;
@@ -44,11 +50,19 @@
   --radius-xl: 1rem;
   --spacing-unit: 1rem;
   
-  /* Shadows */
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  /* Argon Shadows & Gradients */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  --shadow-md: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 15px 35px rgba(50, 50, 93, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
+  --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.1);
+  --shadow-colored: 0 4px 6px rgba(94, 114, 228, 0.11);
+  
+  /* Argon Gradients */
+  --gradient-primary: linear-gradient(87deg, #5e72e4 0, #825ee4 100%);
+  --gradient-success: linear-gradient(87deg, #2dce89 0, #2dcecc 100%);
+  --gradient-info: linear-gradient(87deg, #11cdef 0, #1171ef 100%);
+  --gradient-warning: linear-gradient(87deg, #fb6340 0, #fbb140 100%);
+  --gradient-danger: linear-gradient(87deg, #f5365c 0, #f56036 100%);
   
   /* Transitions */
   --transition-fast: 150ms ease-in-out;
@@ -427,25 +441,77 @@
 }
 
 @layer utilities {
-  /* GHL Brand Utility Classes */
-  .text-ghl-primary {
+  /* Argon Dashboard Utility Classes */
+  .text-argon-primary {
     color: var(--primary);
   }
   
-  .text-ghl-secondary {
-    color: var(--secondary);
+  .text-argon-success {
+    color: var(--success);
   }
   
-  .bg-ghl-primary {
+  .text-argon-info {
+    color: var(--info);
+  }
+  
+  .text-argon-warning {
+    color: var(--warning);
+  }
+  
+  .text-argon-danger {
+    color: var(--danger);
+  }
+  
+  .bg-argon-primary {
     background-color: var(--primary);
   }
   
-  .bg-ghl-secondary {
-    background-color: var(--secondary);
+  .bg-argon-success {
+    background-color: var(--success);
   }
   
-  .bg-ghl-navy {
-    background-color: var(--navy-primary);
+  .bg-argon-info {
+    background-color: var(--info);
+  }
+  
+  .bg-argon-warning {
+    background-color: var(--warning);
+  }
+  
+  .bg-argon-danger {
+    background-color: var(--danger);
+  }
+  
+  .bg-gradient-primary {
+    background: var(--gradient-primary);
+  }
+  
+  .bg-gradient-success {
+    background: var(--gradient-success);
+  }
+  
+  .bg-gradient-info {
+    background: var(--gradient-info);
+  }
+  
+  .bg-gradient-warning {
+    background: var(--gradient-warning);
+  }
+  
+  .bg-gradient-danger {
+    background: var(--gradient-danger);
+  }
+  
+  .shadow-argon {
+    box-shadow: var(--shadow-md);
+  }
+  
+  .shadow-argon-lg {
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .shadow-argon-colored {
+    box-shadow: var(--shadow-colored);
   }
   
   .border-ghl-primary {
