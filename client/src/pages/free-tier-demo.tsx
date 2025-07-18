@@ -238,16 +238,16 @@ export default function FreeTierDemo() {
             </ArgonBox>
           </div>
 
-          {/* Need Help Section */}
-          <div className="bg-white rounded-xl shadow-lg border border-gray-100">
+          {/* Need Help Section - Gradient Background */}
+          <div className="bg-gradient-to-r from-[#0b2147] to-blue-600 rounded-xl shadow-lg text-white">
             <ArgonBox p={3}>
-              <ArgonTypography variant="h6" color="dark" fontWeight="bold" className="mb-3">
+              <ArgonTypography variant="h6" color="white" fontWeight="bold" className="mb-3">
                 Need Help?
               </ArgonTypography>
-              <ArgonTypography variant="body2" color="text" className="mb-4">
+              <ArgonTypography variant="body2" color="white" className="mb-4 opacity-90">
                 If you have questions about your assessment or need assistance, our team is here to help.
               </ArgonTypography>
-              <ArgonButton variant="gradient" color="success" className="flex-shrink-0 bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg hover:shadow-xl">
+              <ArgonButton variant="contained" color="white" className="flex-shrink-0">
                 <Mail className="h-4 w-4 mr-2" />
                 Contact Support
               </ArgonButton>
