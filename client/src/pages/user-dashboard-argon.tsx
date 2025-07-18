@@ -334,6 +334,16 @@ export default function UserDashboardArgon() {
               <div className="space-y-4">
                 {user.resultReady ? (
                   <div className="flex flex-col sm:flex-row justify-between gap-2 sm:gap-1">
+                    <ArgonButton 
+                      variant="gradient" 
+                      color="success" 
+                      size="large" 
+                      onClick={() => setLocation('/assessment-results')}
+                      className="w-full sm:w-auto"
+                    >
+                      <FileText className="h-4 w-4 mr-2" />
+                      View Results
+                    </ArgonButton>
                     <ArgonButton variant="gradient" color="primary" size="large" className="w-full sm:w-auto">
                       <Download className="h-4 w-4 mr-2" />
                       Download Results
@@ -344,7 +354,7 @@ export default function UserDashboardArgon() {
                     </ArgonButton>
                     <ArgonButton 
                       variant="gradient"
-                      color="success"
+                      color="warning"
                       size="large"
                       onClick={() => setLocation('/assessment/free')}
                       className="w-full sm:w-auto"
@@ -362,6 +372,16 @@ export default function UserDashboardArgon() {
                       </ArgonTypography>
                     </div>
                     <div className="flex flex-col sm:flex-row gap-3">
+                      <ArgonButton 
+                        variant="gradient"
+                        color="success"
+                        size="large"
+                        onClick={() => setLocation('/assessment-results')}
+                        className="flex-shrink-0 bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg hover:shadow-xl"
+                      >
+                        <FileText className="h-4 w-4 mr-2" />
+                        View Results
+                      </ArgonButton>
                       <ArgonButton 
                         variant="gradient"
                         color="info"

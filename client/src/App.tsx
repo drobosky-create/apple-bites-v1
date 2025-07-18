@@ -24,6 +24,7 @@ import ReportSelectionPage from "@/pages/report-selection";
 import UserDashboardArgon from "@/pages/user-dashboard-argon";
 import ArgonDemo from "@/pages/argon-demo";
 import FreeTierDemo from "@/pages/free-tier-demo";
+import AssessmentResults from "@/pages/assessment-results";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -47,6 +48,7 @@ function Router() {
         <Route path="/ghl-demo" component={GHLThemeDemo} />
         <Route path="/argon-demo" component={ArgonDemo} />
         <Route path="/free-tier-demo" component={FreeTierDemo} />
+        <Route path="/assessment-results" component={AssessmentResults} />
         
         {/* Pages with header/navigation */}
         <Route path="/assessment/free">

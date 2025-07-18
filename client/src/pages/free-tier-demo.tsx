@@ -210,6 +210,16 @@ export default function FreeTierDemo() {
                 <div className="flex flex-col sm:flex-row gap-3">
                   <ArgonButton 
                     variant="gradient"
+                    color="success"
+                    size="large"
+                    onClick={() => setLocation('/assessment-results')}
+                    className="flex-shrink-0 bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg hover:shadow-xl"
+                  >
+                    <FileText className="h-4 w-4 mr-2" />
+                    View Results
+                  </ArgonButton>
+                  <ArgonButton 
+                    variant="gradient"
                     color="info"
                     size="large"
                     onClick={() => setLocation('/assessment/free')}
