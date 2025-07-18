@@ -108,26 +108,6 @@ export default function UserLogin() {
   };
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#f8f9fa' }}>
-      {/* Argon Header */}
-      <ArgonBox
-        variant="gradient"
-        bgGradient="primary"
-        py={3}
-        className="relative"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-center">
-            <div className="flex items-center space-x-3">
-              <img 
-                src="/apple-bites-logo.png" 
-                alt="Apple Bites Business Assessment" 
-                className="h-12 w-auto"
-              />
-            </div>
-          </div>
-        </div>
-      </ArgonBox>
-
       {/* Main Content */}
       <ArgonBox py={6} px={3} className="bg-transparent">
         <div className="max-w-md mx-auto">
