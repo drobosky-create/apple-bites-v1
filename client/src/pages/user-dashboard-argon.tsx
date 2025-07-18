@@ -17,12 +17,8 @@ import {
   CheckCircle,
   Clock,
   AlertCircle,
-  DollarSign,
-  Users,
-  BarChart3,
-  Target
+  DollarSign
 } from "lucide-react";
-import { apiRequest } from "@/lib/queryClient";
 
 interface User {
   id: string;
@@ -34,7 +30,7 @@ interface User {
   resultReady: boolean;
 }
 
-export default function UserDashboard() {
+export default function UserDashboardArgon() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
   const { user: authUser, isLoading: authLoading } = useAuth();
@@ -58,7 +54,7 @@ export default function UserDashboard() {
 
   if (authLoading || isLoading) {
     return (
-      <div className="min-h-screen" style={{ background: 'var(--argon-background-default)' }}>
+      <div className="min-h-screen" style={{ backgroundColor: '#f8f9fa' }}>
         <div className="flex items-center justify-center min-h-screen">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
         </div>
@@ -68,27 +64,26 @@ export default function UserDashboard() {
 
   if (error || !user) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4" style={{ background: 'var(--argon-background-default)' }}>
-        <ArgonCard className="w-full max-w-md">
-          <ArgonCardHeader>
-            <ArgonTypography variant="h5" color="white" className="text-center mb-2">
+      <div className="min-h-screen flex items-center justify-center p-4" style={{ backgroundColor: '#f8f9fa' }}>
+        <div className="w-full max-w-md bg-white rounded-xl shadow-lg border border-gray-100">
+          <ArgonBox p={3}>
+            <ArgonTypography variant="h5" color="dark" fontWeight="bold" className="text-center mb-2">
               Authentication Required
             </ArgonTypography>
-            <ArgonTypography variant="body2" color="white" className="text-center opacity-75">
+            <ArgonTypography variant="body2" color="text" className="text-center mb-4">
               Please log in to access your dashboard.
             </ArgonTypography>
-          </ArgonCardHeader>
-          <ArgonCardContent>
             <ArgonButton 
               onClick={() => setLocation('/login')} 
+              variant="gradient"
               color="info"
-              className="w-full"
+              fullWidth
               size="large"
             >
               Go to Login
             </ArgonButton>
-          </ArgonCardContent>
-        </ArgonCard>
+          </ArgonBox>
+        </div>
       </div>
     );
   }
@@ -127,7 +122,7 @@ export default function UserDashboard() {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#f8f9fa' }}>
-      {/* Authentic Argon Dashboard Header with Gradient */}
+      {/* Authentic Argon Dashboard Header with Your Brand Gradient */}
       <ArgonBox
         variant="gradient"
         bgGradient="primary"
@@ -227,6 +222,7 @@ export default function UserDashboard() {
                 Your {tierInfo.name} ({tierInfo.price})
               </ArgonTypography>
               
+              <div className="space-y-4">
                 <div className="flex items-center space-x-3">
                   {user.resultReady ? (
                     <>
@@ -258,62 +254,62 @@ export default function UserDashboard() {
                     What's Included:
                   </ArgonTypography>
                   <ul className="space-y-2">
-                {user.tier === 'growth' && (
-                  <>
-                    <li className="flex items-center space-x-2">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
-                      <span>Industry-specific NAICS multipliers</span>
-                    </li>
-                    <li className="flex items-center space-x-2">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
-                      <span>AI-powered growth insights and recommendations</span>
-                    </li>
-                    <li className="flex items-center space-x-2">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
-                      <span>Market positioning analysis</span>
-                    </li>
-                    <li className="flex items-center space-x-2">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
-                      <span>Professional PDF report</span>
-                    </li>
-                  </>
-                )}
-                {user.tier === 'capital' && (
-                  <>
-                    <li className="flex items-center space-x-2">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
-                      <span>Comprehensive capital readiness assessment</span>
-                    </li>
-                    <li className="flex items-center space-x-2">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
-                      <span>Strategic planning and growth recommendations</span>
-                    </li>
-                    <li className="flex items-center space-x-2">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
-                      <span>Investor presentation materials</span>
-                    </li>
-                    <li className="flex items-center space-x-2">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
-                      <span>Executive summary and action plan</span>
-                    </li>
-                  </>
-                )}
-                {user.tier === 'free' && (
-                  <>
-                    <li className="flex items-center space-x-2">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
-                      <span>Basic EBITDA calculation</span>
-                    </li>
-                    <li className="flex items-center space-x-2">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
-                      <span>General business valuation</span>
-                    </li>
-                    <li className="flex items-center space-x-2">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
-                      <span>PDF report summary</span>
-                    </li>
-                  </>
-                )}
+                    {user.tier === 'growth' && (
+                      <>
+                        <li className="flex items-center space-x-2">
+                          <CheckCircle className="h-4 w-4 text-green-500" />
+                          <span>Industry-specific NAICS multipliers</span>
+                        </li>
+                        <li className="flex items-center space-x-2">
+                          <CheckCircle className="h-4 w-4 text-green-500" />
+                          <span>AI-powered growth insights and recommendations</span>
+                        </li>
+                        <li className="flex items-center space-x-2">
+                          <CheckCircle className="h-4 w-4 text-green-500" />
+                          <span>Market positioning analysis</span>
+                        </li>
+                        <li className="flex items-center space-x-2">
+                          <CheckCircle className="h-4 w-4 text-green-500" />
+                          <span>Professional PDF report</span>
+                        </li>
+                      </>
+                    )}
+                    {user.tier === 'capital' && (
+                      <>
+                        <li className="flex items-center space-x-2">
+                          <CheckCircle className="h-4 w-4 text-green-500" />
+                          <span>Comprehensive capital readiness assessment</span>
+                        </li>
+                        <li className="flex items-center space-x-2">
+                          <CheckCircle className="h-4 w-4 text-green-500" />
+                          <span>Strategic planning and growth recommendations</span>
+                        </li>
+                        <li className="flex items-center space-x-2">
+                          <CheckCircle className="h-4 w-4 text-green-500" />
+                          <span>Investor presentation materials</span>
+                        </li>
+                        <li className="flex items-center space-x-2">
+                          <CheckCircle className="h-4 w-4 text-green-500" />
+                          <span>Executive summary and action plan</span>
+                        </li>
+                      </>
+                    )}
+                    {user.tier === 'free' && (
+                      <>
+                        <li className="flex items-center space-x-2">
+                          <CheckCircle className="h-4 w-4 text-green-500" />
+                          <span>Basic EBITDA calculation</span>
+                        </li>
+                        <li className="flex items-center space-x-2">
+                          <CheckCircle className="h-4 w-4 text-green-500" />
+                          <span>General business valuation</span>
+                        </li>
+                        <li className="flex items-center space-x-2">
+                          <CheckCircle className="h-4 w-4 text-green-500" />
+                          <span>PDF report summary</span>
+                        </li>
+                      </>
+                    )}
                   </ul>
                 </div>
               </div>
@@ -326,6 +322,7 @@ export default function UserDashboard() {
               <ArgonTypography variant="h6" color="dark" fontWeight="bold" className="mb-4">
                 Actions
               </ArgonTypography>
+              <div className="space-y-4">
                 {user.resultReady ? (
                   <div className="space-y-3">
                     <ArgonButton variant="gradient" color="primary" size="large" className="w-full sm:w-auto">

@@ -21,7 +21,7 @@ import ValueCalculator from "@/pages/value-calculator";
 import LeadsDashboard from "@/pages/leads-dashboard";
 import TeamDashboard from "@/pages/team-dashboard";
 import ReportSelectionPage from "@/pages/report-selection";
-import UserDashboard from "@/pages/user-dashboard";
+import UserDashboardArgon from "@/pages/user-dashboard-argon";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -35,9 +35,9 @@ function Router() {
           <Route path="/" component={Landing} />
         ) : (
           <>
-            <Route path="/" component={UserDashboard} />
-            <Route path="/dashboard/:tier" component={UserDashboard} />
-            <Route path="/dashboard" component={UserDashboard} />
+            <Route path="/" component={UserDashboardArgon} />
+            <Route path="/dashboard/:tier" component={UserDashboardArgon} />
+            <Route path="/dashboard" component={UserDashboardArgon} />
           </>
         )}
         <Route path="/login" component={UserLogin} />
