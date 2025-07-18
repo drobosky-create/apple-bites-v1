@@ -354,33 +354,35 @@ export default function UserDashboardArgon() {
                     </ArgonButton>
                   </div>
                 ) : (
-                  <div className="space-y-3">
-                    <div className="flex items-center space-x-2">
+                  <div className="space-y-4">
+                    <div className="flex items-center space-x-2 mb-4">
                       <AlertCircle className="h-4 w-4 text-gray-600" />
                       <ArgonTypography variant="body2" color="text">
                         Your assessment is being processed. Results will be available shortly.
                       </ArgonTypography>
                     </div>
-                    <ArgonButton 
-                      variant="gradient"
-                      color="info"
-                      size="large"
-                      onClick={() => setLocation('/assessment/free')}
-                      className="w-full sm:w-auto"
-                    >
-                      <FileText className="h-4 w-4 mr-2" />
-                      Take Free Assessment
-                    </ArgonButton>
-                    <ArgonButton 
-                      variant="outlined"
-                      color="secondary"
-                      size="large"
-                      onClick={() => window.open('https://products.applebites.ai/', '_blank')}
-                      className="w-full sm:w-auto"
-                    >
-                      <ExternalLink className="h-4 w-4 mr-2" />
-                      Purchase Additional Assessments
-                    </ArgonButton>
+                    <div className="flex flex-col sm:flex-row gap-3">
+                      <ArgonButton 
+                        variant="gradient"
+                        color="info"
+                        size="large"
+                        onClick={() => setLocation('/assessment/free')}
+                        className="flex-shrink-0 bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg hover:shadow-xl"
+                      >
+                        <FileText className="h-4 w-4 mr-2" />
+                        Take Free Assessment
+                      </ArgonButton>
+                      <ArgonButton 
+                        variant="outlined"
+                        color="secondary"
+                        size="large"
+                        onClick={() => window.open('https://products.applebites.ai/', '_blank')}
+                        className="flex-shrink-0"
+                      >
+                        <ExternalLink className="h-4 w-4 mr-2" />
+                        Purchase Additional Assessments
+                      </ArgonButton>
+                    </div>
                   </div>
                 )}
               </div>
@@ -396,7 +398,7 @@ export default function UserDashboardArgon() {
               <ArgonTypography variant="body2" color="white" className="mb-4 opacity-90">
                 If you have questions about your assessment or need assistance, our team is here to help.
               </ArgonTypography>
-              <ArgonButton variant="contained" color="white">
+              <ArgonButton variant="contained" color="white" className="flex-shrink-0">
                 <Mail className="h-4 w-4 mr-2" />
                 Contact Support
               </ArgonButton>
