@@ -1,71 +1,115 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
-import { argonColors, linearGradient } from './argon-theme';
 
-interface ArgonProgressProps {
-  value: number;
+interface ArgonProgressProps extends React.HTMLAttributes<HTMLDivElement> {
+  value?: number;
   color?: 'primary' | 'secondary' | 'info' | 'success' | 'warning' | 'error';
-  variant?: 'determinate' | 'indeterminate';
+  variant?: 'linear' | 'circular';
   size?: 'small' | 'medium' | 'large';
-  gradient?: boolean;
-  className?: string;
+  label?: string;
+  showValue?: boolean;
 }
 
-export const ArgonProgress = React.forwardRef<HTMLDivElement, ArgonProgressProps>(
-  ({ value, color = 'info', variant = 'determinate', size = 'medium', gradient = false, className, ...props }, ref) => {
-    
+const ArgonProgress = React.forwardRef<HTMLDivElement, ArgonProgressProps>(
+  ({ 
+    className, 
+    value = 0, 
+    color = 'primary', 
+    variant = 'linear',
+    size = 'medium',
+    label,
+    showValue = false,
+    ...props 
+  }, ref) => {
+    const colorClasses = {
+      primary: 'argon-gradient-primary',
+      secondary: 'argon-gradient-secondary',
+      info: 'argon-gradient-info',
+      success: 'argon-gradient-success',
+      warning: 'argon-gradient-warning',
+      error: 'argon-gradient-error'
+    };
+
     const sizeClasses = {
       small: 'h-1',
-      medium: 'h-1.5',
-      large: 'h-2',
+      medium: 'h-2',
+      large: 'h-3'
     };
 
-    const colorMap = {
-      primary: argonColors.primary.main,
-      secondary: argonColors.secondary.main,
-      info: argonColors.info.main,
-      success: argonColors.success.main,
-      warning: argonColors.warning.main,
-      error: argonColors.error.main,
-    };
-
-    const progressStyles: React.CSSProperties = {};
-    
-    if (gradient && argonColors.gradients[color]) {
-      progressStyles.background = linearGradient(
-        argonColors.gradients[color].main,
-        argonColors.gradients[color].state
+    if (variant === 'linear') {
+      return (
+        <div className="w-full" ref={ref} {...props}>
+          {(label || showValue) && (
+            <div className="flex justify-between items-center mb-2">
+              {label && (
+                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  {label}
+                </span>
+              )}
+              {showValue && (
+                <span className="text-sm text-gray-500">
+                  {Math.round(value)}%
+                </span>
+              )}
+            </div>
+          )}
+          <div className={cn(
+            'w-full bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden',
+            sizeClasses[size],
+            className
+          )}>
+            <div 
+              className={cn(
+                'h-full rounded-full transition-all duration-300 ease-out',
+                colorClasses[color]
+              )}
+              style={{ width: `${Math.min(Math.max(value, 0), 100)}%` }}
+            />
+          </div>
+        </div>
       );
-    } else {
-      progressStyles.backgroundColor = colorMap[color];
     }
 
-    const clampedValue = Math.max(0, Math.min(100, value));
+    // Circular variant
+    const radius = size === 'small' ? 16 : size === 'medium' ? 20 : 24;
+    const strokeWidth = size === 'small' ? 2 : size === 'medium' ? 3 : 4;
+    const normalizedRadius = radius - strokeWidth * 2;
+    const circumference = normalizedRadius * 2 * Math.PI;
+    const strokeDasharray = `${circumference} ${circumference}`;
+    const strokeDashoffset = circumference - (value / 100) * circumference;
 
     return (
-      <div
-        ref={ref}
-        className={cn(
-          'relative overflow-hidden rounded-md bg-gray-200',
-          sizeClasses[size],
-          className
+      <div className="inline-flex items-center justify-center" ref={ref} {...props}>
+        <svg
+          height={radius * 2}
+          width={radius * 2}
+          className="transform -rotate-90"
+        >
+          <circle
+            stroke="currentColor"
+            fill="transparent"
+            strokeWidth={strokeWidth}
+            strokeDasharray={strokeDasharray}
+            style={{ strokeDashoffset }}
+            r={normalizedRadius}
+            cx={radius}
+            cy={radius}
+            className={cn(
+              'transition-all duration-300 ease-out',
+              colorClasses[color].replace('argon-gradient-', 'text-')
+            )}
+          />
+        </svg>
+        {showValue && (
+          <span className="absolute text-sm font-medium">
+            {Math.round(value)}%
+          </span>
         )}
-        {...props}
-      >
-        <div
-          className={cn(
-            'absolute top-0 left-0 h-full rounded-sm transition-all duration-600 ease-out',
-            variant === 'indeterminate' && 'animate-pulse'
-          )}
-          style={{
-            ...progressStyles,
-            width: variant === 'determinate' ? `${clampedValue}%` : '100%',
-            transform: 'translate(0, 0)',
-          }}
-        />
       </div>
     );
   }
 );
 
-ArgonProgress.displayName = 'ArgonProgress';
+ArgonProgress.displayName = "ArgonProgress";
+
+export { ArgonProgress };

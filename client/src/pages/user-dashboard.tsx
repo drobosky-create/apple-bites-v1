@@ -1,9 +1,10 @@
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { ArgonCard, ArgonCardContent, ArgonCardHeader } from "@/components/ui/argon-card";
+import { ArgonButton } from "@/components/ui/argon-button";
+import { ArgonTypography } from "@/components/ui/argon-typography";
+import { ArgonProgress } from "@/components/ui/argon-progress";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { ArgonStatCard } from "@/components/ui/argon-stat-card";
 import { useToast } from "@/hooks/use-toast";
 import { useLocation } from "wouter";
 import { useAuth } from "@/hooks/useAuth";
