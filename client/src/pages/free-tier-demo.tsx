@@ -21,21 +21,21 @@ import {
 export default function FreeTierDemo() {
   const [, setLocation] = useLocation();
 
-  // Mock free tier user data
+  // Mock Growth tier user data for demonstration
   const user = {
-    id: "free-user-123",
-    email: "demo@applebites.ai",
-    firstName: "John",
-    lastName: "Smith",
-    tier: 'free' as const,
+    id: "growth-user-123",
+    email: "demo@company.com",
+    firstName: "Sarah",
+    lastName: "Johnson",
+    tier: 'growth' as const,
     resultReady: true
   };
 
   const tierInfo = {
-    name: "Free Assessment",
-    price: "$0",
-    color: "secondary" as const,
-    icon: Star
+    name: "Growth & Exit Assessment",
+    price: "$795",
+    color: "primary" as const,
+    icon: TrendingUp
   };
 
   const TierIcon = tierInfo.icon;
@@ -106,7 +106,7 @@ export default function FreeTierDemo() {
               title="Assessment Tier"
               count={tierInfo.price}
               icon={{ 
-                color: "secondary",
+                color: "primary",
                 component: <TierIcon className="w-6 h-6" />
               }}
             />
@@ -127,10 +127,15 @@ export default function FreeTierDemo() {
             
             <DetailedStatisticsCard
               title="Business Value"
-              count="Basic"
+              count="$2.4M"
               icon={{ 
-                color: "info",
+                color: "success",
                 component: <DollarSign className="w-6 h-6" />
+              }}
+              percentage={{
+                color: "info",
+                count: "4.9x",
+                text: "multiplier"
               }}
             />
           </div>
@@ -175,7 +180,7 @@ export default function FreeTierDemo() {
                           Estimated Business Value
                         </ArgonTypography>
                         <ArgonTypography variant="h6" color="info" fontWeight="bold">
-                          $847,500
+                          $2.4M
                         </ArgonTypography>
                       </div>
                       <div>
@@ -183,7 +188,7 @@ export default function FreeTierDemo() {
                           EBITDA Multiple
                         </ArgonTypography>
                         <ArgonTypography variant="h6" color="info" fontWeight="bold">
-                          3.4x
+                          4.9x
                         </ArgonTypography>
                       </div>
                       <div>
