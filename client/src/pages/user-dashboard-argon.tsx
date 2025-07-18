@@ -128,8 +128,8 @@ export default function UserDashboardArgon() {
     }
   };
 
-  // Use mock data for Growth tier demonstration
-  const displayUser = user?.tier === 'growth' ? mockGrowthUser : user;
+  // Force Growth tier demonstration - always show Sarah Johnson for demo
+  const displayUser = mockGrowthUser;
   const tierInfo = getTierInfo(displayUser?.tier || 'free');
   const TierIcon = tierInfo.icon;
 
