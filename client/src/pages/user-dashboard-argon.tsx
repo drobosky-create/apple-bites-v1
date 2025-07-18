@@ -40,6 +40,17 @@ export default function UserDashboardArgon() {
     enabled: !!authUser,
   });
 
+  // Mock Growth tier user data for demonstration
+  const mockGrowthUser = {
+    id: "growth-user-123",
+    email: "demo@company.com",
+    firstName: "Sarah",
+    lastName: "Johnson",
+    profileImageUrl: "/default-avatar.png",
+    tier: 'growth' as const,
+    resultReady: true
+  };
+
   const logoutMutation = useMutation({
     mutationFn: async () => {
       window.location.href = '/api/logout';
@@ -117,7 +128,9 @@ export default function UserDashboardArgon() {
     }
   };
 
-  const tierInfo = getTierInfo(user.tier);
+  // Use mock data for Growth tier demonstration
+  const displayUser = user?.tier === 'growth' ? mockGrowthUser : user;
+  const tierInfo = getTierInfo(displayUser?.tier || 'free');
   const TierIcon = tierInfo.icon;
 
   return (
@@ -141,10 +154,10 @@ export default function UserDashboardArgon() {
               </div>
               <ArgonBox>
                 <ArgonTypography variant="h5" color="white" fontWeight="bold" className="mb-1">
-                  Welcome, {user.firstName} {user.lastName}
+                  Welcome, {displayUser.firstName} {displayUser.lastName}
                 </ArgonTypography>
                 <ArgonTypography variant="body2" color="white" opacity={0.8} className="mb-1">
-                  {user.email}
+                  {displayUser.email}
                 </ArgonTypography>
                 <Badge className="bg-white/20 text-white border-white/30 font-medium">
                   {tierInfo.name}
@@ -171,14 +184,14 @@ export default function UserDashboardArgon() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <DetailedStatisticsCard
               title="Account Status"
-              count={user.resultReady ? "Active" : "Processing"}
+              count={displayUser.resultReady ? "Active" : "Processing"}
               icon={{ 
-                color: user.resultReady ? "success" : "info",
-                component: user.resultReady ? <CheckCircle className="w-6 h-6" /> : <Clock className="w-6 h-6" />
+                color: displayUser.resultReady ? "success" : "info",
+                component: displayUser.resultReady ? <CheckCircle className="w-6 h-6" /> : <Clock className="w-6 h-6" />
               }}
               percentage={{
                 color: "success",
-                count: user.resultReady ? "100%" : "75%",
+                count: displayUser.resultReady ? "100%" : "75%",
                 text: "complete"
               }}
             />
@@ -194,24 +207,29 @@ export default function UserDashboardArgon() {
             
             <DetailedStatisticsCard
               title="Reports Generated"
-              count={user.resultReady ? "1" : "0"}
+              count={displayUser.resultReady ? "1" : "0"}
               icon={{ 
                 color: "warning",
                 component: <FileText className="w-6 h-6" />
               }}
               percentage={{
-                color: user.resultReady ? "success" : "secondary",
-                count: user.resultReady ? "+1" : "0",
+                color: displayUser.resultReady ? "success" : "secondary",
+                count: displayUser.resultReady ? "+1" : "0",
                 text: "this month"
               }}
             />
             
             <DetailedStatisticsCard
               title="Business Value"
-              count="Calculated"
+              count={displayUser.tier === 'growth' ? "$2.4M" : "Calculated"}
               icon={{ 
                 color: "success",
                 component: <DollarSign className="w-6 h-6" />
+              }}
+              percentage={{
+                color: "info",
+                count: displayUser.tier === 'growth' ? "4.9x" : "N/A",
+                text: "multiplier"
               }}
             />
           </div>
@@ -233,7 +251,7 @@ export default function UserDashboardArgon() {
               
               <div className="space-y-4">
                 <div className="flex items-center space-x-3">
-                  {user.resultReady ? (
+                  {displayUser.resultReady ? (
                     <>
                       <CheckCircle className="h-5 w-5 text-green-500" />
                       <ArgonTypography variant="body1" color="success" fontWeight="medium">
@@ -263,7 +281,7 @@ export default function UserDashboardArgon() {
                     What's Included:
                   </ArgonTypography>
                   <ul className="space-y-2">
-                    {user.tier === 'growth' && (
+                    {displayUser.tier === 'growth' && (
                       <>
                         <li className="flex items-center space-x-2">
                           <CheckCircle className="h-4 w-4 text-green-500" />
@@ -283,7 +301,7 @@ export default function UserDashboardArgon() {
                         </li>
                       </>
                     )}
-                    {user.tier === 'capital' && (
+                    {displayUser.tier === 'capital' && (
                       <>
                         <li className="flex items-center space-x-2">
                           <CheckCircle className="h-4 w-4 text-green-500" />
@@ -303,7 +321,7 @@ export default function UserDashboardArgon() {
                         </li>
                       </>
                     )}
-                    {user.tier === 'free' && (
+                    {displayUser.tier === 'free' && (
                       <>
                         <li className="flex items-center space-x-2">
                           <CheckCircle className="h-4 w-4 text-green-500" />
@@ -325,6 +343,88 @@ export default function UserDashboardArgon() {
             </ArgonBox>
           </div>
 
+          {/* Latest Assessment Results - Only for Growth Tier */}
+          {displayUser.tier === 'growth' && displayUser.resultReady && (
+            <div className="bg-white rounded-xl shadow-lg border border-gray-100">
+              <ArgonBox p={3}>
+                <ArgonTypography variant="h6" color="dark" fontWeight="bold" className="mb-4">
+                  Latest Assessment Results:
+                </ArgonTypography>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                  <div className="border rounded-lg p-4">
+                    <ArgonTypography variant="body2" color="text" className="mb-1">
+                      Estimated Business Value
+                    </ArgonTypography>
+                    <ArgonTypography variant="h4" color="primary" fontWeight="bold">
+                      $2.4M
+                    </ArgonTypography>
+                  </div>
+                  <div className="border rounded-lg p-4">
+                    <ArgonTypography variant="body2" color="text" className="mb-1">
+                      EBITDA Multiple
+                    </ArgonTypography>
+                    <ArgonTypography variant="h4" color="info" fontWeight="bold">
+                      4.9x
+                    </ArgonTypography>
+                  </div>
+                  <div className="border rounded-lg p-4">
+                    <ArgonTypography variant="body2" color="text" className="mb-1">
+                      Industry
+                    </ArgonTypography>
+                    <ArgonTypography variant="body1" color="dark" fontWeight="medium">
+                      Professional Services
+                    </ArgonTypography>
+                  </div>
+                  <div className="border rounded-lg p-4">
+                    <ArgonTypography variant="body2" color="text" className="mb-1">
+                      Report Date
+                    </ArgonTypography>
+                    <ArgonTypography variant="body1" color="dark" fontWeight="medium">
+                      Jan 15, 2025
+                    </ArgonTypography>
+                  </div>
+                </div>
+
+                <Separator className="my-4" />
+
+                <ArgonTypography variant="h6" color="dark" fontWeight="medium" className="mb-3">
+                  What's Included:
+                </ArgonTypography>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <div className="flex items-center space-x-2">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      <span>Industry-specific multipliers analysis</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      <span>AI-powered insights and recommendations</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      <span>Market positioning analysis</span>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex items-center space-x-2">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      <span>Professional PDF report</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      <span>Strategic growth recommendations</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      <span>Competitive benchmarking</span>
+                    </div>
+                  </div>
+                </div>
+              </ArgonBox>
+            </div>
+          )}
+
           {/* Actions Card */}
           <div className="bg-white rounded-xl shadow-lg border border-gray-100">
             <ArgonBox p={3}>
@@ -332,7 +432,7 @@ export default function UserDashboardArgon() {
                 Actions
               </ArgonTypography>
               <div className="space-y-4">
-                {user.resultReady ? (
+                {displayUser.resultReady ? (
                   <div className="flex flex-col sm:flex-row justify-between gap-2 sm:gap-1">
                     <ArgonButton 
                       variant="gradient" 
