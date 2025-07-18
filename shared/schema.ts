@@ -14,16 +14,22 @@ export const sessions = pgTable(
   (table) => [index("IDX_session_expire").on(table.expire)],
 );
 
-// User storage table for Replit Auth
+// User storage table for both Replit Auth and custom auth
 export const users = pgTable("users", {
-  id: varchar("id").primaryKey().notNull(), // Replit user ID
-  email: varchar("email").unique(),
+  id: varchar("id").primaryKey().notNull(), // Replit user ID or generated ID for custom users
+  email: varchar("email").unique().notNull(),
   firstName: varchar("first_name"),
   lastName: varchar("last_name"),
+  fullName: varchar("full_name"), // For custom registrations
   profileImageUrl: varchar("profile_image_url"),
+  passwordHash: varchar("password_hash"), // For custom auth users (null for Replit users)
+  authProvider: text("auth_provider").notNull().default("custom"), // "replit" or "custom"
+  replitUserId: varchar("replit_user_id"), // Original Replit ID if auth provider is replit
   tier: text("tier").notNull().default("free"), // "free", "growth", "capital"
   ghlContactId: text("ghl_contact_id"),
   resultReady: boolean("result_ready").default(false),
+  isActive: boolean("is_active").default(true),
+  emailVerified: boolean("email_verified").default(false),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -286,6 +292,22 @@ export type TeamMember = typeof teamMembers.$inferSelect;
 export type TeamSession = typeof teamSessions.$inferSelect;
 export type User = typeof users.$inferSelect;
 export type LoginCredentials = z.infer<typeof loginSchema>;
+
+// Custom user registration/login schemas
+export const registerUserSchema = createInsertSchema(users).pick({
+  fullName: true,
+  email: true,
+}).extend({
+  password: z.string().min(8, "Password must be at least 8 characters"),
+});
+
+export const loginUserSchema = z.object({
+  email: z.string().email("Please enter a valid email address"),
+  password: z.string().min(1, "Password is required"),
+});
+
+export type RegisterUser = z.infer<typeof registerUserSchema>;
+export type LoginUser = z.infer<typeof loginUserSchema>;
 export type CreatePasswordData = z.infer<typeof createPasswordSchema>;
 
 // Form step schemas for validation

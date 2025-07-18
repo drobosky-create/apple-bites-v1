@@ -42,12 +42,14 @@ export interface IStorage {
   createLeadActivity(activity: InsertLeadActivity): Promise<LeadActivity>;
   getLeadActivities(leadId: number): Promise<LeadActivity[]>;
 
-  // User management methods (for Replit Auth)
+  // User management methods (for both Replit Auth and custom auth)
   getUser(id: string): Promise<User | undefined>;
   upsertUser(user: UpsertUser): Promise<User>;
   getUserByEmail(email: string): Promise<User | undefined>;
   updateUser(id: string, updates: Partial<User>): Promise<User>;
   deleteUser(id: string): Promise<void>;
+  createCustomUser(userData: { fullName: string; email: string; passwordHash: string }): Promise<User>;
+  validateUserCredentials(email: string, password: string): Promise<User | null>;
 
   // Team management methods
   createTeamMember(member: InsertTeamMember & { hashedPassword: string }): Promise<TeamMember>;
@@ -270,6 +272,46 @@ export class DatabaseStorage implements IStorage {
 
   async deleteTeamSession(sessionId: string): Promise<void> {
     await db.delete(teamSessions).where(eq(teamSessions.id, sessionId));
+  }
+
+  // Custom user authentication methods
+  async createCustomUser(userData: { fullName: string; email: string; passwordHash: string }): Promise<User> {
+    const userId = `custom_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+    
+    const [user] = await db
+      .insert(users)
+      .values({
+        id: userId,
+        email: userData.email,
+        fullName: userData.fullName,
+        passwordHash: userData.passwordHash,
+        authProvider: 'custom',
+        emailVerified: false,
+        tier: 'free',
+        isActive: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      })
+      .returning();
+    
+    return user;
+  }
+
+  async validateUserCredentials(email: string, password: string): Promise<User | null> {
+    const user = await this.getUserByEmail(email);
+    
+    if (!user || !user.passwordHash || user.authProvider !== 'custom') {
+      return null;
+    }
+
+    const bcrypt = await import('bcryptjs');
+    const isValidPassword = await bcrypt.compare(password, user.passwordHash);
+    
+    if (!isValidPassword || !user.isActive) {
+      return null;
+    }
+
+    return user;
   }
 }
 
