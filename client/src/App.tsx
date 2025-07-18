@@ -23,6 +23,7 @@ import TeamDashboard from "@/pages/team-dashboard";
 import ReportSelectionPage from "@/pages/report-selection";
 import UserDashboardArgon from "@/pages/user-dashboard-argon";
 import ArgonDemo from "@/pages/argon-demo";
+import FreeTierDemo from "@/pages/free-tier-demo";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -45,6 +46,7 @@ function Router() {
         <Route path="/redirect" component={RedirectHome} />
         <Route path="/ghl-demo" component={GHLThemeDemo} />
         <Route path="/argon-demo" component={ArgonDemo} />
+        <Route path="/free-tier-demo" component={FreeTierDemo} />
         
         {/* Pages with header/navigation */}
         <Route path="/assessment/free">
