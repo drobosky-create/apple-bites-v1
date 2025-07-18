@@ -197,25 +197,168 @@ export default function FreeTierDemo() {
                 Actions
               </ArgonTypography>
               <div className="space-y-4">
-                <div className="flex flex-col sm:flex-row justify-between gap-2 sm:gap-1">
-                  <ArgonButton variant="gradient" color="primary" size="large" className="w-full sm:w-auto">
-                    <Download className="h-4 w-4 mr-2" />
-                    Download Basic Report
-                  </ArgonButton>
-                  <ArgonButton variant="outlined" color="secondary" size="large" className="w-full sm:w-auto">
-                    <Mail className="h-4 w-4 mr-2" />
-                    Email Results
-                  </ArgonButton>
-                  <ArgonButton 
-                    variant="gradient"
-                    color="info"
-                    size="large"
-                    onClick={() => setLocation('/assessment/free')}
-                    className="w-full sm:w-auto"
-                  >
-                    <FileText className="h-4 w-4 mr-2" />
-                    Take Another Assessment
-                  </ArgonButton>
+                <div className="space-y-6">
+                  {/* Option 1: Current Style */}
+                  <div className="border-2 border-gray-200 rounded-lg p-4">
+                    <ArgonTypography variant="h6" color="dark" fontWeight="bold" className="mb-3">
+                      Option 1: Current Style
+                    </ArgonTypography>
+                    <div className="flex flex-col sm:flex-row justify-between gap-2 sm:gap-1">
+                      <ArgonButton variant="gradient" color="primary" size="large" className="w-full sm:w-auto">
+                        <Download className="h-4 w-4 mr-2" />
+                        Download Basic Report
+                      </ArgonButton>
+                      <ArgonButton variant="outlined" color="secondary" size="large" className="w-full sm:w-auto">
+                        <Mail className="h-4 w-4 mr-2" />
+                        Email Results
+                      </ArgonButton>
+                      <ArgonButton 
+                        variant="gradient"
+                        color="info"
+                        size="large"
+                        onClick={() => setLocation('/assessment/free')}
+                        className="w-full sm:w-auto"
+                      >
+                        <FileText className="h-4 w-4 mr-2" />
+                        Take Another Assessment
+                      </ArgonButton>
+                    </div>
+                  </div>
+
+                  {/* Option 2: Solid Colors */}
+                  <div className="border-2 border-gray-200 rounded-lg p-4">
+                    <ArgonTypography variant="h6" color="dark" fontWeight="bold" className="mb-3">
+                      Option 2: Solid Colors
+                    </ArgonTypography>
+                    <div className="flex flex-col sm:flex-row justify-between gap-2 sm:gap-1">
+                      <ArgonButton variant="gradient" color="primary" size="large" className="w-full sm:w-auto">
+                        <Download className="h-4 w-4 mr-2" />
+                        Download Basic Report
+                      </ArgonButton>
+                      <ArgonButton variant="contained" color="info" size="large" className="w-full sm:w-auto">
+                        <Mail className="h-4 w-4 mr-2" />
+                        Email Results
+                      </ArgonButton>
+                      <ArgonButton 
+                        variant="contained"
+                        color="success"
+                        size="large"
+                        onClick={() => setLocation('/assessment/free')}
+                        className="w-full sm:w-auto"
+                      >
+                        <FileText className="h-4 w-4 mr-2" />
+                        Take Another Assessment
+                      </ArgonButton>
+                    </div>
+                  </div>
+
+                  {/* Option 3: Ghost/Text Style */}
+                  <div className="border-2 border-gray-200 rounded-lg p-4">
+                    <ArgonTypography variant="h6" color="dark" fontWeight="bold" className="mb-3">
+                      Option 3: Ghost/Text Style
+                    </ArgonTypography>
+                    <div className="flex flex-col sm:flex-row justify-between gap-2 sm:gap-1">
+                      <ArgonButton variant="gradient" color="primary" size="large" className="w-full sm:w-auto">
+                        <Download className="h-4 w-4 mr-2" />
+                        Download Basic Report
+                      </ArgonButton>
+                      <ArgonButton variant="text" color="info" size="large" className="w-full sm:w-auto bg-blue-50 hover:bg-blue-100 border border-blue-200">
+                        <Mail className="h-4 w-4 mr-2" />
+                        Email Results
+                      </ArgonButton>
+                      <ArgonButton 
+                        variant="text"
+                        color="success"
+                        size="large"
+                        onClick={() => setLocation('/assessment/free')}
+                        className="w-full sm:w-auto bg-green-50 hover:bg-green-100 border border-green-200"
+                      >
+                        <FileText className="h-4 w-4 mr-2" />
+                        Take Another Assessment
+                      </ArgonButton>
+                    </div>
+                  </div>
+
+                  {/* Option 4: Gradient Variations */}
+                  <div className="border-2 border-gray-200 rounded-lg p-4">
+                    <ArgonTypography variant="h6" color="dark" fontWeight="bold" className="mb-3">
+                      Option 4: Gradient Variations
+                    </ArgonTypography>
+                    <div className="flex flex-col sm:flex-row justify-between gap-2 sm:gap-1">
+                      <ArgonButton variant="gradient" color="primary" size="large" className="w-full sm:w-auto">
+                        <Download className="h-4 w-4 mr-2" />
+                        Download Basic Report
+                      </ArgonButton>
+                      <ArgonButton variant="gradient" color="info" size="large" className="w-full sm:w-auto">
+                        <Mail className="h-4 w-4 mr-2" />
+                        Email Results
+                      </ArgonButton>
+                      <ArgonButton 
+                        variant="gradient"
+                        color="success"
+                        size="large"
+                        onClick={() => setLocation('/assessment/free')}
+                        className="w-full sm:w-auto"
+                      >
+                        <FileText className="h-4 w-4 mr-2" />
+                        Take Another Assessment
+                      </ArgonButton>
+                    </div>
+                  </div>
+
+                  {/* Option 5: Secondary Outlined */}
+                  <div className="border-2 border-gray-200 rounded-lg p-4">
+                    <ArgonTypography variant="h6" color="dark" fontWeight="bold" className="mb-3">
+                      Option 5: Secondary Outlined
+                    </ArgonTypography>
+                    <div className="flex flex-col sm:flex-row justify-between gap-2 sm:gap-1">
+                      <ArgonButton variant="gradient" color="primary" size="large" className="w-full sm:w-auto">
+                        <Download className="h-4 w-4 mr-2" />
+                        Download Basic Report
+                      </ArgonButton>
+                      <ArgonButton variant="outlined" color="info" size="large" className="w-full sm:w-auto">
+                        <Mail className="h-4 w-4 mr-2" />
+                        Email Results
+                      </ArgonButton>
+                      <ArgonButton 
+                        variant="outlined"
+                        color="success"
+                        size="large"
+                        onClick={() => setLocation('/assessment/free')}
+                        className="w-full sm:w-auto"
+                      >
+                        <FileText className="h-4 w-4 mr-2" />
+                        Take Another Assessment
+                      </ArgonButton>
+                    </div>
+                  </div>
+
+                  {/* Option 6: Mixed Styles */}
+                  <div className="border-2 border-gray-200 rounded-lg p-4">
+                    <ArgonTypography variant="h6" color="dark" fontWeight="bold" className="mb-3">
+                      Option 6: Mixed Styles
+                    </ArgonTypography>
+                    <div className="flex flex-col sm:flex-row justify-between gap-2 sm:gap-1">
+                      <ArgonButton variant="gradient" color="primary" size="large" className="w-full sm:w-auto">
+                        <Download className="h-4 w-4 mr-2" />
+                        Download Basic Report
+                      </ArgonButton>
+                      <ArgonButton variant="contained" color="secondary" size="large" className="w-full sm:w-auto">
+                        <Mail className="h-4 w-4 mr-2" />
+                        Email Results
+                      </ArgonButton>
+                      <ArgonButton 
+                        variant="outlined"
+                        color="info"
+                        size="large"
+                        onClick={() => setLocation('/assessment/free')}
+                        className="w-full sm:w-auto"
+                      >
+                        <FileText className="h-4 w-4 mr-2" />
+                        Take Another Assessment
+                      </ArgonButton>
+                    </div>
+                  </div>
                 </div>
               </div>
             </ArgonBox>
