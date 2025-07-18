@@ -152,13 +152,58 @@ export default function FreeTierDemo() {
               
               <div className="space-y-4">
                 <div className="flex items-center space-x-3">
-                  <Clock className="h-5 w-5 text-blue-500" />
-                  <ArgonTypography variant="body1" color="info" fontWeight="medium">
-                    Processing
+                  <CheckCircle className="h-5 w-5 text-green-500" />
+                  <ArgonTypography variant="body1" color="success" fontWeight="medium">
+                    Assessment Complete
                   </ArgonTypography>
-                  <Badge className="bg-blue-100 text-blue-800">
-                    In Progress
+                  <Badge className="bg-green-100 text-green-800">
+                    Results Available
                   </Badge>
+                </div>
+
+                <Separator />
+
+                {/* Latest Results Summary */}
+                <div className="space-y-3">
+                  <ArgonTypography variant="h6" color="dark" fontWeight="medium">
+                    Latest Assessment Results:
+                  </ArgonTypography>
+                  <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <ArgonTypography variant="body2" color="text" className="text-sm opacity-75">
+                          Estimated Business Value
+                        </ArgonTypography>
+                        <ArgonTypography variant="h6" color="info" fontWeight="bold">
+                          $847,500
+                        </ArgonTypography>
+                      </div>
+                      <div>
+                        <ArgonTypography variant="body2" color="text" className="text-sm opacity-75">
+                          EBITDA Multiple
+                        </ArgonTypography>
+                        <ArgonTypography variant="h6" color="info" fontWeight="bold">
+                          3.4x
+                        </ArgonTypography>
+                      </div>
+                      <div>
+                        <ArgonTypography variant="body2" color="text" className="text-sm opacity-75">
+                          Industry
+                        </ArgonTypography>
+                        <ArgonTypography variant="body1" color="dark" fontWeight="medium">
+                          Professional Services
+                        </ArgonTypography>
+                      </div>
+                      <div>
+                        <ArgonTypography variant="body2" color="text" className="text-sm opacity-75">
+                          Report Date
+                        </ArgonTypography>
+                        <ArgonTypography variant="body1" color="dark" fontWeight="medium">
+                          Jan 15, 2025
+                        </ArgonTypography>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 <Separator />
@@ -202,9 +247,9 @@ export default function FreeTierDemo() {
               </ArgonTypography>
               <div className="space-y-4">
                 <div className="flex items-center space-x-2 mb-4">
-                  <AlertCircle className="h-4 w-4 text-gray-600" />
+                  <CheckCircle className="h-4 w-4 text-green-600" />
                   <ArgonTypography variant="body2" color="text">
-                    Your assessment is being processed. Results will be available shortly.
+                    Your latest assessment is complete. View detailed results or take a new assessment.
                   </ArgonTypography>
                 </div>
                 <div className="flex flex-col sm:flex-row gap-3">
@@ -216,7 +261,7 @@ export default function FreeTierDemo() {
                     className="flex-shrink-0 bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg hover:shadow-xl"
                   >
                     <FileText className="h-4 w-4 mr-2" />
-                    View Results
+                    View All Results
                   </ArgonButton>
                   <ArgonButton 
                     variant="gradient"
