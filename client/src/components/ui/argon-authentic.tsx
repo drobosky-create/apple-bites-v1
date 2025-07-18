@@ -52,7 +52,7 @@ const ArgonBox = React.forwardRef<HTMLElement, ArgonBoxProps>(
     
     const bgColorClasses = {
       white: 'bg-white',
-      primary: 'bg-purple-600', // Your brand primary
+      primary: 'bg-[#0b2147]', // Your brand primary
       secondary: 'bg-gray-600',
       info: 'bg-blue-500',
       success: 'bg-green-500',
@@ -64,7 +64,7 @@ const ArgonBox = React.forwardRef<HTMLElement, ArgonBoxProps>(
 
     const textColorClasses = {
       white: 'text-white',
-      primary: 'text-purple-600',
+      primary: 'text-[#0b2147]',
       secondary: 'text-gray-600',
       info: 'text-blue-500',
       success: 'text-green-500',
@@ -119,7 +119,7 @@ const ArgonBox = React.forwardRef<HTMLElement, ArgonBoxProps>(
           color && textColorClasses[color],
           borderRadiusClasses[borderRadius],
           shadowClasses[shadow],
-          variant === 'gradient' && bgGradient && `bg-gradient-to-r from-purple-600 to-blue-600`, // Your brand gradient
+          variant === 'gradient' && bgGradient && `bg-gradient-to-r from-[#0b2147] to-blue-600`, // Your brand gradient
           className
         ),
         style: computedStyle,
@@ -175,7 +175,7 @@ const ArgonTypography = React.forwardRef<HTMLElement, ArgonTypographyProps>(
 
     const colorClasses = {
       inherit: 'text-inherit',
-      primary: textGradient ? 'bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent' : 'text-purple-600',
+      primary: textGradient ? 'bg-gradient-to-r from-[#0b2147] to-blue-600 bg-clip-text text-transparent' : 'text-[#0b2147]',
       secondary: 'text-gray-600',
       info: 'text-blue-500',
       success: 'text-green-500',
@@ -263,7 +263,7 @@ const ArgonButton = React.forwardRef<HTMLButtonElement, ArgonButtonProps>(
 
     const colorClasses = {
       contained: {
-        primary: 'bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg hover:shadow-xl',
+        primary: 'bg-gradient-to-r from-[#0b2147] to-blue-600 text-white shadow-lg hover:shadow-xl',
         secondary: 'bg-gray-600 text-white shadow-lg hover:shadow-xl',
         info: 'bg-blue-500 text-white shadow-lg hover:shadow-xl',
         success: 'bg-green-500 text-white shadow-lg hover:shadow-xl',
@@ -274,7 +274,7 @@ const ArgonButton = React.forwardRef<HTMLButtonElement, ArgonButtonProps>(
         white: 'bg-white text-gray-800 shadow-lg hover:shadow-xl'
       },
       gradient: {
-        primary: 'bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg hover:shadow-xl',
+        primary: 'bg-gradient-to-r from-[#0b2147] to-blue-600 text-white shadow-lg hover:shadow-xl',
         secondary: 'bg-gradient-to-r from-gray-600 to-gray-700 text-white shadow-lg hover:shadow-xl',
         info: 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg hover:shadow-xl',
         success: 'bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg hover:shadow-xl',
@@ -285,7 +285,7 @@ const ArgonButton = React.forwardRef<HTMLButtonElement, ArgonButtonProps>(
         white: 'bg-gradient-to-r from-white to-gray-50 text-gray-800 shadow-lg hover:shadow-xl'
       },
       outlined: {
-        primary: 'border-2 border-purple-600 text-purple-600 hover:bg-purple-600 hover:text-white',
+        primary: 'border-2 border-[#0b2147] text-[#0b2147] hover:bg-[#0b2147] hover:text-white',
         secondary: 'border-2 border-gray-600 text-gray-600 hover:bg-gray-600 hover:text-white',
         info: 'border-2 border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white',
         success: 'border-2 border-green-500 text-green-500 hover:bg-green-500 hover:text-white',
@@ -296,7 +296,7 @@ const ArgonButton = React.forwardRef<HTMLButtonElement, ArgonButtonProps>(
         white: 'border-2 border-white text-white hover:bg-white hover:text-gray-800'
       },
       text: {
-        primary: 'text-purple-600 hover:bg-purple-50',
+        primary: 'text-[#0b2147] hover:bg-blue-50',
         secondary: 'text-gray-600 hover:bg-gray-50',
         info: 'text-blue-500 hover:bg-blue-50',
         success: 'text-green-500 hover:bg-green-50',
