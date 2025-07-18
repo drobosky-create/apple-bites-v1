@@ -188,7 +188,7 @@ export default function ArgonDemo() {
                 Actions
               </ArgonTypography>
               <div className="space-y-4">
-                <div className="flex flex-col sm:flex-row justify-between gap-4 sm:gap-2">
+                <div className="flex flex-col sm:flex-row justify-between gap-2 sm:gap-1">
                   <ArgonButton variant="gradient" color="primary" size="large" className="w-full sm:w-auto">
                     <Download className="h-4 w-4 mr-2" />
                     Download Results

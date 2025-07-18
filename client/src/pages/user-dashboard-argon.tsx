@@ -324,12 +324,12 @@ export default function UserDashboardArgon() {
               </ArgonTypography>
               <div className="space-y-4">
                 {user.resultReady ? (
-                  <div className="space-y-3">
+                  <div className="flex flex-col sm:flex-row justify-between gap-2 sm:gap-1">
                     <ArgonButton variant="gradient" color="primary" size="large" className="w-full sm:w-auto">
                       <Download className="h-4 w-4 mr-2" />
                       Download Results
                     </ArgonButton>
-                    <ArgonButton variant="outlined" color="secondary" size="large" className="w-full sm:w-auto ml-[50px] mr-[50px]">
+                    <ArgonButton variant="outlined" color="secondary" size="large" className="w-full sm:w-auto">
                       <Mail className="h-4 w-4 mr-2" />
                       Email Results
                     </ArgonButton>
