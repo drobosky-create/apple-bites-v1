@@ -37,7 +37,7 @@ function Router() {
           <Route path="/" component={Landing} />
         ) : (
           <>
-            <Route path="/" component={UserDashboardArgon} />
+            <Route path="/" component={FreeTierDemo} />
             <Route path="/dashboard/:tier" component={UserDashboardArgon} />
             <Route path="/dashboard" component={UserDashboardArgon} />
           </>

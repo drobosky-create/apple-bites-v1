@@ -157,12 +157,12 @@ export default function FreeTierDemo() {
               
               <div className="space-y-4">
                 <div className="flex items-center space-x-3">
-                  <CheckCircle className="h-5 w-5 text-green-500" />
-                  <ArgonTypography variant="body1" color="success" fontWeight="medium">
-                    Results Ready
+                  <Clock className="h-5 w-5 text-blue-500" />
+                  <ArgonTypography variant="body1" color="info" fontWeight="medium">
+                    Processing
                   </ArgonTypography>
-                  <Badge className="bg-green-100 text-green-800">
-                    Complete
+                  <Badge className="bg-blue-100 text-blue-800">
+                    In Progress
                   </Badge>
                 </div>
 
@@ -170,7 +170,7 @@ export default function FreeTierDemo() {
 
                 <div className="space-y-3">
                   <ArgonTypography variant="h6" color="dark" fontWeight="medium">
-                    What's Included in Free Assessment:
+                    What's Included:
                   </ArgonTypography>
                   <ul className="space-y-2">
                     <li className="flex items-center space-x-2">
@@ -185,13 +185,13 @@ export default function FreeTierDemo() {
                       <CheckCircle className="h-4 w-4 text-green-500" />
                       <span>PDF report summary</span>
                     </li>
-                    <li className="flex items-center space-x-2">
+                    <li className="flex items-center space-x-2 text-gray-400">
                       <AlertCircle className="h-4 w-4 text-gray-400" />
-                      <span className="text-gray-400">Industry-specific multipliers (upgrade required)</span>
+                      <span className="text-gray-400">Industry-specific multipliers (Upgrade Required)</span>
                     </li>
-                    <li className="flex items-center space-x-2">
+                    <li className="flex items-center space-x-2 text-gray-400">
                       <AlertCircle className="h-4 w-4 text-gray-400" />
-                      <span className="text-gray-400">AI-powered insights (upgrade required)</span>
+                      <span className="text-gray-400">AI-powered insights (Upgrade Required)</span>
                     </li>
                   </ul>
                 </div>
@@ -206,67 +206,51 @@ export default function FreeTierDemo() {
                 Actions
               </ArgonTypography>
               <div className="space-y-4">
-                <div className="flex flex-col sm:flex-row justify-between gap-2 sm:gap-1">
-                  <ArgonButton variant="gradient" color="primary" size="large" className="w-full sm:w-auto">
-                    <Download className="h-4 w-4 mr-2" />
-                    Download Basic Report
-                  </ArgonButton>
-                  <ArgonButton variant="gradient" color="info" size="large" className="w-full sm:w-auto">
-                    <Mail className="h-4 w-4 mr-2" />
-                    Email Results
-                  </ArgonButton>
+                <div className="flex items-center space-x-2 mb-4">
+                  <AlertCircle className="h-4 w-4 text-gray-600" />
+                  <ArgonTypography variant="body2" color="text">
+                    Your assessment is being processed. Results will be available shortly.
+                  </ArgonTypography>
+                </div>
+                <div className="flex flex-col sm:flex-row justify-start gap-2 sm:gap-4">
                   <ArgonButton 
                     variant="gradient"
-                    color="success"
+                    color="info"
                     size="large"
                     onClick={() => setLocation('/assessment/free')}
                     className="w-full sm:w-auto"
                   >
                     <FileText className="h-4 w-4 mr-2" />
-                    Take Another Assessment
+                    Take Free Assessment
+                  </ArgonButton>
+                  <ArgonButton 
+                    variant="outlined"
+                    color="secondary"
+                    size="large"
+                    onClick={() => window.open('https://products.applebites.ai/', '_blank')}
+                    className="w-full sm:w-auto"
+                  >
+                    <ExternalLink className="h-4 w-4 mr-2" />
+                    Purchase Additional Assessments
                   </ArgonButton>
                 </div>
               </div>
             </ArgonBox>
           </div>
 
-          {/* Upgrade Promotion Card */}
-          <div className="bg-gradient-to-r from-[#0b2147] to-blue-600 rounded-xl shadow-lg text-white">
-            <ArgonBox p={4}>
-              <div className="flex items-center justify-between">
-                <div className="flex-1">
-                  <ArgonTypography variant="h5" color="white" fontWeight="bold" className="mb-2">
-                    Unlock Advanced Features
-                  </ArgonTypography>
-                  <ArgonTypography variant="body1" color="white" className="mb-4 opacity-90">
-                    Upgrade to Growth & Exit Assessment for industry-specific analysis, AI insights, and detailed market positioning.
-                  </ArgonTypography>
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    <Badge className="bg-white/20 text-white border-white/30">
-                      Industry Multipliers
-                    </Badge>
-                    <Badge className="bg-white/20 text-white border-white/30">
-                      AI Insights
-                    </Badge>
-                    <Badge className="bg-white/20 text-white border-white/30">
-                      Market Analysis
-                    </Badge>
-                  </div>
-                  <ArgonButton 
-                    variant="contained" 
-                    color="white" 
-                    size="large"
-                    onClick={() => window.open('https://products.applebites.ai/', '_blank')}
-                  >
-                    <Crown className="h-4 w-4 mr-2" />
-                    Upgrade Now - $795
-                    <ExternalLink className="h-4 w-4 ml-2" />
-                  </ArgonButton>
-                </div>
-                <div className="ml-6">
-                  <TrendingUp className="h-16 w-16 text-white/60" />
-                </div>
-              </div>
+          {/* Need Help Section */}
+          <div className="bg-white rounded-xl shadow-lg border border-gray-100">
+            <ArgonBox p={3}>
+              <ArgonTypography variant="h6" color="dark" fontWeight="bold" className="mb-3">
+                Need Help?
+              </ArgonTypography>
+              <ArgonTypography variant="body2" color="text" className="mb-4">
+                If you have questions about your assessment or need assistance, our team is here to help.
+              </ArgonTypography>
+              <ArgonButton variant="gradient" color="success">
+                <Mail className="h-4 w-4 mr-2" />
+                Contact Support
+              </ArgonButton>
             </ArgonBox>
           </div>
         </div>
