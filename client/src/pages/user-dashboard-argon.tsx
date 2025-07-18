@@ -73,31 +73,32 @@ export default function UserDashboardArgon() {
     );
   }
 
-  if (error || !user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center p-4" style={{ backgroundColor: '#f8f9fa' }}>
-        <div className="w-full max-w-md bg-white rounded-xl shadow-lg border border-gray-100">
-          <ArgonBox p={3}>
-            <ArgonTypography variant="h5" color="dark" fontWeight="bold" className="text-center mb-2">
-              Authentication Required
-            </ArgonTypography>
-            <ArgonTypography variant="body2" color="text" className="text-center mb-4">
-              Please log in to access your dashboard.
-            </ArgonTypography>
-            <ArgonButton 
-              onClick={() => setLocation('/login')} 
-              variant="gradient"
-              color="info"
-              fullWidth
-              size="large"
-            >
-              Go to Login
-            </ArgonButton>
-          </ArgonBox>
-        </div>
-      </div>
-    );
-  }
+  // Always show Sarah Johnson demo - skip error handling for demo
+  // if (error || !user) {
+  //   return (
+  //     <div className="min-h-screen flex items-center justify-center p-4" style={{ backgroundColor: '#f8f9fa' }}>
+  //       <div className="w-full max-w-md bg-white rounded-xl shadow-lg border border-gray-100">
+  //         <ArgonBox p={3}>
+  //           <ArgonTypography variant="h5" color="dark" fontWeight="bold" className="text-center mb-2">
+  //             Authentication Required
+  //           </ArgonTypography>
+  //           <ArgonTypography variant="body2" color="text" className="text-center mb-4">
+  //             Please log in to access your dashboard.
+  //           </ArgonTypography>
+  //           <ArgonButton 
+  //             onClick={() => setLocation('/login')} 
+  //             variant="gradient"
+  //             color="info"
+  //             fullWidth
+  //             size="large"
+  //           >
+  //             Go to Login
+  //           </ArgonButton>
+  //         </ArgonBox>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   const getTierInfo = (tier: string) => {
     switch (tier) {
