@@ -4,14 +4,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useMutation } from "@tanstack/react-query";
 import { useLocation } from "wouter";
-import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
+import { Eye, EyeOff, LogIn, UserPlus } from "lucide-react";
+import { apiRequest } from "@/lib/queryClient";
+import { 
+  ArgonBox, 
+  ArgonButton, 
+  ArgonTypography 
+} from "@/components/ui/argon-authentic";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useToast } from "@/hooks/use-toast";
-import { Eye, EyeOff, LogIn, UserPlus, Apple } from "lucide-react";
-import { apiRequest } from "@/lib/queryClient";
 
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -44,6 +46,7 @@ export default function UserLogin() {
   const [showCreatePassword, setShowCreatePassword] = useState(false);
   const [needsPasswordCreation, setNeedsPasswordCreation] = useState(false);
   const [userEmail, setUserEmail] = useState("");
+  const [activeTab, setActiveTab] = useState<'create' | 'login'>('create');
 
   const loginForm = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -185,234 +188,308 @@ export default function UserLogin() {
 
   if (needsPasswordCreation) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#0D1B2A] via-[#1B263B] to-[#0D1B2A] flex items-center justify-center p-4 relative overflow-hidden">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0 bg-repeat" style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
-          }}></div>
-        </div>
-        <Card className="w-full max-w-md shadow-2xl border-[#415A77] bg-[#1B263B]/90 backdrop-blur-sm rounded-xl relative z-10">
-          <CardHeader className="space-y-1 relative">
-            <div className="flex items-center justify-center mb-4">
-              <Apple className="h-8 w-8 text-white mr-2" />
-              <span className="text-2xl font-bold text-white">Apple Bites</span>
+      <div className="min-h-screen" style={{ backgroundColor: '#f8f9fa' }}>
+        {/* Argon Header */}
+        <ArgonBox
+          variant="gradient"
+          bgGradient="primary"
+          py={3}
+          className="relative"
+        >
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-center">
+              <div className="flex items-center space-x-3">
+                <img 
+                  src="/apple-bites-logo.png" 
+                  alt="Apple Bites Business Assessment" 
+                  className="h-12 w-auto"
+                />
+              </div>
             </div>
-            <CardTitle className="text-2xl font-bold text-center text-white" style={{ fontFamily: 'Inter, Poppins, sans-serif' }}>Create Your Password</CardTitle>
-            <CardDescription className="text-center text-[#E0E1DD]">
-              Welcome to Apple Bites! Please create a secure password for your account.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={createPasswordForm.handleSubmit(onCreatePasswordSubmit)} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="email" className="text-white font-medium">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={userEmail}
-                  disabled
-                  className="bg-[#1B263B] border border-[#415A77] text-white placeholder-[#E0E1DD] rounded-lg opacity-75"
-                />
-              </div>
-              
-              <div className="space-y-2">
-                <Label htmlFor="password" className="text-white font-medium">New Password</Label>
-                <div className="relative">
-                  <Input
-                    id="password"
-                    type={showCreatePassword ? "text" : "password"}
-                    {...createPasswordForm.register("password")}
-                    placeholder="Enter at least 8 characters"
-                    className="bg-[#1B263B] border border-[#415A77] text-white placeholder-[#E0E1DD] rounded-lg focus:ring-2 focus:ring-[#778DA9]"
-                  />
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent text-white"
-                    onClick={() => setShowCreatePassword(!showCreatePassword)}
-                  >
-                    {showCreatePassword ? (
-                      <EyeOff className="h-4 w-4" />
-                    ) : (
-                      <Eye className="h-4 w-4" />
-                    )}
-                  </Button>
+          </div>
+        </ArgonBox>
+
+        {/* Main Content */}
+        <ArgonBox py={6} px={3} className="bg-transparent">
+          <div className="max-w-md mx-auto">
+            <div className="bg-white rounded-xl shadow-lg border border-gray-100">
+              <ArgonBox p={4}>
+                <div className="text-center mb-6">
+                  <ArgonTypography variant="h4" color="dark" fontWeight="bold" className="mb-2">
+                    Create Your Password
+                  </ArgonTypography>
+                  <ArgonTypography variant="body2" color="text">
+                    Welcome to Apple Bites! Please create a secure password for your account.
+                  </ArgonTypography>
                 </div>
-                {createPasswordForm.formState.errors.password && (
-                  <p className="text-sm text-red-200">{createPasswordForm.formState.errors.password.message}</p>
-                )}
-              </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="confirmPassword" className="text-white font-medium">Confirm Password</Label>
-                <Input
-                  id="confirmPassword"
-                  type="password"
-                  {...createPasswordForm.register("confirmPassword")}
-                  placeholder="Confirm your password"
-                  className="bg-[#1B263B] border border-[#415A77] text-white placeholder-[#E0E1DD] rounded-lg focus:ring-2 focus:ring-[#778DA9]"
-                />
-                {createPasswordForm.formState.errors.confirmPassword && (
-                  <p className="text-sm text-red-200">{createPasswordForm.formState.errors.confirmPassword.message}</p>
-                )}
-              </div>
+                <form onSubmit={createPasswordForm.handleSubmit(onCreatePasswordSubmit)} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="email" className="text-gray-700 font-medium">Email</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      value={userEmail}
+                      disabled
+                      className="bg-gray-50 border border-gray-200 text-gray-600 rounded-lg opacity-75"
+                    />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="password" className="text-gray-700 font-medium">New Password</Label>
+                    <div className="relative">
+                      <Input
+                        id="password"
+                        type={showCreatePassword ? "text" : "password"}
+                        {...createPasswordForm.register("password")}
+                        placeholder="Enter at least 8 characters"
+                        className="bg-white border border-gray-200 text-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 pr-12"
+                      />
+                      <ArgonButton
+                        variant="text"
+                        color="secondary"
+                        size="small"
+                        className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 min-w-0"
+                        onClick={() => setShowCreatePassword(!showCreatePassword)}
+                      >
+                        {showCreatePassword ? (
+                          <EyeOff className="h-4 w-4" />
+                        ) : (
+                          <Eye className="h-4 w-4" />
+                        )}
+                      </ArgonButton>
+                    </div>
+                    {createPasswordForm.formState.errors.password && (
+                      <p className="text-sm text-red-500">{createPasswordForm.formState.errors.password.message}</p>
+                    )}
+                  </div>
 
-              <Button 
-                type="submit" 
-                className="w-full text-white font-semibold bg-[#415A77] hover:bg-[#778DA9] transition duration-200 rounded-lg border-0" 
-                disabled={createPasswordMutation.isPending}
-              >
-                {createPasswordMutation.isPending ? "Creating Account..." : "Create Password & Login"}
-                <UserPlus className="ml-2 h-4 w-4" />
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
+                  <div className="space-y-2">
+                    <Label htmlFor="confirmPassword" className="text-gray-700 font-medium">Confirm Password</Label>
+                    <Input
+                      id="confirmPassword"
+                      type="password"
+                      {...createPasswordForm.register("confirmPassword")}
+                      placeholder="Confirm your password"
+                      className="bg-white border border-gray-200 text-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    />
+                    {createPasswordForm.formState.errors.confirmPassword && (
+                      <p className="text-sm text-red-500">{createPasswordForm.formState.errors.confirmPassword.message}</p>
+                    )}
+                  </div>
+
+                  <div className="pt-4">
+                    <ArgonButton 
+                      variant="gradient"
+                      color="primary"
+                      size="large"
+                      className="w-full"
+                      disabled={createPasswordMutation.isPending}
+                    >
+                      <UserPlus className="h-4 w-4 mr-2" />
+                      {createPasswordMutation.isPending ? "Creating Account..." : "Create Password & Login"}
+                    </ArgonButton>
+                  </div>
+                </form>
+              </ArgonBox>
+            </div>
+          </div>
+        </ArgonBox>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0D1B2A] via-[#1B263B] to-[#0D1B2A] flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute inset-0 bg-repeat" style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
-        }}></div>
-      </div>
-      <Card className="border text-card-foreground w-full max-w-md shadow-2xl border-[#415A77] bg-[#1B263B]/90 backdrop-blur-sm rounded-xl relative z-10 pt-[15px] pb-[15px]">
-        <CardHeader className="space-y-1 relative">
-          <div className="flex items-center justify-center mb-4">
-            <Apple className="h-8 w-8 text-white mr-2" />
-            <span className="text-2xl font-bold text-white">Apple Bites</span>
+    <div className="min-h-screen" style={{ backgroundColor: '#f8f9fa' }}>
+      {/* Argon Header */}
+      <ArgonBox
+        variant="gradient"
+        bgGradient="primary"
+        py={3}
+        className="relative"
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-center">
+            <div className="flex items-center space-x-3">
+              <img 
+                src="/apple-bites-logo.png" 
+                alt="Apple Bites Business Assessment" 
+                className="h-12 w-auto"
+              />
+            </div>
           </div>
-          <CardTitle className="text-3xl font-bold text-center text-white" style={{ fontFamily: 'Inter, Poppins, sans-serif' }}>Welcome to Apple Bites</CardTitle>
-          <CardDescription className="text-center text-[#E0E1DD] text-base">
-            Create your account to access business valuation tools
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Tabs defaultValue="login" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 bg-[#1B263B] border-[#415A77] rounded-lg">
-              <TabsTrigger value="login" className="tab-active-hover inline-flex items-center justify-center whitespace-nowrap px-3 py-1.5 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:text-[#0D1B2A] hover:bg-[#E0E1DD]/80 data-[state=active]:bg-[#415A77] data-[state=active]:text-white data-[state=active]:shadow-sm border-0 rounded-lg font-medium transition-colors text-[#E0E1DD]">Create Account</TabsTrigger>
-              <TabsTrigger value="info" className="tab-active-hover inline-flex items-center justify-center whitespace-nowrap px-3 py-1.5 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:text-[#0D1B2A] hover:bg-[#E0E1DD]/80 data-[state=active]:bg-[#415A77] data-[state=active]:text-white data-[state=active]:shadow-sm border-0 rounded-lg font-medium transition-colors text-[#E0E1DD]">Existing User?</TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="login" className="space-y-4 bg-transparent p-6 rounded-lg mt-4 border border-[#415A77]">
-              <form onSubmit={createAccountForm.handleSubmit(onCreateAccountSubmit)} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="fullName" className="text-white font-medium">Full Name</Label>
-                  <Input
-                    id="fullName"
-                    type="text"
-                    {...createAccountForm.register("fullName")}
-                    placeholder="Enter your full name"
-                    className="bg-[#1B263B] border border-[#415A77] text-white placeholder-[#E0E1DD] rounded-lg focus:ring-2 focus:ring-[#778DA9]"
-                  />
-                  {createAccountForm.formState.errors.fullName && (
-                    <p className="text-sm text-red-200">{createAccountForm.formState.errors.fullName.message}</p>
-                  )}
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="email" className="text-white font-medium">Email</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    {...createAccountForm.register("email")}
-                    placeholder="Enter your email address"
-                    className="bg-[#1B263B] border border-[#415A77] text-white placeholder-[#E0E1DD] rounded-lg focus:ring-2 focus:ring-[#778DA9]"
-                  />
-                  {createAccountForm.formState.errors.email && (
-                    <p className="text-sm text-red-200">{createAccountForm.formState.errors.email.message}</p>
-                  )}
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="password" className="text-white font-medium">Create Password</Label>
-                  <div className="relative rounded-lg overflow-hidden">
-                    <Input
-                      id="password"
-                      type={showPassword ? "text" : "password"}
-                      {...createAccountForm.register("password")}
-                      placeholder="Create a secure password"
-                      className="bg-[#1B263B] border border-[#415A77] text-white placeholder-[#E0E1DD] rounded-lg focus:ring-2 focus:ring-[#778DA9] pr-12"
-                    />
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 p-0 hover:bg-[#415A77]/20 text-[#E0E1DD] hover:text-white rounded-md transition-colors"
-                      onClick={() => setShowPassword(!showPassword)}
-                    >
-                      {showPassword ? (
-                        <EyeOff className="h-4 w-4" />
-                      ) : (
-                        <Eye className="h-4 w-4" />
-                      )}
-                    </Button>
-                  </div>
-                  {createAccountForm.formState.errors.password && (
-                    <p className="text-sm text-red-200">{createAccountForm.formState.errors.password.message}</p>
-                  )}
-                </div>
+        </div>
+      </ArgonBox>
 
-                <Button 
-                  type="submit" 
-                  className="w-full text-white font-semibold bg-gradient-to-r from-[#415A77] to-[#778DA9] hover:from-[#778DA9] hover:to-[#415A77] transition-all duration-300 rounded-lg border-0 shadow-lg hover:shadow-xl" 
-                  disabled={createAccountMutation.isPending}
-                >
-                  {createAccountMutation.isPending ? "Creating Account..." : "Create Account"}
-                  <LogIn className="ml-2 h-4 w-4" />
-                </Button>
-              </form>
-            </TabsContent>
-            
-            <TabsContent value="info" className="space-y-4 bg-transparent p-6 rounded-lg mt-4 border border-[#415A77]">
-              <div className="space-y-4">
-                <div className="text-center">
-                  <h3 className="font-semibold mb-2 text-white">Already have an account?</h3>
-                  <p className="text-sm text-[#E0E1DD] mb-4">
-                    Sign in with your existing credentials
-                  </p>
-                </div>
-                
-                <form className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="loginEmail" className="text-white font-medium">Email</Label>
-                    <Input
-                      id="loginEmail"
-                      type="email"
-                      placeholder="Enter your email address"
-                      className="bg-[#1B263B] border border-[#415A77] text-white placeholder-[#E0E1DD] rounded-lg focus:ring-2 focus:ring-[#778DA9]"
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="loginPassword" className="text-white font-medium">Password</Label>
-                    <Input
-                      id="loginPassword"
-                      type="password"
-                      placeholder="Enter your password"
-                      className="bg-[#1B263B] border border-[#415A77] text-white placeholder-[#E0E1DD] rounded-lg focus:ring-2 focus:ring-[#778DA9]"
-                    />
-                  </div>
-
-                  <Button 
-                    type="submit" 
-                    className="w-full text-white font-semibold bg-gradient-to-r from-[#415A77] to-[#778DA9] hover:from-[#778DA9] hover:to-[#415A77] transition-all duration-300 rounded-lg border-0 shadow-lg hover:shadow-xl"
-                  >
-                    Sign In
-                    <LogIn className="ml-2 h-4 w-4" />
-                  </Button>
-                </form>
+      {/* Main Content */}
+      <ArgonBox py={6} px={3} className="bg-transparent">
+        <div className="max-w-md mx-auto">
+          <div className="bg-white rounded-xl shadow-lg border border-gray-100">
+            <ArgonBox p={4}>
+              <div className="text-center mb-6">
+                <ArgonTypography variant="h4" color="dark" fontWeight="bold" className="mb-2">
+                  Welcome to Apple Bites
+                </ArgonTypography>
+                <ArgonTypography variant="body2" color="text">
+                  Create your account to access business valuation tools
+                </ArgonTypography>
               </div>
-            </TabsContent>
-          </Tabs>
-        </CardContent>
-      </Card>
+
+                {/* Tab Buttons */}
+                <div className="grid grid-cols-2 gap-2 p-1 bg-gray-100 rounded-lg mb-6">
+                  <ArgonButton
+                    variant={activeTab === 'create' ? 'gradient' : 'text'}
+                    color={activeTab === 'create' ? 'primary' : 'secondary'}
+                    size="medium"
+                    className="w-full"
+                    onClick={() => setActiveTab('create')}
+                  >
+                    Create Account
+                  </ArgonButton>
+                  <ArgonButton
+                    variant={activeTab === 'login' ? 'gradient' : 'text'}
+                    color={activeTab === 'login' ? 'primary' : 'secondary'}
+                    size="medium"
+                    className="w-full"
+                    onClick={() => setActiveTab('login')}
+                  >
+                    Existing User?
+                  </ArgonButton>
+                </div>
+
+                {/* Create Account Form */}
+                {activeTab === 'create' && (
+                  <form onSubmit={createAccountForm.handleSubmit(onCreateAccountSubmit)} className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="fullName" className="text-gray-700 font-medium">Full Name</Label>
+                      <Input
+                        id="fullName"
+                        type="text"
+                        {...createAccountForm.register("fullName")}
+                        placeholder="Enter your full name"
+                        className="bg-white border border-gray-200 text-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500"
+                      />
+                      {createAccountForm.formState.errors.fullName && (
+                        <p className="text-sm text-red-500">{createAccountForm.formState.errors.fullName.message}</p>
+                      )}
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="email" className="text-gray-700 font-medium">Email</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        {...createAccountForm.register("email")}
+                        placeholder="Enter your email address"
+                        className="bg-white border border-gray-200 text-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500"
+                      />
+                      {createAccountForm.formState.errors.email && (
+                        <p className="text-sm text-red-500">{createAccountForm.formState.errors.email.message}</p>
+                      )}
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="password" className="text-gray-700 font-medium">Create Password</Label>
+                      <div className="relative">
+                        <Input
+                          id="password"
+                          type={showPassword ? "text" : "password"}
+                          {...createAccountForm.register("password")}
+                          placeholder="Create a secure password"
+                          className="bg-white border border-gray-200 text-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 pr-12"
+                        />
+                        <ArgonButton
+                          variant="text"
+                          color="secondary"
+                          size="small"
+                          className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 min-w-0"
+                          onClick={() => setShowPassword(!showPassword)}
+                        >
+                          {showPassword ? (
+                            <EyeOff className="h-4 w-4" />
+                          ) : (
+                            <Eye className="h-4 w-4" />
+                          )}
+                        </ArgonButton>
+                      </div>
+                      {createAccountForm.formState.errors.password && (
+                        <p className="text-sm text-red-500">{createAccountForm.formState.errors.password.message}</p>
+                      )}
+                    </div>
+
+                    <div className="pt-4">
+                      <ArgonButton 
+                        variant="gradient"
+                        color="primary"
+                        size="large"
+                        className="w-full"
+                        disabled={createAccountMutation.isPending}
+                      >
+                        <UserPlus className="h-4 w-4 mr-2" />
+                        {createAccountMutation.isPending ? "Creating Account..." : "Create Account"}
+                      </ArgonButton>
+                    </div>
+                  </form>
+                )}
+
+                {/* Login Form */}
+                {activeTab === 'login' && (
+                  <form onSubmit={loginForm.handleSubmit(onLoginSubmit)} className="space-y-4">
+                    <div className="text-center mb-4">
+                      <ArgonTypography variant="h6" color="dark" fontWeight="bold" className="mb-2">
+                        Already have an account?
+                      </ArgonTypography>
+                      <ArgonTypography variant="body2" color="text">
+                        Sign in with your existing credentials
+                      </ArgonTypography>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="loginEmail" className="text-gray-700 font-medium">Email</Label>
+                      <Input
+                        id="loginEmail"
+                        type="email"
+                        {...loginForm.register("email")}
+                        placeholder="Enter your email address"
+                        className="bg-white border border-gray-200 text-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500"
+                      />
+                      {loginForm.formState.errors.email && (
+                        <p className="text-sm text-red-500">{loginForm.formState.errors.email.message}</p>
+                      )}
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="loginPassword" className="text-gray-700 font-medium">Password</Label>
+                      <Input
+                        id="loginPassword"
+                        type="password"
+                        {...loginForm.register("password")}
+                        placeholder="Enter your password"
+                        className="bg-white border border-gray-200 text-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500"
+                      />
+                      {loginForm.formState.errors.password && (
+                        <p className="text-sm text-red-500">{loginForm.formState.errors.password.message}</p>
+                      )}
+                    </div>
+
+                    <div className="pt-4">
+                      <ArgonButton 
+                        variant="gradient"
+                        color="info"
+                        size="large"
+                        className="w-full"
+                        disabled={loginMutation.isPending}
+                      >
+                        <LogIn className="h-4 w-4 mr-2" />
+                        {loginMutation.isPending ? "Signing In..." : "Sign In"}
+                      </ArgonButton>
+                    </div>
+                  </form>
+                )}
+            </ArgonBox>
+          </div>
+        </div>
+      </ArgonBox>
     </div>
   );
 }
