@@ -42,9 +42,14 @@ export default function FreeTierDemo() {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#f8f9fa' }}>
-      {/* Header - Authentic Argon Style */}
-      <ArgonBox py={3} px={3} style={{ backgroundColor: '#ffffff' }} className="shadow-sm border-b border-gray-100">
-        <div className="max-w-7xl mx-auto">
+      {/* Authentic Argon Dashboard Header with Your Brand Gradient */}
+      <ArgonBox
+        variant="gradient"
+        bgGradient="primary"
+        py={3}
+        className="relative"
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-6">
               <div className="flex items-center space-x-3">
@@ -54,45 +59,35 @@ export default function FreeTierDemo() {
                   className="h-12 w-auto"
                 />
               </div>
-              <div className="flex items-center space-x-4">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-r from-[#0b2147] to-blue-600 flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">
-                    {user.firstName[0]}{user.lastName[0]}
-                  </span>
-                </div>
-                <div>
-                  <ArgonTypography variant="h6" color="dark" fontWeight="bold">
-                    Welcome, {user.firstName} {user.lastName}
-                  </ArgonTypography>
-                  <ArgonTypography variant="body2" color="text">
-                    {user.email}
-                  </ArgonTypography>
-                </div>
-              </div>
+              <ArgonBox>
+                <ArgonTypography variant="h5" color="white" fontWeight="bold" className="mb-1">
+                  Welcome, {user.firstName} {user.lastName}
+                </ArgonTypography>
+                <ArgonTypography variant="body2" color="white" opacity={0.8} className="mb-1">
+                  {user.email}
+                </ArgonTypography>
+                <Badge className="bg-white/20 text-white border-white/30 font-medium">
+                  {tierInfo.name}
+                </Badge>
+              </ArgonBox>
             </div>
-            
-            <div className="flex items-center space-x-4">
-              <Badge className="bg-gray-100 text-gray-800">
-                {tierInfo.name}
-              </Badge>
-              <ArgonButton 
-                variant="outlined" 
-                color="secondary" 
-                size="small"
-                onClick={() => setLocation('/login')}
-              >
-                <LogOut className="h-4 w-4 mr-2" />
-                Logout
-              </ArgonButton>
-            </div>
+            <ArgonButton 
+              variant="outlined"
+              color="white"
+              onClick={() => setLocation('/login')}
+              className="border-white/30 hover:bg-white/20"
+            >
+              <LogOut className="h-4 w-4 mr-2" />
+              Logout
+            </ArgonButton>
           </div>
         </div>
       </ArgonBox>
 
-      {/* Statistics Cards */}
-      <ArgonBox py={4} px={3}>
+      {/* Authentic Argon Statistics Cards - Positioned over gradient header */}
+      <ArgonBox mt={-3} mb={3} px={3} className="bg-transparent mt-[14px] mb-[14px]">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <DetailedStatisticsCard
               title="Account Status"
               count="Active"
