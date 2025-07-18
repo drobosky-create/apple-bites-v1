@@ -77,38 +77,158 @@
   --transition-slow: 500ms ease-in-out;
 }
 
-/* GHL Dark Theme */
+/* Argon Dashboard Dark Theme */
 .dark {
-  /* GHL Dark Theme Brand Colors */
-  --primary: #81e5d8;
-  --primary-light: #9debd2;
-  --primary-dark: #65dfce;
-  --secondary: #4493de;
-  --secondary-light: #5ba3e4;
-  --secondary-dark: #3583d8;
-  
-  /* Dark Theme Backgrounds */
-  --background: #0a1e3d;
-  --foreground: #f1f5f9;
-  --muted: #1a2e52;
-  --muted-foreground: #cbd5e0;
-  --popover: #0b2147;
-  --popover-foreground: #f1f5f9;
-  --card: #1a2e52;
-  --card-foreground: #f1f5f9;
-  --border: #334155;
-  --input: #1a2e52;
-  --ring: #188bf6;
-  
-  /* Dark Theme States */
-  --accent: #1a2e52;
-  --accent-foreground: #f1f5f9;
-  --destructive: #dc2626;
-  --destructive-foreground: #f1f5f9;
+  /* Argon Dark Theme Colors */
+  --argon-background-default: #051139;
+  --argon-background-dark: #111c44;
+  --argon-text: rgba(255, 255, 255, 0.8);
+  --argon-light: rgba(240, 242, 245, 0.4);
+  --argon-border-color: rgba(255, 255, 255, 0.15);
   
   /* Override body background for dark theme */
-  background-color: var(--background) !important;
-  color: var(--foreground) !important;
+  background-color: var(--argon-background-default) !important;
+  color: var(--argon-text) !important;
+}
+
+/* Base Body Styling */
+body {
+  font-family: var(--font-family);
+  background-color: var(--argon-background-default);
+  color: var(--argon-text-dark);
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Argon Component Base Classes */
+.argon-card {
+  background: var(--argon-white);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(52, 71, 103, 0.1);
+  overflow: hidden;
+}
+
+.argon-card-dark {
+  background: var(--argon-background-dark);
+  border: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.argon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-sm);
+  text-transform: none;
+  line-height: 1.4;
+  border-radius: var(--radius-md);
+  padding: 10px 20px;
+  min-height: 40px;
+  transition: var(--transition-normal);
+  cursor: pointer;
+  user-select: none;
+  border: none;
+  background-size: 150%;
+  background-position-x: 25%;
+}
+
+.argon-button:hover {
+  transform: translateY(-1px);
+}
+
+.argon-button-primary {
+  background: var(--gradient-primary);
+  color: var(--argon-white);
+  box-shadow: var(--shadow-colored);
+}
+
+.argon-button-secondary {
+  background: var(--gradient-secondary);
+  color: var(--argon-white);
+  box-shadow: var(--shadow-colored);
+}
+
+.argon-button-info {
+  background: var(--gradient-info);
+  color: var(--argon-white);
+  box-shadow: var(--shadow-colored);
+}
+
+.argon-button-success {
+  background: var(--gradient-success);
+  color: var(--argon-white);
+  box-shadow: var(--shadow-colored);
+}
+
+.argon-input {
+  font-family: var(--font-family);
+  font-size: var(--font-size-md);
+  padding: 12px 16px;
+  border: 1px solid rgba(240, 242, 245, 0.4);
+  border-radius: var(--radius-md);
+  background: var(--argon-white);
+  color: var(--argon-text-dark);
+  transition: var(--transition-fast);
+  width: 100%;
+}
+
+.argon-input:focus {
+  border-color: var(--argon-info);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(17, 205, 239, 0.2);
+}
+
+.argon-input-dark {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.argon-gradient-primary {
+  background: var(--gradient-primary);
+}
+
+.argon-gradient-info {
+  background: var(--gradient-info);
+}
+
+.argon-gradient-success {
+  background: var(--gradient-success);
+}
+
+.argon-gradient-warning {
+  background: var(--gradient-warning);
+}
+
+.argon-gradient-error {
+  background: var(--gradient-error);
+}
+
+.argon-text-gradient {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.argon-shadow-sm {
+  box-shadow: var(--shadow-sm);
+}
+
+.argon-shadow-md {
+  box-shadow: var(--shadow-md);
+}
+
+.argon-shadow-lg {
+  box-shadow: var(--shadow-lg);
+}
+
+.argon-shadow-xl {
+  box-shadow: var(--shadow-xl);
 }
 
 @layer base {
