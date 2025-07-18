@@ -329,13 +329,13 @@ export default function UserDashboardArgon() {
                       <Download className="h-4 w-4 mr-2" />
                       Download Results
                     </ArgonButton>
-                    <ArgonButton variant="outlined" color="secondary" size="large" className="w-full sm:w-auto">
+                    <ArgonButton variant="gradient" color="info" size="large" className="w-full sm:w-auto">
                       <Mail className="h-4 w-4 mr-2" />
                       Email Results
                     </ArgonButton>
                     <ArgonButton 
                       variant="gradient"
-                      color="info"
+                      color="success"
                       size="large"
                       onClick={() => setLocation('/assessment/free')}
                       className="w-full sm:w-auto"
