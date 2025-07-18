@@ -132,7 +132,7 @@ export default function UserLogin() {
                     variant="gradient"
                     color="primary"
                     size="large"
-                    className="w-full"
+                    className="w-full focus:outline-none focus:ring-0"
                     onClick={() => window.location.href = '/api/login'}
                   >
                     <svg className="h-5 w-5 mr-3" viewBox="0 0 24 24" fill="currentColor">
@@ -161,7 +161,7 @@ export default function UserLogin() {
                       variant="text"
                       color="secondary"
                       size="medium"
-                      className="w-full"
+                      className="w-full focus:outline-none focus:ring-0"
                       onClick={() => setActiveTab('register')}
                     >
                       <UserPlus className="h-4 w-4 mr-2" />
@@ -171,7 +171,7 @@ export default function UserLogin() {
                       variant="text"
                       color="secondary"
                       size="medium"
-                      className="w-full"
+                      className="w-full focus:outline-none focus:ring-0"
                       onClick={() => setActiveTab('login')}
                     >
                       <LogIn className="h-4 w-4 mr-2" />
@@ -288,7 +288,7 @@ export default function UserLogin() {
                         variant="gradient"
                         color="primary"
                         size="large"
-                        className="w-full"
+                        className="w-full focus:outline-none focus:ring-0"
                         disabled={registerMutation.isPending}
                       >
                         <UserPlus className="h-4 w-4 mr-2" />
@@ -352,7 +352,7 @@ export default function UserLogin() {
                         variant="gradient"
                         color="info"
                         size="large"
-                        className="w-full"
+                        className="w-full focus:outline-none focus:ring-0"
                         disabled={loginMutation.isPending}
                       >
                         <LogIn className="h-4 w-4 mr-2" />
