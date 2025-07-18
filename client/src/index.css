@@ -1,68 +1,75 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Manrope:wght@300;400;500;600;700&family=Lato:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap');
+/* Import Open Sans font for Argon Dashboard */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Argon Dashboard Design System */
+/* Argon Dashboard 2 MUI Design System */
 :root {
-  /* Argon Primary Colors */
-  --primary: #5e72e4;
-  --primary-light: #7c8ce6;
-  --primary-dark: #5060e2;
-  --secondary: #f7fafc;
-  --secondary-light: #f9fbfc;
-  --secondary-dark: #e9ecef;
+  /* Argon Core Colors */
+  --argon-primary: #5e72e4;
+  --argon-secondary: #8392ab;
+  --argon-info: #11cdef;
+  --argon-success: #2dce89;
+  --argon-warning: #fb6340;
+  --argon-error: #f5365c;
+  --argon-light: #e9ecef;
+  --argon-dark: #344767;
   
-  /* Argon Status Colors */
-  --success: #2dce89;
-  --info: #11cdef;
-  --warning: #fb6340;
-  --danger: #f5365c;
+  /* Argon Background Colors */
+  --argon-background-default: #f8f9fa;
+  --argon-background-dark: #172b4d;
+  --argon-white: #ffffff;
+  --argon-black: #000000;
+  --argon-transparent: transparent;
   
-  /* Brand Neutrals */
-  --white: #ffffff;
-  --black: #000000;
-  --gray: #cbd5e0;
-  --gray-light: #f8fafc;
-  --gray-dark: #64748b;
-  --yellow: #faf089;
-  --overlay: rgba(0, 0, 0, 0.5);
-
-  /* Brand Navy Scale */
-  --navy-primary: #0b2147;
-  --navy-light: #1a2e52;
-  --navy-dark: #0a1e3d;
-  
-  /* Typography */
-  --font-primary: 'Montserrat', sans-serif;
-  --font-content: 'Manrope', sans-serif;
-  
-  /* Brand-specific tokens */
-  --color-mctknad1: #0b2147;
-  --text-color: var(--white);
-  --link-color: #188bf6;
-  --placeholder-color: #cbd5e0;
-  
-  /* Layout & Spacing */
-  --radius: 0.5rem;
-  --radius-lg: 0.75rem;
-  --radius-xl: 1rem;
-  --spacing-unit: 1rem;
-  
-  /* Argon Shadows & Gradients */
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-  --shadow-md: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
-  --shadow-lg: 0 15px 35px rgba(50, 50, 93, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
-  --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.1);
-  --shadow-colored: 0 4px 6px rgba(94, 114, 228, 0.11);
+  /* Argon Text Colors */
+  --argon-text: #67748e;
+  --argon-text-dark: #344767;
   
   /* Argon Gradients */
-  --gradient-primary: linear-gradient(87deg, #5e72e4 0, #825ee4 100%);
-  --gradient-success: linear-gradient(87deg, #2dce89 0, #2dcecc 100%);
-  --gradient-info: linear-gradient(87deg, #11cdef 0, #1171ef 100%);
-  --gradient-warning: linear-gradient(87deg, #fb6340 0, #fbb140 100%);
-  --gradient-danger: linear-gradient(87deg, #f5365c 0, #f56036 100%);
+  --gradient-primary: linear-gradient(310deg, #5e72e4, #825ee4);
+  --gradient-secondary: linear-gradient(310deg, #627594, #a8b8d8);
+  --gradient-info: linear-gradient(310deg, #1171ef, #11cdef);
+  --gradient-success: linear-gradient(310deg, #2dce89, #2dcecc);
+  --gradient-warning: linear-gradient(310deg, #fb6340, #fbb140);
+  --gradient-error: linear-gradient(310deg, #f5365c, #f56036);
+  --gradient-light: linear-gradient(310deg, #ced4da, #ebeff4);
+  --gradient-dark: linear-gradient(310deg, #212229, #212529);
+  
+  /* Argon Box Shadows */
+  --shadow-xs: 0 2px 9px -5px rgba(0, 0, 0, 0.15);
+  --shadow-sm: 0 5px 10px 0 rgba(0, 0, 0, 0.12);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.07);
+  --shadow-lg: 0 8px 26px -4px rgba(0, 0, 0, 0.15), 0 8px 9px -5px rgba(0, 0, 0, 0.06);
+  --shadow-xl: 0 23px 45px -11px rgba(0, 0, 0, 0.25);
+  --shadow-xxl: 0 20px 27px 0 rgba(0, 0, 0, 0.05);
+  --shadow-colored: 0 4px 6px 0 rgba(52, 71, 103, 0.1), 0 1px 3px 0 rgba(0, 0, 0, 0.08);
+  
+  /* Argon Border Radius */
+  --radius-xs: 0.125rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-xxl: 1.5rem;
+  --radius-section: 10rem;
+  
+  /* Argon Typography */
+  --font-family: "Open Sans", "Helvetica", "Arial", sans-serif;
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 600;
+  --font-weight-bold: 700;
+  
+  /* Font Sizes */
+  --font-size-xxs: 0.65rem;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
   
   /* Transitions */
   --transition-fast: 150ms ease-in-out;
