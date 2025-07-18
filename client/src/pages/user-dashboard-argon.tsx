@@ -157,7 +157,7 @@ export default function UserDashboardArgon() {
       </ArgonBox>
 
       {/* Authentic Argon Statistics Cards - Positioned over gradient header */}
-      <ArgonBox mt={-3} mb={3} px={3}>
+      <ArgonBox mt={-3} mb={3} px={3} className="bg-transparent mt-[14px] mb-[14px]">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <DetailedStatisticsCard
