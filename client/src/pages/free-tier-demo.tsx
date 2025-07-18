@@ -218,7 +218,7 @@ export default function FreeTierDemo() {
                     color="info"
                     size="large"
                     onClick={() => setLocation('/assessment/free')}
-                    className="flex-shrink-0"
+                    className="flex-shrink-0 bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg hover:shadow-xl"
                   >
                     <FileText className="h-4 w-4 mr-2" />
                     Take Free Assessment
@@ -247,7 +247,7 @@ export default function FreeTierDemo() {
               <ArgonTypography variant="body2" color="text" className="mb-4">
                 If you have questions about your assessment or need assistance, our team is here to help.
               </ArgonTypography>
-              <ArgonButton variant="gradient" color="success" className="flex-shrink-0">
+              <ArgonButton variant="gradient" color="success" className="flex-shrink-0 bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg hover:shadow-xl">
                 <Mail className="h-4 w-4 mr-2" />
                 Contact Support
               </ArgonButton>
