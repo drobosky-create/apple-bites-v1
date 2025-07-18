@@ -46,19 +46,28 @@ export default function FreeTierDemo() {
       <ArgonBox py={3} px={3} style={{ backgroundColor: '#ffffff' }} className="shadow-sm border-b border-gray-100">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-r from-[#0b2147] to-blue-600 flex items-center justify-center">
-                <span className="text-white font-bold text-sm">
-                  {user.firstName[0]}{user.lastName[0]}
-                </span>
+            <div className="flex items-center space-x-6">
+              <div className="flex items-center space-x-3">
+                <img 
+                  src="/apple-bites-logo.png" 
+                  alt="Apple Bites Business Assessment" 
+                  className="h-12 w-auto"
+                />
               </div>
-              <div>
-                <ArgonTypography variant="h6" color="dark" fontWeight="bold">
-                  Welcome, {user.firstName} {user.lastName}
-                </ArgonTypography>
-                <ArgonTypography variant="body2" color="text">
-                  {user.email}
-                </ArgonTypography>
+              <div className="flex items-center space-x-4">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-r from-[#0b2147] to-blue-600 flex items-center justify-center">
+                  <span className="text-white font-bold text-sm">
+                    {user.firstName[0]}{user.lastName[0]}
+                  </span>
+                </div>
+                <div>
+                  <ArgonTypography variant="h6" color="dark" fontWeight="bold">
+                    Welcome, {user.firstName} {user.lastName}
+                  </ArgonTypography>
+                  <ArgonTypography variant="body2" color="text">
+                    {user.email}
+                  </ArgonTypography>
+                </div>
               </div>
             </div>
             

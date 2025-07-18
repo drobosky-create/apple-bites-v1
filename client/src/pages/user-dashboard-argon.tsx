@@ -131,17 +131,26 @@ export default function UserDashboardArgon() {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
-            <ArgonBox>
-              <ArgonTypography variant="h5" color="white" fontWeight="bold" className="mb-1">
-                Welcome, {user.firstName} {user.lastName}
-              </ArgonTypography>
-              <ArgonTypography variant="body2" color="white" opacity={0.8} className="mb-1">
-                {user.email}
-              </ArgonTypography>
-              <Badge className="bg-white/20 text-white border-white/30 font-medium">
-                {tierInfo.name}
-              </Badge>
-            </ArgonBox>
+            <div className="flex items-center space-x-6">
+              <div className="flex items-center space-x-3">
+                <img 
+                  src="/apple-bites-logo.png" 
+                  alt="Apple Bites Business Assessment" 
+                  className="h-12 w-auto"
+                />
+              </div>
+              <ArgonBox>
+                <ArgonTypography variant="h5" color="white" fontWeight="bold" className="mb-1">
+                  Welcome, {user.firstName} {user.lastName}
+                </ArgonTypography>
+                <ArgonTypography variant="body2" color="white" opacity={0.8} className="mb-1">
+                  {user.email}
+                </ArgonTypography>
+                <Badge className="bg-white/20 text-white border-white/30 font-medium">
+                  {tierInfo.name}
+                </Badge>
+              </ArgonBox>
+            </div>
             <ArgonButton 
               variant="outlined"
               color="white"
