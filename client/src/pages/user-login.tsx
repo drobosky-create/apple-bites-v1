@@ -109,11 +109,10 @@ export default function UserLogin() {
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#f8f9fa' }}>
       {/* Main Content */}
-      <ArgonBox py={6} px={3} className="bg-transparent">
+      <div className="py-6 px-3">
         <div className="max-w-md mx-auto">
-          <div className="bg-white rounded-xl shadow-lg border border-gray-100">
-            <ArgonBox p={4}>
-              <div className="text-center mb-6">
+          <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-4">
+            <div className="text-center mb-6">
                 <div className="flex justify-center mb-4">
                   <img 
                     src="/apple-bites-logo-new.png" 
@@ -124,11 +123,11 @@ export default function UserLogin() {
                 <ArgonTypography variant="body2" color="text">
                   Create your account to access business valuation tools
                 </ArgonTypography>
-              </div>
+            </div>
 
-              {/* OAuth Option (Default) */}
-              {activeTab === 'oauth' && (
-                <div className="space-y-4">
+            {/* OAuth Option (Default) */}
+            {activeTab === 'oauth' && (
+              <div className="space-y-4">
                   <ArgonButton 
                     variant="gradient"
                     color="primary"
@@ -182,9 +181,9 @@ export default function UserLogin() {
                 </div>
               )}
 
-              {/* Custom Registration Form */}
-              {activeTab === 'register' && (
-                <div className="space-y-4">
+            {/* Custom Registration Form */}
+            {activeTab === 'register' && (
+              <div className="space-y-4">
                   <div className="flex items-center justify-between mb-4">
                     <ArgonButton
                       variant="text"
@@ -297,12 +296,12 @@ export default function UserLogin() {
                       </ArgonButton>
                     </div>
                   </form>
-                </div>
-              )}
+              </div>
+            )}
 
-              {/* Custom Login Form */}
-              {activeTab === 'login' && (
-                <div className="space-y-4">
+            {/* Custom Login Form */}
+            {activeTab === 'login' && (
+              <div className="space-y-4">
                   <div className="flex items-center justify-between mb-4">
                     <ArgonButton
                       variant="text"
@@ -361,12 +360,11 @@ export default function UserLogin() {
                       </ArgonButton>
                     </div>
                   </form>
-                </div>
-              )}
-            </ArgonBox>
+              </div>
+            )}
           </div>
         </div>
-      </ArgonBox>
+      </div>
     </div>
   );
 }
