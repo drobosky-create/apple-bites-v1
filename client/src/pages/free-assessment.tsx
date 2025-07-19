@@ -130,7 +130,7 @@ export default function FreeAssessment() {
               <div className="flex flex-col h-full justify-between py-10 px-6">
                 {/* Logo Section */}
                 <div className="mb-6">
-                  <div className="bg-gradient-to-br from-[#133157] to-[#1f4c74] rounded-xl p-4 shadow-xl backdrop-blur-sm ring-1 ring-white/10">
+                  <div className="bg-white/30 backdrop-blur-2xl ring-white/40 rounded-xl">
                     <img
                       src={_3}
                       alt="Apple Bites Business Assessment"
