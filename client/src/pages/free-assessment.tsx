@@ -143,9 +143,6 @@ export default function FreeAssessment() {
                 </Badge>
               </div>
               <div className="mb-6">
-                <ArgonTypography variant="h4" color="dark" fontWeight="bold" className="text-center mb-2">
-                  Apple Bites Business Assessment
-                </ArgonTypography>
                 <ArgonTypography variant="body1" color="text" className="text-center">
                   Step {currentStep === "contact" ? "1" : currentStep === "ebitda" ? "2" : currentStep === "adjustments" ? "3" : currentStep === "valueDrivers" ? "4" : "5"} of 5
                 </ArgonTypography>
