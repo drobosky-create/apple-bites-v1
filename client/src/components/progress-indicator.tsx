@@ -1,4 +1,5 @@
 import { FormStep } from "@/hooks/use-valuation-form";
+import { ArgonBox, ArgonTypography } from "@/components/ui/argon-authentic";
 
 interface ProgressIndicatorProps {
   currentStep: FormStep;
@@ -16,12 +17,12 @@ export default function ProgressIndicator({ currentStep }: ProgressIndicatorProp
   const currentStepNumber = steps.find((step) => step.id === currentStep)?.number || 1;
 
   return (
-    <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-slate-200/60 p-3 sm:p-6">
+    <ArgonBox shadow="sm" borderRadius="lg" bgColor="white" p={3}>
       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6">
-        <h2 className="text-lg sm:text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent mb-2 sm:mb-0">Apple Bites Business Assessment</h2>
+        <ArgonTypography variant="h5" fontWeight="bold" color="dark" className="mb-2 sm:mb-0">Apple Bites Business Assessment</ArgonTypography>
         <div className="flex items-center gap-2">
-          <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-          <span className="text-sm font-medium text-slate-600">Step {currentStepNumber} of 5</span>
+          <div className="w-2 h-2 bg-[#0b2147] rounded-full animate-pulse"></div>
+          <ArgonTypography variant="caption" color="text">Step {currentStepNumber} of 5</ArgonTypography>
         </div>
       </div>
       
@@ -33,7 +34,7 @@ export default function ProgressIndicator({ currentStep }: ProgressIndicatorProp
               <div
                 className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300 ${
                   step.number <= currentStepNumber
-                    ? "bg-blue-600 text-white shadow-lg"
+                    ? "bg-[#0b2147] text-white shadow-lg"
                     : "bg-slate-200 text-slate-400"
                 }`}
               >
@@ -48,7 +49,7 @@ export default function ProgressIndicator({ currentStep }: ProgressIndicatorProp
                   {step.label}
                 </span>
                 {step.number === currentStepNumber && (
-                  <span className="block text-xs text-blue-600 font-medium">Current</span>
+                  <span className="block text-xs text-[#0b2147] font-medium">Current</span>
                 )}
               </div>
             </div>
@@ -65,7 +66,7 @@ export default function ProgressIndicator({ currentStep }: ProgressIndicatorProp
                 <div
                   className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
                     step.number <= currentStepNumber
-                      ? "bg-blue-600 text-white shadow-lg scale-110"
+                      ? "bg-[#0b2147] text-white shadow-lg scale-110"
                       : "bg-slate-200 text-slate-400"
                   }`}
                 >
@@ -80,7 +81,7 @@ export default function ProgressIndicator({ currentStep }: ProgressIndicatorProp
                     {step.label}
                   </span>
                   {step.number === currentStepNumber && (
-                    <span className="block text-xs text-blue-600 font-medium mt-0.5">Current</span>
+                    <span className="block text-xs text-[#0b2147] font-medium mt-0.5">Current</span>
                   )}
                 </div>
               </div>
@@ -90,7 +91,7 @@ export default function ProgressIndicator({ currentStep }: ProgressIndicatorProp
                     <div
                       className={`h-full transition-all duration-500 ${
                         step.number < currentStepNumber 
-                          ? "bg-blue-600 w-full" 
+                          ? "bg-[#0b2147] w-full" 
                           : "w-0"
                       }`}
                     />
@@ -101,6 +102,6 @@ export default function ProgressIndicator({ currentStep }: ProgressIndicatorProp
           ))}
         </div>
       </div>
-    </div>
+    </ArgonBox>
   );
 }
