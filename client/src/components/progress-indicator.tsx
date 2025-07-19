@@ -17,7 +17,7 @@ export default function ProgressIndicator({ currentStep }: ProgressIndicatorProp
   const currentStepNumber = steps.find((step) => step.id === currentStep)?.number || 1;
 
   return (
-    <div className="space-y-2">
+    <>
       {steps.map((step, index) => {
         const IconComponent = step.icon;
         const isCurrent = step.number === currentStepNumber;
@@ -84,6 +84,6 @@ export default function ProgressIndicator({ currentStep }: ProgressIndicatorProp
           </div>
         );
       })}
-    </div>
+    </>
   );
 }
