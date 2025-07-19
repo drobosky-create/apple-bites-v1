@@ -43,8 +43,8 @@ export default function ProgressIndicator({ currentStep }: ProgressIndicatorProp
                   isCurrent
                     ? "bg-white text-[#0b2147] shadow-white/20 border-2 border-white/50"
                     : isCompleted
-                    ? "bg-white/20 text-white backdrop-blur-sm hover:bg-white/30"
-                    : "bg-white/10 text-white/50 backdrop-blur-sm"
+                    ? "bg-white/20 text-white backdrop-blur-sm hover:bg-white/30 hover:scale-[1.02]"
+                    : "bg-white/10 text-white/50 backdrop-blur-sm hover:bg-slate-700 hover:scale-[1.02]"
                 }`}
               >
                 <IconComponent className={`h-5 w-5 transition-colors ${
@@ -55,14 +55,14 @@ export default function ProgressIndicator({ currentStep }: ProgressIndicatorProp
               <div className="ml-4 flex-1">
                 <span
                   className={`block text-sm font-medium transition-colors duration-300 ${
-                    isCurrent ? "text-white font-semibold" : isCompleted ? "text-white/90" : "text-white/50"
+                    isCurrent ? "text-slate-100 font-semibold tracking-wide" : isCompleted ? "text-slate-200" : "text-slate-400"
                   }`}
                 >
                   {step.label}
                 </span>
                 <span
                   className={`block text-xs transition-colors duration-300 ${
-                    isCurrent ? "text-white/80" : isCompleted ? "text-white/60" : "text-white/40"
+                    isCurrent ? "text-slate-100 font-medium tracking-wide" : isCompleted ? "text-slate-300" : "text-slate-500"
                   }`}
                 >
                   Step {step.number}
