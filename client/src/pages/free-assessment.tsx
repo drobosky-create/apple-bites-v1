@@ -128,20 +128,35 @@ export default function FreeAssessment() {
           </div>
         </div>
       </ArgonBox>
-      <main className="container mx-auto px-4 max-w-4xl py-8">
-        {/* Central Card Container */}
-        <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
-          {/* Header with Apple Bites Logo and Progress */}
+      <main className="container mx-auto px-4 max-w-7xl py-8">
+        {/* New Layout Structure */}
+        <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-6">
+          {/* Sidebar Stepper */}
           {currentStep !== "results" && (
-            <ArgonBox p={4} className="border-b border-gray-100">
-              
-              
+            <aside className="bg-gradient-to-br from-[#0b2147] to-[#1a365d] text-white rounded-xl p-6 sticky top-4 h-fit">
+              <div className="text-center mb-6">
+                <img 
+                  src={_3} 
+                  alt="Apple Bites" 
+                  className="h-16 w-auto mx-auto mb-3 brightness-0 invert"
+                />
+                <h3 className="text-lg font-semibold">Business Assessment</h3>
+                <p className="text-sm text-slate-300 mt-1">Professional Valuation</p>
+              </div>
               <ProgressIndicator currentStep={currentStep} />
-            </ArgonBox>
+            </aside>
           )}
 
-          {/* Form Content */}
-          <ArgonBox p={4}>
+          {/* Main Form Content */}
+          <section className={`bg-white rounded-xl shadow-lg ${currentStep === "results" ? "col-span-full" : ""}`}>
+            {currentStep !== "results" && (
+              <div className="p-8 border-b border-gray-100">
+                <h1 className="text-2xl font-bold text-slate-800 mb-2">Apple Bites Business Assessment</h1>
+                <p className="text-sm text-slate-500">Let's walk through your business valuation step by step...</p>
+              </div>
+            )}
+
+            <ArgonBox p={8}>
             {currentStep === "contact" && (
               <ContactForm
                 form={forms.contact}
@@ -192,14 +207,13 @@ export default function FreeAssessment() {
                 isSubmitting={isSubmitting}
               />
             )}
-          </ArgonBox>
-        </div>
 
-        {currentStep === "results" && results && (
-          <div className="bg-white rounded-xl shadow-lg border border-gray-100">
-            <ValuationResults results={results} />
-          </div>
-        )}
+            {currentStep === "results" && results && (
+              <ValuationResults results={results} />
+            )}
+            </ArgonBox>
+          </section>
+        </div>
       </main>
       <LoadingModal 
         isVisible={isSubmitting} 
