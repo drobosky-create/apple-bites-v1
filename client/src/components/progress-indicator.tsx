@@ -35,13 +35,15 @@ export default function ProgressIndicator({ currentStep }: ProgressIndicatorProp
             return (
               <div key={step.id} className="flex items-center">
                 <div
-                  className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 ${
+                  className={`w-14 h-14 rounded-full flex items-center justify-center transition-all duration-300 shadow-xl ${
                     step.number <= currentStepNumber
-                      ? "bg-gradient-to-br from-[#0b2147] to-[#1a365d] text-white shadow-lg"
-                      : "bg-slate-200 text-slate-400"
+                      ? "bg-gradient-to-br from-[#0b2147] to-[#1a365d] text-white hover:scale-105"
+                      : "bg-slate-200 text-slate-400 hover:bg-slate-300"
                   }`}
                 >
-                  <IconComponent className="h-5 w-5" />
+                  <IconComponent className={`h-6 w-6 transition-colors ${
+                    step.number <= currentStepNumber ? "text-white" : "text-slate-400"
+                  }`} />
                 </div>
                 <div className="ml-3 flex-1">
                   <span
@@ -52,7 +54,7 @@ export default function ProgressIndicator({ currentStep }: ProgressIndicatorProp
                     {step.label}
                   </span>
                   {step.number === currentStepNumber && (
-                    <div className="inline-flex items-center mt-1 px-3 py-1 bg-[#0b2147]/10 text-[#0b2147] text-sm font-semibold rounded-full border border-[#0b2147]/20">
+                    <div className="inline-flex items-center mt-1 px-3 py-1 bg-[#0b2147]/10 text-[#0b2147] text-sm font-semibold rounded-full ring-1 ring-[#0b2147]/30 shadow-sm">
                       Current
                     </div>
                   )}
@@ -76,16 +78,22 @@ export default function ProgressIndicator({ currentStep }: ProgressIndicatorProp
                 <div className="flex flex-col items-center text-center group cursor-pointer">
                   {/* Step Circle with Icon */}
                   <div
-                    className={`relative w-14 h-14 rounded-full flex items-center justify-center transition-all duration-300 mb-2 group-hover:scale-105 ${
+                    className={`relative w-16 h-16 rounded-full flex items-center justify-center transition-all duration-300 mb-3 group-hover:scale-105 shadow-xl ${
                       isActive
-                        ? "bg-gradient-to-br from-[#0b2147] to-[#1a365d] text-white shadow-lg"
+                        ? "bg-gradient-to-br from-[#0b2147] to-[#1a365d] text-white"
                         : "bg-slate-200 text-slate-400 group-hover:bg-slate-300"
                     }`}
                   >
-                    <IconComponent className="h-6 w-6" />
+                    <IconComponent className={`h-7 w-7 transition-colors ${
+                      isActive ? "text-white group-hover:text-slate-200" : "text-slate-400"
+                    }`} />
                     {/* Step number badge */}
-                    <div className="absolute -top-1 -right-1 w-5 h-5 bg-white rounded-full flex items-center justify-center shadow-sm">
-                      <span className="text-[10px] font-bold text-slate-600">{step.number}</span>
+                    <div className={`absolute -top-1 -right-1 w-6 h-6 bg-white rounded-full flex items-center justify-center shadow-md ring-1 ${
+                      isActive ? "ring-[#0b2147]" : "ring-slate-300"
+                    }`}>
+                      <span className={`text-xs font-bold ${
+                        isActive ? "text-[#0b2147]" : "text-slate-600"
+                      }`}>{step.number}</span>
                     </div>
                   </div>
                   
