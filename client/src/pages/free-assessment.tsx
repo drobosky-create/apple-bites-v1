@@ -128,7 +128,7 @@ export default function FreeAssessment() {
         <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-6">
           {/* Sidebar Stepper */}
           {currentStep !== "results" && (
-            <aside className="bg-gradient-to-br from-[#0b2147] to-[#1a365d] text-white rounded-xl p-6 sticky top-4 h-fit">
+            <aside className="bg-gradient-to-br from-[#0b2147] to-[#1a365d] text-white rounded-xl p-6 sticky top-4 h-fit pl-[16px] pr-[16px] ml-[-18px] mr-[-18px]">
               <div className="text-center mb-6">
                 <img 
                   src={_4} 
