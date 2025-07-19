@@ -20,27 +20,27 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
   const isSubmitting = form.formState.isSubmitting;
 
   return (
-    <ArgonBox shadow="xl" borderRadius="xl" bgColor="white" p={8} className="border border-gray-100">
-      {/* Header Section */}
-      <div className="flex items-start gap-4 mb-8 pb-6 border-b border-gray-100">
-        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#0b2147] to-[#1a365d] flex items-center justify-center shadow-lg">
-          <User className="h-6 w-6 text-white" />
+    <div className="space-y-8">
+      {/* Executive Header Section */}
+      <div className="text-center space-y-4">
+        <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-[#0b2147] to-[#1a365d] flex items-center justify-center shadow-xl mx-auto">
+          <User className="h-8 w-8 text-white" />
         </div>
-        <div className="flex-1">
-          <ArgonTypography variant="h4" fontWeight="bold" color="dark" className="mb-2">
-            Contact Information
-          </ArgonTypography>
-          <ArgonTypography variant="body2" color="text" className="text-gray-600">
+        <div>
+          <h1 className="text-3xl font-bold text-[#0b2147] mb-2">Contact Information</h1>
+          <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
             Please provide your contact details to begin the comprehensive valuation assessment.
-          </ArgonTypography>
+          </p>
         </div>
       </div>
 
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          {/* Contact Details Section */}
-          <div className="space-y-6">
-            <h3 className="text-sm font-semibold text-slate-500 mb-4 uppercase tracking-wide">Contact Details</h3>
+      {/* Form Container */}
+      <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-8 md:p-12">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            {/* Contact Details Section */}
+            <div className="space-y-6">
+              <h3 className="text-xl font-semibold text-[#0b2147] mb-6 pb-3 border-b border-slate-200">Contact Details</h3>
             
             {/* Name Fields */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -49,14 +49,14 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
                 name="firstName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-semibold text-gray-700 mb-2 block">
+                    <FormLabel className="text-sm font-semibold text-[#0b2147] mb-3 block">
                       First Name <span className="text-red-500">*</span>
                     </FormLabel>
                     <FormControl>
                       <Input 
                         {...field} 
                         placeholder="Enter your first name" 
-                        className="h-12 text-base border-gray-200 rounded-lg focus:border-[#0b2147] focus:ring-[#0b2147]/10 transition-all"
+                        className="h-14 text-base border-slate-300 rounded-xl focus:border-[#0b2147] focus:ring-[#0b2147]/20 transition-all shadow-sm font-medium"
                       />
                     </FormControl>
                     <FormMessage className="text-red-500 text-sm mt-1" />
@@ -69,14 +69,14 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
                 name="lastName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-semibold text-gray-700 mb-2 block">
+                    <FormLabel className="text-sm font-semibold text-[#0b2147] mb-3 block">
                       Last Name <span className="text-red-500">*</span>
                     </FormLabel>
                     <FormControl>
                       <Input 
                         {...field} 
                         placeholder="Enter your last name" 
-                        className="h-12 text-base border-gray-200 rounded-lg focus:border-[#0b2147] focus:ring-[#0b2147]/10 transition-all"
+                        className="h-14 text-base border-slate-300 rounded-xl focus:border-[#0b2147] focus:ring-[#0b2147]/20 transition-all shadow-sm font-medium"
                       />
                     </FormControl>
                     <FormMessage className="text-red-500 text-sm mt-1" />
@@ -92,7 +92,7 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-semibold text-gray-700 mb-2 block">
+                    <FormLabel className="text-sm font-semibold text-[#0b2147] mb-3 block">
                       Email Address <span className="text-red-500">*</span>
                     </FormLabel>
                     <FormControl>
@@ -100,7 +100,7 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
                         {...field} 
                         type="email"
                         placeholder="Enter your email address" 
-                        className="h-12 text-base border-gray-200 rounded-lg focus:border-[#0b2147] focus:ring-[#0b2147]/10 transition-all"
+                        className="h-14 text-base border-slate-300 rounded-xl focus:border-[#0b2147] focus:ring-[#0b2147]/20 transition-all shadow-sm font-medium"
                       />
                     </FormControl>
                     <FormMessage className="text-red-500 text-sm mt-1" />
@@ -113,7 +113,7 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
                 name="phone"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-semibold text-gray-700 mb-2 block">
+                    <FormLabel className="text-sm font-semibold text-[#0b2147] mb-3 block">
                       Phone Number <span className="text-red-500">*</span>
                     </FormLabel>
                     <FormControl>
@@ -121,7 +121,7 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
                         {...field} 
                         type="tel"
                         placeholder="(555) 123-4567" 
-                        className="h-12 text-base border-gray-200 rounded-lg focus:border-[#0b2147] focus:ring-[#0b2147]/10 transition-all"
+                        className="h-14 text-base border-slate-300 rounded-xl focus:border-[#0b2147] focus:ring-[#0b2147]/20 transition-all shadow-sm font-medium"
                       />
                     </FormControl>
                     <FormMessage className="text-red-500 text-sm mt-1" />
@@ -133,7 +133,7 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
 
           {/* Business Information Section */}
           <div className="space-y-6">
-            <h3 className="text-sm font-semibold text-slate-500 mb-4 uppercase tracking-wide">Business Information</h3>
+            <h3 className="text-xl font-semibold text-[#0b2147] mb-6 pb-3 border-b border-slate-200">Business Information</h3>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <FormField
@@ -141,14 +141,14 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
                 name="company"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-semibold text-gray-700 mb-2 block">
+                    <FormLabel className="text-sm font-semibold text-[#0b2147] mb-3 block">
                       Company Name <span className="text-red-500">*</span>
                     </FormLabel>
                     <FormControl>
                       <Input 
                         {...field} 
                         placeholder="Enter your company name" 
-                        className="h-12 text-base border-gray-200 rounded-lg focus:border-[#0b2147] focus:ring-[#0b2147]/10 transition-all"
+                        className="h-14 text-base border-slate-300 rounded-xl focus:border-[#0b2147] focus:ring-[#0b2147]/20 transition-all shadow-sm font-medium"
                       />
                     </FormControl>
                     <FormMessage className="text-red-500 text-sm mt-1" />
@@ -161,14 +161,14 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
                 name="jobTitle"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-semibold text-gray-700 mb-2 block">
+                    <FormLabel className="text-sm font-semibold text-[#0b2147] mb-3 block">
                       Job Title <span className="text-red-500">*</span>
                     </FormLabel>
                     <FormControl>
                       <Input 
                         {...field} 
                         placeholder="e.g., CEO, Owner, President" 
-                        className="h-12 text-base border-gray-200 rounded-lg focus:border-[#0b2147] focus:ring-[#0b2147]/10 transition-all"
+                        className="h-14 text-base border-slate-300 rounded-xl focus:border-[#0b2147] focus:ring-[#0b2147]/20 transition-all shadow-sm font-medium"
                       />
                     </FormControl>
                     <FormMessage className="text-red-500 text-sm mt-1" />
@@ -179,45 +179,48 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
           </div>
 
           {/* Enhanced Continue Button */}
-          <div className="pt-6 border-t border-gray-100">
+          <div className="pt-8 border-t border-slate-200 flex justify-center">
             <ArgonButton
               type="submit"
               variant="gradient"
               color="primary"
               disabled={isSubmitting}
-              className="bg-gradient-to-br from-[#0b2147] to-[#1a365d] hover:from-[#112e5a] hover:to-[#1e4471] text-white font-semibold px-8 py-4 rounded-xl shadow-lg transition-all transform hover:scale-[1.02] flex items-center justify-center w-full md:w-auto md:ml-auto"
+              className="bg-gradient-to-br from-[#0b2147] to-[#1a365d] hover:from-[#112e5a] hover:to-[#1e4471] text-white font-semibold px-12 py-4 rounded-xl shadow-xl transition-all transform hover:scale-[1.02] flex items-center justify-center text-lg"
               size="large"
             >
               {isSubmitting ? (
                 <>
-                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-3" />
                   Processing...
                 </>
               ) : (
                 <>
                   <span>Continue Assessment</span>
-                  <ArrowRight className="w-4 h-4 ml-2" />
+                  <ArrowRight className="w-5 h-5 ml-3" />
                 </>
               )}
             </ArgonButton>
           </div>
         </form>
       </Form>
+      </div>
 
-      {/* Privacy Notice */}
-      <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-        <div className="flex items-start gap-3">
-          <Shield className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
+      {/* Enhanced Privacy Notice */}
+      <div className="mt-8 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-2xl shadow-lg">
+        <div className="flex items-start gap-4">
+          <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center flex-shrink-0">
+            <Shield className="h-6 w-6 text-blue-600" />
+          </div>
           <div>
-            <p className="text-sm text-blue-800 font-medium mb-1">
+            <h4 className="text-lg font-semibold text-blue-900 mb-2">
               Your Information is Secure
-            </p>
-            <p className="text-xs text-blue-700">
-              We use enterprise-grade security to protect your data. Your information will only be used for your valuation report and follow-up communications.
+            </h4>
+            <p className="text-sm text-blue-700 leading-relaxed">
+              We use enterprise-grade security to protect your data. Your information will only be used for your valuation report and follow-up communications. We never share your data with third parties.
             </p>
           </div>
         </div>
       </div>
-    </ArgonBox>
+    </div>
   );
 }

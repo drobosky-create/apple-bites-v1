@@ -34,40 +34,45 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
   };
 
   return (
-    <ArgonBox shadow="xl" borderRadius="xl" bgColor="white" p={8} className="border border-gray-100">
-      {/* Header Section */}
-      <div className="flex items-start gap-4 mb-8 pb-6 border-b border-gray-100">
-        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#0b2147] to-[#1a365d] flex items-center justify-center shadow-lg">
-          <Calculator className="h-6 w-6 text-white" />
+    <div className="space-y-8">
+      {/* Executive Header Section */}
+      <div className="text-center space-y-4">
+        <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-[#0b2147] to-[#1a365d] flex items-center justify-center shadow-xl mx-auto">
+          <Calculator className="h-8 w-8 text-white" />
         </div>
-        <div className="flex-1">
-          <ArgonTypography variant="h4" fontWeight="bold" color="dark" className="mb-2">
-            EBITDA & Adjustments
-          </ArgonTypography>
-          <ArgonTypography variant="body2" color="text" className="text-gray-600">
-            Please provide your company's financial information for the most recent fiscal year and any adjustments to normalize EBITDA.
-          </ArgonTypography>
+        <div>
+          <h1 className="text-3xl font-bold text-[#0b2147] mb-2">Financial Information</h1>
+          <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
+            Please provide your company's financial information for the most recent fiscal year to calculate EBITDA.
+          </p>
         </div>
       </div>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+      {/* Form Container */}
+      <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-8 md:p-12">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            {/* Financial Data Section */}
+            <div className="space-y-6">
+              <h3 className="text-xl font-semibold text-[#0b2147] mb-6 pb-3 border-b border-slate-200">Financial Data</h3>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <FormField
               control={form.control}
               name="netIncome"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-slate-900 font-semibold text-sm">
+                  <FormLabel className="text-sm font-semibold text-[#0b2147] mb-3 block">
                     Net Income <span className="text-red-500">*</span>
                   </FormLabel>
                   <FormControl>
                     <div className="relative">
-                      <span className="absolute left-3 top-3 text-slate-500 font-medium">$</span>
+                      <span className="absolute left-4 top-4 text-slate-500 font-medium text-lg">$</span>
                       <Input 
                         {...field} 
                         type="number" 
                         placeholder="0" 
-                        className="h-12 bg-white border-slate-300 focus:border-[#0b2147] focus:ring-[#0b2147]/20 pl-8 text-slate-900 font-medium shadow-sm"
+                        className="h-14 bg-white border-slate-300 focus:border-[#0b2147] focus:ring-[#0b2147]/20 pl-10 text-slate-900 font-medium shadow-sm rounded-xl"
                         onChange={(e) => {
                           field.onChange(e);
                           onDataChange(form.getValues());
@@ -246,29 +251,31 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4 sm:justify-between pt-8 mt-8 border-t border-slate-200">
-            <ArgonButton 
-              type="button" 
-              variant="outlined"
-              color="primary"
-              onClick={onPrev}
-              className="order-2 sm:order-1"
-            >
-              <ArrowLeft className="mr-2 w-4 h-4" />
-              Previous
-            </ArgonButton>
-            <ArgonButton 
-              type="submit" 
-              variant="gradient"
-              color="primary"
-              className="order-1 sm:order-2"
-            >
-              Next: Adjustments
-              <ArrowRight className="ml-2 w-4 h-4" />
-            </ArgonButton>
-          </div>
-        </form>
-      </Form>
-    </ArgonBox>
+            <div className="flex flex-col sm:flex-row gap-6 sm:justify-between pt-8 mt-8 border-t border-slate-200">
+              <ArgonButton 
+                type="button" 
+                variant="outlined"
+                color="primary"
+                onClick={onPrev}
+                className="order-2 sm:order-1 px-8 py-3 text-base font-medium"
+              >
+                <ArrowLeft className="mr-2 w-5 h-5" />
+                Previous
+              </ArgonButton>
+              <ArgonButton 
+                type="submit" 
+                variant="gradient"
+                color="primary"
+                className="order-1 sm:order-2 px-8 py-3 text-base font-medium"
+              >
+                Next: Adjustments
+                <ArrowRight className="ml-2 w-5 h-5" />
+              </ArgonButton>
+            </div>
+            </div>
+          </form>
+        </Form>
+      </div>
+    </div>
   );
 }
