@@ -133,9 +133,9 @@ export default function FreeTierDemo() {
                 component: <DollarSign className="w-6 h-6" />
               }}
               percentage={{
-                color: "info",
-                count: "4.9x",
-                text: "multiplier"
+                color: "success",
+                count: "85%",
+                text: "above industry avg"
               }}
             />
           </div>
@@ -188,7 +188,7 @@ export default function FreeTierDemo() {
                           EBITDA Multiple
                         </ArgonTypography>
                         <ArgonTypography variant="h6" color="info" fontWeight="bold">
-                          4.9x
+                          4.9x (85% above industry avg)
                         </ArgonTypography>
                       </div>
                       <div>
@@ -220,23 +220,23 @@ export default function FreeTierDemo() {
                   <ul className="space-y-2">
                     <li className="flex items-center space-x-2">
                       <CheckCircle className="h-4 w-4 text-green-500" />
-                      <span>Basic EBITDA calculation</span>
+                      <span>Industry-specific EBITDA multipliers</span>
                     </li>
                     <li className="flex items-center space-x-2">
                       <CheckCircle className="h-4 w-4 text-green-500" />
-                      <span>General business valuation</span>
+                      <span>AI-powered growth insights and recommendations</span>
                     </li>
                     <li className="flex items-center space-x-2">
                       <CheckCircle className="h-4 w-4 text-green-500" />
-                      <span>PDF report summary</span>
+                      <span>Professional PDF report with market analysis</span>
                     </li>
-                    <li className="flex items-center space-x-2 text-gray-400">
-                      <AlertCircle className="h-4 w-4 text-gray-400" />
-                      <span className="text-gray-400">Industry-specific multipliers (Upgrade Required)</span>
+                    <li className="flex items-center space-x-2">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      <span>Strategic growth recommendations</span>
                     </li>
-                    <li className="flex items-center space-x-2 text-gray-400">
-                      <AlertCircle className="h-4 w-4 text-gray-400" />
-                      <span className="text-gray-400">AI-powered insights (Upgrade Required)</span>
+                    <li className="flex items-center space-x-2">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      <span>Industry benchmarking and positioning analysis</span>
                     </li>
                   </ul>
                 </div>
