@@ -7,10 +7,12 @@ import ValueDriversForm from "@/components/value-drivers-form";
 import FollowUpForm from "@/components/followup-form";
 import ValuationResults from "@/components/valuation-results";
 import LoadingModal from "@/components/loading-modal";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Home, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { ArgonBox, ArgonTypography, ArgonButton } from "@/components/ui/argon-authentic";
 import appleBitesLogo from "@assets/Apple Bites_1752266454888.png";
+import meritagePartnersLogo from "@assets/Meritage Logo.png";
 import { useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import type { ValuationAssessment } from "@shared/schema";
@@ -78,91 +80,138 @@ export default function FreeAssessment() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-ghl-navy to-ghl-navy-dark py-4">
-      <main className="container mx-auto px-4 max-w-4xl">
-        <Button
-          variant="ghost"
-          onClick={() => window.history.back()}
-          className="mb-6 text-white/70 hover:text-white hover:bg-white/10 transition-all duration-300"
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Back to Home
-        </Button>
-        
-        {/* Header with Apple Bites Logo */}
-        {currentStep !== "results" && (
-          <div className="flex flex-col sm:flex-row items-center justify-center mb-4 sm:mb-8 text-center sm:text-left">
-            <img 
-              src={appleBitesLogo} 
-              alt="Apple Bites Business Assessment" 
-              className="h-15 sm:h-20 w-auto mb-3 sm:mb-0 sm:mr-4"
-            />
-            <div>
-              <h1 className="text-lg sm:text-3xl font-bold text-white">Apple Bites Business Assessment</h1>
-              <Badge className="mt-2 bg-ghl-primary text-white">Free Basic Analysis</Badge>
+    <div className="min-h-screen" style={{ backgroundColor: '#f8f9fa' }}>
+      {/* Authentic Argon Dashboard Header */}
+      <ArgonBox
+        variant="gradient"
+        bgGradient="primary"
+        py={3}
+        className="relative"
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-6">
+              <div className="flex items-center space-x-3">
+                <img 
+                  src={meritagePartnersLogo} 
+                  alt="Meritage Partners" 
+                  className="h-12 w-auto"
+                />
+              </div>
+            </div>
+            <div className="flex items-center space-x-4">
+              <ArgonButton
+                variant="outlined"
+                color="white"
+                size="medium"
+                onClick={() => window.location.href = '/dashboard'}
+                className="flex items-center space-x-2"
+              >
+                <Home className="h-4 w-4" />
+                <span>Dashboard</span>
+              </ArgonButton>
+              <ArgonButton
+                variant="outlined"
+                color="white"
+                size="medium"
+                onClick={() => window.location.href = '/login'}
+                className="flex items-center space-x-2"
+              >
+                <User className="h-4 w-4" />
+                <span>Admin Login</span>
+              </ArgonButton>
             </div>
           </div>
-        )}
+        </div>
+      </ArgonBox>
 
-        {currentStep !== "results" && (
-          <div className="mb-4 sm:mb-8">
-            <ProgressIndicator currentStep={currentStep} />
-          </div>
-        )}
+      <main className="container mx-auto px-4 max-w-4xl py-8">
+        {/* Central Card Container */}
+        <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
+          {/* Header with Apple Bites Logo and Progress */}
+          {currentStep !== "results" && (
+            <ArgonBox p={4} className="border-b border-gray-100">
+              <div className="text-center mb-6">
+                <img 
+                  src={appleBitesLogo} 
+                  alt="Apple Bites Business Assessment" 
+                  className="h-20 w-auto mx-auto mb-4"
+                />
+                <Badge className="bg-green-100 text-green-800 px-3 py-1">
+                  Free Basic Analysis
+                </Badge>
+              </div>
+              <div className="mb-6">
+                <ArgonTypography variant="h4" color="dark" fontWeight="bold" className="text-center mb-2">
+                  Apple Bites Business Assessment
+                </ArgonTypography>
+                <ArgonTypography variant="body1" color="text" className="text-center">
+                  Step {currentStep === "contact" ? "1" : currentStep === "ebitda" ? "2" : currentStep === "adjustments" ? "3" : currentStep === "valueDrivers" ? "4" : "5"} of 5
+                </ArgonTypography>
+              </div>
+              <ProgressIndicator currentStep={currentStep} />
+            </ArgonBox>
+          )}
 
-        {currentStep === "contact" && (
-          <ContactForm
-            form={forms.contact}
-            onNext={nextStep}
-            onDataChange={(data) => updateFormData("contact", data)}
-          />
-        )}
+          {/* Form Content */}
+          <ArgonBox p={4}>
+            {currentStep === "contact" && (
+              <ContactForm
+                form={forms.contact}
+                onNext={nextStep}
+                onDataChange={(data) => updateFormData("contact", data)}
+              />
+            )}
 
-        {currentStep === "ebitda" && (
-          <EbitdaForm
-            form={forms.ebitda}
-            onNext={nextStep}
-            onPrev={prevStep}
-            onDataChange={(data) => updateFormData("ebitda", data)}
-            calculateEbitda={calculateEbitda}
-          />
-        )}
+            {currentStep === "ebitda" && (
+              <EbitdaForm
+                form={forms.ebitda}
+                onNext={nextStep}
+                onPrev={prevStep}
+                onDataChange={(data) => updateFormData("ebitda", data)}
+                calculateEbitda={calculateEbitda}
+              />
+            )}
 
-        {currentStep === "adjustments" && (
-          <AdjustmentsForm
-            form={forms.adjustments}
-            onNext={nextStep}
-            onPrev={prevStep}
-            onDataChange={(data) => updateFormData("adjustments", data)}
-            calculateAdjustedEbitda={calculateAdjustedEbitda}
-            baseEbitda={calculateEbitda()}
-          />
-        )}
+            {currentStep === "adjustments" && (
+              <AdjustmentsForm
+                form={forms.adjustments}
+                onNext={nextStep}
+                onPrev={prevStep}
+                onDataChange={(data) => updateFormData("adjustments", data)}
+                calculateAdjustedEbitda={calculateAdjustedEbitda}
+                baseEbitda={calculateEbitda()}
+              />
+            )}
 
-        {currentStep === "valueDrivers" && (
-          <ValueDriversForm
-            form={forms.valueDrivers}
-            onNext={nextStep}
-            onPrev={prevStep}
-            onDataChange={(data) => updateFormData("valueDrivers", data)}
-          />
-        )}
+            {currentStep === "valueDrivers" && (
+              <ValueDriversForm
+                form={forms.valueDrivers}
+                onNext={nextStep}
+                onPrev={prevStep}
+                onDataChange={(data) => updateFormData("valueDrivers", data)}
+              />
+            )}
 
-        {currentStep === "followUp" && (
-          <FollowUpForm
-            form={forms.followUp}
-            onSubmit={() => {
-              // Submit assessment with free tier
-              submitAssessment();
-            }}
-            onPrev={prevStep}
-            onDataChange={(data) => updateFormData("followUp", data)}
-            isSubmitting={isSubmitting}
-          />
-        )}
+            {currentStep === "followUp" && (
+              <FollowUpForm
+                form={forms.followUp}
+                onSubmit={() => {
+                  // Submit assessment with free tier
+                  submitAssessment();
+                }}
+                onPrev={prevStep}
+                onDataChange={(data) => updateFormData("followUp", data)}
+                isSubmitting={isSubmitting}
+              />
+            )}
+          </ArgonBox>
+        </div>
 
         {currentStep === "results" && results && (
-          <ValuationResults results={results} />
+          <div className="bg-white rounded-xl shadow-lg border border-gray-100">
+            <ValuationResults results={results} />
+          </div>
         )}
       </main>
       <LoadingModal 
