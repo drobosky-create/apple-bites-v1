@@ -19,6 +19,8 @@ import type { ValuationAssessment } from "@shared/schema";
 
 import _3 from "@assets/3.png";
 
+import _4 from "@assets/4.png";
+
 export default function FreeAssessment() {
   const [location] = useLocation();
   
@@ -128,7 +130,7 @@ export default function FreeAssessment() {
               <div className="flex flex-col items-center justify-center mb-6">
                 <div className="bg-white/10 rounded-xl p-3 shadow-lg max-w-[250px]">
                   <img
-                    src={_3}
+                    src={_4}
                     alt="Apple Bites Business Assessment"
                     className="h-auto w-full object-contain"
                   />
