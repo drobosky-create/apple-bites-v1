@@ -1,5 +1,4 @@
 import { FormStep } from "@/hooks/use-valuation-form";
-import { ArgonBox, ArgonTypography } from "@/components/ui/argon-authentic";
 import { User, Calculator, Settings, TrendingUp, CheckCircle } from "lucide-react";
 
 interface ProgressIndicatorProps {
@@ -18,61 +17,69 @@ export default function ProgressIndicator({ currentStep }: ProgressIndicatorProp
   const currentStepNumber = steps.find((step) => step.id === currentStep)?.number || 1;
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-2">
       {steps.map((step, index) => {
         const IconComponent = step.icon;
-        const isActive = step.number <= currentStepNumber;
         const isCurrent = step.number === currentStepNumber;
         const isCompleted = step.number < currentStepNumber;
+        const isUpcoming = step.number > currentStepNumber;
         
         return (
           <div key={step.id} className="relative">
-            {/* Connecting Line */}
+            {/* Vertical Progress Line */}
             {index < steps.length - 1 && (
-              <div 
-                className={`absolute left-6 top-12 w-0.5 h-8 transition-colors duration-300 ${
-                  isCompleted ? "bg-white/50" : "bg-white/20"
-                }`}
-              />
+              <div className="absolute left-[19px] top-12 w-0.5 h-6 bg-white/20" />
             )}
             
-            {/* Step Item */}
-            <div className="flex items-center relative">
+            {/* Step Item - Professional SaaS Style */}
+            <div
+              className={`flex items-center gap-3 py-3 px-3 rounded-lg transition-all duration-300 relative border-l-4 ${
+                isCurrent
+                  ? "bg-white text-[#0b2147] shadow-md border-[#1a365d] transform scale-[1.02]"
+                  : isCompleted
+                  ? "text-white hover:bg-[#1a365d]/70 hover:pl-4 border-transparent hover:border-[#1a365d] cursor-pointer"
+                  : "text-white/70 hover:bg-[#1a365d]/50 hover:pl-4 border-transparent hover:border-[#1a365d]/50 cursor-pointer"
+              }`}
+            >
+              {/* Icon Circle */}
               <div
-                className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 shadow-lg relative z-10 ${
+                className={`flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300 ${
                   isCurrent
-                    ? "bg-white text-[#0b2147] shadow-white/20 border-2 border-white/50"
+                    ? "bg-gradient-to-br from-[#0b2147] to-[#1a365d] text-white shadow-lg"
                     : isCompleted
-                    ? "bg-white/20 text-white backdrop-blur-sm hover:bg-white/30 hover:scale-[1.02]"
-                    : "bg-white/10 text-white/50 backdrop-blur-sm hover:bg-slate-700 hover:scale-[1.02]"
+                    ? "bg-white text-[#0b2147] shadow-sm"
+                    : "bg-white/20 text-white backdrop-blur-sm"
                 }`}
               >
-                <IconComponent className={`h-5 w-5 transition-colors ${
-                  isCurrent ? "text-[#0b2147]" : isCompleted ? "text-white" : "text-white/50"
-                }`} />
+                <IconComponent className="w-4 h-4" />
               </div>
               
-              <div className="ml-4 flex-1">
-                <span
-                  className={`block text-sm font-medium transition-colors duration-300 ${
-                    isCurrent ? "text-slate-100 font-semibold tracking-wide" : isCompleted ? "text-slate-200" : "text-slate-400"
-                  }`}
-                >
+              {/* Step Content */}
+              <div className="flex-1">
+                <div className={`text-sm font-semibold ${
+                  isCurrent ? "text-[#0b2147]" : "text-current"
+                }`}>
                   {step.label}
-                </span>
-                <span
-                  className={`block text-xs transition-colors duration-300 ${
-                    isCurrent ? "text-slate-100 font-medium tracking-wide" : isCompleted ? "text-slate-300" : "text-slate-500"
-                  }`}
-                >
+                </div>
+                <div className={`text-xs tracking-wide flex items-center ${
+                  isCurrent ? "text-[#0b2147]/70" : "text-current opacity-75"
+                }`}>
                   Step {step.number}
-                </span>
-                {isCurrent && (
-                  <div className="inline-flex items-center mt-1 px-2 py-0.5 bg-white/20 text-white text-xs font-medium rounded-full backdrop-blur-sm border border-white/30">
-                    Current
-                  </div>
-                )}
+                  {isCurrent && (
+                    <span className="ml-2 inline-block bg-[#0b2147]/10 text-[#0b2147] text-[10px] px-2 py-0.5 rounded-full font-medium">
+                      Current
+                    </span>
+                  )}
+                  {isCompleted && (
+                    <CheckCircle className="w-3 h-3 ml-2 text-emerald-400" />
+                  )}
+                </div>
               </div>
+              
+              {/* Subtle pulse animation for current step */}
+              {isCurrent && (
+                <div className="absolute inset-0 rounded-lg bg-white/5 animate-pulse" />
+              )}
             </div>
           </div>
         );
