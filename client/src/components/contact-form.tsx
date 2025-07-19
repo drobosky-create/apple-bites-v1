@@ -2,7 +2,7 @@ import { UseFormReturn } from "react-hook-form";
 import { ContactInfo } from "@shared/schema";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { ArgonBox, ArgonTypography, ArgonButton } from "@/components/ui/argon-authentic";
 import { Shield, ArrowRight } from "lucide-react";
 
 interface ContactFormProps {
@@ -18,18 +18,19 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
   };
 
   return (
-    <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-sm border border-slate-200/60">
-      <div className="p-4 sm:p-8 border-b border-slate-200/60 bg-gradient-to-r from-slate-50/80 to-blue-50/40 rounded-t-xl">
-        <div className="flex items-center gap-3 mb-3 bg-[#fafafc]">
+    <ArgonBox shadow="lg" borderRadius="lg" bgColor="white">
+      <ArgonBox p={3} bgColor="white" borderRadius="lg">
+        <div className="flex items-center gap-3 mb-3">
           <div className="p-2 bg-blue-100 rounded-lg">
             <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
           </div>
-          <h3 className="text-xl sm:text-2xl font-bold text-slate-900">Contact Information</h3>
+          <ArgonTypography variant="h4" fontWeight="bold" color="dark">Contact Information</ArgonTypography>
         </div>
-        <p className="text-sm sm:text-base text-slate-600 leading-relaxed bg-[#fafafc]">Please provide your contact details to begin the comprehensive valuation assessment.</p>
-      </div>
+        <ArgonTypography variant="body2" color="text">Please provide your contact details to begin the comprehensive valuation assessment.</ArgonTypography>
+      </ArgonBox>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="p-4 sm:p-8 space-y-4 sm:space-y-6">
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <ArgonBox p={3}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             <FormField
               control={form.control}
@@ -40,7 +41,11 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
                     First Name <span className="text-red-500">*</span>
                   </FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="Enter your first name" className="form-input bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20" />
+                    <Input 
+                      {...field} 
+                      placeholder="Enter your first name" 
+                      className="h-12 text-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500/20"
+                    />
                   </FormControl>
                   <FormMessage className="form-error" />
                 </FormItem>
@@ -56,7 +61,11 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
                     Last Name <span className="text-red-500">*</span>
                   </FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="Enter your last name" className="form-input bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20" />
+                    <Input 
+                      {...field} 
+                      placeholder="Enter your last name" 
+                      className="h-12 text-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500/20"
+                    />
                   </FormControl>
                   <FormMessage className="form-error" />
                 </FormItem>
@@ -73,7 +82,12 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
                   Email Address <span className="text-red-500">*</span>
                 </FormLabel>
                 <FormControl>
-                  <Input {...field} type="email" placeholder="Enter your email address" className="form-input bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20" autoComplete="email" />
+                  <Input 
+                    {...field} 
+                    type="email"
+                    placeholder="Enter your email address" 
+                    className="h-12 text-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500/20"
+                  />
                 </FormControl>
                 <FormMessage className="form-error" />
               </FormItem>
@@ -90,7 +104,12 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
                     Phone Number <span className="text-red-500">*</span>
                   </FormLabel>
                   <FormControl>
-                    <Input {...field} type="tel" placeholder="(555) 123-4567" className="form-input bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20" autoComplete="tel" />
+                    <Input 
+                      {...field} 
+                      type="tel"
+                      placeholder="(555) 123-4567" 
+                      className="h-12 text-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500/20"
+                    />
                   </FormControl>
                   <FormMessage className="form-error" />
                 </FormItem>
@@ -106,7 +125,11 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
                     Company Name <span className="text-red-500">*</span>
                   </FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="Enter your company name" className="form-input bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20" />
+                    <Input 
+                      {...field} 
+                      placeholder="Enter your company name" 
+                      className="h-12 text-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500/20"
+                    />
                   </FormControl>
                   <FormMessage className="form-error" />
                 </FormItem>
@@ -121,7 +144,11 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
               <FormItem>
                 <FormLabel>Job Title</FormLabel>
                 <FormControl>
-                  <Input {...field} placeholder="Enter your job title" className="form-input bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20" />
+                  <Input 
+                    {...field} 
+                    placeholder="Enter your job title" 
+                    className="h-12 text-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500/20"
+                  />
                 </FormControl>
                 <FormMessage className="form-error" />
               </FormItem>
@@ -144,13 +171,20 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
 
           <div className="flex justify-between pt-6 sm:pt-8">
             <div></div>
-            <Button type="submit" className="bg-gradient-to-r from-slate-500 to-slate-600 text-white px-6 sm:px-8 py-2 sm:py-3 rounded-lg font-medium hover:from-slate-600 hover:to-slate-700 transition-all duration-200 shadow-md hover:shadow-lg text-sm sm:text-base">
+            <ArgonButton 
+              type="submit" 
+              variant="gradient"
+              color="success"
+              size="large"
+              disabled={!form.formState.isValid}
+            >
               Next: EBITDA Information
               <ArrowRight className="ml-2 w-3 h-3 sm:w-4 sm:h-4" />
-            </Button>
+            </ArgonButton>
           </div>
+          </ArgonBox>
         </form>
       </Form>
-    </div>
+    </ArgonBox>
   );
 }
