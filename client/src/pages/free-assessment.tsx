@@ -131,7 +131,7 @@ export default function FreeAssessment() {
                 <img 
                   src={_3} 
                   alt="Apple Bites" 
-                  className="h-16 w-auto mx-auto mb-3 brightness-0 invert"
+                  className="h-[250px] w-auto mx-auto mb-3 brightness-85"
                 />
                 <h3 className="text-lg font-semibold">Business Assessment</h3>
                 <p className="text-sm text-slate-300 mt-1">Professional Valuation</p>
