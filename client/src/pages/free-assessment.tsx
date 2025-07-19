@@ -123,26 +123,33 @@ export default function FreeAssessment() {
       </ArgonBox>
       <main className="container mx-auto px-4 max-w-7xl py-8">
         {/* New Layout Structure */}
-        <div className={`${currentStep === "results" ? "w-full" : "flex items-stretch gap-6 w-full"}`}>
+        <div className={`${currentStep === "results" ? "w-full" : "flex min-h-screen items-stretch gap-6 w-full"}`}>
           {/* Sidebar Stepper */}
           {currentStep !== "results" && (
-            <aside className="w-[320px] bg-gradient-to-br from-[#0b2147] to-[#1a365d] text-white rounded-2xl p-6 flex-shrink-0 shadow-xl h-full">
-              <div className="flex flex-col h-full">
-                {/* Logo Box */}
-                <div className="bg-gradient-to-br from-[#133157] to-[#1f4c74] rounded-xl p-4 shadow-xl backdrop-blur-sm ring-1 ring-white/10 max-w-[250px] mx-auto mt-2 mb-4">
-                  <img
-                    src={_3}
-                    alt="Apple Bites Business Assessment"
-                    className="w-full object-contain"
-                  />
+            <aside className="w-[320px] bg-gradient-to-br from-[#0b2147] to-[#1a365d] text-white rounded-2xl flex-shrink-0 shadow-xl flex flex-col">
+              <div className="flex flex-col h-full justify-between py-10 px-6">
+                {/* Logo Section */}
+                <div className="mb-6">
+                  <div className="bg-gradient-to-br from-[#133157] to-[#1f4c74] rounded-xl p-4 shadow-xl backdrop-blur-sm ring-1 ring-white/10">
+                    <img
+                      src={_3}
+                      alt="Apple Bites Business Assessment"
+                      className="w-full object-contain"
+                    />
+                  </div>
+                  <div className="mt-4 text-center text-sm font-semibold uppercase tracking-wide text-slate-300">
+                    Professional Valuation
+                  </div>
                 </div>
-                <p className="text-sm text-slate-300 text-center mb-6">
-                  Professional Valuation
-                </p>
-                
-                {/* Progress Steps */}
-                <div className="flex-grow flex flex-col justify-evenly gap-2 px-2">
+
+                {/* Steps */}
+                <div className="flex-grow flex flex-col justify-evenly gap-6">
                   <ProgressIndicator currentStep={currentStep} />
+                </div>
+
+                {/* Footer */}
+                <div className="text-xs text-slate-400 text-center mt-6">
+                  &copy; 2025 Meritage Partners
                 </div>
               </div>
             </aside>

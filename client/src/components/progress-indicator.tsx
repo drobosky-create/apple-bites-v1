@@ -28,22 +28,22 @@ export default function ProgressIndicator({ currentStep }: ProgressIndicatorProp
           <div key={step.id} className="relative">
             {/* Vertical Progress Line */}
             {index < steps.length - 1 && (
-              <div className="absolute left-[19px] top-12 w-0.5 h-6 bg-white/20" />
+              <div className="absolute left-[23px] top-16 w-0.5 h-8 bg-white/20" />
             )}
             
             {/* Step Item - Professional SaaS Style */}
             <div
-              className={`flex items-center gap-3 py-3 px-3 rounded-lg transition-all duration-300 relative border-l-4 ${
+              className={`flex items-center gap-4 py-4 px-4 rounded-lg transition-all duration-300 relative border-l-4 ${
                 isCurrent
                   ? "bg-white text-[#0b2147] shadow-md border-[#1a365d] transform scale-[1.02]"
                   : isCompleted
-                  ? "text-white hover:bg-[#1a365d]/70 hover:pl-4 border-transparent hover:border-[#1a365d] cursor-pointer"
-                  : "text-white/70 hover:bg-[#1a365d]/50 hover:pl-4 border-transparent hover:border-[#1a365d]/50 cursor-pointer"
+                  ? "text-white hover:bg-[#1a365d]/70 hover:pl-5 border-transparent hover:border-[#1a365d] cursor-pointer"
+                  : "text-white/70 hover:bg-[#1a365d]/50 hover:pl-5 border-transparent hover:border-[#1a365d]/50 cursor-pointer"
               }`}
             >
-              {/* Icon Circle */}
+              {/* Icon Circle - Larger */}
               <div
-                className={`flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300 ${
+                className={`flex items-center justify-center w-12 h-12 rounded-full transition-all duration-300 ${
                   isCurrent
                     ? "bg-gradient-to-br from-[#0b2147] to-[#1a365d] text-white shadow-lg"
                     : isCompleted
@@ -51,27 +51,27 @@ export default function ProgressIndicator({ currentStep }: ProgressIndicatorProp
                     : "bg-white/20 text-white backdrop-blur-sm"
                 }`}
               >
-                <IconComponent className="w-4 h-4" />
+                <IconComponent className="w-6 h-6" />
               </div>
               
-              {/* Step Content */}
+              {/* Step Content - Larger Text */}
               <div className="flex-1">
-                <div className={`text-sm font-semibold ${
+                <div className={`text-lg font-semibold ${
                   isCurrent ? "text-[#0b2147]" : "text-current"
                 }`}>
                   {step.label}
                 </div>
-                <div className={`text-xs tracking-wide flex items-center ${
+                <div className={`text-sm tracking-wide flex items-center ${
                   isCurrent ? "text-[#0b2147]/70" : "text-current opacity-75"
                 }`}>
                   Step {step.number}
                   {isCurrent && (
-                    <span className="ml-2 inline-block bg-[#0b2147]/10 text-[#0b2147] text-[10px] px-2 py-0.5 rounded-full font-medium">
+                    <span className="ml-2 inline-block bg-[#0b2147]/10 text-[#0b2147] text-xs px-2 py-1 rounded-full font-medium">
                       Current
                     </span>
                   )}
                   {isCompleted && (
-                    <CheckCircle className="w-3 h-3 ml-2 text-emerald-400" />
+                    <CheckCircle className="w-4 h-4 ml-2 text-emerald-400" />
                   )}
                 </div>
               </div>
