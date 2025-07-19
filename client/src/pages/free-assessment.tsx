@@ -142,12 +142,7 @@ export default function FreeAssessment() {
 
           {/* Main Form Content */}
           <section className={`bg-white rounded-xl shadow-lg ${currentStep === "results" ? "col-span-full" : ""}`}>
-            {currentStep !== "results" && (
-              <div className="p-8 border-b border-gray-100">
-                <h1 className="text-2xl font-bold text-slate-800 mb-2">Apple Bites Business Assessment</h1>
-                <p className="text-sm text-slate-500">Let's walk through your business valuation step by step...</p>
-              </div>
-            )}
+            
 
             <ArgonBox p={8}>
             {currentStep === "contact" && (
