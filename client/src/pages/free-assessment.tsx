@@ -95,13 +95,6 @@ export default function FreeAssessment() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-6">
-              <div className="flex items-center space-x-3">
-                <img 
-                  src={Apple_Bites__1_} 
-                  alt="Meritage Partners" 
-                  className="h-[150px] w-auto"
-                />
-              </div>
             </div>
             <div className="flex items-center space-x-4">
               <ArgonButton
