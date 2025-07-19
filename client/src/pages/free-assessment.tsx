@@ -128,11 +128,11 @@ export default function FreeAssessment() {
           {currentStep !== "results" && (
             <aside className="w-[320px] bg-gradient-to-br from-[#0b2147] to-[#1a365d] text-white rounded-xl p-6 flex-shrink-0">
               <div className="flex flex-col items-center justify-center mb-6">
-                <div className="bg-white/10 rounded-xl p-3 shadow-lg max-w-[250px]">
+                <div className="bg-gradient-to-br from-[#133157] to-[#1f4c74] rounded-xl p-4 shadow-xl backdrop-blur-sm ring-1 ring-white/10 max-w-[250px]">
                   <img
                     src={_3}
                     alt="Apple Bites Business Assessment"
-                    className="h-auto w-full object-contain"
+                    className="w-full object-contain"
                   />
                 </div>
                 <p className="text-sm text-slate-300 mt-4 text-center">
