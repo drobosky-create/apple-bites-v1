@@ -123,14 +123,14 @@ export default function FreeAssessment() {
       </ArgonBox>
       <main className="container mx-auto px-4 max-w-7xl py-8">
         {/* New Layout Structure */}
-        <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-6">
+        <div className={`${currentStep === "results" ? "w-full" : "flex items-stretch gap-6 w-full"}`}>
           {/* Sidebar Stepper */}
           {currentStep !== "results" && (
-            <aside className="bg-gradient-to-br from-[#0b2147] to-[#1a365d] text-white rounded-xl p-6 sticky top-4 h-fit">
+            <aside className="w-[320px] bg-gradient-to-br from-[#0b2147] to-[#1a365d] text-white rounded-xl p-6 flex-shrink-0">
               <div className="flex flex-col items-center justify-center mb-6">
                 <div className="bg-white/10 rounded-xl p-3 shadow-lg max-w-[250px]">
                   <img
-                    src={_4}
+                    src={_3}
                     alt="Apple Bites Business Assessment"
                     className="h-auto w-full object-contain"
                   />
@@ -144,7 +144,7 @@ export default function FreeAssessment() {
           )}
 
           {/* Main Form Content */}
-          <section className={`bg-white rounded-xl shadow-lg ${currentStep === "results" ? "col-span-full" : ""}`}>
+          <section className={`${currentStep === "results" ? "w-full" : "flex-grow"} bg-white rounded-xl shadow-lg border border-slate-200`}>
             <ArgonBox className="bg-transparent pl-[65px] pr-[65px] pt-[0px] pb-[0px]">
             {currentStep === "contact" && (
               <ContactForm
