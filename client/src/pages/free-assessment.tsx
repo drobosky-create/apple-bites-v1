@@ -21,6 +21,8 @@ import _3 from "@assets/3.png";
 
 import Apple_Bites__1_ from "@assets/Apple Bites (1).png";
 
+import _4 from "@assets/4.png";
+
 export default function FreeAssessment() {
   const [location] = useLocation();
   
@@ -129,9 +131,9 @@ export default function FreeAssessment() {
             <aside className="bg-gradient-to-br from-[#0b2147] to-[#1a365d] text-white rounded-xl p-6 sticky top-4 h-fit">
               <div className="text-center mb-6">
                 <img 
-                  src={_3} 
+                  src={_4} 
                   alt="Apple Bites" 
-                  className="h-[250px] w-auto mx-auto mb-3 brightness-85"
+                  className="h-[250px] w-auto mx-auto mb-3 brightness-25"
                 />
                 
                 <p className="text-sm text-slate-300 mt-1">Professional Valuation</p>
