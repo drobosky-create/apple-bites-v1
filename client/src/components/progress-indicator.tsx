@@ -35,13 +35,13 @@ export default function ProgressIndicator({ currentStep }: ProgressIndicatorProp
             return (
               <div key={step.id} className="flex items-center">
                 <div
-                  className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
+                  className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 ${
                     step.number <= currentStepNumber
                       ? "bg-gradient-to-br from-[#0b2147] to-[#1a365d] text-white shadow-lg"
                       : "bg-slate-200 text-slate-400"
                   }`}
                 >
-                  <IconComponent className="h-4 w-4" />
+                  <IconComponent className="h-5 w-5" />
                 </div>
                 <div className="ml-3 flex-1">
                   <span
@@ -52,7 +52,7 @@ export default function ProgressIndicator({ currentStep }: ProgressIndicatorProp
                     {step.label}
                   </span>
                   {step.number === currentStepNumber && (
-                    <div className="inline-flex items-center mt-1 px-2 py-1 bg-[#0b2147]/10 text-[#0b2147] text-xs font-medium rounded-full">
+                    <div className="inline-flex items-center mt-1 px-3 py-1 bg-[#0b2147]/10 text-[#0b2147] text-sm font-semibold rounded-full border border-[#0b2147]/20">
                       Current
                     </div>
                   )}
@@ -76,16 +76,16 @@ export default function ProgressIndicator({ currentStep }: ProgressIndicatorProp
                 <div className="flex flex-col items-center text-center group cursor-pointer">
                   {/* Step Circle with Icon */}
                   <div
-                    className={`relative w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 mb-2 group-hover:scale-105 ${
+                    className={`relative w-14 h-14 rounded-full flex items-center justify-center transition-all duration-300 mb-2 group-hover:scale-105 ${
                       isActive
                         ? "bg-gradient-to-br from-[#0b2147] to-[#1a365d] text-white shadow-lg"
                         : "bg-slate-200 text-slate-400 group-hover:bg-slate-300"
                     }`}
                   >
-                    <IconComponent className="h-4 w-4" />
+                    <IconComponent className="h-6 w-6" />
                     {/* Step number badge */}
-                    <div className="absolute -top-1 -right-1 w-4 h-4 bg-white rounded-full flex items-center justify-center shadow-sm">
-                      <span className="text-xs font-bold text-slate-600">{step.number}</span>
+                    <div className="absolute -top-1 -right-1 w-5 h-5 bg-white rounded-full flex items-center justify-center shadow-sm">
+                      <span className="text-[10px] font-bold text-slate-600">{step.number}</span>
                     </div>
                   </div>
                   
@@ -101,7 +101,7 @@ export default function ProgressIndicator({ currentStep }: ProgressIndicatorProp
                     
                     {/* Current Step Pill */}
                     {isCurrent && (
-                      <div className="mt-1 px-2 py-0.5 bg-gradient-to-r from-[#0b2147] to-[#1a365d] text-white text-xs font-medium rounded-full shadow-sm animate-pulse">
+                      <div className="mt-1 px-3 py-1 bg-gradient-to-r from-[#0b2147] to-[#1a365d] text-white text-sm font-semibold rounded-full shadow-md border border-white/20 animate-pulse">
                         Current
                       </div>
                     )}
