@@ -19,10 +19,6 @@ import type { ValuationAssessment } from "@shared/schema";
 
 import _3 from "@assets/3.png";
 
-import Apple_Bites__1_ from "@assets/Apple Bites (1).png";
-
-import _4 from "@assets/4.png";
-
 export default function FreeAssessment() {
   const [location] = useLocation();
   
@@ -128,15 +124,18 @@ export default function FreeAssessment() {
         <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-6">
           {/* Sidebar Stepper */}
           {currentStep !== "results" && (
-            <aside className="bg-gradient-to-br from-[#0b2147] to-[#1a365d] text-white rounded-xl p-6 sticky top-4 h-fit pl-[16px] pr-[16px] ml-[-18px] mr-[-18px]">
-              <div className="text-center mb-6">
-                <img 
-                  src={_4} 
-                  alt="Apple Bites" 
-                  className="h-[250px] w-auto mx-auto mb-3 brightness-25"
-                />
-                
-                <p className="text-sm text-slate-300 mt-1">Professional Valuation</p>
+            <aside className="bg-gradient-to-br from-[#0b2147] to-[#1a365d] text-white rounded-xl p-6 sticky top-4 h-fit">
+              <div className="flex flex-col items-center justify-center mb-6">
+                <div className="bg-white/10 rounded-xl p-3 shadow-lg max-w-[250px]">
+                  <img
+                    src={_3}
+                    alt="Apple Bites Business Assessment"
+                    className="h-auto w-full object-contain"
+                  />
+                </div>
+                <p className="text-sm text-slate-300 mt-4 text-center">
+                  Professional Valuation
+                </p>
               </div>
               <ProgressIndicator currentStep={currentStep} />
             </aside>
