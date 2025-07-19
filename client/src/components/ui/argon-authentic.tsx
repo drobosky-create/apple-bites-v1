@@ -316,7 +316,7 @@ const ArgonButton = React.forwardRef<HTMLButtonElement, ArgonButtonProps>(
           'hover:transform hover:-translate-y-0.5',
           'disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none',
           sizeClasses[size],
-          colorClasses[variant === 'gradient' ? 'gradient' : variant][color],
+          colorClasses[variant === 'gradient' ? 'gradient' : (variant || 'contained')]?.[color] || colorClasses.contained.primary,
           circular ? 'rounded-full' : 'rounded-lg',
           iconOnly && 'aspect-square',
           fullWidth && 'w-full',

@@ -158,7 +158,7 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
 
               <FormField
                 control={form.control}
-                name="title"
+                name="jobTitle"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-sm font-semibold text-gray-700 mb-2 block">
@@ -182,6 +182,8 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
           <div className="pt-6 border-t border-gray-100">
             <ArgonButton
               type="submit"
+              variant="gradient"
+              color="primary"
               disabled={isSubmitting}
               className="bg-gradient-to-br from-[#0b2147] to-[#1a365d] hover:from-[#112e5a] hover:to-[#1e4471] text-white font-semibold px-8 py-4 rounded-xl shadow-lg transition-all transform hover:scale-[1.02] flex items-center justify-center w-full md:w-auto md:ml-auto"
               size="large"

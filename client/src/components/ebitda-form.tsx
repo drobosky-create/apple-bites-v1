@@ -249,7 +249,8 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
           <div className="flex flex-col sm:flex-row gap-4 sm:justify-between pt-8 mt-8 border-t border-slate-200">
             <ArgonButton 
               type="button" 
-              variant="outline"
+              variant="outlined"
+              color="primary"
               onClick={onPrev}
               className="order-2 sm:order-1"
             >
@@ -259,7 +260,7 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
             <ArgonButton 
               type="submit" 
               variant="gradient"
-              color="dark"
+              color="primary"
               className="order-1 sm:order-2"
             >
               Next: Adjustments
