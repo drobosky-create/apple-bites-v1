@@ -144,8 +144,11 @@ export default function FreeAssessment() {
           )}
 
           {/* Main Form Content */}
-          <section className={`${currentStep === "results" ? "w-full" : "flex-grow"} bg-white rounded-xl shadow-lg border border-slate-200`}>
-            <ArgonBox className="bg-transparent pl-[65px] pr-[65px] pt-[0px] pb-[0px]">
+          <section className={`${currentStep === "results" ? "w-full" : "flex-grow"} bg-white rounded-2xl shadow-xl border border-slate-200 relative overflow-hidden`}>
+            <div className="absolute inset-0 bg-gradient-to-br from-slate-100 via-white to-slate-100 opacity-40 pointer-events-none z-0 rounded-2xl" />
+            
+            <div className="relative z-10">
+              <ArgonBox className="bg-transparent pl-[65px] pr-[65px] pt-[40px] pb-[40px]">
             {currentStep === "contact" && (
               <ContactForm
                 form={forms.contact}
@@ -201,6 +204,7 @@ export default function FreeAssessment() {
               <ValuationResults results={results} />
             )}
             </ArgonBox>
+            </div>
           </section>
         </div>
       </main>
