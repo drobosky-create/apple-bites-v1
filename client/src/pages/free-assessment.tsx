@@ -130,7 +130,7 @@ export default function FreeAssessment() {
               <div className="flex flex-col items-center justify-center mb-6">
                 <div className="bg-gradient-to-br from-[#133157] to-[#1f4c74] rounded-xl p-4 shadow-xl backdrop-blur-sm ring-1 ring-white/10 max-w-[250px]">
                   <img
-                    src={_3}
+                    src={_4}
                     alt="Apple Bites Business Assessment"
                     className="w-full object-contain"
                   />
