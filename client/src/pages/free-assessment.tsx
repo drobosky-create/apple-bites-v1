@@ -144,7 +144,7 @@ export default function FreeAssessment() {
 
           {/* Main Form Content */}
           <section className={`bg-white rounded-xl shadow-lg ${currentStep === "results" ? "col-span-full" : ""}`}>
-            <ArgonBox p={8}>
+            <ArgonBox className="bg-transparent pl-[65px] pr-[65px] pt-[0px] pb-[0px]">
             {currentStep === "contact" && (
               <ContactForm
                 form={forms.contact}
