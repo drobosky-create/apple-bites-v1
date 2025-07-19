@@ -19,6 +19,8 @@ import type { ValuationAssessment } from "@shared/schema";
 
 import _3 from "@assets/3.png";
 
+import Apple_Bites__1_ from "@assets/Apple Bites (1).png";
+
 export default function FreeAssessment() {
   const [location] = useLocation();
   
@@ -95,7 +97,7 @@ export default function FreeAssessment() {
             <div className="flex items-center space-x-6">
               <div className="flex items-center space-x-3">
                 <img 
-                  src={meritagePartnersLogo} 
+                  src={Apple_Bites__1_} 
                   alt="Meritage Partners" 
                   className="h-12 w-auto"
                 />
