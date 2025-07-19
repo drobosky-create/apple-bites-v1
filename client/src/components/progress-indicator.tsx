@@ -6,9 +6,9 @@ interface ProgressIndicatorProps {
 }
 
 const steps = [
-  { id: "contact", label: "Contact Information", number: 1 },
-  { id: "ebitda", label: "EBITDA Calculation", number: 2 },
-  { id: "adjustments", label: "EBITDA Adjustments", number: 3 },
+  { id: "contact", label: "Contact", number: 1 },
+  { id: "ebitda", label: "EBITDA", number: 2 },
+  { id: "adjustments", label: "Adjustments", number: 3 },
   { id: "valueDrivers", label: "Value Drivers", number: 4 },
   { id: "followUp", label: "Follow-up", number: 5 },
 ];
@@ -59,46 +59,42 @@ export default function ProgressIndicator({ currentStep }: ProgressIndicatorProp
 
       {/* Desktop Layout */}
       <div className="hidden sm:block relative">
-        <div className="overflow-x-auto px-2">
-          <div className="flex items-center justify-between gap-4">
-            {steps.map((step, index) => (
-              <div key={step.id} className="flex items-center gap-2">
-                <div className="flex items-center relative">
-                  <div
-                    className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
-                      step.number <= currentStepNumber
-                        ? "bg-[#0b2147] text-white shadow-lg scale-110"
-                        : "bg-slate-200 text-slate-400"
-                    }`}
-                  >
-                    {step.number}
-                  </div>
-                  <div className="ml-3">
-                    <span
-                      className={`block text-sm font-semibold transition-colors duration-300 ${
-                        step.number <= currentStepNumber ? "text-slate-900" : "text-slate-400"
-                      }`}
-                    >
-                      {step.label}
-                    </span>
-                    {step.number === currentStepNumber && (
-                      <span className="block text-xs text-[#0b2147] font-medium mt-0.5">Current</span>
-                    )}
-                  </div>
+        <div className="flex items-center justify-between">
+          {steps.map((step, index) => (
+            <div key={step.id} className="flex items-center">
+              <div className="flex flex-col items-center text-center">
+                <div
+                  className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300 mb-2 ${
+                    step.number <= currentStepNumber
+                      ? "bg-[#0b2147] text-white shadow-lg"
+                      : "bg-slate-200 text-slate-400"
+                  }`}
+                >
+                  {step.number}
                 </div>
-
-                {index < steps.length - 1 && (
-                  <div className="w-10 h-1 bg-slate-200 mx-2 rounded-full overflow-hidden">
-                    <div
-                      className={`h-full transition-all duration-500 ${
-                        step.number < currentStepNumber ? "bg-[#0b2147] w-full" : "w-0"
-                      }`}
-                    />
-                  </div>
+                <span
+                  className={`text-xs font-medium transition-colors duration-300 ${
+                    step.number <= currentStepNumber ? "text-slate-900" : "text-slate-400"
+                  }`}
+                >
+                  {step.label}
+                </span>
+                {step.number === currentStepNumber && (
+                  <span className="text-xs text-[#0b2147] font-medium mt-1">Current</span>
                 )}
               </div>
-            ))}
-          </div>
+
+              {index < steps.length - 1 && (
+                <div className="flex-1 h-px bg-slate-200 mx-4 min-w-8">
+                  <div
+                    className={`h-full transition-all duration-500 ${
+                      step.number < currentStepNumber ? "bg-[#0b2147] w-full" : "w-0"
+                    }`}
+                  />
+                </div>
+              )}
+            </div>
+          ))}
         </div>
       </div>
     </ArgonBox>
