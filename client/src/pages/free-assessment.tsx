@@ -17,6 +17,8 @@ import { useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import type { ValuationAssessment } from "@shared/schema";
 
+import _3 from "@assets/3.png";
+
 export default function FreeAssessment() {
   const [location] = useLocation();
   
@@ -124,7 +126,6 @@ export default function FreeAssessment() {
           </div>
         </div>
       </ArgonBox>
-
       <main className="container mx-auto px-4 max-w-4xl py-8">
         {/* Central Card Container */}
         <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
@@ -133,7 +134,7 @@ export default function FreeAssessment() {
             <ArgonBox p={4} className="border-b border-gray-100">
               <div className="text-center mb-6">
                 <img 
-                  src={appleBitesLogo} 
+                  src={_3} 
                   alt="Apple Bites Business Assessment" 
                   className="h-20 w-auto mx-auto mb-4"
                 />
