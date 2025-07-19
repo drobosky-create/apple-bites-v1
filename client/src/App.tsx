@@ -6,8 +6,6 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { AdminAuthProvider } from "@/hooks/use-admin-auth";
 import { TeamAuthProvider } from "@/hooks/use-team-auth";
 import { useAuth } from "@/hooks/useAuth";
-import Navigation from "@/components/navigation";
-import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { GHLThemeDemo } from "@/components/ghl-theme-demo";
 import Landing from "@/pages/landing";
@@ -54,127 +52,19 @@ function Router() {
         <Route path="/free-tier-demo" component={FreeTierDemo} />
         <Route path="/assessment-results" component={AssessmentResults} />
         
-        {/* Pages with header/navigation */}
-        <Route path="/assessment/free">
-          <>
-            <Header />
-            <Navigation />
-            <main className="flex-1">
-              <FreeAssessment />
-            </main>
-            <Footer />
-          </>
-        </Route>
-        <Route path="/assessment/paid">
-          <>
-            <Header />
-            <Navigation />
-            <main className="flex-1">
-              <GrowthExitAssessment />
-            </main>
-            <Footer />
-          </>
-        </Route>
-        <Route path="/valuation">
-          <>
-            <Header />
-            <Navigation />
-            <main className="flex-1">
-              <ValuationForm />
-            </main>
-            <Footer />
-          </>
-        </Route>
-        <Route path="/results">
-          <>
-            <Header />
-            <Navigation />
-            <main className="flex-1">
-              <ValuationForm />
-            </main>
-            <Footer />
-          </>
-        </Route>
-        <Route path="/results/:id">
-          <>
-            <Header />
-            <Navigation />
-            <main className="flex-1">
-              <ValuationForm />
-            </main>
-            <Footer />
-          </>
-        </Route>
-        <Route path="/report-selection/:id">
-          <>
-            <Header />
-            <Navigation />
-            <main className="flex-1">
-              <ReportSelectionPage />
-            </main>
-            <Footer />
-          </>
-        </Route>
-        <Route path="/value-calculator">
-          <>
-            <Header />
-            <Navigation />
-            <main className="flex-1">
-              <ValueCalculator />
-            </main>
-            <Footer />
-          </>
-        </Route>
-        <Route path="/admin">
-          <>
-            <Header />
-            <Navigation />
-            <main className="flex-1">
-              <TeamDashboard />
-            </main>
-            <Footer />
-          </>
-        </Route>
-        <Route path="/admin/analytics">
-          <>
-            <Header />
-            <Navigation />
-            <main className="flex-1">
-              <AnalyticsDashboard />
-            </main>
-            <Footer />
-          </>
-        </Route>
-        <Route path="/admin/leads">
-          <>
-            <Header />
-            <Navigation />
-            <main className="flex-1">
-              <LeadsDashboard />
-            </main>
-            <Footer />
-          </>
-        </Route>
-        <Route path="/team">
-          <>
-            <Header />
-            <Navigation />
-            <main className="flex-1">
-              <TeamDashboard />
-            </main>
-            <Footer />
-          </>
-        </Route>
-        <Route>
-          <>
-            <Header />
-            <Navigation />
-            <main className="flex-1">
-              <NotFound />
-            </main>
-            <Footer />
-          </>
-        </Route>
+        {/* Assessment pages - standalone with built-in headers */}
+        <Route path="/assessment/free" component={FreeAssessment} />
+        <Route path="/assessment/paid" component={GrowthExitAssessment} />
+        <Route path="/valuation" component={ValuationForm} />
+        <Route path="/results" component={ValuationForm} />
+        <Route path="/results/:id" component={ValuationForm} />
+        <Route path="/report-selection/:id" component={ReportSelectionPage} />
+        <Route path="/value-calculator" component={ValueCalculator} />
+        <Route path="/admin" component={TeamDashboard} />
+        <Route path="/admin/analytics" component={AnalyticsDashboard} />
+        <Route path="/admin/leads" component={LeadsDashboard} />
+        <Route path="/team" component={TeamDashboard} />
+        <Route component={NotFound} />
       </Switch>
     </div>
   );
