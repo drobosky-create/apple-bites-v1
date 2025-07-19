@@ -4,7 +4,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArgonBox, ArgonTypography, ArgonButton } from "@/components/ui/argon-authentic";
+import { ArrowLeft, ArrowRight, Settings } from "lucide-react";
 
 interface AdjustmentsFormProps {
   form: UseFormReturn<AdjustmentsData>;
@@ -47,15 +48,20 @@ export default function AdjustmentsForm({
   };
 
   return (
-    <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-sm border border-slate-200/60">
-      <div className="p-8 border-b border-slate-200/60 bg-gradient-to-r from-slate-50/80 to-blue-50/40 rounded-t-xl">
-        <div className="flex items-center gap-3 mb-3 bg-[#f9fbfb]">
-          <div className="p-2 bg-blue-100 rounded-lg">
-            <ArrowRight className="w-5 h-5 text-blue-600" />
-          </div>
-          <h3 className="text-2xl font-bold text-slate-900">Owner Adjustments</h3>
+    <ArgonBox shadow="xl" borderRadius="xl" bgColor="white" p={8} className="border border-gray-100">
+      {/* Header Section */}
+      <div className="flex items-start gap-4 mb-8 pb-6 border-b border-gray-100">
+        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#0b2147] to-[#1a365d] flex items-center justify-center shadow-lg">
+          <Settings className="h-6 w-6 text-white" />
         </div>
-        <p className="text-slate-600 leading-relaxed bg-[#f9fbfb]">Add back non-recurring expenses and owner-specific adjustments to normalize EBITDA.</p>
+        <div className="flex-1">
+          <ArgonTypography variant="h4" fontWeight="bold" color="dark" className="mb-2">
+            EBITDA Adjustments
+          </ArgonTypography>
+          <ArgonTypography variant="body2" color="text" className="text-gray-600">
+            Add back expenses that don't represent the true earning potential of your business.
+          </ArgonTypography>
+        </div>
       </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="p-8 space-y-6">
@@ -229,6 +235,6 @@ export default function AdjustmentsForm({
           </div>
         </form>
       </Form>
-    </div>
+    </ArgonBox>
   );
 }

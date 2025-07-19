@@ -50,24 +50,24 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
         </div>
       </div>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="p-8 space-y-6">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <FormField
               control={form.control}
               name="netIncome"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-slate-900 font-medium">
+                  <FormLabel className="text-slate-900 font-semibold text-sm">
                     Net Income <span className="text-red-500">*</span>
                   </FormLabel>
                   <FormControl>
                     <div className="relative">
-                      <span className="absolute left-3 top-3 text-slate-400 bg-[#f8fafc]">$</span>
+                      <span className="absolute left-3 top-3 text-slate-500 font-medium">$</span>
                       <Input 
                         {...field} 
                         type="number" 
                         placeholder="0" 
-                        className="bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20 pl-8"
+                        className="h-12 bg-white border-slate-300 focus:border-[#0b2147] focus:ring-[#0b2147]/20 pl-8 text-slate-900 font-medium shadow-sm"
                         onChange={(e) => {
                           field.onChange(e);
                           onDataChange(form.getValues());
@@ -75,8 +75,10 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
                       />
                     </div>
                   </FormControl>
-                  <p className="form-help">Your company's net income for the most recent fiscal year</p>
-                  <FormMessage className="form-error" />
+                  <ArgonTypography variant="caption" color="text" className="mt-2">
+                    Your company's net income for the most recent fiscal year
+                  </ArgonTypography>
+                  <FormMessage className="text-red-500 text-sm font-medium" />
                 </FormItem>
               )}
             />
@@ -86,17 +88,17 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
               name="interest"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-slate-900 font-medium">
+                  <FormLabel className="text-slate-900 font-semibold text-sm">
                     Interest Expense <span className="text-red-500">*</span>
                   </FormLabel>
                   <FormControl>
                     <div className="relative">
-                      <span className="absolute left-3 top-3 text-slate-400 bg-[#f8fafc]">$</span>
+                      <span className="absolute left-3 top-3 text-slate-500 font-medium">$</span>
                       <Input 
                         {...field} 
                         type="number" 
                         placeholder="0" 
-                        className="bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20 pl-8"
+                        className="h-12 bg-white border-slate-300 focus:border-[#0b2147] focus:ring-[#0b2147]/20 pl-8 text-slate-900 font-medium shadow-sm"
                         onChange={(e) => {
                           field.onChange(e);
                           onDataChange(form.getValues());
@@ -104,8 +106,10 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
                       />
                     </div>
                   </FormControl>
-                  <p className="form-help">Interest paid on loans and credit facilities</p>
-                  <FormMessage className="form-error" />
+                  <ArgonTypography variant="caption" color="text" className="mt-2">
+                    Interest paid on loans and credit facilities
+                  </ArgonTypography>
+                  <FormMessage className="text-red-500 text-sm font-medium" />
                 </FormItem>
               )}
             />
@@ -117,17 +121,17 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
               name="taxes"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-slate-900 font-medium">
+                  <FormLabel className="text-slate-900 font-semibold text-sm">
                     Tax Expense <span className="text-red-500">*</span>
                   </FormLabel>
                   <FormControl>
                     <div className="relative">
-                      <span className="absolute left-3 top-3 text-slate-400 bg-[#f8fafc]">$</span>
+                      <span className="absolute left-3 top-3 text-slate-500 font-medium">$</span>
                       <Input 
                         {...field} 
                         type="number" 
                         placeholder="0" 
-                        className="bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20 pl-8"
+                        className="h-12 bg-white border-slate-300 focus:border-[#0b2147] focus:ring-[#0b2147]/20 pl-8 text-slate-900 font-medium shadow-sm"
                         onChange={(e) => {
                           field.onChange(e);
                           onDataChange(form.getValues());
@@ -135,8 +139,10 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
                       />
                     </div>
                   </FormControl>
-                  <p className="form-help">Federal, state, and local income taxes</p>
-                  <FormMessage className="form-error" />
+                  <ArgonTypography variant="caption" color="text" className="mt-2">
+                    Federal, state, and local income taxes
+                  </ArgonTypography>
+                  <FormMessage className="text-red-500 text-sm font-medium" />
                 </FormItem>
               )}
             />
@@ -146,17 +152,17 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
               name="depreciation"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-slate-900 font-medium">
+                  <FormLabel className="text-slate-900 font-semibold text-sm">
                     Depreciation <span className="text-red-500">*</span>
                   </FormLabel>
                   <FormControl>
                     <div className="relative">
-                      <span className="absolute left-3 top-3 text-slate-400 bg-[#f8fafc]">$</span>
+                      <span className="absolute left-3 top-3 text-slate-500 font-medium">$</span>
                       <Input 
                         {...field} 
                         type="number" 
                         placeholder="0" 
-                        className="bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20 pl-8"
+                        className="h-12 bg-white border-slate-300 focus:border-[#0b2147] focus:ring-[#0b2147]/20 pl-8 text-slate-900 font-medium shadow-sm"
                         onChange={(e) => {
                           field.onChange(e);
                           onDataChange(form.getValues());
@@ -164,8 +170,10 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
                       />
                     </div>
                   </FormControl>
-                  <p className="form-help">Depreciation of physical assets</p>
-                  <FormMessage className="form-error" />
+                  <ArgonTypography variant="caption" color="text" className="mt-2">
+                    Depreciation of physical assets
+                  </ArgonTypography>
+                  <FormMessage className="text-red-500 text-sm font-medium" />
                 </FormItem>
               )}
             />
@@ -177,17 +185,17 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
               name="amortization"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-slate-900 font-medium">
+                  <FormLabel className="text-slate-900 font-semibold text-sm">
                     Amortization <span className="text-red-500">*</span>
                   </FormLabel>
                   <FormControl>
                     <div className="relative">
-                      <span className="absolute left-3 top-3 text-slate-400 bg-[#f8fafc]">$</span>
+                      <span className="absolute left-3 top-3 text-slate-500 font-medium">$</span>
                       <Input 
                         {...field} 
                         type="number" 
                         placeholder="0" 
-                        className="bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20 pl-8"
+                        className="h-12 bg-white border-slate-300 focus:border-[#0b2147] focus:ring-[#0b2147]/20 pl-8 text-slate-900 font-medium shadow-sm"
                         onChange={(e) => {
                           field.onChange(e);
                           onDataChange(form.getValues());
@@ -195,8 +203,10 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
                       />
                     </div>
                   </FormControl>
-                  <p className="form-help">Amortization of intangible assets</p>
-                  <FormMessage className="form-error" />
+                  <ArgonTypography variant="caption" color="text" className="mt-2">
+                    Amortization of intangible assets
+                  </ArgonTypography>
+                  <FormMessage className="text-red-500 text-sm font-medium" />
                 </FormItem>
               )}
             />
@@ -236,20 +246,25 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-3 sm:justify-between pt-6 mt-8">
-            <Button 
+          <div className="flex flex-col sm:flex-row gap-4 sm:justify-between pt-8 mt-8 border-t border-slate-200">
+            <ArgonButton 
               type="button" 
-              variant="ghost" 
+              variant="outline"
               onClick={onPrev}
-              className="bg-gradient-to-r from-slate-500 to-slate-600 text-white px-6 sm:px-8 py-3 rounded-lg font-medium hover:from-slate-600 hover:to-slate-700 transition-all duration-200 shadow-md hover:shadow-lg order-2 sm:order-1"
+              className="order-2 sm:order-1"
             >
               <ArrowLeft className="mr-2 w-4 h-4" />
               Previous
-            </Button>
-            <Button type="submit" className="bg-gradient-to-r from-slate-500 to-slate-600 text-white px-6 sm:px-8 py-3 rounded-lg font-medium hover:from-slate-600 hover:to-slate-700 transition-all duration-200 shadow-md hover:shadow-lg order-1 sm:order-2">
+            </ArgonButton>
+            <ArgonButton 
+              type="submit" 
+              variant="gradient"
+              color="dark"
+              className="order-1 sm:order-2"
+            >
               Next: Adjustments
               <ArrowRight className="ml-2 w-4 h-4" />
-            </Button>
+            </ArgonButton>
           </div>
         </form>
       </Form>
