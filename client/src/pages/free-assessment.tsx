@@ -136,7 +136,7 @@ export default function FreeAssessment() {
                 <img 
                   src={_3} 
                   alt="Apple Bites Business Assessment" 
-                  className="h-20 w-auto mx-auto mb-4"
+                  className="h-20 w-auto mx-auto ml-[212.667px] mr-[212.667px] mt-[6px] mb-[6px] pl-[-2px] pr-[-2px]"
                 />
                 <Badge className="bg-green-100 text-green-800 px-3 py-1">
                   Free Basic Analysis
