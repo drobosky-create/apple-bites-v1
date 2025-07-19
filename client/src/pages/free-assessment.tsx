@@ -133,11 +133,6 @@ export default function FreeAssessment() {
           {currentStep !== "results" && (
             <ArgonBox p={4} className="border-b border-gray-100">
               <div className="text-center mb-6">
-                <img 
-                  src={_3} 
-                  alt="Apple Bites Business Assessment" 
-                  className="h-[225px] w-auto mx-auto mb-4"
-                />
                 <Badge className="bg-green-100 text-green-800 px-3 py-1">
                   Free Basic Analysis
                 </Badge>
