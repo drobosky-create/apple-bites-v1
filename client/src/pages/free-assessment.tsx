@@ -99,7 +99,7 @@ export default function FreeAssessment() {
                 <img 
                   src={Apple_Bites__1_} 
                   alt="Meritage Partners" 
-                  className="h-12 w-auto"
+                  className="h-[150px] w-auto"
                 />
               </div>
             </div>
