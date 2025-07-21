@@ -163,7 +163,6 @@ export default function InteractiveValuationSlider() {
           </p>
         )}
       </div>
-
       {/* Current vs Potential Value Cards with Glassmorphism */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 mb-8 sm:mb-12">
         {/* Current Value Card */}
@@ -179,7 +178,7 @@ export default function InteractiveValuationSlider() {
             <div className="text-base sm:text-lg font-semibold text-[#475569] mb-4">
               {currentMultiple}x EBITDA Multiple
             </div>
-            <Badge variant="secondary" className={`${currentCategory.bgColor} text-white px-4 py-2 text-sm font-medium`}>
+            <Badge variant="secondary" className="inline-flex items-center rounded-full border transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-secondary/80 bg-slate-500 px-4 py-2 text-sm font-medium text-[#2a2c37]">
               {currentCategory.label}
             </Badge>
           </div>
@@ -225,9 +224,6 @@ export default function InteractiveValuationSlider() {
           </div>
         </div>
       </div>
-
-
-
       {/* Interactive Grade Slider with Argon Styling */}
       <div className="bg-white/70 backdrop-blur-xl rounded-2xl shadow-xl shadow-slate-900/5 border border-white/30 p-8 sm:p-12">
         <div className="text-center mb-8">
@@ -385,7 +381,6 @@ export default function InteractiveValuationSlider() {
           </div>
         </div>
       </div>
-
       {/* Call to Action with Argon Styling */}
       {showBooking && (
         <div className="bg-gradient-to-r from-blue-50 to-indigo-50 backdrop-blur-xl rounded-2xl shadow-xl border border-blue-200/50 p-8 animate-in slide-in-from-bottom duration-300">
@@ -409,7 +404,6 @@ export default function InteractiveValuationSlider() {
           </div>
         </div>
       )}
-
       {/* Educational Content with Argon Styling */}
       <div className="bg-white/70 backdrop-blur-xl rounded-2xl shadow-xl shadow-slate-900/5 border border-white/30 p-8 sm:p-12">
         <div className="text-center mb-8">
