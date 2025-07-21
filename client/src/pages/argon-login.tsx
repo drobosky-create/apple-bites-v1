@@ -130,9 +130,7 @@ export default function ArgonLogin() {
             />
             
             
-            <ArgonTypography variant="h5" className="text-[#0b2147] font-semibold">
-              BUSINESS ASSESSMENT
-            </ArgonTypography>
+            
           </div>
           
           <ArgonTypography variant="body1" className="text-slate-600 mb-6">
