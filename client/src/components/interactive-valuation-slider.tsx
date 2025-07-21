@@ -264,8 +264,8 @@ export default function InteractiveValuationSlider() {
                 </p>
               </div>
 
-              {/* Clean Gradient Bar with Blue Theme */}
-              <div className="w-full h-4 bg-gradient-to-r from-blue-300 via-blue-500 to-blue-900 rounded overflow-hidden shadow-inner mt-4 mb-2"></div>
+              {/* Clean Gradient Bar with Purple-Blue Theme */}
+              <div className="w-full h-4 bg-gradient-to-r from-purple-400 via-blue-500 to-blue-800 rounded overflow-hidden shadow-inner mt-4 mb-2"></div>
               
               {/* Professional Grade Markers with Improved Layout and Graphic Connectors */}
               <div className="grid grid-cols-5 gap-4 mt-6">
@@ -280,13 +280,13 @@ export default function InteractiveValuationSlider() {
                     {/* Connector Line from Gradient Bar */}
                     <div className="w-0.5 h-8 bg-gray-300 mx-auto mb-2"></div>
                     
-                    {/* Grade Circle */}
-                    <div className={`w-16 h-16 rounded-full flex items-center justify-center text-xl font-bold mb-2 transition-all duration-200 shadow-md hover:shadow-lg hover:scale-105 ${
+                    {/* Grade Circle with Purple-Blue Gradient */}
+                    <div className={`w-16 h-16 rounded-full flex items-center justify-center text-xl font-bold mb-2 transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 ${
                       item.grade === baseGrade 
-                        ? 'bg-yellow-400 text-slate-800 ring-4 ring-yellow-200' 
+                        ? 'bg-gradient-to-br from-yellow-400 to-orange-400 text-white ring-4 ring-yellow-300' 
                         : item.grade === sliderGrade 
-                          ? 'bg-blue-600 text-white ring-4 ring-blue-300'
-                          : 'bg-blue-100 text-blue-800 hover:bg-blue-200'
+                          ? 'bg-gradient-to-br from-purple-500 to-blue-600 text-white ring-4 ring-purple-300'
+                          : 'bg-gradient-to-br from-blue-100 to-blue-200 text-blue-800 hover:from-blue-200 hover:to-blue-300'
                     }`}>
                       {item.grade}
                     </div>
