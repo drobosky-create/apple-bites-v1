@@ -248,13 +248,11 @@ export default function InteractiveValuationSlider() {
                 Business Value Distribution by Operational Grade
               </h3>
               
-              {/* Floating Current Grade Badge */}
-              <div className="relative mb-8">
-                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-20">
-                  <span className="bg-blue-600 text-white px-4 py-1 rounded-full shadow-lg text-sm font-medium animate-pulse">
-                    Current Grade: {baseGrade}
-                  </span>
-                </div>
+              {/* Current Grade Badge */}
+              <div className="text-center mb-6">
+                <span className="inline-block bg-blue-600 text-white px-4 py-2 rounded-full shadow-lg text-sm font-medium animate-pulse">
+                  Current Grade: {baseGrade}
+                </span>
               </div>
 
               {/* Instructions */}
