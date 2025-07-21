@@ -9,6 +9,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Footer } from "@/components/Footer";
 import { GHLThemeDemo } from "@/components/ghl-theme-demo";
 import Landing from "@/pages/landing";
+import Home from "@/pages/home";
 import RedirectHome from "@/pages/redirect-home";
 import UserLogin from "@/pages/user-login";
 import ValuationForm from "@/pages/valuation-form";
@@ -34,13 +35,13 @@ function Router() {
         {/* Standalone pages without header/navigation */}
         {isLoading || !isAuthenticated ? (
           <>
-            <Route path="/" component={Landing} />
+            <Route path="/" component={Home} />
             <Route path="/dashboard" component={UserLogin} />
             <Route path="/dashboard/:tier" component={UserLogin} />
           </>
         ) : (
           <>
-            <Route path="/" component={FreeTierDemo} />
+            <Route path="/" component={Home} />
             <Route path="/dashboard/:tier" component={UserDashboardArgon} />
             <Route path="/dashboard" component={FreeTierDemo} />
           </>
