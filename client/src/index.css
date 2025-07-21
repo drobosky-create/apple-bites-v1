@@ -73,8 +73,60 @@
   
   /* Transitions */
   --transition-fast: 150ms ease-in-out;
-  --transition-normal: 300ms ease-in-out;
-  --transition-slow: 500ms ease-in-out;
+}
+
+/* Global font smoothing */
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom utilities for Argon enhancements */
+.value-card-hover {
+  transition: all 0.3s ease;
+}
+
+.value-card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 25px 45px -11px rgba(0, 0, 0, 0.15), 0 15px 35px -5px rgba(0, 0, 0, 0.08);
+}
+
+.grade-tooltip {
+  position: relative;
+}
+
+.grade-tooltip::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.grade-tooltip:hover::after {
+  opacity: 1;
+  visibility: visible;
+}
+
+.bounce-enter {
+  animation: bounceIn 0.6s ease;
+}
+
+@keyframes bounceIn {
+  0% { transform: scale(0.3); opacity: 0; }
+  50% { transform: scale(1.05); }
+  70% { transform: scale(0.9); }
+  100% { transform: scale(1); opacity: 1; }
 }
 
 /* Argon Dashboard Dark Theme */
