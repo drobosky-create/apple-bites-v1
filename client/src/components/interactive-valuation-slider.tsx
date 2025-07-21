@@ -352,7 +352,6 @@ export default function InteractiveValuationSlider() {
                   sliderGrade !== baseGrade ? 'shadow-lg border-blue-200 animate-pulse' : 'border-slate-200'
                 }`}>
                   <div className="flex items-center justify-center gap-4">
-                    <span className="text-4xl">🎯</span>
                     <div className="text-left">
                       <div className="text-2xl font-bold text-slate-800">
                         Grade {sliderGrade}
