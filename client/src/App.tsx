@@ -52,18 +52,27 @@ function Router() {
         <Route path="/free-tier-demo" component={FreeTierDemo} />
         <Route path="/assessment-results" component={AssessmentResults} />
         
-        {/* Assessment pages - standalone with built-in headers */}
+        {/* Assessment pages - cleaned up routing */}
         <Route path="/assessment/free" component={FreeAssessment} />
+        <Route path="/assessment/growth" component={GrowthExitAssessment} />
+        <Route path="/assessment/capital" component={GrowthExitAssessment} />
+        
+        {/* Legacy route redirects - TODO: Remove after client updates */}
         <Route path="/assessment/paid" component={GrowthExitAssessment} />
-        <Route path="/valuation" component={ValuationForm} />
+        <Route path="/assessment/strategic" component={GrowthExitAssessment} />
+        
+        {/* Results and admin - require authentication */}
         <Route path="/results" component={AssessmentResults} />
         <Route path="/results/:id" component={AssessmentResults} />
         <Route path="/report-selection/:id" component={ReportSelectionPage} />
-        <Route path="/value-calculator" component={ValueCalculator} />
         <Route path="/admin" component={TeamDashboard} />
         <Route path="/admin/analytics" component={AnalyticsDashboard} />
         <Route path="/admin/leads" component={LeadsDashboard} />
         <Route path="/team" component={TeamDashboard} />
+        
+        {/* Utility routes */}
+        <Route path="/valuation" component={ValuationForm} />
+        <Route path="/value-calculator" component={ValueCalculator} />
         <Route component={NotFound} />
       </Switch>
     </div>

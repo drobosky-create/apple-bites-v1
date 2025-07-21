@@ -178,8 +178,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Legacy Replit Auth user route (for backward compatibility)
+  // TODO: Remove this legacy route after confirming no client dependencies
+  // Legacy Replit Auth user route (for backward compatibility - deprecated)
   app.get('/api/auth/replit-user', isAuthenticated, async (req: any, res) => {
+    console.warn('DEPRECATED: /api/auth/replit-user route accessed. Use /api/auth/user instead.');
     try {
       const userId = req.user.claims.sub;
       const user = await storage.getUser(userId);
@@ -619,9 +621,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      // Send additional webhook for legacy compatibility (direct webhook call)
+      // Consolidated webhook handling - removed legacy duplication
       try {
-        // Determine which webhook URL to use based on assessment tier
+        // Note: Primary webhook already handled via goHighLevelService.processValuationAssessment above
+        // This backup webhook ensures tier-specific routing as fallback only
         let webhookUrl = process.env.GHL_WEBHOOK_FREE_RESULTS; // Default to free results
         
         if (assessment.tier === 'growth' || assessment.tier === 'paid') {
