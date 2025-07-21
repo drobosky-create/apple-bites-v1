@@ -41,8 +41,11 @@ export default function UserLogin() {
 
   const registerMutation = useMutation({
     mutationFn: async (data: RegisterUser) => {
-      const response = await apiRequest("/api/users/register", {
+      const response = await fetch("/api/users/register", {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify(data),
       });
       
@@ -71,8 +74,11 @@ export default function UserLogin() {
 
   const loginMutation = useMutation({
     mutationFn: async (data: LoginUser) => {
-      const response = await apiRequest("/api/users/login", {
+      const response = await fetch("/api/users/login", {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify(data),
       });
       

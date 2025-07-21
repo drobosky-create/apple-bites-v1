@@ -11,7 +11,7 @@ import { GHLThemeDemo } from "@/components/ghl-theme-demo";
 import Landing from "@/pages/landing";
 import Home from "@/pages/home";
 import RedirectHome from "@/pages/redirect-home";
-import UserLogin from "@/pages/user-login";
+import ArgonLogin from "@/pages/argon-login";
 import ValuationForm from "@/pages/valuation-form";
 import FreeAssessment from "@/pages/free-assessment";
 import GrowthExitAssessment from "@/pages/strategic-assessment";
@@ -35,9 +35,9 @@ function Router() {
         {/* Standalone pages without header/navigation */}
         {isLoading || !isAuthenticated ? (
           <>
-            <Route path="/" component={UserLogin} />
-            <Route path="/dashboard" component={UserLogin} />
-            <Route path="/dashboard/:tier" component={UserLogin} />
+            <Route path="/" component={ArgonLogin} />
+            <Route path="/dashboard" component={ArgonLogin} />
+            <Route path="/dashboard/:tier" component={ArgonLogin} />
           </>
         ) : (
           <>
@@ -46,7 +46,7 @@ function Router() {
             <Route path="/dashboard" component={UserDashboardArgon} />
           </>
         )}
-        <Route path="/login" component={UserLogin} />
+        <Route path="/login" component={ArgonLogin} />
         <Route path="/redirect" component={RedirectHome} />
         <Route path="/ghl-demo" component={GHLThemeDemo} />
         <Route path="/argon-demo" component={ArgonDemo} />
