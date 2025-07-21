@@ -285,32 +285,7 @@ export default function InteractiveValuationSlider() {
                     />
                   ))}
                   
-                  {/* Selected Grade Indicator with Cool Theme */}
-                  <div 
-                    className="absolute top-1/2 transform -translate-y-1/2 transition-all duration-500 z-30 pointer-events-none"
-                    style={{ 
-                      left: `${((gradeToNumber(sliderGrade) / 4) * 100)}%`,
-                      transform: 'translateX(-50%) translateY(-50%)'
-                    }}
-                  >
-                    <div className="w-8 h-8 bg-white border-4 border-blue-600 rounded-full shadow-2xl flex items-center justify-center">
-                      <div className="text-xs font-bold text-blue-600">{sliderGrade}</div>
-                      <div className="absolute inset-0 bg-blue-500 rounded-full opacity-20 animate-ping"></div>
-                    </div>
-                  </div>
-                  
-                  {/* Current Grade Baseline Indicator */}
-                  <div 
-                    className="absolute top-1/2 transform -translate-y-1/2 transition-all duration-300 z-20 pointer-events-none"
-                    style={{ 
-                      left: `${((gradeToNumber(baseGrade) / 4) * 100)}%`,
-                      transform: 'translateX(-50%) translateY(-50%)'
-                    }}
-                  >
-                    <div className="w-6 h-6 bg-slate-100 border-3 border-slate-600 rounded-full shadow-lg flex items-center justify-center">
-                      <div className="text-xs font-bold text-slate-600">{baseGrade}</div>
-                    </div>
-                  </div>
+
                 </div>
               </div>
               
@@ -321,18 +296,39 @@ export default function InteractiveValuationSlider() {
                   { grade: 'D', multiple: '3.0x', label: 'Below Avg', color: 'text-blue-600', bgColor: 'bg-blue-50' },
                   { grade: 'C', multiple: '4.2x', label: 'Average', color: 'text-blue-700', bgColor: 'bg-blue-100' },
                   { grade: 'B', multiple: '5.7x', label: 'Good', color: 'text-blue-800', bgColor: 'bg-blue-200' },
-                  { grade: 'A', multiple: '7.5x', label: 'Excellent', color: 'text-slate-900', bgColor: 'bg-slate-800' }
+                  { grade: 'A', multiple: '7.5x', label: 'Excellent', color: 'text-white', bgColor: 'bg-slate-800' }
                 ].map((item, index) => (
                   <div key={item.grade} className="relative group cursor-pointer flex flex-col items-center" onClick={() => setSliderGrade(item.grade as OperationalGrade)}>
                     {/* Vertical Tick Mark */}
-                    <div className="w-1 h-8 bg-slate-300 mx-auto mb-3 group-hover:bg-blue-500 transition-colors duration-200"></div>
+                    <div className={`w-1 h-8 mx-auto mb-3 transition-colors duration-200 ${
+                      item.grade === baseGrade ? 'bg-yellow-500' : 'bg-slate-300 group-hover:bg-blue-500'
+                    }`}></div>
                     
-                    {/* Centered Grade Letter in Cool Gradient Circle */}
-                    <div className={`w-12 h-12 rounded-full ${item.bgColor} flex items-center justify-center mb-2 group-hover:scale-110 transition-all duration-200 shadow-sm group-hover:shadow-md`}>
-                      <div className={`font-bold text-xl ${item.grade === 'A' ? 'text-white' : item.color}`}>
+                    {/* Centered Grade Letter with Current Grade Highlight */}
+                    <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-2 transition-all duration-200 shadow-sm group-hover:shadow-md ${
+                      item.grade === baseGrade 
+                        ? 'bg-yellow-400 ring-4 ring-yellow-200 shadow-lg' 
+                        : item.bgColor + ' group-hover:scale-110'
+                    } ${
+                      item.grade === sliderGrade && item.grade !== baseGrade 
+                        ? 'ring-4 ring-blue-300 shadow-lg scale-105' 
+                        : ''
+                    }`}>
+                      <div className={`font-bold text-xl ${
+                        item.grade === baseGrade 
+                          ? 'text-slate-800' 
+                          : item.color
+                      }`}>
                         {item.grade}
                       </div>
                     </div>
+                    
+                    {/* Current Grade Label */}
+                    {item.grade === baseGrade && (
+                      <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-bold rounded border border-yellow-300">
+                        Current
+                      </div>
+                    )}
                     
                     {/* Multiple Value */}
                     <div className={`font-bold text-sm ${item.color}`}>{item.multiple}</div>
@@ -349,13 +345,17 @@ export default function InteractiveValuationSlider() {
               </div>
 
               {/* Professional Selected Grade Stats Card */}
-              <div className="text-center">
+              <div className="text-center mt-4">
                 <div className={`inline-block bg-gradient-to-br from-slate-50 to-blue-50 border rounded-xl px-8 py-6 shadow-sm transition-all duration-300 ${
                   sliderGrade !== baseGrade ? 'shadow-xl border-blue-300 ring-2 ring-blue-100' : 'border-slate-200'
                 }`}>
                   <div className="flex items-center justify-center gap-6">
                     {/* Grade Circle Icon */}
-                    <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-slate-700 rounded-full flex items-center justify-center shadow-lg">
+                    <div className={`w-16 h-16 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 ${
+                      sliderGrade === baseGrade 
+                        ? 'bg-gradient-to-br from-yellow-400 to-yellow-600' 
+                        : 'bg-gradient-to-br from-blue-500 to-slate-700'
+                    }`}>
                       <div className="text-2xl font-bold text-white">{sliderGrade}</div>
                     </div>
                     
@@ -363,6 +363,11 @@ export default function InteractiveValuationSlider() {
                     <div className="text-left">
                       <div className="text-2xl font-bold text-slate-800 mb-1">
                         Grade {sliderGrade}
+                        {sliderGrade === baseGrade && (
+                          <span className="ml-2 px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-bold rounded">
+                            CURRENT
+                          </span>
+                        )}
                       </div>
                       <div className="text-sm text-slate-600 font-medium">
                         Multiple: <span className="text-blue-700 font-bold">{sliderMultiple}x</span> • {sliderCategory.label}
