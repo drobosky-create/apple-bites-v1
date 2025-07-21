@@ -129,6 +129,23 @@ body {
   100% { transform: scale(1); opacity: 1; }
 }
 
+/* Shimmer animation for selected cards */
+@keyframes shimmer {
+  0% { background-position: -200px 0; }
+  100% { background-position: calc(200px + 100%) 0; }
+}
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  background-size: 200px 100%;
+  animation: shimmer 2s infinite;
+}
+
 /* Argon Dashboard Dark Theme */
 .dark {
   /* Argon Dark Theme Colors */

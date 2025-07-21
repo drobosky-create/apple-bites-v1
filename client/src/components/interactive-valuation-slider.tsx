@@ -168,7 +168,7 @@ export default function InteractiveValuationSlider() {
         {/* Current Value Card */}
         <div className="bg-gradient-to-br from-white to-slate-50 backdrop-blur-xl rounded-2xl shadow-xl shadow-slate-900/5 border border-white/40 p-6 sm:p-8 value-card-hover relative overflow-hidden">
           {/* Subtle icon watermark */}
-          <div className="absolute top-4 right-4 text-6xl opacity-5">💹</div>
+          <div className="absolute top-4 right-4 text-6xl opacity-10">💹</div>
           <div className="text-center relative z-10">
             <h3 className="text-xl sm:text-2xl font-semibold text-[#0F172A] mb-3 tracking-wide">Current Value</h3>
             <p className="text-base sm:text-lg text-[#475569] mb-6">Based on your Operational Grade of {baseGrade}</p>
@@ -191,7 +191,7 @@ export default function InteractiveValuationSlider() {
             : 'shadow-slate-900/5 border-white/40'
         }`}>
           {/* Subtle icon watermark */}
-          <div className="absolute top-4 right-4 text-6xl opacity-5">📈</div>
+          <div className="absolute top-4 right-4 text-6xl opacity-10">📈</div>
           <div className="text-center relative z-10">
             <h3 className="text-xl sm:text-2xl font-semibold text-[#0F172A] mb-3 tracking-wide">Potential Value</h3>
             <p className="text-base sm:text-lg text-[#475569] mb-6">With an Operational Grade of {sliderGrade}</p>
@@ -244,15 +244,16 @@ export default function InteractiveValuationSlider() {
             
             {/* Grade Selection Section */}
             <div className="bg-gradient-to-br from-slate-50/80 to-blue-50/60 backdrop-blur-sm rounded-xl p-6 sm:p-8 border border-white/50">
-              <h4 className="text-xl sm:text-2xl font-bold text-[#0F172A] mb-6 tracking-wide">
+              <h3 className="text-xl sm:text-2xl font-bold text-slate-800 mb-8 text-left">
                 Business Value Distribution by Operational Grade
-              </h4>
+              </h3>
               
-              {/* Current Grade Badge */}
-              <div className="text-center mb-6">
-                <div className="inline-flex items-center gap-2 bg-[#0b2147] text-white px-6 py-3 rounded-full text-base sm:text-lg font-bold shadow-lg border border-white/20">
-                  <span>Your Current Grade:</span>
-                  <span className="bg-white/20 px-3 py-1 rounded-full">{baseGrade}</span>
+              {/* Floating Current Grade Badge */}
+              <div className="relative mb-8">
+                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-20">
+                  <span className="bg-blue-600 text-white px-4 py-1 rounded-full shadow-lg text-sm font-medium animate-pulse">
+                    Current Grade: {baseGrade}
+                  </span>
                 </div>
               </div>
 
@@ -263,115 +264,112 @@ export default function InteractiveValuationSlider() {
                 </p>
               </div>
 
-              {/* Interactive Gradient Bar with Enhanced Features */}
-              <div 
-                className="relative h-20 sm:h-24 rounded-xl overflow-hidden border-2 border-white/50 mb-6 cursor-pointer shadow-lg hover:shadow-xl transition-all duration-300 grade-tooltip"
-                data-tooltip={`${sliderGrade}: ${sliderMultiple}x - ${sliderCategory.label}`}
-                style={{
-                  background: 'linear-gradient(to right, #DC2626 0%, #F97316 25%, #FACC15 50%, #22C55E 75%, #16A34A 100%)'
-                }}
-                onClick={(e) => {
-                  const rect = e.currentTarget.getBoundingClientRect();
-                  const x = e.clientX - rect.left;
-                  const percentage = x / rect.width;
-                  const gradeIndex = Math.floor(percentage * 5);
-                  const grades: OperationalGrade[] = ['F', 'D', 'C', 'B', 'A'];
-                  if (gradeIndex >= 0 && gradeIndex < 5) {
-                    setSliderGrade(grades[gradeIndex]);
-                  }
-                }}
-              >
-                {/* Selected Grade Indicator Ring */}
-                {sliderGrade !== baseGrade && (
+              {/* Interactive Segmented Slider Bar */}
+              <div className="relative mb-8">
+                <div 
+                  className="relative h-16 sm:h-20 rounded-xl overflow-hidden border-2 border-white/50 shadow-lg hover:shadow-xl transition-all duration-300"
+                  style={{
+                    background: 'linear-gradient(to right, #DC2626 0%, #EAB308 50%, #22C55E 100%)'
+                  }}
+                >
+                  {/* Segmented Click Zones */}
+                  {(['F', 'D', 'C', 'B', 'A'] as OperationalGrade[]).map((grade, index) => (
+                    <div
+                      key={grade}
+                      className="absolute inset-y-0 cursor-pointer hover:bg-white/10 transition-all duration-200"
+                      style={{
+                        left: `${(index / 5) * 100}%`,
+                        width: '20%'
+                      }}
+                      onClick={() => setSliderGrade(grade)}
+                    />
+                  ))}
+                  
+                  {/* Animated Pulse at Selected Grade */}
                   <div 
-                    className="absolute inset-y-2 transition-all duration-300 border-4 border-white rounded-md bg-black/20"
+                    className="absolute top-1/2 transform -translate-y-1/2 transition-all duration-500 z-30 pointer-events-none"
                     style={{ 
-                      left: `${(gradeToNumber(sliderGrade) / 5) * 100}%`,
-                      width: '20%'
-                    }}
-                  />
-                )}
-                
-                {/* Enhanced Active Grade Indicator with Glow */}
-                {sliderGrade !== baseGrade && (
-                  <div 
-                    className="absolute top-1/2 transform -translate-y-1/2 transition-all duration-500 z-30 pointer-events-none bounce-enter"
-                    style={{ 
-                      left: `${(gradeToNumber(sliderGrade) / 4) * 100}%`,
+                      left: `${((gradeToNumber(sliderGrade) / 4) * 100)}%`,
                       transform: 'translateX(-50%) translateY(-50%)'
                     }}
                   >
-                    <div className="w-8 h-8 bg-white border-4 border-blue-500 rounded-full shadow-2xl animate-pulse">
-                      <div className="absolute inset-0 bg-blue-500 rounded-full opacity-20 animate-ping"></div>
+                    <div className="w-6 h-6 bg-white border-3 border-blue-500 rounded-full shadow-2xl">
+                      <div className="absolute inset-0 bg-blue-500 rounded-full opacity-30 animate-ping"></div>
                     </div>
                   </div>
-                )}
-                
-                {/* Current Grade Glow Indicator */}
-                <div 
-                  className="absolute top-1/2 transform -translate-y-1/2 transition-all duration-300 z-20 pointer-events-none"
-                  style={{ 
-                    left: `${(gradeToNumber(baseGrade) / 4) * 100}%`,
-                    transform: 'translateX(-50%) translateY(-50%)'
-                  }}
-                >
-                  <div className="w-6 h-6 bg-yellow-400 rounded-full shadow-lg border-2 border-white opacity-80">
-                    <div className="absolute inset-0 bg-yellow-400 rounded-full animate-pulse opacity-60"></div>
+                  
+                  {/* Current Grade Indicator */}
+                  <div 
+                    className="absolute top-1/2 transform -translate-y-1/2 transition-all duration-300 z-20 pointer-events-none"
+                    style={{ 
+                      left: `${((gradeToNumber(baseGrade) / 4) * 100)}%`,
+                      transform: 'translateX(-50%) translateY(-50%)'
+                    }}
+                  >
+                    <div className="w-4 h-4 bg-yellow-400 rounded-full shadow-lg border-2 border-white opacity-90"></div>
                   </div>
                 </div>
               </div>
               
-              {/* Enhanced Grade Labels with Tooltips */}
-              <div className="flex justify-between text-base sm:text-lg text-[#475569] mb-8">
-                <div className="text-center grade-tooltip" data-tooltip="Grade F: 2.0x - Poor Operations">
-                  <div className="font-bold text-[#0F172A] text-lg">F</div>
-                  <div className="text-red-600 font-bold">2.0x</div>
-                  <div className="text-sm text-[#64748B]">Poor</div>
-                </div>
-                <div className="text-center grade-tooltip" data-tooltip="Grade D: 3.0x - Below Average">
-                  <div className="font-bold text-[#0F172A] text-lg">D</div>
-                  <div className="text-red-500 font-bold">3.0x</div>
-                  <div className="text-sm text-[#64748B]">Below Avg</div>
-                </div>
-                <div className="text-center grade-tooltip" data-tooltip="Grade C: 4.2x - Average Operations">
-                  <div className="font-bold text-[#0F172A] text-lg">C</div>
-                  <div className="text-[#64748B] font-bold">4.2x</div>
-                  <div className="text-sm text-[#64748B]">Average</div>
-                </div>
-                <div className="text-center grade-tooltip" data-tooltip="Grade B: 5.7x - Good Operations">
-                  <div className="font-bold text-[#0F172A] text-lg">B</div>
-                  <div className="text-blue-600 font-bold">5.7x</div>
-                  <div className="text-sm text-[#64748B]">Good</div>
-                </div>
-                <div className="text-center grade-tooltip" data-tooltip="Grade A: 7.5x - Excellent Operations">
-                  <div className="font-bold text-[#0F172A] text-lg">A</div>
-                  <div className="text-green-600 font-bold">7.5x</div>
-                  <div className="text-sm text-[#64748B]">Excellent</div>
-                </div>
+              {/* Vertical Tick Marks with Grade Labels and Emojis */}
+              <div className="flex justify-between text-center mb-8">
+                {[
+                  { grade: 'F', emoji: '🟥', multiple: '2.0x', label: 'Poor', color: 'text-red-600' },
+                  { grade: 'D', emoji: '🟧', multiple: '3.0x', label: 'Below Avg', color: 'text-red-500' },
+                  { grade: 'C', emoji: '🟨', multiple: '4.2x', label: 'Average', color: 'text-yellow-600' },
+                  { grade: 'B', emoji: '🟦', multiple: '5.7x', label: 'Good', color: 'text-blue-600' },
+                  { grade: 'A', emoji: '🟩', multiple: '7.5x', label: 'Excellent', color: 'text-green-600' }
+                ].map((item, index) => (
+                  <div key={item.grade} className="relative group cursor-pointer" onClick={() => setSliderGrade(item.grade as OperationalGrade)}>
+                    {/* Vertical Tick Mark */}
+                    <div className="w-1 h-8 bg-slate-300 mx-auto mb-2 group-hover:bg-slate-500 transition-colors duration-200"></div>
+                    
+                    {/* Emoji Icon */}
+                    <div className="text-2xl mb-1 group-hover:scale-110 transition-transform duration-200">
+                      {item.emoji}
+                    </div>
+                    
+                    {/* Grade Letter */}
+                    <div className="font-bold text-slate-800 text-lg">{item.grade}</div>
+                    
+                    {/* Multiple Value */}
+                    <div className={`font-bold ${item.color}`}>{item.multiple}</div>
+                    
+                    {/* Performance Label */}
+                    <div className="text-sm text-slate-600">{item.label}</div>
+                    
+                    {/* Hover Tooltip */}
+                    <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1 bg-black text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
+                      Grade {item.grade}: {item.multiple} - {item.label} Operations
+                    </div>
+                  </div>
+                ))}
               </div>
 
-              {/* Selected Grade Summary Badge */}
+              {/* Enhanced Selected Grade Stat Card */}
               <div className="text-center">
-                <div className="inline-block bg-slate-100 rounded-2xl p-6 border border-slate-200 shadow-sm">
-                  <div className="flex items-center justify-center gap-3 mb-3">
-                    <span className="text-3xl">🎯</span>
+                <div className={`inline-block bg-white border rounded-xl px-6 py-4 shadow-sm transition-all duration-300 ${
+                  sliderGrade !== baseGrade ? 'shadow-lg border-blue-200 animate-pulse' : 'border-slate-200'
+                }`}>
+                  <div className="flex items-center justify-center gap-4">
+                    <span className="text-4xl">🎯</span>
                     <div className="text-left">
-                      <div className="text-xl font-bold text-[#0F172A]">
-                        Selected: Grade {sliderGrade}
+                      <div className="text-2xl font-bold text-slate-800">
+                        Grade {sliderGrade}
                       </div>
-                      <div className="text-[#475569] font-semibold">
+                      <div className="text-sm text-slate-600 font-medium">
                         Multiple: {sliderMultiple}x • {sliderCategory.label}
                       </div>
                     </div>
                   </div>
                   {sliderGrade !== baseGrade && (
-                    <div className="mt-4">
-                      <span className={`inline-flex items-center gap-2 text-base font-bold px-4 py-2 rounded-full border transition-all duration-300 ${
+                    <div className="mt-3 pt-3 border-t border-slate-100">
+                      <span className={`inline-flex items-center gap-2 text-sm font-bold px-3 py-1 rounded-full transition-all duration-300 ${
                         gradeToNumber(sliderGrade) > gradeToNumber(baseGrade) 
-                          ? 'text-green-700 bg-green-50 border-green-200 shadow-green-100' 
-                          : 'text-red-700 bg-red-50 border-red-200 shadow-red-100'
+                          ? 'text-green-700 bg-green-50 border border-green-200' 
+                          : 'text-red-700 bg-red-50 border border-red-200'
                       }`}>
-                        {gradeToNumber(sliderGrade) > gradeToNumber(baseGrade) ? '📈 Improvement Scenario' : '📉 Decline Scenario'}
+                        {gradeToNumber(sliderGrade) > gradeToNumber(baseGrade) ? '📈 Improvement' : '📉 Decline'}
                       </span>
                     </div>
                   )}
