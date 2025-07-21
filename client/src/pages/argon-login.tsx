@@ -128,9 +128,7 @@ export default function ArgonLogin() {
               alt="Apple Bites Business Assessment" 
               className="h-24 w-auto mx-auto mb-4"
             />
-            <ArgonTypography variant="h4" className="text-[#0b2147] font-bold mb-2">
-              MERITAGE PARTNERS
-            </ArgonTypography>
+            
             <ArgonTypography variant="h3" className="text-[#81e5d8] font-bold mb-1">
               APPLE BITES
             </ArgonTypography>
