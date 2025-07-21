@@ -107,18 +107,7 @@ const HorizontalGradeSelector: React.FC<HorizontalGradeSelectorProps> = ({
         )}
       </div>
 
-      {/* Animated Gradient Progress Bar */}
-      <div className="mb-8">
-        <div className="w-full h-4 bg-gradient-to-r from-[#f5365c] via-[#fb6340] via-[#2dce89] via-[#11cdef] to-[#5e72e4] rounded-lg overflow-hidden shadow-inner relative">
-          {/* Active indicator */}
-          <div 
-            className="absolute top-0 h-full w-4 bg-white/90 rounded-sm shadow-md transition-all duration-500 ease-in-out"
-            style={{
-              left: `${(gradeData.findIndex(g => g.grade === sliderGrade) / (gradeData.length - 1)) * 100 - 2}%`
-            }}
-          />
-        </div>
-      </div>
+      
 
       {/* Grade Cards - Responsive Grid */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4 md:gap-6">
