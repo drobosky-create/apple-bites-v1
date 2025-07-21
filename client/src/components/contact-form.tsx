@@ -3,7 +3,10 @@ import { ContactInfo } from "@shared/schema";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { ArgonBox, ArgonTypography, ArgonButton } from "@/components/ui/argon-authentic";
-import { Shield, ArrowRight, User } from "lucide-react";
+import { Shield, ArrowRight, User, CheckCircle, SkipForward } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
 
 interface ContactFormProps {
   form: UseFormReturn<ContactInfo>;
@@ -12,8 +15,51 @@ interface ContactFormProps {
 }
 
 export default function ContactForm({ form, onNext, onDataChange }: ContactFormProps) {
+  const { user, isAuthenticated } = useAuth();
+  const [showPreFillOption, setShowPreFillOption] = useState(false);
+  const [isPreFilled, setIsPreFilled] = useState(false);
+
+  // Check if user is authenticated and has profile information
+  useEffect(() => {
+    if (isAuthenticated && user && user.firstName && user.lastName && user.email) {
+      setShowPreFillOption(true);
+      
+      // Auto pre-fill form with user data
+      const userData = {
+        firstName: user.firstName || '',
+        lastName: user.lastName || '',
+        email: user.email || '',
+        phone: '', // Phone not stored in user profile
+        company: '', // Company not stored in user profile  
+        jobTitle: ''
+      };
+      
+      // Set form values
+      Object.entries(userData).forEach(([key, value]) => {
+        form.setValue(key as keyof ContactInfo, value);
+      });
+      
+      setIsPreFilled(true);
+    }
+  }, [isAuthenticated, user, form]);
+
   const onSubmit = (data: ContactInfo) => {
     onDataChange(data);
+    onNext();
+  };
+
+  const handleSkipToNext = () => {
+    // Pre-fill with current user data and skip to next step
+    const userData: ContactInfo = {
+      firstName: user?.firstName || '',
+      lastName: user?.lastName || '',
+      email: user?.email || '',
+      phone: form.getValues('phone') || '',
+      company: form.getValues('company') || '',
+      jobTitle: form.getValues('jobTitle') || ''
+    };
+    
+    onDataChange(userData);
     onNext();
   };
 
@@ -33,6 +79,39 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
           </p>
         </div>
       </div>
+
+      {/* Pre-fill Notice for Authenticated Users */}
+      {showPreFillOption && isPreFilled && (
+        <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-6 mb-6">
+          <div className="flex items-start space-x-3">
+            <CheckCircle className="h-6 w-6 text-emerald-600 mt-0.5 flex-shrink-0" />
+            <div className="flex-1">
+              <h4 className="text-lg font-semibold text-emerald-800 mb-2">
+                Welcome back, {user?.firstName}!
+              </h4>
+              <p className="text-emerald-700 mb-4">
+                We've pre-filled your contact information from your profile. You can skip to the next step or update any details below.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <Button
+                  onClick={handleSkipToNext}
+                  className="px-6 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center"
+                >
+                  <SkipForward className="mr-2 h-4 w-4" />
+                  Skip to EBITDA Entry
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => setShowPreFillOption(false)}
+                  className="px-6 py-2 border-emerald-300 text-emerald-700 hover:bg-emerald-100 rounded-lg font-semibold transition-all duration-200"
+                >
+                  Update My Information
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Form Container */}
       <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-8 md:p-12">
