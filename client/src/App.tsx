@@ -8,45 +8,9 @@ import { TeamAuthProvider } from "@/hooks/use-team-auth";
 import { useAuth } from "@/hooks/useAuth";
 import { Footer } from "@/components/Footer";
 
-// Import actual components
-import AdminLogin from "@/components/admin-login";
-import TeamLogin from "@/components/team-login";
-
-// Main login component that provides multiple auth options
-function ArgonLogin() {
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-400 via-blue-500 to-blue-800 flex items-center justify-center p-4">
-      <div className="w-full max-w-md space-y-6">
-        {/* Replit OAuth Login */}
-        <div className="card-primary text-center">
-          <h1 className="text-2xl font-bold text-slate-900 mb-4">Welcome to Apple Bites</h1>
-          <p className="text-slate-600 mb-6">Professional Business Valuation Platform</p>
-          <a
-            href="/api/login"
-            className="btn-gradient w-full inline-block text-center no-underline"
-          >
-            Sign in with Replit
-          </a>
-        </div>
-
-        {/* Team Login Option */}
-        <div className="card-primary">
-          <h2 className="text-lg font-semibold text-slate-900 mb-4">Team Member Login</h2>
-          <TeamLogin />
-        </div>
-
-        {/* Admin Login Option */}
-        <div className="card-primary">
-          <h2 className="text-lg font-semibold text-slate-900 mb-4">Admin Login</h2>
-          <AdminLogin />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// Placeholder components - TODO: Replace with actual implementations
+// Import components from argon directory temporarily
 const RedirectHome = () => <div>Redirect Home</div>;
+const ArgonLogin = () => <div>Argon Login</div>;
 const ValuationForm = () => <div>Valuation Form</div>;
 const FreeAssessment = () => <div>Free Assessment</div>;
 const GrowthExitAssessment = () => <div>Growth Exit Assessment</div>;
