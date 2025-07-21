@@ -149,123 +149,125 @@ export default function InteractiveValuationSlider() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-2 sm:p-6 space-y-4 sm:space-y-6">
-      <div className="text-center mb-6 sm:mb-8">
-        <h2 className="text-xl sm:text-3xl font-bold text-slate-900 mb-2">
+    <div className="max-w-6xl mx-auto space-y-8 sm:space-y-12">
+      <div className="text-center mb-8 sm:mb-12">
+        <h2 className="text-2xl sm:text-4xl font-bold text-[#0F172A] mb-4 tracking-wide">
           Business Value Improvement Calculator
         </h2>
-        <p className="text-sm sm:text-base text-slate-600">
+        <p className="text-lg sm:text-xl text-[#64748B] leading-relaxed font-medium">
           See how improving your business operations translates to increased valuation
         </p>
         {latestAssessment && (
-          <p className="text-xs sm:text-sm text-slate-500 mt-2">
+          <p className="text-base sm:text-lg text-[#64748B]/80 mt-3">
             Based on your recent assessment data
           </p>
         )}
       </div>
 
-      {/* Current vs Potential Value Cards with Animation */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
-        <Card className="border-2 border-slate-200 transition-all duration-300">
-          <CardHeader className="text-center">
-            <CardTitle className="text-lg">Current Value</CardTitle>
-            <CardDescription className="text-sm text-slate-600">Based on your Operational Grade of {baseGrade}</CardDescription>
-          </CardHeader>
-          <CardContent className="text-center">
-            <div className="text-3xl font-bold text-slate-900 mb-2 transition-all duration-300">
-              ${Math.round(currentValuation).toLocaleString()}
+      {/* Current vs Potential Value Cards with Glassmorphism */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 mb-8 sm:mb-12">
+        {/* Current Value Card */}
+        <div className="bg-white/60 backdrop-blur-xl rounded-2xl shadow-xl shadow-slate-900/5 border border-white/40 p-6 sm:p-8 transition-all duration-500 hover:shadow-2xl hover:shadow-slate-900/10">
+          <div className="text-center">
+            <h3 className="text-xl sm:text-2xl font-bold text-[#0F172A] mb-3 tracking-wide">Current Value</h3>
+            <p className="text-base sm:text-lg text-[#64748B] mb-6">Based on your Operational Grade of {baseGrade}</p>
+            <div className="text-4xl sm:text-5xl font-bold text-[#0F172A] mb-4 transition-all duration-300">
+              ${currentValuation.toLocaleString()}
             </div>
-            <div className="text-sm text-slate-600 mb-2">
-              {currentMultiple.toFixed(1)}x EBITDA Multiple
+            <div className="text-base sm:text-lg text-[#64748B] font-medium mb-4">
+              {currentMultiple}x EBITDA Multiple
             </div>
-            <Badge variant="secondary" className={`${currentCategory.bgColor} text-white`}>
+            <Badge variant="secondary" className={`${currentCategory.bgColor} text-white px-4 py-2 text-sm`}>
               {currentCategory.label}
             </Badge>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
-        <Card className="border-2 border-[#415A77] bg-white transition-all duration-300">
-          <CardHeader className="text-center">
-            <CardTitle className="text-lg text-slate-900">Potential Value</CardTitle>
-            <CardDescription className="text-sm text-slate-600">
-              With an Operational Grade of {sliderGrade}
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="text-center">
-            <div className="text-3xl font-bold text-slate-900 mb-2 transition-all duration-300">
-              ${Math.round(sliderValuation).toLocaleString()}
+        {/* Potential Value Card */}
+        <div className={`bg-white/60 backdrop-blur-xl rounded-2xl shadow-xl border transition-all duration-500 p-6 sm:p-8 ${
+          sliderGrade !== baseGrade 
+            ? 'shadow-green-500/20 border-green-200/50 hover:shadow-green-500/30' 
+            : 'shadow-slate-900/5 border-white/40 hover:shadow-slate-900/10'
+        }`}>
+          <div className="text-center">
+            <h3 className="text-xl sm:text-2xl font-bold text-[#0F172A] mb-3 tracking-wide">Potential Value</h3>
+            <p className="text-base sm:text-lg text-[#64748B] mb-6">With an Operational Grade of {sliderGrade}</p>
+            <div className={`text-4xl sm:text-5xl font-bold mb-4 transition-all duration-300 ${
+              sliderGrade !== baseGrade ? 'text-green-600' : 'text-[#0F172A]'
+            }`}>
+              ${sliderValuation.toLocaleString()}
             </div>
-            <div className="text-sm text-blue-700 mb-2">
-              {sliderMultiple.toFixed(1)}x EBITDA Multiple
+            <div className="text-base sm:text-lg text-[#64748B] font-medium mb-4">
+              {sliderMultiple}x EBITDA Multiple
             </div>
-            <Badge variant="secondary" className={`${sliderCategory.bgColor} text-white`}>
+            <Badge variant="secondary" className={`${sliderCategory.bgColor} text-white px-4 py-2 text-sm mb-4`}>
               {sliderCategory.label}
             </Badge>
-            <div className="mt-3 p-3 bg-white rounded-lg border min-h-[80px] flex flex-col justify-center">
-              {potentialIncrease !== 0 ? (
-                <>
-                  <div className="text-sm text-gray-600">
-                    {potentialIncrease > 0 ? 'Potential Increase' : 'Potential Decrease'}
+            {sliderGrade !== baseGrade && (
+              <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200/50 rounded-xl p-4 backdrop-blur-sm">
+                <p className="text-sm text-[#64748B] mb-2 font-medium">Adjust the slider below to explore your potential</p>
+                {potentialIncrease > 0 && (
+                  <div className="text-lg font-bold text-green-600">
+                    +${potentialIncrease.toLocaleString()} ({percentageIncrease.toFixed(1)}% increase)
                   </div>
-                  <div className={`text-xl font-bold ${potentialIncrease > 0 ? 'text-blue-600' : 'text-red-600'}`}>
-                    {potentialIncrease > 0 ? '+' : ''}${Math.round(potentialIncrease).toLocaleString()}
+                )}
+                {potentialIncrease < 0 && (
+                  <div className="text-lg font-bold text-red-600">
+                    ${Math.abs(potentialIncrease).toLocaleString()} ({Math.abs(percentageIncrease).toFixed(1)}% decrease)
                   </div>
-                  <div className={`text-sm ${potentialIncrease > 0 ? 'text-blue-600' : 'text-red-600'}`}>
-                    ({potentialIncrease > 0 ? '+' : ''}{Math.round(percentageIncrease)}% change)
-                  </div>
-                </>
-              ) : (
-                <div className="text-sm text-gray-500 text-center">
-                  Move the slider to see potential value changes
-                </div>
-              )}
-            </div>
-          </CardContent>
-        </Card>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
       </div>
 
 
 
-      {/* Interactive Grade Slider */}
-      <Card className="border-2 border-slate-200">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <TrendingUp className="h-5 w-5" />
+      {/* Interactive Grade Slider with Argon Styling */}
+      <div className="bg-white/70 backdrop-blur-xl rounded-2xl shadow-xl shadow-slate-900/5 border border-white/30 p-8 sm:p-12">
+        <div className="text-center mb-8">
+          <h3 className="text-2xl sm:text-3xl font-bold text-[#0F172A] mb-4 tracking-wide flex items-center justify-center gap-3">
+            <TrendingUp className="h-8 w-8 text-[#3B82F6]" />
             Adjust Your Operational Grade
-          </CardTitle>
-          <CardDescription>
+          </h3>
+          <p className="text-lg sm:text-xl text-[#64748B] leading-relaxed font-medium">
             Select different operational grades to see how business improvements impact your valuation
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <div className="px-2 sm:px-4">
-            <p className="text-center text-slate-600 mb-6 text-sm">
+          </p>
+        </div>
+
+        <div className="space-y-8">
+          <div className="text-center">
+            <p className="text-base sm:text-lg text-[#64748B] mb-8 font-medium">
               Click on any grade below to see how operational improvements impact your valuation
             </p>
             
-            {/* Combined Interactive Grade Distribution */}
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <h4 className="font-semibold mb-4 text-center text-base">Business Value Distribution by Operational Grade</h4>
+            {/* Grade Selection Section */}
+            <div className="bg-gradient-to-br from-slate-50/80 to-blue-50/60 backdrop-blur-sm rounded-xl p-6 sm:p-8 border border-white/50">
+              <h4 className="text-xl sm:text-2xl font-bold text-[#0F172A] mb-6 tracking-wide">
+                Business Value Distribution by Operational Grade
+              </h4>
               
-              {/* Static Current Grade Label */}
-              <div className="text-center mb-4">
-                <div className="inline-block bg-black text-white px-6 py-3 rounded-lg text-base font-bold shadow-lg border-2 border-gray-300">
-                  Your Current Grade: {baseGrade}
+              {/* Current Grade Badge */}
+              <div className="text-center mb-6">
+                <div className="inline-flex items-center gap-2 bg-[#0b2147] text-white px-6 py-3 rounded-full text-base sm:text-lg font-bold shadow-lg border border-white/20">
+                  <span>Your Current Grade:</span>
+                  <span className="bg-white/20 px-3 py-1 rounded-full">{baseGrade}</span>
                 </div>
               </div>
 
               {/* Instructions */}
-              <div className="text-center mb-3">
-                <p className="text-sm text-gray-600 font-medium">
-                  👆 Click anywhere on the gradient scale below to explore different performance grades
+              <div className="text-center mb-6">
+                <p className="text-base sm:text-lg text-[#64748B] font-medium">
+                  Click anywhere on the gradient scale below to explore different performance grades
                 </p>
               </div>
 
-              {/* Interactive Grade Bar with Gradient */}
+              {/* Interactive Gradient Bar */}
               <div 
-                className="relative h-16 rounded-lg overflow-hidden border border-gray-300 mb-4 cursor-pointer"
+                className="relative h-20 sm:h-24 rounded-xl overflow-hidden border-2 border-white/50 mb-6 cursor-pointer shadow-lg hover:shadow-xl transition-all duration-300"
                 style={{
-                  background: 'linear-gradient(to right, #ef4444 0%, #f97316 25%, #eab308 50%, #22c55e 75%, #16a34a 100%)'
+                  background: 'linear-gradient(to right, #DC2626 0%, #F97316 25%, #FACC15 50%, #22C55E 75%, #16A34A 100%)'
                 }}
                 onClick={(e) => {
                   const rect = e.currentTarget.getBoundingClientRect();
@@ -303,46 +305,50 @@ export default function InteractiveValuationSlider() {
                 )}
               </div>
               
-              {/* Grade Labels and Multipliers */}
-              <div className="flex justify-between text-xs text-gray-600 mb-4">
+              {/* Grade Labels and Multipliers - Enhanced Size */}
+              <div className="flex justify-between text-base sm:text-lg text-[#64748B] mb-6">
                 <div className="text-center">
-                  <div className="font-semibold">F</div>
-                  <div className="text-red-600 font-medium">2.0x</div>
-                  <div className="text-xs">Poor</div>
+                  <div className="font-bold text-[#0F172A]">F</div>
+                  <div className="text-red-600 font-bold">2.0x</div>
+                  <div className="text-sm">Poor</div>
                 </div>
                 <div className="text-center">
-                  <div className="font-semibold">D</div>
-                  <div className="text-red-500 font-medium">3.0x</div>
-                  <div className="text-xs">Below Avg</div>
+                  <div className="font-bold text-[#0F172A]">D</div>
+                  <div className="text-red-500 font-bold">3.0x</div>
+                  <div className="text-sm">Below Avg</div>
                 </div>
                 <div className="text-center">
-                  <div className="font-semibold">C</div>
-                  <div className="text-slate-600 font-medium">4.2x</div>
-                  <div className="text-xs">Average</div>
+                  <div className="font-bold text-[#0F172A]">C</div>
+                  <div className="text-[#64748B] font-bold">4.2x</div>
+                  <div className="text-sm">Average</div>
                 </div>
                 <div className="text-center">
-                  <div className="font-semibold">B</div>
-                  <div className="text-blue-600 font-medium">5.7x</div>
-                  <div className="text-xs">Good</div>
+                  <div className="font-bold text-[#0F172A]">B</div>
+                  <div className="text-blue-600 font-bold">5.7x</div>
+                  <div className="text-sm">Good</div>
                 </div>
                 <div className="text-center">
-                  <div className="font-semibold">A</div>
-                  <div className="text-green-600 font-medium">7.5x</div>
-                  <div className="text-xs">Excellent</div>
+                  <div className="font-bold text-[#0F172A]">A</div>
+                  <div className="text-green-600 font-bold">7.5x</div>
+                  <div className="text-sm">Excellent</div>
                 </div>
               </div>
 
-              {/* Selected Grade Info */}
-              <div className="text-center bg-white rounded-lg p-4 shadow-sm border">
-                <div className="text-xl font-bold text-slate-900 transition-all duration-300">
+              {/* Selected Grade Info - Enhanced Card */}
+              <div className="text-center bg-white/90 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-white/50">
+                <div className="text-2xl sm:text-3xl font-bold text-[#0F172A] transition-all duration-300 mb-2">
                   Selected Grade: {sliderGrade}
                 </div>
-                <div className="text-sm text-slate-600 mt-1">
-                  Your Current Grade: {baseGrade}
+                <div className="text-lg text-[#64748B] mb-3">
+                  Operational Grade: {sliderGrade} • Multiple: {sliderMultiple}x
                 </div>
                 {sliderGrade !== baseGrade && (
-                  <div className="mt-2 text-sm font-medium">
-                    <span className={gradeToNumber(sliderGrade) > gradeToNumber(baseGrade) ? 'text-green-600' : 'text-red-600'}>
+                  <div className="mt-3">
+                    <span className={`text-lg font-bold px-4 py-2 rounded-full ${
+                      gradeToNumber(sliderGrade) > gradeToNumber(baseGrade) 
+                        ? 'text-green-600 bg-green-50 border border-green-200' 
+                        : 'text-red-600 bg-red-50 border border-red-200'
+                    }`}>
                       {gradeToNumber(sliderGrade) > gradeToNumber(baseGrade) ? '↑ Improvement Scenario' : '↓ Decline Scenario'}
                     </span>
                   </div>
@@ -350,63 +356,71 @@ export default function InteractiveValuationSlider() {
               </div>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
-      {/* Call to Action */}
+      {/* Call to Action with Argon Styling */}
       {showBooking && (
-        <Card className="border-2 border-blue-200 bg-blue-50 animate-in slide-in-from-bottom duration-300">
-          <CardContent className="text-center p-6">
-            <h3 className="text-xl font-bold text-blue-900 mb-2">
+        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 backdrop-blur-xl rounded-2xl shadow-xl border border-blue-200/50 p-8 animate-in slide-in-from-bottom duration-300">
+          <div className="text-center">
+            <h3 className="text-2xl sm:text-3xl font-bold text-[#0F172A] mb-4 tracking-wide">
               Ready to Unlock Your Business Value?
             </h3>
-            <p className="text-blue-700 mb-4">
+            <p className="text-lg sm:text-xl text-[#64748B] mb-6 font-medium">
               By improving your operational grade from {baseGrade} to {sliderGrade}, 
-              you could add <strong>${Math.round(potentialIncrease).toLocaleString()}</strong> to your business value.
+              you could add <strong className="text-green-600">${Math.round(potentialIncrease).toLocaleString()}</strong> to your business value.
             </p>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
-                className="bg-blue-600 hover:bg-blue-700"
+                className="bg-[#3B82F6] hover:bg-[#2563eb] text-white px-8 py-4 rounded-full font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300"
                 onClick={() => window.open('https://api.leadconnectorhq.com/widget/bookings/applebites', '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes')}
               >
-                <Phone className="h-4 w-4 mr-2" />
-                Schedule Strategy Call
+                <Phone className="h-5 w-5 mr-3" />
+                Get Your Customized Value Roadmap
               </Button>
-              <Button variant="outline">
-                Learn About Value Drivers
-                <ArrowRight className="h-4 w-4 ml-2" />
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Educational Content */}
-      <Card className="border-2 border-slate-200">
-        <CardHeader>
-          <CardTitle>How to Improve Your Operational Grade</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-            <div>
-              <h4 className="font-semibold mb-2">Financial Performance (Grade A: 7.5x+ multiple)</h4>
-              <p className="text-gray-600">Consistent profitability, strong cash flow management, and professional financial reporting</p>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-2">Operational Excellence (Grade B: 5.7x multiple)</h4>
-              <p className="text-gray-600">Streamlined processes, quality management systems, and scalable operations</p>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-2">Market Position (Grade C: 4.2x multiple)</h4>
-              <p className="text-gray-600">Competitive differentiation, customer loyalty, and market share protection</p>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-2">Risk Management (Grades D-F: 2.0-3.0x multiple)</h4>
-              <p className="text-gray-600">Diversified revenue streams, reduced owner dependency, and operational stability</p>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      )}
+
+      {/* Educational Content with Argon Styling */}
+      <div className="bg-white/70 backdrop-blur-xl rounded-2xl shadow-xl shadow-slate-900/5 border border-white/30 p-8 sm:p-12">
+        <div className="text-center mb-8">
+          <h3 className="text-2xl sm:text-3xl font-bold text-[#0F172A] mb-4 tracking-wide">
+            How to Improve Your Operational Grade
+          </h3>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+          <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-6 border border-green-200/50">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-bold">Grade A: 7.5x</div>
+            </div>
+            <h4 className="text-lg font-bold text-[#0F172A] mb-3">💰 Financial Performance</h4>
+            <p className="text-[#64748B] leading-relaxed">Consistent profitability, strong cash flow management, and professional financial reporting</p>
+          </div>
+          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200/50">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-bold">Grade B: 5.7x</div>
+            </div>
+            <h4 className="text-lg font-bold text-[#0F172A] mb-3">⚙️ Operational Excellence</h4>
+            <p className="text-[#64748B] leading-relaxed">Streamlined processes, quality management systems, and scalable operations</p>
+          </div>
+          <div className="bg-gradient-to-br from-yellow-50 to-orange-50 rounded-xl p-6 border border-yellow-200/50">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="bg-yellow-500 text-white px-3 py-1 rounded-full text-sm font-bold">Grade C: 4.2x</div>
+            </div>
+            <h4 className="text-lg font-bold text-[#0F172A] mb-3">🎯 Market Position</h4>
+            <p className="text-[#64748B] leading-relaxed">Competitive differentiation, customer loyalty, and market share protection</p>
+          </div>
+          <div className="bg-gradient-to-br from-red-50 to-pink-50 rounded-xl p-6 border border-red-200/50">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">Grades D-F: 2.0-3.0x</div>
+            </div>
+            <h4 className="text-lg font-bold text-[#0F172A] mb-3">🛡️ Risk Management</h4>
+            <p className="text-[#64748B] leading-relaxed">Diversified revenue streams, reduced owner dependency, and operational stability</p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
