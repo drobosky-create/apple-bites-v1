@@ -56,8 +56,8 @@ function Router() {
         <Route path="/assessment/free" component={FreeAssessment} />
         <Route path="/assessment/paid" component={GrowthExitAssessment} />
         <Route path="/valuation" component={ValuationForm} />
-        <Route path="/results" component={ValuationForm} />
-        <Route path="/results/:id" component={ValuationForm} />
+        <Route path="/results" component={AssessmentResults} />
+        <Route path="/results/:id" component={AssessmentResults} />
         <Route path="/report-selection/:id" component={ReportSelectionPage} />
         <Route path="/value-calculator" component={ValueCalculator} />
         <Route path="/admin" component={TeamDashboard} />
