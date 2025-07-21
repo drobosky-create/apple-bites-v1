@@ -107,8 +107,6 @@ const HorizontalGradeSelector: React.FC<HorizontalGradeSelectorProps> = ({
         )}
       </div>
 
-      
-
       {/* Grade Cards - Responsive Grid */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4 md:gap-6">
         {gradeData.map((item) => {
