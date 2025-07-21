@@ -129,9 +129,7 @@ export default function ArgonLogin() {
               className="h-24 w-auto mx-auto mb-4"
             />
             
-            <ArgonTypography variant="h3" className="text-[#81e5d8] font-bold mb-1">
-              APPLE BITES
-            </ArgonTypography>
+            
             <ArgonTypography variant="h5" className="text-[#0b2147] font-semibold">
               BUSINESS ASSESSMENT
             </ArgonTypography>
