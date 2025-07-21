@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { CheckCircle, Star, TrendingUp, FileText, BarChart3, Users } from 'lucide-react';
+import { CheckCircle, Star, TrendingUp, FileText, BarChart3, Users, Crown } from 'lucide-react';
 import { useLocation } from 'wouter';
 import appleBitesLogo from "@assets/Apple Bites_1752266454888.png";
 
@@ -15,6 +15,11 @@ export default function Home() {
 
   const handlePaidTierStart = () => {
     setLocation('/assessment/paid');
+  };
+
+  const handleCapitalTierStart = () => {
+    // Redirect to Apple Bites Capital tier product page
+    window.open('https://products.applebites.ai/capital-readiness-assessment', '_blank');
   };
 
   return (
@@ -37,8 +42,8 @@ export default function Home() {
         </div>
 
         {/* Tier Selection Cards */}
-        <div className="max-w-5xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-8 mb-12">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-8 mb-12">
             {/* Free Tier */}
             <Card className="border-2 border-slate-200 hover:border-blue-300 transition-all duration-300 hover:shadow-lg">
               <CardHeader className="flex flex-col space-y-1.5 p-6 text-center ml-[0px] mr-[0px] pl-[24px] pr-[24px] pt-[23px] pb-[23px]">
@@ -158,6 +163,71 @@ export default function Home() {
                   className="w-full bg-[#415A77] text-white hover:bg-[#1B263B] h-12 text-lg font-bold"
                 >
                   Get Growth & Exit Assessment - $795
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* Capital Readiness Tier */}
+            <Card className="border-2 border-indigo-200 hover:border-indigo-400 transition-all duration-300 hover:shadow-xl relative">
+              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                <Badge className="bg-indigo-600 text-white hover:bg-indigo-700 px-4 py-1 text-sm font-bold">
+                  <Crown className="w-4 h-4 mr-1" />
+                  PREMIUM
+                </Badge>
+              </div>
+              
+              <CardHeader className="text-center pb-4 pt-8">
+                <Badge variant="outline" className="w-fit mx-auto border-indigo-600 text-indigo-600 text-[18px] mt-[9px] mb-[9px]">
+                  CAPITAL READINESS ASSESSMENT
+                </Badge>
+                <CardTitle className="text-2xl text-[#1a2332]">Executive Analysis</CardTitle>
+                <div className="text-4xl font-bold mt-2 text-indigo-600">$2,500</div>
+                <p className="mt-2 text-gray-600">Comprehensive capital readiness and strategic planning</p>
+              </CardHeader>
+              <CardContent className="p-6 bg-gradient-to-br from-indigo-50 to-purple-50 pt-[14px] pb-[14px] rounded-lg">
+                <div className="space-y-4 mb-8">
+                  <div className="flex items-start">
+                    <CheckCircle className="w-5 h-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <div className="font-medium text-[#1a2332]">Investment Readiness Analysis</div>
+                      <div className="text-sm text-gray-700">Complete assessment of capital readiness</div>
+                    </div>
+                  </div>
+                  <div className="flex items-start">
+                    <CheckCircle className="w-5 h-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <div className="font-medium text-[#1a2332]">Executive Strategic Planning</div>
+                      <div className="text-sm text-gray-700">Custom strategic roadmap for growth</div>
+                    </div>
+                  </div>
+                  <div className="flex items-start">
+                    <CheckCircle className="w-5 h-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <div className="font-medium text-[#1a2332]">Investment Banking Presentation</div>
+                      <div className="text-sm text-gray-700">Professional pitch deck preparation</div>
+                    </div>
+                  </div>
+                  <div className="flex items-start">
+                    <CheckCircle className="w-5 h-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <div className="font-medium text-[#1a2332]">Market Comps & Benchmarking</div>
+                      <div className="text-sm text-gray-700">Detailed competitive analysis</div>
+                    </div>
+                  </div>
+                  <div className="flex items-start">
+                    <CheckCircle className="w-5 h-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <div className="font-medium text-[#1a2332]">1:1 Strategy Consultation</div>
+                      <div className="text-sm text-gray-700">Personal session with valuation expert</div>
+                    </div>
+                  </div>
+                </div>
+                
+                <Button 
+                  onClick={handleCapitalTierStart}
+                  className="w-full bg-indigo-600 text-white hover:bg-indigo-700 h-12 text-lg font-bold"
+                >
+                  Get Capital Assessment - $2,500
                 </Button>
               </CardContent>
             </Card>
