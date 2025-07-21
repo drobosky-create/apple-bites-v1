@@ -272,7 +272,10 @@ export default function FreeTierDemo() {
                     variant="gradient"
                     color="info"
                     size="large"
-                    onClick={() => setLocation('/assessment/free')}
+                    onClick={() => {
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                      setLocation('/assessment/free');
+                    }}
                     className="flex-shrink-0 bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg hover:shadow-xl"
                   >
                     <FileText className="h-4 w-4 mr-2" />

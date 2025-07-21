@@ -459,7 +459,10 @@ export default function InteractiveValuationSlider() {
             Want to See How Much More Your Business Could Be Worth?
           </h3>
           <button 
-            onClick={() => window.location.href = '/assessment/free'}
+            onClick={() => {
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+              window.location.href = '/assessment/free';
+            }}
             className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-[#3B82F6] hover:bg-[#2563eb] text-white font-semibold text-lg shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
           >
             Explore Your Full Valuation Roadmap 
