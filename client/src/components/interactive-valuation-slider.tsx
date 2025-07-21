@@ -5,6 +5,7 @@ import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { TrendingUp, ArrowRight, Phone } from "lucide-react";
+import HorizontalGradeSelector from './horizontal-grade-selector';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { ValuationAssessment } from "@shared/schema";
 
@@ -224,117 +225,14 @@ export default function InteractiveValuationSlider() {
           </div>
         </div>
       </div>
-      {/* Interactive Grade Slider with Argon Styling */}
-      <div className="bg-white/70 backdrop-blur-xl rounded-2xl shadow-xl shadow-slate-900/5 border border-white/30 p-8 sm:p-12">
-        <div className="text-center mb-8">
-          <h3 className="text-2xl sm:text-3xl font-bold text-[#0F172A] mb-4 tracking-wide flex items-center justify-center gap-3">
-            <TrendingUp className="h-8 w-8 text-[#3B82F6]" />
-            Adjust Your Operational Grade
-          </h3>
-          <p className="text-lg sm:text-xl text-[#64748B] leading-relaxed font-medium">
-            Select different operational grades to see how business improvements impact your valuation
-          </p>
-        </div>
-
-        <div className="space-y-8">
-          <div className="text-center">
-            <p className="text-base sm:text-lg text-[#475569] mb-8 font-semibold">
-              Click on any grade below to see how operational improvements impact your valuation
-            </p>
-            
-            {/* Grade Selection Section */}
-            <div className="bg-gradient-to-br from-slate-50/80 to-blue-50/60 backdrop-blur-sm rounded-xl p-6 sm:p-8 border border-white/50">
-              <h3 className="text-xl sm:text-2xl font-bold text-slate-800 mb-8 text-left">
-                Business Value Distribution by Operational Grade
-              </h3>
-              
-              {/* Current Grade Badge */}
-              <div className="text-center mb-6">
-                <span className="inline-block bg-blue-600 text-white px-4 py-2 rounded-full shadow-lg text-sm font-medium animate-pulse">
-                  Current Grade: {baseGrade}
-                </span>
-              </div>
-
-              {/* Instructions */}
-              <div className="text-center mb-6">
-                <p className="text-base sm:text-lg text-[#475569] font-semibold">
-                  Click anywhere on the gradient scale below to explore different performance grades
-                </p>
-              </div>
-
-              {/* Clean Gradient Bar with Purple-Blue Theme */}
-              <div className="w-full h-4 bg-gradient-to-r from-purple-400 via-blue-500 to-blue-800 rounded overflow-hidden shadow-inner mt-4 mb-2"></div>
-              
-              {/* Professional Grade Markers with Improved Layout and Graphic Connectors */}
-              <div className="grid grid-cols-5 gap-4 mt-6">
-                {[
-                  { grade: 'F', multiple: '2.0x', label: 'Poor' },
-                  { grade: 'D', multiple: '3.0x', label: 'Below Avg' },
-                  { grade: 'C', multiple: '4.2x', label: 'Average' },
-                  { grade: 'B', multiple: '5.7x', label: 'Good' },
-                  { grade: 'A', multiple: '7.5x', label: 'Excellent' }
-                ].map((item, index) => (
-                  <div key={item.grade} className="text-center relative group cursor-pointer" onClick={() => setSliderGrade(item.grade as OperationalGrade)}>
-                    {/* Connector Line from Gradient Bar */}
-                    <div className="w-0.5 h-8 bg-gray-300 mx-auto mb-2"></div>
-                    
-                    {/* Grade Circle with Purple-Blue Gradient */}
-                    <div className={`w-16 h-16 rounded-full flex items-center justify-center text-xl font-bold mb-2 transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 ${
-                      item.grade === baseGrade 
-                        ? 'bg-gradient-to-br from-yellow-400 to-orange-400 text-white ring-4 ring-yellow-300' 
-                        : item.grade === sliderGrade 
-                          ? 'bg-gradient-to-br from-purple-500 to-blue-600 text-white ring-4 ring-purple-300'
-                          : 'bg-gradient-to-br from-blue-100 to-blue-200 text-blue-800 hover:from-blue-200 hover:to-blue-300'
-                    }`}>
-                      {item.grade}
-                    </div>
-                    
-                    {/* Multiple and Label */}
-                    <div className="text-xs mt-1 text-gray-600 font-medium">{item.multiple}</div>
-                    <div className="text-xs text-gray-500">{item.label}</div>
-
-                    {/* Professional Tooltip with Auto-Shifting */}
-                    <div className={`absolute bottom-full mb-2 px-3 py-2 bg-white text-sm text-gray-800 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 whitespace-nowrap ${
-                      item.grade === 'A' ? 'right-0' :
-                      item.grade === 'F' ? 'left-0' :
-                      'left-1/2 transform -translate-x-1/2'
-                    }`}>
-                      <div className="font-medium">Grade {item.grade}: {item.multiple}</div>
-                      <div className="text-xs text-gray-600">{item.label} Operations</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Professional Details Card */}
-              <div className="bg-white rounded-lg shadow-md p-4 mt-8 text-center">
-                <div className="text-lg font-bold">Grade {sliderGrade}</div>
-                <div className="text-gray-500 text-sm">
-                  Multiple: <span className="font-medium text-blue-600">{sliderMultiple}x</span> • {sliderCategory.label} Operations
-                </div>
-                {sliderGrade === baseGrade && (
-                  <div className="mt-2">
-                    <span className="inline-block px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-bold rounded">
-                      CURRENT GRADE
-                    </span>
-                  </div>
-                )}
-                {sliderGrade !== baseGrade && (
-                  <div className="mt-2">
-                    <span className={`inline-flex items-center gap-2 text-xs font-medium px-3 py-1 rounded-full ${
-                      gradeToNumber(sliderGrade) > gradeToNumber(baseGrade) 
-                        ? 'text-green-700 bg-green-50 border border-green-200' 
-                        : 'text-red-700 bg-red-50 border border-red-200'
-                    }`}>
-                      {gradeToNumber(sliderGrade) > gradeToNumber(baseGrade) ? 'Improvement Scenario' : 'Decline Scenario'}
-                    </span>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      {/* Horizontal Grade Card Selector */}
+      <HorizontalGradeSelector 
+        baseGrade={baseGrade}
+        sliderGrade={sliderGrade}
+        setSliderGrade={setSliderGrade}
+        baseEstimate={currentValuation}
+        sliderEstimate={sliderValuation}
+      />
       {/* Call to Action with Argon Styling */}
       {showBooking && (
         <div className="bg-gradient-to-r from-blue-50 to-indigo-50 backdrop-blur-xl rounded-2xl shadow-xl border border-blue-200/50 p-8 animate-in slide-in-from-bottom duration-300">
