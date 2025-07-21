@@ -35,15 +35,15 @@ function Router() {
         {/* Standalone pages without header/navigation */}
         {isLoading || !isAuthenticated ? (
           <>
-            <Route path="/" component={Home} />
+            <Route path="/" component={UserLogin} />
             <Route path="/dashboard" component={UserLogin} />
             <Route path="/dashboard/:tier" component={UserLogin} />
           </>
         ) : (
           <>
-            <Route path="/" component={Home} />
+            <Route path="/" component={UserDashboardArgon} />
             <Route path="/dashboard/:tier" component={UserDashboardArgon} />
-            <Route path="/dashboard" component={FreeTierDemo} />
+            <Route path="/dashboard" component={UserDashboardArgon} />
           </>
         )}
         <Route path="/login" component={UserLogin} />
