@@ -25,9 +25,9 @@ export function ProtectedRoute({
   // Loading state
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-400 via-blue-500 to-blue-800">
-        <div className="text-white text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto mb-4"></div>
+      <div className="loading-container">
+        <div className="loading-text">
+          <div className="loading-spinner h-8 w-8 mx-auto mb-4"></div>
           <p>Loading...</p>
         </div>
       </div>
@@ -37,8 +37,8 @@ export function ProtectedRoute({
   // Not authenticated
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-400 via-blue-500 to-blue-800">
-        <div className="text-white text-center">
+      <div className="loading-container">
+        <div className="loading-text">
           <h2 className="text-2xl font-bold mb-2">Authentication Required</h2>
           <p>{fallbackMessage}</p>
           <p className="mt-4 text-sm opacity-75">Redirecting to login...</p>

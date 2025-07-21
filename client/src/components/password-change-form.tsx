@@ -158,7 +158,7 @@ export default function PasswordChangeForm({ userId }: PasswordChangeFormProps) 
           <Button 
             type="submit" 
             disabled={changePasswordMutation.isPending}
-            className="bg-blue-600 hover:bg-blue-700 text-white"
+            className="btn-secondary"
           >
             {changePasswordMutation.isPending ? 'Changing...' : 'Change Password'}
           </Button>
