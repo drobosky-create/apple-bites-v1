@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useLocation } from "wouter";
 import { useToast } from "@/hooks/use-toast";
-import { Eye, EyeOff, LogIn, UserPlus, ArrowLeft } from "lucide-react";
+import { Eye, EyeOff, LogIn, UserPlus, ArrowLeft, ArrowRight } from "lucide-react";
 import { 
   ArgonBox, 
   ArgonButton, 
@@ -144,16 +144,13 @@ export default function ArgonLogin() {
           {/* OAuth Section - Default */}
           {activeTab === 'oauth' && (
             <div className="space-y-4">
-              <ArgonButton
-                fullWidth
-                variant="contained"
-                size="large"
+              <button
                 onClick={() => window.location.href = '/api/login'}
-                className="bg-[#0b2147] hover:bg-[#0b2147] text-white py-3 rounded-lg font-semibold shadow-lg"
+                className="w-full bg-[#1e3a8a] hover:bg-[#1d4ed8] text-white py-4 px-6 rounded-lg font-semibold shadow-lg transition-all duration-200 flex items-center justify-center gap-2"
               >
-                <LogIn className="w-5 h-5 mr-2" />
-                Continue with Replit
-              </ArgonButton>
+                Continue Assessment
+                <ArrowRight className="w-5 h-5" />
+              </button>
               
               <div className="text-center">
                 <ArgonTypography variant="body2" className="text-slate-500 mb-4">
