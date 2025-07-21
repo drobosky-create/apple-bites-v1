@@ -1,55 +1,46 @@
-// Static data for grade values and multipliers
-export interface GradeData {
-  grade: 'A' | 'B' | 'C' | 'D' | 'F';
-  multiple: string;
-  label: string;
-  description: string;
-  multiplier: number;
-}
+// Centralized value multipliers and grade data
+import type { OperationalGrade } from '@/utils/gradeLogic';
 
-export const GRADE_DATA: GradeData[] = [
-  {
-    grade: 'A',
-    multiple: '7.5x',
-    label: 'Excellent',
-    description: 'Industry-leading operations with exceptional systems and processes',
-    multiplier: 7.5
-  },
-  {
-    grade: 'B', 
-    multiple: '5.7x',
-    label: 'Good',
-    description: 'Strong operational foundation with well-developed systems',
-    multiplier: 5.7
-  },
-  {
-    grade: 'C',
-    multiple: '4.2x', 
-    label: 'Average',
-    description: 'Adequate operations meeting basic industry standards',
-    multiplier: 4.2
-  },
-  {
-    grade: 'D',
-    multiple: '3.0x',
-    label: 'Needs Work',
-    description: 'Operations requiring improvement to meet market standards',
-    multiplier: 3.0
-  },
-  {
-    grade: 'F',
-    multiple: '2.0x',
-    label: 'At Risk', 
-    description: 'Critical operational issues requiring immediate attention',
-    multiplier: 2.0
+// Brand colors from Argon Dashboard
+export const ArgonColors = {
+  primary: '#0b2147',    // Navy blue
+  secondary: '#1a365d',  // Lighter navy
+  accent: '#4493de',     // Blue
+  teal: '#81e5d8',       // Teal
+  gradient: {
+    primary: 'from-purple-400 via-blue-500 to-blue-800',
+    secondary: 'from-gray-300 to-gray-500'
   }
-];
-
-// Argon Dashboard color themes for grades
-export const GRADE_COLORS = {
-  A: { primary: '#2dce89', secondary: '#11cdef', accent: '#5e72e4' },
-  B: { primary: '#11cdef', secondary: '#2dce89', accent: '#5e72e4' },
-  C: { primary: '#5e72e4', secondary: '#8392ab', accent: '#344767' },
-  D: { primary: '#fb6340', secondary: '#f5365c', accent: '#8392ab' },
-  F: { primary: '#f5365c', secondary: '#fb6340', accent: '#8392ab' }
 } as const;
+
+// Valuation multipliers by grade
+export const valueMultipliers: Record<OperationalGrade, number> = {
+  'A': 7.5,
+  'B': 5.7,
+  'C': 4.2,
+  'D': 3.0,
+  'F': 2.0
+};
+
+// Grade descriptions for UI
+export const gradeDescriptions: Record<OperationalGrade, string> = {
+  'A': 'Exceptional - Top-tier performance',
+  'B': 'Strong - Above average performance',
+  'C': 'Average - Standard market performance',
+  'D': 'Below Average - Needs improvement',
+  'F': 'Poor - Significant issues present'
+};
+
+// Value driver categories
+export const valueDriverCategories = [
+  'Financial Performance',
+  'Customer Concentration',
+  'Management Team',
+  'Competitive Position',
+  'Growth Prospects',
+  'Systems & Processes',
+  'Asset Quality',
+  'Industry Outlook',
+  'Risk Factors',
+  'Owner Dependency'
+] as const;

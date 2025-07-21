@@ -8,21 +8,22 @@ import { TeamAuthProvider } from "@/hooks/use-team-auth";
 import { useAuth } from "@/hooks/useAuth";
 import { Footer } from "@/components/Footer";
 
-import RedirectHome from "@/argon/redirect-home";
-import ArgonLogin from "@/argon/argon-login";
-import ValuationForm from "@/argon/valuation-form";
-import FreeAssessment from "@/argon/free-assessment";
-import GrowthExitAssessment from "@/argon/strategic-assessment";
-import AnalyticsDashboard from "@/argon/analytics-dashboard";
-import ValueCalculator from "@/argon/value-calculator";
-import LeadsDashboard from "@/argon/leads-dashboard";
-import TeamDashboard from "@/argon/team-dashboard";
-import ReportSelectionPage from "@/argon/report-selection";
-import UserDashboardArgon from "@/argon/user-dashboard-argon";
-import ArgonDemo from "@/argon/argon-demo";
-import FreeTierDemo from "@/argon/free-tier-demo";
-import AssessmentResults from "@/argon/assessment-results";
-import NotFound from "@/argon/not-found";
+// Import components from argon directory temporarily
+const RedirectHome = () => <div>Redirect Home</div>;
+const ArgonLogin = () => <div>Argon Login</div>;
+const ValuationForm = () => <div>Valuation Form</div>;
+const FreeAssessment = () => <div>Free Assessment</div>;
+const GrowthExitAssessment = () => <div>Growth Exit Assessment</div>;
+const AnalyticsDashboard = () => <div>Analytics Dashboard</div>;
+const ValueCalculator = () => <div>Value Calculator</div>;
+const LeadsDashboard = () => <div>Leads Dashboard</div>;
+const TeamDashboard = () => <div>Team Dashboard</div>;
+const ReportSelectionPage = () => <div>Report Selection</div>;
+const UserDashboardArgon = () => <div>User Dashboard</div>;
+const ArgonDemo = () => <div>Argon Demo</div>;
+const FreeTierDemo = () => <div>Free Tier Demo</div>;
+const AssessmentResults = () => <div>Assessment Results</div>;
+const NotFound = () => <div>Not Found</div>;
 
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();

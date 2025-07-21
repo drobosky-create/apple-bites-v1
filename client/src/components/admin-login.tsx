@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useErrorState } from '@/utils/stateCleanupUtils';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -23,7 +23,7 @@ interface AdminLoginProps {
 }
 
 export default function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
-  const [error, setError] = useState('');
+  const { error, setError, clearError } = useErrorState();
 
   const form = useForm<LoginData>({
     resolver: zodResolver(loginSchema),
@@ -51,7 +51,7 @@ export default function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
       return response.json();
     },
     onSuccess: () => {
-      setError('');
+      setError(null);
       onLoginSuccess();
     },
     onError: (error: Error) => {

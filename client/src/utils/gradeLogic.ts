@@ -1,85 +1,49 @@
-import { GRADE_DATA, GRADE_COLORS } from '@/data/valueMultipliers';
-
-export { GRADE_DATA, GRADE_COLORS };
-
+// Centralized grade logic utilities - moved from scattered components
 export type OperationalGrade = 'A' | 'B' | 'C' | 'D' | 'F';
 
-// Grade conversion utilities
-export const gradeToNumber = (grade: OperationalGrade): number => {
-  const mapping = { 'A': 5, 'B': 4, 'C': 3, 'D': 2, 'F': 1 };
-  return mapping[grade];
-};
+// Grade scoring utilities (consolidated from value-drivers-heatmap.tsx)
+export function getGradeScore(grade: string): number {
+  const gradeMap: Record<string, number> = { 'A': 5, 'B': 4, 'C': 3, 'D': 2, 'F': 1 };
+  return gradeMap[grade] || 3;
+}
 
-export const numberToGrade = (num: number): OperationalGrade => {
-  const mapping = [null, 'F', 'D', 'C', 'B', 'A'] as const;
-  return mapping[Math.max(1, Math.min(5, Math.round(num)))] as OperationalGrade;
-};
-
-// Get multiplier for specific grade
-export const getMultipleForGrade = (grade: OperationalGrade): number => {
-  const gradeInfo = GRADE_DATA.find(g => g.grade === grade);
-  return gradeInfo?.multiplier || 4.2;
-};
-
-// Calculate valuation based on EBITDA and grade
-export const calculateValuation = (ebitda: number, grade: OperationalGrade): number => {
-  return ebitda * getMultipleForGrade(grade);
-};
-
-// Get Argon Dashboard styling for grade
-export const getGradientStyle = (
-  grade: OperationalGrade, 
-  isSelected: boolean, 
-  isCurrent: boolean
-): React.CSSProperties => {
-  const colors = GRADE_COLORS[grade];
-  
-  if (isSelected) {
-    return {
-      background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)`,
-      color: 'white',
-      transform: 'scale(1.05)',
-      boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)',
-    };
-  }
-  
-  if (isCurrent) {
-    return {
-      background: `linear-gradient(135deg, ${colors.primary}20 0%, ${colors.secondary}20 100%)`,
-      color: colors.primary,
-      border: `2px solid ${colors.primary}`,
-      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-    };
-  }
-  
-  return {
-    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 249, 250, 0.9) 100%)',
-    color: '#344767',
-    border: '1px solid rgba(0, 0, 0, 0.1)',
-    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.12)',
+// Grade styling utilities (consolidated from multiple components)
+export function getGradeColor(grade: OperationalGrade): string {
+  const colorMap: Record<OperationalGrade, string> = {
+    'A': 'bg-green-500 hover:bg-green-600',
+    'B': 'bg-blue-500 hover:bg-blue-600', 
+    'C': 'bg-slate-500 hover:bg-slate-600',
+    'D': 'bg-orange-500 hover:bg-orange-600',
+    'F': 'bg-red-500 hover:bg-red-600'
   };
-};
+  return colorMap[grade];
+}
 
-// Format currency display
-export const formatCurrency = (value: number): string => {
-  if (value >= 1000000) {
-    return `$${(value / 1000000).toFixed(1)}M`;
-  } else if (value >= 1000) {
-    return `$${(value / 1000).toFixed(0)}K`;
-  } else {
-    return `$${value.toLocaleString()}`;
-  }
-};
-
-// Grade category information
-export const getGradeCategory = (grade: OperationalGrade) => {
-  const gradeInfo = GRADE_DATA.find(g => g.grade === grade);
-  const colors = GRADE_COLORS[grade];
-  
-  return {
-    label: gradeInfo?.label || 'Unknown',
-    description: gradeInfo?.description || '',
-    color: `text-[${colors.primary}]`,
-    bgColor: `bg-[${colors.primary}]`
+export function getGradeBorderColor(grade: OperationalGrade): string {
+  const borderMap: Record<OperationalGrade, string> = {
+    'A': 'border-green-600',
+    'B': 'border-blue-600',
+    'C': 'border-slate-600', 
+    'D': 'border-orange-600',
+    'F': 'border-red-600'
   };
-};
+  return borderMap[grade];
+}
+
+// Gradient styling for interactive elements
+export function getGradientStyle(selectedGrade: OperationalGrade, currentGrade: OperationalGrade): string {
+  if (selectedGrade === currentGrade) {
+    return 'from-purple-400 via-blue-500 to-blue-800';
+  }
+  return 'from-gray-300 to-gray-500';
+}
+
+// Currency formatting utility
+export function formatCurrency(amount: number): string {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(amount);
+}

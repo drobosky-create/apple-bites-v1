@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useErrorState } from '@/utils/stateCleanupUtils';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Card } from '@/components/ui/card';
@@ -17,7 +17,7 @@ interface TeamLoginProps {
 }
 
 export default function TeamLogin({ onLoginSuccess }: TeamLoginProps) {
-  const [error, setError] = useState('');
+  const { error, setError, clearError } = useErrorState();
 
   const form = useForm<LoginCredentials>({
     resolver: zodResolver(loginSchema),
