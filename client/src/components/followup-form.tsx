@@ -2,8 +2,8 @@ import { UseFormReturn } from "react-hook-form";
 import { FollowUpData } from "@shared/schema";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft, ArrowRight, Send, Clock } from "lucide-react";
+import { ArrowLeft, Send, Clock, MessageSquare } from "lucide-react";
+import { ArgonButton } from "@/components/ui/argon-authentic";
 
 interface FollowUpFormProps {
   form: UseFormReturn<FollowUpData>;
@@ -24,144 +24,165 @@ export default function FollowUpForm({ form, onSubmit, onPrev, onDataChange, isS
   };
 
   return (
-    <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-sm border border-slate-200/60">
-      <div className="p-8 border-b border-slate-200/60 bg-gradient-to-r from-slate-50/80 to-blue-50/40 rounded-t-xl">
-        <div className="flex items-center gap-3 mb-3">
-          <div className="p-2 bg-blue-100 rounded-lg">
-            <ArrowRight className="w-5 h-5 text-blue-600" />
-          </div>
-          <h3 className="text-2xl font-bold text-slate-900">Follow-up Preferences</h3>
+    <div className="space-y-8">
+      {/* Executive Header Section */}
+      <div className="text-center space-y-4">
+        <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-[#0b2147] to-[#1a365d] flex items-center justify-center shadow-xl mx-auto">
+          <MessageSquare className="h-8 w-8 text-white" />
         </div>
-        <p className="text-slate-600 leading-relaxed">Let us know how you'd like to proceed after receiving your valuation report.</p>
+        <div>
+          <h1 className="text-3xl font-bold text-[#0b2147] mb-2">Follow-up Preferences</h1>
+          <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
+            Let us know how you'd like to proceed after receiving your valuation report.
+          </p>
+        </div>
       </div>
 
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)} className="p-8 space-y-6">
-          <FormField
-            control={form.control}
-            name="followUpIntent"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-sm font-medium text-slate-700">
-                  Would you like to discuss your valuation results with one of our experts?
-                </FormLabel>
-                <FormControl>
-                  <div className="space-y-3">
-                    <label className="flex items-start space-x-3 p-4 border border-slate-200 rounded-lg cursor-pointer hover:border-primary/30 transition-colors">
-                      <input 
-                        type="radio" 
-                        value="yes" 
-                        checked={field.value === "yes"}
-                        onChange={() => {
-                          field.onChange("yes");
-                          onDataChange(form.getValues());
-                        }}
-                        className="mt-1" 
-                      />
-                      <div className="flex-1">
-                        <div className="font-medium text-slate-900">Yes, schedule a consultation</div>
-                        <div className="text-sm text-slate-600 mt-1">I'd like to discuss the results and explore options for improving my business value or preparing for a potential sale.</div>
+      {/* Form Container */}
+      <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-8 md:p-12">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
+            {/* Follow-up Options Section */}
+            <div className="space-y-6">
+              <h3 className="text-xl font-semibold text-[#0b2147] mb-6 pb-3 border-b border-slate-200">Consultation Preferences</h3>
+              
+              <FormField
+                control={form.control}
+                name="followUpIntent"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-base font-semibold text-[#0b2147] mb-4 block">
+                      Would you like to discuss your valuation results with one of our experts?
+                    </FormLabel>
+                    <FormControl>
+                      <div className="space-y-4">
+                        <label className="flex items-start space-x-4 p-6 border-2 border-slate-200 rounded-xl cursor-pointer hover:border-[#0b2147]/30 transition-all">
+                          <input 
+                            type="radio" 
+                            value="yes" 
+                            checked={field.value === "yes"}
+                            onChange={() => {
+                              field.onChange("yes");
+                              onDataChange(form.getValues());
+                            }}
+                            className="mt-1 w-5 h-5 text-[#0b2147]" 
+                          />
+                          <div className="flex-1">
+                            <div className="font-semibold text-[#0b2147] text-lg">Yes, schedule a consultation</div>
+                            <div className="text-slate-600 mt-2">I'd like to discuss the results and explore options for improving my business value or preparing for a potential sale.</div>
+                          </div>
+                        </label>
+                        
+                        <label className="flex items-start space-x-4 p-6 border-2 border-slate-200 rounded-xl cursor-pointer hover:border-[#0b2147]/30 transition-all">
+                          <input 
+                            type="radio" 
+                            value="maybe" 
+                            checked={field.value === "maybe"}
+                            onChange={() => {
+                              field.onChange("maybe");
+                              onDataChange(form.getValues());
+                            }}
+                            className="mt-1 w-5 h-5 text-[#0b2147]" 
+                          />
+                          <div className="flex-1">
+                            <div className="font-semibold text-[#0b2147] text-lg">Maybe later</div>
+                            <div className="text-slate-600 mt-2">I'd like to receive the report first and may reach out for a consultation afterward.</div>
+                          </div>
+                        </label>
+                        
+                        <label className="flex items-start space-x-4 p-6 border-2 border-slate-200 rounded-xl cursor-pointer hover:border-[#0b2147]/30 transition-all">
+                          <input 
+                            type="radio" 
+                            value="no" 
+                            checked={field.value === "no"}
+                            onChange={() => {
+                              field.onChange("no");
+                              onDataChange(form.getValues());
+                            }}
+                            className="mt-1 w-5 h-5 text-[#0b2147]" 
+                          />
+                          <div className="flex-1">
+                            <div className="font-semibold text-[#0b2147] text-lg">Just the report, please</div>
+                            <div className="text-slate-600 mt-2">I only need the valuation report and don't require a consultation at this time.</div>
+                          </div>
+                        </label>
                       </div>
-                    </label>
-                    
-                    <label className="flex items-start space-x-3 p-4 border border-slate-200 rounded-lg cursor-pointer hover:border-primary/30 transition-colors">
-                      <input 
-                        type="radio" 
-                        value="maybe" 
-                        checked={field.value === "maybe"}
-                        onChange={() => {
-                          field.onChange("maybe");
-                          onDataChange(form.getValues());
-                        }}
-                        className="mt-1" 
-                      />
-                      <div className="flex-1">
-                        <div className="font-medium text-slate-900">Maybe later</div>
-                        <div className="text-sm text-slate-600 mt-1">I'd like to review the report first and may reach out for a consultation in the future.</div>
-                      </div>
-                    </label>
-                    
-                    <label className="flex items-start space-x-3 p-4 border border-slate-200 rounded-lg cursor-pointer hover:border-primary/30 transition-colors">
-                      <input 
-                        type="radio" 
-                        value="no" 
-                        checked={field.value === "no"}
-                        onChange={() => {
-                          field.onChange("no");
-                          onDataChange(form.getValues());
-                        }}
-                        className="mt-1" 
-                      />
-                      <div className="flex-1">
-                        <div className="font-medium text-slate-900">No thank you</div>
-                        <div className="text-sm text-slate-600 mt-1">I just need the valuation report for my own reference.</div>
-                      </div>
-                    </label>
-                  </div>
-                </FormControl>
-                <FormMessage className="form-error" />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="additionalComments"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Additional Comments (Optional)</FormLabel>
-                <FormControl>
-                  <Textarea 
-                    {...field} 
-                    rows={4}
-                    className="bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20"
-                    placeholder="Any specific areas of interest or questions about your business..."
-                    onChange={(e) => {
-                      field.onChange(e);
-                      onDataChange(form.getValues());
-                    }}
-                  />
-                </FormControl>
-                <p className="form-help">Share any specific goals or questions about your business valuation</p>
-                <FormMessage className="form-error" />
-              </FormItem>
-            )}
-          />
-
-          <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
-            <div className="flex items-start space-x-3">
-              <div className="flex-shrink-0">
-                <Clock className="w-5 h-5 text-blue-600 mt-0.5" />
-              </div>
-              <div className="text-sm text-blue-800">
-                <p className="font-medium mb-1">Processing Time</p>
-                <p>Your valuation report will be generated and emailed to you within 5-10 minutes. Please check your email and spam folder.</p>
-              </div>
+                    </FormControl>
+                    <FormMessage className="text-red-500 text-sm mt-2" />
+                  </FormItem>
+                )}
+              />
             </div>
-          </div>
 
-          <div className="flex flex-col sm:flex-row gap-3 sm:justify-between pt-6 mt-8">
-            <Button 
-              type="button" 
-              variant="ghost" 
-              onClick={onPrev}
-              className="bg-gradient-to-r from-slate-500 to-slate-600 text-white px-6 sm:px-8 py-3 rounded-lg font-medium hover:from-slate-600 hover:to-slate-700 transition-all duration-200 shadow-md hover:shadow-lg order-2 sm:order-1"
-              disabled={isSubmitting}
-            >
-              <ArrowLeft className="mr-2 w-4 h-4" />
-              Previous
-            </Button>
-            <Button 
-              type="submit" 
-              className="bg-green-600 text-white px-6 sm:px-8 py-3 rounded-lg font-medium hover:bg-green-700 transition-colors focus:ring-2 focus:ring-green-500 focus:ring-offset-2 order-1 sm:order-2"
-              disabled={isSubmitting}
-            >
-              <Send className="mr-2 w-4 h-4" />
-              {isSubmitting ? "Generating Report..." : "Generate Valuation Report"}
-            </Button>
-          </div>
-        </form>
-      </Form>
+            {/* Additional Comments Section */}
+            <div className="space-y-6">
+              <h3 className="text-xl font-semibold text-[#0b2147] mb-6 pb-3 border-b border-slate-200">Additional Information</h3>
+              
+              <FormField
+                control={form.control}
+                name="additionalComments"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-base font-semibold text-[#0b2147] mb-3 block">
+                      Additional Comments or Questions (Optional)
+                    </FormLabel>
+                    <FormControl>
+                      <Textarea 
+                        {...field} 
+                        rows={5}
+                        className="border-slate-300 rounded-xl focus:border-[#0b2147] focus:ring-[#0b2147]/20 resize-none text-base p-4"
+                        placeholder="Share any specific questions about your business valuation or areas you'd like to focus on..."
+                        onChange={(e) => {
+                          field.onChange(e);
+                          onDataChange(form.getValues());
+                        }}
+                      />
+                    </FormControl>
+                    <p className="text-sm text-slate-500 mt-2">
+                      Help us provide the most relevant insights for your business situation.
+                    </p>
+                    <FormMessage className="text-red-500 text-sm" />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            {/* Navigation Buttons */}
+            <div className="flex flex-col sm:flex-row gap-6 sm:justify-between pt-8 mt-8 border-t border-slate-200">
+              <ArgonButton 
+                type="button" 
+                variant="outlined"
+                color="primary"
+                onClick={onPrev}
+                disabled={isSubmitting}
+                className="order-2 sm:order-1 px-8 py-3 text-base font-medium"
+              >
+                <ArrowLeft className="mr-2 w-5 h-5" />
+                Previous
+              </ArgonButton>
+              <ArgonButton 
+                type="submit" 
+                variant="gradient"
+                color="primary"
+                disabled={isSubmitting}
+                className="order-1 sm:order-2 px-12 py-4 text-lg font-semibold"
+              >
+                {isSubmitting ? (
+                  <>
+                    <Clock className="mr-3 w-5 h-5 animate-spin" />
+                    Generating Report...
+                  </>
+                ) : (
+                  <>
+                    <Send className="mr-3 w-5 h-5" />
+                    Generate Valuation Report
+                  </>
+                )}
+              </ArgonButton>
+            </div>
+          </form>
+        </Form>
+      </div>
     </div>
   );
 }

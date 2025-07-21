@@ -93,17 +93,17 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
               name="interest"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-slate-900 font-semibold text-sm">
+                  <FormLabel className="text-sm font-semibold text-[#0b2147] mb-3 block">
                     Interest Expense <span className="text-red-500">*</span>
                   </FormLabel>
                   <FormControl>
                     <div className="relative">
-                      <span className="absolute left-3 top-3 text-slate-500 font-medium">$</span>
+                      <span className="absolute left-4 top-4 text-slate-500 font-medium text-lg">$</span>
                       <Input 
                         {...field} 
                         type="number" 
                         placeholder="0" 
-                        className="h-12 bg-white border-slate-300 focus:border-[#0b2147] focus:ring-[#0b2147]/20 pl-8 text-slate-900 font-medium shadow-sm"
+                        className="h-14 bg-white border-slate-300 focus:border-[#0b2147] focus:ring-[#0b2147]/20 pl-10 text-slate-900 font-medium shadow-sm rounded-xl"
                         onChange={(e) => {
                           field.onChange(e);
                           onDataChange(form.getValues());
@@ -126,17 +126,17 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
               name="taxes"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-slate-900 font-semibold text-sm">
+                  <FormLabel className="text-sm font-semibold text-[#0b2147] mb-3 block">
                     Tax Expense <span className="text-red-500">*</span>
                   </FormLabel>
                   <FormControl>
                     <div className="relative">
-                      <span className="absolute left-3 top-3 text-slate-500 font-medium">$</span>
+                      <span className="absolute left-4 top-4 text-slate-500 font-medium text-lg">$</span>
                       <Input 
                         {...field} 
                         type="number" 
                         placeholder="0" 
-                        className="h-12 bg-white border-slate-300 focus:border-[#0b2147] focus:ring-[#0b2147]/20 pl-8 text-slate-900 font-medium shadow-sm"
+                        className="h-14 bg-white border-slate-300 focus:border-[#0b2147] focus:ring-[#0b2147]/20 pl-10 text-slate-900 font-medium shadow-sm rounded-xl"
                         onChange={(e) => {
                           field.onChange(e);
                           onDataChange(form.getValues());

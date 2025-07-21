@@ -3,7 +3,6 @@ import { ValueDriversData } from "@shared/schema";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight, Info } from "lucide-react";
-import { ArgonButton } from "@/components/ui/argon-authentic";
 
 interface ValueDriversFormProps {
   form: UseFormReturn<ValueDriversData>;
@@ -77,10 +76,10 @@ interface GradeRadioGroupProps {
 }
 
 function GradeRadioGroup({ name, value, onChange, size = "large" }: GradeRadioGroupProps) {
-  const sizeClasses = size === "small" ? "w-8 h-8 text-sm" : "w-12 h-12 text-base";
+  const sizeClasses = size === "small" ? "w-8 h-8 text-sm" : "w-10 h-10";
   
   return (
-    <div className="flex space-x-3">
+    <div className="flex space-x-2">
       {grades.map((grade) => (
         <label key={grade} className="flex items-center cursor-pointer">
           <input
@@ -92,10 +91,10 @@ function GradeRadioGroup({ name, value, onChange, size = "large" }: GradeRadioGr
             className="sr-only"
           />
           <div
-            className={`${sizeClasses} rounded-xl border-2 flex items-center justify-center font-bold transition-all ${
+            className={`${sizeClasses} rounded-full border-2 flex items-center justify-center font-semibold transition-colors ${
               value === grade
-                ? "border-[#0b2147] bg-[#0b2147] text-white shadow-lg scale-110"
-                : "border-slate-300 text-slate-700 hover:border-[#0b2147] hover:scale-105"
+                ? "border-primary bg-primary text-primary-foreground"
+                : "border-slate-300 text-slate-700 hover:border-primary"
             }`}
           >
             {grade}
@@ -150,65 +149,53 @@ export default function ValueDriversForm({ form, onNext, onPrev, onDataChange }:
             <div className="space-y-6">
               <h3 className="text-xl font-semibold text-[#0b2147] mb-6 pb-3 border-b border-slate-200">Business Value Drivers</h3>
 
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {valueDrivers.map((driver) => (
-                  <FormField
-                    key={driver.name}
-                    control={form.control}
-                    name={driver.name as keyof ValueDriversData}
-                    render={({ field }) => (
-                      <FormItem className="space-y-4">
-                        <div>
-                          <FormLabel className="text-base font-semibold text-[#0b2147] mb-2 block">
-                            {driver.title}
-                          </FormLabel>
-                          <p className="text-sm text-slate-600 mb-4">
-                            {driver.description}
-                          </p>
-                        </div>
-                        <FormControl>
-                          <GradeRadioGroup
-                            name={driver.name}
-                            value={field.value as Grade}
-                            onChange={(value) => {
-                              field.onChange(value);
-                              onDataChange(form.getValues());
-                            }}
-                          />
-                        </FormControl>
-                        <FormMessage className="text-red-500 text-sm" />
-                      </FormItem>
-                    )}
-                  />
-                ))}
-              </div>
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {valueDrivers.map((driver) => (
+              <FormField
+                key={driver.name}
+                control={form.control}
+                name={driver.name as keyof ValueDriversData}
+                render={({ field }) => (
+                  <FormItem>
+                    <div className="border border-slate-200 rounded-lg p-4">
+                      <FormLabel className="font-semibold text-slate-900 mb-2 block">{driver.title}</FormLabel>
+                      <p className="text-sm text-slate-600 mb-3">{driver.description}</p>
+                      <FormControl>
+                        <GradeRadioGroup
+                          name={driver.name}
+                          value={field.value as Grade}
+                          onChange={(value) => {
+                            field.onChange(value);
+                            onDataChange(form.getValues());
+                          }}
+                          size="small"
+                        />
+                      </FormControl>
+                    </div>
+                    <FormMessage className="form-error" />
+                  </FormItem>
+                )}
+              />
+            ))}
+          </div>
 
-            {/* Navigation Buttons */}
-            <div className="flex flex-col sm:flex-row gap-6 sm:justify-between pt-8 mt-8 border-t border-slate-200">
-              <ArgonButton 
-                type="button" 
-                variant="outlined"
-                color="primary"
-                onClick={onPrev}
-                className="order-2 sm:order-1 px-8 py-3 text-base font-medium"
-              >
-                <ArrowLeft className="mr-2 w-5 h-5" />
-                Previous
-              </ArgonButton>
-              <ArgonButton 
-                type="submit" 
-                variant="gradient"
-                color="primary"
-                className="order-1 sm:order-2 px-8 py-3 text-base font-medium"
-              >
-                Next: Follow-up
-                <ArrowRight className="ml-2 w-5 h-5" />
-              </ArgonButton>
-            </div>
-          </form>
-        </Form>
-      </div>
+          <div className="flex flex-col sm:flex-row gap-3 sm:justify-between pt-6 mt-8">
+            <Button 
+              type="button" 
+              variant="ghost" 
+              onClick={onPrev}
+              className="bg-gradient-to-r from-slate-500 to-slate-600 text-white px-6 sm:px-8 py-3 rounded-lg font-medium hover:from-slate-600 hover:to-slate-700 transition-all duration-200 shadow-md hover:shadow-lg order-2 sm:order-1"
+            >
+              <ArrowLeft className="mr-2 w-4 h-4" />
+              Previous
+            </Button>
+            <Button type="submit" className="heritage-gradient px-6 sm:px-8 py-3 rounded-lg font-medium shadow-sm hover:shadow-md transition-all duration-200 order-1 sm:order-2 text-[#ffffff]">
+              Next: Follow-up Preferences
+              <ArrowRight className="ml-2 w-4 h-4" />
+            </Button>
+          </div>
+        </form>
+      </Form>
     </div>
   );
 }

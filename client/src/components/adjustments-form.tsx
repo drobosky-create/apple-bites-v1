@@ -48,23 +48,27 @@ export default function AdjustmentsForm({
   };
 
   return (
-    <ArgonBox shadow="xl" borderRadius="xl" bgColor="white" p={8} className="border border-gray-100">
-      {/* Header Section */}
-      <div className="flex items-start gap-4 mb-8 pb-6 border-b border-gray-100">
-        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#0b2147] to-[#1a365d] flex items-center justify-center shadow-lg">
-          <Settings className="h-6 w-6 text-white" />
+    <div className="space-y-8">
+      {/* Executive Header Section */}
+      <div className="text-center space-y-4">
+        <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-[#0b2147] to-[#1a365d] flex items-center justify-center shadow-xl mx-auto">
+          <Settings className="h-8 w-8 text-white" />
         </div>
-        <div className="flex-1">
-          <ArgonTypography variant="h4" fontWeight="bold" color="dark" className="mb-2">
-            EBITDA Adjustments
-          </ArgonTypography>
-          <ArgonTypography variant="body2" color="text" className="text-gray-600">
+        <div>
+          <h1 className="text-3xl font-bold text-[#0b2147] mb-2">EBITDA Adjustments</h1>
+          <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
             Add back expenses that don't represent the true earning potential of your business.
-          </ArgonTypography>
+          </p>
         </div>
       </div>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="p-8 space-y-6">
+
+      {/* Form Container */}
+      <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-8 md:p-12">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            {/* Adjustments Section */}
+            <div className="space-y-6">
+              <h3 className="text-xl font-semibold text-[#0b2147] mb-6 pb-3 border-b border-slate-200">Adjustment Categories</h3>
           <div className="space-y-4">
             <FormField
               control={form.control}
@@ -218,23 +222,31 @@ export default function AdjustmentsForm({
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-3 sm:justify-between pt-6 mt-8">
-            <Button 
-              type="button" 
-              variant="ghost" 
-              onClick={onPrev}
-              className="bg-gradient-to-r from-slate-500 to-slate-600 text-white px-6 sm:px-8 py-3 rounded-lg font-medium hover:from-slate-600 hover:to-slate-700 transition-all duration-200 shadow-md hover:shadow-lg order-2 sm:order-1"
-            >
-              <ArrowLeft className="mr-2 w-4 h-4" />
-              Previous
-            </Button>
-            <Button type="submit" className="heritage-gradient text-white px-6 sm:px-8 py-3 rounded-lg font-medium shadow-sm hover:shadow-md transition-all duration-200 order-1 sm:order-2">
-              Next: Value Drivers
-              <ArrowRight className="ml-2 w-4 h-4" />
-            </Button>
-          </div>
-        </form>
-      </Form>
-    </ArgonBox>
+            <div className="flex flex-col sm:flex-row gap-6 sm:justify-between pt-8 mt-8 border-t border-slate-200">
+              <ArgonButton 
+                type="button" 
+                variant="outlined"
+                color="primary"
+                onClick={onPrev}
+                className="order-2 sm:order-1 px-8 py-3 text-base font-medium"
+              >
+                <ArrowLeft className="mr-2 w-5 h-5" />
+                Previous
+              </ArgonButton>
+              <ArgonButton 
+                type="submit" 
+                variant="gradient"
+                color="primary"
+                className="order-1 sm:order-2 px-8 py-3 text-base font-medium"
+              >
+                Next: Value Drivers
+                <ArrowRight className="ml-2 w-5 h-5" />
+              </ArgonButton>
+            </div>
+            </div>
+          </form>
+        </Form>
+      </div>
+    </div>
   );
 }
