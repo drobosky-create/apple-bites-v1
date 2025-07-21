@@ -15,6 +15,8 @@ import { Label } from "@/components/ui/label";
 import { registerUserSchema, loginUserSchema, type RegisterUser, type LoginUser } from "@shared/schema";
 import appleBitesLogo from "@assets/Apple Bites_1752266454888.png";
 
+import _3 from "@assets/3.png";
+
 export default function ArgonLogin() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
@@ -122,7 +124,7 @@ export default function ArgonLogin() {
         <div className="px-8 pt-8 pb-6 text-center bg-gradient-to-b from-white to-slate-50">
           <div className="mb-6">
             <img 
-              src={appleBitesLogo} 
+              src={_3} 
               alt="Apple Bites Business Assessment" 
               className="h-24 w-auto mx-auto mb-4"
             />
