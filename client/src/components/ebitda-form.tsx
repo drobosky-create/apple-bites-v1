@@ -252,25 +252,21 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
           </div>
 
             <div className="flex flex-col sm:flex-row gap-6 sm:justify-between pt-8 mt-8 border-t border-slate-200">
-              <ArgonButton 
+              <button 
                 type="button" 
-                variant="outlined"
-                color="primary"
                 onClick={onPrev}
-                className="order-2 sm:order-1 px-8 py-3 text-base font-medium"
+                className="order-2 sm:order-1 px-8 py-3 text-base font-medium rounded-xl border-2 border-[#0b2147] text-[#0b2147] bg-white hover:bg-[#0b2147] hover:text-white transition-all duration-200 flex items-center justify-center shadow-sm hover:shadow-md"
               >
                 <ArrowLeft className="mr-2 w-5 h-5" />
                 Previous
-              </ArgonButton>
-              <ArgonButton 
+              </button>
+              <button 
                 type="submit" 
-                variant="gradient"
-                color="primary"
-                className="order-1 sm:order-2 px-8 py-3 text-base font-medium"
+                className="order-1 sm:order-2 px-8 py-3 text-base font-medium rounded-xl bg-gradient-to-r from-[#0b2147] to-[#1a365d] text-white hover:from-[#1a365d] hover:to-[#0b2147] transition-all duration-200 flex items-center justify-center shadow-md hover:shadow-lg"
               >
                 Next: Adjustments
                 <ArrowRight className="ml-2 w-5 h-5" />
-              </ArgonButton>
+              </button>
             </div>
             </div>
           </form>

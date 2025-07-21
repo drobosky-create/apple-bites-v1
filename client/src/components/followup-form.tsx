@@ -149,23 +149,19 @@ export default function FollowUpForm({ form, onSubmit, onPrev, onDataChange, isS
 
             {/* Navigation Buttons */}
             <div className="flex flex-col sm:flex-row gap-6 sm:justify-between pt-8 mt-8 border-t border-slate-200">
-              <ArgonButton 
+              <button 
                 type="button" 
-                variant="outlined"
-                color="primary"
                 onClick={onPrev}
                 disabled={isSubmitting}
-                className="order-2 sm:order-1 px-8 py-3 text-base font-medium"
+                className="order-2 sm:order-1 px-8 py-3 text-base font-medium rounded-xl border-2 border-[#0b2147] text-[#0b2147] bg-white hover:bg-[#0b2147] hover:text-white transition-all duration-200 flex items-center justify-center shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <ArrowLeft className="mr-2 w-5 h-5" />
                 Previous
-              </ArgonButton>
-              <ArgonButton 
+              </button>
+              <button 
                 type="submit" 
-                variant="gradient"
-                color="primary"
                 disabled={isSubmitting}
-                className="order-1 sm:order-2 px-12 py-4 text-lg font-semibold"
+                className="order-1 sm:order-2 px-12 py-4 text-lg font-semibold rounded-xl bg-gradient-to-r from-[#0b2147] to-[#1a365d] text-white hover:from-[#1a365d] hover:to-[#0b2147] transition-all duration-200 flex items-center justify-center shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? (
                   <>
@@ -178,7 +174,7 @@ export default function FollowUpForm({ form, onSubmit, onPrev, onDataChange, isS
                     Generate Valuation Report
                   </>
                 )}
-              </ArgonButton>
+              </button>
             </div>
           </form>
         </Form>
