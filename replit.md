@@ -107,6 +107,8 @@ This is a business valuation calculator application built as a full-stack web pl
 
 Preferred communication style: Simple, everyday language.
 
+**Development Priority**: Always check Argon Dashboard folder first for any files, templates, or assets. Use Argon components, styles, and logic as the primary source. Only look elsewhere if Argon folder doesn't contain a relevant match.
+
 ## Recent Changes
 
 - **July 21, 2025 - Homepage Routing Simplified for GHL Store Integration**: Removed three-tier pricing homepage as users come directly from GoHighLevel store with purchases already made. Homepage now redirects unauthenticated users to login page and authenticated users to their dashboard. Streamlined user flow: GHL Store → Login → User Dashboard → Assessment based on purchased tier. Maintains hybrid authentication system with Replit OAuth, custom registration, and custom login options.
