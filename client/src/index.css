@@ -171,6 +171,29 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Remove purple focus outline from all buttons and ArgonButton components */
+button:focus,
+button:focus-visible,
+.MuiButton-root:focus,
+.MuiButton-root:focus-visible,
+.MuiButtonBase-root:focus,
+.MuiButtonBase-root:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Remove default browser button focus styles */
+button {
+  outline: none;
+  border: none;
+  background: none;
+}
+
+button:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
 /* Argon Component Base Classes */
 .argon-card {
   background: var(--argon-white);

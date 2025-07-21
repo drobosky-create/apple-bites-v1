@@ -126,7 +126,7 @@ export default function ArgonLogin() {
             <img 
               src={_3} 
               alt="Apple Bites Business Assessment" 
-              className="h-24 w-auto mx-auto mb-4"
+              className="h-[375px] w-auto mx-auto mb-4"
             />
             
             
@@ -149,7 +149,7 @@ export default function ArgonLogin() {
                 variant="contained"
                 size="large"
                 onClick={() => window.location.href = '/api/login'}
-                className="bg-[#0b2147] hover:bg-[#1a365d] text-white py-3 rounded-lg font-semibold shadow-lg"
+                className="bg-[#0b2147] hover:bg-[#0b2147] text-white py-3 rounded-lg font-semibold shadow-lg"
               >
                 <LogIn className="w-5 h-5 mr-2" />
                 Continue with Replit
