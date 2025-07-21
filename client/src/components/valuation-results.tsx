@@ -161,29 +161,29 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
         </div>
 
         {/* Key Metrics */}
-        <div className="grid grid-cols-2 gap-4">
-          <div className="bg-slate-50 rounded-lg p-4">
-            <h5 className="font-semibold text-slate-900 mb-3 text-xl">Financial Summary</h5>
-            <div className="space-y-2">
-              <div className="flex justify-between text-sm">
+        <div className="grid grid-cols-2 gap-6">
+          <div className="bg-slate-50 rounded-lg p-6">
+            <h5 className="font-semibold text-slate-900 mb-4 text-3xl">Financial Summary</h5>
+            <div className="space-y-4">
+              <div className="flex justify-between text-xl">
                 <span className="text-slate-600">Adjusted EBITDA</span>
                 <span className="font-medium">{formatCurrency(results.adjustedEbitda)}</span>
               </div>
-              <div className="flex justify-between text-sm">
+              <div className="flex justify-between text-xl">
                 <span className="text-slate-600">Multiple</span>
                 <span className="font-medium">{results.valuationMultiple}x</span>
               </div>
             </div>
           </div>
 
-          <div className="bg-slate-50 rounded-lg p-4">
-            <h5 className="font-semibold text-slate-900 mb-3 text-xl">Top Drivers</h5>
-            <div className="space-y-2">
-              <div className="flex justify-between text-sm">
+          <div className="bg-slate-50 rounded-lg p-6">
+            <h5 className="font-semibold text-slate-900 mb-4 text-3xl">Top Drivers</h5>
+            <div className="space-y-4">
+              <div className="flex justify-between text-xl">
                 <span className="text-slate-600">Growth</span>
                 <span className="text-green-600 font-medium">{results.growthProspects}</span>
               </div>
-              <div className="flex justify-between text-sm">
+              <div className="flex justify-between text-xl">
                 <span className="text-slate-600">Financial</span>
                 <span className="text-primary font-medium">{results.financialPerformance}</span>
               </div>
