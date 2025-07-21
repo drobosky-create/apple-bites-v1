@@ -209,33 +209,7 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
             </p>
           </div>
 
-          <div className="pt-3 border-t border-slate-200">
-            <div className="bg-slate-50 rounded-lg p-3">
-              <h6 className="font-semibold text-slate-900 mb-2 text-sm">Dear {results.firstName},</h6>
-              <div className="text-xs text-slate-600 leading-relaxed">
-                <p className="mb-2">
-                  Thank you for completing our comprehensive business valuation assessment 
-                  for <strong>{results.company}</strong>. We've analyzed your business across multiple value 
-                  drivers and prepared this detailed report with our findings.
-                </p>
-              </div>
-            </div>
-            
-            <div className="mt-3 text-center">
-              <p className="text-slate-800 font-medium mb-1 text-xs">Best regards,</p>
-              <p className="text-blue-600 font-bold text-sm">The Meritage Partners Team</p>
-              <p className="text-slate-600 text-xs">M&A Advisory & Business Valuation Experts</p>
-              <div className="flex items-center justify-center mt-2 space-x-4 text-xs">
-                <a href="mailto:info@meritage-partners.com" className="text-blue-600 hover:text-blue-700">
-                  info@meritage-partners.com
-                </a>
-                <span className="text-slate-400">|</span>
-                <a href="tel:+19495229121" className="text-blue-600 hover:text-blue-700">
-                  (949) 522-9121
-                </a>
-              </div>
-            </div>
-          </div>
+
         </div>
 
 
