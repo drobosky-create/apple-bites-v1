@@ -8,22 +8,21 @@ import { TeamAuthProvider } from "@/hooks/use-team-auth";
 import { useAuth } from "@/hooks/useAuth";
 import { Footer } from "@/components/Footer";
 
-
-import RedirectHome from "@/pages/redirect-home";
-import ArgonLogin from "@/pages/argon-login";
-import ValuationForm from "@/pages/valuation-form";
-import FreeAssessment from "@/pages/free-assessment";
-import GrowthExitAssessment from "@/pages/strategic-assessment";
-import AnalyticsDashboard from "@/pages/analytics-dashboard";
-import ValueCalculator from "@/pages/value-calculator";
-import LeadsDashboard from "@/pages/leads-dashboard";
-import TeamDashboard from "@/pages/team-dashboard";
-import ReportSelectionPage from "@/pages/report-selection";
-import UserDashboardArgon from "@/pages/user-dashboard-argon";
-import ArgonDemo from "@/pages/argon-demo";
-import FreeTierDemo from "@/pages/free-tier-demo";
-import AssessmentResults from "@/pages/assessment-results";
-import NotFound from "@/pages/not-found";
+import RedirectHome from "@/argon/redirect-home";
+import ArgonLogin from "@/argon/argon-login";
+import ValuationForm from "@/argon/valuation-form";
+import FreeAssessment from "@/argon/free-assessment";
+import GrowthExitAssessment from "@/argon/strategic-assessment";
+import AnalyticsDashboard from "@/argon/analytics-dashboard";
+import ValueCalculator from "@/argon/value-calculator";
+import LeadsDashboard from "@/argon/leads-dashboard";
+import TeamDashboard from "@/argon/team-dashboard";
+import ReportSelectionPage from "@/argon/report-selection";
+import UserDashboardArgon from "@/argon/user-dashboard-argon";
+import ArgonDemo from "@/argon/argon-demo";
+import FreeTierDemo from "@/argon/free-tier-demo";
+import AssessmentResults from "@/argon/assessment-results";
+import NotFound from "@/argon/not-found";
 
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();
