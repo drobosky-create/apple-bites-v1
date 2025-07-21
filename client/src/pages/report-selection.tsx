@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useRoute } from 'wouter';
-import TierSelection from '@/components/tier-selection';
+import PricingPanel from '@/components/PricingPanel';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Loader2 } from 'lucide-react';
@@ -114,7 +114,7 @@ export default function ReportSelectionPage() {
             </div>
           </div>
         ) : (
-          <TierSelection 
+          <PricingPanel 
             assessment={assessment} 
             onTierSelect={handleTierSelect}
           />

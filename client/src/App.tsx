@@ -7,9 +7,8 @@ import { AdminAuthProvider } from "@/hooks/use-admin-auth";
 import { TeamAuthProvider } from "@/hooks/use-team-auth";
 import { useAuth } from "@/hooks/useAuth";
 import { Footer } from "@/components/Footer";
-import { GHLThemeDemo } from "@/components/ghl-theme-demo";
-import Landing from "@/pages/landing";
-import Home from "@/pages/home";
+
+
 import RedirectHome from "@/pages/redirect-home";
 import ArgonLogin from "@/pages/argon-login";
 import ValuationForm from "@/pages/valuation-form";
@@ -48,7 +47,7 @@ function Router() {
         )}
         <Route path="/login" component={ArgonLogin} />
         <Route path="/redirect" component={RedirectHome} />
-        <Route path="/ghl-demo" component={GHLThemeDemo} />
+
         <Route path="/argon-demo" component={ArgonDemo} />
         <Route path="/free-tier-demo" component={FreeTierDemo} />
         <Route path="/assessment-results" component={AssessmentResults} />

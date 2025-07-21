@@ -1,4 +1,4 @@
-import InteractiveValuationSlider from "@/components/interactive-valuation-slider";
+import ValuationSummary from "@/components/ValuationSummary";
 import { useQuery } from "@tanstack/react-query";
 import { useLocation } from "wouter";
 import { useEffect } from "react";
@@ -87,7 +87,7 @@ export default function ValueCalculator() {
           <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 via-transparent to-indigo-50/30 pointer-events-none" />
           
           <div className="relative z-10">
-            <InteractiveValuationSlider />
+            <ValuationSummary />
           </div>
         </div>
       </div>

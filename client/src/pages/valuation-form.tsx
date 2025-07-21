@@ -6,7 +6,7 @@ import AdjustmentsForm from "@/components/adjustments-form";
 import ValueDriversForm from "@/components/value-drivers-form";
 import FollowUpForm from "@/components/followup-form";
 import TierSelectionForm from "@/components/tier-selection-form";
-import ValuationResults from "@/components/valuation-results";
+import ValuationResults from "@/components/ValuationResults";
 import LoadingModal from "@/components/loading-modal";
 import { Shield, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";

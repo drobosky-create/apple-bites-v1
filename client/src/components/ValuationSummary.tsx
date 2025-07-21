@@ -5,7 +5,7 @@ import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { TrendingUp, ArrowRight, Phone } from "lucide-react";
-import HorizontalGradeSelector from './horizontal-grade-selector';
+import GradeCard from './GradeCard';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { ValuationAssessment } from "@shared/schema";
 
@@ -225,8 +225,8 @@ export default function InteractiveValuationSlider() {
           </div>
         </div>
       </div>
-      {/* Horizontal Grade Card Selector */}
-      <HorizontalGradeSelector 
+      {/* Grade Card Selector */}
+      <GradeCard 
         baseGrade={baseGrade}
         sliderGrade={sliderGrade}
         setSliderGrade={setSliderGrade}

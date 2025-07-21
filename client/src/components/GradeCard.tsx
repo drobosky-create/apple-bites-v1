@@ -49,7 +49,7 @@ const getGradientStyle = (grade: string, isSelected: boolean, isCurrent: boolean
   };
 };
 
-const HorizontalGradeSelector: React.FC<HorizontalGradeSelectorProps> = ({
+const GradeCard: React.FC<HorizontalGradeSelectorProps> = ({
   baseGrade,
   sliderGrade,
   setSliderGrade,
@@ -172,4 +172,4 @@ const HorizontalGradeSelector: React.FC<HorizontalGradeSelectorProps> = ({
   );
 };
 
-export default HorizontalGradeSelector;
+export default GradeCard;
