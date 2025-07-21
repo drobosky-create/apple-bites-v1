@@ -264,10 +264,10 @@ export default function InteractiveValuationSlider() {
                 </p>
               </div>
 
-              {/* Clean Gradient Bar */}
-              <div className="w-full h-4 bg-gradient-to-r from-red-300 via-yellow-300 via-blue-300 to-green-300 rounded overflow-hidden shadow-inner mt-4 mb-6"></div>
+              {/* Clean Gradient Bar with Blue Theme */}
+              <div className="w-full h-4 bg-gradient-to-r from-blue-300 via-blue-500 to-blue-900 rounded overflow-hidden shadow-inner mt-4 mb-2"></div>
               
-              {/* Professional Grade Markers with Improved Layout */}
+              {/* Professional Grade Markers with Improved Layout and Graphic Connectors */}
               <div className="grid grid-cols-5 gap-4 mt-6">
                 {[
                   { grade: 'F', multiple: '2.0x', label: 'Poor' },
@@ -277,6 +277,9 @@ export default function InteractiveValuationSlider() {
                   { grade: 'A', multiple: '7.5x', label: 'Excellent' }
                 ].map((item, index) => (
                   <div key={item.grade} className="text-center relative group cursor-pointer" onClick={() => setSliderGrade(item.grade as OperationalGrade)}>
+                    {/* Connector Line from Gradient Bar */}
+                    <div className="w-0.5 h-8 bg-gray-300 mx-auto mb-2"></div>
+                    
                     {/* Grade Circle */}
                     <div className={`w-16 h-16 rounded-full flex items-center justify-center text-xl font-bold mb-2 transition-all duration-200 shadow-md hover:shadow-lg hover:scale-105 ${
                       item.grade === baseGrade 
