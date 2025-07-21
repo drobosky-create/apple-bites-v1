@@ -269,7 +269,7 @@ export default function InteractiveValuationSlider() {
                 <div 
                   className="relative h-16 sm:h-20 rounded-xl overflow-hidden border-2 border-white/50 shadow-lg hover:shadow-xl transition-all duration-300"
                   style={{
-                    background: 'linear-gradient(to right, #DC2626 0%, #EAB308 50%, #22C55E 100%)'
+                    background: 'linear-gradient(to right, #E0F2FE 0%, #3B82F6 25%, #1D4ED8 75%, #0F172A 100%)'
                   }}
                 >
                   {/* Segmented Click Zones */}
@@ -285,7 +285,7 @@ export default function InteractiveValuationSlider() {
                     />
                   ))}
                   
-                  {/* Animated Pulse at Selected Grade */}
+                  {/* Selected Grade Indicator with Cool Theme */}
                   <div 
                     className="absolute top-1/2 transform -translate-y-1/2 transition-all duration-500 z-30 pointer-events-none"
                     style={{ 
@@ -293,12 +293,13 @@ export default function InteractiveValuationSlider() {
                       transform: 'translateX(-50%) translateY(-50%)'
                     }}
                   >
-                    <div className="w-6 h-6 bg-white border-3 border-blue-500 rounded-full shadow-2xl">
-                      <div className="absolute inset-0 bg-blue-500 rounded-full opacity-30 animate-ping"></div>
+                    <div className="w-8 h-8 bg-white border-4 border-blue-600 rounded-full shadow-2xl flex items-center justify-center">
+                      <div className="text-xs font-bold text-blue-600">{sliderGrade}</div>
+                      <div className="absolute inset-0 bg-blue-500 rounded-full opacity-20 animate-ping"></div>
                     </div>
                   </div>
                   
-                  {/* Current Grade Indicator */}
+                  {/* Current Grade Baseline Indicator */}
                   <div 
                     className="absolute top-1/2 transform -translate-y-1/2 transition-all duration-300 z-20 pointer-events-none"
                     style={{ 
@@ -306,69 +307,77 @@ export default function InteractiveValuationSlider() {
                       transform: 'translateX(-50%) translateY(-50%)'
                     }}
                   >
-                    <div className="w-4 h-4 bg-yellow-400 rounded-full shadow-lg border-2 border-white opacity-90"></div>
+                    <div className="w-6 h-6 bg-slate-100 border-3 border-slate-600 rounded-full shadow-lg flex items-center justify-center">
+                      <div className="text-xs font-bold text-slate-600">{baseGrade}</div>
+                    </div>
                   </div>
                 </div>
               </div>
               
-              {/* Vertical Tick Marks with Grade Labels and Emojis */}
+              {/* Professional Grade Markers with Cool Gradient Theme */}
               <div className="flex justify-between text-center mb-8">
                 {[
-                  { grade: 'F', emoji: '🟥', multiple: '2.0x', label: 'Poor', color: 'text-red-600' },
-                  { grade: 'D', emoji: '🟧', multiple: '3.0x', label: 'Below Avg', color: 'text-red-500' },
-                  { grade: 'C', emoji: '🟨', multiple: '4.2x', label: 'Average', color: 'text-yellow-600' },
-                  { grade: 'B', emoji: '🟦', multiple: '5.7x', label: 'Good', color: 'text-blue-600' },
-                  { grade: 'A', emoji: '🟩', multiple: '7.5x', label: 'Excellent', color: 'text-green-600' }
+                  { grade: 'F', multiple: '2.0x', label: 'Poor', color: 'text-slate-600', bgColor: 'bg-slate-100' },
+                  { grade: 'D', multiple: '3.0x', label: 'Below Avg', color: 'text-blue-600', bgColor: 'bg-blue-50' },
+                  { grade: 'C', multiple: '4.2x', label: 'Average', color: 'text-blue-700', bgColor: 'bg-blue-100' },
+                  { grade: 'B', multiple: '5.7x', label: 'Good', color: 'text-blue-800', bgColor: 'bg-blue-200' },
+                  { grade: 'A', multiple: '7.5x', label: 'Excellent', color: 'text-slate-900', bgColor: 'bg-slate-800' }
                 ].map((item, index) => (
-                  <div key={item.grade} className="relative group cursor-pointer" onClick={() => setSliderGrade(item.grade as OperationalGrade)}>
+                  <div key={item.grade} className="relative group cursor-pointer flex flex-col items-center" onClick={() => setSliderGrade(item.grade as OperationalGrade)}>
                     {/* Vertical Tick Mark */}
-                    <div className="w-1 h-8 bg-slate-300 mx-auto mb-2 group-hover:bg-slate-500 transition-colors duration-200"></div>
+                    <div className="w-1 h-8 bg-slate-300 mx-auto mb-3 group-hover:bg-blue-500 transition-colors duration-200"></div>
                     
-                    {/* Emoji Icon */}
-                    <div className="text-2xl mb-1 group-hover:scale-110 transition-transform duration-200">
-                      {item.emoji}
+                    {/* Centered Grade Letter in Cool Gradient Circle */}
+                    <div className={`w-12 h-12 rounded-full ${item.bgColor} flex items-center justify-center mb-2 group-hover:scale-110 transition-all duration-200 shadow-sm group-hover:shadow-md`}>
+                      <div className={`font-bold text-xl ${item.grade === 'A' ? 'text-white' : item.color}`}>
+                        {item.grade}
+                      </div>
                     </div>
                     
-                    {/* Grade Letter */}
-                    <div className="font-bold text-slate-800 text-lg">{item.grade}</div>
-                    
                     {/* Multiple Value */}
-                    <div className={`font-bold ${item.color}`}>{item.multiple}</div>
+                    <div className={`font-bold text-sm ${item.color}`}>{item.multiple}</div>
                     
                     {/* Performance Label */}
-                    <div className="text-sm text-slate-600">{item.label}</div>
+                    <div className="text-xs text-slate-500 mt-1">{item.label}</div>
                     
                     {/* Hover Tooltip */}
-                    <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1 bg-black text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
+                    <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1 bg-slate-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-10">
                       Grade {item.grade}: {item.multiple} - {item.label} Operations
                     </div>
                   </div>
                 ))}
               </div>
 
-              {/* Enhanced Selected Grade Stat Card */}
+              {/* Professional Selected Grade Stats Card */}
               <div className="text-center">
-                <div className={`inline-block bg-white border rounded-xl px-6 py-4 shadow-sm transition-all duration-300 ${
-                  sliderGrade !== baseGrade ? 'shadow-lg border-blue-200 animate-pulse' : 'border-slate-200'
+                <div className={`inline-block bg-gradient-to-br from-slate-50 to-blue-50 border rounded-xl px-8 py-6 shadow-sm transition-all duration-300 ${
+                  sliderGrade !== baseGrade ? 'shadow-xl border-blue-300 ring-2 ring-blue-100' : 'border-slate-200'
                 }`}>
-                  <div className="flex items-center justify-center gap-4">
+                  <div className="flex items-center justify-center gap-6">
+                    {/* Grade Circle Icon */}
+                    <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-slate-700 rounded-full flex items-center justify-center shadow-lg">
+                      <div className="text-2xl font-bold text-white">{sliderGrade}</div>
+                    </div>
+                    
+                    {/* Grade Stats */}
                     <div className="text-left">
-                      <div className="text-2xl font-bold text-slate-800">
+                      <div className="text-2xl font-bold text-slate-800 mb-1">
                         Grade {sliderGrade}
                       </div>
                       <div className="text-sm text-slate-600 font-medium">
-                        Multiple: {sliderMultiple}x • {sliderCategory.label}
+                        Multiple: <span className="text-blue-700 font-bold">{sliderMultiple}x</span> • {sliderCategory.label}
                       </div>
                     </div>
                   </div>
+                  
                   {sliderGrade !== baseGrade && (
-                    <div className="mt-3 pt-3 border-t border-slate-100">
-                      <span className={`inline-flex items-center gap-2 text-sm font-bold px-3 py-1 rounded-full transition-all duration-300 ${
+                    <div className="mt-4 pt-4 border-t border-slate-200">
+                      <span className={`inline-flex items-center gap-2 text-sm font-bold px-4 py-2 rounded-full transition-all duration-300 ${
                         gradeToNumber(sliderGrade) > gradeToNumber(baseGrade) 
-                          ? 'text-green-700 bg-green-50 border border-green-200' 
-                          : 'text-red-700 bg-red-50 border border-red-200'
+                          ? 'text-blue-800 bg-blue-100 border border-blue-200 shadow-sm' 
+                          : 'text-slate-700 bg-slate-100 border border-slate-200 shadow-sm'
                       }`}>
-                        {gradeToNumber(sliderGrade) > gradeToNumber(baseGrade) ? '📈 Improvement' : '📉 Decline'}
+                        {gradeToNumber(sliderGrade) > gradeToNumber(baseGrade) ? '📈 Improvement Scenario' : '📉 Decline Scenario'}
                       </span>
                     </div>
                   )}
