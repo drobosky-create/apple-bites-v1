@@ -21,14 +21,14 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
 
   // Check if user is authenticated and has profile information
   useEffect(() => {
-    if (isAuthenticated && user && user.firstName && user.lastName && user.email) {
+    if (isAuthenticated && user && (user as any).firstName && (user as any).lastName && (user as any).email) {
       setShowPreFillOption(true);
       
       // Auto pre-fill form with user data
       const userData = {
-        firstName: user.firstName || '',
-        lastName: user.lastName || '',
-        email: user.email || '',
+        firstName: (user as any).firstName || '',
+        lastName: (user as any).lastName || '',
+        email: (user as any).email || '',
         phone: '', // Phone not stored in user profile
         company: '', // Company not stored in user profile  
         jobTitle: ''
@@ -51,9 +51,9 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
   const handleSkipToNext = () => {
     // Pre-fill with current user data and skip to next step
     const userData: ContactInfo = {
-      firstName: user?.firstName || '',
-      lastName: user?.lastName || '',
-      email: user?.email || '',
+      firstName: (user as any)?.firstName || '',
+      lastName: (user as any)?.lastName || '',
+      email: (user as any)?.email || '',
       phone: form.getValues('phone') || '',
       company: form.getValues('company') || '',
       jobTitle: form.getValues('jobTitle') || ''
@@ -87,7 +87,7 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
             <CheckCircle className="h-6 w-6 text-emerald-600 mt-0.5 flex-shrink-0" />
             <div className="flex-1">
               <h4 className="text-lg font-semibold text-emerald-800 mb-2">
-                Welcome back, {user?.firstName}!
+                Welcome back, {(user as any)?.firstName}!
               </h4>
               <p className="text-emerald-700 mb-4">
                 We've pre-filled your contact information from your profile. You can skip to the next step or update any details below.

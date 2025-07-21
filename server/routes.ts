@@ -457,7 +457,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const aiNarrative = await Promise.race([
           generateValuationNarrative(analysisInput),
           new Promise((_, reject) => 
-            setTimeout(() => reject(new Error('AI generation timeout')), 10000)
+            setTimeout(() => reject(new Error('AI generation timeout')), 25000)
           )
         ]) as { narrativeSummary: string; keyStrengths: string[]; areasForImprovement: string[]; recommendations: string[]; };
         narrativeAnalysis = aiNarrative;
