@@ -17,7 +17,7 @@ import { styled } from '@mui/material/styles';
 import { Card } from '@mui/material';
 
 // Using direct path for logo
-const appleBitesLogo = "/assets/logos/apple-bites-logo-variant-1.png";
+const appleBitesLogo = "/assets/logos/apple-bites-meritage-logo.png";
 
 // Authentic Material Dashboard Styled Components (matching the template exactly)
 const MaterialBackground = styled(Box)(({ theme }) => ({
@@ -183,6 +183,17 @@ export default function AuthenticMaterialLogin() {
         <AuthenticationCard>
           {/* Floating Header Section */}
           <HeaderSection>
+            <Box
+              component="img"
+              src={appleBitesLogo}
+              alt="Apple Bites Business Assessment"
+              sx={{
+                height: '120px',
+                width: 'auto',
+                marginBottom: '16px',
+                filter: 'brightness(1.1)',
+              }}
+            />
             <Typography 
               variant="h4" 
               sx={{ 
