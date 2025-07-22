@@ -30,7 +30,7 @@ interface User {
   resultReady: boolean;
 }
 
-export default function UserDashboardArgon() {
+export default function Dashboard() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
   const { user: authUser, isLoading: authLoading } = useAuth();

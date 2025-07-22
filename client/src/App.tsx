@@ -12,7 +12,7 @@ import { GHLThemeDemo } from "@/components/ghl-theme-demo";
 import Landing from "@/pages/landing";
 import Home from "@/pages/home";
 import RedirectHome from "@/pages/redirect-home";
-import ArgonLogin from "@/pages/argon-login";
+import Login from "@/pages/login";
 import ValuationForm from "@/pages/valuation-form";
 import FreeAssessment from "@/pages/free-assessment";
 import GrowthExitAssessment from "@/pages/strategic-assessment";
@@ -21,8 +21,8 @@ import ValueCalculator from "@/pages/value-calculator";
 import LeadsDashboard from "@/pages/leads-dashboard";
 import TeamDashboard from "@/pages/team-dashboard";
 import ReportSelectionPage from "@/pages/report-selection";
-import UserDashboardArgon from "@/pages/user-dashboard-argon";
-import ArgonDemo from "@/pages/argon-demo";
+import Dashboard from "@/pages/dashboard";
+import Demo from "@/pages/demo";
 import FreeTierDemo from "@/pages/free-tier-demo";
 import AssessmentResults from "@/pages/assessment-results";
 import NotFound from "@/pages/not-found";
@@ -36,21 +36,21 @@ function Router() {
         {/* Standalone pages without header/navigation */}
         {isLoading || !isAuthenticated ? (
           <>
-            <Route path="/" component={ArgonLogin} />
-            <Route path="/dashboard" component={ArgonLogin} />
-            <Route path="/dashboard/:tier" component={ArgonLogin} />
+            <Route path="/" component={Login} />
+            <Route path="/dashboard" component={Login} />
+            <Route path="/dashboard/:tier" component={Login} />
           </>
         ) : (
           <>
-            <Route path="/" component={UserDashboardArgon} />
-            <Route path="/dashboard/:tier" component={UserDashboardArgon} />
-            <Route path="/dashboard" component={UserDashboardArgon} />
+            <Route path="/" component={Dashboard} />
+            <Route path="/dashboard/:tier" component={Dashboard} />
+            <Route path="/dashboard" component={Dashboard} />
           </>
         )}
-        <Route path="/login" component={ArgonLogin} />
+        <Route path="/login" component={Login} />
         <Route path="/redirect" component={RedirectHome} />
         <Route path="/ghl-demo" component={GHLThemeDemo} />
-        <Route path="/argon-demo" component={ArgonDemo} />
+        <Route path="/demo" component={Demo} />
         <Route path="/free-tier-demo" component={FreeTierDemo} />
         <Route path="/assessment-results" component={AssessmentResults} />
         

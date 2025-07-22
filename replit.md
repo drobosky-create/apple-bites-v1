@@ -111,7 +111,7 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
-- **July 22, 2025 - Multi-Provider OAuth Integration Completed**: Enabled all configured Replit OAuth providers (Google, GitHub, X/Twitter, Apple, Email) for seamless social login. Users can now authenticate using any of these providers through the unified Replit Auth system. All social login buttons now properly redirect to /api/login which handles the OAuth flow and provider selection automatically.
+- **July 22, 2025 - File Architecture Cleanup & Multi-Provider OAuth Integration**: Renamed all argon-prefixed files to clean architecture: argon-login.tsx → login.tsx, user-dashboard-argon.tsx → dashboard.tsx, argon-demo.tsx → demo.tsx. Updated all imports and routes accordingly. Enabled all configured Replit OAuth providers (Google, GitHub, X/Twitter, Apple, Email) for seamless social login. Users can now authenticate using any of these providers through the unified Replit Auth system. All social login buttons now properly redirect to /api/login which handles the OAuth flow and provider selection automatically.
 
 - **July 21, 2025 - Homepage Routing Simplified for GHL Store Integration**: Removed three-tier pricing homepage as users come directly from GoHighLevel store with purchases already made. Homepage now redirects unauthenticated users to login page and authenticated users to their dashboard. Streamlined user flow: GHL Store → Login → User Dashboard → Assessment based on purchased tier. Maintains hybrid authentication system with Replit OAuth, custom registration, and custom login options.
 

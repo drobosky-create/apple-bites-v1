@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 
 // Demo component to showcase Argon Dashboard design
-export default function ArgonDemo() {
+export default function Demo() {
   // Mock user data for demo
   const user = {
     id: "demo-user",
