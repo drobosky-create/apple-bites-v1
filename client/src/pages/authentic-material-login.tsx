@@ -23,12 +23,12 @@ const appleBitesLogo = "/assets/logos/apple-bites-logo-3.png";
 const MaterialBackground = styled(Box)(({ theme }) => ({
   minHeight: '100vh',
   background: `
-    linear-gradient(310deg, rgba(33, 82, 255, 0.8) 0%, rgba(33, 212, 253, 0.8) 100%),
-    url('/assets/logos/apple-bites-business-context.png')
+    linear-gradient(310deg, rgba(33, 82, 255, 0.7) 0%, rgba(33, 212, 253, 0.7) 100%),
+    url('/assets/twilight-city-skyline.png')
   `,
-  backgroundSize: 'cover, contain',
-  backgroundPosition: 'center, center',
-  backgroundRepeat: 'no-repeat, no-repeat',
+  backgroundSize: 'cover',
+  backgroundPosition: 'center',
+  backgroundRepeat: 'no-repeat',
   backgroundBlendMode: 'overlay',
   display: 'flex',
   alignItems: 'center',
