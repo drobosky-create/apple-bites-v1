@@ -48,9 +48,11 @@ const drawerWidth = 280;
 
 const MainContent = styled(Box)(({ theme }) => ({
   flexGrow: 1,
-  padding: theme.spacing(3),
+  padding: theme.spacing(2),
+  paddingLeft: theme.spacing(1), // Minimal left padding to reduce gap
   marginLeft: drawerWidth,
   minHeight: '100vh',
+  maxWidth: `calc(100vw - ${drawerWidth}px)`, // Prevent content overflow
 }));
 
 const GradientAppBar = styled(AppBar)(({ theme }) => ({
@@ -214,10 +216,8 @@ export default function Dashboard() {
               left: 0,
               right: 0,
               bottom: 0,
-              background: 'rgba(116, 123, 138, 0.3)', // More transparent frosted glass
-              backdropFilter: 'blur(20px) saturate(180%)',
-              WebkitBackdropFilter: 'blur(20px) saturate(180%)', // Safari support
-              border: '1px solid rgba(255, 255, 255, 0.1)',
+              background: 'rgba(116, 123, 138, 0.85)', // Glass overlay with secondary color
+              backdropFilter: 'blur(10px)',
               zIndex: 1,
             },
             '& > *': {
@@ -324,12 +324,14 @@ export default function Dashboard() {
             onClick={() => logoutMutation.mutate()}
             disabled={logoutMutation.isPending}
             sx={{
-              color: 'white',
-              borderColor: 'rgba(255,255,255,0.3)',
-              borderRadius: '12px',
-              '&:hover': {
-                backgroundColor: 'rgba(255,255,255,0.1)',
-                borderColor: 'rgba(255,255,255,0.5)',
+              backgroundColor: '#747b8a',
+                color: '#ffffff',
+                borderRadius: '8px',
+                textTransform: 'none',
+                fontWeight: 500,
+                boxShadow: 'none',
+                '&:hover': {
+                  backgroundColor: '#495361',
               }
             }}
             startIcon={<LogOut size={18} />}
