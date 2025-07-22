@@ -26,16 +26,17 @@ import {
   ArgonTypography 
 } from "@/components/ui/argon-authentic";
 import { registerUserSchema, loginUserSchema, type RegisterUser, type LoginUser } from "@shared/schema";
-import appleBitesLogo from "@assets/Apple Bites_1752266454888.png";
+import appleBitesLogo from "@assets/3_1753206059591.png";
 
 // Styled Components
 const GradientBackground = styled(Box)(({ theme }) => ({
   minHeight: '100vh',
-  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+  background: 'linear-gradient(135deg, #0b1426 0%, #1a202c 25%, #2d3748 50%, #1a202c 75%, #0b1426 100%)',
   position: 'relative',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
+  flexDirection: 'column',
   '&::before': {
     content: '""',
     position: 'absolute',
@@ -43,7 +44,7 @@ const GradientBackground = styled(Box)(({ theme }) => ({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundImage: `url('data:image/svg+xml,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><g fill="%23ffffff" fill-opacity="0.1"><circle cx="7" cy="7" r="2"/><circle cx="27" cy="7" r="2"/><circle cx="47" cy="7" r="2"/><circle cx="7" cy="27" r="2"/><circle cx="27" cy="27" r="2"/><circle cx="47" cy="27" r="2"/><circle cx="7" cy="47" r="2"/><circle cx="27" cy="47" r="2"/><circle cx="47" cy="47" r="2"/></g></g></svg>')`,
+    backgroundImage: `url('data:image/svg+xml,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><g fill="%2381e5d8" fill-opacity="0.05"><circle cx="7" cy="7" r="1"/><circle cx="27" cy="7" r="1"/><circle cx="47" cy="7" r="1"/><circle cx="7" cy="27" r="1"/><circle cx="27" cy="27" r="1"/><circle cx="47" cy="27" r="1"/><circle cx="7" cy="47" r="1"/><circle cx="27" cy="47" r="1"/><circle cx="47" cy="47" r="1"/></g></g></svg>')`,
   },
 }));
 
@@ -58,7 +59,7 @@ const LoginCard = styled(Card)(({ theme }) => ({
 }));
 
 const LoginHeader = styled(Box)(({ theme }) => ({
-  background: 'linear-gradient(135deg, #344767 0%, #2c3e50 100%)',
+  background: 'linear-gradient(135deg, #1a202c 0%, #2d3748 100%)',
   padding: theme.spacing(4, 4, 3),
   borderRadius: '16px 16px 0 0',
   textAlign: 'center',
@@ -89,7 +90,7 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
       borderColor: '#dee2e6',
     },
     '&.Mui-focused fieldset': {
-      borderColor: '#5e72e4',
+      borderColor: '#81e5d8',
     },
   },
   '& .MuiInputLabel-root': {
@@ -98,7 +99,7 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
 }));
 
 const SignInButton = styled(Button)(({ theme }) => ({
-  background: 'linear-gradient(135deg, #344767 0%, #2c3e50 100%)',
+  background: 'linear-gradient(135deg, #81e5d8 0%, #4493de 100%)',
   color: '#ffffff',
   borderRadius: 12,
   padding: theme.spacing(1.5, 0),
@@ -106,11 +107,11 @@ const SignInButton = styled(Button)(({ theme }) => ({
   fontWeight: 600,
   textTransform: 'uppercase',
   letterSpacing: '0.5px',
-  boxShadow: '0 4px 6px rgba(52, 71, 103, 0.3)',
+  boxShadow: '0 4px 6px rgba(129, 229, 216, 0.3)',
   '&:hover': {
-    background: 'linear-gradient(135deg, #2c3e50 0%, #344767 100%)',
+    background: 'linear-gradient(135deg, #4493de 0%, #81e5d8 100%)',
     transform: 'translateY(-1px)',
-    boxShadow: '0 6px 10px rgba(52, 71, 103, 0.4)',
+    boxShadow: '0 6px 10px rgba(129, 229, 216, 0.4)',
   },
   '&:disabled': {
     background: '#e9ecef',
@@ -185,7 +186,20 @@ export default function ArgonLogin() {
 
   return (
     <GradientBackground>
-      <Container maxWidth="sm" sx={{ px: 2 }}>
+      {/* Apple Bites Logo */}
+      <Box sx={{ mb: 4, textAlign: 'center', zIndex: 2 }}>
+        <img 
+          src={appleBitesLogo} 
+          alt="Apple Bites Business Assessment" 
+          style={{
+            height: '180px',
+            width: 'auto',
+            filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3))',
+          }}
+        />
+      </Box>
+      
+      <Container maxWidth="sm" sx={{ px: 2, zIndex: 2 }}>
         <LoginCard>
           <LoginHeader>
             <Typography 
@@ -251,10 +265,10 @@ export default function ArgonLogin() {
                       onChange={(e) => setRememberMe(e.target.checked)}
                       sx={{
                         '& .MuiSwitch-switchBase.Mui-checked': {
-                          color: '#5e72e4',
+                          color: '#81e5d8',
                         },
                         '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
-                          backgroundColor: '#5e72e4',
+                          backgroundColor: '#81e5d8',
                         },
                       }}
                     />
@@ -284,7 +298,7 @@ export default function ArgonLogin() {
                     type="button"
                     onClick={handleSignUp}
                     sx={{
-                      color: '#5e72e4',
+                      color: '#81e5d8',
                       textDecoration: 'none',
                       fontWeight: 500,
                       '&:hover': {
