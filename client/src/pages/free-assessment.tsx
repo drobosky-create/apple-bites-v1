@@ -412,9 +412,7 @@ export default function FreeAssessment() {
               <Typography variant="h4" fontWeight="bold" color="#344767" gutterBottom>
                 {steps.find(step => step.id === currentStep)?.label}
               </Typography>
-              <Typography variant="body1" color="#67748e">
-                {steps.find(step => step.id === currentStep)?.description}
-              </Typography>
+              
             </Box>
 
             {/* Form Content */}
