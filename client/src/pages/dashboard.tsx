@@ -217,8 +217,10 @@ export default function Dashboard() {
               left: 0,
               right: 0,
               bottom: 0,
-              background: 'rgba(116, 123, 138, 0.85)', // Glass overlay with secondary color
-              backdropFilter: 'blur(10px)',
+              background: 'rgba(116, 123, 138, 0.3)', // More transparent frosted glass
+              backdropFilter: 'blur(20px) saturate(180%)',
+              WebkitBackdropFilter: 'blur(20px) saturate(180%)', // Safari support
+              border: '1px solid rgba(255, 255, 255, 0.1)',
               zIndex: 1,
             },
             '& > *': {
