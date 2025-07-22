@@ -41,7 +41,7 @@ const AuthCard = styled(Paper)({
 });
 
 const AuthCardHeader = styled(Box)({
-  background: 'linear-gradient(135deg, #EBEFF4 0%, #CED4DA 100%)',
+  background: 'linear-gradient(135deg, #747b8a 0%, #495361 100%)',
   borderRadius: '15px',
   padding: '40px 24px 32px',
   textAlign: 'center',
@@ -74,17 +74,17 @@ const SocialButton = styled(MuiLink)({
   height: '32px',
   margin: '0 4px',
   borderRadius: '50%',
-  backgroundColor: 'rgba(52, 71, 103, 0.1)',
-  color: '#344767',
+  backgroundColor: 'rgba(255, 255, 255, 0.15)',
+  color: '#fff',
   textDecoration: 'none',
   transition: 'all 0.15s ease',
   cursor: 'pointer',
   backdropFilter: 'blur(4px)',
-  border: '1px solid rgba(52, 71, 103, 0.1)',
+  border: '1px solid rgba(255, 255, 255, 0.2)',
   '&:hover': {
-    backgroundColor: 'rgba(52, 71, 103, 0.2)',
+    backgroundColor: 'rgba(255, 255, 255, 0.25)',
     transform: 'translateY(-1px)',
-    boxShadow: '0 4px 8px rgba(52, 71, 103, 0.15)',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.15)',
   },
 });
 
@@ -163,7 +163,7 @@ export default function MaterialDashboardLogin() {
               <Typography
                 variant="h5"
                 sx={{
-                  color: '#344767', // Dark color for better contrast on light background
+                  color: '#fff', // White text for contrast on dark background
                   fontWeight: 600,
                   marginBottom: '8px',
                 }}
