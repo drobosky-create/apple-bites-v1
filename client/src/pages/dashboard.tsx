@@ -202,7 +202,7 @@ export default function Dashboard() {
           '& .MuiDrawer-paper': {
             width: drawerWidth,
             boxSizing: 'border-box',
-            backgroundColor: '#344767',
+            background: 'linear-gradient(135deg, #747b8a 0%, #495361 100%)',
             color: 'white',
           },
         }}
