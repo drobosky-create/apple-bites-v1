@@ -33,7 +33,7 @@ const DashboardBackground = styled(Box)(({ theme }) => ({
 }));
 
 const GradientAppBar = styled(AppBar)(({ theme }) => ({
-  background: 'linear-gradient(310deg, #2152ff 0%, #21d4fd 100%)',
+  background: '#747b8a',
   boxShadow: '0 4px 20px 0 rgba(0, 0, 0, 0.12)',
 }));
 
