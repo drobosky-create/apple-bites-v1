@@ -40,15 +40,15 @@ export default function Dashboard() {
     enabled: !!authUser,
   });
 
-  // Mock Growth tier user data for demonstration
-  const mockGrowthUser = {
-    id: "growth-user-123",
-    email: "demo@company.com",
-    firstName: "Sarah",
-    lastName: "Johnson",
+  // Default free tier user for demonstration
+  const defaultFreeUser = {
+    id: "free-user-123",
+    email: user?.email || "demo@company.com",
+    firstName: user?.firstName || "Demo",
+    lastName: user?.lastName || "User",
     profileImageUrl: "/default-avatar.png",
-    tier: 'growth' as const,
-    resultReady: true
+    tier: 'free' as const,
+    resultReady: false
   };
 
   const logoutMutation = useMutation({
