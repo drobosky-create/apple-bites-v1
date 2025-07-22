@@ -34,8 +34,6 @@ const AuthenticationCard = styled(Card)(({ theme }) => ({
   width: '100%',
   maxWidth: 350,
   margin: '0 auto',
-  marginTop: theme.spacing(3),
-  paddingTop: theme.spacing(6),
   borderRadius: '16px',
   boxShadow: '0 8px 20px rgba(0,0,0,0.1)',
   position: 'relative',
@@ -49,11 +47,10 @@ const HeaderSection = styled(Box)(({ theme }) => ({
   background: 'linear-gradient(135deg, rgba(116, 123, 138, 0.9) 0%, rgba(73, 83, 97, 0.9) 100%)',
   borderRadius: '16px',
   padding: '24px 16px',
-  margin: '0 auto',
+  margin: '0 auto 24px auto',
   textAlign: 'center',
   color: '#ffffff',
   position: 'relative',
-  top: '-40px',
   zIndex: 2,
   boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
   backdropFilter: 'blur(12px)',
@@ -190,9 +187,8 @@ export default function AuthenticMaterialLogin() {
   return (
     <MaterialBackground>
       <Box sx={{ width: '100%', maxWidth: 400, position: 'relative' }}>
-        <AuthenticationCard>
-          {/* Floating Header Section */}
-          <HeaderSection>
+        {/* Floating Header Section */}
+        <HeaderSection>
             <Box
               component="img"
               src={appleBitesLogo}
@@ -244,9 +240,10 @@ export default function AuthenticMaterialLogin() {
                 <Email fontSize="small" />
               </SocialIconButton>
             </Box>
-          </HeaderSection>
+        </HeaderSection>
 
-          <CardContent sx={{ p: 4, pt: 6 }}>
+        <AuthenticationCard>
+          <CardContent sx={{ p: 4, pt: 3 }}>
             {/* Login Form */}
             <Box component="form" onSubmit={handleLogin}>
               <MaterialTextField
