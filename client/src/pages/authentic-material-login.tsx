@@ -212,12 +212,14 @@ export default function AuthenticMaterialLogin() {
             right: 0,
             mx: 'auto',
             maxWidth: '300px',
-            backgroundColor: 'transparent',
+            backgroundColor: 'rgba(255, 255, 255, 0.1)',
             borderRadius: '16px',
             boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
             padding: '24px 16px',
             zIndex: 2,
             textAlign: 'center',
+            backdropFilter: 'blur(10px)',
+            border: '1px solid rgba(255, 255, 255, 0.2)',
           }}
         >
             <Box
