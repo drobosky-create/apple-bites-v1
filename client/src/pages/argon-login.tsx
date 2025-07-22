@@ -187,7 +187,13 @@ export default function ArgonLogin() {
   return (
     <GradientBackground>
       {/* Apple Bites Logo */}
-      <Box sx={{ mb: 4 }}>
+      <Box sx={{ 
+        mb: 4, 
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%'
+      }}>
         <img
           src={appleBitesLogo}
           alt="Apple Bites Business Assessment"
