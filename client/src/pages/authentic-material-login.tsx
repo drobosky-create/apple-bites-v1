@@ -285,9 +285,15 @@ export default function AuthenticMaterialLogin() {
               <SignInButton
                 type="submit"
                 disabled={isLoading || !email || !password}
-                sx={{ mb: 3 }}
+                sx={{ 
+                  mb: 3,
+                  backgroundColor: '#42424a !important',
+                  '&:hover': {
+                    backgroundColor: '#3a3a40 !important',
+                  }
+                }}
               >
-                {isLoading ? 'Signing in...' : 'Sign in'}
+                {isLoading ? 'SIGNING IN...' : 'SIGN IN'}
               </SignInButton>
 
               <Box sx={{ textAlign: 'center' }}>
