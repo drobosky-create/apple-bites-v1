@@ -112,13 +112,13 @@ const SignInButton = styled(Button)(({ theme }) => ({
   letterSpacing: '0.0625rem',
   padding: '12px 24px',
   width: '100%',
-  background: '#344767',
+  background: '#42424a',
   color: '#ffffff',
-  boxShadow: '0 4px 7px -1px rgba(52, 71, 103, 0.4)',
+  boxShadow: '0 4px 7px -1px rgba(66, 66, 74, 0.4)',
   border: 'none',
   '&:hover': {
-    background: '#2c3e50',
-    boxShadow: '0 8px 16px -4px rgba(52, 71, 103, 0.4)',
+    background: '#3a3a40',
+    boxShadow: '0 8px 16px -4px rgba(66, 66, 74, 0.4)',
     transform: 'translateY(-1px)',
   },
   '&:disabled': {
@@ -195,6 +195,8 @@ export default function AuthenticMaterialLogin() {
                 width: 'auto',
                 marginBottom: '16px',
                 filter: 'brightness(1.1)',
+                display: 'block',
+                margin: '0 auto 16px auto',
               }}
             />
             <Typography 
