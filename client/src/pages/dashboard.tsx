@@ -202,8 +202,26 @@ export default function Dashboard() {
           '& .MuiDrawer-paper': {
             width: drawerWidth,
             boxSizing: 'border-box',
-            background: 'linear-gradient(135deg, #747b8a 0%, #495361 100%)',
+            backgroundImage: 'url(/assets/twilight-city-skyline.png)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
             color: 'white',
+            '&::before': {
+              content: '""',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: 'rgba(116, 123, 138, 0.85)', // Glass overlay with secondary color
+              backdropFilter: 'blur(10px)',
+              zIndex: 1,
+            },
+            '& > *': {
+              position: 'relative',
+              zIndex: 2,
+            },
           },
         }}
       >
