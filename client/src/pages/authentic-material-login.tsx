@@ -188,15 +188,30 @@ export default function AuthenticMaterialLogin() {
 
   return (
     <MaterialBackground>
-      <Box sx={{ width: '100%', maxWidth: 400, position: 'relative' }}>
+      <Box sx={{ width: '100%', maxWidth: 400, position: 'relative', minHeight: '620px' }}>
         {/* Floating Header Section */}
-        <HeaderSection className="pt-[22px] pb-[22px] MuiBox-root css-1vm1hbi mt-[0px] mb-[0px]">
+        <HeaderSection
+          sx={{
+            position: 'absolute',
+            top: '40px',
+            left: 0,
+            right: 0,
+            mx: 'auto',
+            maxWidth: '300px',
+            backgroundColor: 'transparent',
+            borderRadius: '16px',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
+            padding: '24px 16px',
+            zIndex: 2,
+            textAlign: 'center',
+          }}
+        >
             <Box
               component="img"
               src={appleBitesLogo}
               alt="Apple Bites Business Assessment"
               sx={{
-                height: '250px',
+                height: '200px',
                 width: 'auto',
                 filter: 'brightness(1.1)',
                 display: 'block',
@@ -212,6 +227,7 @@ export default function AuthenticMaterialLogin() {
                 mb: 2,
                 fontSize: '1.25rem',
                 fontFamily: 'Roboto, Helvetica, Arial, sans-serif',
+                color: '#fff',
               }}
             >
               Sign in
@@ -221,9 +237,8 @@ export default function AuthenticMaterialLogin() {
               sx={{
                 display: 'flex',
                 justifyContent: 'center',
-                gap: 1.5, // consistent spacing between buttons
+                gap: 1.5,
                 mt: 1,
-                mb: 2,
               }}
             >
               <SocialIconButton onClick={() => handleSocialLogin('facebook')}>
@@ -244,7 +259,17 @@ export default function AuthenticMaterialLogin() {
             </Box>
         </HeaderSection>
 
-        <AuthenticationCard>
+        <AuthenticationCard
+          sx={{
+            mt: '140px',
+            pt: 8,
+            borderRadius: '16px',
+            minHeight: '480px',
+            backgroundColor: '#fff',
+            position: 'relative',
+            zIndex: 1,
+          }}
+        >
           <CardContent sx={{ p: 4, pt: 3 }}>
             {/* Login Form */}
             <Box component="form" onSubmit={handleLogin}>
