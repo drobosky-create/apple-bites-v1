@@ -100,7 +100,7 @@ const StyledTextField = styled(TextField)({
 });
 
 const SignInButton = styled(Button)({
-  background: 'linear-gradient(310deg, #2152ff 0%, #21d4fd 100%)',
+  background: 'linear-gradient(310deg, #42424a 0%, #191919 100%)',
   color: '#fff',
   borderRadius: '8px',
   padding: '12px 24px',
@@ -108,8 +108,9 @@ const SignInButton = styled(Button)({
   fontWeight: 600,
   boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
   '&:hover': {
-    background: 'linear-gradient(310deg, #1e47d9 0%, #1db8e6 100%)',
-    boxShadow: '0 6px 8px -1px rgba(0, 0, 0, 0.15)',
+    background: 'linear-gradient(310deg, #4a4a52 0%, #1f1f1f 100%)',
+    boxShadow: '0 6px 8px -1px rgba(0, 0, 0, 0.25)',
+    transform: 'translateY(-1px)',
   },
 });
 
