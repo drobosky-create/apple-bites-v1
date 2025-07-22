@@ -1,4 +1,4 @@
-import { useErrorState } from '@/utils/stateCleanupUtils';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Card } from '@/components/ui/card';
@@ -17,7 +17,7 @@ interface TeamLoginProps {
 }
 
 export default function TeamLogin({ onLoginSuccess }: TeamLoginProps) {
-  const { error, setError, clearError } = useErrorState();
+  const [error, setError] = useState('');
 
   const form = useForm<LoginCredentials>({
     resolver: zodResolver(loginSchema),
@@ -87,7 +87,7 @@ export default function TeamLogin({ onLoginSuccess }: TeamLoginProps) {
                         {...field}
                         type="email"
                         placeholder="Enter your email"
-                        className="form-input pl-10"
+                        className="bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20 pl-10"
                         disabled={loginMutation.isPending}
                       />
                     </div>
@@ -110,7 +110,7 @@ export default function TeamLogin({ onLoginSuccess }: TeamLoginProps) {
                         {...field}
                         type="password"
                         placeholder="Enter your password"
-                        className="form-input pl-10"
+                        className="bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20 pl-10"
                         disabled={loginMutation.isPending}
                       />
                     </div>

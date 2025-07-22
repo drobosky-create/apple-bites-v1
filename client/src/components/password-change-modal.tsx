@@ -156,7 +156,7 @@ export default function PasswordChangeModal({ isOpen, onSuccess, userEmail }: Pa
               <Button 
                 type="submit" 
                 disabled={isLoading}
-                className="btn-secondary min-w-[120px]"
+                className="bg-blue-600 hover:bg-blue-700 text-white min-w-[120px]"
               >
                 {isLoading ? 'Updating...' : 'Update Password'}
               </Button>

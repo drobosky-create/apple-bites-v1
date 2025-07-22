@@ -1,4 +1,4 @@
-import { useErrorState } from '@/utils/stateCleanupUtils';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -23,7 +23,7 @@ interface AdminLoginProps {
 }
 
 export default function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
-  const { error, setError, clearError } = useErrorState();
+  const [error, setError] = useState('');
 
   const form = useForm<LoginData>({
     resolver: zodResolver(loginSchema),
@@ -51,7 +51,7 @@ export default function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
       return response.json();
     },
     onSuccess: () => {
-      setError(null);
+      setError('');
       onLoginSuccess();
     },
     onError: (error: Error) => {
@@ -90,7 +90,7 @@ export default function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
                         {...field}
                         type="text"
                         placeholder="Enter your username"
-                        className="form-input pl-10"
+                        className="bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20 pl-10"
                         disabled={loginMutation.isPending}
                       />
                     </div>
@@ -113,7 +113,7 @@ export default function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
                         {...field}
                         type="password"
                         placeholder="Enter your password"
-                        className="form-input pl-10"
+                        className="bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20 pl-10"
                         disabled={loginMutation.isPending}
                       />
                     </div>

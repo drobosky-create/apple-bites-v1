@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
@@ -6,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
-import { usePasswordFields } from '@/components/PasswordVisibilityToggle';
+import { Eye, EyeOff } from 'lucide-react';
 
 const passwordChangeSchema = z.object({
   currentPassword: z.string().min(1, 'Current password is required'),
@@ -29,8 +30,10 @@ interface PasswordChangeFormProps {
 }
 
 export default function PasswordChangeForm({ userId }: PasswordChangeFormProps) {
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const { toast } = useToast();
-  const { getPasswordType, PasswordToggle } = usePasswordFields();
 
   const form = useForm<PasswordChangeData>({
     resolver: zodResolver(passwordChangeSchema),
@@ -91,12 +94,18 @@ export default function PasswordChangeForm({ userId }: PasswordChangeFormProps) 
                 <div className="relative">
                   <Input 
                     {...field} 
-                    type={getPasswordType('currentPassword')} 
+                    type={showCurrentPassword ? "text" : "password"} 
                     className="pr-10 bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20"
                   />
-                  <div className="absolute right-0 top-0 h-full px-3 py-2 flex items-center">
-                    <PasswordToggle fieldName="currentPassword" />
-                  </div>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                    onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                  >
+                    {showCurrentPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </Button>
                 </div>
               </FormControl>
               <FormMessage />
@@ -113,12 +122,18 @@ export default function PasswordChangeForm({ userId }: PasswordChangeFormProps) 
                 <div className="relative">
                   <Input 
                     {...field} 
-                    type={getPasswordType('newPassword')} 
+                    type={showNewPassword ? "text" : "password"} 
                     className="pr-10 bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20"
                   />
-                  <div className="absolute right-0 top-0 h-full px-3 py-2 flex items-center">
-                    <PasswordToggle fieldName="newPassword" />
-                  </div>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                    onClick={() => setShowNewPassword(!showNewPassword)}
+                  >
+                    {showNewPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </Button>
                 </div>
               </FormControl>
               <FormMessage />
@@ -135,12 +150,18 @@ export default function PasswordChangeForm({ userId }: PasswordChangeFormProps) 
                 <div className="relative">
                   <Input 
                     {...field} 
-                    type={getPasswordType('confirmPassword')} 
+                    type={showConfirmPassword ? "text" : "password"} 
                     className="pr-10 bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20"
                   />
-                  <div className="absolute right-0 top-0 h-full px-3 py-2 flex items-center">
-                    <PasswordToggle fieldName="confirmPassword" />
-                  </div>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  >
+                    {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </Button>
                 </div>
               </FormControl>
               <FormMessage />
@@ -158,7 +179,7 @@ export default function PasswordChangeForm({ userId }: PasswordChangeFormProps) 
           <Button 
             type="submit" 
             disabled={changePasswordMutation.isPending}
-            className="btn-secondary"
+            className="bg-blue-600 hover:bg-blue-700 text-white"
           >
             {changePasswordMutation.isPending ? 'Changing...' : 'Change Password'}
           </Button>

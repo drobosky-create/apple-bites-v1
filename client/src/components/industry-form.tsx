@@ -304,7 +304,7 @@ export default function IndustryForm({ form, onNext, onPrev, onDataChange }: Ind
               </Button>
               <Button
                 type="submit"
-                className="px-8 btn-secondary"
+                className="px-8 bg-blue-600 hover:bg-blue-700"
               >
                 Continue to EBITDA Analysis
               </Button>

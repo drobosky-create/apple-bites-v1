@@ -16,28 +16,6 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       colors: {
-        // Argon Dashboard Brand Colors - Centralized Theme
-        argon: {
-          navy: '#0b2147',        // Primary brand navy
-          navyDark: '#0a1e3d',    // Darker navy variant  
-          navyLight: '#1a365d',   // Lighter navy variant
-          blue: '#4493de',        // Secondary blue
-          blueLight: '#60a5fa',   // Light blue variant
-          teal: '#81e5d8',        // Accent teal
-          purple: '#8b5cf6',      // Purple accent
-          slate: {
-            50: '#f8fafc',
-            100: '#f1f5f9', 
-            300: '#cbd5e1',
-            600: '#475569',
-            700: '#334155',
-            900: '#0f172a'
-          },
-          gradient: {
-            primary: 'linear-gradient(135deg, #8b5cf6 0%, #3b82f6 50%, #1e40af 100%)',
-            secondary: 'linear-gradient(135deg, #6b7280 0%, #9ca3af 100%)'
-          }
-        },
         // GHL Brand Colors - Primary Palette
         primary: {
           DEFAULT: '#81e5d8',
@@ -84,6 +62,14 @@ export default {
         popover: {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",
+        },
+        primary: {
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
+        },
+        secondary: {
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
         },
         muted: {
           DEFAULT: "hsl(var(--muted))",

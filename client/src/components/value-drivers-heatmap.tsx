@@ -1,9 +1,8 @@
+import { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Info, TrendingUp, TrendingDown, Minus } from 'lucide-react';
 import type { ValuationAssessment } from '@shared/schema';
-import { useValuation } from '@/context/ValuationContext';
-import { getGradeColor, getGradeScore } from '@/utils/gradeLogic';
 
 interface ValueDriversHeatmapProps {
   assessment: ValuationAssessment;
@@ -21,8 +20,23 @@ interface DriverData {
 }
 
 export default function ValueDriversHeatmap({ assessment }: ValueDriversHeatmapProps) {
+  const [selectedDriver, setSelectedDriver] = useState<DriverData | null>(null);
 
-  // Using centralized grade utilities
+  const getGradeScore = (grade: string): number => {
+    const gradeMap: Record<string, number> = { 'A': 5, 'B': 4, 'C': 3, 'D': 2, 'F': 1 };
+    return gradeMap[grade] || 3;
+  };
+
+  const getGradeColor = (grade: Grade): string => {
+    const colorMap: Record<Grade, string> = {
+      'A': 'bg-green-500 hover:bg-green-600',
+      'B': 'bg-blue-500 hover:bg-blue-600', 
+      'C': 'bg-slate-500 hover:bg-slate-600',
+      'D': 'bg-orange-500 hover:bg-orange-600',
+      'F': 'bg-red-500 hover:bg-red-600'
+    };
+    return colorMap[grade];
+  };
 
   const getGradeBorderColor = (grade: Grade): string => {
     const borderMap: Record<Grade, string> = {
