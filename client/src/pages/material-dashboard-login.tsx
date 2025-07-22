@@ -30,7 +30,7 @@ const AuthPageContainer = styled(Box)({
 });
 
 const AuthCard = styled(Paper)({
-  maxWidth: '400px',
+  maxWidth: '350px',
   width: '100%',
   backgroundColor: '#fff',
   borderRadius: '15px',
@@ -43,7 +43,7 @@ const AuthCard = styled(Paper)({
 const AuthCardHeader = styled(Box)({
   backgroundColor: '#344767',
   borderRadius: '15px',
-  padding: '96px 32px 72px', // 3x taller: increased from 32px to 96px top, 24px to 72px bottom
+  padding: '40px 24px 32px', // Reduced padding for more compact appearance
   textAlign: 'center',
   marginTop: '-40px',
   marginLeft: '16px',
@@ -55,12 +55,12 @@ const AuthCardHeader = styled(Box)({
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
-  gap: '24px',
+  gap: '16px', // Reduced gap between elements
 });
 
 const AuthCardBody = styled(Box)({
-  padding: '24px',
-  paddingTop: '8px',
+  padding: '20px 24px 24px', // Reduced top padding
+  paddingTop: '16px',
 });
 
 const SocialButton = styled(MuiLink)({
@@ -140,7 +140,7 @@ export default function MaterialDashboardLogin() {
 
   return (
     <AuthPageContainer>
-      <Container maxWidth="sm" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+      <Container maxWidth="xs" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
         <AuthCard elevation={0}>
             <AuthCardHeader>
               <Box
@@ -148,18 +148,18 @@ export default function MaterialDashboardLogin() {
                 src="/assets/logos/apple-bites-meritage-logo.png"
                 alt="Apple Bites Business Assessment"
                 sx={{
-                  height: '80px',
+                  height: '100px', // Reduced logo size
                   width: 'auto',
-                  marginBottom: '16px',
-                  filter: 'brightness(1.1)', // Slight brightness boost for better visibility on dark background
+                  marginBottom: '8px', // Reduced margin
+                  filter: 'brightness(1.1)',
                 }}
               />
               <Typography
-                variant="h4"
+                variant="h5" // Smaller heading
                 sx={{
                   color: '#fff',
                   fontWeight: 600,
-                  marginBottom: '24px',
+                  marginBottom: '8px', // Reduced margin
                 }}
               >
                 Sign in
