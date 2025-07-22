@@ -508,7 +508,7 @@ export default function Dashboard() {
               <Avatar sx={{ 
                 width: 80, 
                 height: 80, 
-                background: 'linear-gradient(135deg, #2152ff 0%, #21d4fd 100%)',
+                background: 'linear-gradient(135deg, #252160 0%, #00d7fe 100%)',
                 fontSize: '2rem',
                 fontWeight: 'bold'
               }}>
