@@ -262,7 +262,6 @@ export default function AuthenticMaterialLogin() {
         <AuthenticationCard
           sx={{
             mt: '140px',
-            pt: 8,
             borderRadius: '16px',
             minHeight: '480px',
             backgroundColor: '#fff',
@@ -270,7 +269,7 @@ export default function AuthenticMaterialLogin() {
             zIndex: 1,
           }}
         >
-          <CardContent sx={{ p: 4, pt: 3 }}>
+          <CardContent sx={{ p: 4, pt: 1 }}>
             {/* Login Form */}
             <Box component="form" onSubmit={handleLogin}>
               <MaterialTextField
