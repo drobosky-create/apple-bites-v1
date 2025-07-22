@@ -190,7 +190,7 @@ export default function AuthenticMaterialLogin() {
     <MaterialBackground>
       <Box sx={{ width: '100%', maxWidth: 400, position: 'relative' }}>
         {/* Floating Header Section */}
-        <HeaderSection className="pt-[22px] pb-[22px] mt-[0px] mb-[0px]">
+        <HeaderSection className="pt-[22px] pb-[22px] MuiBox-root css-1vm1hbi mt-[0px] mb-[0px]">
             <Box
               component="img"
               src={appleBitesLogo}
