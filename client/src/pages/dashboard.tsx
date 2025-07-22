@@ -181,7 +181,7 @@ export default function Dashboard() {
                 <Box component="img"
                   src="/assets/logos/apple-bites-logo-3.png"
                   alt="Apple Bites Business Assessment"
-                  sx={{ height: 50, width: 'auto' }}
+                  sx={{ height: 175, width: 'auto' }}
                 />
                 <Box>
                   <Typography variant="h5" fontWeight="bold" color="white">
@@ -203,15 +203,23 @@ export default function Dashboard() {
                 </Box>
               </Box>
               <ActionButton
-                variant="outlined"
+                variant="contained"
                 onClick={() => logoutMutation.mutate()}
                 disabled={logoutMutation.isPending}
                 sx={{
-                  color: 'white',
-                  borderColor: 'rgba(255,255,255,0.3)',
-                  '&:hover': {
-                    backgroundColor: 'rgba(255,255,255,0.1)',
-                    borderColor: 'rgba(255,255,255,0.5)',
+                    backgroundColor: '#EBEFF4',
+                      color: '#212529', // dark text for light background
+                      borderRadius: '8px',
+                      boxShadow: 'none',
+                      textTransform: 'none',
+                      fontWeight: 500,
+                      '&:hover': {
+                        backgroundColor: '#CED4DA',
+                        boxShadow: 'none',
+                      },
+                      '&:disabled': {
+                        backgroundColor: '#EBEFF4',
+                        color: '#adb5bd',
                   }
                 }}
                 startIcon={<LogOut size={18} />}
@@ -262,15 +270,15 @@ export default function Dashboard() {
           <Box display="flex" gap={3} sx={{ flexDirection: { xs: 'column', md: 'row' } }}>
             {/* Assessment Status */}
             <Box sx={{ flex: 1 }}>
-              <StatCard>
-                <CardContent sx={{ p: 3 }}>
+              <StatCard sx={{ minHeight: 280 }}>
+                <CardContent sx={{ p: 3, height: '100%', display: 'flex', flexDirection: 'column' }}>
                   <Box display="flex" alignItems="center" gap={2} mb={2}>
                     <CheckCircle size={24} color={displayUser.resultReady ? "#4caf50" : "#ff9800"} />
                     <Typography variant="h6" fontWeight="bold" color="#344767">
                       Assessment Status
                     </Typography>
                   </Box>
-                  <Typography variant="body1" color="#67748e" mb={3}>
+                  <Typography variant="body1" color="#67748e" sx={{ flexGrow: 1, mb: 3 }}>
                     {displayUser.resultReady 
                       ? "Your assessment is complete and ready for download"
                       : "Complete your business assessment to get your valuation report"
@@ -281,10 +289,15 @@ export default function Dashboard() {
                     fullWidth
                     onClick={() => setLocation('/assessment/free')}
                     sx={{
-                      background: 'linear-gradient(135deg, #2152ff 0%, #21d4fd 100%)',
+                      backgroundColor: '#747b8a',
+                      color: '#ffffff',
+                      borderRadius: '8px',
+                      textTransform: 'none',
+                      fontWeight: 500,
+                      boxShadow: 'none',
                       '&:hover': {
-                        background: 'linear-gradient(135deg, #1e4bff 0%, #1ecffa 100%)',
-                      }
+                        backgroundColor: '#495361',
+                      },
                     }}
                   >
                     {displayUser.resultReady ? "View Results" : "Start Assessment"}
@@ -295,15 +308,15 @@ export default function Dashboard() {
 
             {/* Quick Actions */}
             <Box sx={{ flex: 1 }}>
-              <StatCard>
-                <CardContent sx={{ p: 3 }}>
+              <StatCard sx={{ minHeight: 280 }}>
+                <CardContent sx={{ p: 3, height: '100%', display: 'flex', flexDirection: 'column' }}>
                   <Box display="flex" alignItems="center" gap={2} mb={2}>
                     <TierIcon size={24} color="#2152ff" />
                     <Typography variant="h6" fontWeight="bold" color="#344767">
                       Quick Actions
                     </Typography>
                   </Box>
-                  <Box display="flex" flexDirection="column" gap={2}>
+                  <Box display="flex" flexDirection="column" gap={2} sx={{ flexGrow: 1, justifyContent: 'flex-start' }}>
                     <ActionButton
                       variant="outlined"
                       startIcon={<FileText size={18} />}
