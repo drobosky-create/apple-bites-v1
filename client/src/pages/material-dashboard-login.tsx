@@ -43,7 +43,7 @@ const AuthCard = styled(Paper)({
 const AuthCardHeader = styled(Box)({
   backgroundColor: '#344767',
   borderRadius: '15px',
-  padding: '32px 32px 24px',
+  padding: '96px 32px 72px', // 3x taller: increased from 32px to 96px top, 24px to 72px bottom
   textAlign: 'center',
   marginTop: '-40px',
   marginLeft: '16px',
@@ -51,6 +51,11 @@ const AuthCardHeader = styled(Box)({
   position: 'relative',
   zIndex: 10,
   boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+  gap: '24px',
 });
 
 const AuthCardBody = styled(Box)({
@@ -138,12 +143,23 @@ export default function MaterialDashboardLogin() {
       <Container maxWidth="sm" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
         <AuthCard elevation={0}>
             <AuthCardHeader>
+              <Box
+                component="img"
+                src="/assets/logos/apple-bites-meritage-logo.png"
+                alt="Apple Bites Business Assessment"
+                sx={{
+                  height: '80px',
+                  width: 'auto',
+                  marginBottom: '16px',
+                  filter: 'brightness(1.1)', // Slight brightness boost for better visibility on dark background
+                }}
+              />
               <Typography
                 variant="h4"
                 sx={{
                   color: '#fff',
                   fontWeight: 600,
-                  marginBottom: '8px',
+                  marginBottom: '24px',
                 }}
               >
                 Sign in
