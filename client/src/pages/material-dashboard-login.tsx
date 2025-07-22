@@ -21,12 +21,33 @@ const appleBitesLogo = "/assets/logos/apple-bites-logo-variant-1.png";
 // Exact Material Dashboard structure and styling
 const AuthPageContainer = styled(Box)({
   minHeight: '100vh',
-  background: 'linear-gradient(310deg, #2152ff 0%, #21d4fd 100%)',
+  background: `
+    linear-gradient(310deg, rgba(33, 82, 255, 0.7) 0%, rgba(33, 212, 253, 0.6) 100%),
+    url('/assets/backgrounds/twilight-city-skyline.png')
+  `,
+  backgroundSize: 'cover',
+  backgroundPosition: 'center',
+  backgroundRepeat: 'no-repeat',
   fontFamily: 'Roboto, Helvetica, Arial, sans-serif',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   padding: '24px',
+  filter: 'brightness(0.65) contrast(0.9)',
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background: 'rgba(0, 0, 0, 0.3)',
+    zIndex: 1,
+  },
+  '& > *': {
+    position: 'relative',
+    zIndex: 2,
+  },
 });
 
 const AuthCard = styled(Paper)({
