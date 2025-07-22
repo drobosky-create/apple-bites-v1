@@ -270,7 +270,7 @@ export default function Dashboard() {
           <Box display="flex" gap={3} sx={{ flexDirection: { xs: 'column', md: 'row' } }}>
             {/* Assessment Status */}
             <Box sx={{ flex: 1 }}>
-              <StatCard sx={{ minHeight: 280 }}>
+              <StatCard sx={{ minHeight: 200 }}>
                 <CardContent sx={{ p: 3, height: '100%', display: 'flex', flexDirection: 'column' }}>
                   <Box display="flex" alignItems="center" gap={2} mb={2}>
                     <CheckCircle size={24} color={displayUser.resultReady ? "#4caf50" : "#ff9800"} />
@@ -308,7 +308,7 @@ export default function Dashboard() {
 
             {/* Quick Actions */}
             <Box sx={{ flex: 1 }}>
-              <StatCard sx={{ minHeight: 280 }}>
+              <StatCard sx={{ minHeight: 200 }}>
                 <CardContent sx={{ p: 3, height: '100%', display: 'flex', flexDirection: 'column' }}>
                   <Box display="flex" alignItems="center" gap={2} mb={2}>
                     <TierIcon size={24} color="#2152ff" />
