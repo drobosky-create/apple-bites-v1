@@ -36,7 +36,9 @@ import {
   Settings,
   BarChart3,
   Calendar,
-  Download
+  Download,
+  Lock,
+  X
 } from "lucide-react";
 
 // Material Dashboard Styled Components
@@ -651,11 +653,33 @@ export default function Dashboard() {
           {/* Features Overview - Full Width */}
           <StatCard>
             <CardContent sx={{ p: 4 }}>
-              <Typography variant="h5" fontWeight="bold" color="#344767" mb={3}>
-                What's Included in Your {tierInfo.name}
-              </Typography>
-              <Box display="flex" gap={3} sx={{ flexDirection: { xs: 'column', md: 'row' } }}>
-                <Box display="flex" alignItems="start" gap={2} sx={{ flex: 1 }}>
+              <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
+                <Typography variant="h5" fontWeight="bold" color="#344767">
+                  What's Included in Your {tierInfo.name}
+                </Typography>
+                {displayUser.tier === 'free' && (
+                  <Button
+                    variant="contained"
+                    startIcon={<Crown size={18} />}
+                    onClick={() => window.open('https://products.applebites.ai/', '_blank')}
+                    sx={{
+                      backgroundColor: '#ff9800',
+                      color: 'white',
+                      textTransform: 'none',
+                      fontWeight: 600,
+                      '&:hover': {
+                        backgroundColor: '#f57c00',
+                      }
+                    }}
+                  >
+                    Upgrade Now
+                  </Button>
+                )}
+              </Box>
+              
+              <Box display="grid" gridTemplateColumns={{ xs: '1fr', md: 'repeat(2, 1fr)' }} gap={3}>
+                {/* Current Tier Features */}
+                <Box display="flex" alignItems="start" gap={2}>
                   <CheckCircle size={20} color="#4caf50" style={{ marginTop: 2 }} />
                   <Box>
                     <Typography variant="body1" fontWeight="600" color="#344767">
@@ -666,7 +690,8 @@ export default function Dashboard() {
                     </Typography>
                   </Box>
                 </Box>
-                <Box display="flex" alignItems="start" gap={2} sx={{ flex: 1 }}>
+
+                <Box display="flex" alignItems="start" gap={2}>
                   <CheckCircle size={20} color="#4caf50" style={{ marginTop: 2 }} />
                   <Box>
                     <Typography variant="body1" fontWeight="600" color="#344767">
@@ -677,7 +702,8 @@ export default function Dashboard() {
                     </Typography>
                   </Box>
                 </Box>
-                <Box display="flex" alignItems="start" gap={2} sx={{ flex: 1 }}>
+
+                <Box display="flex" alignItems="start" gap={2}>
                   <CheckCircle size={20} color="#4caf50" style={{ marginTop: 2 }} />
                   <Box>
                     <Typography variant="body1" fontWeight="600" color="#344767">
@@ -688,7 +714,208 @@ export default function Dashboard() {
                     </Typography>
                   </Box>
                 </Box>
+
+                <Box display="flex" alignItems="start" gap={2}>
+                  <CheckCircle size={20} color="#4caf50" style={{ marginTop: 2 }} />
+                  <Box>
+                    <Typography variant="body1" fontWeight="600" color="#344767">
+                      Email Delivery
+                    </Typography>
+                    <Typography variant="body2" color="#67748e">
+                      Automated report delivery to your inbox
+                    </Typography>
+                  </Box>
+                </Box>
+
+                {/* Growth Tier Features */}
+                {displayUser.tier === 'free' ? (
+                  <>
+                    <Box display="flex" alignItems="start" gap={2} sx={{ opacity: 0.6 }}>
+                      <Lock size={20} color="#ff9800" style={{ marginTop: 2 }} />
+                      <Box>
+                        <Typography variant="body1" fontWeight="600" color="#67748e" sx={{ textDecoration: 'line-through' }}>
+                          Industry-Specific Analysis
+                        </Typography>
+                        <Box display="flex" alignItems="center" gap={1}>
+                          <Chip 
+                            label="Upgrade Required" 
+                            size="small" 
+                            sx={{ 
+                              backgroundColor: '#ff9800', 
+                              color: 'white', 
+                              fontSize: '10px',
+                              height: '20px'
+                            }} 
+                          />
+                          <Typography variant="body2" color="#67748e">
+                            NAICS-specific multipliers and benchmarks
+                          </Typography>
+                        </Box>
+                      </Box>
+                    </Box>
+
+                    <Box display="flex" alignItems="start" gap={2} sx={{ opacity: 0.6 }}>
+                      <Lock size={20} color="#ff9800" style={{ marginTop: 2 }} />
+                      <Box>
+                        <Typography variant="body1" fontWeight="600" color="#67748e" sx={{ textDecoration: 'line-through' }}>
+                          AI-Powered Business Insights
+                        </Typography>
+                        <Box display="flex" alignItems="center" gap={1}>
+                          <Chip 
+                            label="Upgrade Required" 
+                            size="small" 
+                            sx={{ 
+                              backgroundColor: '#ff9800', 
+                              color: 'white', 
+                              fontSize: '10px',
+                              height: '20px'
+                            }} 
+                          />
+                          <Typography variant="body2" color="#67748e">
+                            GPT-4 powered recommendations and strategies
+                          </Typography>
+                        </Box>
+                      </Box>
+                    </Box>
+
+                    <Box display="flex" alignItems="start" gap={2} sx={{ opacity: 0.6 }}>
+                      <Lock size={20} color="#ff9800" style={{ marginTop: 2 }} />
+                      <Box>
+                        <Typography variant="body1" fontWeight="600" color="#67748e" sx={{ textDecoration: 'line-through' }}>
+                          Advanced Financial Modeling
+                        </Typography>
+                        <Box display="flex" alignItems="center" gap={1}>
+                          <Chip 
+                            label="Upgrade Required" 
+                            size="small" 
+                            sx={{ 
+                              backgroundColor: '#ff9800', 
+                              color: 'white', 
+                              fontSize: '10px',
+                              height: '20px'
+                            }} 
+                          />
+                          <Typography variant="body2" color="#67748e">
+                            Detailed cash flow and scenario analysis
+                          </Typography>
+                        </Box>
+                      </Box>
+                    </Box>
+
+                    <Box display="flex" alignItems="start" gap={2} sx={{ opacity: 0.6 }}>
+                      <Lock size={20} color="#ff9800" style={{ marginTop: 2 }} />
+                      <Box>
+                        <Typography variant="body1" fontWeight="600" color="#67748e" sx={{ textDecoration: 'line-through' }}>
+                          Executive Presentation
+                        </Typography>
+                        <Box display="flex" alignItems="center" gap={1}>
+                          <Chip 
+                            label="Upgrade Required" 
+                            size="small" 
+                            sx={{ 
+                              backgroundColor: '#ff9800', 
+                              color: 'white', 
+                              fontSize: '10px',
+                              height: '20px'
+                            }} 
+                          />
+                          <Typography variant="body2" color="#67748e">
+                            Investment-grade presentation materials
+                          </Typography>
+                        </Box>
+                      </Box>
+                    </Box>
+                  </>
+                ) : (
+                  <>
+                    <Box display="flex" alignItems="start" gap={2}>
+                      <CheckCircle size={20} color="#4caf50" style={{ marginTop: 2 }} />
+                      <Box>
+                        <Typography variant="body1" fontWeight="600" color="#344767">
+                          Industry-Specific Analysis
+                        </Typography>
+                        <Typography variant="body2" color="#67748e">
+                          NAICS-specific multipliers and benchmarks
+                        </Typography>
+                      </Box>
+                    </Box>
+
+                    <Box display="flex" alignItems="start" gap={2}>
+                      <CheckCircle size={20} color="#4caf50" style={{ marginTop: 2 }} />
+                      <Box>
+                        <Typography variant="body1" fontWeight="600" color="#344767">
+                          AI-Powered Business Insights
+                        </Typography>
+                        <Typography variant="body2" color="#67748e">
+                          GPT-4 powered recommendations and strategies
+                        </Typography>
+                      </Box>
+                    </Box>
+
+                    <Box display="flex" alignItems="start" gap={2}>
+                      <CheckCircle size={20} color="#4caf50" style={{ marginTop: 2 }} />
+                      <Box>
+                        <Typography variant="body1" fontWeight="600" color="#344767">
+                          Advanced Financial Modeling
+                        </Typography>
+                        <Typography variant="body2" color="#67748e">
+                          Detailed cash flow and scenario analysis
+                        </Typography>
+                      </Box>
+                    </Box>
+
+                    <Box display="flex" alignItems="start" gap={2}>
+                      <CheckCircle size={20} color="#4caf50" style={{ marginTop: 2 }} />
+                      <Box>
+                        <Typography variant="body1" fontWeight="600" color="#344767">
+                          Executive Presentation
+                        </Typography>
+                        <Typography variant="body2" color="#67748e">
+                          Investment-grade presentation materials
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </>
+                )}
               </Box>
+
+              {displayUser.tier === 'free' && (
+                <Box 
+                  mt={4} 
+                  p={3} 
+                  sx={{ 
+                    backgroundColor: '#fff3e0', 
+                    borderRadius: '12px',
+                    border: '1px solid #ffcc02'
+                  }}
+                >
+                  <Box display="flex" alignItems="center" gap={2} mb={2}>
+                    <Crown size={20} color="#ff9800" />
+                    <Typography variant="h6" fontWeight="bold" color="#e65100">
+                      Unlock Premium Features
+                    </Typography>
+                  </Box>
+                  <Typography variant="body2" color="#bf360c" mb={2}>
+                    Upgrade to Growth or Capital tier for industry-specific analysis, AI insights, and executive-grade reports.
+                  </Typography>
+                  <Button
+                    variant="contained"
+                    startIcon={<ExternalLink size={16} />}
+                    onClick={() => window.open('https://products.applebites.ai/', '_blank')}
+                    sx={{
+                      backgroundColor: '#ff9800',
+                      color: 'white',
+                      textTransform: 'none',
+                      fontWeight: 600,
+                      '&:hover': {
+                        backgroundColor: '#f57c00',
+                      }
+                    }}
+                  >
+                    View Upgrade Options
+                  </Button>
+                </Box>
+              )}
             </CardContent>
           </StatCard>
         </Box>
