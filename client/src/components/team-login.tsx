@@ -87,7 +87,7 @@ export default function TeamLogin({ onLoginSuccess }: TeamLoginProps) {
                         {...field}
                         type="email"
                         placeholder="Enter your email"
-                        className="bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20 pl-10"
+                        className="form-input pl-10"
                         disabled={loginMutation.isPending}
                       />
                     </div>
@@ -110,7 +110,7 @@ export default function TeamLogin({ onLoginSuccess }: TeamLoginProps) {
                         {...field}
                         type="password"
                         placeholder="Enter your password"
-                        className="bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20 pl-10"
+                        className="form-input pl-10"
                         disabled={loginMutation.isPending}
                       />
                     </div>
