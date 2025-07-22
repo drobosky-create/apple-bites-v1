@@ -148,7 +148,7 @@ export default function MaterialDashboardLogin() {
               >
                 Sign in
               </Typography>
-              <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1, flexWrap: 'wrap' }}>
                 <SocialButton onClick={handleSocialLogin}>
                   <Facebook sx={{ fontSize: 16 }} />
                 </SocialButton>
@@ -157,6 +157,12 @@ export default function MaterialDashboardLogin() {
                 </SocialButton>
                 <SocialButton onClick={handleSocialLogin}>
                   <Google sx={{ fontSize: 16 }} />
+                </SocialButton>
+                <SocialButton onClick={handleSocialLogin}>
+                  <Apple sx={{ fontSize: 16 }} />
+                </SocialButton>
+                <SocialButton onClick={handleSocialLogin}>
+                  <Email sx={{ fontSize: 16 }} />
                 </SocialButton>
               </Box>
             </AuthCardHeader>
