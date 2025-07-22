@@ -33,21 +33,28 @@ const MaterialBackground = styled(Box)(({ theme }) => ({
 const AuthenticationCard = styled(Card)(({ theme }) => ({
   width: '100%',
   maxWidth: 400,
-  borderRadius: 15,
-  overflow: 'visible',
-  boxShadow: '0 20px 27px 0 rgba(0, 0, 0, 0.05)',
+  margin: '0 auto',
+  marginTop: theme.spacing(6),
+  paddingTop: theme.spacing(8),
+  borderRadius: '16px',
+  boxShadow: '0 8px 20px rgba(0,0,0,0.1)',
+  position: 'relative',
   backgroundColor: '#ffffff',
+  zIndex: 1,
+  overflow: 'visible',
 }));
 
 const HeaderSection = styled(Box)(({ theme }) => ({
+  maxWidth: '320px',
   background: 'linear-gradient(135deg, rgba(116, 123, 138, 0.9) 0%, rgba(73, 83, 97, 0.9) 100%)',
-  borderRadius: '15px',
-  padding: theme.spacing(5, 3, 4),
+  borderRadius: '16px',
+  padding: '24px 16px',
+  margin: '0 auto',
   textAlign: 'center',
   color: '#ffffff',
   position: 'relative',
   top: '-40px',
-  marginBottom: '-40px',
+  zIndex: 2,
   boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
   backdropFilter: 'blur(12px)',
   WebkitBackdropFilter: 'blur(12px)',
@@ -191,7 +198,7 @@ export default function AuthenticMaterialLogin() {
               src={appleBitesLogo}
               alt="Apple Bites Business Assessment"
               sx={{
-                height: '200px',
+                height: '250px',
                 width: 'auto',
                 filter: 'brightness(1.1)',
                 display: 'block',
