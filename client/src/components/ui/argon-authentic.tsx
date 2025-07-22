@@ -1,5 +1,14 @@
-// Authentic Argon Dashboard Components Adapted for Your Brand
+// NextJS Material UI Components - Direct Replacement for Argon Dashboard
 import React from 'react';
+import { 
+  Box, 
+  Typography, 
+  Button, 
+  BoxProps, 
+  TypographyProps, 
+  ButtonProps 
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
 import { cn } from '@/lib/utils';
 
 // Argon Box - Core layout component
@@ -27,6 +36,45 @@ interface ArgonBoxProps extends React.HTMLAttributes<HTMLDivElement> {
   bgGradient?: 'primary' | 'info' | 'success' | 'warning' | 'error';
 }
 
+// Styled Material UI Box with Argon styling
+const StyledArgonBox = styled(Box, {
+  shouldForwardProp: (prop) => !['variant', 'bgColor', 'bgGradient'].includes(prop as string),
+})<ArgonBoxProps>(({ theme, variant, bgColor, bgGradient }) => {
+  const getBackground = () => {
+    if (variant === 'gradient' && bgGradient) {
+      const gradients = {
+        primary: 'linear-gradient(135deg, #5e72e4 0%, #825ee4 100%)',
+        info: 'linear-gradient(135deg, #11cdef 0%, #1171ef 100%)',
+        success: 'linear-gradient(135deg, #2dce89 0%, #2dcecc 100%)',
+        warning: 'linear-gradient(135deg, #fb6340 0%, #fbb140 100%)',
+        error: 'linear-gradient(135deg, #f5365c 0%, #f56036 100%)',
+      };
+      return gradients[bgGradient] || gradients.primary;
+    }
+    
+    const colors = {
+      white: '#ffffff',
+      primary: '#5e72e4',
+      secondary: '#8392ab',
+      info: '#11cdef',
+      success: '#2dce89',
+      warning: '#fb6340',
+      error: '#f5365c',
+      dark: '#344767',
+      transparent: 'transparent',
+    };
+    
+    return colors[bgColor as keyof typeof colors] || 'transparent';
+  };
+
+  return {
+    background: getBackground(),
+    ...(variant === 'gradient' && {
+      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+    }),
+  };
+});
+
 const ArgonBox = React.forwardRef<HTMLElement, ArgonBoxProps>(
   ({ 
     className, 
@@ -48,85 +96,52 @@ const ArgonBox = React.forwardRef<HTMLElement, ArgonBoxProps>(
     style,
     ...props 
   }, ref) => {
-    const Component = component;
-    
-    const bgColorClasses = {
-      white: 'bg-white',
-      primary: 'bg-[#0b2147]', // Your brand primary
-      secondary: 'bg-gray-600',
-      info: 'bg-blue-500',
-      success: 'bg-green-500',
-      warning: 'bg-orange-500',
-      error: 'bg-red-500',
-      dark: 'bg-gray-800',
-      transparent: 'bg-transparent'
-    };
-
-    const textColorClasses = {
-      white: 'text-white',
-      primary: 'text-[#0b2147]',
-      secondary: 'text-gray-600',
-      info: 'text-blue-500',
-      success: 'text-green-500',
-      warning: 'text-orange-500',
-      error: 'text-red-500',
-      dark: 'text-gray-800',
-      text: 'text-gray-700'
-    };
-
-    const borderRadiusClasses = {
-      xs: 'rounded-sm',
-      sm: 'rounded',
-      md: 'rounded-md',
-      lg: 'rounded-lg',
-      xl: 'rounded-xl',
-      section: 'rounded-3xl',
-      none: ''
-    };
-
-    const shadowClasses = {
-      xs: 'shadow-sm',
-      sm: 'shadow',
-      md: 'shadow-md',
-      lg: 'shadow-lg',
-      xl: 'shadow-xl',
-      none: ''
-    };
-
-    const computedStyle = {
-      ...style,
-      ...(p !== undefined && { padding: `${p * 8}px` }),
-      ...(m !== undefined && { margin: `${m * 8}px` }),
-      ...(px !== undefined && { paddingLeft: `${px * 8}px`, paddingRight: `${px * 8}px` }),
-      ...(py !== undefined && { paddingTop: `${py * 8}px`, paddingBottom: `${py * 8}px` }),
-      ...(mt !== undefined && { marginTop: `${mt * 8}px` }),
-      ...(mb !== undefined && { marginBottom: `${mb * 8}px` }),
-      ...(ml !== undefined && { marginLeft: `${ml * 8}px` }),
-      ...(mr !== undefined && { marginRight: `${mr * 8}px` }),
-      ...(display && { display }),
-      ...(justifyContent && { justifyContent }),
-      ...(alignItems && { alignItems }),
-      ...(width && { width }),
-      ...(height && { height }),
-      ...(lineHeight && { lineHeight }),
-    };
-
-    return React.createElement(
-      Component,
-      {
-        className: cn(
-          bgColorClasses[bgColor],
-          color && textColorClasses[color],
-          borderRadiusClasses[borderRadius],
-          shadowClasses[shadow],
-          variant === 'gradient' && bgGradient && `bg-gradient-to-r from-[#0b2147] to-blue-600`, // Your brand gradient
-          className
-        ),
-        style: computedStyle,
-        ref,
-        ...props
-      },
-      children
+    return (
+      <StyledArgonBox
+        component={component as any}
+        variant={variant}
+        bgColor={bgColor}
+        bgGradient={bgGradient}
+        ref={ref}
+        sx={{
+          ...(p !== undefined && { p }),
+          ...(m !== undefined && { m }),
+          ...(px !== undefined && { px }),
+          ...(py !== undefined && { py }),
+          ...(mt !== undefined && { mt }),
+          ...(mb !== undefined && { mb }),
+          ...(ml !== undefined && { ml }),
+          ...(mr !== undefined && { mr }),
+          ...(display && { display }),
+          ...(justifyContent && { justifyContent }),
+          ...(alignItems && { alignItems }),
+          ...(width && { width }),
+          ...(height && { height }),
+          ...(lineHeight && { lineHeight }),
+          ...(borderRadius !== 'none' && { 
+            borderRadius: {
+              xs: 1, sm: 2, md: 3, lg: 4, xl: 5, section: 8
+            }[borderRadius] || 3 
+          }),
+          ...(shadow !== 'none' && { 
+            boxShadow: {
+              xs: 1, sm: 2, md: 4, lg: 8, xl: 12
+            }[shadow] || 0 
+          }),
+          ...(color && { 
+            color: {
+              white: '#ffffff', primary: '#5e72e4', secondary: '#8392ab',
+              info: '#11cdef', success: '#2dce89', warning: '#fb6340',
+              error: '#f5365c', dark: '#344767', text: '#67748e'
+            }[color] || color 
+          }),
+          ...style,
+        }}
+        className={className}
+        {...props}
+      >
+        {children}
+      </StyledArgonBox>
     );
   }
 );
@@ -144,6 +159,57 @@ interface ArgonTypographyProps extends React.HTMLAttributes<HTMLElement> {
   component?: keyof JSX.IntrinsicElements;
 }
 
+// Styled Material UI Typography with Argon styling
+const StyledArgonTypography = styled(Typography, {
+  shouldForwardProp: (prop) => !['textGradient'].includes(prop as string),
+})<ArgonTypographyProps>(({ theme, color, textGradient, fontWeight, textTransform, opacity }) => {
+  const getColor = () => {
+    const colors = {
+      inherit: 'inherit',
+      primary: textGradient ? 'transparent' : '#5e72e4',
+      secondary: '#8392ab',
+      info: '#11cdef',
+      success: '#2dce89',
+      warning: '#fb6340',
+      error: '#f5365c',
+      light: '#e9ecef',
+      dark: '#344767',
+      text: '#67748e',
+      white: '#ffffff'
+    };
+    return colors[color as keyof typeof colors] || colors.dark;
+  };
+
+  const getBackground = () => {
+    if (textGradient && color) {
+      const gradients = {
+        primary: 'linear-gradient(135deg, #5e72e4 0%, #825ee4 100%)',
+        info: 'linear-gradient(135deg, #11cdef 0%, #1171ef 100%)',
+        success: 'linear-gradient(135deg, #2dce89 0%, #2dcecc 100%)',
+        warning: 'linear-gradient(135deg, #fb6340 0%, #fbb140 100%)',
+        error: 'linear-gradient(135deg, #f5365c 0%, #f56036 100%)',
+      };
+      return gradients[color as keyof typeof gradients] || gradients.primary;
+    }
+    return 'transparent';
+  };
+
+  return {
+    color: getColor(),
+    background: getBackground(),
+    WebkitBackgroundClip: textGradient ? 'text' : 'initial',
+    backgroundClip: textGradient ? 'text' : 'initial',
+    fontWeight: fontWeight ? {
+      light: 300,
+      regular: 400,
+      medium: 500,
+      bold: 700
+    }[fontWeight] : undefined,
+    textTransform: textTransform || 'none',
+    opacity: opacity || 1,
+  };
+});
+
 const ArgonTypography = React.forwardRef<HTMLElement, ArgonTypographyProps>(
   ({ 
     className, 
@@ -158,75 +224,22 @@ const ArgonTypography = React.forwardRef<HTMLElement, ArgonTypographyProps>(
     style,
     ...props 
   }, ref) => {
-    const variantStyles = {
-      h1: 'text-5xl leading-tight font-bold',
-      h2: 'text-4xl leading-tight font-bold',
-      h3: 'text-3xl leading-normal font-bold',
-      h4: 'text-2xl leading-normal font-bold',
-      h5: 'text-xl leading-normal font-bold',
-      h6: 'text-lg leading-relaxed font-bold',
-      subtitle1: 'text-lg leading-relaxed',
-      subtitle2: 'text-base leading-relaxed',
-      body1: 'text-base leading-relaxed',
-      body2: 'text-sm leading-relaxed',
-      button: 'text-sm leading-normal uppercase font-bold',
-      caption: 'text-xs leading-tight'
-    };
-
-    const colorClasses = {
-      inherit: 'text-inherit',
-      primary: textGradient ? 'bg-gradient-to-r from-[#0b2147] to-blue-600 bg-clip-text text-transparent' : 'text-[#0b2147]',
-      secondary: 'text-gray-600',
-      info: 'text-blue-500',
-      success: 'text-green-500',
-      warning: 'text-orange-500',
-      error: 'text-red-500',
-      light: 'text-gray-400',
-      dark: 'text-gray-800',
-      text: 'text-gray-700',
-      white: 'text-white'
-    };
-
-    const fontWeightClasses = {
-      light: 'font-light',
-      regular: 'font-normal',
-      medium: 'font-medium',
-      bold: 'font-bold'
-    };
-
-    const textTransformClasses = {
-      none: '',
-      capitalize: 'capitalize',
-      uppercase: 'uppercase',
-      lowercase: 'lowercase'
-    };
-
-    const getComponent = () => {
-      if (component) return component;
-      if (['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(variant)) {
-        return variant as keyof JSX.IntrinsicElements;
-      }
-      return 'p';
-    };
-
-    const Component = getComponent();
-
-    return React.createElement(
-      Component,
-      {
-        className: cn(
-          'font-sans',
-          variantStyles[variant],
-          colorClasses[color],
-          fontWeight && fontWeightClasses[fontWeight],
-          textTransformClasses[textTransform],
-          className
-        ),
-        style: { ...style, opacity },
-        ref,
-        ...props
-      },
-      children
+    return (
+      <StyledArgonTypography
+        variant={variant}
+        component={component}
+        color={color as any}
+        fontWeight={fontWeight}
+        textTransform={textTransform}
+        textGradient={textGradient}
+        opacity={opacity}
+        ref={ref}
+        className={className}
+        style={style}
+        {...props}
+      >
+        {children}
+      </StyledArgonTypography>
     );
   }
 );
@@ -243,6 +256,51 @@ interface ArgonButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>
   fullWidth?: boolean;
 }
 
+// Styled Material UI Button with Argon styling
+const StyledArgonButton = styled(Button, {
+  shouldForwardProp: (prop) => !['circular', 'iconOnly', 'gradientVariant'].includes(prop as string),
+})<ArgonButtonProps & { gradientVariant?: boolean }>(({ theme, color, variant, size, circular, iconOnly, gradientVariant }) => {
+  const getBackground = () => {
+    if (variant === 'gradient' || gradientVariant) {
+      const gradients = {
+        primary: 'linear-gradient(135deg, #5e72e4 0%, #825ee4 100%)',
+        secondary: 'linear-gradient(135deg, #8392ab 0%, #a8b8d8 100%)',
+        info: 'linear-gradient(135deg, #11cdef 0%, #1171ef 100%)',
+        success: 'linear-gradient(135deg, #2dce89 0%, #2dcecc 100%)',
+        warning: 'linear-gradient(135deg, #fb6340 0%, #fbb140 100%)',
+        error: 'linear-gradient(135deg, #f5365c 0%, #f56036 100%)',
+        light: 'linear-gradient(135deg, #e9ecef 0%, #ebeff4 100%)',
+        dark: 'linear-gradient(135deg, #344767 0%, #212529 100%)',
+        white: 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)',
+      };
+      return gradients[color as keyof typeof gradients] || gradients.primary;
+    }
+    return undefined;
+  };
+
+  return {
+    borderRadius: circular ? '50%' : '12px',
+    fontWeight: 600,
+    textTransform: 'none',
+    background: getBackground(),
+    boxShadow: variant === 'contained' || variant === 'gradient' 
+      ? '0 4px 6px -1px rgba(0, 0, 0, 0.1)' 
+      : 'none',
+    minWidth: iconOnly ? 'auto' : '64px',
+    aspectRatio: iconOnly ? '1' : 'auto',
+    '&:hover': {
+      background: getBackground()?.replace('135deg', '315deg'),
+      transform: 'translateY(-1px)',
+      boxShadow: variant === 'contained' || variant === 'gradient'
+        ? `0 6px 10px -1px rgba(${color === 'primary' ? '94, 114, 228' : '0, 0, 0'}, 0.3)`
+        : 'none',
+    },
+    '&:active': {
+      transform: 'translateY(0)',
+    },
+  };
+});
+
 const ArgonButton = React.forwardRef<HTMLButtonElement, ArgonButtonProps>(
   ({ 
     className, 
@@ -255,78 +313,21 @@ const ArgonButton = React.forwardRef<HTMLButtonElement, ArgonButtonProps>(
     children,
     ...props 
   }, ref) => {
-    const sizeClasses = {
-      small: 'px-3 py-1.5 text-sm min-h-[32px]',
-      medium: 'px-4 py-2 text-sm min-h-[40px]',
-      large: 'px-6 py-3 text-base min-h-[48px]'
-    };
-
-    const colorClasses = {
-      contained: {
-        primary: 'bg-gradient-to-r from-[#0b2147] to-blue-600 text-white shadow-lg hover:shadow-xl',
-        secondary: 'bg-gray-600 text-white shadow-lg hover:shadow-xl',
-        info: 'bg-blue-500 text-white shadow-lg hover:shadow-xl',
-        success: 'bg-green-500 text-white shadow-lg hover:shadow-xl',
-        warning: 'bg-orange-500 text-white shadow-lg hover:shadow-xl',
-        error: 'bg-red-500 text-white shadow-lg hover:shadow-xl',
-        light: 'bg-gray-100 text-gray-800 shadow-lg hover:shadow-xl',
-        dark: 'bg-gray-800 text-white shadow-lg hover:shadow-xl',
-        white: 'bg-white text-gray-800 shadow-lg hover:shadow-xl'
-      },
-      gradient: {
-        primary: 'bg-gradient-to-r from-[#0b2147] to-blue-600 text-white shadow-lg hover:shadow-xl',
-        secondary: 'bg-gradient-to-r from-gray-600 to-gray-700 text-white shadow-lg hover:shadow-xl',
-        info: 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg hover:shadow-xl',
-        success: 'bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg hover:shadow-xl',
-        warning: 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg hover:shadow-xl',
-        error: 'bg-gradient-to-r from-red-500 to-red-600 text-white shadow-lg hover:shadow-xl',
-        light: 'bg-gradient-to-r from-gray-100 to-gray-200 text-gray-800 shadow-lg hover:shadow-xl',
-        dark: 'bg-gradient-to-r from-gray-800 to-gray-900 text-white shadow-lg hover:shadow-xl',
-        white: 'bg-gradient-to-r from-white to-gray-50 text-gray-800 shadow-lg hover:shadow-xl'
-      },
-      outlined: {
-        primary: 'border-2 border-[#0b2147] text-[#0b2147] hover:bg-[#0b2147] hover:text-white',
-        secondary: 'border-2 border-gray-600 text-gray-600 hover:bg-gray-600 hover:text-white',
-        info: 'border-2 border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white',
-        success: 'border-2 border-green-500 text-green-500 hover:bg-green-500 hover:text-white',
-        warning: 'border-2 border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white',
-        error: 'border-2 border-red-500 text-red-500 hover:bg-red-500 hover:text-white',
-        light: 'border-2 border-gray-300 text-gray-600 hover:bg-gray-300 hover:text-gray-800',
-        dark: 'border-2 border-gray-800 text-gray-800 hover:bg-gray-800 hover:text-white',
-        white: 'border-2 border-white text-white hover:bg-white hover:text-gray-800'
-      },
-      text: {
-        primary: 'text-[#0b2147] hover:bg-blue-50',
-        secondary: 'text-gray-600 hover:bg-gray-50',
-        info: 'text-blue-500 hover:bg-blue-50',
-        success: 'text-green-500 hover:bg-green-50',
-        warning: 'text-orange-500 hover:bg-orange-50',
-        error: 'text-red-500 hover:bg-red-50',
-        light: 'text-gray-400 hover:bg-gray-50',
-        dark: 'text-gray-800 hover:bg-gray-50',
-        white: 'text-white hover:bg-white/10'
-      }
-    };
-
     return (
-      <button
-        className={cn(
-          'inline-flex items-center justify-center font-bold transition-all duration-200 ease-in-out',
-          'focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500',
-          'hover:transform hover:-translate-y-0.5',
-          'disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none',
-          sizeClasses[size],
-          colorClasses[variant === 'gradient' ? 'gradient' : (variant || 'contained')]?.[color] || colorClasses.contained.primary,
-          circular ? 'rounded-full' : 'rounded-lg',
-          iconOnly && 'aspect-square',
-          fullWidth && 'w-full',
-          className
-        )}
+      <StyledArgonButton
+        variant={variant === 'gradient' ? 'contained' : variant}
+        color={color as any}
+        size={size}
+        circular={circular}
+        iconOnly={iconOnly}
+        fullWidth={fullWidth}
+        gradientVariant={variant === 'gradient'}
         ref={ref}
+        className={className}
         {...props}
       >
         {children}
-      </button>
+      </StyledArgonButton>
     );
   }
 );

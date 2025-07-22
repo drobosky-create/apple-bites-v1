@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { TrendingUp } from 'lucide-react';
+import { Card, Typography, Box, Chip, Tooltip } from '@mui/material';
+import { styled } from '@mui/material/styles';
 type OperationalGrade = 'A' | 'B' | 'C' | 'D' | 'F';
 
 interface HorizontalGradeSelectorProps {
@@ -67,110 +69,189 @@ const HorizontalGradeSelector: React.FC<HorizontalGradeSelectorProps> = ({
     }).format(value);
   };
 
-  return (
-    <div className="bg-white/70 backdrop-blur-xl rounded-2xl shadow-xl shadow-slate-900/5 border border-white/30 p-8 sm:p-12">
-      {/* Header Section with Argon Typography */}
-      <div className="text-center mb-8">
-        <h3 className="text-2xl sm:text-3xl font-bold text-[#344767] mb-4 tracking-wide flex items-center justify-center gap-3">
-          <TrendingUp className="h-8 w-8 text-[#5e72e4]" />
-          Interactive Grade Assessment
-        </h3>
-        <p className="text-lg sm:text-xl text-[#67748e] leading-relaxed font-medium">
-          Click any grade below to explore how operational improvements impact your business valuation
-        </p>
-      </div>
+  const StyledCard = styled(Card)(({ theme }) => ({
+    background: 'rgba(255, 255, 255, 0.7)',
+    backdropFilter: 'blur(16px)',
+    borderRadius: '16px',
+    boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+    border: '1px solid rgba(255, 255, 255, 0.3)',
+    padding: theme.spacing(6, 8),
+    [theme.breakpoints.down('sm')]: {
+      padding: theme.spacing(4, 6),
+    },
+  }));
 
-      {/* Current vs Projected Display */}
-      <div className="bg-gradient-to-br from-slate-50/80 to-blue-50/60 backdrop-blur-sm rounded-xl p-6 sm:p-8 border border-white/50 mb-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-center">
-          <div>
-            <div className="text-sm font-semibold text-[#67748e] mb-2">Current Valuation (Grade {baseGrade})</div>
-            <div className="text-2xl font-bold text-[#344767]">{formatCurrency(baseEstimate)}</div>
-          </div>
-          <div>
-            <div className="text-sm font-semibold text-[#67748e] mb-2">Projected Valuation (Grade {sliderGrade})</div>
-            <div className="text-2xl font-bold text-[#5e72e4]">{formatCurrency(sliderEstimate)}</div>
-          </div>
-        </div>
-        
-        {/* Improvement Indicator */}
-        {sliderEstimate !== baseEstimate && (
-          <div className="text-center mt-4">
-            <div className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-medium ${
-              sliderEstimate > baseEstimate 
-                ? 'bg-[#2dce89]/10 text-[#2dce89] border border-[#2dce89]/20' 
-                : 'bg-[#f5365c]/10 text-[#f5365c] border border-[#f5365c]/20'
-            }`}>
-              {sliderEstimate > baseEstimate ? '+' : ''}{formatCurrency(sliderEstimate - baseEstimate)} change
-            </div>
-          </div>
-        )}
-      </div>
+  const GradeCard = styled(Card, {
+    shouldForwardProp: (prop) => !['isSelected', 'isCurrent'].includes(prop as string),
+  })<{ isSelected: boolean; isCurrent: boolean }>(({ theme, isSelected, isCurrent }) => ({
+    padding: theme.spacing(3),
+    borderRadius: '12px',
+    textAlign: 'center',
+    transition: 'all 0.3s ease-in-out',
+    cursor: 'pointer',
+    border: '1px solid rgba(255, 255, 255, 0.2)',
+    position: 'relative',
+    '&:hover': {
+      transform: 'scale(1.05)',
+      boxShadow: theme.shadows[8],
+    },
+    ...(isSelected && {
+      background: 'linear-gradient(135deg, #5e72e4 0%, #825ee4 100%)',
+      color: '#ffffff',
+      boxShadow: '0 8px 16px rgba(94, 114, 228, 0.4)',
+    }),
+    ...(isCurrent && !isSelected && {
+      background: 'linear-gradient(135deg, #fb6340 0%, #fbb140 100%)',
+      color: '#ffffff',
+      boxShadow: '0 8px 16px rgba(251, 99, 64, 0.4)',
+    }),
+    ...(!isSelected && !isCurrent && {
+      background: 'rgba(248, 249, 250, 0.8)',
+      color: '#344767',
+      '&:hover': {
+        background: 'rgba(244, 245, 247, 0.9)',
+      },
+    }),
+  }));
+
+  return (
+    <StyledCard>
+      {/* Header Section */}
+      <Box textAlign="center" mb={4}>
+        <Typography 
+          variant="h3" 
+          component="h3" 
+          sx={{ 
+            fontWeight: 700, 
+            color: '#344767', 
+            mb: 2,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 2
+          }}
+        >
+          <TrendingUp style={{ fontSize: '2rem', color: '#5e72e4' }} />
+          Interactive Grade Assessment
+        </Typography>
+        <Typography 
+          variant="h6" 
+          sx={{ 
+            color: '#67748e', 
+            fontWeight: 500,
+            lineHeight: 1.6
+          }}
+        >
+          Click any grade below to explore how operational improvements impact your business valuation
+        </Typography>
+      </Box>
+
+
 
       
 
-      {/* Grade Cards - Responsive Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-4 md:gap-6">
+      {/* Grade Cards - Material UI Grid */}
+      <Box 
+        display="grid" 
+        gridTemplateColumns={{ xs: 'repeat(2, 1fr)', md: 'repeat(5, 1fr)' }}
+        gap={{ xs: 2, md: 3 }}
+        mb={4}
+      >
         {gradeData.map((item) => {
           const isCurrent = item.grade === baseGrade;
           const isSelected = item.grade === sliderGrade;
-          const isHovered = hoveredGrade === item.grade;
-          const gradientStyle = getGradientStyle(item.grade, isSelected, isCurrent);
           
           return (
-            <div
+            <Tooltip
               key={item.grade}
-              className="relative group cursor-pointer"
-              onClick={() => setSliderGrade(item.grade)}
-              onMouseEnter={() => setHoveredGrade(item.grade)}
-              onMouseLeave={() => setHoveredGrade(null)}
+              title={
+                <Box>
+                  <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 0.5 }}>
+                    Grade {item.grade}: {item.multiple}
+                  </Typography>
+                  <Typography variant="caption" sx={{ opacity: 0.9 }}>
+                    {item.description}
+                  </Typography>
+                </Box>
+              }
+              placement="top"
+              arrow
             >
-              {/* Grade Card with Argon Styling */}
-              <div
-                className="relative p-6 rounded-xl text-center transition-all duration-300 ease-in-out hover:scale-105 border border-white/20"
-                style={gradientStyle}
+              <GradeCard
+                isSelected={isSelected}
+                isCurrent={isCurrent}
+                onClick={() => setSliderGrade(item.grade)}
+                onMouseEnter={() => setHoveredGrade(item.grade)}
+                onMouseLeave={() => setHoveredGrade(null)}
               >
                 {/* Current Badge */}
                 {isCurrent && (
-                  <div className="absolute -top-2 -right-2">
-                    <div className="bg-[#fb6340] text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg animate-pulse">
-                      Current
-                    </div>
-                  </div>
+                  <Chip
+                    label="Current"
+                    size="small"
+                    sx={{
+                      position: 'absolute',
+                      top: -8,
+                      right: -8,
+                      bgcolor: '#fb6340',
+                      color: 'white',
+                      fontSize: '0.75rem',
+                      fontWeight: 700,
+                      animation: 'pulse 2s infinite',
+                      '@keyframes pulse': {
+                        '0%, 100%': { opacity: 1 },
+                        '50%': { opacity: 0.7 },
+                      },
+                    }}
+                  />
                 )}
                 
                 {/* Grade Letter */}
-                <div className="text-4xl font-bold mb-2">{item.grade}</div>
+                <Typography 
+                  variant="h2" 
+                  component="div" 
+                  sx={{ fontWeight: 700, mb: 1 }}
+                >
+                  {item.grade}
+                </Typography>
                 
                 {/* Multiple */}
-                <div className="text-sm font-semibold mb-1">{item.multiple}</div>
+                <Typography 
+                  variant="body2" 
+                  sx={{ fontWeight: 600, mb: 0.5 }}
+                >
+                  {item.multiple}
+                </Typography>
                 
                 {/* Label */}
-                <div className="text-xs font-medium opacity-90">{item.label}</div>
-              </div>
-
-              {/* Tooltip with Argon Styling */}
-              <div className={`absolute bottom-full mb-3 left-1/2 transform -translate-x-1/2 px-4 py-3 bg-[#344767] text-white text-sm rounded-lg shadow-xl z-20 whitespace-nowrap transition-opacity duration-200 pointer-events-none ${
-                isHovered ? 'opacity-100' : 'opacity-0'
-              }`}>
-                <div className="font-semibold mb-1">Grade {item.grade}: {item.multiple}</div>
-                <div className="text-xs opacity-90">{item.description}</div>
-                {/* Tooltip Arrow */}
-                <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-[#344767]" />
-              </div>
-            </div>
+                <Typography 
+                  variant="caption" 
+                  sx={{ fontWeight: 500, opacity: 0.9 }}
+                >
+                  {item.label}
+                </Typography>
+              </GradeCard>
+            </Tooltip>
           );
         })}
-      </div>
+      </Box>
 
       {/* Additional Info */}
-      <div className="text-center mt-8">
-        <p className="text-sm text-[#67748e] leading-relaxed">
+      <Box textAlign="center" mt={4}>
+        <Typography 
+          variant="body2" 
+          sx={{ 
+            color: '#67748e', 
+            lineHeight: 1.6,
+            maxWidth: 600,
+            mx: 'auto'
+          }}
+        >
           Each grade represents operational excellence levels that directly impact business valuation multiples. 
           Click any grade to see the potential impact on your business value.
-        </p>
-      </div>
-    </div>
+        </Typography>
+      </Box>
+    </StyledCard>
   );
 };
 
