@@ -148,9 +148,9 @@ export default function MaterialDashboardLogin() {
                 src="/assets/logos/apple-bites-meritage-logo.png"
                 alt="Apple Bites Business Assessment"
                 sx={{
-                  height: '100px', // Reduced logo size
+                  height: '250px',
                   width: 'auto',
-                  marginBottom: '8px', // Reduced margin
+                  marginBottom: '8px',
                   filter: 'brightness(1.1)',
                 }}
               />
