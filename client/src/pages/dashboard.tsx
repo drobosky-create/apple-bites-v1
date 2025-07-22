@@ -214,8 +214,10 @@ export default function Dashboard() {
               left: 0,
               right: 0,
               bottom: 0,
-              background: 'rgba(116, 123, 138, 0.85)', // Glass overlay with secondary color
-              backdropFilter: 'blur(10px)',
+              background: 'rgba(116, 123, 138, 0.3)', // More transparent frosted glass
+              backdropFilter: 'blur(20px) saturate(180%)',
+              WebkitBackdropFilter: 'blur(20px) saturate(180%)', // Safari support
+              border: '1px solid rgba(255, 255, 255, 0.1)',
               zIndex: 1,
             },
             '& > *': {
@@ -227,7 +229,7 @@ export default function Dashboard() {
       >
         <Box sx={{ p: 2, textAlign: 'center' }}>
           <Box component="img"
-            src="/assets/logos/apple-bites-logo-variant-4.png"
+            src="/assets/logos/apple-bites-logo-variant-3.png"
             alt="Apple Bites Business Assessment"
             sx={{
               width: '80%',        // Responsive width inside sidebar
@@ -318,7 +320,7 @@ export default function Dashboard() {
         <Box sx={{ mt: 'auto', p: 2 }}>
           <Button
             fullWidth
-            variant="outlined"
+            variant="contained"
             onClick={() => logoutMutation.mutate()}
             disabled={logoutMutation.isPending}
             sx={{
