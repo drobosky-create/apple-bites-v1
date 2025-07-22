@@ -207,11 +207,18 @@ export default function Dashboard() {
           },
         }}
       >
-        <Box sx={{ p: 3, textAlign: 'center' }}>
+        <Box sx={{ p: 2, textAlign: 'center' }}>
           <Box component="img"
-            src="/assets/logos/apple-bites-logo-3.png"
+            src="/assets/logos/apple-bites-logo-variant-4.png"
             alt="Apple Bites Business Assessment"
-            sx={{ height: 60, width: 'auto', mb: 2 }}
+            sx={{
+              width: '80%',        // Responsive width inside sidebar
+              maxWidth: 200,       // Cap the max width for consistency
+              mt: 1,               // Move logo up (margin top)
+              mb: 1,               // Space below logo
+              mx: 'auto',          // Center horizontally
+              display: 'block',
+            }}
           />
           <Typography variant="h6" fontWeight="bold" color="white" gutterBottom>
             {displayUser.firstName} {displayUser.lastName}
