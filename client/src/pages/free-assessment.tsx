@@ -48,8 +48,34 @@ import type { ValuationAssessment } from "@shared/schema";
 const AssessmentBackground = styled(Box)(({ theme }) => ({
   display: 'flex',
   minHeight: '100vh',
-  backgroundColor: '#f8f9fa',
+  background: `
+    linear-gradient(135deg, 
+      #0b2147 0%, 
+      #1e3a8a 25%, 
+      #312e81 50%, 
+      #1e293b 75%, 
+      #0f172a 100%
+    ),
+    radial-gradient(ellipse at 70% 20%, rgba(139, 92, 246, 0.3) 0%, transparent 50%),
+    radial-gradient(ellipse at 30% 80%, rgba(59, 130, 246, 0.2) 0%, transparent 60%)
+  `,
+  backgroundAttachment: 'fixed',
+  position: 'relative',
   gap: 0,
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background: `
+      url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M50 90C77.614 90 100 67.614 100 40S77.614 0 50 0 0 22.386 0 50s22.386 40 50 40zm0-8c19.882 0 36-16.118 36-36S69.882 8 50 8 14 24.118 14 50s16.118 32 36 32z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"),
+      linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.01) 50%, transparent 60%)
+    `,
+    pointerEvents: 'none',
+    opacity: 0.4,
+  }
 }));
 
 const drawerWidth = 280;
@@ -60,14 +86,33 @@ const MainContent = styled(Box)(({ theme }) => ({
   marginLeft: 0,
   minHeight: '100vh',
   width: `calc(100vw - ${drawerWidth}px)`,
-  backgroundColor: '#f8f9fa',
+  position: 'relative',
+  background: 'transparent',
 }));
 
 const FormCard = styled(Card)(({ theme }) => ({
-  backgroundColor: '#ffffff',
-  borderRadius: '16px',
-  boxShadow: '0 8px 20px rgba(0,0,0,0.1)',
+  backgroundColor: 'rgba(255, 255, 255, 0.95)',
+  backdropFilter: 'blur(20px) saturate(180%)',
+  WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+  borderRadius: '20px',
+  border: '1px solid rgba(255, 255, 255, 0.3)',
+  boxShadow: `
+    0 25px 50px rgba(0, 0, 0, 0.25),
+    0 0 0 1px rgba(255, 255, 255, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1)
+  `,
   transition: 'all 0.3s ease',
+  position: 'relative',
+  overflow: 'hidden',
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: '1px',
+    background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent)',
+  }
 }));
 
 const StepIcon = styled(Box)<{ active: boolean; completed: boolean }>(({ theme, active, completed }) => ({
@@ -93,12 +138,17 @@ const StepConnector = styled(Box)(({ theme }) => ({
 }));
 
 const SidebarCard = styled(Card)(({ theme }) => ({
-  backgroundColor: 'rgba(255, 255, 255, 0.3)',
+  backgroundColor: 'rgba(255, 255, 255, 0.1)',
   backdropFilter: 'blur(20px) saturate(180%)',
   WebkitBackdropFilter: 'blur(20px) saturate(180%)',
   border: '1px solid rgba(255, 255, 255, 0.2)',
   borderRadius: '16px',
-  boxShadow: 'none',
+  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+  transition: 'all 0.3s ease',
+  '&:hover': {
+    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    transform: 'translateY(-2px)',
+  }
 }));
 
 export default function FreeAssessment() {
@@ -184,10 +234,32 @@ export default function FreeAssessment() {
           '& .MuiDrawer-paper': {
             width: drawerWidth,
             boxSizing: 'border-box',
-            background: 'linear-gradient(135deg, #0b2147 0%, #1a365d 100%)',
-            backgroundImage: 'url("data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.05"%3E%3Cpath d="m36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
+            background: 'linear-gradient(135deg, rgba(11, 33, 71, 0.95) 0%, rgba(26, 54, 93, 0.98) 50%, rgba(11, 33, 71, 0.95) 100%)',
+            backgroundImage: `
+              radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+              radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.15) 0%, transparent 50%),
+              radial-gradient(circle at 40% 40%, rgba(120, 119, 198, 0.2) 0%, transparent 50%),
+              url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")
+            `,
+            backdropFilter: 'blur(20px) saturate(180%)',
+            WebkitBackdropFilter: 'blur(20px) saturate(180%)',
             border: 'none',
+            borderRight: '1px solid rgba(255, 255, 255, 0.1)',
+            position: 'relative',
             overflow: 'hidden',
+            '&::before': {
+              content: '""',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: `
+                linear-gradient(180deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 20%, transparent 100%),
+                radial-gradient(ellipse at top, rgba(255,255,255,0.1) 0%, transparent 70%)
+              `,
+              pointerEvents: 'none',
+            }
           },
         }}
       >
@@ -280,24 +352,38 @@ export default function FreeAssessment() {
 
           {/* Navigation Actions */}
           <Box sx={{ mt: 'auto', pt: 3, borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-            <Button
-              variant="outlined"
-              fullWidth
-              startIcon={<Home size={18} />}
+            <Box
+              component="button"
               onClick={() => window.location.href = '/dashboard'}
               sx={{
-                borderColor: 'rgba(255,255,255,0.3)',
+                width: '100%',
+                p: 2,
+                borderColor: 'rgba(255,255,255,0.2)',
+                backgroundColor: 'rgba(255,255,255,0.1)',
                 color: 'white',
                 textTransform: 'none',
+                border: '1px solid rgba(255,255,255,0.2)',
+                borderRadius: '12px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 1,
                 mb: 1,
+                backdropFilter: 'blur(10px)',
+                transition: 'all 0.3s ease',
                 '&:hover': {
-                  borderColor: 'rgba(255,255,255,0.5)',
-                  backgroundColor: 'rgba(255,255,255,0.1)',
+                  borderColor: 'rgba(255,255,255,0.4)',
+                  backgroundColor: 'rgba(255,255,255,0.2)',
+                  transform: 'translateY(-2px)',
                 }
               }}
             >
-              Dashboard
-            </Button>
+              <Home size={18} />
+              <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                Dashboard
+              </Typography>
+            </Box>
             <Typography 
               variant="caption" 
               sx={{ 
