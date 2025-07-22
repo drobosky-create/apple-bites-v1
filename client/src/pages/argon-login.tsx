@@ -4,84 +4,142 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useLocation } from "wouter";
 import { useToast } from "@/hooks/use-toast";
-import { Eye, EyeOff, LogIn, UserPlus, ArrowLeft, ArrowRight } from "lucide-react";
+import {
+  Box,
+  Card,
+  CardContent,
+  TextField,
+  Button,
+  Typography,
+  Switch,
+  FormControlLabel,
+  Link as MuiLink,
+  Grid,
+  Container,
+  IconButton,
+} from '@mui/material';
+import { Facebook, GitHub, Google } from '@mui/icons-material';
+import { styled } from '@mui/material/styles';
 import { 
   ArgonBox, 
   ArgonButton, 
   ArgonTypography 
 } from "@/components/ui/argon-authentic";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { registerUserSchema, loginUserSchema, type RegisterUser, type LoginUser } from "@shared/schema";
 import appleBitesLogo from "@assets/Apple Bites_1752266454888.png";
 
-import _3 from "@assets/3.png";
+// Styled Components
+const GradientBackground = styled(Box)(({ theme }) => ({
+  minHeight: '100vh',
+  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+  position: 'relative',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundImage: `url('data:image/svg+xml,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><g fill="%23ffffff" fill-opacity="0.1"><circle cx="7" cy="7" r="2"/><circle cx="27" cy="7" r="2"/><circle cx="47" cy="7" r="2"/><circle cx="7" cy="27" r="2"/><circle cx="27" cy="27" r="2"/><circle cx="47" cy="27" r="2"/><circle cx="7" cy="47" r="2"/><circle cx="27" cy="47" r="2"/><circle cx="47" cy="47" r="2"/></g></g></svg>')`,
+  },
+}));
+
+const LoginCard = styled(Card)(({ theme }) => ({
+  maxWidth: 400,
+  width: '100%',
+  borderRadius: 16,
+  boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+  overflow: 'visible',
+  position: 'relative',
+  zIndex: 1,
+}));
+
+const LoginHeader = styled(Box)(({ theme }) => ({
+  background: 'linear-gradient(135deg, #344767 0%, #2c3e50 100%)',
+  padding: theme.spacing(4, 4, 3),
+  borderRadius: '16px 16px 0 0',
+  textAlign: 'center',
+  marginBottom: theme.spacing(1),
+}));
+
+const SocialButton = styled(IconButton)(({ theme }) => ({
+  backgroundColor: 'rgba(255, 255, 255, 0.1)',
+  color: '#ffffff',
+  margin: theme.spacing(0, 0.5),
+  width: 40,
+  height: 40,
+  '&:hover': {
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    transform: 'translateY(-2px)',
+  },
+  transition: 'all 0.3s ease',
+}));
+
+const StyledTextField = styled(TextField)(({ theme }) => ({
+  '& .MuiOutlinedInput-root': {
+    borderRadius: 12,
+    backgroundColor: '#f8f9fa',
+    '& fieldset': {
+      borderColor: '#e9ecef',
+    },
+    '&:hover fieldset': {
+      borderColor: '#dee2e6',
+    },
+    '&.Mui-focused fieldset': {
+      borderColor: '#5e72e4',
+    },
+  },
+  '& .MuiInputLabel-root': {
+    color: '#67748e',
+  },
+}));
+
+const SignInButton = styled(Button)(({ theme }) => ({
+  background: 'linear-gradient(135deg, #344767 0%, #2c3e50 100%)',
+  color: '#ffffff',
+  borderRadius: 12,
+  padding: theme.spacing(1.5, 0),
+  fontSize: '0.875rem',
+  fontWeight: 600,
+  textTransform: 'uppercase',
+  letterSpacing: '0.5px',
+  boxShadow: '0 4px 6px rgba(52, 71, 103, 0.3)',
+  '&:hover': {
+    background: 'linear-gradient(135deg, #2c3e50 0%, #344767 100%)',
+    transform: 'translateY(-1px)',
+    boxShadow: '0 6px 10px rgba(52, 71, 103, 0.4)',
+  },
+  '&:disabled': {
+    background: '#e9ecef',
+    color: '#67748e',
+    transform: 'none',
+    boxShadow: 'none',
+  },
+  transition: 'all 0.3s ease',
+}));
 
 export default function ArgonLogin() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
-  const [showPassword, setShowPassword] = useState(false);
-  const [activeTab, setActiveTab] = useState<'oauth' | 'register' | 'login'>('oauth');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const registerForm = useForm<RegisterUser>({
-    resolver: zodResolver(registerUserSchema),
-    defaultValues: {
-      firstName: "",
-      lastName: "",
-      email: "",
-      password: "",
-    },
-  });
-
-  const loginForm = useForm<LoginUser>({
-    resolver: zodResolver(loginUserSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
-  });
-
-  const registerMutation = useMutation({
-    mutationFn: async (data: RegisterUser) => {
-      const response = await fetch("/api/users/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-      
-      if (!response.ok) {
-        const error = await response.text();
-        throw new Error(error || "Registration failed");
-      }
-      
-      return response.json();
-    },
-    onSuccess: (data) => {
-      toast({
-        title: "Account created successfully",
-        description: `Welcome to your ${data.user.tier} account!`,
-      });
-      setLocation("/dashboard");
-    },
-    onError: (error: Error) => {
-      toast({
-        title: "Registration failed",
-        description: error.message,
-        variant: "destructive",
-      });
-    },
-  });
-
-  const loginMutation = useMutation({
-    mutationFn: async (data: LoginUser) => {
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    
+    try {
       const response = await fetch("/api/users/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ email, password }),
       });
       
       if (!response.ok) {
@@ -89,284 +147,192 @@ export default function ArgonLogin() {
         throw new Error(error || "Login failed");
       }
       
-      return response.json();
-    },
-    onSuccess: (data) => {
+      const data = await response.json();
       toast({
         title: "Welcome back!",
-        description: `Logged in to your ${data.user.tier} account`,
+        description: `Logged in to your ${data.user?.tier || 'free'} account`,
       });
       setLocation("/dashboard");
-    },
-    onError: (error: Error) => {
+    } catch (error: any) {
       toast({
         title: "Login failed",
         description: error.message,
         variant: "destructive",
       });
-    },
-  });
-
-  const onRegisterSubmit = (data: RegisterUser) => {
-    registerMutation.mutate(data);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const onLoginSubmit = (data: LoginUser) => {
-    loginMutation.mutate(data);
+  const handleSocialLogin = (provider: 'facebook' | 'github' | 'google') => {
+    if (provider === 'github') {
+      // Use Replit OAuth for GitHub
+      window.location.href = '/api/login';
+    } else {
+      toast({
+        title: "Coming Soon",
+        description: `${provider.charAt(0).toUpperCase() + provider.slice(1)} login will be available soon.`,
+      });
+    }
+  };
+
+  const handleSignUp = () => {
+    toast({
+      title: "Registration",
+      description: "Please use the assessment purchase flow to create your account.",
+    });
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center p-4">
-      {/* Professional Argon Card */}
-      <div className="w-full max-w-md bg-white rounded-xl shadow-2xl border border-slate-200 overflow-hidden">
-        
-        {/* Header Section with Branding */}
-        <div className="px-8 pt-8 pb-6 text-center bg-gradient-to-b from-white to-slate-50">
-          <div className="mb-6">
-            <img 
-              src={_3} 
-              alt="Apple Bites Business Assessment" 
-              className="h-[375px] w-auto mx-auto mb-4"
-            />
-            
-            
-            
-          </div>
-          
-          <ArgonTypography variant="body1" className="text-slate-600 mb-6">
-            Create your account to access business valuation tools
-          </ArgonTypography>
-        </div>
+    <GradientBackground>
+      <Container maxWidth="sm" sx={{ px: 2 }}>
+        <LoginCard>
+          <LoginHeader>
+            <Typography 
+              variant="h4" 
+              component="h1" 
+              sx={{ 
+                color: '#ffffff', 
+                fontWeight: 600, 
+                mb: 2,
+                fontSize: { xs: '1.5rem', sm: '2rem' }
+              }}
+            >
+              Sign in
+            </Typography>
+            <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1 }}>
+              <SocialButton onClick={() => handleSocialLogin('facebook')} size="small">
+                <Facebook fontSize="small" />
+              </SocialButton>
+              <SocialButton onClick={() => handleSocialLogin('github')} size="small">
+                <GitHub fontSize="small" />
+              </SocialButton>
+              <SocialButton onClick={() => handleSocialLogin('google')} size="small">
+                <Google fontSize="small" />
+              </SocialButton>
+            </Box>
+          </LoginHeader>
 
-        {/* Content Section */}
-        <div className="px-8 pb-8">
-          
-          {/* OAuth Section - Default */}
-          {activeTab === 'oauth' && (
-            <div className="space-y-4">
-              <button
-                onClick={() => window.location.href = '/api/login'}
-                className="w-full bg-[#1e3a8a] hover:bg-[#1d4ed8] text-white py-4 px-6 rounded-lg font-semibold shadow-lg transition-all duration-200 flex items-center justify-center gap-2"
+          <CardContent sx={{ p: 4, pt: 3 }}>
+            <form onSubmit={handleLogin}>
+              <Box sx={{ mb: 3 }}>
+                <StyledTextField
+                  fullWidth
+                  label="Email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  variant="outlined"
+                  required
+                  disabled={isLoading}
+                  size="medium"
+                />
+              </Box>
+
+              <Box sx={{ mb: 3 }}>
+                <StyledTextField
+                  fullWidth
+                  label="Password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  variant="outlined"
+                  required
+                  disabled={isLoading}
+                  size="medium"
+                />
+              </Box>
+
+              <Box sx={{ mb: 3 }}>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={rememberMe}
+                      onChange={(e) => setRememberMe(e.target.checked)}
+                      sx={{
+                        '& .MuiSwitch-switchBase.Mui-checked': {
+                          color: '#5e72e4',
+                        },
+                        '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+                          backgroundColor: '#5e72e4',
+                        },
+                      }}
+                    />
+                  }
+                  label={
+                    <Typography variant="body2" sx={{ color: '#67748e' }}>
+                      Remember me
+                    </Typography>
+                  }
+                />
+              </Box>
+
+              <SignInButton
+                type="submit"
+                fullWidth
+                disabled={isLoading || !email || !password}
+                sx={{ mb: 3 }}
               >
-                Continue Assessment
-                <ArrowRight className="w-5 h-5" />
-              </button>
-              
-              <div className="text-center">
-                <ArgonTypography variant="body2" className="text-slate-500 mb-4">
-                  Secure OAuth authentication
-                </ArgonTypography>
-              </div>
+                {isLoading ? 'Signing in...' : 'Sign in'}
+              </SignInButton>
 
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-slate-300" />
-                </div>
-                <div className="relative flex justify-center text-sm">
-                  <span className="px-4 bg-white text-slate-500">Or</span>
-                </div>
-              </div>
+              <Box sx={{ textAlign: 'center' }}>
+                <Typography variant="body2" sx={{ color: '#67748e' }}>
+                  Don't have an account?{' '}
+                  <MuiLink
+                    component="button"
+                    type="button"
+                    onClick={handleSignUp}
+                    sx={{
+                      color: '#5e72e4',
+                      textDecoration: 'none',
+                      fontWeight: 500,
+                      '&:hover': {
+                        textDecoration: 'underline',
+                      },
+                    }}
+                  >
+                    Sign up
+                  </MuiLink>
+                </Typography>
+              </Box>
+            </form>
+          </CardContent>
+        </LoginCard>
+      </Container>
 
-              <div className="grid grid-cols-2 gap-4 mt-6">
-                <ArgonButton
-                  variant="outlined"
-                  onClick={() => setActiveTab('register')}
-                  className="border-[#0b2147] text-[#0b2147] hover:bg-[#0b2147] hover:text-white py-2 rounded-lg font-medium"
-                >
-                  <UserPlus className="w-4 h-4 mr-2" />
-                  Create Account
-                </ArgonButton>
-                
-                <ArgonButton
-                  variant="outlined"
-                  onClick={() => setActiveTab('login')}
-                  className="border-[#0b2147] text-[#0b2147] hover:bg-[#0b2147] hover:text-white py-2 rounded-lg font-medium"
-                >
-                  <LogIn className="w-4 h-4 mr-2" />
-                  Sign In
-                </ArgonButton>
-              </div>
-            </div>
-          )}
-
-          {/* Registration Form */}
-          {activeTab === 'register' && (
-            <div className="space-y-6">
-              <div className="flex items-center mb-4">
-                <button
-                  onClick={() => setActiveTab('oauth')}
-                  className="flex items-center text-slate-600 hover:text-[#0b2147] transition-colors"
-                >
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  Back
-                </button>
-              </div>
-
-              <form onSubmit={registerForm.handleSubmit(onRegisterSubmit)} className="space-y-5">
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="space-y-2">
-                    <Label htmlFor="firstName" className="text-slate-700 font-medium">
-                      First Name
-                    </Label>
-                    <Input
-                      id="firstName"
-                      type="text"
-                      {...registerForm.register("firstName")}
-                      className="h-12 border-slate-300 focus:border-[#0b2147] focus:ring-[#0b2147]"
-                    />
-                    {registerForm.formState.errors.firstName && (
-                      <p className="text-red-500 text-sm">
-                        {registerForm.formState.errors.firstName.message}
-                      </p>
-                    )}
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="lastName" className="text-slate-700 font-medium">
-                      Last Name
-                    </Label>
-                    <Input
-                      id="lastName"
-                      type="text"
-                      {...registerForm.register("lastName")}
-                      className="h-12 border-slate-300 focus:border-[#0b2147] focus:ring-[#0b2147]"
-                    />
-                    {registerForm.formState.errors.lastName && (
-                      <p className="text-red-500 text-sm">
-                        {registerForm.formState.errors.lastName.message}
-                      </p>
-                    )}
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="email" className="text-slate-700 font-medium">
-                    Email Address
-                  </Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    {...registerForm.register("email")}
-                    className="h-12 border-slate-300 focus:border-[#0b2147] focus:ring-[#0b2147]"
-                  />
-                  {registerForm.formState.errors.email && (
-                    <p className="text-red-500 text-sm">
-                      {registerForm.formState.errors.email.message}
-                    </p>
-                  )}
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="password" className="text-slate-700 font-medium">
-                    Password
-                  </Label>
-                  <div className="relative">
-                    <Input
-                      id="password"
-                      type={showPassword ? "text" : "password"}
-                      {...registerForm.register("password")}
-                      className="h-12 pr-12 border-slate-300 focus:border-[#0b2147] focus:ring-[#0b2147]"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600"
-                    >
-                      {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                    </button>
-                  </div>
-                  {registerForm.formState.errors.password && (
-                    <p className="text-red-500 text-sm">
-                      {registerForm.formState.errors.password.message}
-                    </p>
-                  )}
-                </div>
-
-                <ArgonButton
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  size="large"
-                  disabled={registerMutation.isPending}
-                  className="bg-[#0b2147] hover:bg-[#1a365d] text-white py-3 rounded-lg font-semibold shadow-lg"
-                >
-                  {registerMutation.isPending ? "Creating Account..." : "Create Account"}
-                </ArgonButton>
-              </form>
-            </div>
-          )}
-
-          {/* Login Form */}
-          {activeTab === 'login' && (
-            <div className="space-y-6">
-              <div className="flex items-center mb-4">
-                <button
-                  onClick={() => setActiveTab('oauth')}
-                  className="flex items-center text-slate-600 hover:text-[#0b2147] transition-colors"
-                >
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  Back
-                </button>
-              </div>
-
-              <form onSubmit={loginForm.handleSubmit(onLoginSubmit)} className="space-y-5">
-                <div className="space-y-2">
-                  <Label htmlFor="loginEmail" className="text-slate-700 font-medium">
-                    Email Address
-                  </Label>
-                  <Input
-                    id="loginEmail"
-                    type="email"
-                    {...loginForm.register("email")}
-                    className="h-12 border-slate-300 focus:border-[#0b2147] focus:ring-[#0b2147]"
-                  />
-                  {loginForm.formState.errors.email && (
-                    <p className="text-red-500 text-sm">
-                      {loginForm.formState.errors.email.message}
-                    </p>
-                  )}
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="loginPassword" className="text-slate-700 font-medium">
-                    Password
-                  </Label>
-                  <div className="relative">
-                    <Input
-                      id="loginPassword"
-                      type={showPassword ? "text" : "password"}
-                      {...loginForm.register("password")}
-                      className="h-12 pr-12 border-slate-300 focus:border-[#0b2147] focus:ring-[#0b2147]"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600"
-                    >
-                      {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                    </button>
-                  </div>
-                  {loginForm.formState.errors.password && (
-                    <p className="text-red-500 text-sm">
-                      {loginForm.formState.errors.password.message}
-                    </p>
-                  )}
-                </div>
-
-                <ArgonButton
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  size="large"
-                  disabled={loginMutation.isPending}
-                  className="bg-[#0b2147] hover:bg-[#1a365d] text-white py-3 rounded-lg font-semibold shadow-lg"
-                >
-                  {loginMutation.isPending ? "Signing In..." : "Sign In"}
-                </ArgonButton>
-              </form>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
+      {/* Footer */}
+      <Box
+        sx={{
+          position: 'absolute',
+          bottom: 16,
+          left: 16,
+          right: 16,
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: 2,
+        }}
+      >
+        <Typography variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.8)' }}>
+          © 2025, made with ❤️ by Apple Bites for a better business valuation experience.
+        </Typography>
+        <Box sx={{ display: 'flex', gap: 2 }}>
+          <MuiLink href="#" sx={{ color: 'rgba(255, 255, 255, 0.8)', textDecoration: 'none', fontSize: '0.75rem' }}>
+            Apple Bites
+          </MuiLink>
+          <MuiLink href="#" sx={{ color: 'rgba(255, 255, 255, 0.8)', textDecoration: 'none', fontSize: '0.75rem' }}>
+            About Us
+          </MuiLink>
+          <MuiLink href="#" sx={{ color: 'rgba(255, 255, 255, 0.8)', textDecoration: 'none', fontSize: '0.75rem' }}>
+            Support
+          </MuiLink>
+          <MuiLink href="#" sx={{ color: 'rgba(255, 255, 255, 0.8)', textDecoration: 'none', fontSize: '0.75rem' }}>
+            License
+          </MuiLink>
+        </Box>
+      </Box>
+    </GradientBackground>
   );
 }
