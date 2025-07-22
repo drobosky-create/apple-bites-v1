@@ -17,7 +17,7 @@ import { styled } from '@mui/material/styles';
 import { Card } from '@mui/material';
 
 // Using direct path for logo
-const appleBitesLogo = "/assets/logos/apple-bites-meritage-logo.png";
+const appleBitesLogo = "/assets/logos/apple-bites-logo-3.png";
 
 // Authentic Material Dashboard Styled Components (matching the template exactly)
 const MaterialBackground = styled(Box)(({ theme }) => ({
@@ -40,15 +40,18 @@ const AuthenticationCard = styled(Card)(({ theme }) => ({
 }));
 
 const HeaderSection = styled(Box)(({ theme }) => ({
-  background: '#344767',
-  borderRadius: '15px 15px 0 0',
-  padding: theme.spacing(4, 4, 3),
+  background: 'linear-gradient(135deg, rgba(116, 123, 138, 0.9) 0%, rgba(73, 83, 97, 0.9) 100%)',
+  borderRadius: '15px',
+  padding: theme.spacing(5, 3, 4),
   textAlign: 'center',
   color: '#ffffff',
   position: 'relative',
   top: '-40px',
   marginBottom: '-40px',
-  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+  backdropFilter: 'blur(12px)',
+  WebkitBackdropFilter: 'blur(12px)',
+  border: '1px solid rgba(255, 255, 255, 0.2)',
 }));
 
 const SocialIconButton = styled(MuiLink)(({ theme }) => ({
@@ -188,7 +191,7 @@ export default function AuthenticMaterialLogin() {
               src={appleBitesLogo}
               alt="Apple Bites Business Assessment"
               sx={{
-                height: '120px',
+                height: '200px',
                 width: 'auto',
                 marginBottom: '16px',
                 filter: 'brightness(1.1)',
