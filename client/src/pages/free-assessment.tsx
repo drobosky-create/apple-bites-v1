@@ -409,9 +409,6 @@ export default function FreeAssessment() {
           <CardContent sx={{ p: 4, minHeight: '600px' }}>
             {/* Header */}
             <Box sx={{ mb: 4 }}>
-              <Typography variant="h4" fontWeight="bold" color="#344767" gutterBottom>
-                {steps.find(step => step.id === currentStep)?.label}
-              </Typography>
               
             </Box>
 
