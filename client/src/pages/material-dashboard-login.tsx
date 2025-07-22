@@ -37,6 +37,7 @@ const AuthCard = styled(Paper)({
   overflow: 'visible',
   position: 'relative',
   boxShadow: '0 20px 27px 0 rgba(0, 0, 0, 0.05)',
+  margin: '0 auto',
 });
 
 const AuthCardHeader = styled(Box)({
@@ -134,7 +135,7 @@ export default function MaterialDashboardLogin() {
 
   return (
     <AuthPageContainer>
-      <Container maxWidth="sm">
+      <Container maxWidth="sm" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
         <AuthCard elevation={0}>
             <AuthCardHeader>
               <Typography
