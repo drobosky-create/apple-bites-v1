@@ -32,10 +32,10 @@ const MaterialBackground = styled(Box)(({ theme }) => ({
 
 const AuthenticationCard = styled(Card)(({ theme }) => ({
   width: '100%',
-  maxWidth: 400,
+  maxWidth: 350,
   margin: '0 auto',
-  marginTop: theme.spacing(6),
-  paddingTop: theme.spacing(8),
+  marginTop: theme.spacing(3),
+  paddingTop: theme.spacing(6),
   borderRadius: '16px',
   boxShadow: '0 8px 20px rgba(0,0,0,0.1)',
   position: 'relative',
