@@ -328,7 +328,7 @@ export default function FreeAssessment() {
             >
               Assessment Progress
             </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
               {steps.map((step, index) => {
                 const isActive = step.id === currentStep;
                 const isCompleted = index < currentStepIndex;
@@ -336,12 +336,12 @@ export default function FreeAssessment() {
                 
                 return (
                   <Box key={step.id}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, py: 1 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, py: 0.5 }}>
                       <StepIcon active={isActive} completed={isCompleted}>
                         {isCompleted ? (
-                          <CheckCircle size={20} />
+                          <CheckCircle size={18} />
                         ) : (
-                          <StepIconComponent size={20} />
+                          <StepIconComponent size={18} />
                         )}
                       </StepIcon>
                       <Box sx={{ flex: 1 }}>
@@ -350,7 +350,8 @@ export default function FreeAssessment() {
                           sx={{ 
                             color: isActive ? '#ffffff' : 'rgba(255,255,255,0.8)',
                             fontWeight: isActive ? 600 : 400,
-                            fontSize: '14px'
+                            fontSize: '13px',
+                            lineHeight: 1.2
                           }}
                         >
                           {step.label}
@@ -359,7 +360,8 @@ export default function FreeAssessment() {
                           variant="caption" 
                           sx={{ 
                             color: 'rgba(255,255,255,0.6)',
-                            fontSize: '11px'
+                            fontSize: '10px',
+                            lineHeight: 1.1
                           }}
                         >
                           {step.description}
@@ -372,14 +374,20 @@ export default function FreeAssessment() {
                           sx={{ 
                             backgroundColor: '#ffffff',
                             color: '#2152ff',
-                            fontSize: '9px',
-                            height: '18px'
+                            fontSize: '8px',
+                            height: '16px'
                           }} 
                         />
                       )}
                     </Box>
                     {index < steps.length - 1 && (
-                      <StepConnector />
+                      <Box sx={{ 
+                        ml: 2.75, 
+                        height: 16, 
+                        width: 2, 
+                        backgroundColor: 'rgba(255,255,255,0.2)',
+                        borderRadius: 1
+                      }} />
                     )}
                   </Box>
                 );
@@ -407,11 +415,6 @@ export default function FreeAssessment() {
       <MainContent>
         <FormCard>
           <CardContent sx={{ p: 4, minHeight: '600px' }}>
-            {/* Header */}
-            <Box sx={{ mb: 4 }}>
-              
-            </Box>
-
             {/* Form Content */}
             <Box>
               {currentStep === "contact" && (
