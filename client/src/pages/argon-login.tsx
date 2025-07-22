@@ -205,7 +205,16 @@ export default function ArgonLogin() {
         />
       </Box>
       
-      <Container maxWidth="sm" sx={{ px: 2, zIndex: 2 }}>
+      {/* Login Form Container */}
+      <Box sx={{ 
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
+        maxWidth: '400px',
+        px: 2,
+        zIndex: 2
+      }}>
         <LoginCard>
           <LoginHeader>
             <Typography 
@@ -319,7 +328,7 @@ export default function ArgonLogin() {
             </form>
           </CardContent>
         </LoginCard>
-      </Container>
+      </Box>
 
       {/* Footer */}
       <Box
