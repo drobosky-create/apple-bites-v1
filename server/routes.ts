@@ -694,6 +694,39 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Simple email/password login for demo purposes
+  app.post("/api/login", async (req, res) => {
+    try {
+      const { email, password } = req.body;
+      
+      // For demo purposes, accept any email/password and create a simple session
+      if (!email || !password) {
+        return res.status(400).json({ error: 'Email and password are required' });
+      }
+      
+      // Create demo user data
+      const user = {
+        id: 'demo-user',
+        email: email,
+        firstName: email.split('@')[0] || 'Demo',
+        lastName: 'User',
+        tier: 'free'
+      };
+      
+      // Set session
+      (req.session as any).isAuthenticated = true;
+      (req.session as any).user = user;
+      
+      res.json({ 
+        success: true, 
+        message: 'Authentication successful',
+        user: user
+      });
+    } catch (error) {
+      res.status(500).json({ error: 'Authentication failed' });
+    }
+  });
+
   // Admin authentication routes
   app.post("/api/admin/login", async (req, res) => {
     try {
