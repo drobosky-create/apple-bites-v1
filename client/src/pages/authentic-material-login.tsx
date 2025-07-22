@@ -195,7 +195,7 @@ export default function AuthenticMaterialLogin() {
 
   return (
     <MaterialBackground>
-      <Box sx={{ width: '100%', maxWidth: 600, position: 'relative', minHeight: '930px', transform: 'scale(1.5)', transformOrigin: 'center' }}>
+      <Box sx={{ width: '100%', maxWidth: 400, position: 'relative', minHeight: '620px' }}>
         {/* Floating Header Section */}
         <HeaderSection
           sx={{
