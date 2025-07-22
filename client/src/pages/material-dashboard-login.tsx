@@ -41,21 +41,24 @@ const AuthCard = styled(Paper)({
 });
 
 const AuthCardHeader = styled(Box)({
-  backgroundColor: '#344767',
+  background: 'linear-gradient(135deg, #EBEFF4 0%, #CED4DA 100%)',
   borderRadius: '15px',
-  padding: '40px 24px 32px', // Reduced padding for more compact appearance
+  padding: '40px 24px 32px',
   textAlign: 'center',
   marginTop: '-40px',
   marginLeft: '16px',
   marginRight: '16px',
   position: 'relative',
   zIndex: 10,
-  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+  backdropFilter: 'blur(8px)',
+  WebkitBackdropFilter: 'blur(8px)',
+  border: '1px solid rgba(255, 255, 255, 0.18)',
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
-  gap: '16px', // Reduced gap between elements
+  gap: '16px',
 });
 
 const AuthCardBody = styled(Box)({
@@ -71,14 +74,17 @@ const SocialButton = styled(MuiLink)({
   height: '32px',
   margin: '0 4px',
   borderRadius: '50%',
-  backgroundColor: 'rgba(255, 255, 255, 0.2)',
-  color: '#fff',
+  backgroundColor: 'rgba(52, 71, 103, 0.1)',
+  color: '#344767',
   textDecoration: 'none',
   transition: 'all 0.15s ease',
   cursor: 'pointer',
+  backdropFilter: 'blur(4px)',
+  border: '1px solid rgba(52, 71, 103, 0.1)',
   '&:hover': {
-    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    backgroundColor: 'rgba(52, 71, 103, 0.2)',
     transform: 'translateY(-1px)',
+    boxShadow: '0 4px 8px rgba(52, 71, 103, 0.15)',
   },
 });
 
@@ -155,11 +161,11 @@ export default function MaterialDashboardLogin() {
                 }}
               />
               <Typography
-                variant="h5" // Smaller heading
+                variant="h5"
                 sx={{
-                  color: '#fff',
+                  color: '#344767', // Dark color for better contrast on light background
                   fontWeight: 600,
-                  marginBottom: '8px', // Reduced margin
+                  marginBottom: '8px',
                 }}
               >
                 Sign in
