@@ -166,15 +166,8 @@ export default function ArgonLogin() {
   };
 
   const handleSocialLogin = (provider: 'facebook' | 'github' | 'google') => {
-    if (provider === 'github') {
-      // Use Replit OAuth for GitHub
-      window.location.href = '/api/login';
-    } else {
-      toast({
-        title: "Coming Soon",
-        description: `${provider.charAt(0).toUpperCase() + provider.slice(1)} login will be available soon.`,
-      });
-    }
+    // All providers are supported via Replit Auth
+    window.location.href = '/api/login';
   };
 
   const handleSignUp = () => {
