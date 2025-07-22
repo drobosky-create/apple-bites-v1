@@ -27,7 +27,7 @@ export function getSession() {
   const pgStore = connectPg(session);
   const sessionStore = new pgStore({
     conString: process.env.DATABASE_URL,
-    createTableIfMissing: false,
+    createTableIfMissing: true,
     ttl: sessionTtl,
     tableName: "sessions",
   });
@@ -38,7 +38,7 @@ export function getSession() {
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      secure: true,
+      secure: false, // Set to false for development
       maxAge: sessionTtl,
     },
   });
@@ -59,10 +59,13 @@ async function upsertUser(
 ) {
   await storage.upsertUser({
     id: claims["sub"],
-    email: claims["email"],
+    email: claims["email"] || "",
     firstName: claims["first_name"],
     lastName: claims["last_name"],
     profileImageUrl: claims["profile_image_url"],
+    authProvider: "replit",
+    replitUserId: claims["sub"],
+    emailVerified: true,
   });
 }
 

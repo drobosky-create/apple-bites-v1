@@ -1,7 +1,7 @@
 import type { Express, Request } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { setupAuth, isAuthenticated } from "./replitAuth";
+import { setupSimpleAuth, isSimpleAuthenticated } from "./simple-replit-auth";
 import { insertValuationAssessmentSchema, type ValuationAssessment, loginSchema, insertTeamMemberSchema, type LoginCredentials, type InsertTeamMember, type TeamMember, registerUserSchema, loginUserSchema, type RegisterUser, type LoginUser } from "@shared/schema";
 import { generateValuationNarrative, type ValuationAnalysisInput } from "./openai";
 import { generateFinancialCoachingTips, generateContextualInsights, type FinancialCoachingData } from "./services/aiCoaching";
@@ -32,8 +32,8 @@ declare global {
 
 export async function registerRoutes(app: Express): Promise<Server> {
   
-  // Setup Replit Auth
-  await setupAuth(app);
+  // Setup Simple Auth
+  setupSimpleAuth(app);
 
   // Custom user authentication middleware
   const isCustomUserAuthenticated = async (req: any, res: any, next: any) => {
@@ -168,21 +168,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json({ message: "Logged out successfully" });
   });
 
-  // Combined user route that works with both auth types
-  app.get('/api/auth/user', isAnyUserAuthenticated, async (req: any, res) => {
-    try {
-      res.json(req.currentUser);
-    } catch (error) {
-      console.error("Error fetching user:", error);
-      res.status(500).json({ message: "Failed to fetch user" });
+  // Simple auth user route for demo
+  app.get('/api/auth/user', (req: any, res) => {
+    if ((req.session as any)?.isAuthenticated) {
+      const user = (req.session as any).user;
+      res.json({
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        tier: "free",
+        authProvider: "replit"
+      });
+    } else {
+      res.status(401).json({ message: "Unauthorized" });
     }
   });
 
   // Legacy Replit Auth user route (for backward compatibility)
-  app.get('/api/auth/replit-user', isAuthenticated, async (req: any, res) => {
+  app.get('/api/auth/replit-user', isSimpleAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
+      const user = (req.session as any).user;
       res.json(user);
     } catch (error) {
       console.error("Error fetching user:", error);
@@ -2282,7 +2288,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         testResults,
         summary: {
           totalIndustries: comprehensiveNAICSMultipliers.length,
-          sectors: getAllComprehensiveSectors().length,
+          sectors: getComprehensiveSectors().length,
           tested: testResults.length
         }
       });
