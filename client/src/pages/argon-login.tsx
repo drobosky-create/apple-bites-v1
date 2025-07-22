@@ -18,7 +18,7 @@ import {
   Container,
   IconButton,
 } from '@mui/material';
-import { Facebook, GitHub, Google } from '@mui/icons-material';
+import { Facebook, GitHub, Google, Apple, Email } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
 import { 
   ArgonBox, 
@@ -165,7 +165,7 @@ export default function ArgonLogin() {
     }
   };
 
-  const handleSocialLogin = (provider: 'facebook' | 'github' | 'google') => {
+  const handleSocialLogin = (provider: 'facebook' | 'github' | 'google' | 'apple' | 'email') => {
     // All providers are supported via Replit Auth
     window.location.href = '/api/login';
   };
@@ -222,15 +222,21 @@ export default function ArgonLogin() {
             >
               Sign in
             </Typography>
-            <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1 }}>
-              <SocialButton onClick={() => handleSocialLogin('facebook')} size="small">
-                <Facebook fontSize="small" />
+            <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1, flexWrap: 'wrap' }}>
+              <SocialButton onClick={() => handleSocialLogin('google')} size="small">
+                <Google fontSize="small" />
               </SocialButton>
               <SocialButton onClick={() => handleSocialLogin('github')} size="small">
                 <GitHub fontSize="small" />
               </SocialButton>
-              <SocialButton onClick={() => handleSocialLogin('google')} size="small">
-                <Google fontSize="small" />
+              <SocialButton onClick={() => handleSocialLogin('facebook')} size="small">
+                <Facebook fontSize="small" />
+              </SocialButton>
+              <SocialButton onClick={() => handleSocialLogin('apple')} size="small">
+                <Apple fontSize="small" />
+              </SocialButton>
+              <SocialButton onClick={() => handleSocialLogin('email')} size="small">
+                <Email fontSize="small" />
               </SocialButton>
             </Box>
           </LoginHeader>
