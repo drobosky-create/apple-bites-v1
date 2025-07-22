@@ -261,15 +261,18 @@ export default function AuthenticMaterialLogin() {
 
         <AuthenticationCard
           sx={{
-            mt: '140px',
-            borderRadius: '16px',
-            minHeight: '480px',
-            backgroundColor: '#fff',
-            position: 'relative',
-            zIndex: 1,
+            mt: '160px', // slight push to sit under floating header
+              borderRadius: '16px',
+              minHeight: '480px', // reduced height to remove bottom space
+              backgroundColor: '#fff',
+              position: 'relative',
+              zIndex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'flex-start', // ensures top-alignment
           }}
         >
-          <CardContent sx={{ p: 4, pt: 1 }}>
+          <CardContent sx={{ px: 4, pt: 12, pb: 4 }}>
             {/* Login Form */}
             <Box component="form" onSubmit={handleLogin}>
               <MaterialTextField
@@ -334,6 +337,10 @@ export default function AuthenticMaterialLogin() {
                   backgroundColor: '#42424a !important',
                   '&:hover': {
                     backgroundColor: '#3a3a40 !important',
+                  },
+                  '&:disabled': {
+                    backgroundColor: '#42424a !important',
+                    opacity: 0.6,
                   }
                 }}
               >
