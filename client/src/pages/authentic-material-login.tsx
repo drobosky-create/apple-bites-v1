@@ -386,18 +386,7 @@ export default function AuthenticMaterialLogin() {
           </CardContent>
         </AuthenticationCard>
 
-        {/* Footer */}
-        <Box sx={{ mt: 4, textAlign: 'center' }}>
-          <Typography 
-            variant="caption" 
-            sx={{ 
-              color: 'rgba(255, 255, 255, 0.8)',
-              fontFamily: 'Roboto, Helvetica, Arial, sans-serif',
-            }}
-          >
-            © 2025, made with ❤️ by Creative Tim for a better web.
-          </Typography>
-        </Box>
+        
       </Box>
     </MaterialBackground>
   );
