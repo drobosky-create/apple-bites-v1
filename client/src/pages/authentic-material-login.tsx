@@ -22,7 +22,14 @@ const appleBitesLogo = "/assets/logos/apple-bites-logo-3.png";
 // Authentic Material Dashboard Styled Components (matching the template exactly)
 const MaterialBackground = styled(Box)(({ theme }) => ({
   minHeight: '100vh',
-  background: 'linear-gradient(310deg, #2152ff 0%, #21d4fd 100%)',
+  background: `
+    linear-gradient(310deg, rgba(33, 82, 255, 0.8) 0%, rgba(33, 212, 253, 0.8) 100%),
+    url('/assets/logos/apple-bites-business-context.png')
+  `,
+  backgroundSize: 'cover, contain',
+  backgroundPosition: 'center, center',
+  backgroundRepeat: 'no-repeat, no-repeat',
+  backgroundBlendMode: 'overlay',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
