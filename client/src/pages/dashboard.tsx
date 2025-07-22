@@ -42,17 +42,18 @@ const DashboardBackground = styled(Box)(({ theme }) => ({
   display: 'flex',
   minHeight: '100vh',
   backgroundColor: '#f8f9fa',
+  gap: 0, // Remove any gap between sidebar and content
 }));
 
 const drawerWidth = 280;
 
 const MainContent = styled(Box)(({ theme }) => ({
   flexGrow: 1,
-  padding: theme.spacing(2),
-  paddingLeft: theme.spacing(1), // Minimal left padding to reduce gap
-  marginLeft: drawerWidth,
+  padding: '16px 24px 24px 8px', // Top, Right, Bottom, Left - minimal left padding
+  marginLeft: 0, // Remove margin since drawer is permanent
   minHeight: '100vh',
-  maxWidth: `calc(100vw - ${drawerWidth}px)`, // Prevent content overflow
+  width: `calc(100vw - ${drawerWidth}px)`,
+  backgroundColor: '#f8f9fa',
 }));
 
 const GradientAppBar = styled(AppBar)(({ theme }) => ({
