@@ -217,134 +217,184 @@ export default function FreeAssessment() {
           },
         }}
       >
-        <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', p: 3 }}>
-          {/* Logo Section */}
-          <Box sx={{ mb: 4, textAlign: 'center' }}>
-            <SidebarCard sx={{ p: 2, mb: 2 }}>
-              <img
-                src={appleBitesLogo}
-                alt="Apple Bites"
-                style={{ 
-                  width: '100%', 
-                  height: 'auto', 
-                  maxHeight: '60px',
-                  objectFit: 'contain' 
+        <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+          {/* Logo and User Info */}
+          <Box sx={{ p: 2, textAlign: 'center' }}>
+            <Box component="img"
+              src="/assets/logos/apple-bites-logo-variant-3.png"
+              alt="Apple Bites Business Assessment"
+              sx={{
+                width: '80%',
+                maxWidth: 200,
+                mt: 1,
+                mb: 1,
+                mx: 'auto',
+                display: 'block',
+              }}
+            />
+            <Typography variant="h6" fontWeight="bold" color="white" gutterBottom>
+              Demo User
+            </Typography>
+            <Typography variant="body2" color="rgba(255,255,255,0.7)" gutterBottom>
+              demo@example.com
+            </Typography>
+            <Chip 
+              label="Free Assessment"
+              size="small"
+              sx={{ 
+                backgroundColor: 'rgba(255,255,255,0.2)',
+                color: 'white',
+                border: '1px solid rgba(255,255,255,0.3)'
+              }}
+            />
+          </Box>
+
+          <Divider sx={{ borderColor: 'rgba(255,255,255,0.12)' }} />
+
+          <List sx={{ px: 2, py: 2 }}>
+            <ListItem disablePadding>
+              <ListItemButton 
+                onClick={() => window.location.href = '/dashboard'}
+                sx={{ 
+                  borderRadius: '12px',
+                  mb: 1,
+                  '&:hover': { backgroundColor: 'rgba(255,255,255,0.1)' }
                 }}
-              />
-            </SidebarCard>
+              >
+                <ListItemIcon sx={{ color: 'white', minWidth: 40 }}>
+                  <Home size={20} />
+                </ListItemIcon>
+                <ListItemText 
+                  primary="Dashboard" 
+                  primaryTypographyProps={{ color: 'white', fontWeight: 500 }}
+                />
+              </ListItemButton>
+            </ListItem>
+
+            <ListItem disablePadding>
+              <ListItemButton 
+                sx={{ 
+                  borderRadius: '12px',
+                  mb: 1,
+                  backgroundColor: 'rgba(255,255,255,0.1)',
+                  '&:hover': { backgroundColor: 'rgba(255,255,255,0.2)' }
+                }}
+              >
+                <ListItemIcon sx={{ color: 'white', minWidth: 40 }}>
+                  <FileText size={20} />
+                </ListItemIcon>
+                <ListItemText 
+                  primary="New Assessment" 
+                  primaryTypographyProps={{ color: 'white', fontWeight: 500 }}
+                />
+              </ListItemButton>
+            </ListItem>
+
+            <ListItem disablePadding>
+              <ListItemButton 
+                onClick={() => window.open('https://products.applebites.ai/', '_blank')}
+                sx={{ 
+                  borderRadius: '12px',
+                  mb: 1,
+                  '&:hover': { backgroundColor: 'rgba(255,255,255,0.1)' }
+                }}
+              >
+                <ListItemIcon sx={{ color: 'white', minWidth: 40 }}>
+                  <TrendingUp size={20} />
+                </ListItemIcon>
+                <ListItemText 
+                  primary="Upgrade Plan" 
+                  primaryTypographyProps={{ color: 'white', fontWeight: 500 }}
+                />
+              </ListItemButton>
+            </ListItem>
+          </List>
+
+          <Divider sx={{ borderColor: 'rgba(255,255,255,0.12)' }} />
+
+          {/* Progress Steps */}
+          <Box sx={{ px: 2, py: 1, flex: 1 }}>
             <Typography 
               variant="caption" 
               sx={{ 
                 color: 'rgba(255,255,255,0.7)', 
                 textTransform: 'uppercase',
                 letterSpacing: '0.1em',
-                fontWeight: 600
+                fontWeight: 600,
+                px: 2,
+                mb: 2,
+                display: 'block'
               }}
             >
-              Business Valuation Assessment
+              Assessment Progress
             </Typography>
-          </Box>
-
-          {/* Progress Steps */}
-          <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
-            {steps.map((step, index) => {
-              const isActive = step.id === currentStep;
-              const isCompleted = index < currentStepIndex;
-              const StepIconComponent = step.icon;
-              
-              return (
-                <Box key={step.id}>
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, py: 1 }}>
-                    <StepIcon active={isActive} completed={isCompleted}>
-                      {isCompleted ? (
-                        <CheckCircle size={20} />
-                      ) : (
-                        <StepIconComponent size={20} />
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              {steps.map((step, index) => {
+                const isActive = step.id === currentStep;
+                const isCompleted = index < currentStepIndex;
+                const StepIconComponent = step.icon;
+                
+                return (
+                  <Box key={step.id}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, py: 1 }}>
+                      <StepIcon active={isActive} completed={isCompleted}>
+                        {isCompleted ? (
+                          <CheckCircle size={20} />
+                        ) : (
+                          <StepIconComponent size={20} />
+                        )}
+                      </StepIcon>
+                      <Box sx={{ flex: 1 }}>
+                        <Typography 
+                          variant="body2" 
+                          sx={{ 
+                            color: isActive ? '#ffffff' : 'rgba(255,255,255,0.8)',
+                            fontWeight: isActive ? 600 : 400,
+                            fontSize: '14px'
+                          }}
+                        >
+                          {step.label}
+                        </Typography>
+                        <Typography 
+                          variant="caption" 
+                          sx={{ 
+                            color: 'rgba(255,255,255,0.6)',
+                            fontSize: '11px'
+                          }}
+                        >
+                          {step.description}
+                        </Typography>
+                      </Box>
+                      {isActive && (
+                        <Chip 
+                          label="Current" 
+                          size="small" 
+                          sx={{ 
+                            backgroundColor: '#ffffff',
+                            color: '#2152ff',
+                            fontSize: '9px',
+                            height: '18px'
+                          }} 
+                        />
                       )}
-                    </StepIcon>
-                    <Box sx={{ flex: 1 }}>
-                      <Typography 
-                        variant="body1" 
-                        sx={{ 
-                          color: isActive ? '#ffffff' : 'rgba(255,255,255,0.8)',
-                          fontWeight: isActive ? 600 : 400,
-                          fontSize: '16px'
-                        }}
-                      >
-                        {step.label}
-                      </Typography>
-                      <Typography 
-                        variant="caption" 
-                        sx={{ 
-                          color: 'rgba(255,255,255,0.6)',
-                          fontSize: '12px'
-                        }}
-                      >
-                        {step.description}
-                      </Typography>
                     </Box>
-                    {isActive && (
-                      <Chip 
-                        label="Current" 
-                        size="small" 
-                        sx={{ 
-                          backgroundColor: '#ffffff',
-                          color: '#2152ff',
-                          fontSize: '10px',
-                          height: '20px'
-                        }} 
-                      />
+                    {index < steps.length - 1 && (
+                      <StepConnector />
                     )}
                   </Box>
-                  {index < steps.length - 1 && (
-                    <StepConnector />
-                  )}
-                </Box>
-              );
-            })}
+                );
+              })}
+            </Box>
           </Box>
 
-          {/* Navigation Actions */}
-          <Box sx={{ mt: 'auto', pt: 3, borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-            <Box
-              component="button"
-              onClick={() => window.location.href = '/dashboard'}
-              sx={{
-                width: '100%',
-                p: 2,
-                borderColor: 'rgba(255,255,255,0.2)',
-                backgroundColor: 'rgba(255,255,255,0.1)',
-                color: 'white',
-                textTransform: 'none',
-                border: '1px solid rgba(255,255,255,0.2)',
-                borderRadius: '12px',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: 1,
-                mb: 1,
-                backdropFilter: 'blur(10px)',
-                transition: 'all 0.3s ease',
-                '&:hover': {
-                  borderColor: 'rgba(255,255,255,0.4)',
-                  backgroundColor: 'rgba(255,255,255,0.2)',
-                  transform: 'translateY(-2px)',
-                }
-              }}
-            >
-              <Home size={18} />
-              <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                Dashboard
-              </Typography>
-            </Box>
+          {/* Footer */}
+          <Box sx={{ mt: 'auto', p: 2 }}>
             <Typography 
               variant="caption" 
               sx={{ 
                 color: 'rgba(255,255,255,0.5)',
                 display: 'block',
-                textAlign: 'center',
-                mt: 2
+                textAlign: 'center'
               }}
             >
               © 2025 Meritage Partners
