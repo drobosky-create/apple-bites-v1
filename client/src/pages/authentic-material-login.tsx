@@ -193,26 +193,34 @@ export default function AuthenticMaterialLogin() {
               sx={{
                 height: '200px',
                 width: 'auto',
-                marginBottom: '16px',
                 filter: 'brightness(1.1)',
                 display: 'block',
-                margin: '0 auto 16px auto',
+                mx: 'auto',
+                mb: 2,
               }}
             />
+
             <Typography 
               variant="h4" 
               sx={{ 
                 fontWeight: 600,
-                mb: 1,
+                mb: 2,
                 fontSize: '1.25rem',
                 fontFamily: 'Roboto, Helvetica, Arial, sans-serif',
               }}
             >
               Sign in
             </Typography>
-            
-            {/* Social Login Icons - exactly like the template */}
-            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                gap: 1.5, // consistent spacing between buttons
+                mt: 1,
+                mb: 2,
+              }}
+            >
               <SocialIconButton onClick={() => handleSocialLogin('facebook')}>
                 <Facebook fontSize="small" />
               </SocialIconButton>
@@ -221,6 +229,12 @@ export default function AuthenticMaterialLogin() {
               </SocialIconButton>
               <SocialIconButton onClick={() => handleSocialLogin('google')}>
                 <Google fontSize="small" />
+              </SocialIconButton>
+              <SocialIconButton onClick={() => handleSocialLogin('apple')}>
+                <Apple fontSize="small" />
+              </SocialIconButton>
+              <SocialIconButton onClick={() => handleSocialLogin('email')}>
+                <Email fontSize="small" />
               </SocialIconButton>
             </Box>
           </HeaderSection>
