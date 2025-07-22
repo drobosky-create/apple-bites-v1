@@ -34,7 +34,9 @@ import {
   ExternalLink,
   Home,
   Settings,
-  BarChart3
+  BarChart3,
+  Calendar,
+  Download
 } from "lucide-react";
 
 // Material Dashboard Styled Components
@@ -107,6 +109,157 @@ interface User {
   tier: 'free' | 'growth' | 'capital';
   resultReady: boolean;
 }
+
+interface Assessment {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  company?: string;
+  tier: string;
+  adjustedEBITDA: number;
+  valuationEstimate: number;
+  overallScore: string;
+  submissionDate: string;
+  pdfLink?: string;
+}
+
+// Past Assessments Component
+const PastAssessmentsSection = ({ userEmail }: { userEmail: string }) => {
+  const { data: assessments, isLoading } = useQuery({
+    queryKey: ['/api/analytics/assessments'],
+    retry: false,
+  });
+
+  const userAssessments = assessments?.filter((assessment: Assessment) => 
+    assessment.email === userEmail
+  ) || [];
+
+  if (isLoading) {
+    return (
+      <Box display="flex" justifyContent="center" py={4}>
+        <Typography color="#67748e">Loading assessments...</Typography>
+      </Box>
+    );
+  }
+
+  if (userAssessments.length === 0) {
+    return (
+      <Box textAlign="center" py={4}>
+        <FileText size={48} color="#67748e" style={{ marginBottom: 16 }} />
+        <Typography variant="h6" color="#344767" mb={1}>
+          No assessments yet
+        </Typography>
+        <Typography variant="body2" color="#67748e" mb={3}>
+          Complete your first business valuation assessment to see your results here
+        </Typography>
+      </Box>
+    );
+  }
+
+  return (
+    <Box>
+      {userAssessments.slice(0, 3).map((assessment: Assessment) => (
+        <Box
+          key={assessment.id}
+          sx={{
+            p: 3,
+            mb: 2,
+            border: '1px solid #e3e6ea',
+            borderRadius: '12px',
+            '&:hover': {
+              backgroundColor: '#f8f9fa',
+              borderColor: '#2152ff',
+            }
+          }}
+        >
+          <Box display="flex" justifyContent="space-between" alignItems="start">
+            <Box flex={1}>
+              <Box display="flex" alignItems="center" gap={2} mb={1}>
+                <BarChart3 size={20} color="#2152ff" />
+                <Typography variant="h6" fontWeight="bold" color="#344767">
+                  {assessment.company || 'Business Assessment'}
+                </Typography>
+                <Chip
+                  label={assessment.overallScore}
+                  size="small"
+                  sx={{
+                    backgroundColor: assessment.overallScore === 'A' ? '#4caf50' : 
+                                    assessment.overallScore === 'B' ? '#8bc34a' :
+                                    assessment.overallScore === 'C' ? '#ff9800' :
+                                    assessment.overallScore === 'D' ? '#ff5722' : '#f44336',
+                    color: 'white',
+                    fontWeight: 'bold'
+                  }}
+                />
+              </Box>
+              
+              <Box display="flex" gap={4} mb={2}>
+                <Box>
+                  <Typography variant="body2" color="#67748e">Valuation</Typography>
+                  <Typography variant="h6" color="#344767" fontWeight="bold">
+                    ${assessment.valuationEstimate?.toLocaleString() || 'N/A'}
+                  </Typography>
+                </Box>
+                <Box>
+                  <Typography variant="body2" color="#67748e">EBITDA</Typography>
+                  <Typography variant="h6" color="#344767" fontWeight="bold">
+                    ${assessment.adjustedEBITDA?.toLocaleString() || 'N/A'}
+                  </Typography>
+                </Box>
+                <Box>
+                  <Typography variant="body2" color="#67748e">Date</Typography>
+                  <Box display="flex" alignItems="center" gap={1}>
+                    <Calendar size={16} color="#67748e" />
+                    <Typography variant="body2" color="#67748e">
+                      {new Date(assessment.submissionDate).toLocaleDateString()}
+                    </Typography>
+                  </Box>
+                </Box>
+              </Box>
+            </Box>
+            
+            {assessment.pdfLink && (
+              <Button
+                variant="outlined"
+                size="small"
+                startIcon={<Download size={16} />}
+                onClick={() => window.open(assessment.pdfLink, '_blank')}
+                sx={{
+                  borderColor: '#2152ff',
+                  color: '#2152ff',
+                  textTransform: 'none',
+                  '&:hover': {
+                    backgroundColor: 'rgba(33, 82, 255, 0.04)',
+                  }
+                }}
+              >
+                Download Report
+              </Button>
+            )}
+          </Box>
+        </Box>
+      ))}
+      
+      {userAssessments.length > 3 && (
+        <Box textAlign="center" mt={2}>
+          <Button
+            variant="text"
+            sx={{
+              color: '#2152ff',
+              textTransform: 'none',
+              '&:hover': {
+                backgroundColor: 'rgba(33, 82, 255, 0.04)',
+              }
+            }}
+          >
+            View All {userAssessments.length} Assessments
+          </Button>
+        </Box>
+      )}
+    </Box>
+  );
+};
 
 export default function Dashboard() {
   const [, setLocation] = useLocation();
@@ -465,6 +618,35 @@ export default function Dashboard() {
               </StatCard>
             </Box>
           </Box>
+
+          {/* Past Assessments */}
+          <StatCard>
+            <CardContent sx={{ p: 4 }}>
+              <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
+                <Typography variant="h5" fontWeight="bold" color="#344767">
+                  Past Assessments
+                </Typography>
+                <Button
+                  variant="outlined"
+                  startIcon={<FileText size={18} />}
+                  onClick={() => setLocation('/assessment/free')}
+                  sx={{
+                    borderColor: '#2152ff',
+                    color: '#2152ff',
+                    textTransform: 'none',
+                    '&:hover': {
+                      backgroundColor: 'rgba(33, 82, 255, 0.04)',
+                      borderColor: '#1e4bff',
+                    }
+                  }}
+                >
+                  New Assessment
+                </Button>
+              </Box>
+              
+              <PastAssessmentsSection userEmail={displayUser.email} />
+            </CardContent>
+          </StatCard>
 
           {/* Features Overview - Full Width */}
           <StatCard>
