@@ -151,7 +151,7 @@ export default function MaterialDashboardLogin() {
             <AuthCardHeader>
               <Box
                 component="img"
-                src="/assets/logos/apple-bites-meritage-logo.png"
+                src="/assets/logos/apple-bites-logo-3.png"
                 alt="Apple Bites Business Assessment"
                 sx={{
                   height: '250px',
