@@ -13,6 +13,7 @@ import Landing from "@/pages/landing";
 import Home from "@/pages/home";
 import RedirectHome from "@/pages/redirect-home";
 import Login from "@/pages/login";
+import MaterialLogin from "@/pages/material-login";
 import ValuationForm from "@/pages/valuation-form";
 import FreeAssessment from "@/pages/free-assessment";
 import GrowthExitAssessment from "@/pages/strategic-assessment";
@@ -36,9 +37,9 @@ function Router() {
         {/* Standalone pages without header/navigation */}
         {isLoading || !isAuthenticated ? (
           <>
-            <Route path="/" component={Login} />
-            <Route path="/dashboard" component={Login} />
-            <Route path="/dashboard/:tier" component={Login} />
+            <Route path="/" component={MaterialLogin} />
+            <Route path="/dashboard" component={MaterialLogin} />
+            <Route path="/dashboard/:tier" component={MaterialLogin} />
           </>
         ) : (
           <>
@@ -47,7 +48,8 @@ function Router() {
             <Route path="/dashboard" component={Dashboard} />
           </>
         )}
-        <Route path="/login" component={Login} />
+        <Route path="/login" component={MaterialLogin} />
+        <Route path="/login-old" component={Login} />
         <Route path="/redirect" component={RedirectHome} />
         <Route path="/ghl-demo" component={GHLThemeDemo} />
         <Route path="/demo" component={Demo} />
