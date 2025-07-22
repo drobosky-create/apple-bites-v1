@@ -12,6 +12,14 @@ import {
   Avatar,
   Chip,
   Container,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Divider,
+  IconButton,
   AppBar,
   Toolbar,
 } from '@mui/material';
@@ -23,13 +31,26 @@ import {
   Crown,
   CheckCircle,
   Clock,
-  ExternalLink
+  ExternalLink,
+  Home,
+  Settings,
+  BarChart3
 } from "lucide-react";
 
 // Material Dashboard Styled Components
 const DashboardBackground = styled(Box)(({ theme }) => ({
+  display: 'flex',
   minHeight: '100vh',
   backgroundColor: '#f8f9fa',
+}));
+
+const drawerWidth = 280;
+
+const MainContent = styled(Box)(({ theme }) => ({
+  flexGrow: 1,
+  padding: theme.spacing(3),
+  marginLeft: drawerWidth,
+  minHeight: '100vh',
 }));
 
 const GradientAppBar = styled(AppBar)(({ theme }) => ({
@@ -157,7 +178,7 @@ export default function Dashboard() {
   };
 
   // Use actual user data or default to free tier
-  const displayUser: User = user || {
+  const displayUser: User = (user as User) || {
     id: "demo-user",
     email: "demo@applebites.ai",
     firstName: "Demo",
@@ -172,67 +193,127 @@ export default function Dashboard() {
 
   return (
     <DashboardBackground>
-      {/* Header */}
-      <GradientAppBar position="static" elevation={0}>
-        <Toolbar sx={{ py: 2 }}>
-          <Container maxWidth="xl">
-            <Box display="flex" justifyContent="space-between" alignItems="center">
-              <Box display="flex" alignItems="center" gap={3}>
-                <Box component="img"
-                  src="/assets/logos/apple-bites-logo-3.png"
-                  alt="Apple Bites Business Assessment"
-                  sx={{ height: 175, width: 'auto' }}
-                />
-                <Box>
-                  <Typography variant="h5" fontWeight="bold" color="white">
-                    Welcome, {displayUser.firstName} {displayUser.lastName}
-                  </Typography>
-                  <Typography variant="body2" color="rgba(255,255,255,0.8)">
-                    {displayUser.email}
-                  </Typography>
-                  <Chip 
-                    label={tierInfo.name}
-                    size="small"
-                    sx={{ 
-                      mt: 1,
-                      backgroundColor: 'rgba(255,255,255,0.2)',
-                      color: 'white',
-                      border: '1px solid rgba(255,255,255,0.3)'
-                    }}
-                  />
-                </Box>
-              </Box>
-              <ActionButton
-                variant="contained"
-                onClick={() => logoutMutation.mutate()}
-                disabled={logoutMutation.isPending}
-                sx={{
-                    backgroundColor: '#EBEFF4',
-                      color: '#212529', // dark text for light background
-                      borderRadius: '8px',
-                      boxShadow: 'none',
-                      textTransform: 'none',
-                      fontWeight: 500,
-                      '&:hover': {
-                        backgroundColor: '#CED4DA',
-                        boxShadow: 'none',
-                      },
-                      '&:disabled': {
-                        backgroundColor: '#EBEFF4',
-                        color: '#adb5bd',
-                  }
-                }}
-                startIcon={<LogOut size={18} />}
-              >
-                Logout
-              </ActionButton>
-            </Box>
-          </Container>
-        </Toolbar>
-      </GradientAppBar>
+      {/* Sidebar Drawer */}
+      <Drawer
+        variant="permanent"
+        sx={{
+          width: drawerWidth,
+          flexShrink: 0,
+          '& .MuiDrawer-paper': {
+            width: drawerWidth,
+            boxSizing: 'border-box',
+            backgroundColor: '#344767',
+            color: 'white',
+          },
+        }}
+      >
+        <Box sx={{ p: 3, textAlign: 'center' }}>
+          <Box component="img"
+            src="/assets/logos/apple-bites-logo-3.png"
+            alt="Apple Bites Business Assessment"
+            sx={{ height: 60, width: 'auto', mb: 2 }}
+          />
+          <Typography variant="h6" fontWeight="bold" color="white" gutterBottom>
+            {displayUser.firstName} {displayUser.lastName}
+          </Typography>
+          <Typography variant="body2" color="rgba(255,255,255,0.7)" gutterBottom>
+            {displayUser.email}
+          </Typography>
+          <Chip 
+            label={tierInfo.name}
+            size="small"
+            sx={{ 
+              backgroundColor: 'rgba(255,255,255,0.2)',
+              color: 'white',
+              border: '1px solid rgba(255,255,255,0.3)'
+            }}
+          />
+        </Box>
+
+        <Divider sx={{ borderColor: 'rgba(255,255,255,0.12)' }} />
+
+        <List sx={{ px: 2, py: 2 }}>
+          <ListItem disablePadding>
+            <ListItemButton 
+              sx={{ 
+                borderRadius: '12px',
+                mb: 1,
+                '&:hover': { backgroundColor: 'rgba(255,255,255,0.1)' }
+              }}
+            >
+              <ListItemIcon sx={{ color: 'white', minWidth: 40 }}>
+                <Home size={20} />
+              </ListItemIcon>
+              <ListItemText 
+                primary="Dashboard" 
+                primaryTypographyProps={{ color: 'white', fontWeight: 500 }}
+              />
+            </ListItemButton>
+          </ListItem>
+
+          <ListItem disablePadding>
+            <ListItemButton 
+              onClick={() => setLocation('/assessment/free')}
+              sx={{ 
+                borderRadius: '12px',
+                mb: 1,
+                '&:hover': { backgroundColor: 'rgba(255,255,255,0.1)' }
+              }}
+            >
+              <ListItemIcon sx={{ color: 'white', minWidth: 40 }}>
+                <FileText size={20} />
+              </ListItemIcon>
+              <ListItemText 
+                primary="New Assessment" 
+                primaryTypographyProps={{ color: 'white', fontWeight: 500 }}
+              />
+            </ListItemButton>
+          </ListItem>
+
+          <ListItem disablePadding>
+            <ListItemButton 
+              onClick={() => window.open('https://products.applebites.ai/', '_blank')}
+              sx={{ 
+                borderRadius: '12px',
+                mb: 1,
+                '&:hover': { backgroundColor: 'rgba(255,255,255,0.1)' }
+              }}
+            >
+              <ListItemIcon sx={{ color: 'white', minWidth: 40 }}>
+                <ExternalLink size={20} />
+              </ListItemIcon>
+              <ListItemText 
+                primary="Upgrade Plan" 
+                primaryTypographyProps={{ color: 'white', fontWeight: 500 }}
+              />
+            </ListItemButton>
+          </ListItem>
+        </List>
+
+        <Box sx={{ mt: 'auto', p: 2 }}>
+          <Button
+            fullWidth
+            variant="outlined"
+            onClick={() => logoutMutation.mutate()}
+            disabled={logoutMutation.isPending}
+            sx={{
+              color: 'white',
+              borderColor: 'rgba(255,255,255,0.3)',
+              borderRadius: '12px',
+              '&:hover': {
+                backgroundColor: 'rgba(255,255,255,0.1)',
+                borderColor: 'rgba(255,255,255,0.5)',
+              }
+            }}
+            startIcon={<LogOut size={18} />}
+          >
+            Logout
+          </Button>
+        </Box>
+      </Drawer>
 
       {/* Main Content */}
-      <Container maxWidth="xl" sx={{ py: 4 }}>
+      <MainContent>
         {/* Welcome Section */}
         <WelcomeCard>
           <CardContent sx={{ p: 4 }}>
@@ -397,7 +478,7 @@ export default function Dashboard() {
             </CardContent>
           </StatCard>
         </Box>
-      </Container>
+      </MainContent>
     </DashboardBackground>
   );
 }
