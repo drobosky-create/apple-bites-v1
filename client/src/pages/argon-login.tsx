@@ -185,19 +185,52 @@ export default function ArgonLogin() {
   };
 
   return (
-    <GradientBackground>
-      {/* Apple Bites Logo */}
-      <Box sx={{ mb: 4, textAlign: 'center', zIndex: 2 }}>
-        <img 
-          src={appleBitesLogo} 
-          alt="Apple Bites Business Assessment" 
-          style={{
-            height: '180px',
-            width: 'auto',
-            filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3))',
+      <GradientBackground>
+        {/* Apple Bites Logo */}
+        <Box sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          mb: 4,
+          zIndex: 2,
+        }}>
+          <img
+            src={appleBitesLogo}
+            alt="Apple Bites Business Assessment"
+            style={{
+              height: '180px',
+              width: 'auto',
+              filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3))',
+            }}
+          />
+        </Box>
+      ✅ With This Updated Block
+      tsx
+      Copy
+      Edit
+      <GradientBackground>
+        <Box
+          sx={{
+            minHeight: '100vh',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            px: 2,
           }}
-        />
-      </Box>
+        >
+          {/* Apple Bites Logo */}
+          <Box sx={{ mb: 4 }}>
+            <img
+              src={appleBitesLogo}
+              alt="Apple Bites Business Assessment"
+              style={{
+                height: '180px',
+                width: 'auto',
+                filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3))',
+              }}
+            />
+          </Box>
       
       <Container maxWidth="sm" sx={{ px: 2, zIndex: 2 }}>
         <LoginCard>
