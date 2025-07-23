@@ -193,8 +193,7 @@ export default function InteractiveValuationSlider() {
             (potentialIncrease > 0 ? 'ring-2 ring-green-400 ring-opacity-50 shadow-2xl shadow-green-200/50' : 'ring-2 ring-red-400 ring-opacity-50 shadow-2xl shadow-red-200/50') 
             : ''
         }`}>
-          {/* Subtle icon watermark */}
-          <div className="absolute top-4 right-4 text-6xl opacity-10">📈</div>
+          
           <div className="text-center relative z-10">
             <h3 className="text-xl sm:text-2xl font-semibold text-slate-800 mb-3 tracking-wide">Potential Value</h3>
             {sliderGrade !== baseGrade ? (
