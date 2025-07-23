@@ -374,7 +374,11 @@ export default function ValueCalculator() {
                   return (
                     <Box 
                       key={assessment.id}
-                      onClick={() => {
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        console.log('Assessment card clicked, ID:', assessment.id);
+                        console.log('Navigating to:', `/assessment-results/${assessment.id}`);
                         // Navigate to results page with specific assessment ID
                         setLocation(`/assessment-results/${assessment.id}`);
                       }}
