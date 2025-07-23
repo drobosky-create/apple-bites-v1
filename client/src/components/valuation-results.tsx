@@ -134,7 +134,7 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
               <Button 
                 onClick={handleExploreImprovements}
                 variant="outline"
-                className="flex-1 px-6 py-4 rounded-lg text-sm font-medium border-[#1a2332] text-[#1a2332] hover:bg-[#1a2332] hover:text-white flex items-center justify-center"
+                className="flex-1 px-6 py-4 rounded-lg text-sm font-medium border-[#1a2332] text-[#1a2332] bg-slate-50 hover:bg-[#1a2332] hover:text-white flex items-center justify-center transition-all duration-200"
               >
                 <Calculator className="mr-2 w-4 h-4" />
                 Explore Value Improvements

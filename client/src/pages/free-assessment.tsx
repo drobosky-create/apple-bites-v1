@@ -398,7 +398,7 @@ export default function FreeAssessment() {
                       {isActive && (
                         <Chip 
                           label="Current" 
-                          size="small" 
+                          size="large" 
                           sx={{ 
                             backgroundColor: '#ffffff',
                             color: '#2152ff',
