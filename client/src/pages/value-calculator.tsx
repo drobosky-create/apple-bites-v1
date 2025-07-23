@@ -342,7 +342,7 @@ export default function ValueCalculator() {
             </Box>
             <Button
               onClick={() => setLocation('/')}
-              className="bg-gray-500 text-white hover:bg-gray-600 font-semibold px-6 py-3 rounded-lg transition-all duration-200"
+              className="bg-gradient-to-br from-[#191919] to-[#42424a] text-white font-semibold px-6 py-3 rounded-xl shadow-lg backdrop-blur-md bg-opacity-80 border border-white/10 hover:brightness-110 transition-all duration-300"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Dashboard
