@@ -118,12 +118,12 @@ interface Assessment {
   lastName: string;
   email: string;
   company?: string;
-  tier: string;
-  adjustedEBITDA: number;
-  valuationEstimate: number;
+  reportTier: string;
+  adjustedEbitda: number;
+  midEstimate: number;
   overallScore: string;
-  submissionDate: string;
-  pdfLink?: string;
+  createdAt: Date | null;
+  pdfUrl?: string;
 }
 
 // Past Assessments Component
@@ -164,14 +164,22 @@ const PastAssessmentsSection = ({ userEmail }: { userEmail: string }) => {
       {userAssessments.slice(0, 3).map((assessment: Assessment) => (
         <Box
           key={assessment.id}
+          onClick={() => {
+            console.log('Assessment clicked, ID:', assessment.id);
+            setLocation(`/assessment-results/${assessment.id}`);
+          }}
           sx={{
             p: 3,
             mb: 2,
             border: '1px solid #e3e6ea',
             borderRadius: '12px',
+            cursor: 'pointer',
+            transition: 'all 0.2s ease',
             '&:hover': {
               backgroundColor: '#f8f9fa',
               borderColor: '#2152ff',
+              transform: 'translateY(-2px)',
+              boxShadow: '0 4px 12px rgba(33, 82, 255, 0.15)'
             }
           }}
         >
@@ -200,13 +208,13 @@ const PastAssessmentsSection = ({ userEmail }: { userEmail: string }) => {
                 <Box>
                   <Typography variant="body2" color="#67748e">Valuation</Typography>
                   <Typography variant="h6" color="#344767" fontWeight="bold">
-                    ${assessment.valuationEstimate?.toLocaleString() || 'N/A'}
+                    ${assessment.midEstimate?.toLocaleString() || 'N/A'}
                   </Typography>
                 </Box>
                 <Box>
                   <Typography variant="body2" color="#67748e">EBITDA</Typography>
                   <Typography variant="h6" color="#344767" fontWeight="bold">
-                    ${assessment.adjustedEBITDA?.toLocaleString() || 'N/A'}
+                    ${assessment.adjustedEbitda?.toLocaleString() || 'N/A'}
                   </Typography>
                 </Box>
                 <Box>
@@ -214,19 +222,22 @@ const PastAssessmentsSection = ({ userEmail }: { userEmail: string }) => {
                   <Box display="flex" alignItems="center" gap={1}>
                     <Calendar size={16} color="#67748e" />
                     <Typography variant="body2" color="#67748e">
-                      {new Date(assessment.submissionDate).toLocaleDateString()}
+                      {assessment.createdAt ? new Date(assessment.createdAt).toLocaleDateString() : 'Invalid Date'}
                     </Typography>
                   </Box>
                 </Box>
               </Box>
             </Box>
             
-            {assessment.pdfLink && (
+            {assessment.pdfUrl && (
               <Button
                 variant="outlined"
                 size="small"
                 startIcon={<Download size={16} />}
-                onClick={() => window.open(assessment.pdfLink, '_blank')}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  window.open(assessment.pdfUrl, '_blank');
+                }}
                 sx={{
                   borderColor: '#2152ff',
                   color: '#2152ff',
