@@ -92,7 +92,7 @@ const OperationalGradeGauge: React.FC<OperationalGradeGaugeProps> = ({
   return (
     <div className="flex justify-center items-center -mt-8">
       {/* Glass card */}
-        <div className="relative bg-[rgba(116,123,138,0.3)] backdrop-blur-[20px] saturate-[180%] rounded-2xl border border-white/10 shadow-2xl px-6 py-4 scale-[1.25]">
+        <div className="relative bg-[rgba(116,123,138,0.3)] backdrop-blur-[20px] saturate-[180%] rounded-2xl border border-white/10 shadow-2xl px-8 py-6 w-[750px]">
           {/* Title */}
           <div className="text-center mb-4">
             <h3 className="text-lg font-bold text-white">{title}</h3>
@@ -101,7 +101,7 @@ const OperationalGradeGauge: React.FC<OperationalGradeGaugeProps> = ({
 
           {/* Gauge */}
           <div className="flex justify-center">
-            <svg width="280" height="140" viewBox="0 0 300 160" className="overflow-visible drop-shadow-lg">
+            <svg width="650" height="150" viewBox="0 0 300 160" className="overflow-visible drop-shadow-lg">
           {/* Material Dashboard Gradient Definitions */}
           <defs>
             {/* F Grade - Deep Red Material Gradient */}
