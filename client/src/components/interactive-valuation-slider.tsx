@@ -266,9 +266,9 @@ export default function InteractiveValuationSlider() {
 
 
       {/* Combined Gauge and Grade Selection */}
-      <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-6 sm:p-8">
+      <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-6 sm:p-10">
         {/* Gauge */}
-        <div className="mb-8">
+        <div className="mb-20">
           <OperationalGradeGauge 
             grade={sliderGrade}
             title="Operational Grade Impact Analysis"

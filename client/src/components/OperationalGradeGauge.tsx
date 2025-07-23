@@ -90,9 +90,9 @@ const OperationalGradeGauge: React.FC<OperationalGradeGaugeProps> = ({
   const currentSegment = gradeSegments.find(s => s.grade === grade);
 
   return (
-    <div className="flex justify-center items-center mt-8">
+    <div className="flex justify-center items-center -mt-8">
       {/* Glass card */}
-      <div className="relative bg-black/20 backdrop-blur-md rounded-2xl border border-white/10 shadow-2xl px-8 py-6 scale-[1.05]">
+        <div className="relative bg-[rgba(116,123,138,0.3)] backdrop-blur-[20px] saturate-[180%] rounded-2xl border border-white/10 shadow-2xl px-8 py-6 scale-[1.25]">
           {/* Title */}
           <div className="text-center mb-6">
             <h3 className="text-lg font-bold text-white">{title}</h3>
@@ -101,7 +101,7 @@ const OperationalGradeGauge: React.FC<OperationalGradeGaugeProps> = ({
 
           {/* Gauge */}
           <div className="flex justify-center">
-            <svg width="300" height="160" viewBox="0 0 300 160" className="overflow-visible drop-shadow-lg">
+            <svg width="750" height="160" viewBox="0 0 300 160" className="overflow-visible drop-shadow-lg">
           {/* Gradient Definitions */}
           <defs>
             <linearGradient id="redGradient" x1="0%" y1="0%" x2="100%" y2="100%">
