@@ -8,6 +8,7 @@ import { AdminAuthProvider } from "@/hooks/use-admin-auth";
 import { TeamAuthProvider } from "@/hooks/use-team-auth";
 import { useAuth } from "@/hooks/useAuth";
 import { Footer } from "@/components/Footer";
+import StickyContactWidget from "@/components/sticky-contact-widget";
 import { GHLThemeDemo } from "@/components/ghl-theme-demo";
 import Landing from "@/pages/landing";
 import Home from "@/pages/home";
@@ -74,6 +75,9 @@ function Router() {
         <Route path="/team" component={TeamDashboard} />
         <Route component={NotFound} />
       </Switch>
+      
+      {/* Global Sticky Contact Widget */}
+      <StickyContactWidget />
     </div>
   );
 }
