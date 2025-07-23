@@ -262,7 +262,7 @@ export default function InteractiveValuationSlider() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
-                className="bg-[#3B82F6] hover:bg-[#2563eb] text-white px-8 py-4 rounded-full font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300"
+                className="bg-[#42424a] hover:bg-[#191919] text-white px-8 py-4 rounded-xl font-semibold text-lg shadow-2xl shadow-slate-400/25 hover:shadow-3xl hover:shadow-slate-500/30 border border-slate-300/20 hover:scale-105 transition-all duration-300"
                 onClick={() => window.open('https://api.leadconnectorhq.com/widget/bookings/applebites', '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes')}
               >
                 <Phone className="h-5 w-5 mr-3" />
@@ -320,7 +320,7 @@ export default function InteractiveValuationSlider() {
               window.scrollTo({ top: 0, behavior: 'smooth' });
               window.location.href = '/assessment/free';
             }}
-            className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-[#3B82F6] hover:bg-[#2563eb] text-white font-semibold text-lg shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
+            className="inline-flex items-center gap-3 px-8 py-4 rounded-xl bg-[#42424a] hover:bg-[#191919] text-white font-semibold text-lg shadow-2xl shadow-slate-400/25 hover:shadow-3xl hover:shadow-slate-500/30 border border-slate-300/20 hover:scale-105 transition-all duration-300"
           >
             Explore Your Full Valuation Roadmap 
             <ArrowRight className="h-5 w-5" />
