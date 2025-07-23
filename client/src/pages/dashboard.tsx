@@ -190,18 +190,6 @@ const PastAssessmentsSection = ({ userEmail, setLocation }: { userEmail: string,
                 <Typography variant="h6" fontWeight="bold" color="#344767">
                   {assessment.company || 'Business Assessment'}
                 </Typography>
-                <Chip
-                  label={assessment.overallScore}
-                  size="small"
-                  sx={{
-                    backgroundColor: assessment.overallScore === 'A' ? '#4caf50' : 
-                                    assessment.overallScore === 'B' ? '#8bc34a' :
-                                    assessment.overallScore === 'C' ? '#ff9800' :
-                                    assessment.overallScore === 'D' ? '#ff5722' : '#f44336',
-                    color: 'white',
-                    fontWeight: 'bold'
-                  }}
-                />
               </Box>
               
               <Box display="flex" gap={4} mb={2}>
@@ -233,6 +221,39 @@ const PastAssessmentsSection = ({ userEmail, setLocation }: { userEmail: string,
               </Box>
             </Box>
             
+            {/* Grade Glass Box - Right Side */}
+            <Box
+              sx={{
+                width: '64px',
+                height: '64px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: 'rgba(255, 255, 255, 0.1)',
+                backdropFilter: 'blur(10px)',
+                border: '2px solid',
+                borderColor: assessment.overallScore === 'A' ? '#4caf50' : 
+                           assessment.overallScore === 'B' ? '#8bc34a' :
+                           assessment.overallScore === 'C' ? '#ff9800' :
+                           assessment.overallScore === 'D' ? '#ff5722' : '#f44336',
+                borderRadius: '12px',
+                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+                ml: 2
+              }}
+            >
+              <Typography 
+                variant="h4" 
+                sx={{ 
+                  fontWeight: 'bold',
+                  color: assessment.overallScore === 'A' ? '#4caf50' : 
+                        assessment.overallScore === 'B' ? '#8bc34a' :
+                        assessment.overallScore === 'C' ? '#ff9800' :
+                        assessment.overallScore === 'D' ? '#ff5722' : '#f44336',
+                }}
+              >
+                {assessment.overallScore}
+              </Typography>
+            </Box>
 
           </Box>
         </Box>
