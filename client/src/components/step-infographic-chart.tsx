@@ -121,12 +121,12 @@ export default function StepInfographicChart({
             }}
           >
             {/* Grade Number */}
-            <div className="text-4xl font-black mb-2" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.3)' }}>
+            <div className="text-4xl font-black mb-2 text-shadow">
               {String(index + 1).padStart(2, '0')}
             </div>
             
             {/* Grade Letter */}
-            <div className="text-3xl font-black mb-2" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.3)' }}>
+            <div className="text-3xl font-black mb-2 text-shadow">
               {gradeData.grade}
             </div>
 
@@ -240,7 +240,11 @@ export default function StepInfographicChart({
         </p>
       </div>
 
-
+      <style>{`
+        .text-shadow {
+          text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+      `}</style>
     </div>
   );
 }
