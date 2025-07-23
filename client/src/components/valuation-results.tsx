@@ -52,8 +52,8 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
   };
 
   const handleExploreImprovements = () => {
-    // Redirect to value calculator with current grade data prefilled
-    setLocation(`/value-calculator?grade=${results.overallScore}`);
+    // Redirect to value calculator with specific assessment ID
+    setLocation(`/value-calculator?assessmentId=${results.id}`);
   };
 
   return (

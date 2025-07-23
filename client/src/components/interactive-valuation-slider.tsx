@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useQuery } from "@tanstack/react-query";
+import { useLocation } from "wouter";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
@@ -12,7 +13,13 @@ import { ValuationAssessment } from "@shared/schema";
 type OperationalGrade = 'A' | 'B' | 'C' | 'D' | 'F';
 
 export default function InteractiveValuationSlider() {
-  // Fetch the most recent assessment data
+  const [location] = useLocation();
+  
+  // Get assessment ID from URL parameters
+  const urlParams = new URLSearchParams(location.split('?')[1] || '');
+  const assessmentId = urlParams.get('assessmentId');
+  
+  // Fetch the assessment data
   const { data: assessments, isLoading } = useQuery<ValuationAssessment[]>({
     queryKey: ['/api/analytics/assessments']
   });
@@ -38,8 +45,10 @@ export default function InteractiveValuationSlider() {
     }
   };
 
-  // Use most recent assessment data or defaults
-  const latestAssessment = assessments?.[assessments.length - 1];
+  // Use specific assessment if ID provided, otherwise use most recent
+  const targetAssessment = assessmentId 
+    ? assessments?.find(a => a.id.toString() === assessmentId)
+    : assessments?.[assessments.length - 1];
   
   // Ensure EBITDA is properly parsed from string to number
   const getEbitdaValue = (assessment: ValuationAssessment | undefined): number => {
@@ -52,9 +61,9 @@ export default function InteractiveValuationSlider() {
     return !isNaN(parsed) && parsed > 0 ? parsed : 1379841;
   };
   
-  const currentEbitda = getEbitdaValue(latestAssessment);
-  const baseGrade: OperationalGrade = latestAssessment ? 
-    (latestAssessment.overallScore?.charAt(0) as OperationalGrade || 'C') : 'C';
+  const currentEbitda = getEbitdaValue(targetAssessment);
+  const baseGrade: OperationalGrade = targetAssessment ? 
+    (targetAssessment.overallScore?.charAt(0) as OperationalGrade || 'C') : 'C';
 
   const [sliderGrade, setSliderGrade] = useState<OperationalGrade>(baseGrade);
   const [showBooking, setShowBooking] = useState(false);
@@ -168,9 +177,9 @@ export default function InteractiveValuationSlider() {
   return (
     <div className="max-w-6xl mx-auto space-y-8 sm:space-y-12">
       <div className="text-center mb-8 sm:mb-12">
-        {latestAssessment && (
+        {targetAssessment && (
           <p className="text-base sm:text-lg text-[#475569]/80 mt-3">
-            Based on your recent assessment data
+            Based on your assessment data
           </p>
         )}
       </div>
