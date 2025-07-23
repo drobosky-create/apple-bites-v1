@@ -92,41 +92,52 @@ const OperationalGradeGauge: React.FC<OperationalGradeGaugeProps> = ({
   return (
     <div className="flex justify-center items-center -mt-8">
       {/* Glass card */}
-        <div className="relative bg-[rgba(116,123,138,0.3)] backdrop-blur-[20px] saturate-[180%] rounded-2xl border border-white/10 shadow-2xl px-8 py-6 scale-[1.25]">
+        <div className="relative bg-[rgba(116,123,138,0.3)] backdrop-blur-[20px] saturate-[180%] rounded-2xl border border-white/10 shadow-2xl px-6 py-4 scale-[1.25]">
           {/* Title */}
-          <div className="text-center mb-6">
+          <div className="text-center mb-4">
             <h3 className="text-lg font-bold text-white">{title}</h3>
             <p className="text-sm text-white/80 mt-1">Current Performance Level</p>
           </div>
 
           {/* Gauge */}
           <div className="flex justify-center">
-            <svg width="750" height="160" viewBox="0 0 300 160" className="overflow-visible drop-shadow-lg">
-          {/* Gradient Definitions */}
+            <svg width="280" height="140" viewBox="0 0 300 160" className="overflow-visible drop-shadow-lg">
+          {/* Material Dashboard Gradient Definitions */}
           <defs>
+            {/* F Grade - Deep Red Material Gradient */}
             <linearGradient id="redGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#ef4444" />
-              <stop offset="100%" stopColor="#dc2626" />
+              <stop offset="0%" stopColor="#ff5722" />
+              <stop offset="100%" stopColor="#d32f2f" />
             </linearGradient>
+            {/* D Grade - Orange Material Gradient */}
             <linearGradient id="orangeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#fb923c" />
-              <stop offset="100%" stopColor="#ea580c" />
+              <stop offset="0%" stopColor="#ff9800" />
+              <stop offset="100%" stopColor="#f57c00" />
             </linearGradient>
+            {/* C Grade - Amber Material Gradient */}
             <linearGradient id="yellowGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#facc15" />
-              <stop offset="100%" stopColor="#eab308" />
+              <stop offset="0%" stopColor="#ffc107" />
+              <stop offset="100%" stopColor="#ff8f00" />
             </linearGradient>
+            {/* B Grade - Blue Material Gradient */}
             <linearGradient id="blueGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#38bdf8" />
-              <stop offset="100%" stopColor="#0284c7" />
+              <stop offset="0%" stopColor="#2196f3" />
+              <stop offset="100%" stopColor="#1976d2" />
             </linearGradient>
+            {/* A Grade - Green Material Gradient */}
             <linearGradient id="greenGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#22c55e" />
-              <stop offset="100%" stopColor="#16a34a" />
+              <stop offset="0%" stopColor="#4caf50" />
+              <stop offset="100%" stopColor="#388e3c" />
             </linearGradient>
+            {/* Background with subtle Material gradient */}
             <linearGradient id="backgroundGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#f8fafc" />
-              <stop offset="100%" stopColor="#e2e8f0" />
+              <stop offset="0%" stopColor="#ffffff" />
+              <stop offset="100%" stopColor="#f5f5f5" />
+            </linearGradient>
+            {/* Card background gradient */}
+            <linearGradient id="cardGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="rgba(255,255,255,0.1)" />
+              <stop offset="100%" stopColor="rgba(255,255,255,0.05)" />
             </linearGradient>
           </defs>
           
@@ -179,12 +190,13 @@ const OperationalGradeGauge: React.FC<OperationalGradeGaugeProps> = ({
             );
           })}
           
-          {/* Needle with gradient */}
+          {/* Needle with Material Design gradient */}
           <g className="transition-transform duration-1000 ease-out">
             <defs>
               <linearGradient id="needleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#1e293b" />
-                <stop offset="100%" stopColor="#475569" />
+                <stop offset="0%" stopColor="#37474f" />
+                <stop offset="50%" stopColor="#546e7a" />
+                <stop offset="100%" stopColor="#263238" />
               </linearGradient>
             </defs>
             <line
