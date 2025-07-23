@@ -127,7 +127,7 @@ interface Assessment {
 }
 
 // Past Assessments Component
-const PastAssessmentsSection = ({ userEmail }: { userEmail: string }) => {
+const PastAssessmentsSection = ({ userEmail, setLocation }: { userEmail: string, setLocation: (path: string) => void }) => {
   const { data: assessments, isLoading } = useQuery({
     queryKey: ['/api/analytics/assessments'],
     retry: false,
@@ -229,27 +229,7 @@ const PastAssessmentsSection = ({ userEmail }: { userEmail: string }) => {
               </Box>
             </Box>
             
-            {assessment.pdfUrl && (
-              <Button
-                variant="outlined"
-                size="small"
-                startIcon={<Download size={16} />}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  window.open(assessment.pdfUrl, '_blank');
-                }}
-                sx={{
-                  borderColor: '#2152ff',
-                  color: '#2152ff',
-                  textTransform: 'none',
-                  '&:hover': {
-                    backgroundColor: 'rgba(33, 82, 255, 0.04)',
-                  }
-                }}
-              >
-                Download Report
-              </Button>
-            )}
+
           </Box>
         </Box>
       ))}
@@ -657,7 +637,7 @@ export default function Dashboard() {
                 </Button>
               </Box>
               
-              <PastAssessmentsSection userEmail={displayUser.email} />
+              <PastAssessmentsSection userEmail={displayUser.email} setLocation={setLocation} />
             </CardContent>
           </StatCard>
 
