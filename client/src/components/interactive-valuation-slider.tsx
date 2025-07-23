@@ -5,7 +5,7 @@ import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { TrendingUp, ArrowRight, Phone } from "lucide-react";
-import HorizontalGradeSelector from './horizontal-grade-selector';
+import CoinStackChart from './coin-stack-chart';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { ValuationAssessment } from "@shared/schema";
 
@@ -171,7 +171,12 @@ export default function InteractiveValuationSlider() {
           {/* Subtle icon watermark */}
           <div className="absolute top-4 right-4 text-6xl opacity-10">💹</div>
           <div className="text-center relative z-10">
-            <h3 className="text-xl sm:text-2xl font-semibold text-[#0F172A] mb-3 tracking-wide">Current Value</h3>
+            <h3 className="text-xl sm:text-2xl font-semibold text-[#0F172A] mb-3 tracking-wide">
+              Current Value 
+              <span className="ml-3 inline-block px-3 py-1 text-sm font-semibold text-white bg-orange-500 rounded-full">
+                You are here
+              </span>
+            </h3>
             <p className="text-base sm:text-lg text-[#475569] mb-6">Based on your Operational Grade of {baseGrade}</p>
             <div className="text-4xl sm:text-5xl font-bold text-[#0F172A] mb-4 transition-all duration-300">
               ${currentValuation.toLocaleString()}
@@ -195,7 +200,15 @@ export default function InteractiveValuationSlider() {
           <div className="absolute top-4 right-4 text-6xl opacity-10">📈</div>
           <div className="text-center relative z-10">
             <h3 className="text-xl sm:text-2xl font-semibold text-[#0F172A] mb-3 tracking-wide">Potential Value</h3>
-            <p className="text-base sm:text-lg text-[#475569] mb-6">With an Operational Grade of {sliderGrade}</p>
+            {sliderGrade !== baseGrade ? (
+              <p className="text-base sm:text-lg text-[#475569] mb-6">
+                Estimated increase if operational grade improves to {sliderGrade}
+              </p>
+            ) : (
+              <p className="text-base sm:text-lg text-[#475569] mb-6">
+                Based on selected grade ({sliderGrade})
+              </p>
+            )}
             <div className={`text-4xl sm:text-5xl font-bold mb-4 transition-all duration-300 ${
               sliderGrade !== baseGrade ? 'text-green-600' : 'text-[#0F172A]'
             }`}>
@@ -208,31 +221,45 @@ export default function InteractiveValuationSlider() {
               {sliderCategory.label}
             </Badge>
             {sliderGrade !== baseGrade && (
-              <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200/50 rounded-xl p-4 backdrop-blur-sm">
-                <p className="text-sm text-[#475569] mb-2 font-medium">Adjust the slider below to explore your potential</p>
-                {potentialIncrease > 0 && (
-                  <div className="text-lg font-bold text-green-600">
-                    +${potentialIncrease.toLocaleString()} ({percentageIncrease.toFixed(1)}% increase)
-                  </div>
-                )}
-                {potentialIncrease < 0 && (
-                  <div className="text-lg font-bold text-red-600">
-                    ${Math.abs(potentialIncrease).toLocaleString()} ({Math.abs(percentageIncrease).toFixed(1)}% decrease)
-                  </div>
-                )}
+              <div className="bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-300 rounded-xl p-6 backdrop-blur-sm shadow-lg">
+                <div className="text-center">
+                  <div className="text-xs uppercase tracking-wider text-green-700 font-bold mb-2">💰 POTENTIAL GAIN</div>
+                  {potentialIncrease > 0 && (
+                    <div className="text-2xl font-black text-green-600 mb-2">
+                      +${potentialIncrease.toLocaleString()}
+                    </div>
+                  )}
+                  {potentialIncrease > 0 && (
+                    <div className="text-lg font-bold text-green-700">
+                      +{percentageIncrease.toFixed(1)}% increase
+                    </div>
+                  )}
+                  {potentialIncrease < 0 && (
+                    <div className="text-2xl font-black text-red-600 mb-2">
+                      -${Math.abs(potentialIncrease).toLocaleString()}
+                    </div>
+                  )}
+                  {potentialIncrease < 0 && (
+                    <div className="text-lg font-bold text-red-700">
+                      -{Math.abs(percentageIncrease).toFixed(1)}% decrease
+                    </div>
+                  )}
+                </div>
               </div>
             )}
           </div>
         </div>
       </div>
-      {/* Horizontal Grade Card Selector */}
-      <HorizontalGradeSelector 
-        baseGrade={baseGrade}
-        sliderGrade={sliderGrade}
-        setSliderGrade={setSliderGrade}
-        baseEstimate={currentValuation}
-        sliderEstimate={sliderValuation}
-      />
+      {/* Coin Stack Chart Selector */}
+      <div className="bg-white/70 backdrop-blur-xl rounded-2xl shadow-xl shadow-slate-900/5 border border-white/30 p-6 sm:p-8">
+        <CoinStackChart 
+          currentGrade={baseGrade}
+          selectedGrade={sliderGrade}
+          onGradeSelect={setSliderGrade}
+          getValuation={calculateValuation}
+          getMultiple={getMultipleForGrade}
+        />
+      </div>
       {/* Call to Action with Argon Styling */}
       {showBooking && (
         <div className="bg-gradient-to-r from-blue-50 to-indigo-50 backdrop-blur-xl rounded-2xl shadow-xl border border-blue-200/50 p-8 animate-in slide-in-from-bottom duration-300">
