@@ -77,12 +77,40 @@ const StepIcon = styled(Box)<{ active: boolean; completed: boolean }>(({ theme, 
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  backgroundColor: completed ? '#4caf50' : active ? '#05cef4' : '#e3e6ea',
+  background: completed 
+    ? 'linear-gradient(135deg, #4caf50 0%, #2e7d32 100%)' 
+    : active 
+    ? 'linear-gradient(135deg, #05cef4 0%, #0b2147 100%)' 
+    : 'linear-gradient(135deg, #f5f5f5 0%, #e3e6ea 100%)',
   color: completed || active ? 'white' : '#67748e',
   fontWeight: 'bold',
   fontSize: '14px',
   transition: 'all 0.3s ease',
-  border: active ? '3px solid rgba(33, 82, 255, 0.3)' : 'none',
+  border: active ? '3px solid rgba(5, 206, 244, 0.4)' : 'none',
+  boxShadow: completed || active 
+    ? '0 4px 12px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1)' 
+    : '0 2px 6px rgba(0, 0, 0, 0.08)',
+  position: 'relative',
+  '&::before': completed || active ? {
+    content: '""',
+    position: 'absolute',
+    top: '-2px',
+    left: '-2px',
+    right: '-2px',
+    bottom: '-2px',
+    borderRadius: '50%',
+    background: completed 
+      ? 'linear-gradient(135deg, #4caf50 0%, #2e7d32 100%)' 
+      : 'linear-gradient(135deg, #05cef4 0%, #0b2147 100%)',
+    opacity: 0.3,
+    zIndex: -1,
+  } : {},
+  '&:hover': {
+    transform: active || completed ? 'scale(1.05)' : 'scale(1.02)',
+    boxShadow: completed || active 
+      ? '0 6px 16px rgba(0, 0, 0, 0.2), 0 3px 6px rgba(0, 0, 0, 0.15)' 
+      : '0 4px 10px rgba(0, 0, 0, 0.12)',
+  }
 }));
 
 const StepConnector = styled(Box)(({ theme }) => ({
