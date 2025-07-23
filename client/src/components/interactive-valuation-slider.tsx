@@ -101,11 +101,16 @@ export default function InteractiveValuationSlider() {
   const getGradeInfo = (grade: 'A' | 'B' | 'C' | 'D' | 'F') => {
     const multiplier = getMultipleForGrade(grade);
     const colorMap = {
-      'A': { bg: 'bg-green-500/85', border: 'border-green-400', gradient: 'from-green-50 to-emerald-50', borderColor: 'border-green-200/30' },
-      'B': { bg: 'bg-blue-500/80', border: 'border-blue-400', gradient: 'from-blue-50 to-indigo-50', borderColor: 'border-blue-200/50' },
-      'C': { bg: 'bg-yellow-500/85', border: 'border-yellow-400', gradient: 'from-yellow-50 to-orange-50', borderColor: 'border-yellow-200/30' },
-      'D': { bg: 'bg-orange-500/85', border: 'border-orange-400', gradient: 'from-orange-50 to-red-50', borderColor: 'border-orange-200/30' },
-      'F': { bg: 'bg-red-500/85', border: 'border-red-400', gradient: 'from-red-50 to-pink-50', borderColor: 'border-red-200/30' }
+      'A': { bg: 'bg-green-500/85', border: 'border-green-400', gradient: 'from-green-50 to-emerald-50', borderColor: 'border-green-200/30',badgeBg: 'bg-green-500',
+             badgeTextColor: 'text-white', },
+      'B': { bg: 'bg-blue-500/80', border: 'border-blue-400', gradient: 'from-blue-50 to-indigo-50', borderColor: 'border-blue-200/50',badgeBg: 'bg-blue-500',
+             badgeTextColor: 'text-white', },
+      'C': { bg: 'bg-yellow-500/85', border: 'border-yellow-400', gradient: 'from-yellow-50 to-orange-50', borderColor: 'border-yellow-200/30',badgeBg: 'bg-yellow-400',
+             badgeTextColor: 'text-gray-900', },
+      'D': { bg: 'bg-orange-500/85', border: 'border-orange-400', gradient: 'from-orange-50 to-red-50', borderColor: 'border-orange-200/30', badgeBg: 'bg-orange-500',
+             badgeTextColor: 'text-white', },
+      'F': { bg: 'bg-red-500/85', border: 'border-red-400', gradient: 'from-red-50 to-pink-50', borderColor: 'border-red-200/30', badgeBg: 'bg-red-500',
+             badgeTextColor: 'text-white', }
     };
     return { 
       multiplier, 
@@ -187,7 +192,7 @@ export default function InteractiveValuationSlider() {
       {/* Current vs Potential Value Cards with Glassmorphism */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 mb-8 sm:mb-12">
         {/* Current Value Card */}
-        <div className="bg-black/20 backdrop-blur-md rounded-xl shadow-2xl border border-white/10 p-6 sm:p-8 text-center relative overflow-hidden">
+        <div className="bg-black/60 backdrop-blur-md rounded-xl shadow-2xl border border-white/10 p-6 sm:p-8 text-center relative overflow-hidden">
           
           <h3 className="text-xl sm:text-2xl font-semibold text-white mb-2 tracking-wide">
             Current Value 
@@ -214,7 +219,7 @@ export default function InteractiveValuationSlider() {
               'bg-green-500/20 border-green-400/40 ring-2 ring-green-400 ring-opacity-50 shadow-2xl shadow-green-400/30' : 
               'bg-red-500/20 border-red-400/40 ring-2 ring-red-400 ring-opacity-50 shadow-2xl shadow-red-400/30'
             )
-            : 'bg-black/20 border-white/10'
+            : 'bg-black/60 border-white/10'
         }`}>
           
           <div className="text-center relative z-10">
@@ -266,7 +271,7 @@ export default function InteractiveValuationSlider() {
 
 
       {/* Combined Gauge and Grade Selection */}
-      <div className="bg-black/20 backdrop-blur-md rounded-xl shadow-2xl border border-white/10 p-6 sm:p-10">
+      <div className="bg-black/60 backdrop-blur-md rounded-xl shadow-2xl border border-white/10 p-6 sm:p-10">
         {/* Gauge */}
         <div className="mb-10">
           <OperationalGradeGauge 
@@ -379,7 +384,7 @@ export default function InteractiveValuationSlider() {
         </div>
       )}
       {/* Educational Content */}
-      <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-8 sm:p-12">
+      <div className="bg-black/60 rounded-xl shadow-lg border border-gray-200 p-8 sm:p-12">
         <div className="text-center mb-8">
           <h3 className="text-2xl sm:text-3xl font-bold text-[#0F172A] mb-4 tracking-wide">
             How to Improve Your Operational Grade
@@ -399,7 +404,7 @@ export default function InteractiveValuationSlider() {
         hover:shadow-2xl
         transition-all duration-300 ease-in-out`}>
                 <div className="flex items-center gap-3 mb-3">
-                  <div className={`${gradeInfo.bg} bg-opacity-80 text-white px-3 py-1 rounded-full text-xs uppercase tracking-wider font-bold ${gradeInfo.border} shadow-sm`}>
+                  <div className={`${gradeInfo.bg} bg-opacity-80 text-white px-3 py-1 rounded-full text-xs uppercase tracking-wider font-bold `}>
                     {gradeInfo.label}
                   </div>
                 </div>
@@ -422,7 +427,7 @@ export default function InteractiveValuationSlider() {
         hover:shadow-2xl
         transition-all duration-300 ease-in-out`}>
                 <div className="flex items-center gap-3 mb-3">
-                  <div className={`${gradeInfo.bg} bg-opacity-90 text-white px-3 py-1 rounded-full text-xs uppercase tracking-wider font-bold ${gradeInfo.border}`}>
+                  <div className={`${gradeInfo.bg} bg-opacity-90 text-white px-3 py-1 rounded-full text-xs uppercase tracking-wider font-bold `}>
                     {gradeInfo.label}
                   </div>
                 </div>
@@ -445,7 +450,7 @@ export default function InteractiveValuationSlider() {
         hover:shadow-2xl
         transition-all duration-300 ease-in-out`}>
                 <div className="flex items-center gap-3 mb-3">
-                  <div className={`${gradeInfo.bg} bg-opacity-90 text-white px-3 py-1 rounded-full text-xs uppercase tracking-wider font-bold ${gradeInfo.border}`}>
+                  <div className={`${gradeInfo.bg} bg-opacity-90 text-white px-3 py-1 rounded-full text-xs uppercase tracking-wider font-bold `}>
                     {gradeInfo.label}
                   </div>
                 </div>
@@ -456,6 +461,9 @@ export default function InteractiveValuationSlider() {
           })()}
 
           {/* Risk Management - Grades D-F */}
+          {(() => {
+            const gradeInfo = getGradeInfo('D-F');
+            return (
           <div className="bg-gradient-to-br ${gradeInfo.gradient}
             rounded-xl p-6
             border ${gradeInfo.borderColor}
@@ -484,7 +492,7 @@ export default function InteractiveValuationSlider() {
               window.scrollTo({ top: 0, behavior: 'smooth' });
               window.location.href = '/assessment/free';
             }}
-            className="inline-flex items-center gap-3 px-8 py-4 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-200"
+            className="inline-flex items-center gap-3 px-8 py-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-200"
           >
             Explore Your Full Valuation Roadmap 
             <ArrowRight className="h-5 w-5" />

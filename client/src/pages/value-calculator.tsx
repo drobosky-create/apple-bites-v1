@@ -353,7 +353,7 @@ export default function ValueCalculator() {
 
           {/* Main Calculator Container with Dark Background for Glass Effect */}
           <Box sx={{
-            background: 'linear-gradient(135deg, #1e293b 0%, #334155 100%)',
+            background: 'linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 90%)',
             borderRadius: '20px',
             p: 6,
             boxShadow: '0 20px 40px rgba(0,0,0,0.2)'
