@@ -86,7 +86,7 @@ const StepIcon = styled(Box)<{ active: boolean; completed: boolean }>(({ theme, 
   fontWeight: 'bold',
   fontSize: '14px',
   transition: 'all 0.3s ease',
-  border: active ? '3px solid rgba(5, 206, 244, 0.4)' : 'none',
+  border: 'none',
   boxShadow: completed || active 
     ? '0 4px 12px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1)' 
     : '0 2px 6px rgba(0, 0, 0, 0.08)',
