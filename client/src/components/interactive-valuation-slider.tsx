@@ -189,7 +189,7 @@ export default function InteractiveValuationSlider() {
 
         {/* Potential Value Card */}
         <div className={`bg-white/70 backdrop-blur-xl rounded-2xl shadow-xl shadow-slate-900/5 border border-white/40 p-6 sm:p-8 value-card-hover relative overflow-hidden transition-all duration-300 ${
-          sliderGrade !== baseGrade ? 'ring-2 ring-green-400 ring-opacity-50 shadow-2xl shadow-green-200/50 animate-pulse' : ''
+          sliderGrade !== baseGrade ? 'ring-2 ring-green-400 ring-opacity-50 shadow-2xl shadow-green-200/50' : ''
         }`}>
           {/* Subtle icon watermark */}
           <div className="absolute top-4 right-4 text-6xl opacity-10">📈</div>
