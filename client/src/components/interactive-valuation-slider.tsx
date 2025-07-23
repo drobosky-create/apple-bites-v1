@@ -167,89 +167,82 @@ export default function InteractiveValuationSlider() {
       {/* Current vs Potential Value Cards with Glassmorphism */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 mb-8 sm:mb-12">
         {/* Current Value Card */}
-        <div className="bg-gradient-to-br from-white to-slate-50 backdrop-blur-xl rounded-2xl shadow-xl shadow-slate-900/5 border border-white/40 p-6 sm:p-8 value-card-hover relative overflow-hidden">
-          {/* Subtle icon watermark */}
-          <div className="absolute top-4 right-4 text-6xl opacity-10">💹</div>
-          <div className="text-center relative z-10">
-            <h3 className="text-xl sm:text-2xl font-semibold text-[#0F172A] mb-3 tracking-wide">
-              Current Value 
-              <span className="ml-3 inline-block px-3 py-1 text-sm font-semibold text-white bg-orange-500 rounded-full">
-                You are here
-              </span>
-            </h3>
-            <p className="text-base sm:text-lg text-[#475569] mb-6">Based on your Operational Grade of {baseGrade}</p>
-            <div className="text-4xl sm:text-5xl font-bold text-[#0F172A] mb-4 transition-all duration-300">
-              ${currentValuation.toLocaleString()}
-            </div>
-            <div className="text-base sm:text-lg font-semibold text-[#475569] mb-4">
-              {currentMultiple}x EBITDA Multiple
-            </div>
-            <Badge variant="secondary" className="inline-flex items-center rounded-full border transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-secondary/80 bg-slate-500 px-4 py-2 text-sm font-medium text-[#2a2c37]">
-              {currentCategory.label}
-            </Badge>
+        <div className="bg-gradient-to-br from-sky-100/40 to-blue-100/30 backdrop-blur-xl rounded-xl shadow-lg border border-slate-300 p-6 sm:p-8 text-center relative overflow-hidden">
+          <div className="absolute top-4 right-4 text-5xl opacity-10">💹</div>
+          <h3 className="text-xl sm:text-2xl font-semibold text-slate-800 mb-2 tracking-wide">
+            Current Value 
+            <span className="ml-3 inline-block px-3 py-1 text-sm font-semibold text-white bg-orange-500 rounded-full">
+              You are here
+            </span>
+          </h3>
+          <p className="text-base sm:text-lg text-slate-500 mb-4">Based on your Operational Grade of {baseGrade}</p>
+          <div className="text-4xl sm:text-5xl font-bold text-slate-800 mb-4">
+            ${currentValuation.toLocaleString()}
           </div>
+          <div className="text-base sm:text-lg font-semibold text-slate-600 mb-4">
+            {currentMultiple}x EBITDA Multiple
+          </div>
+          <span className="inline-flex items-center rounded-full px-4 py-1 text-sm font-medium bg-slate-200 text-slate-700">
+            {currentCategory.label}
+          </span>
         </div>
 
         {/* Potential Value Card */}
-        <div className={`bg-gradient-to-br from-white to-slate-50 backdrop-blur-xl rounded-2xl shadow-xl border p-6 sm:p-8 value-card-hover relative overflow-hidden ${
-          sliderGrade !== baseGrade 
-            ? 'shadow-green-500/20 border-green-200/50' 
-            : 'shadow-slate-900/5 border-white/40'
-        }`}>
+        <div className="bg-white/70 backdrop-blur-xl rounded-2xl shadow-xl shadow-slate-900/5 border border-white/40 p-6 sm:p-8 value-card-hover relative overflow-hidden">
           {/* Subtle icon watermark */}
           <div className="absolute top-4 right-4 text-6xl opacity-10">📈</div>
           <div className="text-center relative z-10">
-            <h3 className="text-xl sm:text-2xl font-semibold text-[#0F172A] mb-3 tracking-wide">Potential Value</h3>
+            <h3 className="text-xl sm:text-2xl font-semibold text-slate-800 mb-3 tracking-wide">Potential Value</h3>
             {sliderGrade !== baseGrade ? (
-              <p className="text-base sm:text-lg text-[#475569] mb-6">
-                Estimated increase if operational grade improves to {sliderGrade}
+              <p className="text-base sm:text-lg text-slate-500 mb-4">
+                Based on selected grade ({sliderGrade})
               </p>
             ) : (
-              <p className="text-base sm:text-lg text-[#475569] mb-6">
+              <p className="text-base sm:text-lg text-slate-500 mb-4">
                 Based on selected grade ({sliderGrade})
               </p>
             )}
-            <div className={`text-4xl sm:text-5xl font-bold mb-4 transition-all duration-300 ${
-              sliderGrade !== baseGrade ? 'text-green-600' : 'text-[#0F172A]'
-            }`}>
+            <div className="text-4xl sm:text-5xl font-bold text-slate-800 mb-4">
               ${sliderValuation.toLocaleString()}
             </div>
-            <div className="text-base sm:text-lg font-semibold text-[#475569] mb-4">
+            <div className="text-base sm:text-lg font-semibold text-slate-600 mb-4">
               {sliderMultiple}x EBITDA Multiple
             </div>
-            <Badge variant="secondary" className={`${sliderCategory.bgColor} text-white px-4 py-2 text-sm font-medium mb-4`}>
+            <span className="inline-flex items-center rounded-full px-4 py-1 text-sm font-medium bg-slate-200 text-slate-700">
               {sliderCategory.label}
-            </Badge>
-            {sliderGrade !== baseGrade && (
-              <div className="bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-300 rounded-xl p-6 backdrop-blur-sm shadow-lg">
-                <div className="text-center">
-                  <div className="text-xs uppercase tracking-wider text-green-700 font-bold mb-2">💰 POTENTIAL GAIN</div>
-                  {potentialIncrease > 0 && (
-                    <div className="text-2xl font-black text-green-600 mb-2">
-                      +${potentialIncrease.toLocaleString()}
-                    </div>
-                  )}
-                  {potentialIncrease > 0 && (
-                    <div className="text-lg font-bold text-green-700">
-                      +{percentageIncrease.toFixed(1)}% increase
-                    </div>
-                  )}
-                  {potentialIncrease < 0 && (
-                    <div className="text-2xl font-black text-red-600 mb-2">
-                      -${Math.abs(potentialIncrease).toLocaleString()}
-                    </div>
-                  )}
-                  {potentialIncrease < 0 && (
-                    <div className="text-lg font-bold text-red-700">
-                      -{Math.abs(percentageIncrease).toFixed(1)}% decrease
-                    </div>
-                  )}
-                </div>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* POTENTIAL GAIN Display - Separate section */}
+      {sliderGrade !== baseGrade && (
+        <div className="bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-300 rounded-xl p-6 backdrop-blur-sm shadow-lg mt-6">
+          <div className="text-center">
+            <div className="text-xs uppercase tracking-wider text-green-700 font-bold mb-2">💰 POTENTIAL GAIN</div>
+            {potentialIncrease > 0 && (
+              <div className="text-2xl font-black text-green-600 mb-2">
+                +${potentialIncrease.toLocaleString()}
+              </div>
+            )}
+            {potentialIncrease > 0 && (
+              <div className="text-lg font-bold text-green-700">
+                +{percentageIncrease.toFixed(1)}% increase
+              </div>
+            )}
+            {potentialIncrease < 0 && (
+              <div className="text-2xl font-black text-red-600 mb-2">
+                -${Math.abs(potentialIncrease).toLocaleString()}
+              </div>
+            )}
+            {potentialIncrease < 0 && (
+              <div className="text-lg font-bold text-red-700">
+                -{Math.abs(percentageIncrease).toFixed(1)}% decrease
               </div>
             )}
           </div>
         </div>
-      </div>
+      )}
       {/* Step Infographic Chart */}
       <div className="bg-white/70 backdrop-blur-xl rounded-2xl shadow-xl shadow-slate-900/5 border border-white/30 p-6 sm:p-8">
         <StepInfographicChart 
