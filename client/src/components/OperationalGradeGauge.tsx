@@ -92,11 +92,11 @@ const OperationalGradeGauge: React.FC<OperationalGradeGaugeProps> = ({
   return (
     <div className="flex justify-center items-center -mt-14">
       {/* Glass card */}
-        <div className="relative bg-black/0 backdrop-blur-md rounded-2xl shadow-2xl px-6 py-4 pb-0 w-[750px] border border-white/10 transform scale-105">
+        <div className="relative bg-slate/60 backdrop-blur-md rounded-2xl shadow-2xl px-6 py-4 pb-0 w-[750px] border border-white/10 transform scale-105">
           {/* Title */}
           <div className="text-center -mb-3">
-            <h3 className="text-xl font-bold text-white">{title}</h3>
-            <p className="text-med text-white/80 mt-1">Current Performance Level</p>
+            <h3 className="text-xl font-bold text-#1c2534">{title}</h3>
+            <p className="text-med text-#1c2534 mt-1">Current Performance Level</p>
           </div>
 
           {/* Gauge */}

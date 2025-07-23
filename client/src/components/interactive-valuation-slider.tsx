@@ -101,11 +101,11 @@ export default function InteractiveValuationSlider() {
   const getGradeInfo = (grade: 'A' | 'B' | 'C' | 'D' | 'F') => {
     const multiplier = getMultipleForGrade(grade);
     const colorMap = {
-      'A': { bg: 'bg-green-500', border: 'border-green-400', gradient: 'from-green-50 to-emerald-50', borderColor: 'border-green-200/50' },
-      'B': { bg: 'bg-blue-500', border: 'border-blue-400', gradient: 'from-blue-50 to-indigo-50', borderColor: 'border-blue-200/50' },
-      'C': { bg: 'bg-yellow-500', border: 'border-yellow-400', gradient: 'from-yellow-50 to-orange-50', borderColor: 'border-yellow-200/50' },
-      'D': { bg: 'bg-orange-500', border: 'border-orange-400', gradient: 'from-orange-50 to-red-50', borderColor: 'border-orange-200/50' },
-      'F': { bg: 'bg-red-500', border: 'border-red-400', gradient: 'from-red-50 to-pink-50', borderColor: 'border-red-200/50' }
+      'A': { bg: 'bg-green-500/85', border: 'border-green-400', gradient: 'from-green-50 to-emerald-50', borderColor: 'border-green-200/30' },
+      'B': { bg: 'bg-blue-500/80', border: 'border-blue-400', gradient: 'from-blue-50 to-indigo-50', borderColor: 'border-blue-200/50' },
+      'C': { bg: 'bg-yellow-500/85', border: 'border-yellow-400', gradient: 'from-yellow-50 to-orange-50', borderColor: 'border-yellow-200/30' },
+      'D': { bg: 'bg-orange-500/85', border: 'border-orange-400', gradient: 'from-orange-50 to-red-50', borderColor: 'border-orange-200/30' },
+      'F': { bg: 'bg-red-500/85', border: 'border-red-400', gradient: 'from-red-50 to-pink-50', borderColor: 'border-red-200/30' }
     };
     return { 
       multiplier, 
@@ -276,7 +276,7 @@ export default function InteractiveValuationSlider() {
           />
         </div>
         
-        <h3 className="text-xl font-bold text-center text-slate-800 mb-6">
+        <h3 className="text-xl font-bold text-center text-slate-100 mb-10">
           Click any grade to see how operational improvements impact your business value
         </h3>
         <div className="grid grid-cols-5 gap-4">
@@ -290,15 +290,15 @@ export default function InteractiveValuationSlider() {
               <button
                 key={grade}
                 onClick={() => setSliderGrade(grade)}
-                className={`relative p-4 rounded-lg border transition-all duration-200 hover:shadow-md ${
+                className={`relative p-4 rounded-xl border transition-all duration-200 hover:shadow-md ${
                   isSelected 
                     ? 'border-blue-500 shadow-md bg-blue-50' 
                     : 'border-gray-300 hover:border-gray-400 bg-white'
                 }`}
               >
                 {isCurrent && (
-                  <div className="absolute -top-2 left-1/2 transform -translate-x-1/2">
-                    <span className="bg-orange-500 text-white text-xs px-2 py-1 rounded-full font-semibold">
+                  <div className="absolute -bottom-5 left-1/2 transform -translate-x-1/2">
+                    <span className="bg-teal-500 text-white text-xl px-2 py-2 rounded-full font-semibold">
                       Current
                     </span>
                   </div>
@@ -313,22 +313,24 @@ export default function InteractiveValuationSlider() {
                 
                 <div className="flex items-center justify-between">
                   {/* Icon Section */}
-                  <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${gradeInfo.bg} shadow-lg`}>
+                  <div
+                    className={`absolute -top-3 -left-3 z-10 w-14 h-14 rounded-2xl flex items-center justify-center ${gradeInfo.bg} backdrop-blur-md border border-white/20 shadow-lg`}
+                  >
                     <span className="text-white font-black text-2xl">{grade}</span>
                   </div>
                   
                   {/* Content Section */}
                   <div className="flex-1 text-right">
-                    <div className="text-white/80 text-sm font-medium mb-1">
+                    <div className="text-black/80 text-sm font-medium mb-1">
                       {grade === 'F' ? 'Poor Performance' :
                        grade === 'D' ? 'Below Average' :
                        grade === 'C' ? 'Average Performance' :
                        grade === 'B' ? 'Good Performance' : 'Excellent Performance'}
                     </div>
-                    <div className="text-white text-3xl font-black mb-1">
+                    <div className="text-black text-3xl font-black mb-1">
                       {gradeInfo.multiplier.toFixed(1)}x
                     </div>
-                    <div className="text-white/60 text-sm">
+                    <div className="text-black/60 text-sm">
                       EBITDA Multiple
                     </div>
                   </div>
@@ -338,7 +340,7 @@ export default function InteractiveValuationSlider() {
           })}
         </div>
         
-        <div className="flex justify-center gap-4 mt-6 text-sm">
+        <div className="flex justify-center gap-4 mt-12 text-sm">
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
             <span className="text-white/80">Current Grade</span>
@@ -388,9 +390,16 @@ export default function InteractiveValuationSlider() {
           {(() => {
             const gradeInfo = getGradeInfo('A');
             return (
-              <div className={`bg-gradient-to-br ${gradeInfo.gradient} rounded-lg p-6 border ${gradeInfo.borderColor} hover:shadow-md transition-all duration-200`}>
+              <div className={`bg-gradient-to-br ${gradeInfo.gradient}
+        rounded-xl p-6
+        border ${gradeInfo.borderColor}
+        backdrop-blur-md
+        bg-white/10
+        shadow-xl
+        hover:shadow-2xl
+        transition-all duration-300 ease-in-out`}>
                 <div className="flex items-center gap-3 mb-3">
-                  <div className={`${gradeInfo.bg} bg-opacity-90 text-white px-3 py-1 rounded-full text-xs uppercase tracking-wider font-bold ${gradeInfo.border}`}>
+                  <div className={`${gradeInfo.bg} bg-opacity-80 text-white px-3 py-1 rounded-full text-xs uppercase tracking-wider font-bold ${gradeInfo.border} shadow-sm`}>
                     {gradeInfo.label}
                   </div>
                 </div>
@@ -404,7 +413,14 @@ export default function InteractiveValuationSlider() {
           {(() => {
             const gradeInfo = getGradeInfo('B');
             return (
-              <div className={`bg-gradient-to-br ${gradeInfo.gradient} rounded-lg p-6 border ${gradeInfo.borderColor} hover:shadow-md transition-all duration-200`}>
+              <div className={`bg-gradient-to-br ${gradeInfo.gradient}
+        rounded-xl p-6
+        border ${gradeInfo.borderColor}
+        backdrop-blur-md
+        bg-white/10
+        shadow-xl
+        hover:shadow-2xl
+        transition-all duration-300 ease-in-out`}>
                 <div className="flex items-center gap-3 mb-3">
                   <div className={`${gradeInfo.bg} bg-opacity-90 text-white px-3 py-1 rounded-full text-xs uppercase tracking-wider font-bold ${gradeInfo.border}`}>
                     {gradeInfo.label}
@@ -420,7 +436,14 @@ export default function InteractiveValuationSlider() {
           {(() => {
             const gradeInfo = getGradeInfo('C');
             return (
-              <div className={`bg-gradient-to-br ${gradeInfo.gradient} rounded-lg p-6 border ${gradeInfo.borderColor} hover:shadow-md transition-all duration-200`}>
+              <div className={`bg-gradient-to-br ${gradeInfo.gradient}
+        rounded-xl p-6
+        border ${gradeInfo.borderColor}
+        backdrop-blur-md
+        bg-white/10
+        shadow-xl
+        hover:shadow-2xl
+        transition-all duration-300 ease-in-out`}>
                 <div className="flex items-center gap-3 mb-3">
                   <div className={`${gradeInfo.bg} bg-opacity-90 text-white px-3 py-1 rounded-full text-xs uppercase tracking-wider font-bold ${gradeInfo.border}`}>
                     {gradeInfo.label}
@@ -433,7 +456,14 @@ export default function InteractiveValuationSlider() {
           })()}
 
           {/* Risk Management - Grades D-F */}
-          <div className="bg-gradient-to-br from-red-50 to-pink-50 rounded-lg p-6 border border-red-200 hover:shadow-md transition-all duration-200">
+          <div className="bg-gradient-to-br ${gradeInfo.gradient}
+            rounded-xl p-6
+            border ${gradeInfo.borderColor}
+            backdrop-blur-md
+            bg-white/10
+            shadow-xl
+            hover:shadow-2xl
+            transition-all duration-300 ease-in-out">
             <div className="flex items-center gap-3 mb-3">
               <div className="bg-red-500 bg-opacity-90 text-white px-3 py-1 rounded-full text-xs uppercase tracking-wider font-bold border-red-400">
                 Grades D-F: {getMultipleForGrade('D').toFixed(1)}-{getMultipleForGrade('F').toFixed(1)}x
