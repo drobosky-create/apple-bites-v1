@@ -244,47 +244,7 @@ const OperationalGradeGauge: React.FC<OperationalGradeGaugeProps> = ({
         </svg>
       </div>
 
-      {/* Valuation Display Below Gauge */}
-      <div className="flex justify-center mt-6">
-        <div className="grid grid-cols-5 gap-6 text-center">
-          {(['F', 'D', 'C', 'B', 'A'] as const).map((displayGrade) => {
-            const gradeInfo = gradeSegments.find(s => s.grade === displayGrade);
-            if (!gradeInfo) return null;
-            
-            const valuation = 3500000; // Base EBITDA for demo
-            const multiplier = 
-              displayGrade === 'F' ? 2.0 :
-              displayGrade === 'D' ? 3.0 :
-              displayGrade === 'C' ? 4.2 :
-              displayGrade === 'B' ? 5.7 :
-              7.5;
-            
-            const calculatedValue = valuation * multiplier;
-            const isCurrentGrade = displayGrade === grade;
-            
-            return (
-              <div key={displayGrade} className="relative">
-                {isCurrentGrade && (
-                  <div className="absolute -top-8 left-1/2 transform -translate-x-1/2">
-                    <span className="bg-orange-500 text-white text-xs px-3 py-1 rounded-full font-semibold">
-                      Current
-                    </span>
-                  </div>
-                )}
-                <div className={`text-2xl font-bold mb-1 ${isCurrentGrade ? 'text-slate-800' : 'text-slate-600'}`}>
-                  ${(calculatedValue / 1000000).toFixed(1)}M
-                </div>
-                <div className={`text-sm mb-2 ${isCurrentGrade ? 'text-slate-600' : 'text-slate-500'}`}>
-                  {multiplier.toFixed(1)}x
-                </div>
-                <div className={`text-xs uppercase tracking-wide ${isCurrentGrade ? 'text-slate-700' : 'text-slate-500'}`}>
-                  EBITDA
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
+      
     </div>
   );
 };
