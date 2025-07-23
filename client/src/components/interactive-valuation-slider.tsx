@@ -5,7 +5,7 @@ import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { TrendingUp, ArrowRight, Phone } from "lucide-react";
-import StepInfographicChart from './step-infographic-chart';
+import ModernGradeChart from './modern-grade-chart';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { ValuationAssessment } from "@shared/schema";
 
@@ -241,7 +241,7 @@ export default function InteractiveValuationSlider() {
 
       {/* Step Infographic Chart */}
       <div className="bg-white/70 backdrop-blur-xl rounded-2xl shadow-xl shadow-slate-900/5 border border-white/30 p-6 sm:p-8">
-        <StepInfographicChart 
+        <ModernGradeChart 
           currentGrade={baseGrade}
           selectedGrade={sliderGrade}
           onGradeSelect={setSliderGrade}
