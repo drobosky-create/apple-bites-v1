@@ -152,9 +152,6 @@ export default function InteractiveValuationSlider() {
   return (
     <div className="max-w-6xl mx-auto space-y-8 sm:space-y-12">
       <div className="text-center mb-8 sm:mb-12">
-        <p className="text-lg sm:text-xl text-[#475569] leading-relaxed font-semibold">
-          See how improving your business operations translates to increased valuation
-        </p>
         {latestAssessment && (
           <p className="text-base sm:text-lg text-[#475569]/80 mt-3">
             Based on your recent assessment data
