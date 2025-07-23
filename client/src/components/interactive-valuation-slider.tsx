@@ -462,26 +462,24 @@ export default function InteractiveValuationSlider() {
 
           {/* Risk Management - Grades D-F */}
           {(() => {
-            const gradeInfo = getGradeInfo('D');
+            const gradeInfo = getGradeInfo('D-F');
             return (
-              <div className={`bg-gradient-to-br ${gradeInfo.gradient}
-                rounded-xl p-6
-                border ${gradeInfo.borderColor}
-                backdrop-blur-md
-                bg-white/10
-                shadow-xl
-                hover:shadow-2xl
-                transition-all duration-300 ease-in-out`}>
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="bg-red-500 bg-opacity-90 text-white px-3 py-1 rounded-full text-xs uppercase tracking-wider font-bold border-red-400">
-                    Grades D-F: {getMultipleForGrade('D').toFixed(1)}-{getMultipleForGrade('F').toFixed(1)}x
-                  </div>
-                </div>
-                <h4 className="text-lg sm:text-xl font-bold text-[#0F172A] mb-3">🛡️ Risk Management</h4>
-                <p className="text-[#475569] leading-relaxed font-medium">Diversified revenue streams, reduced owner dependency, and operational stability</p>
+          <div className="bg-gradient-to-br ${gradeInfo.gradient}
+            rounded-xl p-6
+            border ${gradeInfo.borderColor}
+            backdrop-blur-md
+            bg-white/10
+            shadow-xl
+            hover:shadow-2xl
+            transition-all duration-300 ease-in-out">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="bg-red-500 bg-opacity-90 text-white px-3 py-1 rounded-full text-xs uppercase tracking-wider font-bold border-red-400">
+                Grades D-F: {getMultipleForGrade('D').toFixed(1)}-{getMultipleForGrade('F').toFixed(1)}x
               </div>
-            );
-          })()}
+            </div>
+            <h4 className="text-lg sm:text-xl font-bold text-[#0F172A] mb-3">🛡️ Risk Management</h4>
+            <p className="text-[#475569] leading-relaxed font-medium">Diversified revenue streams, reduced owner dependency, and operational stability</p>
+          </div>
         </div>
 
         {/* Final CTA Section */}
