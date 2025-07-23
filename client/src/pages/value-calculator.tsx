@@ -33,7 +33,7 @@ const drawerWidth = 280;
 
 const MainContent = styled(Box)(({ theme }) => ({
   flexGrow: 1,
-  padding: '16px 24px 24px 8px',
+  padding: '8px 16px 16px 8px',
   marginLeft: 0,
   minHeight: '100vh',
   width: `calc(100vw - ${drawerWidth}px)`,
@@ -324,16 +324,16 @@ export default function ValueCalculator() {
       <MainContent>
         <Container maxWidth="xl" sx={{ py: 0 }}>
           {/* Page Header */}
-          <Box sx={{ mb: 4, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <Box sx={{ mb: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <Box>
-              <Typography variant="h4" sx={{ 
+              <Typography variant="h5" sx={{ 
                 color: '#344767', 
                 fontWeight: 700,
-                mb: 1
+                mb: 0.5
               }}>
                 Value Improvement Calculator
               </Typography>
-              <Typography variant="h6" sx={{ 
+              <Typography variant="body1" sx={{ 
                 color: '#67748e', 
                 fontWeight: 400
               }}>
@@ -342,21 +342,19 @@ export default function ValueCalculator() {
             </Box>
             <Button
               onClick={() => setLocation('/')}
-              className="bg-gradient-to-br from-[#191919] to-[#42424a] text-white font-semibold px-6 py-3 rounded-xl shadow-lg backdrop-blur-md bg-opacity-80 border border-white/10 hover:brightness-110 transition-all duration-300"
+              className="bg-gradient-to-br from-[#191919] to-[#42424a] text-white font-semibold px-4 py-2 rounded-lg shadow-md backdrop-blur-md bg-opacity-80 border border-white/10 hover:brightness-110 transition-all duration-300"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Dashboard
             </Button>
           </Box>
 
-
-
           {/* Main Calculator Container with Dark Background for Glass Effect */}
           <Box sx={{
             background: 'linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 90%)',
-            borderRadius: '20px',
-            p: 6,
-            boxShadow: '0 20px 40px rgba(0,0,0,0.2)'
+            borderRadius: '16px',
+            p: 3,
+            boxShadow: '0 10px 25px rgba(0,0,0,0.15)'
           }}>
             <InteractiveValuationSlider />
           </Box>

@@ -181,30 +181,30 @@ export default function InteractiveValuationSlider() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto space-y-8 sm:space-y-12">
-      <div className="text-center mb-8 sm:mb-12">
+    <div className="max-w-6xl mx-auto space-y-4 sm:space-y-6">
+      <div className="text-center mb-3 sm:mb-4">
         {targetAssessment && (
-          <p className="text-base sm:text-lg text-[#475569]/80 mt-3">
+          <p className="text-sm sm:text-base text-[#475569]/80 mt-2">
             Based on your assessment data
           </p>
         )}
       </div>
       {/* Current vs Potential Value Cards with Glassmorphism */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 mb-8 sm:mb-12">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-4 sm:mb-6">
         {/* Current Value Card */}
-        <div className="bg-black/60 backdrop-blur-md rounded-xl shadow-2xl border border-white/10 p-6 sm:p-8 text-center relative overflow-hidden">
+        <div className="bg-black/60 backdrop-blur-md rounded-xl shadow-2xl border border-white/10 p-4 sm:p-6 text-center relative overflow-hidden">
           
-          <h3 className="text-xl sm:text-2xl font-semibold text-white mb-2 tracking-wide">
+          <h3 className="text-lg sm:text-xl font-semibold text-white mb-2 tracking-wide">
             Current Value 
-            <span className="ml-3 inline-block px-3 py-1 text-sm font-semibold text-white bg-orange-500 rounded-full">
+            <span className="ml-2 inline-block px-2 py-1 text-xs font-semibold text-white bg-orange-500 rounded-full">
               You are here
             </span>
           </h3>
-          <p className="text-base sm:text-lg text-white/80 mb-4">Based on your Operational Grade of {baseGrade}</p>
-          <div className="text-4xl sm:text-5xl font-bold text-white mb-4">
+          <p className="text-sm sm:text-base text-white/80 mb-3">Based on your Operational Grade of {baseGrade}</p>
+          <div className="text-3xl sm:text-4xl font-bold text-white mb-3">
             ${currentValuation.toLocaleString()}
           </div>
-          <div className="text-base sm:text-lg font-semibold text-white/90 mb-4">
+          <div className="text-sm sm:text-base font-semibold text-white/90 mb-3">
             {currentMultiple}x EBITDA Multiple
           </div>
           <span className="inline-flex items-center rounded-full px-4 py-1 text-sm font-medium bg-white/20 text-white border border-white/30">
@@ -213,7 +213,7 @@ export default function InteractiveValuationSlider() {
         </div>
 
         {/* Potential Value Card */}
-        <div className={`backdrop-blur-md rounded-2xl shadow-2xl border p-6 sm:p-8 value-card-hover relative overflow-hidden transition-all duration-300 ${
+        <div className={`backdrop-blur-md rounded-xl shadow-2xl border p-4 sm:p-6 value-card-hover relative overflow-hidden transition-all duration-300 ${
           sliderGrade !== baseGrade ? 
             (potentialIncrease > 0 ? 
               'bg-green-500/20 border-green-400/40 ring-2 ring-green-400 ring-opacity-50 shadow-2xl shadow-green-400/30' : 
@@ -223,20 +223,20 @@ export default function InteractiveValuationSlider() {
         }`}>
           
           <div className="text-center relative z-10">
-            <h3 className="text-xl sm:text-2xl font-semibold text-white mb-3 tracking-wide">Potential Value</h3>
+            <h3 className="text-lg sm:text-xl font-semibold text-white mb-2 tracking-wide">Potential Value</h3>
             {sliderGrade !== baseGrade ? (
-              <p className="text-base sm:text-lg text-white/80 mb-4">
+              <p className="text-sm sm:text-base text-white/80 mb-3">
                 Based on selected grade ({sliderGrade})
               </p>
             ) : (
-              <p className="text-base sm:text-lg text-white/80 mb-4">
+              <p className="text-sm sm:text-base text-white/80 mb-3">
                 Based on selected grade ({sliderGrade})
               </p>
             )}
-            <div className="text-4xl sm:text-5xl font-bold text-white mb-4">
+            <div className="text-3xl sm:text-4xl font-bold text-white mb-3">
               ${sliderValuation.toLocaleString()}
             </div>
-            <div className="text-base sm:text-lg font-semibold text-white/90 mb-4">
+            <div className="text-sm sm:text-base font-semibold text-white/90 mb-3">
               {sliderMultiple}x EBITDA Multiple
             </div>
             <span className="inline-flex items-center rounded-full px-4 py-1 text-sm font-medium bg-white/20 text-white border border-white/30">
@@ -245,19 +245,19 @@ export default function InteractiveValuationSlider() {
             
             {/* POTENTIAL GAIN Display - Inside the card */}
             {sliderGrade !== baseGrade && (
-              <div className={`mt-6 pt-4 border-t ${potentialIncrease > 0 ? 'border-green-300/40' : 'border-red-300/40'}`}>
+              <div className={`mt-4 pt-3 border-t ${potentialIncrease > 0 ? 'border-green-300/40' : 'border-red-300/40'}`}>
                 <div className="text-center">
-                  <div className={`text-xs uppercase tracking-wider font-bold mb-2 ${
+                  <div className={`text-xs uppercase tracking-wider font-bold mb-1 ${
                     potentialIncrease > 0 ? 'text-green-300' : 'text-red-300'
                   }`}>
                     {potentialIncrease > 0 ? '💰 POTENTIAL GAIN' : '⚠️ POTENTIAL LOSS'}
                   </div>
-                  <div className={`text-2xl font-black mb-2 ${
+                  <div className={`text-xl font-black mb-1 ${
                     potentialIncrease > 0 ? 'text-green-200' : 'text-red-200'
                   }`}>
                     {potentialIncrease > 0 ? '+' : '-'}${Math.abs(potentialIncrease).toLocaleString()}
                   </div>
-                  <div className={`text-lg font-bold ${
+                  <div className={`text-base font-bold ${
                     potentialIncrease > 0 ? 'text-green-300' : 'text-red-300'
                   }`}>
                     {potentialIncrease > 0 ? '+' : '-'}{Math.abs(percentageIncrease).toFixed(1)}% {potentialIncrease > 0 ? 'increase' : 'decrease'}
@@ -271,9 +271,9 @@ export default function InteractiveValuationSlider() {
 
 
       {/* Combined Gauge and Grade Selection */}
-      <div className="bg-black/60 backdrop-blur-md rounded-xl shadow-2xl border border-white/10 p-6 sm:p-10">
+      <div className="bg-black/60 backdrop-blur-md rounded-xl shadow-2xl border border-white/10 p-4 sm:p-6">
         {/* Gauge */}
-        <div className="mb-10">
+        <div className="mb-6">
           <OperationalGradeGauge 
             grade={sliderGrade}
             title="Operational Grade Impact Analysis"
@@ -281,10 +281,10 @@ export default function InteractiveValuationSlider() {
           />
         </div>
         
-        <h3 className="text-xl font-bold text-center text-slate-100 mb-10">
+        <h3 className="text-lg font-bold text-center text-slate-100 mb-6">
           Click any grade to see how operational improvements impact your business value
         </h3>
-        <div className="grid grid-cols-5 gap-4">
+        <div className="grid grid-cols-5 gap-3">
           {(['F', 'D', 'C', 'B', 'A'] as const).map((grade) => {
             const gradeInfo = getGradeInfo(grade);
             const isSelected = grade === sliderGrade;
@@ -295,15 +295,15 @@ export default function InteractiveValuationSlider() {
               <button
                 key={grade}
                 onClick={() => setSliderGrade(grade)}
-                className={`relative p-4 rounded-xl border transition-all duration-200 hover:shadow-md ${
+                className={`relative p-3 rounded-lg border transition-all duration-200 hover:shadow-md ${
                   isSelected 
                     ? 'border-blue-500 shadow-md bg-blue-50' 
                     : 'border-gray-300 hover:border-gray-400 bg-white'
                 }`}
               >
                 {isCurrent && (
-                  <div className="absolute -bottom-5 left-1/2 transform -translate-x-1/2">
-                    <span className="bg-teal-500 text-white text-xl px-2 py-2 rounded-full font-semibold">
+                  <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2">
+                    <span className="bg-teal-500 text-white text-sm px-2 py-1 rounded-full font-semibold">
                       Current
                     </span>
                   </div>
@@ -319,9 +319,9 @@ export default function InteractiveValuationSlider() {
                 <div className="flex items-center justify-between">
                   {/* Icon Section */}
                   <div
-                    className={`absolute -top-3 -left-3 z-10 w-14 h-14 rounded-2xl flex items-center justify-center ${gradeInfo.bg} backdrop-blur-md border border-white/20 shadow-lg`}
+                    className={`absolute -top-2 -left-2 z-10 w-12 h-12 rounded-xl flex items-center justify-center ${gradeInfo.bg} backdrop-blur-md border border-white/20 shadow-lg`}
                   >
-                    <span className="text-white font-black text-2xl">{grade}</span>
+                    <span className="text-white font-black text-xl">{grade}</span>
                   </div>
                   
                   {/* Content Section */}
@@ -332,7 +332,7 @@ export default function InteractiveValuationSlider() {
                        grade === 'C' ? 'Average Performance' :
                        grade === 'B' ? 'Good Performance' : 'Excellent Performance'}
                     </div>
-                    <div className="text-black text-3xl font-black mb-1">
+                    <div className="text-black text-2xl font-black mb-1">
                       {gradeInfo.multiplier.toFixed(1)}x
                     </div>
                     <div className="text-black/60 text-sm">
@@ -345,7 +345,7 @@ export default function InteractiveValuationSlider() {
           })}
         </div>
         
-        <div className="flex justify-center gap-4 mt-12 text-sm">
+        <div className="flex justify-center gap-4 mt-6 text-sm">
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
             <span className="text-white/80">Current Grade</span>
@@ -356,18 +356,18 @@ export default function InteractiveValuationSlider() {
           </div>
         </div>
         
-        <p className="text-center text-sm text-white/60 mt-4">
+        <p className="text-center text-sm text-white/60 mt-3">
           Valuations based on EBITDA multiple × Click to select target grade
         </p>
       </div>
       {/* Call to Action */}
       {showBooking && (
-        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg shadow-lg border border-blue-200 p-8">
+        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg shadow-lg border border-blue-200 p-6">
           <div className="text-center">
-            <h3 className="text-2xl sm:text-3xl font-bold text-[#0F172A] mb-4 tracking-wide">
+            <h3 className="text-xl sm:text-2xl font-bold text-[#0F172A] mb-3 tracking-wide">
               Ready to Unlock Your Business Value?
             </h3>
-            <p className="text-lg sm:text-xl text-[#64748B] mb-6 font-medium">
+            <p className="text-base sm:text-lg text-[#64748B] mb-4 font-medium">
               By improving your operational grade from {baseGrade} to {sliderGrade}, 
               you could add <strong className="text-green-600">${Math.round(potentialIncrease).toLocaleString()}</strong> to your business value.
             </p>
@@ -384,32 +384,32 @@ export default function InteractiveValuationSlider() {
         </div>
       )}
       {/* Educational Content */}
-      <div className="bg-black/60 rounded-xl shadow-lg border border-gray-200 p-8 sm:p-12">
-        <div className="text-center mb-8">
-          <h3 className="text-2xl sm:text-3xl font-bold text-[#0F172A] mb-4 tracking-wide">
+      <div className="bg-black/60 rounded-xl shadow-lg border border-gray-200 p-4 sm:p-6">
+        <div className="text-center mb-4">
+          <h3 className="text-lg sm:text-xl font-bold text-white mb-2 tracking-wide">
             How to Improve Your Operational Grade
           </h3>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           {/* Financial Performance - Grade A */}
           {(() => {
             const gradeInfo = getGradeInfo('A');
             return (
               <div className={`bg-gradient-to-br ${gradeInfo.gradient}
-        rounded-xl p-6
+        rounded-lg p-4
         border ${gradeInfo.borderColor}
         backdrop-blur-md
         bg-white/10
-        shadow-xl
-        hover:shadow-2xl
+        shadow-lg
+        hover:shadow-xl
         transition-all duration-300 ease-in-out`}>
-                <div className="flex items-center gap-3 mb-3">
-                  <div className={`${gradeInfo.bg} bg-opacity-80 text-white px-3 py-1 rounded-full text-xs uppercase tracking-wider font-bold `}>
+                <div className="flex items-center gap-2 mb-2">
+                  <div className={`${gradeInfo.bg} bg-opacity-80 text-white px-2 py-1 rounded-full text-xs uppercase tracking-wider font-bold `}>
                     {gradeInfo.label}
                   </div>
                 </div>
-                <h4 className="text-lg sm:text-xl font-bold text-[#0F172A] mb-3">💰 Financial Performance</h4>
-                <p className="text-[#475569] leading-relaxed font-medium">Consistent profitability, strong cash flow management, and professional financial reporting</p>
+                <h4 className="text-base sm:text-lg font-bold text-[#0F172A] mb-2">💰 Financial Performance</h4>
+                <p className="text-[#475569] leading-relaxed font-medium text-sm">Consistent profitability, strong cash flow management, and professional financial reporting</p>
               </div>
             );
           })()}
@@ -419,20 +419,20 @@ export default function InteractiveValuationSlider() {
             const gradeInfo = getGradeInfo('B');
             return (
               <div className={`bg-gradient-to-br ${gradeInfo.gradient}
-        rounded-xl p-6
+        rounded-lg p-4
         border ${gradeInfo.borderColor}
         backdrop-blur-md
         bg-white/10
-        shadow-xl
-        hover:shadow-2xl
+        shadow-lg
+        hover:shadow-xl
         transition-all duration-300 ease-in-out`}>
-                <div className="flex items-center gap-3 mb-3">
-                  <div className={`${gradeInfo.bg} bg-opacity-90 text-white px-3 py-1 rounded-full text-xs uppercase tracking-wider font-bold `}>
+                <div className="flex items-center gap-2 mb-2">
+                  <div className={`${gradeInfo.bg} bg-opacity-90 text-white px-2 py-1 rounded-full text-xs uppercase tracking-wider font-bold `}>
                     {gradeInfo.label}
                   </div>
                 </div>
-                <h4 className="text-lg sm:text-xl font-bold text-[#0F172A] mb-3">⚙️ Operational Excellence</h4>
-                <p className="text-[#475569] leading-relaxed font-medium">Streamlined processes, quality management systems, and scalable operations</p>
+                <h4 className="text-base sm:text-lg font-bold text-[#0F172A] mb-2">⚙️ Operational Excellence</h4>
+                <p className="text-[#475569] leading-relaxed font-medium text-sm">Streamlined processes, quality management systems, and scalable operations</p>
               </div>
             );
           })()}
@@ -442,20 +442,20 @@ export default function InteractiveValuationSlider() {
             const gradeInfo = getGradeInfo('C');
             return (
               <div className={`bg-gradient-to-br ${gradeInfo.gradient}
-        rounded-xl p-6
+        rounded-lg p-4
         border ${gradeInfo.borderColor}
         backdrop-blur-md
         bg-white/10
-        shadow-xl
-        hover:shadow-2xl
+        shadow-lg
+        hover:shadow-xl
         transition-all duration-300 ease-in-out`}>
-                <div className="flex items-center gap-3 mb-3">
-                  <div className={`${gradeInfo.bg} bg-opacity-90 text-white px-3 py-1 rounded-full text-xs uppercase tracking-wider font-bold `}>
+                <div className="flex items-center gap-2 mb-2">
+                  <div className={`${gradeInfo.bg} bg-opacity-90 text-white px-2 py-1 rounded-full text-xs uppercase tracking-wider font-bold `}>
                     {gradeInfo.label}
                   </div>
                 </div>
-                <h4 className="text-lg sm:text-xl font-bold text-[#0F172A] mb-3">🎯 Market Position</h4>
-                <p className="text-[#475569] leading-relaxed font-medium">Competitive differentiation, customer loyalty, and market share protection</p>
+                <h4 className="text-base sm:text-lg font-bold text-[#0F172A] mb-2">🎯 Market Position</h4>
+                <p className="text-[#475569] leading-relaxed font-medium text-sm">Competitive differentiation, customer loyalty, and market share protection</p>
               </div>
             );
           })()}
@@ -465,28 +465,28 @@ export default function InteractiveValuationSlider() {
             const gradeInfo = getGradeInfo('D');
             return (
               <div className={`bg-gradient-to-br ${gradeInfo.gradient}
-                rounded-xl p-6
+                rounded-lg p-4
                 border ${gradeInfo.borderColor}
                 backdrop-blur-md
                 bg-white/10
-                shadow-xl
-                hover:shadow-2xl
+                shadow-lg
+                hover:shadow-xl
                 transition-all duration-300 ease-in-out`}>
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="bg-red-500 bg-opacity-90 text-white px-3 py-1 rounded-full text-xs uppercase tracking-wider font-bold border-red-400">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="bg-red-500 bg-opacity-90 text-white px-2 py-1 rounded-full text-xs uppercase tracking-wider font-bold border-red-400">
                     Grades D-F: {getMultipleForGrade('D').toFixed(1)}-{getMultipleForGrade('F').toFixed(1)}x
                   </div>
                 </div>
-                <h4 className="text-lg sm:text-xl font-bold text-[#0F172A] mb-3">🛡️ Risk Management</h4>
-                <p className="text-[#475569] leading-relaxed font-medium">Diversified revenue streams, reduced owner dependency, and operational stability</p>
+                <h4 className="text-base sm:text-lg font-bold text-[#0F172A] mb-2">🛡️ Risk Management</h4>
+                <p className="text-[#475569] leading-relaxed font-medium text-sm">Diversified revenue streams, reduced owner dependency, and operational stability</p>
               </div>
             );
           })()}
         </div>
 
         {/* Final CTA Section */}
-        <div className="text-center mt-12">
-          <h3 className="text-xl sm:text-2xl font-semibold text-[#475569] mb-4">
+        <div className="text-center mt-6">
+          <h3 className="text-lg sm:text-xl font-semibold text-white mb-3">
             Want to See How Much More Your Business Could Be Worth?
           </h3>
           <button 
@@ -494,10 +494,10 @@ export default function InteractiveValuationSlider() {
               window.scrollTo({ top: 0, behavior: 'smooth' });
               window.location.href = '/assessment/free';
             }}
-            className="inline-flex items-center gap-3 px-8 py-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-200"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-base shadow-lg hover:shadow-xl transition-all duration-200"
           >
             Explore Your Full Valuation Roadmap 
-            <ArrowRight className="h-5 w-5" />
+            <ArrowRight className="h-4 w-4" />
           </button>
         </div>
       </div>
