@@ -341,145 +341,15 @@ export default function ValueCalculator() {
               </Typography>
             </Box>
             <Button
-              onClick={() => setLocation('/assessment/free')}
+              onClick={() => setLocation('/')}
               className="bg-gray-500 text-white hover:bg-gray-600 font-semibold px-6 py-3 rounded-lg transition-all duration-200"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Assessment
+              Back to Dashboard
             </Button>
           </Box>
 
-          {/* Past Assessments Section */}
-          {assessments && assessments.length > 0 && (
-            <Box sx={{
-              backgroundColor: 'white',
-              borderRadius: '16px',
-              boxShadow: '0 8px 20px rgba(0,0,0,0.1)',
-              p: 4,
-              mb: 4
-            }}>
-              <Typography variant="h5" sx={{ 
-                color: '#344767', 
-                fontWeight: 700,
-                mb: 3
-              }}>
-                Your Assessment History
-              </Typography>
-              <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 2 }}>
-                {assessments.map((assessment, index) => {
-                  const assessmentTier = getTierInfo(assessment.reportTier || 'free');
-                  const submissionDate = new Date(assessment.createdAt || Date.now());
-                  const isLatest = index === 0;
-                  
-                  return (
-                    <Box 
-                      key={assessment.id}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        console.log('Assessment card clicked, ID:', assessment.id);
-                        console.log('Navigating to:', `/assessment-results/${assessment.id}`);
-                        // Navigate to results page with specific assessment ID
-                        setLocation(`/assessment-results/${assessment.id}`);
-                      }}
-                      sx={{
-                        p: 3,
-                        border: '1px solid #e9ecef',
-                        borderRadius: '12px',
-                        cursor: 'pointer',
-                        transition: 'all 0.2s ease',
-                        backgroundColor: isLatest ? '#f8f9ff' : 'white',
-                        '&:hover': {
-                          borderColor: '#2152ff',
-                          transform: 'translateY(-2px)',
-                          boxShadow: '0 4px 12px rgba(33, 82, 255, 0.15)'
-                        }
-                      }}
-                    >
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
-                        <Box>
-                          <Typography variant="h6" sx={{ color: '#344767', fontWeight: 600, mb: 1 }}>
-                            {assessment.firstName} {assessment.lastName}
-                          </Typography>
-                          <Typography variant="body2" sx={{ color: '#67748e', mb: 1 }}>
-                            {assessment.company || 'Business Assessment'}
-                          </Typography>
-                          <Typography variant="caption" sx={{ color: '#8392ab' }}>
-                            {submissionDate.toLocaleDateString('en-US', { 
-                              year: 'numeric', 
-                              month: 'short', 
-                              day: 'numeric' 
-                            })}
-                          </Typography>
-                        </Box>
-                        <Box sx={{ textAlign: 'right' }}>
-                          <Chip
-                            label={assessmentTier.name}
-                            size="small"
-                            sx={{
-                              backgroundColor: isLatest ? '#2152ff' : '#e9ecef',
-                              color: isLatest ? 'white' : '#67748e',
-                              fontSize: '0.75rem',
-                              mb: 1
-                            }}
-                          />
-                          {isLatest && (
-                            <Typography variant="caption" sx={{ 
-                              display: 'block', 
-                              color: '#2152ff', 
-                              fontWeight: 600 
-                            }}>
-                              Latest
-                            </Typography>
-                          )}
-                        </Box>
-                      </Box>
-                      
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <Box>
-                          <Typography variant="body2" sx={{ color: '#67748e', mb: 1 }}>
-                            Business Valuation
-                          </Typography>
-                          <Typography variant="h6" sx={{ color: '#28a745', fontWeight: 700 }}>
-                            ${assessment.midEstimate?.toLocaleString() || 'N/A'}
-                          </Typography>
-                        </Box>
-                        <Box sx={{ textAlign: 'right' }}>
-                          <Typography variant="body2" sx={{ color: '#67748e', mb: 1 }}>
-                            Grade
-                          </Typography>
-                          <Typography variant="h6" sx={{ 
-                            color: assessment.overallScore?.includes('A') ? '#28a745' : 
-                                   assessment.overallScore?.includes('B') ? '#17a2b8' :
-                                   assessment.overallScore?.includes('C') ? '#ffc107' :
-                                   assessment.overallScore?.includes('D') ? '#fd7e14' : '#dc3545',
-                            fontWeight: 700 
-                          }}>
-                            {assessment.overallScore || 'N/A'}
-                          </Typography>
-                        </Box>
-                      </Box>
-                      
-                      <Box sx={{ 
-                        mt: 2, 
-                        pt: 2, 
-                        borderTop: '1px solid #e9ecef',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: '#2152ff'
-                      }}>
-                        <FileText size={16} style={{ marginRight: 8 }} />
-                        <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                          View Full Report
-                        </Typography>
-                      </Box>
-                    </Box>
-                  );
-                })}
-              </Box>
-            </Box>
-          )}
+
 
           {/* Main Calculator Container */}
           <Box sx={{
