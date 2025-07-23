@@ -4,10 +4,20 @@
  */
 
 import React from 'react';
-import { ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-// Material Dashboard 2 theme
-import materialTheme from '@/assets/theme';
+
+// Simple fallback theme to prevent crashes
+const defaultTheme = createTheme({
+  palette: {
+    primary: {
+      main: '#5e72e4',
+    },
+    secondary: {
+      main: '#8392ab',
+    },
+  },
+});
 
 interface MaterialWrapperProps {
   children: React.ReactNode;
@@ -16,7 +26,7 @@ interface MaterialWrapperProps {
 
 export default function MaterialWrapper({ children, ...props }: MaterialWrapperProps) {
   return (
-    <ThemeProvider theme={materialTheme} {...props}>
+    <ThemeProvider theme={defaultTheme} {...props}>
       <CssBaseline />
       {children}
     </ThemeProvider>
