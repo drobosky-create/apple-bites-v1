@@ -13,19 +13,19 @@ const OperationalGradeGauge: React.FC<OperationalGradeGaugeProps> = ({
 }) => {
   const [animatedAngle, setAnimatedAngle] = useState(0);
   
-  // Define grade segments with colors and angles
+  // Define grade segments with colors and angles (rotated 90 degrees - quarter circle)
   const gradeSegments = [
     { grade: 'F', color: 'bg-red-500', angle: 0, label: 'Poor' },
-    { grade: 'D', color: 'bg-orange-400', angle: 36, label: 'Below Average' },
-    { grade: 'C', color: 'bg-yellow-300', angle: 72, label: 'Average' },
-    { grade: 'B', color: 'bg-sky-400', angle: 108, label: 'Good' },
-    { grade: 'A', color: 'bg-emerald-500', angle: 144, label: 'Excellent' },
+    { grade: 'D', color: 'bg-orange-400', angle: 18, label: 'Below Average' },
+    { grade: 'C', color: 'bg-yellow-300', angle: 36, label: 'Average' },
+    { grade: 'B', color: 'bg-sky-400', angle: 54, label: 'Good' },
+    { grade: 'A', color: 'bg-emerald-500', angle: 72, label: 'Excellent' },
   ];
 
-  // Get target angle for current grade
+  // Get target angle for current grade (quarter circle from 0 to 90 degrees)
   const getTargetAngle = (currentGrade: string) => {
     const segment = gradeSegments.find(s => s.grade === currentGrade);
-    return segment ? segment.angle + 18 : 18; // Add 18 to center needle in segment
+    return segment ? segment.angle + 9 : 9; // Add 9 to center needle in segment (90/5 = 18, so half is 9)
   };
 
   const targetAngle = getTargetAngle(grade);
@@ -58,29 +58,30 @@ const OperationalGradeGauge: React.FC<OperationalGradeGaugeProps> = ({
     }
   }, [grade, targetAngle, animated]);
 
-  // Create SVG path for arc segments
+  // Create SVG path for arc segments (quarter circle from bottom-left to top-right)
   const createArcPath = (startAngle: number, endAngle: number, radius: number) => {
-    const centerX = 150;
+    const centerX = 120;
     const centerY = 120;
     
-    const startAngleRad = (startAngle - 90) * (Math.PI / 180);
-    const endAngleRad = (endAngle - 90) * (Math.PI / 180);
+    // Convert to quarter circle: 0° = bottom (270° in normal coords), 90° = right (0° in normal coords)
+    const startAngleRad = (startAngle + 180) * (Math.PI / 180);
+    const endAngleRad = (endAngle + 180) * (Math.PI / 180);
     
     const x1 = centerX + radius * Math.cos(startAngleRad);
     const y1 = centerY + radius * Math.sin(startAngleRad);
     const x2 = centerX + radius * Math.cos(endAngleRad);
     const y2 = centerY + radius * Math.sin(endAngleRad);
     
-    const largeArcFlag = endAngle - startAngle > 180 ? 1 : 0;
+    const largeArcFlag = endAngle - startAngle > 90 ? 1 : 0;
     
     return `M ${centerX} ${centerY} L ${x1} ${y1} A ${radius} ${radius} 0 ${largeArcFlag} 1 ${x2} ${y2} Z`;
   };
 
-  // Get needle position
+  // Get needle position (quarter circle coordinates)
   const needleAngle = animatedAngle;
-  const needleAngleRad = (needleAngle - 90) * (Math.PI / 180);
-  const needleLength = 75;
-  const centerX = 150;
+  const needleAngleRad = (needleAngle + 180) * (Math.PI / 180);
+  const needleLength = 80;
+  const centerX = 120;
   const centerY = 120;
   const needleX = centerX + needleLength * Math.cos(needleAngleRad);
   const needleY = centerY + needleLength * Math.sin(needleAngleRad);
@@ -98,11 +99,39 @@ const OperationalGradeGauge: React.FC<OperationalGradeGaugeProps> = ({
 
       {/* Gauge Container */}
       <div className="relative flex justify-center">
-        <svg width="300" height="180" viewBox="0 0 300 180" className="overflow-visible">
+        <svg width="240" height="140" viewBox="0 0 240 140" className="overflow-visible">
+          {/* Gradient Definitions */}
+          <defs>
+            <linearGradient id="redGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#ef4444" />
+              <stop offset="100%" stopColor="#dc2626" />
+            </linearGradient>
+            <linearGradient id="orangeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#fb923c" />
+              <stop offset="100%" stopColor="#ea580c" />
+            </linearGradient>
+            <linearGradient id="yellowGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#facc15" />
+              <stop offset="100%" stopColor="#eab308" />
+            </linearGradient>
+            <linearGradient id="blueGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#38bdf8" />
+              <stop offset="100%" stopColor="#0284c7" />
+            </linearGradient>
+            <linearGradient id="greenGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#22c55e" />
+              <stop offset="100%" stopColor="#16a34a" />
+            </linearGradient>
+            <linearGradient id="backgroundGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#f8fafc" />
+              <stop offset="100%" stopColor="#e2e8f0" />
+            </linearGradient>
+          </defs>
+          
           {/* Background arc */}
           <path
-            d={createArcPath(0, 180, 80)}
-            fill="rgb(241, 245, 249)"
+            d={createArcPath(0, 90, 90)}
+            fill="url(#backgroundGradient)"
             stroke="rgb(226, 232, 240)"
             strokeWidth="1"
           />
@@ -110,36 +139,37 @@ const OperationalGradeGauge: React.FC<OperationalGradeGaugeProps> = ({
           {/* Grade segments */}
           {gradeSegments.map((segment, index) => {
             const startAngle = segment.angle;
-            const endAngle = index < gradeSegments.length - 1 ? gradeSegments[index + 1].angle : 180;
+            const endAngle = index < gradeSegments.length - 1 ? gradeSegments[index + 1].angle : 90;
             const isActive = segment.grade === grade;
+            
+            const gradientId = 
+              segment.grade === 'F' ? 'redGradient' :
+              segment.grade === 'D' ? 'orangeGradient' :
+              segment.grade === 'C' ? 'yellowGradient' :
+              segment.grade === 'B' ? 'blueGradient' :
+              'greenGradient';
             
             return (
               <g key={segment.grade}>
                 <path
-                  d={createArcPath(startAngle, endAngle, 80)}
-                  fill={isActive ? 
-                    segment.grade === 'F' ? 'rgb(239, 68, 68)' :
-                    segment.grade === 'D' ? 'rgb(251, 146, 60)' :
-                    segment.grade === 'C' ? 'rgb(250, 204, 21)' :
-                    segment.grade === 'B' ? 'rgb(56, 189, 248)' :
-                    'rgb(34, 197, 94)'
-                    : 'rgb(248, 250, 252)'
-                  }
+                  d={createArcPath(startAngle, endAngle, 90)}
+                  fill={isActive ? `url(#${gradientId})` : 'rgb(248, 250, 252)'}
                   stroke="white"
                   strokeWidth="2"
                   className="transition-all duration-300"
                   style={{
-                    filter: isActive ? 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))' : 'none'
+                    filter: isActive ? 'drop-shadow(0 4px 8px rgba(0,0,0,0.15))' : 'none',
+                    opacity: isActive ? 1 : 0.3
                   }}
                 />
                 
                 {/* Grade labels */}
                 <text
-                  x={centerX + 95 * Math.cos((segment.angle + 18 - 90) * (Math.PI / 180))}
-                  y={centerY + 95 * Math.sin((segment.angle + 18 - 90) * (Math.PI / 180))}
+                  x={centerX + 105 * Math.cos((segment.angle + 9 + 180) * (Math.PI / 180))}
+                  y={centerY + 105 * Math.sin((segment.angle + 9 + 180) * (Math.PI / 180))}
                   textAnchor="middle"
                   dominantBaseline="middle"
-                  className={`text-sm font-semibold ${isActive ? 'fill-gray-800' : 'fill-gray-500'}`}
+                  className={`text-sm font-bold ${isActive ? 'fill-gray-800' : 'fill-gray-400'}`}
                 >
                   {segment.grade}
                 </text>
@@ -147,29 +177,41 @@ const OperationalGradeGauge: React.FC<OperationalGradeGaugeProps> = ({
             );
           })}
           
-          {/* Needle */}
+          {/* Needle with gradient */}
           <g className="transition-transform duration-1000 ease-out">
+            <defs>
+              <linearGradient id="needleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#1e293b" />
+                <stop offset="100%" stopColor="#475569" />
+              </linearGradient>
+            </defs>
             <line
               x1={centerX}
               y1={centerY}
               x2={needleX}
               y2={needleY}
-              stroke="rgb(30, 41, 59)"
-              strokeWidth="3"
+              stroke="url(#needleGradient)"
+              strokeWidth="4"
               strokeLinecap="round"
+              style={{
+                filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))'
+              }}
             />
             
-            {/* Needle center dot */}
+            {/* Needle center dot with gradient */}
             <circle
               cx={centerX}
               cy={centerY}
-              r="6"
-              fill="rgb(30, 41, 59)"
+              r="8"
+              fill="url(#needleGradient)"
+              style={{
+                filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))'
+              }}
             />
             <circle
               cx={centerX}
               cy={centerY}
-              r="3"
+              r="4"
               fill="white"
             />
           </g>
@@ -177,9 +219,9 @@ const OperationalGradeGauge: React.FC<OperationalGradeGaugeProps> = ({
           {/* Tick marks */}
           {gradeSegments.map((segment) => {
             const tickAngle = segment.angle;
-            const tickAngleRad = (tickAngle - 90) * (Math.PI / 180);
-            const innerRadius = 65;
-            const outerRadius = 75;
+            const tickAngleRad = (tickAngle + 180) * (Math.PI / 180);
+            const innerRadius = 75;
+            const outerRadius = 85;
             
             const x1 = centerX + innerRadius * Math.cos(tickAngleRad);
             const y1 = centerY + innerRadius * Math.sin(tickAngleRad);
@@ -195,22 +237,14 @@ const OperationalGradeGauge: React.FC<OperationalGradeGaugeProps> = ({
                 y2={y2}
                 stroke="rgb(148, 163, 184)"
                 strokeWidth="2"
+                strokeLinecap="round"
               />
             );
           })}
         </svg>
       </div>
 
-      {/* Grade info */}
-      <div className="text-center mt-4">
-        <div className="flex items-center justify-center gap-2 mb-2">
-          <div className={`w-4 h-4 rounded-full ${currentSegment?.color || 'bg-gray-300'}`}></div>
-          <span className="text-2xl font-bold text-gray-800">{grade}</span>
-        </div>
-        <p className="text-sm font-medium text-gray-600">
-          {currentSegment?.label || 'Unknown'}
-        </p>
-      </div>
+
     </div>
   );
 };
