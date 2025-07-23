@@ -311,38 +311,46 @@ export default function InteractiveValuationSlider() {
                   </div>
                 )}
                 
-                <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3 ${gradeInfo.bg} text-white font-bold text-2xl`}>
-                  {grade}
-                </div>
-                
-                
-                <div className="text-sm text-slate-600 mb-2">
-                  {gradeInfo.multiplier.toFixed(1)}x EBITDA
-                </div>
-                <div className="text-xs font-medium text-slate-700">
-                  {grade === 'F' ? 'Poor' :
-                   grade === 'D' ? 'Below Average' :
-                   grade === 'C' ? 'Average' :
-                   grade === 'B' ? 'Good' : 'Excellent'}
+                <div className="flex items-center justify-between">
+                  {/* Icon Section */}
+                  <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${gradeInfo.bg} shadow-lg`}>
+                    <span className="text-white font-black text-2xl">{grade}</span>
+                  </div>
+                  
+                  {/* Content Section */}
+                  <div className="flex-1 text-right">
+                    <div className="text-white/80 text-sm font-medium mb-1">
+                      {grade === 'F' ? 'Poor Performance' :
+                       grade === 'D' ? 'Below Average' :
+                       grade === 'C' ? 'Average Performance' :
+                       grade === 'B' ? 'Good Performance' : 'Excellent Performance'}
+                    </div>
+                    <div className="text-white text-3xl font-black mb-1">
+                      {gradeInfo.multiplier.toFixed(1)}x
+                    </div>
+                    <div className="text-white/60 text-sm">
+                      EBITDA Multiple
+                    </div>
+                  </div>
                 </div>
               </button>
             );
           })}
         </div>
         
-        <div className="flex justify-center gap-4 mt-4 text-sm">
+        <div className="flex justify-center gap-4 mt-6 text-sm">
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
-            <span className="text-slate-600">Current Grade</span>
+            <span className="text-white/80">Current Grade</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-            <span className="text-slate-600">Selected Target</span>
+            <span className="text-white/80">Selected Target</span>
           </div>
         </div>
         
-        <p className="text-center text-sm text-slate-500 mt-4">
-          Valuations based on EBITDA multiple × Hover for details
+        <p className="text-center text-sm text-white/60 mt-4">
+          Valuations based on EBITDA multiple × Click to select target grade
         </p>
       </div>
       {/* Call to Action */}
