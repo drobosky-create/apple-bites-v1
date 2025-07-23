@@ -266,7 +266,7 @@ export default function InteractiveValuationSlider() {
 
 
       {/* Combined Gauge and Grade Selection */}
-      <div className="bg-white/70 backdrop-blur-xl rounded-2xl shadow-xl shadow-slate-900/5 border border-white/30 p-6 sm:p-8">
+      <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-6 sm:p-8">
         {/* Larger Gauge */}
         <div className="flex justify-center mb-8">
           <div className="transform scale-125">
@@ -292,10 +292,10 @@ export default function InteractiveValuationSlider() {
               <button
                 key={grade}
                 onClick={() => setSliderGrade(grade)}
-                className={`relative p-4 rounded-xl border-2 transition-all duration-200 hover:scale-105 ${
+                className={`relative p-4 rounded-lg border transition-all duration-200 hover:shadow-md ${
                   isSelected 
-                    ? 'border-slate-400 shadow-lg transform scale-105' 
-                    : 'border-slate-200 hover:border-slate-300'
+                    ? 'border-blue-500 shadow-md bg-blue-50' 
+                    : 'border-gray-300 hover:border-gray-400 bg-white'
                 }`}
               >
                 {isCurrent && (
@@ -347,9 +347,9 @@ export default function InteractiveValuationSlider() {
           Valuations based on EBITDA multiple × Hover for details
         </p>
       </div>
-      {/* Call to Action with Argon Styling */}
+      {/* Call to Action */}
       {showBooking && (
-        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 backdrop-blur-xl rounded-2xl shadow-xl border border-blue-200/50 p-8 animate-in slide-in-from-bottom duration-300">
+        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg shadow-lg border border-blue-200 p-8">
           <div className="text-center">
             <h3 className="text-2xl sm:text-3xl font-bold text-[#0F172A] mb-4 tracking-wide">
               Ready to Unlock Your Business Value?
@@ -360,7 +360,7 @@ export default function InteractiveValuationSlider() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
-                className="bg-[#42424a] hover:bg-[#191919] text-white px-8 py-4 rounded-xl font-semibold text-lg shadow-2xl shadow-slate-400/25 hover:shadow-3xl hover:shadow-slate-500/30 border border-slate-300/20 hover:scale-105 transition-all duration-300"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-200"
                 onClick={() => window.open('https://api.leadconnectorhq.com/widget/bookings/applebites', '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes')}
               >
                 <Phone className="h-5 w-5 mr-3" />
@@ -370,8 +370,8 @@ export default function InteractiveValuationSlider() {
           </div>
         </div>
       )}
-      {/* Educational Content with Argon Styling */}
-      <div className="bg-white/70 backdrop-blur-xl rounded-2xl shadow-xl shadow-slate-900/5 border border-white/30 p-8 sm:p-12">
+      {/* Educational Content */}
+      <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-8 sm:p-12">
         <div className="text-center mb-8">
           <h3 className="text-2xl sm:text-3xl font-bold text-[#0F172A] mb-4 tracking-wide">
             How to Improve Your Operational Grade
@@ -382,7 +382,7 @@ export default function InteractiveValuationSlider() {
           {(() => {
             const gradeInfo = getGradeInfo('A');
             return (
-              <div className={`bg-gradient-to-br ${gradeInfo.gradient} rounded-xl p-6 border ${gradeInfo.borderColor} hover:scale-[1.02] hover:shadow-lg transition-all duration-300 cursor-pointer`}>
+              <div className={`bg-gradient-to-br ${gradeInfo.gradient} rounded-lg p-6 border ${gradeInfo.borderColor} hover:shadow-md transition-all duration-200`}>
                 <div className="flex items-center gap-3 mb-3">
                   <div className={`${gradeInfo.bg} bg-opacity-90 text-white px-3 py-1 rounded-full text-xs uppercase tracking-wider font-bold ${gradeInfo.border}`}>
                     {gradeInfo.label}
@@ -398,7 +398,7 @@ export default function InteractiveValuationSlider() {
           {(() => {
             const gradeInfo = getGradeInfo('B');
             return (
-              <div className={`bg-gradient-to-br ${gradeInfo.gradient} rounded-xl p-6 border ${gradeInfo.borderColor} hover:scale-[1.02] hover:shadow-lg transition-all duration-300 cursor-pointer`}>
+              <div className={`bg-gradient-to-br ${gradeInfo.gradient} rounded-lg p-6 border ${gradeInfo.borderColor} hover:shadow-md transition-all duration-200`}>
                 <div className="flex items-center gap-3 mb-3">
                   <div className={`${gradeInfo.bg} bg-opacity-90 text-white px-3 py-1 rounded-full text-xs uppercase tracking-wider font-bold ${gradeInfo.border}`}>
                     {gradeInfo.label}
@@ -414,7 +414,7 @@ export default function InteractiveValuationSlider() {
           {(() => {
             const gradeInfo = getGradeInfo('C');
             return (
-              <div className={`bg-gradient-to-br ${gradeInfo.gradient} rounded-xl p-6 border ${gradeInfo.borderColor} hover:scale-[1.02] hover:shadow-lg transition-all duration-300 cursor-pointer`}>
+              <div className={`bg-gradient-to-br ${gradeInfo.gradient} rounded-lg p-6 border ${gradeInfo.borderColor} hover:shadow-md transition-all duration-200`}>
                 <div className="flex items-center gap-3 mb-3">
                   <div className={`${gradeInfo.bg} bg-opacity-90 text-white px-3 py-1 rounded-full text-xs uppercase tracking-wider font-bold ${gradeInfo.border}`}>
                     {gradeInfo.label}
@@ -427,7 +427,7 @@ export default function InteractiveValuationSlider() {
           })()}
 
           {/* Risk Management - Grades D-F */}
-          <div className="bg-gradient-to-br from-red-50 to-pink-50 rounded-xl p-6 border border-red-200/50 hover:scale-[1.02] hover:shadow-lg transition-all duration-300 cursor-pointer">
+          <div className="bg-gradient-to-br from-red-50 to-pink-50 rounded-lg p-6 border border-red-200 hover:shadow-md transition-all duration-200">
             <div className="flex items-center gap-3 mb-3">
               <div className="bg-red-500 bg-opacity-90 text-white px-3 py-1 rounded-full text-xs uppercase tracking-wider font-bold border-red-400">
                 Grades D-F: {getMultipleForGrade('D').toFixed(1)}-{getMultipleForGrade('F').toFixed(1)}x
@@ -448,7 +448,7 @@ export default function InteractiveValuationSlider() {
               window.scrollTo({ top: 0, behavior: 'smooth' });
               window.location.href = '/assessment/free';
             }}
-            className="inline-flex items-center gap-3 px-8 py-4 rounded-xl bg-[#42424a] hover:bg-[#191919] text-white font-semibold text-lg shadow-2xl shadow-slate-400/25 hover:shadow-3xl hover:shadow-slate-500/30 border border-slate-300/20 hover:scale-105 transition-all duration-300"
+            className="inline-flex items-center gap-3 px-8 py-4 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-200"
           >
             Explore Your Full Valuation Roadmap 
             <ArrowRight className="h-5 w-5" />
