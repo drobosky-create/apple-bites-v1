@@ -59,7 +59,7 @@ function Router() {
         <Route path="/ghl-demo" component={GHLThemeDemo} />
         <Route path="/demo" component={Demo} />
         <Route path="/free-tier-demo" component={FreeTierDemo} />
-        <Route path="/assessment-results" component={AssessmentResults} />
+        <Route path="/assessment-results/:id" component={AssessmentResults} />
         
         {/* Assessment pages - standalone with built-in headers */}
         <Route path="/assessment/free" component={FreeAssessment} />

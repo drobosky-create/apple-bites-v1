@@ -1,303 +1,366 @@
-import React from "react";
-import { useLocation } from "wouter";
-import { 
-  ArgonBox, 
-  ArgonButton, 
-  ArgonTypography
-} from "@/components/ui/argon-authentic";
-import { DetailedStatisticsCard } from "@/components/ui/argon-statistics-card";
-import { Badge } from "@/components/ui/badge";
-import { 
-  ArrowLeft,
-  Download, 
-  Mail, 
-  FileText, 
-  Calendar,
-  TrendingUp,
-  Star,
-  Crown,
-  CheckCircle,
-  Clock
-} from "lucide-react";
+import { useRoute, useLocation } from "wouter";
+import { useQuery } from "@tanstack/react-query";
+import { useAuth } from "@/hooks/useAuth";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft, Home, FileText, TrendingUp, ExternalLink, LogOut } from "lucide-react";
+import ValuationResults from "@/components/valuation-results";
+import type { ValuationAssessment } from "@shared/schema";
+import {
+  Box,
+  Typography,
+  Container,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Divider,
+  Chip,
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
+
+// Material Dashboard Styled Components (matching dashboard.tsx exactly)
+const DashboardBackground = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  minHeight: '100vh',
+  backgroundColor: '#f8f9fa',
+  gap: 0,
+}));
+
+const drawerWidth = 280;
+
+const MainContent = styled(Box)(({ theme }) => ({
+  flexGrow: 1,
+  padding: '16px 24px 24px 8px',
+  marginLeft: 0,
+  minHeight: '100vh',
+  width: `calc(100vw - ${drawerWidth}px)`,
+  backgroundColor: '#f8f9fa',
+}));
+
+interface User {
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  profileImageUrl: string;
+  tier: 'free' | 'growth' | 'capital';
+  resultReady: boolean;
+}
 
 export default function AssessmentResults() {
+  const [, params] = useRoute("/assessment-results/:id");
   const [, setLocation] = useLocation();
+  const { user: authUser, isLoading: authLoading } = useAuth();
+  
+  const assessmentId = params?.id;
 
-  // Mock user data - would come from API
-  const user = {
-    id: "user-123",
+  // Fetch all assessments to find the specific one
+  const { data: assessments, isLoading: assessmentsLoading } = useQuery<ValuationAssessment[]>({
+    queryKey: ['/api/analytics/assessments'],
+    enabled: !!assessmentId,
+  });
+
+  // Find the specific assessment
+  const assessment = assessments?.find(a => a.id.toString() === assessmentId);
+
+  const { data: user } = useQuery({
+    queryKey: ['/api/auth/user'],
+    enabled: !!authUser,
+  });
+
+  if (authLoading || assessmentsLoading) {
+    return (
+      <DashboardBackground>
+        <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
+          <Box sx={{ 
+            width: 40, 
+            height: 40, 
+            border: '3px solid #f3f3f3',
+            borderTop: '3px solid #2152ff',
+            borderRadius: '50%',
+            animation: 'spin 1s linear infinite',
+            '@keyframes spin': {
+              '0%': { transform: 'rotate(0deg)' },
+              '100%': { transform: 'rotate(360deg)' },
+            }
+          }} />
+        </Box>
+      </DashboardBackground>
+    );
+  }
+
+  if (!assessment) {
+    return (
+      <DashboardBackground>
+        <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh" p={3}>
+          <Box sx={{ 
+            maxWidth: 400, 
+            width: '100%',
+            backgroundColor: 'white',
+            borderRadius: '16px',
+            boxShadow: '0 8px 20px rgba(0,0,0,0.1)',
+            p: 4,
+            textAlign: 'center'
+          }}>
+            <FileText size={64} color="#67748e" style={{ marginBottom: 16 }} />
+            <Typography variant="h4" sx={{ color: '#344767', fontWeight: 700, mb: 2 }}>
+              Assessment Not Found
+            </Typography>
+            <Typography variant="body1" sx={{ color: '#67748e', mb: 3 }}>
+              The requested assessment could not be found or you don't have access to it.
+            </Typography>
+            <Button 
+              onClick={() => setLocation('/value-calculator')}
+              className="w-full bg-blue-600 text-white hover:bg-blue-700 font-semibold py-3 rounded-lg transition-all duration-200"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back to Value Calculator
+            </Button>
+          </Box>
+        </Box>
+      </DashboardBackground>
+    );
+  }
+
+  // Use actual user data or default to free tier
+  const displayUser: User = (user as User) || {
+    id: "demo-user",
     email: "demo@applebites.ai",
-    firstName: "John",
-    lastName: "Smith",
-    tier: 'growth' as const
+    firstName: "Demo",
+    lastName: "User", 
+    profileImageUrl: "/default-avatar.png",
+    tier: 'free' as const,
+    resultReady: false
   };
 
-  // Mock assessment data - would come from API
-  const assessments = [
-    {
-      id: "assessment-1",
-      type: "Growth & Exit Assessment",
-      tier: "growth",
-      status: "completed",
-      completedDate: "2025-01-15",
-      businessValue: "$2.4M",
-      ebitda: "$485K",
-      multiplier: "4.9x",
-      industry: "Professional Services",
-      grade: "B+",
-      icon: TrendingUp,
-      color: "bg-blue-600"
-    },
-    {
-      id: "assessment-2", 
-      type: "Free Assessment",
-      tier: "free",
-      status: "completed",
-      completedDate: "2025-01-10",
-      businessValue: "$1.8M",
-      ebitda: "$320K",
-      multiplier: "5.6x",
-      industry: "General",
-      grade: "B",
-      icon: Star,
-      color: "bg-gray-500"
-    },
-    {
-      id: "assessment-3",
-      type: "Capital Readiness Assessment", 
-      tier: "capital",
-      status: "processing",
-      completedDate: null,
-      businessValue: null,
-      ebitda: null,
-      multiplier: null,
-      industry: "Technology",
-      grade: null,
-      icon: Crown,
-      color: "bg-indigo-600"
-    }
-  ];
-
-  const getTierBadge = (tier: string) => {
+  const getTierInfo = (tier: string) => {
     switch (tier) {
       case 'growth':
-        return { name: 'Growth & Exit', color: 'bg-blue-100 text-blue-800' };
+        return {
+          name: 'Growth & Exit Assessment',
+          color: 'primary',
+          description: 'Professional industry-specific analysis with AI insights',
+          price: '$795',
+        };
       case 'capital':
-        return { name: 'Capital Readiness', color: 'bg-indigo-100 text-indigo-800' };
+        return {
+          name: 'Capital Readiness Assessment',
+          color: 'secondary',
+          description: 'Comprehensive capital readiness analysis and strategic planning',
+          price: '$2,500',
+        };
       default:
-        return { name: 'Free', color: 'bg-gray-100 text-gray-800' };
+        return {
+          name: 'Free Assessment',
+          color: 'default',
+          description: 'Basic business valuation analysis',
+          price: 'Free',
+        };
     }
   };
 
+  const tierInfo = getTierInfo(displayUser.tier);
+
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#f8f9fa' }}>
-      {/* Header */}
-      <ArgonBox
-        variant="gradient"
-        bgGradient="primary"
-        py={3}
-        className="relative"
+    <DashboardBackground>
+      {/* Sidebar Drawer */}
+      <Drawer
+        variant="permanent"
+        sx={{
+          width: drawerWidth,
+          flexShrink: 0,
+          '& .MuiDrawer-paper': {
+            width: drawerWidth,
+            boxSizing: 'border-box',
+            backgroundImage: 'url(/assets/twilight-city-skyline.png)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            color: 'white',
+            '&::before': {
+              content: '""',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: 'rgba(116, 123, 138, 0.3)',
+              backdropFilter: 'blur(20px) saturate(180%)',
+              WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              zIndex: 1,
+            },
+            '& > *': {
+              position: 'relative',
+              zIndex: 2,
+            },
+          },
+        }}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-6">
-              <div className="flex items-center space-x-3">
-                <img 
-                  src="/apple-bites-logo.png" 
-                  alt="Apple Bites Business Assessment" 
-                  className="h-20 w-auto"
-                />
-              </div>
-              <ArgonBox>
-                <ArgonTypography variant="h5" color="white" fontWeight="bold" className="mb-1">
-                  Welcome, {user.firstName} {user.lastName}
-                </ArgonTypography>
-                <ArgonTypography variant="body2" color="white" opacity={0.8} className="mb-1">
-                  {user.email}
-                </ArgonTypography>
-                <Badge className="bg-white/20 text-white border-white/30 font-medium">
-                  Assessment Results
-                </Badge>
-              </ArgonBox>
-            </div>
-            <ArgonButton 
-              variant="outlined"
-              color="white"
+        <Box sx={{ p: 2, textAlign: 'center' }}>
+          <Box component="img"
+            src="/assets/logos/apple-bites-logo-variant-3.png"
+            alt="Apple Bites Business Assessment"
+            sx={{
+              width: '80%',
+              maxWidth: 200,
+              mt: 1,
+              mb: 1,
+              mx: 'auto',
+              display: 'block',
+            }}
+          />
+          <Typography variant="h6" fontWeight="bold" color="white" gutterBottom>
+            {displayUser.firstName} {displayUser.lastName}
+          </Typography>
+          <Typography variant="body2" color="rgba(255,255,255,0.7)" gutterBottom>
+            {displayUser.email}
+          </Typography>
+          <Chip 
+            label={tierInfo.name}
+            size="small"
+            sx={{
+              backgroundColor: 'rgba(255,255,255,0.2)',
+              color: 'white',
+              fontSize: '0.75rem',
+              mt: 1
+            }}
+          />
+        </Box>
+
+        <Divider sx={{ borderColor: 'rgba(255,255,255,0.12)', my: 2 }} />
+
+        <List sx={{ px: 2 }}>
+          <ListItem disablePadding>
+            <ListItemButton 
               onClick={() => setLocation('/dashboard')}
-              className="border-white/30 hover:bg-white/20"
+              sx={{ 
+                borderRadius: '12px',
+                mb: 1,
+                '&:hover': { backgroundColor: 'rgba(255,255,255,0.1)' }
+              }}
             >
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Dashboard
-            </ArgonButton>
-          </div>
-        </div>
-      </ArgonBox>
+              <ListItemIcon sx={{ color: 'white', minWidth: 40 }}>
+                <Home size={20} />
+              </ListItemIcon>
+              <ListItemText 
+                primary="Dashboard" 
+                primaryTypographyProps={{ color: 'white', fontWeight: 500 }}
+              />
+            </ListItemButton>
+          </ListItem>
 
-      {/* Statistics Cards */}
-      <ArgonBox mt={3} mb={3} px={3} className="bg-transparent" style={{ marginTop: '14px', marginBottom: '14px' }}>
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <DetailedStatisticsCard
-              title="Total Assessments"
-              count={assessments.length.toString()}
-              icon={{ 
-                color: "info",
-                component: <FileText className="w-6 h-6" />
+          <ListItem disablePadding>
+            <ListItemButton 
+              onClick={() => setLocation('/value-calculator')}
+              sx={{ 
+                borderRadius: '12px',
+                mb: 1,
+                '&:hover': { backgroundColor: 'rgba(255,255,255,0.1)' }
               }}
-              percentage={{
-                color: "success",
-                count: "+1",
-                text: "this month"
-              }}
-            />
-            
-            <DetailedStatisticsCard
-              title="Completed"
-              count={assessments.filter(a => a.status === 'completed').length.toString()}
-              icon={{ 
-                color: "success",
-                component: <CheckCircle className="w-6 h-6" />
-              }}
-            />
-            
-            <DetailedStatisticsCard
-              title="Processing"
-              count={assessments.filter(a => a.status === 'processing').length.toString()}
-              icon={{ 
-                color: "warning",
-                component: <Clock className="w-6 h-6" />
-              }}
-            />
-            
-            <DetailedStatisticsCard
-              title="Latest Value"
-              count={assessments.find(a => a.status === 'completed')?.businessValue || "N/A"}
-              icon={{ 
-                color: "primary",
-                component: <TrendingUp className="w-6 h-6" />
-              }}
-            />
-          </div>
-        </div>
-      </ArgonBox>
+            >
+              <ListItemIcon sx={{ color: 'white', minWidth: 40 }}>
+                <TrendingUp size={20} />
+              </ListItemIcon>
+              <ListItemText 
+                primary="Value Calculator" 
+                primaryTypographyProps={{ color: 'white', fontWeight: 500 }}
+              />
+            </ListItemButton>
+          </ListItem>
 
-      {/* Assessment Results */}
-      <ArgonBox px={3}>
-        <div className="max-w-7xl mx-auto space-y-6">
-          {assessments.map((assessment) => {
-            const tierBadge = getTierBadge(assessment.tier);
-            const AssessmentIcon = assessment.icon;
-            
-            return (
-              <div key={assessment.id} className="bg-white rounded-xl shadow-lg border border-gray-100">
-                <ArgonBox p={4}>
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex items-start space-x-4">
-                      <div className={`w-12 h-12 rounded-lg ${assessment.color} flex items-center justify-center`}>
-                        <AssessmentIcon className="h-6 w-6 text-white" />
-                      </div>
-                      <div>
-                        <ArgonTypography variant="h6" color="dark" fontWeight="bold" className="mb-1">
-                          {assessment.type}
-                        </ArgonTypography>
-                        <div className="flex items-center space-x-3 mb-2">
-                          <Badge className={tierBadge.color}>
-                            {tierBadge.name}
-                          </Badge>
-                          {assessment.status === 'completed' ? (
-                            <Badge className="bg-green-100 text-green-800">
-                              <CheckCircle className="h-3 w-3 mr-1" />
-                              Completed
-                            </Badge>
-                          ) : (
-                            <Badge className="bg-blue-100 text-blue-800">
-                              <Clock className="h-3 w-3 mr-1" />
-                              Processing
-                            </Badge>
-                          )}
-                        </div>
-                        {assessment.completedDate && (
-                          <div className="flex items-center space-x-2 text-sm text-gray-600">
-                            <Calendar className="h-4 w-4" />
-                            <span>Completed: {new Date(assessment.completedDate).toLocaleDateString()}</span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
+          <ListItem disablePadding>
+            <ListItemButton 
+              sx={{ 
+                borderRadius: '12px',
+                mb: 1,
+                backgroundColor: 'rgba(255,255,255,0.2)',
+                '&:hover': { backgroundColor: 'rgba(255,255,255,0.25)' }
+              }}
+            >
+              <ListItemIcon sx={{ color: 'white', minWidth: 40 }}>
+                <FileText size={20} />
+              </ListItemIcon>
+              <ListItemText 
+                primary="Assessment Results" 
+                primaryTypographyProps={{ color: 'white', fontWeight: 600 }}
+              />
+            </ListItemButton>
+          </ListItem>
 
-                  {assessment.status === 'completed' ? (
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
-                      <div className="text-center p-3 bg-gray-50 rounded-lg">
-                        <ArgonTypography variant="h6" color="primary" fontWeight="bold">
-                          {assessment.businessValue}
-                        </ArgonTypography>
-                        <ArgonTypography variant="body2" color="text">
-                          Business Value
-                        </ArgonTypography>
-                      </div>
-                      <div className="text-center p-3 bg-gray-50 rounded-lg">
-                        <ArgonTypography variant="h6" color="success" fontWeight="bold">
-                          {assessment.ebitda}
-                        </ArgonTypography>
-                        <ArgonTypography variant="body2" color="text">
-                          EBITDA
-                        </ArgonTypography>
-                      </div>
-                      <div className="text-center p-3 bg-gray-50 rounded-lg">
-                        <ArgonTypography variant="h6" color="info" fontWeight="bold">
-                          {assessment.multiplier}
-                        </ArgonTypography>
-                        <ArgonTypography variant="body2" color="text">
-                          Multiplier
-                        </ArgonTypography>
-                      </div>
-                      <div className="text-center p-3 bg-gray-50 rounded-lg">
-                        <ArgonTypography variant="h6" color="warning" fontWeight="bold">
-                          {assessment.grade}
-                        </ArgonTypography>
-                        <ArgonTypography variant="body2" color="text">
-                          Overall Grade
-                        </ArgonTypography>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-                      <ArgonTypography variant="body2" color="info" className="text-center">
-                        Assessment is being processed. Results will be available shortly.
-                      </ArgonTypography>
-                    </div>
-                  )}
+          <ListItem disablePadding>
+            <ListItemButton 
+              onClick={() => window.open('https://products.applebites.ai/', '_blank')}
+              sx={{ 
+                borderRadius: '12px',
+                mb: 1,
+                '&:hover': { backgroundColor: 'rgba(255,255,255,0.1)' }
+              }}
+            >
+              <ListItemIcon sx={{ color: 'white', minWidth: 40 }}>
+                <ExternalLink size={20} />
+              </ListItemIcon>
+              <ListItemText 
+                primary="Upgrade Plan" 
+                primaryTypographyProps={{ color: 'white', fontWeight: 500 }}
+              />
+            </ListItemButton>
+          </ListItem>
+        </List>
 
-                  <div className="flex flex-wrap gap-3">
-                    {assessment.status === 'completed' ? (
-                      <>
-                        <ArgonButton variant="gradient" color="primary" size="medium">
-                          <Download className="h-4 w-4 mr-2" />
-                          Download PDF
-                        </ArgonButton>
-                        <ArgonButton variant="gradient" color="info" size="medium">
-                          <Mail className="h-4 w-4 mr-2" />
-                          Email Results
-                        </ArgonButton>
-                        <ArgonButton variant="outlined" color="secondary" size="medium">
-                          <FileText className="h-4 w-4 mr-2" />
-                          View Details
-                        </ArgonButton>
-                      </>
-                    ) : (
-                      <ArgonButton variant="outlined" color="secondary" size="medium" disabled>
-                        <Clock className="h-4 w-4 mr-2" />
-                        Processing...
-                      </ArgonButton>
-                    )}
-                  </div>
-                </ArgonBox>
-              </div>
-            );
-          })}
-        </div>
-      </ArgonBox>
-    </div>
+        <Box sx={{ mt: 'auto', p: 2, borderTop: '1px solid rgba(255,255,255,0.12)' }}>
+          <Typography variant="caption" color="rgba(255,255,255,0.6)" textAlign="center" display="block">
+            © 2025 Meritage Partners
+          </Typography>
+        </Box>
+      </Drawer>
+
+      {/* Main Content */}
+      <MainContent>
+        <Container maxWidth="xl" sx={{ py: 0 }}>
+          {/* Page Header */}
+          <Box sx={{ mb: 4, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <Box>
+              <Typography variant="h4" sx={{ 
+                color: '#344767', 
+                fontWeight: 700,
+                mb: 1
+              }}>
+                Assessment Results
+              </Typography>
+              <Typography variant="h6" sx={{ 
+                color: '#67748e', 
+                fontWeight: 400
+              }}>
+                {assessment.firstName} {assessment.lastName} - {new Date(assessment.createdAt || Date.now()).toLocaleDateString('en-US', { 
+                  year: 'numeric', 
+                  month: 'long', 
+                  day: 'numeric' 
+                })}
+              </Typography>
+            </Box>
+            <Button
+              onClick={() => setLocation('/value-calculator')}
+              className="bg-gray-500 text-white hover:bg-gray-600 font-semibold px-6 py-3 rounded-lg transition-all duration-200"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back to Calculator
+            </Button>
+          </Box>
+
+          {/* Assessment Results Container */}
+          <Box sx={{
+            backgroundColor: 'white',
+            borderRadius: '16px',
+            boxShadow: '0 8px 20px rgba(0,0,0,0.1)',
+            overflow: 'hidden'
+          }}>
+            <ValuationResults results={assessment} />
+          </Box>
+        </Container>
+      </MainContent>
+    </DashboardBackground>
   );
 }
