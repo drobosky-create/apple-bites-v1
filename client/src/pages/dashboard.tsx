@@ -208,13 +208,17 @@ const PastAssessmentsSection = ({ userEmail, setLocation }: { userEmail: string,
                 <Box>
                   <Typography variant="body2" color="#67748e">Valuation</Typography>
                   <Typography variant="h6" color="#344767" fontWeight="bold">
-                    ${assessment.midEstimate?.toLocaleString() || 'N/A'}
+                    ${typeof assessment.midEstimate === 'string' ? 
+                      parseFloat(assessment.midEstimate).toLocaleString() : 
+                      assessment.midEstimate?.toLocaleString() || 'N/A'}
                   </Typography>
                 </Box>
                 <Box>
                   <Typography variant="body2" color="#67748e">EBITDA</Typography>
                   <Typography variant="h6" color="#344767" fontWeight="bold">
-                    ${assessment.adjustedEbitda?.toLocaleString() || 'N/A'}
+                    ${typeof assessment.adjustedEbitda === 'string' ? 
+                      parseFloat(assessment.adjustedEbitda).toLocaleString() : 
+                      assessment.adjustedEbitda?.toLocaleString() || 'N/A'}
                   </Typography>
                 </Box>
                 <Box>
