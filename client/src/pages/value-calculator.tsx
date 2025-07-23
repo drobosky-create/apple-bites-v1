@@ -3,80 +3,56 @@ import { useQuery } from "@tanstack/react-query";
 import { useLocation } from "wouter";
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Lock, Home, Calculator, BarChart3, Settings, HelpCircle, TrendingUp } from "lucide-react";
+import { ArrowLeft, Lock, Home, FileText, TrendingUp, ExternalLink, LogOut } from "lucide-react";
 import type { ValuationAssessment } from "@shared/schema";
-import { Box, Drawer, Typography, Card, CardContent } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import { useAuth } from "@/hooks/useAuth";
+import {
+  Box,
+  Typography,
+  Container,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Divider,
+  Chip,
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
 
-// Styled Components with Material Dashboard Theme
-const MainBackground = styled(Box)({
-  minHeight: '100vh',
-  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-  position: 'relative',
-  '&::before': {
-    content: '""',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    background: 'url("data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.05"%3E%3Ccircle cx="7" cy="7" r="7"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
-    opacity: 0.3,
-  },
-});
-
-const SidebarDrawer = styled(Drawer)({
-  width: 280,
-  '& .MuiDrawer-paper': {
-    width: 280,
-    background: 'rgba(255, 255, 255, 0.1)',
-    backdropFilter: 'blur(20px)',
-    border: '1px solid rgba(255, 255, 255, 0.2)',
-    borderRadius: '0 20px 20px 0',
-    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
-  },
-});
-
-const NavItem = styled(Box)<{ active?: boolean }>(({ active }) => ({
+// Material Dashboard Styled Components (matching dashboard.tsx exactly)
+const DashboardBackground = styled(Box)(({ theme }) => ({
   display: 'flex',
-  alignItems: 'center',
-  gap: '12px',
-  padding: '12px 20px',
-  margin: '4px 12px',
-  borderRadius: '12px',
-  cursor: 'pointer',
-  transition: 'all 0.3s ease',
-  background: active ? 'rgba(255, 255, 255, 0.2)' : 'transparent',
-  '&:hover': {
-    background: 'rgba(255, 255, 255, 0.15)',
-    transform: 'translateX(4px)',
-  },
+  minHeight: '100vh',
+  backgroundColor: '#f8f9fa',
+  gap: 0,
 }));
 
-const MainContent = styled(Box)({
-  marginLeft: 280,
-  padding: '32px',
-  position: 'relative',
-  zIndex: 1,
-});
+const drawerWidth = 280;
 
-const GlassCard = styled(Card)({
-  background: 'rgba(255, 255, 255, 0.1)',
-  backdropFilter: 'blur(20px)',
-  border: '1px solid rgba(255, 255, 255, 0.2)',
-  borderRadius: '20px',
-  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
-  '& .MuiCardContent-root': {
-    padding: '32px',
-  },
-});
+const MainContent = styled(Box)(({ theme }) => ({
+  flexGrow: 1,
+  padding: '16px 24px 24px 8px',
+  marginLeft: 0,
+  minHeight: '100vh',
+  width: `calc(100vw - ${drawerWidth}px)`,
+  backgroundColor: '#f8f9fa',
+}));
 
-const PageHeader = styled(Box)({
-  marginBottom: '32px',
-});
+interface User {
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  profileImageUrl: string;
+  tier: 'free' | 'growth' | 'capital';
+  resultReady: boolean;
+}
 
 export default function ValueCalculator() {
   const [, setLocation] = useLocation();
+  const { user: authUser, isLoading: authLoading } = useAuth();
   
   // Check if user has completed at least one assessment
   const { data: assessments, isLoading } = useQuery<ValuationAssessment[]>({
@@ -92,178 +68,298 @@ export default function ValueCalculator() {
     }
   }, [isLoading, hasCompletedAssessment, setLocation]);
 
-  // Navigation items
-  const navigationItems = [
-    { icon: Home, label: 'Dashboard', path: '/', active: false },
-    { icon: Calculator, label: 'Assessment', path: '/assessment/free', active: false },
-    { icon: TrendingUp, label: 'Value Calculator', path: '/value-calculator', active: true },
-    { icon: BarChart3, label: 'Analytics', path: '/analytics', active: false },
-    { icon: Settings, label: 'Settings', path: '/settings', active: false },
-    { icon: HelpCircle, label: 'Help', path: '/help', active: false },
-  ];
+  const { data: user } = useQuery({
+    queryKey: ['/api/auth/user'],
+    enabled: !!authUser,
+  });
 
-  if (isLoading) {
+  if (authLoading || isLoading) {
     return (
-      <MainBackground>
-        <Box sx={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'center', 
-          minHeight: '100vh' 
-        }}>
-          <GlassCard>
-            <CardContent sx={{ textAlign: 'center' }}>
-              <Box sx={{ 
-                width: 48, 
-                height: 48, 
-                border: '3px solid rgba(255,255,255,0.3)',
-                borderTop: '3px solid white',
-                borderRadius: '50%',
-                animation: 'spin 1s linear infinite',
-                margin: '0 auto 16px',
-              }} />
-              <Typography variant="h6" sx={{ color: 'white', fontWeight: 500 }}>
-                Loading your data...
-              </Typography>
-            </CardContent>
-          </GlassCard>
+      <DashboardBackground>
+        <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
+          <Box sx={{ 
+            width: 40, 
+            height: 40, 
+            border: '3px solid #f3f3f3',
+            borderTop: '3px solid #2152ff',
+            borderRadius: '50%',
+            animation: 'spin 1s linear infinite',
+            '@keyframes spin': {
+              '0%': { transform: 'rotate(0deg)' },
+              '100%': { transform: 'rotate(360deg)' },
+            }
+          }} />
         </Box>
-      </MainBackground>
+      </DashboardBackground>
     );
   }
 
   // Show access denied if no assessments found
   if (!hasCompletedAssessment) {
     return (
-      <MainBackground>
-        <Box sx={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'center', 
-          minHeight: '100vh',
-          padding: 3 
-        }}>
-          <GlassCard sx={{ maxWidth: 400, width: '100%' }}>
-            <CardContent sx={{ textAlign: 'center' }}>
-              <Lock size={64} color="rgba(255,255,255,0.7)" style={{ marginBottom: 16 }} />
-              <Typography variant="h4" sx={{ color: 'white', fontWeight: 700, mb: 2 }}>
-                Assessment Required
-              </Typography>
-              <Typography variant="body1" sx={{ color: 'rgba(255,255,255,0.8)', mb: 3 }}>
-                You need to complete a business valuation assessment before accessing the value improvement calculator.
-              </Typography>
-              <Button 
-                onClick={() => setLocation('/valuation-form')}
-                className="w-full bg-white text-purple-600 hover:bg-gray-50 font-semibold py-3 rounded-lg transition-all duration-200"
-              >
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Start Valuation Assessment
-              </Button>
-            </CardContent>
-          </GlassCard>
+      <DashboardBackground>
+        <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh" p={3}>
+          <Box sx={{ 
+            maxWidth: 400, 
+            width: '100%',
+            backgroundColor: 'white',
+            borderRadius: '16px',
+            boxShadow: '0 8px 20px rgba(0,0,0,0.1)',
+            p: 4,
+            textAlign: 'center'
+          }}>
+            <Lock size={64} color="#67748e" style={{ marginBottom: 16 }} />
+            <Typography variant="h4" sx={{ color: '#344767', fontWeight: 700, mb: 2 }}>
+              Assessment Required
+            </Typography>
+            <Typography variant="body1" sx={{ color: '#67748e', mb: 3 }}>
+              You need to complete a business valuation assessment before accessing the value improvement calculator.
+            </Typography>
+            <Button 
+              onClick={() => setLocation('/assessment/free')}
+              className="w-full bg-blue-600 text-white hover:bg-blue-700 font-semibold py-3 rounded-lg transition-all duration-200"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Start Valuation Assessment
+            </Button>
+          </Box>
         </Box>
-      </MainBackground>
+      </DashboardBackground>
     );
   }
 
+  // Use actual user data or default to free tier
+  const displayUser: User = (user as User) || {
+    id: "demo-user",
+    email: "demo@applebites.ai",
+    firstName: "Demo",
+    lastName: "User", 
+    profileImageUrl: "/default-avatar.png",
+    tier: 'free' as const,
+    resultReady: false
+  };
+
+  const getTierInfo = (tier: string) => {
+    switch (tier) {
+      case 'growth':
+        return {
+          name: 'Growth & Exit Assessment',
+          color: 'primary',
+          description: 'Professional industry-specific analysis with AI insights',
+          price: '$795',
+        };
+      case 'capital':
+        return {
+          name: 'Capital Readiness Assessment',
+          color: 'secondary',
+          description: 'Comprehensive capital readiness analysis and strategic planning',
+          price: '$2,500',
+        };
+      default:
+        return {
+          name: 'Free Assessment',
+          color: 'default',
+          description: 'Basic business valuation analysis',
+          price: 'Free',
+        };
+    }
+  };
+
+  const tierInfo = getTierInfo(displayUser.tier);
+
   return (
-    <MainBackground>
-      {/* Sidebar Navigation */}
-      <SidebarDrawer variant="permanent" anchor="left">
-        <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-          {/* Logo/Brand Section */}
-          <Box sx={{ padding: '24px 20px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-            <Typography variant="h5" sx={{ 
-              color: 'white', 
-              fontWeight: 700,
-              textAlign: 'center',
-              background: 'linear-gradient(45deg, #fff 30%, #e0e7ff 90%)',
-              backgroundClip: 'text',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent'
-            }}>
-              Apple Bites
-            </Typography>
-          </Box>
-
-          {/* Navigation Items */}
-          <Box sx={{ flex: 1, paddingTop: 2 }}>
-            {navigationItems.map((item) => (
-              <NavItem 
-                key={item.path}
-                active={item.active}
-                onClick={() => !item.active && setLocation(item.path)}
-              >
-                <item.icon size={20} color="white" />
-                <Typography variant="body2" sx={{ 
-                  color: 'white', 
-                  fontWeight: item.active ? 600 : 400 
-                }}>
-                  {item.label}
-                </Typography>
-              </NavItem>
-            ))}
-          </Box>
-
-          {/* Footer */}
-          <Box sx={{ padding: 2, borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-            <Typography variant="caption" sx={{ 
-              color: 'rgba(255,255,255,0.6)', 
-              textAlign: 'center',
-              display: 'block'
-            }}>
-              © 2025 Meritage Partners
-            </Typography>
-          </Box>
+    <DashboardBackground>
+      {/* Sidebar Drawer */}
+      <Drawer
+        variant="permanent"
+        sx={{
+          width: drawerWidth,
+          flexShrink: 0,
+          '& .MuiDrawer-paper': {
+            width: drawerWidth,
+            boxSizing: 'border-box',
+            backgroundImage: 'url(/assets/twilight-city-skyline.png)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            color: 'white',
+            '&::before': {
+              content: '""',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: 'rgba(116, 123, 138, 0.3)',
+              backdropFilter: 'blur(20px) saturate(180%)',
+              WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              zIndex: 1,
+            },
+            '& > *': {
+              position: 'relative',
+              zIndex: 2,
+            },
+          },
+        }}
+      >
+        <Box sx={{ p: 2, textAlign: 'center' }}>
+          <Box component="img"
+            src="/assets/logos/apple-bites-logo-variant-3.png"
+            alt="Apple Bites Business Assessment"
+            sx={{
+              width: '80%',
+              maxWidth: 200,
+              mt: 1,
+              mb: 1,
+              mx: 'auto',
+              display: 'block',
+            }}
+          />
+          <Typography variant="h6" fontWeight="bold" color="white" gutterBottom>
+            {displayUser.firstName} {displayUser.lastName}
+          </Typography>
+          <Typography variant="body2" color="rgba(255,255,255,0.7)" gutterBottom>
+            {displayUser.email}
+          </Typography>
+          <Chip 
+            label={tierInfo.name}
+            size="small"
+            sx={{ 
+              backgroundColor: 'rgba(255,255,255,0.2)',
+              color: 'white',
+              border: '1px solid rgba(255,255,255,0.3)'
+            }}
+          />
         </Box>
-      </SidebarDrawer>
+
+        <Divider sx={{ borderColor: 'rgba(255,255,255,0.12)' }} />
+
+        <List sx={{ px: 2, py: 2 }}>
+          <ListItem disablePadding>
+            <ListItemButton 
+              onClick={() => setLocation('/')}
+              sx={{ 
+                borderRadius: '12px',
+                mb: 1,
+                '&:hover': { backgroundColor: 'rgba(255,255,255,0.1)' }
+              }}
+            >
+              <ListItemIcon sx={{ color: 'white', minWidth: 40 }}>
+                <Home size={20} />
+              </ListItemIcon>
+              <ListItemText 
+                primary="Dashboard" 
+                primaryTypographyProps={{ color: 'white', fontWeight: 500 }}
+              />
+            </ListItemButton>
+          </ListItem>
+
+          <ListItem disablePadding>
+            <ListItemButton 
+              onClick={() => setLocation('/assessment/free')}
+              sx={{ 
+                borderRadius: '12px',
+                mb: 1,
+                '&:hover': { backgroundColor: 'rgba(255,255,255,0.1)' }
+              }}
+            >
+              <ListItemIcon sx={{ color: 'white', minWidth: 40 }}>
+                <FileText size={20} />
+              </ListItemIcon>
+              <ListItemText 
+                primary="New Assessment" 
+                primaryTypographyProps={{ color: 'white', fontWeight: 500 }}
+              />
+            </ListItemButton>
+          </ListItem>
+
+          <ListItem disablePadding>
+            <ListItemButton 
+              sx={{ 
+                borderRadius: '12px',
+                mb: 1,
+                backgroundColor: 'rgba(255,255,255,0.2)',
+                '&:hover': { backgroundColor: 'rgba(255,255,255,0.25)' }
+              }}
+            >
+              <ListItemIcon sx={{ color: 'white', minWidth: 40 }}>
+                <TrendingUp size={20} />
+              </ListItemIcon>
+              <ListItemText 
+                primary="Value Calculator" 
+                primaryTypographyProps={{ color: 'white', fontWeight: 600 }}
+              />
+            </ListItemButton>
+          </ListItem>
+
+          <ListItem disablePadding>
+            <ListItemButton 
+              onClick={() => window.open('https://products.applebites.ai/', '_blank')}
+              sx={{ 
+                borderRadius: '12px',
+                mb: 1,
+                '&:hover': { backgroundColor: 'rgba(255,255,255,0.1)' }
+              }}
+            >
+              <ListItemIcon sx={{ color: 'white', minWidth: 40 }}>
+                <ExternalLink size={20} />
+              </ListItemIcon>
+              <ListItemText 
+                primary="Upgrade Plan" 
+                primaryTypographyProps={{ color: 'white', fontWeight: 500 }}
+              />
+            </ListItemButton>
+          </ListItem>
+        </List>
+
+        <Box sx={{ mt: 'auto', p: 2, borderTop: '1px solid rgba(255,255,255,0.12)' }}>
+          <Typography variant="caption" color="rgba(255,255,255,0.6)" textAlign="center" display="block">
+            © 2025 Meritage Partners
+          </Typography>
+        </Box>
+      </Drawer>
 
       {/* Main Content */}
       <MainContent>
-        {/* Page Header */}
-        <PageHeader>
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
+        <Container maxWidth="xl" sx={{ py: 0 }}>
+          {/* Page Header */}
+          <Box sx={{ mb: 4, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <Box>
-              <Typography variant="h3" sx={{ 
-                color: 'white', 
+              <Typography variant="h4" sx={{ 
+                color: '#344767', 
                 fontWeight: 700,
-                textShadow: '0 2px 4px rgba(0,0,0,0.3)'
+                mb: 1
               }}>
                 Value Improvement Calculator
               </Typography>
               <Typography variant="h6" sx={{ 
-                color: 'rgba(255,255,255,0.8)', 
-                fontWeight: 400,
-                mt: 1
+                color: '#67748e', 
+                fontWeight: 400
               }}>
                 Explore how improving your operational grades affects your business valuation
               </Typography>
             </Box>
             <Button
               onClick={() => setLocation('/assessment/free')}
-              className="bg-white/20 border border-white/30 text-white hover:bg-white/30 backdrop-blur-sm font-semibold px-6 py-3 rounded-lg transition-all duration-200"
+              className="bg-gray-500 text-white hover:bg-gray-600 font-semibold px-6 py-3 rounded-lg transition-all duration-200"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Assessment
             </Button>
           </Box>
-        </PageHeader>
 
-        {/* Main Calculator Container */}
-        <GlassCard>
-          <CardContent>
+          {/* Main Calculator Container */}
+          <Box sx={{
+            backgroundColor: 'white',
+            borderRadius: '16px',
+            boxShadow: '0 8px 20px rgba(0,0,0,0.1)',
+            p: 4
+          }}>
             <InteractiveValuationSlider />
-          </CardContent>
-        </GlassCard>
+          </Box>
+        </Container>
       </MainContent>
-
-      {/* CSS for spinner animation */}
-      <style jsx>{`
-        @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        }
-      `}</style>
-    </MainBackground>
+    </DashboardBackground>
   );
 }
