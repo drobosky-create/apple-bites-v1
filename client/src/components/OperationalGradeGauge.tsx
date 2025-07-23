@@ -92,11 +92,11 @@ const OperationalGradeGauge: React.FC<OperationalGradeGaugeProps> = ({
   return (
     <div className="flex justify-center items-center -mt-8">
       {/* Glass card */}
-        <div className="relative bg-[rgba(116,123,138,0.3)] backdrop-blur-[20px] saturate-[180%] rounded-2xl border border-white/10 shadow-2xl px-8 py-6 w-[750px]">
+        <div className="relative bg-white rounded-2xl shadow-xl px-8 py-6 w-[750px] border border-gray-100">
           {/* Title */}
           <div className="text-center mb-4">
-            <h3 className="text-lg font-bold text-white">{title}</h3>
-            <p className="text-sm text-white/80 mt-1">Current Performance Level</p>
+            <h3 className="text-lg font-bold text-gray-700">{title}</h3>
+            <p className="text-sm text-gray-500 mt-1">Current Performance Level</p>
           </div>
 
           {/* Gauge */}
@@ -182,7 +182,7 @@ const OperationalGradeGauge: React.FC<OperationalGradeGaugeProps> = ({
                   y={centerY + 95 * Math.sin((segment.angle + 18 + 180) * (Math.PI / 180))}
                   textAnchor="middle"
                   dominantBaseline="middle"
-                  className={`text-lg font-bold ${isActive ? 'fill-white' : 'fill-gray-400'}`}
+                  className={`text-lg font-bold ${isActive ? 'fill-white' : 'fill-gray-600'}`}
                 >
                   {segment.grade}
                 </text>
@@ -249,7 +249,7 @@ const OperationalGradeGauge: React.FC<OperationalGradeGaugeProps> = ({
                 y1={y1}
                 x2={x2}
                 y2={y2}
-                stroke="rgb(148, 163, 184)"
+                stroke="rgb(107, 114, 128)"
                 strokeWidth="2"
                 strokeLinecap="round"
               />
