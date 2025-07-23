@@ -187,73 +187,73 @@ export default function InteractiveValuationSlider() {
       {/* Current vs Potential Value Cards with Glassmorphism */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 mb-8 sm:mb-12">
         {/* Current Value Card */}
-        <div className="bg-gradient-to-br from-sky-100/40 to-blue-100/30 backdrop-blur-xl rounded-xl shadow-lg border border-slate-300 p-6 sm:p-8 text-center relative overflow-hidden">
+        <div className="bg-black/20 backdrop-blur-md rounded-xl shadow-2xl border border-white/10 p-6 sm:p-8 text-center relative overflow-hidden">
           
-          <h3 className="text-xl sm:text-2xl font-semibold text-slate-800 mb-2 tracking-wide">
+          <h3 className="text-xl sm:text-2xl font-semibold text-white mb-2 tracking-wide">
             Current Value 
             <span className="ml-3 inline-block px-3 py-1 text-sm font-semibold text-white bg-orange-500 rounded-full">
               You are here
             </span>
           </h3>
-          <p className="text-base sm:text-lg text-slate-500 mb-4">Based on your Operational Grade of {baseGrade}</p>
-          <div className="text-4xl sm:text-5xl font-bold text-slate-800 mb-4">
+          <p className="text-base sm:text-lg text-white/80 mb-4">Based on your Operational Grade of {baseGrade}</p>
+          <div className="text-4xl sm:text-5xl font-bold text-white mb-4">
             ${currentValuation.toLocaleString()}
           </div>
-          <div className="text-base sm:text-lg font-semibold text-slate-600 mb-4">
+          <div className="text-base sm:text-lg font-semibold text-white/90 mb-4">
             {currentMultiple}x EBITDA Multiple
           </div>
-          <span className="inline-flex items-center rounded-full px-4 py-1 text-sm font-medium bg-slate-200 text-slate-700">
+          <span className="inline-flex items-center rounded-full px-4 py-1 text-sm font-medium bg-white/20 text-white border border-white/30">
             {currentCategory.label}
           </span>
         </div>
 
         {/* Potential Value Card */}
-        <div className={`backdrop-blur-xl rounded-2xl shadow-xl shadow-slate-900/5 border p-6 sm:p-8 value-card-hover relative overflow-hidden transition-all duration-300 ${
+        <div className={`backdrop-blur-md rounded-2xl shadow-2xl border p-6 sm:p-8 value-card-hover relative overflow-hidden transition-all duration-300 ${
           sliderGrade !== baseGrade ? 
             (potentialIncrease > 0 ? 
-              'bg-gradient-to-br from-green-50/60 to-emerald-50/40 border-green-200/60 ring-2 ring-green-400 ring-opacity-50 shadow-2xl shadow-green-200/50' : 
-              'bg-gradient-to-br from-red-50/60 to-rose-50/40 border-red-200/60 ring-2 ring-red-400 ring-opacity-50 shadow-2xl shadow-red-200/50'
+              'bg-green-500/20 border-green-400/40 ring-2 ring-green-400 ring-opacity-50 shadow-2xl shadow-green-400/30' : 
+              'bg-red-500/20 border-red-400/40 ring-2 ring-red-400 ring-opacity-50 shadow-2xl shadow-red-400/30'
             )
-            : 'bg-white/70 border-white/40'
+            : 'bg-black/20 border-white/10'
         }`}>
           
           <div className="text-center relative z-10">
-            <h3 className="text-xl sm:text-2xl font-semibold text-slate-800 mb-3 tracking-wide">Potential Value</h3>
+            <h3 className="text-xl sm:text-2xl font-semibold text-white mb-3 tracking-wide">Potential Value</h3>
             {sliderGrade !== baseGrade ? (
-              <p className="text-base sm:text-lg text-slate-500 mb-4">
+              <p className="text-base sm:text-lg text-white/80 mb-4">
                 Based on selected grade ({sliderGrade})
               </p>
             ) : (
-              <p className="text-base sm:text-lg text-slate-500 mb-4">
+              <p className="text-base sm:text-lg text-white/80 mb-4">
                 Based on selected grade ({sliderGrade})
               </p>
             )}
-            <div className="text-4xl sm:text-5xl font-bold text-slate-800 mb-4">
+            <div className="text-4xl sm:text-5xl font-bold text-white mb-4">
               ${sliderValuation.toLocaleString()}
             </div>
-            <div className="text-base sm:text-lg font-semibold text-slate-600 mb-4">
+            <div className="text-base sm:text-lg font-semibold text-white/90 mb-4">
               {sliderMultiple}x EBITDA Multiple
             </div>
-            <span className="inline-flex items-center rounded-full px-4 py-1 text-sm font-medium bg-slate-200 text-slate-700">
+            <span className="inline-flex items-center rounded-full px-4 py-1 text-sm font-medium bg-white/20 text-white border border-white/30">
               {sliderCategory.label}
             </span>
             
             {/* POTENTIAL GAIN Display - Inside the card */}
             {sliderGrade !== baseGrade && (
-              <div className={`mt-6 pt-4 border-t ${potentialIncrease > 0 ? 'border-green-200' : 'border-red-200'}`}>
+              <div className={`mt-6 pt-4 border-t ${potentialIncrease > 0 ? 'border-green-300/40' : 'border-red-300/40'}`}>
                 <div className="text-center">
                   <div className={`text-xs uppercase tracking-wider font-bold mb-2 ${
-                    potentialIncrease > 0 ? 'text-green-700' : 'text-red-700'
+                    potentialIncrease > 0 ? 'text-green-300' : 'text-red-300'
                   }`}>
                     {potentialIncrease > 0 ? '💰 POTENTIAL GAIN' : '⚠️ POTENTIAL LOSS'}
                   </div>
                   <div className={`text-2xl font-black mb-2 ${
-                    potentialIncrease > 0 ? 'text-green-600' : 'text-red-600'
+                    potentialIncrease > 0 ? 'text-green-200' : 'text-red-200'
                   }`}>
                     {potentialIncrease > 0 ? '+' : '-'}${Math.abs(potentialIncrease).toLocaleString()}
                   </div>
                   <div className={`text-lg font-bold ${
-                    potentialIncrease > 0 ? 'text-green-700' : 'text-red-700'
+                    potentialIncrease > 0 ? 'text-green-300' : 'text-red-300'
                   }`}>
                     {potentialIncrease > 0 ? '+' : '-'}{Math.abs(percentageIncrease).toFixed(1)}% {potentialIncrease > 0 ? 'increase' : 'decrease'}
                   </div>
@@ -266,9 +266,9 @@ export default function InteractiveValuationSlider() {
 
 
       {/* Combined Gauge and Grade Selection */}
-      <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-6 sm:p-10">
+      <div className="bg-black/20 backdrop-blur-md rounded-xl shadow-2xl border border-white/10 p-6 sm:p-10">
         {/* Gauge */}
-        <div className="mb-20">
+        <div className="mb-10">
           <OperationalGradeGauge 
             grade={sliderGrade}
             title="Operational Grade Impact Analysis"
@@ -369,7 +369,7 @@ export default function InteractiveValuationSlider() {
         </div>
       )}
       {/* Educational Content */}
-      <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-8 sm:p-12">
+      <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-8 sm:p-12">
         <div className="text-center mb-8">
           <h3 className="text-2xl sm:text-3xl font-bold text-[#0F172A] mb-4 tracking-wide">
             How to Improve Your Operational Grade

@@ -351,12 +351,12 @@ export default function ValueCalculator() {
 
 
 
-          {/* Main Calculator Container */}
+          {/* Main Calculator Container with Dark Background for Glass Effect */}
           <Box sx={{
-            backgroundColor: 'white',
-            borderRadius: '16px',
-            boxShadow: '0 8px 20px rgba(0,0,0,0.1)',
-            p: 4
+            background: 'linear-gradient(135deg, #1e293b 0%, #334155 100%)',
+            borderRadius: '20px',
+            p: 6,
+            boxShadow: '0 20px 40px rgba(0,0,0,0.2)'
           }}>
             <InteractiveValuationSlider />
           </Box>
