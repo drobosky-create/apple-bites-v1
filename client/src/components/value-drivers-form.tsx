@@ -94,9 +94,14 @@ function GradeRadioGroup({ name, value, onChange, size = "large" }: GradeRadioGr
           <div
             className={`${sizeClasses} rounded-xl border-2 flex items-center justify-center font-bold transition-all ${
               value === grade
-                ? "border-[#0b2147] bg-[#0b2147] text-white shadow-lg scale-110"
-                : "border-slate-300 text-slate-700 hover:border-[#0b2147] hover:scale-105"
+                ? "text-white shadow-lg scale-110 border-[#0b2147]"
+              : "border-slate-300 text-slate-700 hover:border-[#0b2147] hover:scale-105"
             }`}
+            style={
+                value === grade
+                  ? { background: 'linear-gradient(135deg, #0d1b2a 0%, #adb5bd 100%)' }
+                  : {}
+              }
           >
             {grade}
           </div>

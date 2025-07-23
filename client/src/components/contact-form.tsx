@@ -259,13 +259,10 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
 
           {/* Enhanced Continue Button */}
           <div className="pt-8 border-t border-slate-200 flex justify-center">
-            <ArgonButton
+            <button
               type="submit"
-              variant="gradient"
-              color="primary"
               disabled={isSubmitting}
-              className="bg-gradient-to-br from-[#0b2147] to-[#1a365d] hover:from-[#112e5a] hover:to-[#1e4471] text-white font-semibold px-12 py-4 rounded-xl shadow-xl transition-all transform hover:scale-[1.02] flex items-center justify-center text-lg"
-              size="large"
+              className="bg-[#747b8a] hover:bg-[#495361] text-white font-semibold px-12 py-4 rounded-xl shadow-lg transition-all transform hover:scale-[1.02] flex items-center justify-center text-lg border-none disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSubmitting ? (
                 <>
@@ -278,7 +275,7 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
                   <ArrowRight className="w-5 h-5 ml-3" />
                 </>
               )}
-            </ArgonButton>
+            </button>
           </div>
         </form>
       </Form>
