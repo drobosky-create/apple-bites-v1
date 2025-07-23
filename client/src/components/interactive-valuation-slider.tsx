@@ -265,17 +265,19 @@ export default function InteractiveValuationSlider() {
       </div>
 
 
-      {/* Operational Grade Gauge */}
-      <div className="flex justify-center">
-        <OperationalGradeGauge 
-          grade={sliderGrade}
-          title="Operational Grade Impact Analysis"
-          animated={true}
-        />
-      </div>
-
-      {/* Grade Selection Controls */}
+      {/* Combined Gauge and Grade Selection */}
       <div className="bg-white/70 backdrop-blur-xl rounded-2xl shadow-xl shadow-slate-900/5 border border-white/30 p-6 sm:p-8">
+        {/* Larger Gauge */}
+        <div className="flex justify-center mb-8">
+          <div className="transform scale-125">
+            <OperationalGradeGauge 
+              grade={sliderGrade}
+              title="Operational Grade Impact Analysis"
+              animated={true}
+            />
+          </div>
+        </div>
+        
         <h3 className="text-xl font-bold text-center text-slate-800 mb-6">
           Click any grade to see how operational improvements impact your business value
         </h3>
