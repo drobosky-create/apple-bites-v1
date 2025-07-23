@@ -315,9 +315,7 @@ export default function InteractiveValuationSlider() {
                   {grade}
                 </div>
                 
-                <div className="text-lg font-bold text-slate-800 mb-1">
-                  ${(valuation / 1000000).toFixed(1)}M
-                </div>
+                
                 <div className="text-sm text-slate-600 mb-2">
                   {gradeInfo.multiplier.toFixed(1)}x EBITDA
                 </div>
