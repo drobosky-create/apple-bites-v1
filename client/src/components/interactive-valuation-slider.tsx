@@ -267,15 +267,13 @@ export default function InteractiveValuationSlider() {
 
       {/* Combined Gauge and Grade Selection */}
       <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-6 sm:p-8">
-        {/* Larger Gauge */}
-        <div className="flex justify-center mb-8">
-          <div className="transform scale-125">
-            <OperationalGradeGauge 
-              grade={sliderGrade}
-              title="Operational Grade Impact Analysis"
-              animated={true}
-            />
-          </div>
+        {/* Gauge */}
+        <div className="mb-8">
+          <OperationalGradeGauge 
+            grade={sliderGrade}
+            title="Operational Grade Impact Analysis"
+            animated={true}
+          />
         </div>
         
         <h3 className="text-xl font-bold text-center text-slate-800 mb-6">
