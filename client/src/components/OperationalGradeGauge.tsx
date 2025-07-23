@@ -101,7 +101,7 @@ const OperationalGradeGauge: React.FC<OperationalGradeGaugeProps> = ({
 
           {/* Gauge */}
           <div className="flex justify-center">
-            <svg width="575" height="230" viewBox="0 0 300 160" className="overflow-visible drop-shadow-lg">
+            <svg width="750" height="300" viewBox="0 0 300 160" className="overflow-visible drop-shadow-lg">
           {/* Material Dashboard Gradient Definitions */}
           <defs>
             {/* F Grade - Deep Red Material Gradient */}
