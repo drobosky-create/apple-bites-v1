@@ -92,16 +92,16 @@ const OperationalGradeGauge: React.FC<OperationalGradeGaugeProps> = ({
   return (
     <div className="flex justify-center items-center -mt-8">
       {/* Glass card */}
-        <div className="relative bg-white rounded-2xl shadow-xl px-8 py-6 w-[750px] border border-gray-100">
+        <div className="relative bg-white rounded-2xl shadow-xl px-6 py-4 w-[750px] border border-gray-100">
           {/* Title */}
-          <div className="text-center mb-4">
-            <h3 className="text-lg font-bold text-gray-700">{title}</h3>
+          <div className="text-left mb-3">
+            <h3 className="text-xl font-bold text-gray-800">{title}</h3>
             <p className="text-sm text-gray-500 mt-1">Current Performance Level</p>
           </div>
 
           {/* Gauge */}
           <div className="flex justify-center">
-            <svg width="650" height="150" viewBox="0 0 300 160" className="overflow-visible drop-shadow-lg">
+            <svg width="500" height="200" viewBox="0 0 300 160" className="overflow-visible drop-shadow-lg">
           {/* Material Dashboard Gradient Definitions */}
           <defs>
             {/* F Grade - Deep Red Material Gradient */}
@@ -182,7 +182,12 @@ const OperationalGradeGauge: React.FC<OperationalGradeGaugeProps> = ({
                   y={centerY + 95 * Math.sin((segment.angle + 18 + 180) * (Math.PI / 180))}
                   textAnchor="middle"
                   dominantBaseline="middle"
-                  className={`text-lg font-bold ${isActive ? 'fill-white' : 'fill-gray-600'}`}
+                  className={`text-3xl font-black ${isActive ? 'fill-white' : 'fill-gray-700'}`}
+                  style={{
+                    fontSize: '24px',
+                    fontWeight: '900',
+                    textShadow: isActive ? '1px 1px 2px rgba(0,0,0,0.3)' : 'none'
+                  }}
                 >
                   {segment.grade}
                 </text>
