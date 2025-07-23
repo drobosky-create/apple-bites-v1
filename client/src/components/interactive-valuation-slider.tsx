@@ -189,7 +189,9 @@ export default function InteractiveValuationSlider() {
 
         {/* Potential Value Card */}
         <div className={`bg-white/70 backdrop-blur-xl rounded-2xl shadow-xl shadow-slate-900/5 border border-white/40 p-6 sm:p-8 value-card-hover relative overflow-hidden transition-all duration-300 ${
-          sliderGrade !== baseGrade ? 'ring-2 ring-green-400 ring-opacity-50 shadow-2xl shadow-green-200/50' : ''
+          sliderGrade !== baseGrade ? 
+            (potentialIncrease > 0 ? 'ring-2 ring-green-400 ring-opacity-50 shadow-2xl shadow-green-200/50' : 'ring-2 ring-red-400 ring-opacity-50 shadow-2xl shadow-red-200/50') 
+            : ''
         }`}>
           {/* Subtle icon watermark */}
           <div className="absolute top-4 right-4 text-6xl opacity-10">📈</div>
@@ -216,29 +218,23 @@ export default function InteractiveValuationSlider() {
             
             {/* POTENTIAL GAIN Display - Inside the card */}
             {sliderGrade !== baseGrade && (
-              <div className="mt-6 pt-4 border-t border-slate-200">
+              <div className={`mt-6 pt-4 border-t ${potentialIncrease > 0 ? 'border-green-200' : 'border-red-200'}`}>
                 <div className="text-center">
-                  <div className="text-xs uppercase tracking-wider text-green-700 font-bold mb-2">💰 POTENTIAL GAIN</div>
-                  {potentialIncrease > 0 && (
-                    <div className="text-2xl font-black text-green-600 mb-2">
-                      +${potentialIncrease.toLocaleString()}
-                    </div>
-                  )}
-                  {potentialIncrease > 0 && (
-                    <div className="text-lg font-bold text-green-700">
-                      +{percentageIncrease.toFixed(1)}% increase
-                    </div>
-                  )}
-                  {potentialIncrease < 0 && (
-                    <div className="text-2xl font-black text-red-600 mb-2">
-                      -${Math.abs(potentialIncrease).toLocaleString()}
-                    </div>
-                  )}
-                  {potentialIncrease < 0 && (
-                    <div className="text-lg font-bold text-red-700">
-                      -{Math.abs(percentageIncrease).toFixed(1)}% decrease
-                    </div>
-                  )}
+                  <div className={`text-xs uppercase tracking-wider font-bold mb-2 ${
+                    potentialIncrease > 0 ? 'text-green-700' : 'text-red-700'
+                  }`}>
+                    {potentialIncrease > 0 ? '💰 POTENTIAL GAIN' : '⚠️ POTENTIAL LOSS'}
+                  </div>
+                  <div className={`text-2xl font-black mb-2 ${
+                    potentialIncrease > 0 ? 'text-green-600' : 'text-red-600'
+                  }`}>
+                    {potentialIncrease > 0 ? '+' : '-'}${Math.abs(potentialIncrease).toLocaleString()}
+                  </div>
+                  <div className={`text-lg font-bold ${
+                    potentialIncrease > 0 ? 'text-green-700' : 'text-red-700'
+                  }`}>
+                    {potentialIncrease > 0 ? '+' : '-'}{Math.abs(percentageIncrease).toFixed(1)}% {potentialIncrease > 0 ? 'increase' : 'decrease'}
+                  </div>
                 </div>
               </div>
             )}
