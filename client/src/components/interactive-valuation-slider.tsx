@@ -88,6 +88,22 @@ export default function InteractiveValuationSlider() {
     return currentEbitda * multiple;
   };
 
+  const getGradeInfo = (grade: 'A' | 'B' | 'C' | 'D' | 'F') => {
+    const multiplier = getMultipleForGrade(grade);
+    const colorMap = {
+      'A': { bg: 'bg-green-500', border: 'border-green-400', gradient: 'from-green-50 to-emerald-50', borderColor: 'border-green-200/50' },
+      'B': { bg: 'bg-blue-500', border: 'border-blue-400', gradient: 'from-blue-50 to-indigo-50', borderColor: 'border-blue-200/50' },
+      'C': { bg: 'bg-yellow-500', border: 'border-yellow-400', gradient: 'from-yellow-50 to-orange-50', borderColor: 'border-yellow-200/50' },
+      'D': { bg: 'bg-orange-500', border: 'border-orange-400', gradient: 'from-orange-50 to-red-50', borderColor: 'border-orange-200/50' },
+      'F': { bg: 'bg-red-500', border: 'border-red-400', gradient: 'from-red-50 to-pink-50', borderColor: 'border-red-200/50' }
+    };
+    return { 
+      multiplier, 
+      ...colorMap[grade],
+      label: `Grade ${grade}: ${multiplier.toFixed(1)}x`
+    };
+  };
+
   const currentValuation = calculateValuation(baseGrade);
   const sliderValuation = calculateValuation(sliderGrade);
   const potentialIncrease = sliderValuation - currentValuation;
@@ -280,30 +296,60 @@ export default function InteractiveValuationSlider() {
           </h3>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
-          <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-6 border border-green-200/50 hover:scale-[1.02] hover:shadow-lg transition-all duration-300 cursor-pointer">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="bg-green-500 bg-opacity-90 text-white px-3 py-1 rounded-full text-xs uppercase tracking-wider font-bold border border-green-400">Grade A: 7.5x</div>
-            </div>
-            <h4 className="text-lg sm:text-xl font-bold text-[#0F172A] mb-3">💰 Financial Performance</h4>
-            <p className="text-[#475569] leading-relaxed font-medium">Consistent profitability, strong cash flow management, and professional financial reporting</p>
-          </div>
-          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200/50 hover:scale-[1.02] hover:shadow-lg transition-all duration-300 cursor-pointer">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="bg-blue-500 bg-opacity-90 text-white px-3 py-1 rounded-full text-xs uppercase tracking-wider font-bold border border-blue-400">Grade B: 5.7x</div>
-            </div>
-            <h4 className="text-lg sm:text-xl font-bold text-[#0F172A] mb-3">⚙️ Operational Excellence</h4>
-            <p className="text-[#475569] leading-relaxed font-medium">Streamlined processes, quality management systems, and scalable operations</p>
-          </div>
-          <div className="bg-gradient-to-br from-yellow-50 to-orange-50 rounded-xl p-6 border border-yellow-200/50 hover:scale-[1.02] hover:shadow-lg transition-all duration-300 cursor-pointer">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="bg-yellow-500 bg-opacity-90 text-white px-3 py-1 rounded-full text-xs uppercase tracking-wider font-bold border border-yellow-400">Grade C: 4.2x</div>
-            </div>
-            <h4 className="text-lg sm:text-xl font-bold text-[#0F172A] mb-3">🎯 Market Position</h4>
-            <p className="text-[#475569] leading-relaxed font-medium">Competitive differentiation, customer loyalty, and market share protection</p>
-          </div>
+          {/* Financial Performance - Grade A */}
+          {(() => {
+            const gradeInfo = getGradeInfo('A');
+            return (
+              <div className={`bg-gradient-to-br ${gradeInfo.gradient} rounded-xl p-6 border ${gradeInfo.borderColor} hover:scale-[1.02] hover:shadow-lg transition-all duration-300 cursor-pointer`}>
+                <div className="flex items-center gap-3 mb-3">
+                  <div className={`${gradeInfo.bg} bg-opacity-90 text-white px-3 py-1 rounded-full text-xs uppercase tracking-wider font-bold ${gradeInfo.border}`}>
+                    {gradeInfo.label}
+                  </div>
+                </div>
+                <h4 className="text-lg sm:text-xl font-bold text-[#0F172A] mb-3">💰 Financial Performance</h4>
+                <p className="text-[#475569] leading-relaxed font-medium">Consistent profitability, strong cash flow management, and professional financial reporting</p>
+              </div>
+            );
+          })()}
+
+          {/* Operational Excellence - Grade B */}
+          {(() => {
+            const gradeInfo = getGradeInfo('B');
+            return (
+              <div className={`bg-gradient-to-br ${gradeInfo.gradient} rounded-xl p-6 border ${gradeInfo.borderColor} hover:scale-[1.02] hover:shadow-lg transition-all duration-300 cursor-pointer`}>
+                <div className="flex items-center gap-3 mb-3">
+                  <div className={`${gradeInfo.bg} bg-opacity-90 text-white px-3 py-1 rounded-full text-xs uppercase tracking-wider font-bold ${gradeInfo.border}`}>
+                    {gradeInfo.label}
+                  </div>
+                </div>
+                <h4 className="text-lg sm:text-xl font-bold text-[#0F172A] mb-3">⚙️ Operational Excellence</h4>
+                <p className="text-[#475569] leading-relaxed font-medium">Streamlined processes, quality management systems, and scalable operations</p>
+              </div>
+            );
+          })()}
+
+          {/* Market Position - Grade C */}
+          {(() => {
+            const gradeInfo = getGradeInfo('C');
+            return (
+              <div className={`bg-gradient-to-br ${gradeInfo.gradient} rounded-xl p-6 border ${gradeInfo.borderColor} hover:scale-[1.02] hover:shadow-lg transition-all duration-300 cursor-pointer`}>
+                <div className="flex items-center gap-3 mb-3">
+                  <div className={`${gradeInfo.bg} bg-opacity-90 text-white px-3 py-1 rounded-full text-xs uppercase tracking-wider font-bold ${gradeInfo.border}`}>
+                    {gradeInfo.label}
+                  </div>
+                </div>
+                <h4 className="text-lg sm:text-xl font-bold text-[#0F172A] mb-3">🎯 Market Position</h4>
+                <p className="text-[#475569] leading-relaxed font-medium">Competitive differentiation, customer loyalty, and market share protection</p>
+              </div>
+            );
+          })()}
+
+          {/* Risk Management - Grades D-F */}
           <div className="bg-gradient-to-br from-red-50 to-pink-50 rounded-xl p-6 border border-red-200/50 hover:scale-[1.02] hover:shadow-lg transition-all duration-300 cursor-pointer">
             <div className="flex items-center gap-3 mb-3">
-              <div className="bg-red-500 bg-opacity-90 text-white px-3 py-1 rounded-full text-xs uppercase tracking-wider font-bold border border-red-400">Grades D-F: 2.0-3.0x</div>
+              <div className="bg-red-500 bg-opacity-90 text-white px-3 py-1 rounded-full text-xs uppercase tracking-wider font-bold border-red-400">
+                Grades D-F: {getMultipleForGrade('D').toFixed(1)}-{getMultipleForGrade('F').toFixed(1)}x
+              </div>
             </div>
             <h4 className="text-lg sm:text-xl font-bold text-[#0F172A] mb-3">🛡️ Risk Management</h4>
             <p className="text-[#475569] leading-relaxed font-medium">Diversified revenue streams, reduced owner dependency, and operational stability</p>
