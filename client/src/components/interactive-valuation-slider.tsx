@@ -168,7 +168,7 @@ export default function InteractiveValuationSlider() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 mb-8 sm:mb-12">
         {/* Current Value Card */}
         <div className="bg-gradient-to-br from-sky-100/40 to-blue-100/30 backdrop-blur-xl rounded-xl shadow-lg border border-slate-300 p-6 sm:p-8 text-center relative overflow-hidden">
-          <div className="absolute top-4 right-4 text-5xl opacity-10">💹</div>
+          
           <h3 className="text-xl sm:text-2xl font-semibold text-slate-800 mb-2 tracking-wide">
             Current Value 
             <span className="ml-3 inline-block px-3 py-1 text-sm font-semibold text-white bg-orange-500 rounded-full">
