@@ -41,6 +41,76 @@ import {
   X
 } from "lucide-react";
 
+const getGradeStyles = (grade: string) => {
+  switch (grade) {
+    case 'A+':
+    case 'A':
+      return {
+        borderColor: '#42a5f5', // Blue
+        textColor: '#42a5f5',
+        bgColor: 'rgba(66, 165, 245, 0.1)', // Light blue tint
+      };
+    case 'B+':
+    case 'B':
+    case 'B-':
+      return {
+        borderColor: '#8bc34a', // Green
+        textColor: '#8bc34a',
+        bgColor: 'rgba(139, 195, 74, 0.1)', // Light green tint
+      };
+    case 'C+':
+    case 'C':
+    case 'C-':
+      return {
+        borderColor: '#ff9800', // Orange
+        textColor: '#ff9800',
+        bgColor: 'rgba(255, 152, 0, 0.1)', // Light orange tint
+      };
+    case 'D+':
+    case 'D':
+    case 'D-':
+    default:
+      return {
+        borderColor: '#f44336', // Red
+        textColor: '#f44336',
+        bgColor: 'rgba(244, 67, 54, 0.1)', // Light red tint
+      };
+  }
+};
+
+const GradeBox = ({ grade }: { grade: string }) => {
+  const { borderColor, textColor, bgColor } = getGradeStyles(grade);
+
+  return (
+    <Box
+      sx={{
+        width: '64px',
+        height: '64px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: bgColor,
+        backdropFilter: 'blur(12px)',
+        border: '2px solid',
+        borderColor,
+        borderRadius: '12px',
+        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+        ml: 2,
+      }}
+    >
+      <Typography
+        variant="h5"
+        sx={{
+          fontWeight: 'bold',
+          color: textColor,
+        }}
+      >
+        {grade}
+      </Typography>
+    </Box>
+  );
+};
+
 // Material Dashboard Styled Components
 const DashboardBackground = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -221,39 +291,7 @@ const PastAssessmentsSection = ({ userEmail, setLocation }: { userEmail: string,
               </Box>
             </Box>
             
-            {/* Grade Glass Box - Right Side */}
-            <Box
-              sx={{
-                width: '64px',
-                height: '64px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                background: 'rgba(255, 255, 255, 0.1)',
-                backdropFilter: 'blur(10px)',
-                border: '2px solid',
-                borderColor: assessment.overallScore === 'A' ? '#4caf50' : 
-                           assessment.overallScore === 'B' ? '#8bc34a' :
-                           assessment.overallScore === 'C' ? '#ff9800' :
-                           assessment.overallScore === 'D' ? '#ff5722' : '#f44336',
-                borderRadius: '12px',
-                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
-                ml: 2
-              }}
-            >
-              <Typography 
-                variant="h4" 
-                sx={{ 
-                  fontWeight: 'bold',
-                  color: assessment.overallScore === 'A' ? '#4caf50' : 
-                        assessment.overallScore === 'B' ? '#8bc34a' :
-                        assessment.overallScore === 'C' ? '#ff9800' :
-                        assessment.overallScore === 'D' ? '#ff5722' : '#f44336',
-                }}
-              >
-                {assessment.overallScore}
-              </Typography>
-            </Box>
+            <GradeBox grade={assessment.overallScore || 'C'} />
 
           </Box>
         </Box>
