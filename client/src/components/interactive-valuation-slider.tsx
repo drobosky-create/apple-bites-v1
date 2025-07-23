@@ -188,10 +188,13 @@ export default function InteractiveValuationSlider() {
         </div>
 
         {/* Potential Value Card */}
-        <div className={`bg-white/70 backdrop-blur-xl rounded-2xl shadow-xl shadow-slate-900/5 border border-white/40 p-6 sm:p-8 value-card-hover relative overflow-hidden transition-all duration-300 ${
+        <div className={`backdrop-blur-xl rounded-2xl shadow-xl shadow-slate-900/5 border p-6 sm:p-8 value-card-hover relative overflow-hidden transition-all duration-300 ${
           sliderGrade !== baseGrade ? 
-            (potentialIncrease > 0 ? 'ring-2 ring-green-400 ring-opacity-50 shadow-2xl shadow-green-200/50' : 'ring-2 ring-red-400 ring-opacity-50 shadow-2xl shadow-red-200/50') 
-            : ''
+            (potentialIncrease > 0 ? 
+              'bg-gradient-to-br from-green-50/60 to-emerald-50/40 border-green-200/60 ring-2 ring-green-400 ring-opacity-50 shadow-2xl shadow-green-200/50' : 
+              'bg-gradient-to-br from-red-50/60 to-rose-50/40 border-red-200/60 ring-2 ring-red-400 ring-opacity-50 shadow-2xl shadow-red-200/50'
+            )
+            : 'bg-white/70 border-white/40'
         }`}>
           
           <div className="text-center relative z-10">
