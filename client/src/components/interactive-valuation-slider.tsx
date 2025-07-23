@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { TrendingUp, ArrowRight, Phone } from "lucide-react";
 import ModernGradeChart from './modern-grade-chart';
+import OperationalGradeGauge from './OperationalGradeGauge';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { ValuationAssessment } from "@shared/schema";
 
@@ -264,15 +265,87 @@ export default function InteractiveValuationSlider() {
       </div>
 
 
-      {/* Step Infographic Chart */}
-      <div className="bg-white/70 backdrop-blur-xl rounded-2xl shadow-xl shadow-slate-900/5 border border-white/30 p-6 sm:p-8">
-        <ModernGradeChart 
-          currentGrade={baseGrade}
-          selectedGrade={sliderGrade}
-          onGradeSelect={setSliderGrade}
-          getValuation={calculateValuation}
-          getMultiple={getMultipleForGrade}
+      {/* Operational Grade Gauge */}
+      <div className="flex justify-center">
+        <OperationalGradeGauge 
+          grade={sliderGrade}
+          title="Operational Grade Impact Analysis"
+          animated={true}
         />
+      </div>
+
+      {/* Grade Selection Controls */}
+      <div className="bg-white/70 backdrop-blur-xl rounded-2xl shadow-xl shadow-slate-900/5 border border-white/30 p-6 sm:p-8">
+        <h3 className="text-xl font-bold text-center text-slate-800 mb-6">
+          Click any grade to see how operational improvements impact your business value
+        </h3>
+        <div className="grid grid-cols-5 gap-4">
+          {(['F', 'D', 'C', 'B', 'A'] as const).map((grade) => {
+            const gradeInfo = getGradeInfo(grade);
+            const isSelected = grade === sliderGrade;
+            const isCurrent = grade === baseGrade;
+            const valuation = calculateValuation(grade);
+            
+            return (
+              <button
+                key={grade}
+                onClick={() => setSliderGrade(grade)}
+                className={`relative p-4 rounded-xl border-2 transition-all duration-200 hover:scale-105 ${
+                  isSelected 
+                    ? 'border-slate-400 shadow-lg transform scale-105' 
+                    : 'border-slate-200 hover:border-slate-300'
+                }`}
+              >
+                {isCurrent && (
+                  <div className="absolute -top-2 left-1/2 transform -translate-x-1/2">
+                    <span className="bg-orange-500 text-white text-xs px-2 py-1 rounded-full font-semibold">
+                      Current
+                    </span>
+                  </div>
+                )}
+                {isSelected && !isCurrent && (
+                  <div className="absolute -top-2 left-1/2 transform -translate-x-1/2">
+                    <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full font-semibold">
+                      Selected Target
+                    </span>
+                  </div>
+                )}
+                
+                <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3 ${gradeInfo.bg} text-white font-bold text-2xl`}>
+                  {grade}
+                </div>
+                
+                <div className="text-lg font-bold text-slate-800 mb-1">
+                  ${(valuation / 1000000).toFixed(1)}M
+                </div>
+                <div className="text-sm text-slate-600 mb-2">
+                  {gradeInfo.multiplier.toFixed(1)}x EBITDA
+                </div>
+                <div className="text-xs font-medium text-slate-700">
+                  {grade === 'F' ? 'Poor' :
+                   grade === 'D' ? 'Below Average' :
+                   grade === 'C' ? 'Average' :
+                   grade === 'B' ? 'Good' : 'Excellent'}
+                </div>
+              </button>
+            );
+          })}
+        </div>
+        
+        <div className="flex justify-center gap-4 mt-4 text-sm">
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
+            <span className="text-slate-600">Current Grade</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+            <span className="text-slate-600">Selected Target</span>
+          </div>
+        </div>
+        
+        <p className="text-center text-sm text-slate-500 mt-4">
+          Valuations based on EBITDA multiple × Hover for details
+        </p>
       </div>
       {/* Call to Action with Argon Styling */}
       {showBooking && (
