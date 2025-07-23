@@ -90,16 +90,17 @@ const OperationalGradeGauge: React.FC<OperationalGradeGaugeProps> = ({
   const currentSegment = gradeSegments.find(s => s.grade === grade);
 
   return (
-    <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+      <div className="bg-white rounded-xl border border-slate-200 pt-24 pb-6 shadow-sm relative z-0">
       {/* Title */}
       <div className="text-center mb-4">
         <h3 className="text-lg font-bold text-gray-800">{title}</h3>
         <p className="text-sm text-gray-600 mt-1">Current Performance Level</p>
       </div>
-
-      {/* Gauge Container */}
-      <div className="relative flex justify-center">
-        <svg width="300" height="160" viewBox="0 0 300 160" className="overflow-visible">
+      {/* Black Glass Gauge Container */}
+      <div className="flex justify-center mb-8">
+        <div className="relative bg-black/20 backdrop-blur-md rounded-2xl border border-white/10 shadow-2xl p-8 scale-[1.15]">
+          <div className="relative flex justify-center">
+            <svg width="300" height="160" viewBox="0 0 300 160" className="overflow-visible drop-shadow-lg">
           {/* Gradient Definitions */}
           <defs>
             <linearGradient id="redGradient" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -241,9 +242,10 @@ const OperationalGradeGauge: React.FC<OperationalGradeGaugeProps> = ({
               />
             );
           })}
-        </svg>
+            </svg>
+          </div>
+        </div>
       </div>
-
       
     </div>
   );
