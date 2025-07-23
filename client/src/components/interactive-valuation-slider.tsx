@@ -152,9 +152,6 @@ export default function InteractiveValuationSlider() {
   return (
     <div className="max-w-6xl mx-auto space-y-8 sm:space-y-12">
       <div className="text-center mb-8 sm:mb-12">
-        <h2 className="text-2xl sm:text-4xl font-bold text-[#0F172A] mb-4 tracking-wide font-smoothing-antialiased">
-          Business Value Improvement Calculator
-        </h2>
         <p className="text-lg sm:text-xl text-[#475569] leading-relaxed font-semibold">
           See how improving your business operations translates to increased valuation
         </p>
