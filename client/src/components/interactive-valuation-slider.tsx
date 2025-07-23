@@ -188,7 +188,9 @@ export default function InteractiveValuationSlider() {
         </div>
 
         {/* Potential Value Card */}
-        <div className="bg-white/70 backdrop-blur-xl rounded-2xl shadow-xl shadow-slate-900/5 border border-white/40 p-6 sm:p-8 value-card-hover relative overflow-hidden">
+        <div className={`bg-white/70 backdrop-blur-xl rounded-2xl shadow-xl shadow-slate-900/5 border border-white/40 p-6 sm:p-8 value-card-hover relative overflow-hidden transition-all duration-300 ${
+          sliderGrade !== baseGrade ? 'ring-2 ring-green-400 ring-opacity-50 shadow-2xl shadow-green-200/50 animate-pulse' : ''
+        }`}>
           {/* Subtle icon watermark */}
           <div className="absolute top-4 right-4 text-6xl opacity-10">📈</div>
           <div className="text-center relative z-10">
@@ -211,38 +213,40 @@ export default function InteractiveValuationSlider() {
             <span className="inline-flex items-center rounded-full px-4 py-1 text-sm font-medium bg-slate-200 text-slate-700">
               {sliderCategory.label}
             </span>
+            
+            {/* POTENTIAL GAIN Display - Inside the card */}
+            {sliderGrade !== baseGrade && (
+              <div className="mt-6 pt-4 border-t border-slate-200">
+                <div className="text-center">
+                  <div className="text-xs uppercase tracking-wider text-green-700 font-bold mb-2">💰 POTENTIAL GAIN</div>
+                  {potentialIncrease > 0 && (
+                    <div className="text-2xl font-black text-green-600 mb-2">
+                      +${potentialIncrease.toLocaleString()}
+                    </div>
+                  )}
+                  {potentialIncrease > 0 && (
+                    <div className="text-lg font-bold text-green-700">
+                      +{percentageIncrease.toFixed(1)}% increase
+                    </div>
+                  )}
+                  {potentialIncrease < 0 && (
+                    <div className="text-2xl font-black text-red-600 mb-2">
+                      -${Math.abs(potentialIncrease).toLocaleString()}
+                    </div>
+                  )}
+                  {potentialIncrease < 0 && (
+                    <div className="text-lg font-bold text-red-700">
+                      -{Math.abs(percentageIncrease).toFixed(1)}% decrease
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
 
-      {/* POTENTIAL GAIN Display - Separate section */}
-      {sliderGrade !== baseGrade && (
-        <div className="bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-300 rounded-xl p-6 backdrop-blur-sm shadow-lg mt-6">
-          <div className="text-center">
-            <div className="text-xs uppercase tracking-wider text-green-700 font-bold mb-2">💰 POTENTIAL GAIN</div>
-            {potentialIncrease > 0 && (
-              <div className="text-2xl font-black text-green-600 mb-2">
-                +${potentialIncrease.toLocaleString()}
-              </div>
-            )}
-            {potentialIncrease > 0 && (
-              <div className="text-lg font-bold text-green-700">
-                +{percentageIncrease.toFixed(1)}% increase
-              </div>
-            )}
-            {potentialIncrease < 0 && (
-              <div className="text-2xl font-black text-red-600 mb-2">
-                -${Math.abs(potentialIncrease).toLocaleString()}
-              </div>
-            )}
-            {potentialIncrease < 0 && (
-              <div className="text-lg font-bold text-red-700">
-                -{Math.abs(percentageIncrease).toFixed(1)}% decrease
-              </div>
-            )}
-          </div>
-        </div>
-      )}
+
       {/* Step Infographic Chart */}
       <div className="bg-white/70 backdrop-blur-xl rounded-2xl shadow-xl shadow-slate-900/5 border border-white/30 p-6 sm:p-8">
         <StepInfographicChart 
