@@ -208,7 +208,7 @@ export default function AuthenticMaterialLogin() {
         <HeaderSection
           sx={{
             position: 'absolute',
-            top: '40px',
+            top: '20px',
             left: 0,
             right: 0,
             mx: 'auto',
@@ -227,7 +227,7 @@ export default function AuthenticMaterialLogin() {
               src={appleBitesLogo}
               alt="Apple Bites Business Assessment"
               style={{
-                height: '250px',
+                height: '225px',
                 width: 'auto',
                 filter: 'brightness(1.1)',
                 display: 'block',
