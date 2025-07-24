@@ -136,7 +136,7 @@ export default function ArgonLogin() {
     setIsLoading(true);
     
     try {
-      const response = await fetch("/api/users/login", {
+      const response = await fetch("/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -309,9 +309,7 @@ export default function ArgonLogin() {
                 <Typography variant="body2" sx={{ color: '#67748e' }}>
                   Don't have an account?{' '}
                   <MuiLink
-                    component="button"
-                    type="button"
-                    onClick={handleSignUp}
+                    href="/signup"
                     sx={{
                       color: '#81e5d8',
                       textDecoration: 'none',

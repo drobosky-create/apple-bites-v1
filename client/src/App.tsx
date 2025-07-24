@@ -17,6 +17,7 @@ import Login from "@/pages/login";
 import MaterialLogin from "@/pages/material-login";
 import AuthenticMaterialLogin from "@/pages/authentic-material-login";
 import MaterialDashboardLogin from "@/pages/material-dashboard-login";
+import SignUp from "@/pages/signup";
 import ValuationForm from "@/pages/valuation-form";
 import FreeAssessment from "@/pages/free-assessment";
 import GrowthExitAssessment from "@/pages/strategic-assessment";
@@ -52,6 +53,7 @@ function Router() {
           </>
         )}
         <Route path="/login" component={MaterialDashboardLogin} />
+        <Route path="/signup" component={SignUp} />
         <Route path="/login-auth" component={AuthenticMaterialLogin} />
         <Route path="/login-material" component={MaterialLogin} />
         <Route path="/login-old" component={Login} />

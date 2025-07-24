@@ -181,21 +181,42 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json({ message: "Logged out successfully" });
   });
 
-  // Simple auth user route for demo
-  app.get('/api/auth/user', (req: any, res) => {
+  // Updated user route that works with custom authentication
+  app.get('/api/auth/user', async (req: any, res) => {
+    // Check for custom authentication session
+    const customUserId = req.session?.customUserSessionId;
+    if (customUserId) {
+      try {
+        const user = await storage.getUser(customUserId);
+        if (user && user.isActive) {
+          return res.json({
+            id: user.id,
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            tier: user.tier || "free",
+            authProvider: user.authProvider || "custom"
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching custom user:", error);
+      }
+    }
+
+    // Legacy demo session support (fallback)
     if ((req.session as any)?.isAuthenticated) {
       const user = (req.session as any).user;
-      res.json({
+      return res.json({
         id: user.id,
         email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,
         tier: "free",
-        authProvider: "replit"
+        authProvider: "demo"
       });
-    } else {
-      res.status(401).json({ message: "Unauthorized" });
     }
+
+    res.status(401).json({ message: "Unauthorized" });
   });
 
   // Legacy Replit Auth user route (for backward compatibility)
@@ -707,36 +728,78 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Simple email/password login for demo purposes
+  // User signup endpoint
+  app.post("/api/signup", async (req, res) => {
+    try {
+      const validatedData = registerUserSchema.parse(req.body);
+      
+      // Check if user already exists
+      const existingUser = await storage.getUserByEmail(validatedData.email);
+      if (existingUser) {
+        return res.status(400).json({ error: "User already exists with this email" });
+      }
+
+      // Hash password
+      const saltRounds = 12;
+      const passwordHash = await bcrypt.hash(validatedData.password, saltRounds);
+
+      // Create user
+      const user = await storage.createCustomUser({
+        firstName: validatedData.firstName || '',
+        lastName: validatedData.lastName || '',
+        email: validatedData.email,
+        passwordHash,
+      });
+
+      // Create session
+      req.session.customUserSessionId = user.id;
+
+      res.json({
+        success: true,
+        message: "Account created successfully",
+        user: {
+          id: user.id,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          tier: user.tier,
+          authProvider: user.authProvider,
+        },
+      });
+    } catch (error: any) {
+      console.error("Signup error:", error);
+      res.status(400).json({ error: error.message || "Registration failed" });
+    }
+  });
+
+  // User login endpoint  
   app.post("/api/login", async (req, res) => {
     try {
-      const { email, password } = req.body;
+      const validatedData = loginUserSchema.parse(req.body);
       
-      // For demo purposes, accept any email/password and create a simple session
-      if (!email || !password) {
-        return res.status(400).json({ error: 'Email and password are required' });
+      const user = await storage.validateUserCredentials(validatedData.email, validatedData.password);
+      if (!user) {
+        return res.status(401).json({ error: "Invalid email or password" });
       }
-      
-      // Create demo user data
-      const user = {
-        id: 'demo-user',
-        email: email,
-        firstName: email.split('@')[0] || 'Demo',
-        lastName: 'User',
-        tier: 'free'
-      };
-      
-      // Set session
-      (req.session as any).isAuthenticated = true;
-      (req.session as any).user = user;
-      
-      res.json({ 
-        success: true, 
-        message: 'Authentication successful',
-        user: user
+
+      // Create session
+      req.session.customUserSessionId = user.id;
+
+      res.json({
+        success: true,
+        message: "Login successful",
+        user: {
+          id: user.id,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          tier: user.tier,
+          authProvider: user.authProvider,
+        },
       });
-    } catch (error) {
-      res.status(500).json({ error: 'Authentication failed' });
+    } catch (error: any) {
+      console.error("Login error:", error);
+      res.status(400).json({ error: error.message || "Login failed" });
     }
   });
 
