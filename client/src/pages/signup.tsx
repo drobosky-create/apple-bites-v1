@@ -6,8 +6,6 @@ import { useLocation } from "wouter";
 import { useToast } from "@/hooks/use-toast";
 import {
   Box,
-  Card,
-  CardContent,
   TextField,
   Button,
   Typography,
@@ -48,21 +46,18 @@ const LoginBackground = styled(Box)(({ theme }) => ({
   },
 }));
 
-const AuthenticationCard = styled(Card)(({ theme }) => ({
-  maxWidth: 450,
-  width: '100%',
-  margin: '0 16px',
-  marginTop: '160px', // slight push to sit under floating header
+const AuthenticationCard = styled(Box)(({ theme }) => ({
+  marginTop: '280px', // Push below floating header
+  maxWidth: '400px',
+  margin: '280px auto 0 auto',
+  backgroundColor: 'rgba(255, 255, 255, 0.1)',
+  backdropFilter: 'blur(10px)',
   borderRadius: '16px',
-  minHeight: '520px', // adjusted for signup form
-  backgroundColor: '#fff',
+  boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
+  border: '1px solid rgba(255, 255, 255, 0.2)',
+  padding: '32px 24px',
   position: 'relative',
   zIndex: 1,
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'flex-start', // ensures top-alignment
-  transform: 'scale(1.15)',
-  transformOrigin: 'center center'
 }));
 
 const HeaderSection = styled(Box)(({ theme }) => ({
@@ -208,44 +203,24 @@ export default function SignUp() {
           </HeaderSection>
 
           <AuthenticationCard>
-            <CardContent sx={{ px: 4, pt: 4, pb: 4 }}>
-              <Box component="form" onSubmit={form.handleSubmit(onSubmit)}>
-                <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
-                  <TextField
-                    fullWidth
-                    label="First Name"
-                    {...form.register("firstName")}
-                    error={!!form.formState.errors.firstName}
-                    helperText={form.formState.errors.firstName?.message}
-                    variant="outlined"
-                    required
-                    disabled={signupMutation.isPending}
-                    sx={{
-                      mb: 2,
-                      '& .MuiOutlinedInput-root': {
-                        backgroundColor: 'rgba(248, 249, 250, 0.8)',
-                        borderRadius: '8px',
-                      },
-                    }}
-                  />
-                  <TextField
-                    fullWidth
-                    label="Last Name"
-                    {...form.register("lastName")}
-                    error={!!form.formState.errors.lastName}
-                    helperText={form.formState.errors.lastName?.message}
-                    variant="outlined"
-                    required
-                    disabled={signupMutation.isPending}
-                    sx={{
-                      mb: 2,
-                      '& .MuiOutlinedInput-root': {
-                        backgroundColor: 'rgba(248, 249, 250, 0.8)',
-                        borderRadius: '8px',
-                      },
-                    }}
-                  />
-                </Box>
+            <Box component="form" onSubmit={form.handleSubmit(onSubmit)}>
+                <TextField
+                  fullWidth
+                  label="First Name"
+                  {...form.register("firstName")}
+                  error={!!form.formState.errors.firstName}
+                  helperText={form.formState.errors.firstName?.message}
+                  margin="normal"
+                  disabled={signupMutation.isPending}
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                      borderRadius: '8px',
+                      '& fieldset': { border: 'none' },
+                    },
+                    '& .MuiInputLabel-root': { color: '#67748e' },
+                  }}
+                />
 
                 <TextField
                   fullWidth
@@ -254,15 +229,15 @@ export default function SignUp() {
                   {...form.register("email")}
                   error={!!form.formState.errors.email}
                   helperText={form.formState.errors.email?.message}
-                  variant="outlined"
-                  required
+                  margin="normal"
                   disabled={signupMutation.isPending}
                   sx={{
-                    mb: 2,
                     '& .MuiOutlinedInput-root': {
-                      backgroundColor: 'rgba(248, 249, 250, 0.8)',
+                      backgroundColor: 'rgba(255, 255, 255, 0.9)',
                       borderRadius: '8px',
+                      '& fieldset': { border: 'none' },
                     },
+                    '& .MuiInputLabel-root': { color: '#67748e' },
                   }}
                 />
 
@@ -273,8 +248,7 @@ export default function SignUp() {
                   {...form.register("password")}
                   error={!!form.formState.errors.password}
                   helperText={form.formState.errors.password?.message}
-                  variant="outlined"
-                  required
+                  margin="normal"
                   disabled={signupMutation.isPending}
                   InputProps={{
                     endAdornment: (
@@ -290,11 +264,12 @@ export default function SignUp() {
                     ),
                   }}
                   sx={{
-                    mb: 2,
                     '& .MuiOutlinedInput-root': {
-                      backgroundColor: 'rgba(248, 249, 250, 0.8)',
+                      backgroundColor: 'rgba(255, 255, 255, 0.9)',
                       borderRadius: '8px',
+                      '& fieldset': { border: 'none' },
                     },
+                    '& .MuiInputLabel-root': { color: '#67748e' },
                   }}
                 />
 
@@ -305,8 +280,7 @@ export default function SignUp() {
                   {...form.register("confirmPassword")}
                   error={!!form.formState.errors.confirmPassword}
                   helperText={form.formState.errors.confirmPassword?.message}
-                  variant="outlined"
-                  required
+                  margin="normal"
                   disabled={signupMutation.isPending}
                   InputProps={{
                     endAdornment: (
@@ -322,60 +296,65 @@ export default function SignUp() {
                     ),
                   }}
                   sx={{
-                    mb: 3,
                     '& .MuiOutlinedInput-root': {
-                      backgroundColor: 'rgba(248, 249, 250, 0.8)',
+                      backgroundColor: 'rgba(255, 255, 255, 0.9)',
                       borderRadius: '8px',
+                      '& fieldset': { border: 'none' },
                     },
+                    '& .MuiInputLabel-root': { color: '#67748e' },
                   }}
                 />
 
-                <SignUpButton
+                <Button
                   type="submit"
+                  fullWidth
+                  variant="contained"
                   disabled={signupMutation.isPending}
                   sx={{ 
-                    mb: 3,
-                    backgroundColor: '#42424a !important',
+                    mt: 3,
+                    mb: 2,
+                    backgroundColor: '#42424a',
+                    color: '#fff',
+                    fontWeight: 'bold',
+                    textTransform: 'uppercase',
+                    borderRadius: '8px',
                     '&:hover': {
-                      backgroundColor: '#3a3a40 !important',
+                      backgroundColor: '#3a3a40',
                     },
                     '&:disabled': {
-                      backgroundColor: '#42424a !important',
+                      backgroundColor: '#42424a',
                       opacity: 0.6,
                     }
                   }}
                 >
-                  {signupMutation.isPending ? 'CREATING ACCOUNT...' : 'CREATE ACCOUNT'}
-                </SignUpButton>
+                  {signupMutation.isPending ? 'Creating Account...' : 'Create Account'}
+                </Button>
 
-                <Box sx={{ textAlign: 'center' }}>
-                  <Typography 
-                    variant="body2" 
-                    sx={{ 
-                      color: '#67748e',
-                      fontSize: '0.875rem',
-                      fontFamily: 'Roboto, Helvetica, Arial, sans-serif',
+                <Typography 
+                  variant="body2" 
+                  sx={{ 
+                    textAlign: 'center',
+                    color: '#fff',
+                    fontSize: '0.875rem',
+                  }}
+                >
+                  Already have an account?{' '}
+                  <MuiLink
+                    href="/login"
+                    sx={{
+                      color: '#fff',
+                      textDecoration: 'underline',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      '&:hover': {
+                        color: '#f0f0f0',
+                      },
                     }}
                   >
-                    Already have an account?{' '}
-                    <MuiLink
-                      href="/login"
-                      sx={{
-                        color: '#344767',
-                        textDecoration: 'none',
-                        fontWeight: 600,
-                        cursor: 'pointer',
-                        '&:hover': {
-                          textDecoration: 'underline',
-                        },
-                      }}
-                    >
-                      Sign in here
-                    </MuiLink>
-                  </Typography>
-                </Box>
-              </Box>
-            </CardContent>
+                    Sign in here
+                  </MuiLink>
+                </Typography>
+            </Box>
         </AuthenticationCard>
         </Box>
       </Container>
