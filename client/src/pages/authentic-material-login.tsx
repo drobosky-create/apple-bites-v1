@@ -227,7 +227,7 @@ export default function AuthenticMaterialLogin() {
               src={appleBitesLogo}
               alt="Apple Bites Business Assessment"
               style={{
-                height: '120px',
+                height: '250px',
                 width: 'auto',
                 filter: 'brightness(1.1)',
                 display: 'block',
