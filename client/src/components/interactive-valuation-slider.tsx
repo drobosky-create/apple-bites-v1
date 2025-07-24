@@ -268,19 +268,13 @@ export default function InteractiveValuationSlider() {
                   ? 'bg-green-500/20 border-green-400/40 border-2 shadow-lg shadow-green-400/20' 
                   : 'bg-red-500/20 border-red-400/40 border-2 shadow-lg shadow-red-400/20'
               }`}>
-                <div className={`text-xs sm:text-sm uppercase tracking-wider font-bold mb-2 ${
-                  potentialIncrease > 0 ? 'text-green-300' : 'text-red-300'
-                }`}>
+                <div className="text-xs sm:text-sm uppercase tracking-wider font-bold mb-2 text-black">
                   {potentialIncrease > 0 ? '💰 POTENTIAL GAIN' : '⚠️ POTENTIAL LOSS'}
                 </div>
-                <div className={`text-2xl sm:text-3xl font-black mb-2 ${
-                  potentialIncrease > 0 ? 'text-green-200' : 'text-red-200'
-                }`}>
+                <div className="text-2xl sm:text-3xl font-black mb-2 text-black">
                   {potentialIncrease > 0 ? '+' : '-'}${Math.abs(potentialIncrease).toLocaleString()}
                 </div>
-                <div className={`text-base sm:text-lg font-bold ${
-                  potentialIncrease > 0 ? 'text-green-300' : 'text-red-300'
-                }`}>
+                <div className="text-base sm:text-lg font-bold text-black">
                   {potentialIncrease > 0 ? '+' : '-'}{Math.abs(percentageIncrease).toFixed(1)}% {potentialIncrease > 0 ? 'increase' : 'decrease'}
                 </div>
               </div>
