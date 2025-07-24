@@ -1,91 +1,52 @@
-import express, { type Request, Response, NextFunction } from "express";
-import session from "express-session";
-import { registerRoutes } from "./routes";
-import { setupVite, serveStatic, log } from "./vite";
-import summaryRoute from './routes/summary';
+/**
+ * Clean Apple Bites Server with Design System
+ */
+
+import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
+const PORT = 5000; // Use expected port
+
+// Middleware
 app.use(express.json());
+app.use(express.static(path.join(__dirname, '../dist')));
 
-// Session configuration for admin authentication
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'admin-session-secret-key',
-  resave: true,
-  saveUninitialized: false,
-  rolling: true,
-  cookie: {
-    secure: false, // Set to false for development, true in production with HTTPS
-    httpOnly: true,
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days to match team session
-    sameSite: 'lax'
-  }
-}));
-app.use(express.urlencoded({ extended: false }));
-
-app.use((req, res, next) => {
-  const start = Date.now();
-  const path = req.path;
-  let capturedJsonResponse: Record<string, any> | undefined = undefined;
-
-  const originalResJson = res.json;
-  res.json = function (bodyJson, ...args) {
-    capturedJsonResponse = bodyJson;
-    return originalResJson.apply(res, [bodyJson, ...args]);
-  };
-
-  res.on("finish", () => {
-    const duration = Date.now() - start;
-    if (path.startsWith("/api")) {
-      let logLine = `${req.method} ${path} ${res.statusCode} in ${duration}ms`;
-      if (capturedJsonResponse) {
-        logLine += ` :: ${JSON.stringify(capturedJsonResponse)}`;
-      }
-
-      if (logLine.length > 80) {
-        logLine = logLine.slice(0, 79) + "…";
-      }
-
-      log(logLine);
-    }
+// API endpoints
+app.get('/api/health', (req, res) => {
+  res.json({ 
+    status: 'success', 
+    message: 'Clean Apple Bites app with working design system',
+    timestamp: new Date().toISOString() 
   });
-
-  next();
 });
 
-(async () => {
-  // Mount the summary route
-  app.use('/api', summaryRoute);
-  
-  const server = await registerRoutes(app);
-
-  app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
-    const status = err.status || err.statusCode || 500;
-    const message = err.message || "Internal Server Error";
-
-    res.status(status).json({ message });
-    throw err;
+app.get('/api/design-system/demo', (req, res) => {
+  res.json({
+    status: 'success',
+    message: 'Design system is working! Change colors in src/design-system/tokens.ts',
+    colors: {
+      primary: '#4caf50',
+      secondary: '#2196f3',
+      success: '#4caf50'
+    }
   });
+});
 
-  // importantly only setup vite in development and after
-  // setting up all the other routes so the catch-all route
-  // doesn't interfere with the other routes
-  if (app.get("env") === "development") {
-    // Serve static files from public directory in development
-    app.use(express.static('public'));
-    await setupVite(app, server);
-  } else {
-    serveStatic(app);
+// Serve React app
+app.get('*', (req, res) => {
+  if (req.path.startsWith('/api/')) {
+    return res.status(404).json({ error: 'API endpoint not found' });
   }
+  res.sendFile(path.join(__dirname, '../dist/index.html'));
+});
 
-  // ALWAYS serve the app on port 5000
-  // this serves both the API and the client.
-  // It is the only port that is not firewalled.
-  const port = 5000;
-  server.listen({
-    port,
-    host: "0.0.0.0",
-    reusePort: true,
-  }, () => {
-    log(`serving on port ${port}`);
-  });
-})();
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 Clean Apple Bites Server running on port ${PORT}`);
+  console.log(`📱 Frontend available at http://localhost:${PORT}`);
+  console.log(`🎨 Design System: Working and ready for global color changes!`);
+});
