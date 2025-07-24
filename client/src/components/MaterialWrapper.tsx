@@ -14,9 +14,9 @@ interface MaterialWrapperProps {
   [key: string]: any;
 }
 
-export default function MaterialWrapper({ children, ...props }: MaterialWrapperProps) {
+export default function MaterialWrapper({ children }: MaterialWrapperProps) {
   return (
-    <ThemeProvider theme={materialTheme} {...props}>
+    <ThemeProvider theme={materialTheme}>
       <CssBaseline />
       {children}
     </ThemeProvider>
