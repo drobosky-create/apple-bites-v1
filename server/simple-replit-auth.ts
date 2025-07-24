@@ -20,8 +20,10 @@ export function setupSimpleAuth(app: Express) {
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      secure: false, // Set to false for development
+      secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
       maxAge: sessionTtl,
+      sameSite: 'lax', // Use lax for better compatibility
+      domain: process.env.NODE_ENV === 'production' ? '.applebites.ai' : undefined, // Set domain for production
     },
   }));
 

@@ -111,6 +111,8 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- **July 24, 2025 - Production Domain Authentication & Session Configuration**: Updated session configuration for production deployment with proper domain settings for applebites.ai. Fixed login redirect issues by adding delay for toast display and configured secure cookies for production environment. Enhanced "Sign up" functionality to redirect directly to free assessment instead of showing registration message. Sidebar overlay lightened to 0.45 opacity for better background visibility. Production authentication now fully functional with proper session handling across development and deployed environments.
+
 - **July 24, 2025 - Security Dependency Update & TypeScript Fixes**: Successfully resolved all issues after form-data dependency security update. Fixed 29+ TypeScript errors including session type declarations, database schema mismatches, and component import issues. Added missing database columns (tier, awaitingPasswordCreation, metadata) using SQL commands. Updated Express session interface declarations and storage methods. Application now fully functional with enhanced security and type safety.
 
 - **July 24, 2025 - Production Domain Configuration**: Updated login system configuration to support applebites.ai domain for production deployment. Set REPLIT_DOMAINS environment variable to include both production domain (applebites.ai) and development domain for seamless OAuth integration. Configured proper callback URLs for custom domain deployment while maintaining development environment compatibility.
