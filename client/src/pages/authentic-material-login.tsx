@@ -16,8 +16,9 @@ import { styled } from '@mui/material/styles';
 // Direct MUI Card import
 import { Card } from '@mui/material';
 
-// Using direct path for logo from assets directory
-const appleBitesLogo = "/assets/logos/apple-bites-logo-variant-1.png";
+// Using correct Apple Bites logo from attached assets
+import appleBitesLogoSrc from "@assets/3.png";
+const appleBitesLogo = appleBitesLogoSrc;
 
 // Authentic Material Dashboard Styled Components (matching the template exactly)
 const MaterialBackground = styled(Box)(({ theme }) => ({
