@@ -307,9 +307,10 @@ interface MaterialButtonProps {
   link?: boolean;
   justIcon?: boolean;
   className?: string;
+  onClick?: () => void;
 }
 
-export const MaterialButton = styled(({ children, color = 'primary', size, simple, round, disabled, block, link, justIcon, className, ...rest }: MaterialButtonProps) => {
+export const MaterialButton = styled(({ children, color = 'primary', size, simple, round, disabled, block, link, justIcon, className, onClick, ...rest }: MaterialButtonProps) => {
   const btnClasses = classNames({
     'material-button': true,
     [`material-button-${color}`]: color,
@@ -324,7 +325,7 @@ export const MaterialButton = styled(({ children, color = 'primary', size, simpl
   });
 
   return (
-    <Button className={btnClasses} disabled={disabled} {...rest}>
+    <Button className={btnClasses} disabled={disabled} onClick={onClick} {...rest}>
       {children}
     </Button>
   );
