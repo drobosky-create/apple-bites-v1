@@ -513,8 +513,8 @@ export default function InteractiveValuationSlider() {
           </h3>
           <button 
             onClick={() => {
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-              window.location.href = '/assessment/free';
+              // Open calendar booking link in new tab
+              window.open('https://calendly.com/meritage-partners/valuation-consultation', '_blank');
             }}
             className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-base shadow-lg hover:shadow-xl transition-all duration-200"
           >
