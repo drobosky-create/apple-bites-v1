@@ -11,6 +11,7 @@ Build a professional business valuation platform that provides comprehensive com
 - **AI-Powered Analysis**: Advanced OpenAI GPT-4o integration for personalized business coaching and recommendations
 - **Industry-Specific Valuation**: Authentic NAICS database with 2,000+ industry classifications and specific multipliers
 - **Results Dashboards**: Comprehensive valuation results with industry analysis and recommendations
+- **Value Improvement Calculator**: Interactive tool allowing users to see how improving specific business areas affects valuation
 - **CRM Integration**: GoHighLevel webhook system for automated lead processing and follow-up workflows
 
 ### Target Users
@@ -208,6 +209,7 @@ Results Page (Basic)
     - General valuation range
     - Basic business grade
     - Basic results dashboard
+    - "Explore Value Improvements" button (leads to calculator)
     - Upgrade prompts
 ```
 
@@ -260,6 +262,7 @@ Results Page (Premium)
     - Executive summary with action plan
     - Industry benchmarking charts
     - Comprehensive results dashboard
+    - Value Improvement Calculator (full access)
     - Strategic recommendations
     - Follow-up consultation booking
 ```
@@ -282,6 +285,7 @@ Growth Tier ($795) - "Growth & Exit Assessment"
     - Executive summary & action plan
     - Professional results dashboard
     - Industry benchmarking charts
+    - Value Improvement Calculator with scenario planning
     - Strategic recommendations
     - Priority CRM processing
     
@@ -671,7 +675,50 @@ const saveResultsDashboard = async (assessmentId, dashboardData) => {
 };
 ```
 
-### 3. GoHighLevel CRM Integration
+### 3. Value Improvement Calculator
+```typescript
+// Interactive calculator for exploring valuation improvements
+const ValueImprovementCalculator = {
+  // Load user's assessment data
+  loadAssessmentData: async (assessmentId: string) => {
+    const assessment = await storage.getAssessment(assessmentId);
+    return {
+      currentScores: assessment.valueDriverScores,
+      currentValuation: assessment.calculatedValuation,
+      industryMultiplier: assessment.industryMultiplier
+    };
+  },
+
+  // Calculate potential improvements
+  calculatePotentialGain: (currentScores, improvedScores, industryData) => {
+    const currentMultiplier = calculateValueDriverMultiplier(currentScores);
+    const improvedMultiplier = calculateValueDriverMultiplier(improvedScores);
+    
+    const currentValuation = baseEbitda * industryData.baseMultiplier * currentMultiplier;
+    const improvedValuation = baseEbitda * industryData.baseMultiplier * improvedMultiplier;
+    
+    return {
+      potentialGain: improvedValuation - currentValuation,
+      percentageIncrease: ((improvedValuation / currentValuation) - 1) * 100,
+      newValuation: improvedValuation
+    };
+  },
+
+  // Interactive grade adjustment interface
+  renderGradeSelector: (valueDriver, currentGrade, onGradeChange) => (
+    <InteractiveGradeSlider
+      valueDriver={valueDriver}
+      currentGrade={currentGrade}
+      onChange={(newGrade) => {
+        onGradeChange(valueDriver, newGrade);
+        updatePotentialGain();
+      }}
+    />
+  )
+};
+```
+
+### 4. GoHighLevel CRM Integration
 ```typescript
 // Process leads in CRM system
 const processLead = async (assessmentData) => {
@@ -699,6 +746,8 @@ POST /api/valuation              # Submit complete assessment
 GET  /api/assessments/:id        # Retrieve assessment
 GET  /api/results/:id           # Get results dashboard data
 POST /api/assessments/:id/process # Process assessment and generate results
+GET  /api/value-calculator/:id  # Access value improvement calculator
+POST /api/value-calculator/:id/calculate # Calculate potential improvements
 ```
 
 ### User Management  
@@ -827,7 +876,8 @@ REPLIT_DOMAINS=applebites.ai            # Production domain
 3. AI-powered coaching integration
 4. Industry-specific valuation calculations
 5. Professional results dashboards with industry analysis
-6. Enhanced CRM integration and lead processing
+6. Value Improvement Calculator with interactive grade adjustment
+7. Enhanced CRM integration and lead processing
 
 ### Phase 3 (Premium Features)
 1. Comprehensive admin dashboard
