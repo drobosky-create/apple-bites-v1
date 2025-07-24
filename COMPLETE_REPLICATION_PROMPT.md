@@ -12,6 +12,7 @@ Build a professional business valuation platform that provides comprehensive com
 - **Industry-Specific Valuation**: Authentic NAICS database with 2,000+ industry classifications and specific multipliers
 - **Results Dashboards**: Comprehensive valuation results with industry analysis and recommendations
 - **Value Improvement Calculator**: Interactive tool allowing users to see how improving specific business areas affects valuation
+- **Tier-Based Access Control**: Purchase verification system ensuring users only access features they've paid for
 - **CRM Integration**: GoHighLevel webhook system for automated lead processing and follow-up workflows
 
 ### Target Users
@@ -143,6 +144,8 @@ CREATE TABLE valuation_assessments (
   is_processed BOOLEAN DEFAULT false,
   results_url TEXT,                    -- URL to results dashboard
   dashboard_tier TEXT DEFAULT 'basic', -- 'basic', 'professional', 'executive'
+  purchase_verified BOOLEAN DEFAULT false, -- Verified tier purchase status
+  access_expires_at TIMESTAMP,        -- Expiration for paid access (if applicable)
   
   created_at TIMESTAMP DEFAULT NOW()
 );
@@ -272,22 +275,25 @@ Results Page (Premium)
 Homepage → Tier Selection
     ↓
 Free Tier (Apple Bites Assessment)
-    - 5-step basic assessment
+    - 5-step basic assessment (always accessible)
     - General multipliers (no industry-specific)
-    - Basic results dashboard
-    - General AI summary
+    - Basic results dashboard with upgrade prompts
+    - Limited AI summary (basic insights only)
+    - Basic Value Calculator access (view only, no scenario saving)
     - Lead capture and CRM integration
+    - Clear upgrade paths to Growth tier
     
 Growth Tier ($795) - "Growth & Exit Assessment" 
-    - 6-step comprehensive assessment
-    - Industry-specific NAICS multipliers
-    - AI-powered business coaching
-    - Executive summary & action plan
-    - Professional results dashboard
-    - Industry benchmarking charts
-    - Value Improvement Calculator with scenario planning
-    - Strategic recommendations
-    - Priority CRM processing
+    - 6-step comprehensive assessment (purchase verified)
+    - Industry-specific NAICS multipliers (authenticated access)
+    - AI-powered business coaching (full GPT-4o integration)
+    - Executive summary & action plan (professional grade)
+    - Professional results dashboard (enhanced features)
+    - Industry benchmarking charts (full data access)
+    - Value Improvement Calculator with scenario planning and saving
+    - Strategic recommendations (comprehensive analysis)
+    - Priority CRM processing and follow-up automation
+    - Access valid for 1 year from purchase date
     
 Capital Tier ($2,495) - "Capital Readiness Assessment"
     - Complete investment readiness analysis
@@ -718,7 +724,112 @@ const ValueImprovementCalculator = {
 };
 ```
 
-### 4. GoHighLevel CRM Integration
+### 4. Tier-Based Access Control System
+```typescript
+// Purchase verification and access control
+const AccessControlSystem = {
+  // Verify user's tier access
+  verifyTierAccess: async (userId: string, requiredTier: 'free' | 'growth' | 'capital') => {
+    const user = await storage.getUser(userId);
+    
+    if (!user) return { hasAccess: false, reason: 'User not found' };
+    
+    // Free tier always has access to free features
+    if (requiredTier === 'free') return { hasAccess: true };
+    
+    // Check if user has purchased required tier
+    const tierHierarchy = { free: 0, growth: 1, capital: 2 };
+    const userTierLevel = tierHierarchy[user.tier];
+    const requiredTierLevel = tierHierarchy[requiredTier];
+    
+    if (userTierLevel >= requiredTierLevel) {
+      // Verify purchase is still valid (not expired)
+      const isValidPurchase = await verifyPurchaseStatus(user.ghlContactId, user.tier);
+      return { 
+        hasAccess: isValidPurchase,
+        reason: isValidPurchase ? null : 'Purchase expired or invalid'
+      };
+    }
+    
+    return { 
+      hasAccess: false, 
+      reason: `Requires ${requiredTier} tier or higher. Current tier: ${user.tier}`,
+      upgradeUrl: `https://products.applebites.ai/product-details/product/${getProductId(requiredTier)}`
+    };
+  },
+
+  // Middleware for protecting routes
+  requireTier: (tier: string) => {
+    return async (req, res, next) => {
+      const userId = req.session?.user?.id;
+      if (!userId) return res.status(401).json({ error: 'Authentication required' });
+      
+      const access = await AccessControlSystem.verifyTierAccess(userId, tier);
+      if (!access.hasAccess) {
+        return res.status(403).json({ 
+          error: 'Access denied',
+          reason: access.reason,
+          upgradeUrl: access.upgradeUrl,
+          requiredTier: tier
+        });
+      }
+      
+      next();
+    };
+  },
+
+  // Feature-specific access checks
+  canAccessFeature: async (userId: string, feature: string) => {
+    const featureRequirements = {
+      'basic_assessment': 'free',
+      'industry_analysis': 'growth',
+      'ai_coaching': 'growth',
+      'value_calculator': 'free',  // Basic access
+      'value_calculator_advanced': 'growth',  // Scenario saving
+      'executive_reports': 'capital',
+      'team_management': 'capital'
+    };
+    
+    const requiredTier = featureRequirements[feature];
+    if (!requiredTier) return { hasAccess: false, reason: 'Unknown feature' };
+    
+    return await AccessControlSystem.verifyTierAccess(userId, requiredTier);
+  }
+};
+
+// Purchase verification with GoHighLevel
+const verifyPurchaseStatus = async (ghlContactId: string, tier: string) => {
+  try {
+    const response = await fetch(`${GHL_API_URL}/contacts/${ghlContactId}`, {
+      headers: { 'Authorization': `Bearer ${GHL_API_KEY}` }
+    });
+    
+    const contact = await response.json();
+    
+    // Check for purchase tags or custom fields
+    const purchaseTags = {
+      'growth': 'Apple Bites Growth Purchase',
+      'capital': 'Apple Bites Capital Purchase'
+    };
+    
+    const hasPurchaseTag = contact.tags?.includes(purchaseTags[tier]);
+    const purchaseDate = contact.customFields?.['purchase_date'];
+    
+    // Verify purchase is recent and valid
+    if (hasPurchaseTag && purchaseDate) {
+      const daysSincePurchase = (Date.now() - new Date(purchaseDate).getTime()) / (1000 * 60 * 60 * 24);
+      return daysSincePurchase <= 365; // Valid for 1 year
+    }
+    
+    return false;
+  } catch (error) {
+    console.error('Purchase verification failed:', error);
+    return false; // Fail secure - deny access if verification fails
+  }
+};
+```
+
+### 5. GoHighLevel CRM Integration
 ```typescript
 // Process leads in CRM system
 const processLead = async (assessmentData) => {
@@ -748,6 +859,11 @@ GET  /api/results/:id           # Get results dashboard data
 POST /api/assessments/:id/process # Process assessment and generate results
 GET  /api/value-calculator/:id  # Access value improvement calculator
 POST /api/value-calculator/:id/calculate # Calculate potential improvements
+
+# Tier-Based Access Control
+GET  /api/user/tier-status      # Check user's current tier and access
+POST /api/user/verify-purchase  # Verify purchase status with CRM
+GET  /api/features/access-check # Check access to specific features
 ```
 
 ### User Management  
@@ -865,19 +981,21 @@ REPLIT_DOMAINS=applebites.ai            # Production domain
 
 ### Phase 1 (Foundation)
 1. Database schema with tier support
-2. User authentication and tier-based access
-3. Free tier assessment (5-step basic flow)
-4. Basic valuation calculation engine
-5. Simple results dashboard display
+2. User authentication and tier-based access control system
+3. Purchase verification integration with GoHighLevel
+4. Free tier assessment (5-step basic flow) with access restrictions
+5. Basic valuation calculation engine
+6. Simple results dashboard display with tier-appropriate features
 
 ### Phase 2 (Growth Tier Implementation) 
 1. Industry classification system (NAICS database)
-2. Advanced 6-step assessment flow
-3. AI-powered coaching integration
-4. Industry-specific valuation calculations
+2. Advanced 6-step assessment flow with tier verification
+3. AI-powered coaching integration (Growth tier only)
+4. Industry-specific valuation calculations with purchase verification
 5. Professional results dashboards with industry analysis
 6. Value Improvement Calculator with interactive grade adjustment
-7. Enhanced CRM integration and lead processing
+7. Enhanced CRM integration and purchase status monitoring
+8. Upgrade prompts and tier-based feature gates
 
 ### Phase 3 (Premium Features)
 1. Comprehensive admin dashboard
