@@ -61,6 +61,10 @@ const MainContent = styled(Box)(({ theme }) => ({
   minHeight: '100vh',
   width: `calc(100vw - ${drawerWidth}px)`,
   backgroundColor: '#f8f9fa',
+  [theme.breakpoints.down('md')]: {
+    width: '100vw',
+    padding: '16px',
+  },
 }));
 
 const FormCard = styled(Card)(({ theme }) => ({
@@ -214,6 +218,7 @@ export default function FreeAssessment() {
         sx={{
           width: drawerWidth,
           flexShrink: 0,
+          display: { xs: 'none', md: 'block' }, // Hide on mobile, show on desktop
           '& .MuiDrawer-paper': {
             width: drawerWidth,
             boxSizing: 'border-box',
