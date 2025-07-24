@@ -196,7 +196,7 @@ export default function InteractiveValuationSlider() {
           
           <h3 className="text-lg sm:text-xl font-semibold text-white mb-2 tracking-wide">
             Current Value 
-            <span className="ml-2 inline-block px-2 py-1 text-xs font-semibold text-white bg-orange-500 rounded-full">
+            <span className="ml-2 inline-block px-2 py-1 text-xs font-semibold text-white bg-[#17c9ee] rounded-full">
               You are here
             </span>
           </h3>
@@ -223,23 +223,35 @@ export default function InteractiveValuationSlider() {
         }`}>
           
           <div className="text-center relative z-10">
-            <h3 className="text-lg sm:text-xl font-semibold text-black mb-2 tracking-wide">Potential Value</h3>
+            <h3 className={`text-lg sm:text-xl font-semibold mb-2 tracking-wide ${
+              sliderGrade !== baseGrade ? 'text-black' : 'text-white'
+            }`}>Potential Value</h3>
             {sliderGrade !== baseGrade ? (
-              <p className="text-sm sm:text-base text-black/80 mb-3">
+              <p className={`text-sm sm:text-base mb-3 ${
+                sliderGrade !== baseGrade ? 'text-black/80' : 'text-white/80'
+              }`}>
                 Based on selected grade ({sliderGrade})
               </p>
             ) : (
-              <p className="text-sm sm:text-base text-black/80 mb-3">
+              <p className={`text-sm sm:text-base mb-3 ${
+                sliderGrade !== baseGrade ? 'text-black/80' : 'text-white/80'
+              }`}>
                 Based on selected grade ({sliderGrade})
               </p>
             )}
-            <div className="text-3xl sm:text-4xl font-bold text-black mb-3">
+            <div className={`text-3xl sm:text-4xl font-bold mb-3 ${
+              sliderGrade !== baseGrade ? 'text-black' : 'text-white'
+            }`}>
               ${sliderValuation.toLocaleString()}
             </div>
-            <div className="text-sm sm:text-base font-semibold text-black/90 mb-3">
+            <div className={`text-sm sm:text-base font-semibold mb-3 ${
+              sliderGrade !== baseGrade ? 'text-black/90' : 'text-white/90'
+            }`}>
               {sliderMultiple}x EBITDA Multiple
             </div>
-            <span className="inline-flex items-center rounded-full px-4 py-1 text-sm font-medium bg-white/20 text-black border border-white/30">
+            <span className={`inline-flex items-center rounded-full px-4 py-1 text-sm font-medium bg-white/20 border border-white/30 ${
+              sliderGrade !== baseGrade ? 'text-black' : 'text-white'
+            }`}>
               {sliderCategory.label}
             </span>
           </div>
@@ -265,16 +277,16 @@ export default function InteractiveValuationSlider() {
             {sliderGrade !== baseGrade ? (
               <div className={`w-full rounded-xl p-4 text-center transition-all duration-300 ${
                 potentialIncrease > 0 
-                  ? 'bg-green-500/20 border-green-400/40 border-2 shadow-lg shadow-green-400/20' 
-                  : 'bg-red-500/20 border-red-400/40 border-2 shadow-lg shadow-red-400/20'
+                  ? 'bg-green-500/80 border-green-400/40 border-2 shadow-lg shadow-green-400/20' 
+                  : 'bg-red-500/80 border-red-400/40 border-2 shadow-lg shadow-red-400/20'
               }`}>
-                <div className="text-xs sm:text-sm uppercase tracking-wider font-bold mb-2 text-black">
+                <div className="text-XL sm:text-xl uppercase tracking-wider font-bold mb-2 text-black">
                   {potentialIncrease > 0 ? '💰 POTENTIAL GAIN' : '⚠️ POTENTIAL LOSS'}
                 </div>
                 <div className="text-2xl sm:text-3xl font-black mb-2 text-black">
                   {potentialIncrease > 0 ? '+' : '-'}${Math.abs(potentialIncrease).toLocaleString()}
                 </div>
-                <div className="text-base sm:text-lg font-bold text-black">
+                <div className="text-base sm:text-xl font-bold text-black">
                   {potentialIncrease > 0 ? '+' : '-'}{Math.abs(percentageIncrease).toFixed(1)}% {potentialIncrease > 0 ? 'increase' : 'decrease'}
                 </div>
               </div>
@@ -313,7 +325,7 @@ export default function InteractiveValuationSlider() {
               >
                 {isCurrent && (
                   <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2">
-                    <span className="bg-teal-500 text-white text-sm px-2 py-1 rounded-full font-semibold">
+                    <span className="bg-[#17c9ee] text-white text-sm px-2 py-1 rounded-full font-semibold">
                       Current
                     </span>
                   </div>
@@ -357,7 +369,7 @@ export default function InteractiveValuationSlider() {
         
         <div className="flex justify-center gap-4 mt-6 text-sm">
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 bg-teal-500 rounded-full"></div>
+            <div className="w-3 h-3 bg-[#17c9ee] rounded-full"></div>
             <span className="text-white/80">Current Grade</span>
           </div>
           <div className="flex items-center gap-2">
@@ -383,7 +395,7 @@ export default function InteractiveValuationSlider() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
-                className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-200"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-200"
                 onClick={() => window.open('https://api.leadconnectorhq.com/widget/bookings/applebites', '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes')}
               >
                 <Phone className="h-5 w-5 mr-3" />
