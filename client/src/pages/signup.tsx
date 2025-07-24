@@ -47,9 +47,9 @@ const LoginBackground = styled(Box)(({ theme }) => ({
 }));
 
 const AuthenticationCard = styled(Box)(({ theme }) => ({
-  marginTop: '280px', // Push below floating header
+  marginTop: '175px', // Push below floating header
   maxWidth: '400px',
-  margin: '280px auto 0 auto',
+  margin: '175px auto 0 auto',
   backgroundColor: 'rgba(255, 255, 255, 0.1)',
   backdropFilter: 'blur(10px)',
   borderRadius: '16px',
@@ -62,7 +62,7 @@ const AuthenticationCard = styled(Box)(({ theme }) => ({
 
 const HeaderSection = styled(Box)(({ theme }) => ({
   position: 'absolute',
-  top: '20px',
+  top: '-40px',
   left: 0,
   right: 0,
   margin: '0 auto',
@@ -165,7 +165,7 @@ export default function SignUp() {
       <Container maxWidth="sm">
         <Box sx={{ 
           position: 'relative',
-          minHeight: '620px',
+          minHeight: '450px',
           transform: 'scale(1.15)',
           transformOrigin: 'center center'
         }}>
