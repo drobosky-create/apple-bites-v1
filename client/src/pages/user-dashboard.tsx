@@ -11,7 +11,7 @@ import {
   Flex,
   StatsCard,
   designTokens
-} from "@/design-system/components";
+} from "@/design-system/simple-components";
 import { Box } from '@mui/material';
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";

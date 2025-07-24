@@ -15,10 +15,10 @@ export const designTokens = {
     primary: {
       50: '#faf5ff',
       100: '#f3e8ff', 
-      500: '#9c27b0',  // Main brand color
-      600: '#8e24aa',
-      700: '#7b1fa2',
-      900: '#4a148c',
+      500: '#4caf50',  // Main brand color - CHANGED TO GREEN FOR VISIBILITY!
+      600: '#43a047',
+      700: '#388e3c',
+      900: '#1b5e20',
     },
     
     // Secondary Colors

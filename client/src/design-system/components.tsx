@@ -23,19 +23,7 @@ interface ButtonProps {
   className?: string;
 }
 
-export const Button = styled(({ children, variant = 'primary', size = 'md', fullWidth, disabled, onClick, className, ...rest }: ButtonProps) => {
-  return (
-    <MuiButton 
-      className={className}
-      disabled={disabled}
-      onClick={onClick}
-      fullWidth={fullWidth}
-      {...rest}
-    >
-      {children}
-    </MuiButton>
-  );
-})(({ variant = 'primary', size = 'md', fullWidth }) => {
+export const Button = styled(MuiButton)<ButtonProps>(({ variant = 'primary', size = 'md', fullWidth }) => {
   const validVariants = ['primary', 'secondary', 'success'] as const;
   const safeVariant = validVariants.includes(variant as any) ? variant : 'primary';
   const baseStyles = componentVariants.button[safeVariant] || componentVariants.button.primary;
@@ -75,13 +63,7 @@ interface CardProps {
   className?: string;
 }
 
-export const Card = styled(({ children, variant = 'default', padding, className, ...rest }: CardProps) => {
-  return (
-    <MuiCard className={className} {...rest}>
-      {children}
-    </MuiCard>
-  );
-})(({ variant = 'default', padding }) => {
+export const Card = styled(MuiCard)<CardProps>(({ variant = 'default', padding }) => {
   const baseStyles = componentVariants.card[variant] || componentVariants.card.default;
   
   return {
@@ -127,9 +109,7 @@ interface InputProps {
   className?: string;
 }
 
-export const Input = styled(({ className, ...props }: InputProps) => {
-  return <MuiTextField className={className} {...props} />;
-})({
+export const Input = styled(MuiTextField)<InputProps>({
   '& .MuiOutlinedInput-root': {
     ...componentVariants.input.default,
     '& fieldset': {
@@ -170,18 +150,7 @@ interface TextProps {
   className?: string;
 }
 
-export const Text = styled(({ children, variant = 'body1', color = 'primary', align = 'left', className, ...rest }: TextProps) => {
-  return (
-    <MuiTypography 
-      variant={variant} 
-      className={className} 
-      align={align}
-      {...rest}
-    >
-      {children}
-    </MuiTypography>
-  );
-})(({ color = 'primary' }) => {
+export const Text = styled(MuiTypography)<TextProps>(({ color = 'primary' }) => {
   const colorMap = {
     primary: designTokens.colors.text.primary,
     secondary: designTokens.colors.text.secondary,
