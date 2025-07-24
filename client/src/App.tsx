@@ -61,7 +61,7 @@ function Router() {
         <Route path="/redirect" component={RedirectHome} />
         <Route path="/ghl-demo" component={GHLThemeDemo} />
         <Route path="/demo" component={Demo} />
-      <Route path="/design-system" component={lazy(() => import('./components/examples/ComponentShowcase'))} />
+      <Route path="/design-system" component={lazy(() => import('./components/examples/SimpleComponentShowcase'))} />
         <Route path="/free-tier-demo" component={FreeTierDemo} />
         <Route path="/assessment-results/:id" component={AssessmentResults} />
         

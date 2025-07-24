@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid2 as Grid, Typography, Box } from '@mui/material';
+import { Typography, Box } from '@mui/material';
 import {
   MaterialCard,
   MaterialCardHeader,
@@ -8,30 +8,18 @@ import {
   MaterialButton,
   MaterialTextField,
   MaterialTitle,
-  MaterialCardTitle,
   MaterialBackground,
   MaterialContainer,
   MaterialStatsCard,
-  AppBackground,
-  GlassCard,
-  PrimaryButton,
-  SecondaryButton,
-  OutlineButton,
-  StyledTextField,
-  SectionHeader,
-  DashboardCard,
-  brandColors,
-} from '@/components/ui';
+} from '@/components/ui/material-dashboard-system';
 import { 
   Dashboard, 
   Person, 
   AttachMoney, 
   TrendingUp, 
-  Business,
-  Assessment,
 } from '@mui/icons-material';
 
-export default function ComponentShowcase() {
+export default function SimpleComponentShowcase() {
   return (
     <MaterialBackground>
       <MaterialContainer maxWidth="lg">
@@ -45,26 +33,26 @@ export default function ComponentShowcase() {
             Material Dashboard Components
           </MaterialTitle>
           
-          <Grid container spacing={3}>
+          <Box display="flex" flexWrap="wrap" gap={3} mb={4}>
             {/* Stats Cards */}
-            <Grid xs={12} sm={6} md={3}>
+            <Box flex="1" minWidth="250px">
               <MaterialStatsCard
                 title="Total Valuations"
                 value="1,234"
-                icon={<Assessment style={{ fontSize: '2rem' }} />}
+                icon={<Dashboard style={{ fontSize: '2rem' }} />}
                 color="primary"
                 footer={
                   <Box display="flex" alignItems="center">
-                    <TrendingUp style={{ color: brandColors.success, marginRight: '5px' }} />
+                    <TrendingUp style={{ color: '#4caf50', marginRight: '5px' }} />
                     <Typography variant="body2" color="textSecondary">
                       +12% from last month
                     </Typography>
                   </Box>
                 }
               />
-            </Grid>
+            </Box>
             
-            <Grid xs={12} sm={6} md={3}>
+            <Box flex="1" minWidth="250px">
               <MaterialStatsCard
                 title="Average Value"
                 value="$2.4M"
@@ -76,9 +64,9 @@ export default function ComponentShowcase() {
                   </Typography>
                 }
               />
-            </Grid>
+            </Box>
             
-            <Grid xs={12} sm={6} md={3}>
+            <Box flex="1" minWidth="250px">
               <MaterialStatsCard
                 title="Active Users"
                 value="5,678"
@@ -90,33 +78,19 @@ export default function ComponentShowcase() {
                   </Typography>
                 }
               />
-            </Grid>
-            
-            <Grid xs={12} sm={6} md={3}>
-              <MaterialStatsCard
-                title="Business Types"
-                value="25+"
-                icon={<Business style={{ fontSize: '2rem' }} />}
-                color="warning"
-                footer={
-                  <Typography variant="body2" color="textSecondary">
-                    All major industries
-                  </Typography>
-                }
-              />
-            </Grid>
-          </Grid>
+            </Box>
+          </Box>
         </Box>
 
         {/* Material Dashboard Cards */}
         <Box mb={6}>
-          <Grid container spacing={3}>
-            <Grid xs={12} md={6}>
+          <Box display="flex" flexWrap="wrap" gap={3}>
+            <Box flex="1" minWidth="400px">
               <MaterialCard>
                 <MaterialCardHeader color="primary">
-                  <MaterialCardTitle variant="h6" style={{ color: 'white' }}>
+                  <Typography variant="h6" style={{ color: 'white' }}>
                     Regular Card with Primary Header
-                  </MaterialCardTitle>
+                  </Typography>
                 </MaterialCardHeader>
                 <MaterialCardBody>
                   <Typography variant="body1" gutterBottom>
@@ -138,14 +112,14 @@ export default function ComponentShowcase() {
                   </MaterialButton>
                 </MaterialCardFooter>
               </MaterialCard>
-            </Grid>
+            </Box>
             
-            <Grid xs={12} md={6}>
+            <Box flex="1" minWidth="400px">
               <MaterialCard>
                 <MaterialCardHeader color="success">
-                  <MaterialCardTitle variant="h6" style={{ color: 'white' }}>
+                  <Typography variant="h6" style={{ color: 'white' }}>
                     Success Card with Actions
-                  </MaterialCardTitle>
+                  </Typography>
                 </MaterialCardHeader>
                 <MaterialCardBody>
                   <Typography variant="h4" color="textPrimary" gutterBottom>
@@ -166,8 +140,8 @@ export default function ComponentShowcase() {
                   </Box>
                 </MaterialCardBody>
               </MaterialCard>
-            </Grid>
-          </Grid>
+            </Box>
+          </Box>
         </Box>
 
         {/* Button Showcase */}
@@ -207,113 +181,102 @@ export default function ComponentShowcase() {
           </Box>
         </Box>
 
-        <AppBackground style={{ padding: '40px 20px', borderRadius: '16px' }}>
-          <SectionHeader>Apple Bites Glass Design System</SectionHeader>
+        {/* Brand Color System */}
+        <Box sx={{ padding: '40px 20px', borderRadius: '16px', background: '#f5f5f5', mb: 6 }}>
+          <MaterialTitle variant="h4" gutterBottom>
+            Brand Color System
+          </MaterialTitle>
           
-          <Grid container spacing={3}>
-            <Grid xs={12} md={4}>
-              <GlassCard style={{ padding: '24px' }}>
-                <Typography variant="h6" style={{ color: 'white', marginBottom: '16px' }}>
-                  Glass Card Example
-                </Typography>
-                <Typography variant="body2" style={{ color: '#f7fafc', marginBottom: '20px' }}>
-                  This card uses the glass morphism design with backdrop blur effects.
-                </Typography>
-                <StyledTextField
-                  fullWidth
-                  label="Glass Input"
-                  margin="normal"
-                />
-                <Box mt={2}>
-                  <PrimaryButton size="small">
-                    Primary Action
-                  </PrimaryButton>
-                </Box>
-              </GlassCard>
-            </Grid>
+          <Box display="flex" flexWrap="wrap" gap={3}>
+            <Box flex="1" minWidth="300px">
+              <MaterialCard>
+                <MaterialCardHeader color="primary">
+                  <Typography variant="h6" style={{ color: 'white' }}>
+                    Primary Navy
+                  </Typography>
+                </MaterialCardHeader>
+                <MaterialCardBody>
+                  <Typography variant="body2" gutterBottom>
+                    Main brand color used for headers, primary buttons, and key navigation elements.
+                  </Typography>
+                  <Typography variant="body2" style={{ fontFamily: 'monospace' }}>
+                    #0b2147
+                  </Typography>
+                </MaterialCardBody>
+              </MaterialCard>
+            </Box>
             
-            <Grid xs={12} md={4}>
-              <DashboardCard>
-                <Typography variant="h6" style={{ color: 'white', marginBottom: '16px' }}>
-                  Dashboard Card
-                </Typography>
-                <Typography variant="h4" style={{ color: '#81e5d8', marginBottom: '8px' }}>
-                  $1.2M
-                </Typography>
-                <Typography variant="body2" style={{ color: '#a0aec0' }}>
-                  Business Valuation
-                </Typography>
-                <Box mt={2} display="flex" gap={1}>
-                  <SecondaryButton size="small">
-                    Details
-                  </SecondaryButton>
-                  <OutlineButton size="small">
-                    Export
-                  </OutlineButton>
-                </Box>
-              </DashboardCard>
-            </Grid>
+            <Box flex="1" minWidth="300px">
+              <MaterialCard>
+                <MaterialCardHeader color="secondary">
+                  <Typography variant="h6" style={{ color: 'white' }}>
+                    Secondary Teal
+                  </Typography>
+                </MaterialCardHeader>
+                <MaterialCardBody>
+                  <Typography variant="body2" gutterBottom>
+                    Accent color for highlights, secondary actions, and visual emphasis.
+                  </Typography>
+                  <Typography variant="body2" style={{ fontFamily: 'monospace' }}>
+                    #81e5d8
+                  </Typography>
+                </MaterialCardBody>
+              </MaterialCard>
+            </Box>
             
-            <Grid xs={12} md={4}>
-              <GlassCard style={{ padding: '24px', textAlign: 'center' }}>
-                <Box 
-                  sx={{ 
-                    width: '60px', 
-                    height: '60px', 
-                    borderRadius: '50%', 
-                    background: 'linear-gradient(135deg, #81e5d8 0%, #4493de 100%)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    margin: '0 auto 16px auto'
-                  }}
-                >
-                  <TrendingUp style={{ color: 'white', fontSize: '2rem' }} />
-                </Box>
-                <Typography variant="h6" style={{ color: 'white', marginBottom: '8px' }}>
-                  Growth Metrics
-                </Typography>
-                <Typography variant="body2" style={{ color: '#a0aec0' }}>
-                  Track your business performance with real-time analytics
-                </Typography>
-              </GlassCard>
-            </Grid>
-          </Grid>
-        </AppBackground>
+            <Box flex="1" minWidth="300px">
+              <MaterialCard>
+                <MaterialCardHeader color="accent">
+                  <Typography variant="h6" style={{ color: 'white' }}>
+                    Accent Blue
+                  </Typography>
+                </MaterialCardHeader>
+                <MaterialCardBody>
+                  <Typography variant="body2" gutterBottom>
+                    Supporting blue for links, information displays, and complementary elements.
+                  </Typography>
+                  <Typography variant="body2" style={{ fontFamily: 'monospace' }}>
+                    #4493de
+                  </Typography>
+                </MaterialCardBody>
+              </MaterialCard>
+            </Box>
+          </Box>
+        </Box>
         
         {/* Form Example */}
         <Box mt={6}>
           <MaterialCard>
             <MaterialCardHeader color="accent">
-              <MaterialCardTitle variant="h6" style={{ color: 'white' }}>
+              <Typography variant="h6" style={{ color: 'white' }}>
                 Contact Form Example
-              </MaterialCardTitle>
+              </Typography>
             </MaterialCardHeader>
             <MaterialCardBody>
-              <Grid container spacing={2}>
-                <Grid xs={12} md={6}>
+              <Box display="flex" flexWrap="wrap" gap={2}>
+                <Box flex="1" minWidth="250px">
                   <MaterialTextField
                     fullWidth
                     label="First Name"
                     margin="normal"
                   />
-                </Grid>
-                <Grid xs={12} md={6}>
+                </Box>
+                <Box flex="1" minWidth="250px">
                   <MaterialTextField
                     fullWidth
                     label="Last Name"
                     margin="normal"
                   />
-                </Grid>
-                <Grid xs={12}>
+                </Box>
+                <Box width="100%">
                   <MaterialTextField
                     fullWidth
                     label="Email Address"
                     type="email"
                     margin="normal"
                   />
-                </Grid>
-                <Grid xs={12}>
+                </Box>
+                <Box width="100%">
                   <MaterialTextField
                     fullWidth
                     label="Message"
@@ -321,8 +284,8 @@ export default function ComponentShowcase() {
                     rows={4}
                     margin="normal"
                   />
-                </Grid>
-              </Grid>
+                </Box>
+              </Box>
             </MaterialCardBody>
             <MaterialCardFooter>
               <MaterialButton color="accent">
