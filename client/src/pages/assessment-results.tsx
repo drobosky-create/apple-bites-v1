@@ -186,7 +186,7 @@ export default function AssessmentResults() {
               left: 0,
               right: 0,
               bottom: 0,
-              background: 'rgba(11, 20, 38, 0.65)',
+              background: 'rgba(11, 20, 38, 0.45)',
               backdropFilter: 'blur(20px) saturate(180%)',
               WebkitBackdropFilter: 'blur(20px) saturate(180%)',
               border: '1px solid rgba(255, 255, 255, 0.1)',
