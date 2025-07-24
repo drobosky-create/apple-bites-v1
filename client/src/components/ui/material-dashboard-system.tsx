@@ -465,7 +465,8 @@ export const MaterialBackground = styled(Box)(({ theme }) => ({
 }));
 
 // Container with proper spacing
-export const MaterialContainer = styled(Container)(({ theme }) => ({
+export const MaterialContainer = styled(Box)(({ theme }) => ({
+  maxWidth: '1200px',
   paddingRight: '15px',
   paddingLeft: '15px',
   marginRight: 'auto',

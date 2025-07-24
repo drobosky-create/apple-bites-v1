@@ -33,7 +33,7 @@ import {
   Target
 } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
-import MaterialDashboardWrapper from '@/components/ui/MaterialDashboardWrapper';
+// Material Dashboard styling applied directly
 
 interface User {
   id: string;
@@ -69,38 +69,34 @@ export default function UserDashboard() {
 
   if (authLoading || isLoading) {
     return (
-      <MaterialDashboardWrapper>
-        <MaterialBackground>
-          <MaterialContainer>
-            <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
-              <Typography variant="h6">Loading...</Typography>
-            </Box>
-          </MaterialContainer>
-        </MaterialBackground>
-      </MaterialDashboardWrapper>
+      <MaterialBackground>
+        <MaterialContainer>
+          <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
+            <Typography variant="h6">Loading...</Typography>
+          </Box>
+        </MaterialContainer>
+      </MaterialBackground>
     );
   }
 
   if (error || !user) {
     return (
-      <MaterialDashboardWrapper>
-        <MaterialBackground>
-          <MaterialContainer>
-            <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
-              <MaterialCard>
-                <MaterialCardBody>
-                  <Typography variant="h6" color="error">
-                    Error loading user data
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary">
-                    Please try refreshing the page or contact support.
-                  </Typography>
-                </MaterialCardBody>
-              </MaterialCard>
-            </Box>
-          </MaterialContainer>
-        </MaterialBackground>
-      </MaterialDashboardWrapper>
+      <MaterialBackground>
+        <MaterialContainer>
+          <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
+            <MaterialCard>
+              <MaterialCardBody>
+                <Typography variant="h6" color="error">
+                  Error loading user data
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  Please try refreshing the page or contact support.
+                </Typography>
+              </MaterialCardBody>
+            </MaterialCard>
+          </Box>
+        </MaterialContainer>
+      </MaterialBackground>
     );
   }
 
@@ -121,9 +117,8 @@ export default function UserDashboard() {
   const TierIcon = tierInfo.icon;
 
   return (
-    <MaterialDashboardWrapper>
-      <MaterialBackground>
-        <MaterialContainer>
+    <MaterialBackground>
+      <MaterialContainer>
           {/* Header Card */}
           <MaterialCard>
             <MaterialCardHeader color="primary">
@@ -303,7 +298,6 @@ export default function UserDashboard() {
             </Box>
           </Box>
         </MaterialContainer>
-      </MaterialBackground>
-    </MaterialDashboardWrapper>
+    </MaterialBackground>
   );
 }
