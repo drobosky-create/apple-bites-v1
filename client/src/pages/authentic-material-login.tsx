@@ -16,8 +16,8 @@ import { styled } from '@mui/material/styles';
 // Direct MUI Card import
 import { Card } from '@mui/material';
 
-// Using direct path for logo
-const appleBitesLogo = "/apple-bites-logo-new.png";
+// Using direct path for logo from assets directory
+const appleBitesLogo = "/assets/logos/apple-bites-logo-variant-1.png";
 
 // Authentic Material Dashboard Styled Components (matching the template exactly)
 const MaterialBackground = styled(Box)(({ theme }) => ({
@@ -222,17 +222,20 @@ export default function AuthenticMaterialLogin() {
             border: '1px solid rgba(255, 255, 255, 0.2)',
           }}
         >
-            <Box
-              component="img"
+            <img
               src={appleBitesLogo}
               alt="Apple Bites Business Assessment"
-              sx={{
-                height: '200px',
+              style={{
+                height: '120px',
                 width: 'auto',
                 filter: 'brightness(1.1)',
                 display: 'block',
-                mx: 'auto',
-                mb: 2,
+                margin: '0 auto 16px auto',
+              }}
+              onError={(e) => {
+                console.log('Logo failed to load:', appleBitesLogo);
+                // Fallback to a different logo
+                (e.target as HTMLImageElement).src = '/apple-bites-logo.png';
               }}
             />
 
