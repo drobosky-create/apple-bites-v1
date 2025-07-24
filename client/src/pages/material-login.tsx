@@ -160,7 +160,7 @@ export default function MaterialLogin() {
           alignItems: 'center',
         }}>
           <img
-            src={appleBitesLogo}
+            src="/apple-bites-logo-new.png"
             alt="Apple Bites Business Assessment"
             style={{
               height: '120px',

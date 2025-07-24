@@ -123,7 +123,7 @@ export default function UserLogin() {
                   <img 
                     src="/apple-bites-logo-new.png" 
                     alt="Apple Bites Business Assessment" 
-                    className="h-50 w-auto"
+                    className="h-32 w-auto"
                   />
                 </div>
                 <ArgonTypography variant="body2" color="text">

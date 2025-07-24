@@ -27,7 +27,7 @@ import {
 } from "@/components/ui/argon-authentic";
 import { registerUserSchema, loginUserSchema, type RegisterUser, type LoginUser } from "@shared/schema";
 // Using direct path for logo
-const appleBitesLogo = "/assets/logos/apple-bites-logo-variant-1.png";
+const appleBitesLogo = "/apple-bites-logo-new.png";
 
 // Styled Components
 const GradientBackground = styled(Box)(({ theme }) => ({
