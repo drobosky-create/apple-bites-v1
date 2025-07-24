@@ -24,7 +24,7 @@ const appleBitesLogo = appleBitesLogoSrc;
 const MaterialBackground = styled(Box)(({ theme }) => ({
   minHeight: '100vh',
   backgroundImage: `
-    linear-gradient(310deg, rgba(33, 82, 255, 0.7) 0%, rgba(33, 212, 253, 0.7) 100%),
+    linear-gradient(310deg, rgba(11, 20, 38, 0.85) 0%, rgba(26, 54, 93, 0.85) 50%, rgba(45, 55, 72, 0.85) 100%),
     url('/assets/twilight-city-skyline.png')
   `,
   backgroundSize: 'cover',
