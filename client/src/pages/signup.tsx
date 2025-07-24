@@ -208,9 +208,7 @@ export default function SignUp() {
           </HeaderSection>
 
           <AuthenticationCard>
-
             <CardContent sx={{ px: 4, pt: 4, pb: 4 }}>
-              {/* Signup Form */}
               <Box component="form" onSubmit={form.handleSubmit(onSubmit)}>
                 <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
                   <TextField
