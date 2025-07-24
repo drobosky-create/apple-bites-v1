@@ -36,7 +36,9 @@ export const Button = styled(({ children, variant = 'primary', size = 'md', full
     </MuiButton>
   );
 })(({ variant = 'primary', size = 'md', fullWidth }) => {
-  const baseStyles = componentVariants.button[variant] || componentVariants.button.primary;
+  const validVariants = ['primary', 'secondary', 'success'] as const;
+  const safeVariant = validVariants.includes(variant as any) ? variant : 'primary';
+  const baseStyles = componentVariants.button[safeVariant] || componentVariants.button.primary;
   
   const sizeStyles = {
     sm: {
@@ -271,13 +273,13 @@ export const StatsCard: React.FC<StatsCardProps> = ({
       <Flex direction="row" align="center" justify="space-between">
         <Box>
           <Text variant="body2" color="secondary">{title}</Text>
-          <Text variant="h4" style={{ fontWeight: designTokens.typography.fontWeight.bold }}>
+          <Text variant="h4" sx={{ fontWeight: designTokens.typography.fontWeight.bold }}>
             {value}
           </Text>
           {change && (
             <Text 
               variant="caption" 
-              style={{ color: changeColors[changeType] }}
+              sx={{ color: changeColors[changeType] }}
             >
               {change}
             </Text>

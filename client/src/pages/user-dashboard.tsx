@@ -1,16 +1,18 @@
 import React from 'react';
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { 
-  MaterialCard, 
-  MaterialCardHeader, 
-  MaterialCardBody, 
-  MaterialCardFooter,
-  MaterialButton, 
-  MaterialBackground,
-  MaterialContainer,
-  MaterialStatsCard,
-} from "@/components/ui/material-dashboard-system";
-import { Box, Typography } from '@mui/material';
+  Button,
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  Container,
+  Text,
+  Flex,
+  StatsCard,
+  designTokens
+} from "@/design-system/components";
+import { Box } from '@mui/material';
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
@@ -69,34 +71,30 @@ export default function UserDashboard() {
 
   if (authLoading || isLoading) {
     return (
-      <MaterialBackground>
-        <MaterialContainer>
-          <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
-            <Typography variant="h6">Loading...</Typography>
-          </Box>
-        </MaterialContainer>
-      </MaterialBackground>
+      <Container>
+        <Flex direction="column" align="center" justify="center" style={{ minHeight: '100vh' }}>
+          <Text variant="h6">Loading...</Text>
+        </Flex>
+      </Container>
     );
   }
 
   if (error || !user) {
     return (
-      <MaterialBackground>
-        <MaterialContainer>
-          <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
-            <MaterialCard>
-              <MaterialCardBody>
-                <Typography variant="h6" color="error">
-                  Error loading user data
-                </Typography>
-                <Typography variant="body2" color="textSecondary">
-                  Please try refreshing the page or contact support.
-                </Typography>
-              </MaterialCardBody>
-            </MaterialCard>
-          </Box>
-        </MaterialContainer>
-      </MaterialBackground>
+      <Container>
+        <Flex direction="column" align="center" justify="center" style={{ minHeight: '100vh' }}>
+          <Card variant="elevated">
+            <CardBody>
+              <Text variant="h6" color="error">
+                Error loading user data
+              </Text>
+              <Text variant="body2" color="secondary">
+                Please try refreshing the page or contact support.
+              </Text>
+            </CardBody>
+          </Card>
+        </Flex>
+      </Container>
     );
   }
 
@@ -117,187 +115,169 @@ export default function UserDashboard() {
   const TierIcon = tierInfo.icon;
 
   return (
-    <MaterialBackground>
-      <MaterialContainer>
-          {/* Header Card */}
-          <MaterialCard>
-            <MaterialCardHeader color="primary">
-              <Box display="flex" alignItems="center" justifyContent="space-between" p={2}>
-                <Box display="flex" alignItems="center" gap={3}>
-                  <Box display="flex" alignItems="center" gap={2}>
-                    <img 
-                      src="/apple-bites-logo.png" 
-                      alt="Apple Bites Business Assessment" 
-                      style={{ height: '48px', width: 'auto' }}
-                    />
-                  </Box>
-                  <Box>
-                    <Typography variant="h5" style={{ color: 'white', fontWeight: 'bold' }}>
-                      Welcome, {userData.firstName} {userData.lastName}
-                    </Typography>
-                    <Typography variant="body2" style={{ color: 'rgba(255,255,255,0.8)' }}>
-                      {userData.email}
-                    </Typography>
-                    <Badge className="bg-white/20 text-white border-white/30 font-medium">
-                      {tierInfo.name}
-                    </Badge>
-                  </Box>
-                </Box>
-                <MaterialButton 
-                  color="white"
-                  simple
-                  onClick={() => logoutMutation.mutate()}
-                >
-                  <LogOut style={{ width: '16px', height: '16px', marginRight: '8px' }} />
-                  Logout
-                </MaterialButton>
-              </Box>
-            </MaterialCardHeader>
-          </MaterialCard>
-
-          {/* Statistics Cards */}
-          <Box mt={3} mb={3}>
-            <Box display="grid" gridTemplateColumns={{ xs: '1fr', md: 'repeat(2, 1fr)', lg: 'repeat(4, 1fr)' }} gap={3}>
-              <MaterialStatsCard
-                title="Account Status"
-                value="Active"
-                icon={<CheckCircle style={{ fontSize: '2rem' }} />}
-                color="success"
-                footer={
-                  <Typography variant="body2" color="textSecondary">
-                    Account in good standing
-                  </Typography>
-                }
-              />
-              
-              <MaterialStatsCard
-                title="Assessment Tier"
-                value={tierInfo.price}
-                icon={<TierIcon style={{ fontSize: '2rem' }} />}
-                color={tierInfo.color as any}
-                footer={
-                  <Typography variant="body2" color="textSecondary">
-                    {tierInfo.name}
-                  </Typography>
-                }
-              />
-              
-              <MaterialStatsCard
-                title="Reports Generated"
-                value={userData.resultReady ? "1" : "0"}
-                icon={<FileText style={{ fontSize: '2rem' }} />}
-                color="info"
-                footer={
-                  <Typography variant="body2" color="textSecondary">
-                    {userData.resultReady ? "Report ready" : "No reports yet"}
-                  </Typography>
-                }
-              />
-              
-              <MaterialStatsCard
-                title="Business Value"
-                value="$0"
-                icon={<DollarSign style={{ fontSize: '2rem' }} />}
-                color="warning"
-                footer={
-                  <Typography variant="body2" color="textSecondary">
-                    Complete assessment for value
-                  </Typography>
-                }
-              />
+    <Container>
+      {/* Header Card */}
+      <Card variant="gradient" style={{ marginBottom: designTokens.spacing[8] }}>
+        <Flex direction="row" align="center" justify="space-between">
+          <Flex direction="row" align="center" gap={6}>
+            <img 
+              src="/apple-bites-logo.png" 
+              alt="Apple Bites Business Assessment" 
+              style={{ height: '48px', width: 'auto' }}
+            />
+            <Box>
+              <Text variant="h4" style={{ color: 'white', fontWeight: designTokens.typography.fontWeight.bold }}>
+                Welcome, {userData.firstName} {userData.lastName}
+              </Text>
+              <Text variant="body2" style={{ color: 'rgba(255,255,255,0.8)' }}>
+                {userData.email}
+              </Text>
+              <Badge className="bg-white/20 text-white border-white/30 font-medium mt-2">
+                {tierInfo.name}
+              </Badge>
             </Box>
-          </Box>
+          </Flex>
+          <Button 
+            variant="secondary"
+            onClick={() => logoutMutation.mutate()}
+            style={{ 
+              backgroundColor: 'rgba(255,255,255,0.2)', 
+              color: 'white',
+              border: '1px solid rgba(255,255,255,0.3)'
+            }}
+          >
+            <LogOut style={{ width: '16px', height: '16px', marginRight: '8px' }} />
+            Logout
+          </Button>
+        </Flex>
+      </Card>
 
-          {/* Main Content */}
-          <Box display="flex" flexDirection="column" gap={4}>
-            {/* Assessment Status Card */}
-            <MaterialCard>
-              <MaterialCardHeader color="info">
-                <Typography variant="h6" style={{ color: 'white', fontWeight: 'bold' }}>
-                  Assessment Status
-                </Typography>
-              </MaterialCardHeader>
-              <MaterialCardBody>
-                <Typography variant="body2" color="textSecondary" gutterBottom>
-                  Complete your business assessment to get your valuation report
-                </Typography>
-                
-                <Box mt={2}>
-                  {userData.resultReady ? (
-                    <Box display="flex" alignItems="center" gap={2} mb={2}>
-                      <CheckCircle style={{ color: '#4caf50', fontSize: '1.25rem' }} />
-                      <Typography variant="body1" color="success.main" fontWeight="medium">
-                        Assessment Complete - Results Ready
-                      </Typography>
-                    </Box>
-                  ) : (
-                    <Box display="flex" alignItems="center" gap={2} mb={2}>
-                      <Clock style={{ color: '#ff9800', fontSize: '1.25rem' }} />
-                      <Typography variant="body1" color="warning.main" fontWeight="medium">
-                        Assessment Not Started
-                      </Typography>
-                    </Box>
-                  )}
-                </Box>
-              </MaterialCardBody>
-              <MaterialCardFooter>
-                <MaterialButton 
-                  color="primary"
-                  onClick={() => setLocation('/assessment/free')}
-                >
-                  {userData.resultReady ? 'View Results' : 'Start Assessment'}
-                </MaterialButton>
-              </MaterialCardFooter>
-            </MaterialCard>
+      {/* Statistics Cards */}
+      <Box style={{ marginBottom: designTokens.spacing[8] }}>
+        <Box display="grid" gridTemplateColumns={{ xs: '1fr', md: 'repeat(2, 1fr)', lg: 'repeat(4, 1fr)' }} gap={3}>
+          <StatsCard
+            title="Account Status"
+            value="Active"
+            icon={<CheckCircle style={{ fontSize: '2rem' }} />}
+            changeType="positive"
+          />
+          
+          <StatsCard
+            title="Assessment Tier"
+            value={tierInfo.price}
+            icon={<TierIcon style={{ fontSize: '2rem' }} />}
+            changeType="neutral"
+          />
+          
+          <StatsCard
+            title="Reports Generated"
+            value={userData.resultReady ? "1" : "0"}
+            icon={<FileText style={{ fontSize: '2rem' }} />}
+            changeType="neutral"
+          />
+          
+          <StatsCard
+            title="Business Value"
+            value="$0"
+            icon={<DollarSign style={{ fontSize: '2rem' }} />}
+            changeType="neutral"
+          />
+        </Box>
+      </Box>
 
-            {/* Quick Actions */}
-            <Box display="grid" gridTemplateColumns={{ xs: '1fr', md: 'repeat(2, 1fr)' }} gap={3}>
-              <MaterialCard>
-                <MaterialCardHeader color="success">
-                  <Typography variant="h6" style={{ color: 'white' }}>
-                    New Assessment
-                  </Typography>
-                </MaterialCardHeader>
-                <MaterialCardBody>
-                  <Typography variant="body2" color="textSecondary">
-                    Start a new business valuation assessment to get your updated report.
-                  </Typography>
-                </MaterialCardBody>
-                <MaterialCardFooter>
-                  <MaterialButton 
-                    color="success"
-                    onClick={() => setLocation('/assessment/free')}
-                  >
-                    <Target style={{ width: '16px', height: '16px', marginRight: '8px' }} />
-                    New Assessment
-                  </MaterialButton>
-                </MaterialCardFooter>
-              </MaterialCard>
-
-              <MaterialCard>
-                <MaterialCardHeader color="warning">
-                  <Typography variant="h6" style={{ color: 'white' }}>
-                    Upgrade Plan
-                  </Typography>
-                </MaterialCardHeader>
-                <MaterialCardBody>
-                  <Typography variant="body2" color="textSecondary">
-                    Upgrade to get industry-specific analysis and AI-powered insights.
-                  </Typography>
-                </MaterialCardBody>
-                <MaterialCardFooter>
-                  <MaterialButton 
-                    color="warning"
-                    onClick={() => window.open('https://products.applebites.ai/', '_blank')}
-                  >
-                    <ExternalLink style={{ width: '16px', height: '16px', marginRight: '8px' }} />
-                    Upgrade Plan
-                  </MaterialButton>
-                </MaterialCardFooter>
-              </MaterialCard>
+      {/* Main Content */}
+      <Flex direction="column" gap={8}>
+        {/* Assessment Status Card */}
+        <Card variant="elevated">
+          <CardHeader>
+            <Text variant="h5" style={{ 
+              color: designTokens.colors.primary[500], 
+              fontWeight: designTokens.typography.fontWeight.bold 
+            }}>
+              Assessment Status
+            </Text>
+          </CardHeader>
+          <CardBody>
+            <Text variant="body2" color="secondary" style={{ marginBottom: designTokens.spacing[4] }}>
+              Complete your business assessment to get your valuation report
+            </Text>
+            
+            <Box style={{ marginTop: designTokens.spacing[4] }}>
+              {userData.resultReady ? (
+                <Flex direction="row" align="center" gap={3} style={{ marginBottom: designTokens.spacing[4] }}>
+                  <CheckCircle style={{ color: designTokens.colors.success[500], fontSize: '1.25rem' }} />
+                  <Text variant="body1" style={{ color: designTokens.colors.success[500], fontWeight: designTokens.typography.fontWeight.medium }}>
+                    Assessment Complete - Results Ready
+                  </Text>
+                </Flex>
+              ) : (
+                <Flex direction="row" align="center" gap={3} style={{ marginBottom: designTokens.spacing[4] }}>
+                  <Clock style={{ color: designTokens.colors.warning[500], fontSize: '1.25rem' }} />
+                  <Text variant="body1" style={{ color: designTokens.colors.warning[500], fontWeight: designTokens.typography.fontWeight.medium }}>
+                    Assessment Not Started
+                  </Text>
+                </Flex>
+              )}
             </Box>
-          </Box>
-        </MaterialContainer>
-    </MaterialBackground>
+          </CardBody>
+          <CardFooter>
+            <Button 
+              variant="primary"
+              onClick={() => setLocation('/assessment/free')}
+            >
+              {userData.resultReady ? 'View Results' : 'Start Assessment'}
+            </Button>
+          </CardFooter>
+        </Card>
+
+        {/* Quick Actions */}
+        <Box display="grid" gridTemplateColumns={{ xs: '1fr', md: 'repeat(2, 1fr)' }} gap={3}>
+          <Card variant="elevated">
+            <CardHeader>
+              <Text variant="h6" style={{ color: designTokens.colors.success[500], fontWeight: designTokens.typography.fontWeight.bold }}>
+                New Assessment
+              </Text>
+            </CardHeader>
+            <CardBody>
+              <Text variant="body2" color="secondary">
+                Start a new business valuation assessment to get your updated report.
+              </Text>
+            </CardBody>
+            <CardFooter>
+              <Button 
+                variant="success"
+                onClick={() => setLocation('/assessment/free')}
+              >
+                <Target style={{ width: '16px', height: '16px', marginRight: '8px' }} />
+                New Assessment
+              </Button>
+            </CardFooter>
+          </Card>
+
+          <Card variant="elevated">
+            <CardHeader>
+              <Text variant="h6" style={{ color: designTokens.colors.warning[500], fontWeight: designTokens.typography.fontWeight.bold }}>
+                Upgrade Plan
+              </Text>
+            </CardHeader>
+            <CardBody>
+              <Text variant="body2" color="secondary">
+                Upgrade to get industry-specific analysis and AI-powered insights.
+              </Text>
+            </CardBody>
+            <CardFooter>
+              <Button 
+                variant="primary"
+                onClick={() => window.open('https://products.applebites.ai/', '_blank')}
+                style={{ backgroundColor: designTokens.colors.warning[500] }}
+              >
+                <ExternalLink style={{ width: '16px', height: '16px', marginRight: '8px' }} />
+                Upgrade Plan
+              </Button>
+            </CardFooter>
+          </Card>
+        </Box>
+      </Flex>
+    </Container>
   );
 }
