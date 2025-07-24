@@ -7,15 +7,17 @@ Build a professional business valuation platform that provides comprehensive com
 ## 📋 Core Business Requirements
 
 ### Primary Function
-- **Business Valuation Calculator**: Multi-step assessment that calculates company values using EBITDA analysis, value driver scoring, and industry-specific multipliers
-- **AI-Powered Analysis**: Generate executive summaries and business improvement recommendations
-- **Professional PDF Reports**: Branded valuation reports with charts and detailed analysis
-- **CRM Integration**: Automatic lead processing and follow-up workflows
+- **Multi-Tier Business Valuation Platform**: Complete assessment system with Free, Growth ($795), and Capital tiers
+- **AI-Powered Analysis**: Advanced OpenAI GPT-4o integration for personalized business coaching and recommendations
+- **Industry-Specific Valuation**: Authentic NAICS database with 2,000+ industry classifications and specific multipliers
+- **Professional PDF Reports**: Tier-specific branded reports with executive summaries and action plans
+- **CRM Integration**: GoHighLevel webhook system for automated lead processing and follow-up workflows
 
 ### Target Users
-- **Business Owners**: Seeking company valuations for sale preparation or strategic planning
-- **Financial Advisors**: Providing valuation services to clients
-- **M&A Professionals**: Conducting preliminary business assessments
+- **Business Owners**: Seeking company valuations for sale preparation, growth planning, or strategic decisions
+- **Financial Advisors**: Providing comprehensive valuation services to clients with industry-specific analysis
+- **M&A Professionals**: Conducting detailed business assessments with AI-powered insights
+- **Investment Banks**: Preliminary valuations with executive-grade reporting capabilities
 
 ## 🏗️ System Architecture
 
@@ -52,7 +54,7 @@ PDF Generation: Puppeteer
 ### Core Tables
 
 ```sql
--- Users with multi-tier access
+-- Users with multi-tier access and purchase tracking
 CREATE TABLE users (
   id VARCHAR PRIMARY KEY,
   email VARCHAR UNIQUE NOT NULL,
@@ -60,7 +62,13 @@ CREATE TABLE users (
   last_name VARCHAR,
   password_hash VARCHAR,
   tier TEXT DEFAULT 'free',    -- 'free', 'growth', 'capital'
+  auth_provider TEXT DEFAULT 'custom',  -- 'custom', 'google', 'replit'
+  result_ready BOOLEAN DEFAULT false,
+  awaiting_password_creation BOOLEAN DEFAULT false,
+  ghl_contact_id TEXT,         -- GoHighLevel CRM integration
+  purchase_date TIMESTAMP,     -- Tier purchase tracking
   is_active BOOLEAN DEFAULT true,
+  metadata JSONB,              -- Additional user data
   created_at TIMESTAMP DEFAULT NOW()
 );
 
@@ -110,21 +118,30 @@ CREATE TABLE valuation_assessments (
   high_estimate DECIMAL(15,2),
   overall_score TEXT,
   
-  -- Industry Classification
+  -- Industry Classification (Enhanced for Paid Tier)
   naics_code TEXT,
+  sic_code TEXT,               -- SIC code for additional classification
   industry_description TEXT,
+  business_model TEXT,         -- Business model description
+  competitive_advantage TEXT,  -- Competitive positioning
+  founding_year INTEGER,       -- Company founding year
   
   -- Follow-up
   follow_up_intent TEXT NOT NULL,    -- 'yes', 'maybe', 'no'
   additional_comments TEXT,
   
-  -- AI Generated Content
-  executive_summary TEXT,
+  -- AI Generated Content (Tier-Specific)
+  executive_summary TEXT,      -- Basic for free, comprehensive for paid
   improvement_recommendations TEXT,
+  ai_coaching_insights TEXT,   -- Advanced AI coaching (paid tier only)
+  strategic_analysis TEXT,     -- Strategic recommendations (paid tier only)
+  industry_benchmarks JSONB,   -- Industry comparison data (paid tier only)
   
-  -- Processing
+  -- Processing and Tier Management
+  assessment_tier TEXT DEFAULT 'free',  -- 'free', 'growth', 'capital'
   is_processed BOOLEAN DEFAULT false,
   pdf_url TEXT,
+  report_tier TEXT DEFAULT 'basic',    -- 'basic', 'professional', 'executive'
   
   created_at TIMESTAMP DEFAULT NOW()
 );
@@ -164,29 +181,62 @@ Login/Register (/login, /signup)
 User Dashboard (/dashboard)
 ```
 
-### 2. Assessment Process (Core Flow)
+### 2. Assessment Process (Tier-Based Flow)
+
+#### Free Tier Assessment (Basic)
 ```
-Dashboard → Start Assessment
+Dashboard → Start Free Assessment
     ↓
 Step 1: Contact Information
-    - First/Last Name
-    - Email, Phone
+    - First/Last Name, Email, Phone
     - Company Name, Job Title
     ↓
 Step 2: Financial Data (EBITDA Components)
-    - Net Income
-    - Interest Expense
-    - Tax Expense  
-    - Depreciation
-    - Amortization
+    - Net Income, Interest, Taxes
+    - Depreciation, Amortization
     ↓
 Step 3: Owner Adjustments
-    - Owner Salary Above Market Rate
-    - Personal Expenses Through Business
-    - One-Time Expenses
-    - Other Adjustments
+    - Owner Salary, Personal Expenses
+    - One-Time Expenses, Other Adjustments
     ↓
 Step 4: Value Drivers Assessment (A-F Grades)
+    - 10 key business factors
+    ↓
+Step 5: Follow-Up Preferences
+    ↓
+Results Page (Basic)
+    - General valuation range
+    - Basic business grade
+    - Basic PDF report
+    - Upgrade prompts
+```
+
+#### Growth & Exit Assessment ($795) - Premium Flow
+```
+Dashboard → Start Growth Assessment
+    ↓
+Step 1: Contact Information
+    - Enhanced contact capture
+    - Company details and role
+    ↓
+Step 2: Industry Classification
+    - NAICS Code Selection (2,000+ options)
+    - Industry Description
+    - Business Model Analysis
+    - Competitive Advantage Assessment
+    - Company Founding Year
+    ↓
+Step 3: Financial Data (Enhanced)
+    - Detailed EBITDA components
+    - Revenue trends analysis
+    - Margin analysis
+    ↓
+Step 4: Advanced Owner Adjustments
+    - Market-rate salary comparisons
+    - Normalized expense analysis
+    - One-time event impacts
+    ↓
+Step 5: Comprehensive Value Drivers (A-F Grades)
     - Financial Performance
     - Customer Concentration Risk
     - Management Team Strength
@@ -198,97 +248,276 @@ Step 4: Value Drivers Assessment (A-F Grades)
     - Risk Factors
     - Owner Dependency
     ↓
-Step 5: Follow-Up Preferences
-    - Interest in consultation (yes/maybe/no)
-    - Additional comments
+Step 6: Strategic Assessment
+    - Growth strategy evaluation
+    - Exit readiness analysis
+    - Market positioning
     ↓
-Results Page
-    - Valuation range (low/mid/high estimates)
-    - Overall business grade
-    - AI-generated executive summary
-    - Industry analysis
-    - PDF report download
-    - CRM lead processing
+Results Page (Premium)
+    - Industry-specific valuation ranges
+    - NAICS multiplier analysis
+    - AI-powered business coaching
+    - Executive summary with action plan
+    - Industry benchmarking charts
+    - Professional PDF report
+    - Strategic recommendations
+    - Follow-up consultation booking
 ```
 
-### 3. Admin/Team Management
+### 3. Tier Selection & Pricing Integration
+```
+Homepage → Tier Selection
+    ↓
+Free Tier (Apple Bites Assessment)
+    - 5-step basic assessment
+    - General multipliers (no industry-specific)
+    - Basic PDF report
+    - General AI summary
+    - Basic email delivery
+    
+Growth Tier ($795) - "Growth & Exit Assessment" 
+    - 6-step comprehensive assessment
+    - Industry-specific NAICS multipliers
+    - AI-powered business coaching
+    - Executive summary & action plan
+    - Professional PDF report
+    - Industry benchmarking charts
+    - Strategic recommendations
+    - Priority email support
+    
+Capital Tier ($2,495) - "Capital Readiness Assessment"
+    - Complete investment readiness analysis
+    - Institutional investor perspective
+    - Due diligence preparation
+    - Market comparables analysis
+    - Investment memorandum template
+    - Executive presentations
+    - Direct advisor consultation
+```
+
+### 4. Admin/Team Management
 ```
 Team Login (/team/login)
     ↓
 Team Dashboard (/team/dashboard)
-    - Lead management
-    - Assessment analytics
-    - User management
+    - Lead management with tier tracking
+    - Assessment analytics by tier
+    - Revenue reporting
+    - User tier management
+    - A/B testing capabilities  
     - Report generation
+    - CRM integration monitoring
 ```
 
 ## 🧮 Core Business Logic
 
-### Valuation Calculation Engine
+### Tier-Based Valuation Engine
 
+#### Free Tier Calculation (Basic)
 ```typescript
-// 1. Calculate Base EBITDA
-baseEbitda = netIncome + interest + taxes + depreciation + amortization
-
-// 2. Calculate Adjusted EBITDA  
-adjustedEbitda = baseEbitda + ownerSalary + personalExpenses + oneTimeExpenses + otherAdjustments
-
-// 3. Grade to Multiplier Conversion
-const gradeMultipliers = {
-  'A': 1.25,  // 25% premium
-  'B': 1.10,  // 10% premium
-  'C': 1.00,  // Baseline
-  'D': 0.85,  // 15% discount
-  'F': 0.70   // 30% discount
+// Basic valuation with general multipliers
+function calculateFreeValuation(formData) {
+  // 1. Calculate Base EBITDA
+  const baseEbitda = netIncome + interest + taxes + depreciation + amortization;
+  
+  // 2. Calculate Adjusted EBITDA
+  const adjustedEbitda = baseEbitda + ownerSalary + personalExpenses + oneTimeExpenses;
+  
+  // 3. Grade to Multiplier (Generic)
+  const gradeMultipliers = {
+    'A': 6.0,  'B': 5.0,  'C': 4.0,  'D': 3.0,  'F': 2.0
+  };
+  
+  // 4. Simple average multiplier
+  const avgGrade = calculateAverageGrade(valueDrivers);
+  const multiplier = gradeMultipliers[avgGrade];
+  
+  // 5. Basic valuation range (±20%)
+  const midEstimate = adjustedEbitda * multiplier;
+  const lowEstimate = midEstimate * 0.8;
+  const highEstimate = midEstimate * 1.2;
+  
+  return { baseEbitda, adjustedEbitda, multiplier, lowEstimate, midEstimate, highEstimate, overallGrade: avgGrade };
 }
-
-// 4. Calculate Weighted Average from Value Drivers
-weightedMultiplier = average(all_value_driver_multipliers)
-
-// 5. Industry-Specific Adjustment
-industryMultipliers = getNAICSMultiplier(naicsCode) // {min, avg, max}
-finalMultipliers = industryMultipliers * weightedMultiplier
-
-// 6. Final Valuation Range
-lowEstimate = adjustedEbitda * finalMultipliers.min
-midEstimate = adjustedEbitda * finalMultipliers.avg  
-highEstimate = adjustedEbitda * finalMultipliers.max
-
-// 7. Overall Grade Determination
-overallGrade = convertScoreToGrade(weightedMultiplier)
 ```
 
-### NAICS Industry Database
-Include 2,000+ industry classifications with specific multiplier ranges:
+#### Growth Tier Calculation (Advanced)
 ```typescript
+// Industry-specific valuation with NAICS multipliers
+function calculateGrowthValuation(formData, naicsData) {
+  // 1. Enhanced EBITDA calculation
+  const baseEbitda = calculateEnhancedEbitda(formData);
+  const adjustedEbitda = calculateNormalizedEbitda(baseEbitda, formData.adjustments);
+  
+  // 2. Industry-Specific Base Multipliers
+  const industryMultipliers = getNAICSMultipliers(formData.naicsCode);
+  // Returns: { min: 2.1, avg: 4.2, max: 6.8, riskLevel: 'medium', growthOutlook: 'good' }
+  
+  // 3. Value Driver Analysis with Weighted Scoring
+  const valueDriverWeights = {
+    financialPerformance: 0.20,    // 20% weight
+    customerConcentration: 0.15,   // 15% weight
+    managementTeam: 0.15,          // 15% weight
+    competitivePosition: 0.12,     // 12% weight
+    growthProspects: 0.12,         // 12% weight
+    systemsProcesses: 0.10,        // 10% weight
+    assetQuality: 0.08,            // 8% weight
+    industryOutlook: 0.08          // 8% weight
+  };
+  
+  // 4. Calculate Weighted Grade Score
+  const weightedScore = calculateWeightedGradeScore(valueDrivers, valueDriverWeights);
+  
+  // 5. Grade Modifier Application
+  const gradeModifier = getGradeModifier(weightedScore);
+  // A=1.25, B=1.10, C=1.00, D=0.85, F=0.70
+  
+  // 6. Risk and Growth Adjustments
+  const riskAdjustment = getRiskAdjustment(industryMultipliers.riskLevel, formData);
+  const growthAdjustment = getGrowthAdjustment(industryMultipliers.growthOutlook, formData);
+  
+  // 7. Final Industry-Adjusted Multipliers
+  const finalMultipliers = {
+    low: industryMultipliers.min * gradeModifier * riskAdjustment,
+    mid: industryMultipliers.avg * gradeModifier * (riskAdjustment + growthAdjustment) / 2,
+    high: industryMultipliers.max * gradeModifier * growthAdjustment
+  };
+  
+  // 8. Sophisticated Valuation Range
+  const lowEstimate = adjustedEbitda * finalMultipliers.low;
+  const midEstimate = adjustedEbitda * finalMultipliers.mid;
+  const highEstimate = adjustedEbitda * finalMultipliers.high;
+  
+  return {
+    baseEbitda,
+    adjustedEbitda,
+    industryMultipliers,
+    finalMultipliers,
+    lowEstimate,
+    midEstimate,
+    highEstimate,
+    weightedScore,
+    overallGrade: scoreToGrade(weightedScore),
+    industryAnalysis: generateIndustryAnalysis(naicsData),
+    riskFactors: identifyRiskFactors(formData, industryMultipliers)
+  };
+}
+```
+
+### Comprehensive NAICS Industry Database
+
+#### Database Structure (2,075+ Classifications)
+```typescript
+interface NAICSEntry {
+  code: string;              // 6-digit NAICS code
+  title: string;             // Industry description
+  minMultiplier: number;     // Conservative valuation multiple
+  avgMultiplier: number;     // Market average multiple
+  maxMultiplier: number;     // Premium valuation multiple
+  riskLevel: 'low' | 'medium' | 'high';
+  growthOutlook: 'declining' | 'stable' | 'good' | 'excellent';
+  sector: string;            // Primary sector classification
+  marketTrends: string[];    // Current market trends
+  typicalMargins: {          // Industry financial benchmarks
+    grossMargin: number;
+    operatingMargin: number;
+    netMargin: number;
+  };
+}
+
+// Sample High-Value Industries
 const naicsDatabase = {
-  "541511": {  // Custom Computer Programming
+  "541511": {  // Custom Computer Programming Services
     title: "Custom Computer Programming Services",
-    minMultiplier: 3.5,
-    avgMultiplier: 6.8, 
-    maxMultiplier: 12.0,
+    minMultiplier: 4.2,
+    avgMultiplier: 7.8,
+    maxMultiplier: 15.2,
     riskLevel: "medium",
-    growthOutlook: "excellent"
+    growthOutlook: "excellent",
+    sector: "Technology",
+    marketTrends: ["AI Integration", "Cloud Migration", "Digital Transformation"],
+    typicalMargins: { grossMargin: 0.75, operatingMargin: 0.15, netMargin: 0.12 }
+  },
+  "621111": {  // Offices of Physicians (except Mental Health)
+    title: "Physicians' Offices",
+    minMultiplier: 3.8,
+    avgMultiplier: 5.2,
+    maxMultiplier: 7.1,
+    riskLevel: "low",
+    growthOutlook: "good",
+    sector: "Healthcare",
+    marketTrends: ["Telehealth Growth", "Value-Based Care", "Consolidation"],
+    typicalMargins: { grossMargin: 0.65, operatingMargin: 0.18, netMargin: 0.14 }
   },
   "722511": {  // Full-Service Restaurants
     title: "Full-Service Restaurants",
-    minMultiplier: 1.2,
-    avgMultiplier: 2.4,
-    maxMultiplier: 3.8,
-    riskLevel: "high", 
-    growthOutlook: "stable"
+    minMultiplier: 1.5,
+    avgMultiplier: 2.8,
+    maxMultiplier: 4.2,
+    riskLevel: "high",
+    growthOutlook: "stable",
+    sector: "Food Service",
+    marketTrends: ["Delivery Integration", "Labor Shortages", "Technology Adoption"],
+    typicalMargins: { grossMargin: 0.32, operatingMargin: 0.08, netMargin: 0.05 }
+  },
+  "531210": {  // Offices of Real Estate Agents and Brokers
+    title: "Real Estate Brokerage",
+    minMultiplier: 2.1,
+    avgMultiplier: 3.5,
+    maxMultiplier: 5.8,
+    riskLevel: "medium",
+    growthOutlook: "stable",
+    sector: "Real Estate",
+    marketTrends: ["Digital Platforms", "Market Volatility", "Commission Pressure"],
+    typicalMargins: { grossMargin: 0.28, operatingMargin: 0.12, netMargin: 0.08 }
   }
-  // ... 2000+ more industries
+  // ... 2,071+ more authentic industry classifications
+};
+
+// Industry Risk Assessment
+function assessIndustryRisk(naicsCode: string, formData: any): number {
+  const industry = naicsDatabase[naicsCode];
+  let riskScore = 1.0;
+  
+  // Base risk by industry
+  switch (industry.riskLevel) {
+    case 'low': riskScore *= 1.05; break;
+    case 'medium': riskScore *= 1.0; break;
+    case 'high': riskScore *= 0.92; break;
+  }
+  
+  // Growth outlook adjustment
+  switch (industry.growthOutlook) {
+    case 'declining': riskScore *= 0.85; break;
+    case 'stable': riskScore *= 1.0; break;
+    case 'good': riskScore *= 1.08; break;
+    case 'excellent': riskScore *= 1.15; break;
+  }
+  
+  return riskScore;
 }
 ```
 
 ## 🎨 UI/UX Requirements
 
-### Design System
-- **Color Palette**: Professional navy (#0b2147), teal accents (#81e5d8), clean whites/grays
-- **Typography**: Montserrat for headings, Manrope for body text
-- **Components**: Material-UI with custom branded styling
-- **Layout**: Clean, professional, mobile-responsive
+### Design System & Branding
+- **Color Palette**: 
+  - Primary Navy: #0b2147 (Apple Bites brand)
+  - Secondary Teal: #81e5d8 (accent color)
+  - Success Green: #10b981 (positive metrics)
+  - Warning Orange: #f59e0b (upgrade prompts)
+  - Professional Grays: #f8fafc, #e2e8f0, #64748b
+- **Typography**: 
+  - Headings: Montserrat (weights: 400, 600, 700)
+  - Body: Manrope (weights: 400, 500, 600)
+- **Components**: Material-UI v5 with extensive custom theming
+- **Layout**: Executive-grade responsive design with mobile-first approach
+- **Brand Assets**: Apple Bites logo variants (metallic apple with money design)
+
+### Tier-Specific UI Elements
+- **Free Tier**: Basic styling, upgrade prompts, limited features visible
+- **Growth Tier**: Premium styling, expanded features, professional reports
+- **Capital Tier**: Executive styling, white-glove experience, concierge features
 
 ### Key UI Components Needed
 
@@ -320,29 +549,101 @@ IndustryChart     // Industry comparison charts
 
 #### 4. Admin Dashboard Components
 ```tsx
-LeadsTable        // Lead management interface
-AnalyticsCharts   // Assessment metrics and trends
+LeadsTable        // Lead management with tier filtering
+AnalyticsCharts   // Revenue analytics by tier
 UserManagement    // Team member administration
+TierMetrics       // Conversion tracking across tiers
+RevenueReporting  // Financial performance dashboard
+A/BTestingPanel   // Conversion optimization tools
+```
+
+#### 5. Tier-Specific Components
+```tsx
+TierSelection     // Homepage tier comparison and selection
+UpgradePrompts    // Strategic upgrade messaging throughout free experience
+PremiumFeatures   // Growth/Capital tier exclusive features
+AICoachingPanel   // Interactive AI business coaching interface
+IndustryCharts    // NAICS-specific benchmarking visualizations
 ```
 
 ## 🔌 External Integrations
 
-### 1. OpenAI Integration (AI Analysis)
+### 1. Advanced OpenAI Integration (Tier-Specific AI Analysis)
+
+#### Free Tier - Basic AI Analysis
 ```typescript
-// Generate executive summaries and recommendations
-const generateValuationAnalysis = async (assessmentData) => {
+const generateBasicAnalysis = async (assessmentData) => {
+  const response = await openai.chat.completions.create({
+    model: "gpt-4o-mini",
+    messages: [{
+      role: "system",
+      content: "You are a business analyst providing basic valuation insights. Keep responses concise and general."
+    }, {
+      role: "user",
+      content: `Basic business assessment: ${JSON.stringify(assessmentData)}`
+    }]
+  });
+  return response.choices[0].message.content;
+};
+```
+
+#### Growth Tier - Comprehensive AI Coaching
+```typescript
+const generateAdvancedCoaching = async (assessmentData, industryData) => {
+  const systemPrompt = `You are a senior M&A advisor and business strategist with 20+ years of experience. 
+  Provide comprehensive business coaching based on the assessment data and industry benchmarks.
+  
+  Focus on:
+  1. Strategic value improvement opportunities
+  2. Industry-specific growth strategies  
+  3. Exit readiness analysis
+  4. Competitive positioning advice
+  5. Risk mitigation strategies
+  6. Financial optimization recommendations
+  7. Market timing considerations
+  8. Actionable 90-day improvement plan
+  
+  Use industry data: ${JSON.stringify(industryData)}`;
+  
+  const response = await openai.chat.completions.create({
+    model: "gpt-4o",
+    temperature: 0.7,
+    max_tokens: 2500,
+    messages: [{
+      role: "system",
+      content: systemPrompt
+    }, {
+      role: "user",
+      content: `Comprehensive assessment data: ${JSON.stringify(assessmentData)}`
+    }]
+  });
+  
+  return {
+    executiveSummary: extractExecutiveSummary(response.choices[0].message.content),
+    strategicRecommendations: extractStrategicRecommendations(response.choices[0].message.content),
+    actionPlan: extractActionPlan(response.choices[0].message.content),
+    riskAnalysis: extractRiskAnalysis(response.choices[0].message.content),
+    industryInsights: generateIndustryInsights(assessmentData, industryData)
+  };
+};
+
+// AI Coaching Feature (Growth Tier Exclusive)
+const generatePersonalizedCoaching = async (assessmentData, specificFocus) => {
   const response = await openai.chat.completions.create({
     model: "gpt-4o",
     messages: [{
       role: "system",
-      content: "You are a business valuation expert..."
+      content: `You are a business coach specializing in ${specificFocus}. 
+      Provide specific, actionable advice for this business owner.`
     }, {
-      role: "user", 
-      content: JSON.stringify(assessmentData)
+      role: "user",
+      content: `Business context: ${JSON.stringify(assessmentData)}. 
+      Focus area: ${specificFocus}. 
+      Provide 5 specific action items with expected impact and timeline.`
     }]
   });
   return response.choices[0].message.content;
-}
+};
 ```
 
 ### 2. PDF Report Generation
@@ -460,18 +761,29 @@ POST /api/webhooks/gohighlevel  # Webhook processing
 # Database
 DATABASE_URL=postgresql://...
 
-# External Services
-OPENAI_API_KEY=sk-...
-SENDGRID_API_KEY=SG....
-GHL_API_KEY=...
-GHL_LOCATION_ID=...
+# External Services  
+OPENAI_API_KEY=sk-...                    # GPT-4o for AI coaching
+SENDGRID_API_KEY=SG....                  # Email delivery
+GHL_API_KEY=...                          # GoHighLevel CRM
+GHL_LOCATION_ID=...                      # GHL location ID
 
-# Webhook URLs  
-GHL_WEBHOOK_FREE_RESULTS=https://...
-GHL_WEBHOOK_GROWTH_RESULTS=https://...
+# Tier-Specific Webhook URLs
+GHL_WEBHOOK_FREE_RESULTS=https://...     # Free tier completions
+GHL_WEBHOOK_GROWTH_PURCHASE=https://...  # Growth tier purchases  
+GHL_WEBHOOK_GROWTH_RESULTS=https://...   # Growth tier completions
+GHL_WEBHOOK_CAPITAL_PURCHASE=https://... # Capital tier purchases
+GHL_WEBHOOK_CAPITAL_RESULTS=https://...  # Capital tier completions
 
 # Session Security
-SESSION_SECRET=...
+SESSION_SECRET=...                       # Session encryption key
+JWT_SECRET=...                          # JWT token signing
+
+# Payment Integration (if applicable)
+STRIPE_SECRET_KEY=sk_...                # Stripe payments
+STRIPE_WEBHOOK_SECRET=whsec_...         # Stripe webhook verification
+
+# Domain Configuration
+REPLIT_DOMAINS=applebites.ai            # Production domain
 ```
 
 ### Performance Requirements
@@ -520,22 +832,35 @@ SESSION_SECRET=...
 
 ## 🎯 Implementation Priority
 
-### Phase 1 (Core MVP)
-1. Database schema and basic authentication
-2. Multi-step assessment form
-3. Valuation calculation engine
-4. Basic results display
+### Phase 1 (Foundation)
+1. Database schema with tier support
+2. User authentication and tier-based access
+3. Free tier assessment (5-step basic flow)
+4. Basic valuation calculation engine
+5. Simple results display and PDF generation
 
-### Phase 2 (Professional Features)
-1. PDF report generation
-2. Email delivery system
-3. AI-powered analysis
-4. Professional UI/UX polish
+### Phase 2 (Growth Tier Implementation) 
+1. Industry classification system (NAICS database)
+2. Advanced 6-step assessment flow
+3. AI-powered coaching integration
+4. Industry-specific valuation calculations
+5. Professional PDF reports with branding
+6. Email delivery system enhancement
 
-### Phase 3 (Advanced Features)
-1. Admin dashboard and analytics
-2. CRM integration
-3. Advanced lead management
-4. Performance optimization
+### Phase 3 (Premium Features)
+1. Comprehensive admin dashboard
+2. GoHighLevel CRM integration 
+3. Lead scoring and management system
+4. Analytics and revenue reporting
+5. A/B testing capabilities
+6. Performance optimization
+
+### Phase 4 (Capital Tier - Future)
+1. Investment readiness assessment
+2. Institutional investor analysis
+3. Due diligence preparation tools
+4. Market comparables database
+5. Executive presentation templates
+6. Direct advisor consultation booking
 
 This comprehensive specification provides everything needed to replicate the Apple Bites Business Valuation Platform with clean architecture, no design issues, and clearly defined user flows.
