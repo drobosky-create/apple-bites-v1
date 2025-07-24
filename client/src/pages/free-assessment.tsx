@@ -231,7 +231,7 @@ export default function FreeAssessment() {
               left: 0,
               right: 0,
               bottom: 0,
-              background: 'rgba(11, 20, 38, 0.85)',
+              background: 'rgba(11, 20, 38, 0.65)',
               backdropFilter: 'blur(20px) saturate(180%)',
               WebkitBackdropFilter: 'blur(20px) saturate(180%)',
               border: '1px solid rgba(255, 255, 255, 0.1)',
@@ -398,7 +398,7 @@ export default function FreeAssessment() {
                       {isActive && (
                         <Chip 
                           label="Current" 
-                          size="large" 
+                          size="small" 
                           sx={{ 
                             backgroundColor: '#ffffff',
                             color: '#2152ff',

@@ -203,7 +203,7 @@ const PastAssessmentsSection = ({ userEmail, setLocation }: { userEmail: string,
     retry: false,
   });
 
-  const userAssessments = assessments?.filter((assessment: Assessment) => 
+  const userAssessments = assessments?.filter?.((assessment: Assessment) => 
     assessment.email === userEmail
   ) || [];
 
@@ -426,7 +426,7 @@ export default function Dashboard() {
               left: 0,
               right: 0,
               bottom: 0,
-              background: 'rgba(11, 20, 38, 0.85)', // Darker overlay to match login
+              background: 'rgba(11, 20, 38, 0.65)', // Lighter overlay for better visibility
               backdropFilter: 'blur(20px) saturate(180%)',
               WebkitBackdropFilter: 'blur(20px) saturate(180%)', // Safari support
               border: '1px solid rgba(255, 255, 255, 0.1)',
