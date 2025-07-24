@@ -192,7 +192,7 @@ export default function AuthenticMaterialLogin() {
   };
 
   const handleSignUp = () => {
-    setLocation("/assessment/free");
+    setLocation("/signup");
   };
 
   return (

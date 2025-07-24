@@ -143,10 +143,7 @@ export default function MaterialLogin() {
   };
 
   const handleSignUp = () => {
-    toast({
-      title: "Registration",
-      description: "Please use the assessment purchase flow to create your account.",
-    });
+    setLocation("/signup");
   };
 
   return (

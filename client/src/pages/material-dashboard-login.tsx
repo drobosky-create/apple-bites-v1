@@ -247,7 +247,7 @@ export default function MaterialDashboardLogin() {
                 >
                   Don't have an account?{' '}
                   <MuiLink
-                    href="/api/login"
+                    href="/signup"
                     sx={{
                       color: '#2152ff',
                       textDecoration: 'none',
