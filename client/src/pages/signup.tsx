@@ -210,169 +210,174 @@ export default function SignUp() {
           <AuthenticationCard>
 
             <CardContent sx={{ px: 4, pt: 12, pb: 4 }}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
-                <TextField
-                  fullWidth
-                  label="First Name"
-                  {...form.register("firstName")}
-                  error={!!form.formState.errors.firstName}
-                  helperText={form.formState.errors.firstName?.message}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <Person sx={{ color: '#666' }} />
-                      </InputAdornment>
-                    ),
-                  }}
-                  sx={{
-                    '& .MuiOutlinedInput-root': {
-                      borderRadius: '12px',
-                      backgroundColor: 'rgba(255, 255, 255, 0.8)',
-                    },
-                  }}
-                />
-                <TextField
-                  fullWidth
-                  label="Last Name"
-                  {...form.register("lastName")}
-                  error={!!form.formState.errors.lastName}
-                  helperText={form.formState.errors.lastName?.message}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <Person sx={{ color: '#666' }} />
-                      </InputAdornment>
-                    ),
-                  }}
-                  sx={{
-                    '& .MuiOutlinedInput-root': {
-                      borderRadius: '12px',
-                      backgroundColor: 'rgba(255, 255, 255, 0.8)',
-                    },
-                  }}
-                />
-              </Box>
-
-              <TextField
-                fullWidth
-                label="Email Address"
-                type="email"
-                {...form.register("email")}
-                error={!!form.formState.errors.email}
-                helperText={form.formState.errors.email?.message}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <Email sx={{ color: '#666' }} />
-                    </InputAdornment>
-                  ),
-                }}
-                sx={{
-                  mb: 3,
-                  '& .MuiOutlinedInput-root': {
-                    borderRadius: '12px',
-                    backgroundColor: 'rgba(255, 255, 255, 0.8)',
-                  },
-                }}
-              />
-
-              <TextField
-                fullWidth
-                label="Password"
-                type={showPassword ? 'text' : 'password'}
-                {...form.register("password")}
-                error={!!form.formState.errors.password}
-                helperText={form.formState.errors.password?.message}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <Lock sx={{ color: '#666' }} />
-                    </InputAdornment>
-                  ),
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        onClick={() => setShowPassword(!showPassword)}
-                        edge="end"
-                      >
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-                sx={{
-                  mb: 3,
-                  '& .MuiOutlinedInput-root': {
-                    borderRadius: '12px',
-                    backgroundColor: 'rgba(255, 255, 255, 0.8)',
-                  },
-                }}
-              />
-
-              <TextField
-                fullWidth
-                label="Confirm Password"
-                type={showConfirmPassword ? 'text' : 'password'}
-                {...form.register("confirmPassword")}
-                error={!!form.formState.errors.confirmPassword}
-                helperText={form.formState.errors.confirmPassword?.message}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <Lock sx={{ color: '#666' }} />
-                    </InputAdornment>
-                  ),
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                        edge="end"
-                      >
-                        {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-                sx={{
-                  mb: 4,
-                  '& .MuiOutlinedInput-root': {
-                    borderRadius: '12px',
-                    backgroundColor: 'rgba(255, 255, 255, 0.8)',
-                  },
-                }}
-              />
-
-              <SignUpButton
-                type="submit"
-                fullWidth
-                size="large"
-                disabled={signupMutation.isPending}
-                startIcon={<PersonAdd />}
-              >
-                {signupMutation.isPending ? "Creating Account..." : "Create Account"}
-              </SignUpButton>
-
-              <Box sx={{ textAlign: 'center', mt: 3 }}>
-                <Typography variant="body2" sx={{ color: '#666' }}>
-                  Already have an account?{' '}
-                  <MuiLink
-                    href="/login"
+              {/* Signup Form */}
+              <Box component="form" onSubmit={form.handleSubmit(onSubmit)}>
+                <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
+                  <TextField
+                    fullWidth
+                    label="First Name"
+                    {...form.register("firstName")}
+                    error={!!form.formState.errors.firstName}
+                    helperText={form.formState.errors.firstName?.message}
+                    variant="outlined"
+                    required
+                    disabled={signupMutation.isPending}
                     sx={{
-                      color: '#0b2147',
-                      fontWeight: 600,
-                      textDecoration: 'none',
-                      '&:hover': {
-                        textDecoration: 'underline',
+                      mb: 2,
+                      '& .MuiOutlinedInput-root': {
+                        backgroundColor: 'rgba(248, 249, 250, 0.8)',
+                        borderRadius: '8px',
                       },
                     }}
+                  />
+                  <TextField
+                    fullWidth
+                    label="Last Name"
+                    {...form.register("lastName")}
+                    error={!!form.formState.errors.lastName}
+                    helperText={form.formState.errors.lastName?.message}
+                    variant="outlined"
+                    required
+                    disabled={signupMutation.isPending}
+                    sx={{
+                      mb: 2,
+                      '& .MuiOutlinedInput-root': {
+                        backgroundColor: 'rgba(248, 249, 250, 0.8)',
+                        borderRadius: '8px',
+                      },
+                    }}
+                  />
+                </Box>
+
+                <TextField
+                  fullWidth
+                  label="Email Address"
+                  type="email"
+                  {...form.register("email")}
+                  error={!!form.formState.errors.email}
+                  helperText={form.formState.errors.email?.message}
+                  variant="outlined"
+                  required
+                  disabled={signupMutation.isPending}
+                  sx={{
+                    mb: 2,
+                    '& .MuiOutlinedInput-root': {
+                      backgroundColor: 'rgba(248, 249, 250, 0.8)',
+                      borderRadius: '8px',
+                    },
+                  }}
+                />
+
+                <TextField
+                  fullWidth
+                  label="Password"
+                  type={showPassword ? 'text' : 'password'}
+                  {...form.register("password")}
+                  error={!!form.formState.errors.password}
+                  helperText={form.formState.errors.password?.message}
+                  variant="outlined"
+                  required
+                  disabled={signupMutation.isPending}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() => setShowPassword(!showPassword)}
+                          edge="end"
+                          size="small"
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                  sx={{
+                    mb: 2,
+                    '& .MuiOutlinedInput-root': {
+                      backgroundColor: 'rgba(248, 249, 250, 0.8)',
+                      borderRadius: '8px',
+                    },
+                  }}
+                />
+
+                <TextField
+                  fullWidth
+                  label="Confirm Password"
+                  type={showConfirmPassword ? 'text' : 'password'}
+                  {...form.register("confirmPassword")}
+                  error={!!form.formState.errors.confirmPassword}
+                  helperText={form.formState.errors.confirmPassword?.message}
+                  variant="outlined"
+                  required
+                  disabled={signupMutation.isPending}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                          edge="end"
+                          size="small"
+                        >
+                          {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                  sx={{
+                    mb: 3,
+                    '& .MuiOutlinedInput-root': {
+                      backgroundColor: 'rgba(248, 249, 250, 0.8)',
+                      borderRadius: '8px',
+                    },
+                  }}
+                />
+
+                <SignUpButton
+                  type="submit"
+                  disabled={signupMutation.isPending}
+                  sx={{ 
+                    mb: 3,
+                    backgroundColor: '#42424a !important',
+                    '&:hover': {
+                      backgroundColor: '#3a3a40 !important',
+                    },
+                    '&:disabled': {
+                      backgroundColor: '#42424a !important',
+                      opacity: 0.6,
+                    }
+                  }}
+                >
+                  {signupMutation.isPending ? 'CREATING ACCOUNT...' : 'CREATE ACCOUNT'}
+                </SignUpButton>
+
+                <Box sx={{ textAlign: 'center' }}>
+                  <Typography 
+                    variant="body2" 
+                    sx={{ 
+                      color: '#67748e',
+                      fontSize: '0.875rem',
+                      fontFamily: 'Roboto, Helvetica, Arial, sans-serif',
+                    }}
                   >
-                    Sign in here
-                  </MuiLink>
-                </Typography>
+                    Already have an account?{' '}
+                    <MuiLink
+                      href="/login"
+                      sx={{
+                        color: '#344767',
+                        textDecoration: 'none',
+                        fontWeight: 600,
+                        cursor: 'pointer',
+                        '&:hover': {
+                          textDecoration: 'underline',
+                        },
+                      }}
+                    >
+                      Sign in here
+                    </MuiLink>
+                  </Typography>
+                </Box>
               </Box>
-            </form>
-          </CardContent>
+            </CardContent>
         </AuthenticationCard>
         </Box>
       </Container>
