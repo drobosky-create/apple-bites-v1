@@ -3,7 +3,7 @@ import { ValueDriversData } from "@shared/schema";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight, Info } from "lucide-react";
-import { ArgonButton } from "@/components/ui/argon-authentic";
+import { MaterialButton } from "@/components/ui/material-dashboard-system";
 
 interface ValueDriversFormProps {
   form: UseFormReturn<ValueDriversData>;

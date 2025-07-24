@@ -4,7 +4,12 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { ArgonBox, ArgonTypography, ArgonButton } from "@/components/ui/argon-authentic";
+import { 
+  MaterialCard, 
+  MaterialCardBody, 
+  MaterialButton 
+} from "@/components/ui/material-dashboard-system";
+import { Typography } from '@mui/material';
 import { ArrowLeft, ArrowRight, Calculator } from "lucide-react";
 
 interface EbitdaFormProps {

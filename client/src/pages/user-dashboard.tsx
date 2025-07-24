@@ -1,6 +1,15 @@
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { ArgonBox, ArgonTypography, ArgonButton } from "@/components/ui/argon-authentic";
-import { DetailedStatisticsCard } from "@/components/ui/argon-statistics-card";
+import { 
+  MaterialCard, 
+  MaterialCardHeader, 
+  MaterialCardBody, 
+  MaterialCardFooter,
+  MaterialButton, 
+  MaterialBackground,
+  MaterialContainer,
+  MaterialStatsCard,
+} from "@/components/ui/material-dashboard-system";
+import { Box, Typography } from '@mui/material';
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";

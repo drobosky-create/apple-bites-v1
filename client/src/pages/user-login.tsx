@@ -7,10 +7,11 @@ import { useToast } from "@/hooks/use-toast";
 import { Eye, EyeOff, LogIn, UserPlus, ArrowLeft } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { 
-  ArgonBox, 
-  ArgonButton, 
-  ArgonTypography 
-} from "@/components/ui/argon-authentic";
+  MaterialCard, 
+  MaterialCardHeader, 
+  MaterialCardBody, 
+  MaterialButton 
+} from "@/components/ui/material-dashboard-system";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { registerUserSchema, loginUserSchema, type RegisterUser, type LoginUser } from "@shared/schema";

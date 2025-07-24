@@ -21,10 +21,11 @@ import {
 import { Facebook, GitHub, Google, Apple, Email } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
 import { 
-  ArgonBox, 
-  ArgonButton, 
-  ArgonTypography 
-} from "@/components/ui/argon-authentic";
+  MaterialCard, 
+  MaterialCardHeader, 
+  MaterialCardBody, 
+  MaterialButton 
+} from "@/components/ui/material-dashboard-system";
 import { registerUserSchema, loginUserSchema, type RegisterUser, type LoginUser } from "@shared/schema";
 // Using direct path for logo
 const appleBitesLogo = "/apple-bites-logo-new.png";
