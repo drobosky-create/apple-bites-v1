@@ -10,7 +10,7 @@ Build a professional business valuation platform that provides comprehensive com
 - **Multi-Tier Business Valuation Platform**: Complete assessment system with Free, Growth ($795), and Capital tiers
 - **AI-Powered Analysis**: Advanced OpenAI GPT-4o integration for personalized business coaching and recommendations
 - **Industry-Specific Valuation**: Authentic NAICS database with 2,000+ industry classifications and specific multipliers
-- **Professional PDF Reports**: Tier-specific branded reports with executive summaries and action plans
+- **Results Dashboards**: Comprehensive valuation results with industry analysis and recommendations
 - **CRM Integration**: GoHighLevel webhook system for automated lead processing and follow-up workflows
 
 ### Target Users
@@ -140,8 +140,8 @@ CREATE TABLE valuation_assessments (
   -- Processing and Tier Management
   assessment_tier TEXT DEFAULT 'free',  -- 'free', 'growth', 'capital'
   is_processed BOOLEAN DEFAULT false,
-  pdf_url TEXT,
-  report_tier TEXT DEFAULT 'basic',    -- 'basic', 'professional', 'executive'
+  results_url TEXT,                    -- URL to results dashboard
+  dashboard_tier TEXT DEFAULT 'basic', -- 'basic', 'professional', 'executive'
   
   created_at TIMESTAMP DEFAULT NOW()
 );
@@ -207,7 +207,7 @@ Step 5: Follow-Up Preferences
 Results Page (Basic)
     - General valuation range
     - Basic business grade
-    - Basic PDF report
+    - Basic results dashboard
     - Upgrade prompts
 ```
 
@@ -259,7 +259,7 @@ Results Page (Premium)
     - AI-powered business coaching
     - Executive summary with action plan
     - Industry benchmarking charts
-    - Professional PDF report
+    - Comprehensive results dashboard
     - Strategic recommendations
     - Follow-up consultation booking
 ```
@@ -271,19 +271,19 @@ Homepage → Tier Selection
 Free Tier (Apple Bites Assessment)
     - 5-step basic assessment
     - General multipliers (no industry-specific)
-    - Basic PDF report
+    - Basic results dashboard
     - General AI summary
-    - Basic email delivery
+    - Lead capture and CRM integration
     
 Growth Tier ($795) - "Growth & Exit Assessment" 
     - 6-step comprehensive assessment
     - Industry-specific NAICS multipliers
     - AI-powered business coaching
     - Executive summary & action plan
-    - Professional PDF report
+    - Professional results dashboard
     - Industry benchmarking charts
     - Strategic recommendations
-    - Priority email support
+    - Priority CRM processing
     
 Capital Tier ($2,495) - "Capital Readiness Assessment"
     - Complete investment readiness analysis
@@ -646,49 +646,32 @@ const generatePersonalizedCoaching = async (assessmentData, specificFocus) => {
 };
 ```
 
-### 2. PDF Report Generation
+### 2. Results Dashboard Generation
 ```typescript
-// Use Puppeteer to generate professional PDF reports
-const generateValuationPDF = async (assessment) => {
-  const browser = await puppeteer.launch();
-  const page = await browser.newPage();
-  
-  const html = generateReportHTML(assessment);
-  await page.setContent(html);
-  
-  const pdf = await page.pdf({
-    format: 'A4',
-    printBackground: true,
-    margin: { top: '20mm', bottom: '20mm', left: '15mm', right: '15mm' }
-  });
-  
-  await browser.close();
-  return pdf;
-}
-```
-
-### 3. Email Delivery (SendGrid)
-```typescript
-// Send PDF reports via email
-const sendValuationReport = async (email, pdfBuffer) => {
-  const msg = {
-    to: email,
-    from: 'reports@applebites.ai',
-    subject: 'Your Business Valuation Report',
-    html: emailTemplate,
-    attachments: [{
-      content: pdfBuffer.toString('base64'),
-      filename: 'valuation-report.pdf',
-      type: 'application/pdf',
-      disposition: 'attachment'
-    }]
+// Generate comprehensive results dashboard
+const generateResultsDashboard = async (assessment) => {
+  const dashboardData = {
+    valuation: calculateValuationMetrics(assessment),
+    industryAnalysis: getIndustryAnalysis(assessment.naicsCode),
+    recommendations: await generateAIRecommendations(assessment),
+    benchmarks: getIndustryBenchmarks(assessment.naicsCode),
+    improvements: identifyImprovementAreas(assessment)
   };
   
-  await sgMail.send(msg);
-}
+  return dashboardData;
+};
+
+// Save results to database for dashboard access
+const saveResultsDashboard = async (assessmentId, dashboardData) => {
+  await storage.updateAssessment(assessmentId, {
+    resultsData: JSON.stringify(dashboardData),
+    isProcessed: true,
+    resultsUrl: `/results/${assessmentId}`
+  });
+};
 ```
 
-### 4. GoHighLevel CRM Integration
+### 3. GoHighLevel CRM Integration
 ```typescript
 // Process leads in CRM system
 const processLead = async (assessmentData) => {
@@ -714,8 +697,8 @@ const processLead = async (assessmentData) => {
 ```
 POST /api/valuation              # Submit complete assessment
 GET  /api/assessments/:id        # Retrieve assessment
-POST /api/assessments/:id/pdf    # Generate PDF report
-POST /api/assessments/:id/email  # Email report
+GET  /api/results/:id           # Get results dashboard data
+POST /api/assessments/:id/process # Process assessment and generate results
 ```
 
 ### User Management  
@@ -763,7 +746,6 @@ DATABASE_URL=postgresql://...
 
 # External Services  
 OPENAI_API_KEY=sk-...                    # GPT-4o for AI coaching
-SENDGRID_API_KEY=SG....                  # Email delivery
 GHL_API_KEY=...                          # GoHighLevel CRM
 GHL_LOCATION_ID=...                      # GHL location ID
 
@@ -837,15 +819,15 @@ REPLIT_DOMAINS=applebites.ai            # Production domain
 2. User authentication and tier-based access
 3. Free tier assessment (5-step basic flow)
 4. Basic valuation calculation engine
-5. Simple results display and PDF generation
+5. Simple results dashboard display
 
 ### Phase 2 (Growth Tier Implementation) 
 1. Industry classification system (NAICS database)
 2. Advanced 6-step assessment flow
 3. AI-powered coaching integration
 4. Industry-specific valuation calculations
-5. Professional PDF reports with branding
-6. Email delivery system enhancement
+5. Professional results dashboards with industry analysis
+6. Enhanced CRM integration and lead processing
 
 ### Phase 3 (Premium Features)
 1. Comprehensive admin dashboard
