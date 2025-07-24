@@ -80,9 +80,9 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
                 </svg>
               </div>
               <div className="flex-1">
-                <h4 className="text-2xl font-bold text-[#0b2147] mb-4">AI-Generated Executive Summary</h4>
+                <h4 className="text-xl font-bold text-[#0b2147] mb-4">AI-Generated Executive Summary</h4>
                 <div className="prose prose-slate max-w-none">
-                  <p className="text-lg text-slate-700 leading-relaxed whitespace-pre-wrap">{results.executiveSummary}</p>
+                  <p className="text-md text-slate-700 leading-relaxed whitespace-pre-wrap">{results.executiveSummary}</p>
                 </div>
               </div>
             </div>
@@ -99,9 +99,9 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
                 </svg>
               </div>
               <div className="flex-1">
-                <h4 className="text-2xl font-bold text-slate-900 mb-4">Detailed Business Analysis</h4>
+                <h4 className="text-xl font-bold text-slate-900 mb-4">Detailed Business Analysis</h4>
                 <div className="prose prose-slate max-w-none">
-                  <div className="text-lg text-slate-700 leading-relaxed whitespace-pre-wrap">{results.narrativeSummary}</div>
+                  <div className="text-md text-slate-700 leading-relaxed whitespace-pre-wrap">{results.narrativeSummary}</div>
                 </div>
               </div>
             </div>
