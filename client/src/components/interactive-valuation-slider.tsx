@@ -223,23 +223,23 @@ export default function InteractiveValuationSlider() {
         }`}>
           
           <div className="text-center relative z-10">
-            <h3 className="text-lg sm:text-xl font-semibold text-white mb-2 tracking-wide">Potential Value</h3>
+            <h3 className="text-lg sm:text-xl font-semibold text-black mb-2 tracking-wide">Potential Value</h3>
             {sliderGrade !== baseGrade ? (
-              <p className="text-sm sm:text-base text-white/80 mb-3">
+              <p className="text-sm sm:text-base text-black/80 mb-3">
                 Based on selected grade ({sliderGrade})
               </p>
             ) : (
-              <p className="text-sm sm:text-base text-white/80 mb-3">
+              <p className="text-sm sm:text-base text-black/80 mb-3">
                 Based on selected grade ({sliderGrade})
               </p>
             )}
-            <div className="text-3xl sm:text-4xl font-bold text-white mb-3">
+            <div className="text-3xl sm:text-4xl font-bold text-black mb-3">
               ${sliderValuation.toLocaleString()}
             </div>
-            <div className="text-sm sm:text-base font-semibold text-white/90 mb-3">
+            <div className="text-sm sm:text-base font-semibold text-black/90 mb-3">
               {sliderMultiple}x EBITDA Multiple
             </div>
-            <span className="inline-flex items-center rounded-full px-4 py-1 text-sm font-medium bg-white/20 text-white border border-white/30">
+            <span className="inline-flex items-center rounded-full px-4 py-1 text-sm font-medium bg-white/20 text-black border border-white/30">
               {sliderCategory.label}
             </span>
           </div>
