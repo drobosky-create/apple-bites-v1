@@ -64,20 +64,24 @@ const LoginCard = styled(Card)(({ theme }) => ({
 }));
 
 const FloatingHeader = styled(Box)(({ theme }) => ({
-  backgroundColor: 'rgba(255, 255, 255, 0.1)',
+  backgroundColor: 'rgba(255, 255, 255, 0.25)',
   backdropFilter: 'blur(20px) saturate(180%)',
   WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-  border: '1px solid rgba(255, 255, 255, 0.2)',
+  border: '1px solid rgba(255, 255, 255, 0.3)',
   borderRadius: '20px',
   padding: '24px',
   margin: '-48px auto 32px auto',
   width: '90%',
   maxWidth: '300px',
   textAlign: 'center',
-  boxShadow: '0 16px 32px rgba(0, 0, 0, 0.2)',
+  boxShadow: '0 16px 32px rgba(0, 0, 0, 0.3)',
   position: 'relative',
   zIndex: 2,
   transform: 'scale(1.15)',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
 }));
 
 const SignUpButton = styled(Button)({
@@ -172,15 +176,17 @@ export default function SignUp() {
               src={appleBitesLogo}
               alt="Apple Bites"
               sx={{
-                width: '120px',
+                width: '175px',
                 height: 'auto',
-                mb: 2,
+                mb: 1,
+                display: 'block',
+                margin: '0 auto 8px auto',
               }}
             />
             <Typography 
               variant="h5" 
               sx={{ 
-                color: 'white',
+                color: 'slate',
                 fontWeight: 700,
                 textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
               }}
