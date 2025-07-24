@@ -1,5 +1,6 @@
 import React from 'react';
 import { Typography, Box } from '@mui/material';
+import MaterialDashboardWrapper from '@/components/ui/MaterialDashboardWrapper';
 import {
   MaterialCard,
   MaterialCardHeader,
@@ -21,7 +22,8 @@ import {
 
 export default function SimpleComponentShowcase() {
   return (
-    <MaterialBackground>
+    <MaterialDashboardWrapper>
+      <MaterialBackground>
       <MaterialContainer maxWidth="lg">
         <MaterialTitle variant="h3" align="center" gutterBottom>
           Design System Showcase
@@ -299,5 +301,6 @@ export default function SimpleComponentShowcase() {
         </Box>
       </MaterialContainer>
     </MaterialBackground>
+    </MaterialDashboardWrapper>
   );
 }

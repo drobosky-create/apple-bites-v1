@@ -1,13 +1,9 @@
 /**
  * Material Dashboard 2 Wrapper
- * Provides the authentic Material Dashboard theme and styling
+ * Provides minimal wrapper without global theme changes
  */
 
 import React from 'react';
-import { ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-// Material Dashboard 2 theme
-import materialTheme from '@/assets/theme';
 
 interface MaterialWrapperProps {
   children: React.ReactNode;
@@ -15,10 +11,5 @@ interface MaterialWrapperProps {
 }
 
 export default function MaterialWrapper({ children }: MaterialWrapperProps) {
-  return (
-    <ThemeProvider theme={materialTheme}>
-      <CssBaseline />
-      {children}
-    </ThemeProvider>
-  );
+  return <>{children}</>;
 }
