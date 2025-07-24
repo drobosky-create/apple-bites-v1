@@ -170,7 +170,11 @@ export default function AuthenticMaterialLogin() {
         title: "Welcome back!",
         description: `Logged in to your ${data.user?.tier || 'free'} account`,
       });
-      setLocation("/dashboard");
+      
+      // Add a small delay to ensure toast shows, then redirect
+      setTimeout(() => {
+        setLocation("/dashboard");
+      }, 500);
     } catch (error: any) {
       toast({
         title: "Login failed",
@@ -188,10 +192,7 @@ export default function AuthenticMaterialLogin() {
   };
 
   const handleSignUp = () => {
-    toast({
-      title: "Registration",
-      description: "Please use the assessment purchase flow to create your account.",
-    });
+    setLocation("/assessment/free");
   };
 
   return (
