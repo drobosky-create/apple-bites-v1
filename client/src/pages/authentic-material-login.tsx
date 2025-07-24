@@ -23,14 +23,14 @@ const appleBitesLogo = appleBitesLogoSrc;
 // Authentic Material Dashboard Styled Components (matching the template exactly)
 const MaterialBackground = styled(Box)(({ theme }) => ({
   minHeight: '100vh',
-  background: `
+  backgroundImage: `
     linear-gradient(310deg, rgba(33, 82, 255, 0.7) 0%, rgba(33, 212, 253, 0.7) 100%),
     url('/assets/twilight-city-skyline.png')
   `,
   backgroundSize: 'cover',
   backgroundPosition: 'center',
   backgroundRepeat: 'no-repeat',
-  backgroundBlendMode: 'overlay',
+  backgroundAttachment: 'fixed',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
