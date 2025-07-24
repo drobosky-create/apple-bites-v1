@@ -21,11 +21,24 @@ import path from 'path';
 import bcrypt from 'bcryptjs';
 import { nanoid } from 'nanoid';
 
-// Extend Express Request interface
+// Extend Express types
+declare module 'express-session' {
+  interface SessionData {
+    customUserSessionId?: string;
+    teamSessionId?: string;
+    adminAuthenticated?: boolean;
+    userId?: string;
+    userEmail?: string;
+    userTier?: string;
+  }
+}
+
 declare global {
   namespace Express {
     interface Request {
       user?: TeamMember;
+      currentUser?: any;
+      authType?: string;
     }
   }
 }
@@ -106,8 +119,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Create user
       const user = await storage.createCustomUser({
-        firstName: validatedData.firstName,
-        lastName: validatedData.lastName,
+        firstName: validatedData.firstName || '',
+        lastName: validatedData.lastName || '',
         email: validatedData.email,
         passwordHash,
       });

@@ -44,6 +44,8 @@ export interface IStorage {
 
   // User management methods (for both Replit Auth and custom auth)
   getUser(id: string): Promise<User | undefined>;
+  getUserById(id: string): Promise<User | undefined>;
+  createUser(userData: Partial<User>): Promise<User>;
   upsertUser(user: UpsertUser): Promise<User>;
   getUserByEmail(email: string): Promise<User | undefined>;
   updateUser(id: string, updates: Partial<User>): Promise<User>;
@@ -175,6 +177,38 @@ export class DatabaseStorage implements IStorage {
   async getUser(id: string): Promise<User | undefined> {
     const [user] = await db.select().from(users).where(eq(users.id, id));
     return user || undefined;
+  }
+
+  async getUserById(id: string): Promise<User | undefined> {
+    return this.getUser(id);
+  }
+
+  async createUser(userData: Partial<User>): Promise<User> {
+    const userId = userData.id || `user_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+    
+    const [user] = await db
+      .insert(users)
+      .values({
+        id: userId,
+        email: userData.email!,
+        firstName: userData.firstName || null,
+        lastName: userData.lastName || null,
+        fullName: userData.fullName || null,
+        profileImageUrl: userData.profileImageUrl || null,
+        passwordHash: userData.passwordHash || null,
+        authProvider: userData.authProvider || 'custom',
+        replitUserId: userData.replitUserId || null,
+        tier: userData.tier || 'free',
+        ghlContactId: userData.ghlContactId || null,
+        resultReady: userData.resultReady || false,
+        isActive: userData.isActive !== false,
+        emailVerified: userData.emailVerified || false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      })
+      .returning();
+    
+    return user;
   }
 
   async upsertUser(userData: UpsertUser): Promise<User> {

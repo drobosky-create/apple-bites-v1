@@ -28,6 +28,7 @@ export const users = pgTable("users", {
   tier: text("tier").notNull().default("free"), // "free", "growth", "capital"
   ghlContactId: text("ghl_contact_id"),
   resultReady: boolean("result_ready").default(false),
+  awaitingPasswordCreation: boolean("awaiting_password_creation").default(false),
   isActive: boolean("is_active").default(true),
   emailVerified: boolean("email_verified").default(false),
   createdAt: timestamp("created_at").defaultNow(),
@@ -52,6 +53,7 @@ export const valuationAssessments = pgTable("valuation_assessments", {
   industryDescription: text("industry_description"),
   
   // Tier Information
+  tier: text("tier").default("free"), // "free", "growth", "capital"
   reportTier: text("report_tier").notNull().default("free"), // "free" or "paid"
   paymentStatus: text("payment_status").default("pending"), // "pending", "completed", "failed"
   stripePaymentId: text("stripe_payment_id"),
@@ -162,6 +164,7 @@ export const leadActivities = pgTable("lead_activities", {
   activityType: text("activity_type").notNull(), // "assessment_completed", "email_sent", "call_made", "meeting_scheduled", etc.
   activityData: text("activity_data"), // JSON string for additional data
   description: text("description"),
+  metadata: jsonb("metadata"), // Additional structured data
   
   createdAt: timestamp("created_at").defaultNow(),
 });

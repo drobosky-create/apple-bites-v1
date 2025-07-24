@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 import { Facebook, GitHub, Google, Apple, Email } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
-import Card from "@/components/MaterialCard";
+import { Card } from '@mui/material';
 
 // Using direct path for logo
 const appleBitesLogo = "/assets/logos/apple-bites-logo-variant-1.png";
