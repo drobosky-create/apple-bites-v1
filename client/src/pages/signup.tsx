@@ -48,40 +48,38 @@ const LoginBackground = styled(Box)(({ theme }) => ({
   },
 }));
 
-const LoginCard = styled(Card)(({ theme }) => ({
+const AuthenticationCard = styled(Card)(({ theme }) => ({
   maxWidth: 450,
   width: '100%',
   margin: '0 16px',
-  backgroundColor: 'rgba(255, 255, 255, 0.95)',
-  backdropFilter: 'blur(20px) saturate(180%)',
-  WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-  border: '1px solid rgba(255, 255, 255, 0.2)',
-  borderRadius: '24px',
-  boxShadow: '0 32px 64px rgba(0, 0, 0, 0.3), 0 16px 32px rgba(0, 0, 0, 0.2)',
+  marginTop: '160px', // slight push to sit under floating header
+  borderRadius: '16px',
+  minHeight: '520px', // adjusted for signup form
+  backgroundColor: '#fff',
   position: 'relative',
   zIndex: 1,
-  overflow: 'visible',
-}));
-
-const FloatingHeader = styled(Box)(({ theme }) => ({
-  backgroundColor: 'rgba(255, 255, 255, 0.25)',
-  backdropFilter: 'blur(20px) saturate(180%)',
-  WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-  border: '1px solid rgba(255, 255, 255, 0.3)',
-  borderRadius: '20px',
-  padding: '24px',
-  margin: '-48px auto 32px auto',
-  width: '90%',
-  maxWidth: '300px',
-  textAlign: 'center',
-  boxShadow: '0 16px 32px rgba(0, 0, 0, 0.3)',
-  position: 'relative',
-  zIndex: 2,
-  transform: 'scale(1.15)',
   display: 'flex',
   flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
+  justifyContent: 'flex-start', // ensures top-alignment
+  transform: 'scale(1.15)',
+  transformOrigin: 'center center'
+}));
+
+const HeaderSection = styled(Box)(({ theme }) => ({
+  position: 'absolute',
+  top: '20px',
+  left: 0,
+  right: 0,
+  margin: '0 auto',
+  maxWidth: '300px',
+  backgroundColor: 'rgba(255, 255, 255, 0.1)',
+  borderRadius: '16px',
+  boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
+  padding: '24px 16px',
+  zIndex: 2,
+  textAlign: 'center',
+  backdropFilter: 'blur(10px)',
+  border: '1px solid rgba(255, 255, 255, 0.2)',
 }));
 
 const SignUpButton = styled(Button)({
@@ -170,41 +168,48 @@ export default function SignUp() {
   return (
     <LoginBackground>
       <Container maxWidth="sm">
-        <LoginCard>
-          <FloatingHeader>
-            <Box component="img"
+        <Box sx={{ 
+          position: 'relative',
+          minHeight: '620px',
+          transform: 'scale(1.15)',
+          transformOrigin: 'center center'
+        }}>
+          {/* Floating Header Section */}
+          <HeaderSection>
+            <img
               src={appleBitesLogo}
-              alt="Apple Bites"
-              sx={{
-                width: '175px',
-                height: 'auto',
-                mb: 1,
+              alt="Apple Bites Business Assessment"
+              style={{
+                height: '225px',
+                width: 'auto',
+                filter: 'brightness(1.1)',
                 display: 'block',
-                margin: '0 auto 8px auto',
+                margin: '0 auto 16px auto',
+              }}
+              onError={(e) => {
+                console.log('Logo failed to load:', appleBitesLogo);
+                // Fallback to a different logo
+                (e.target as HTMLImageElement).src = '/apple-bites-logo.png';
               }}
             />
+
             <Typography 
-              variant="h5" 
+              variant="h4" 
               sx={{ 
-                color: 'slate',
-                fontWeight: 700,
-                textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
+                fontWeight: 600,
+                mb: 2,
+                fontSize: '1.25rem',
+                fontFamily: 'Roboto, Helvetica, Arial, sans-serif',
+                color: '#fff',
               }}
             >
               Create Account
             </Typography>
-            <Typography 
-              variant="body2" 
-              sx={{ 
-                color: 'rgba(255, 255, 255, 0.8)',
-                mt: 1,
-              }}
-            >
-              Join Apple Bites Business Assessment
-            </Typography>
-          </FloatingHeader>
+          </HeaderSection>
 
-          <CardContent sx={{ p: 4, pt: 2 }}>
+          <AuthenticationCard>
+
+            <CardContent sx={{ px: 4, pt: 12, pb: 4 }}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
                 <TextField
@@ -368,7 +373,8 @@ export default function SignUp() {
               </Box>
             </form>
           </CardContent>
-        </LoginCard>
+        </AuthenticationCard>
+        </Box>
       </Container>
     </LoginBackground>
   );
