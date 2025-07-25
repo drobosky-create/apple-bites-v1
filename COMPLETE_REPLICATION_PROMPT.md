@@ -681,48 +681,337 @@ const saveResultsDashboard = async (assessmentId, dashboardData) => {
 };
 ```
 
-### 3. Value Improvement Calculator
+### 3. Value Improvement Calculator (Interactive Valuation Tool)
+
+#### Overview
+The Value Improvement Calculator is a sophisticated interactive tool that allows users to visualize how operational improvements affect their business valuation in real-time. It features glassmorphism design, animated components, and tier-based access controls.
+
+#### Core Architecture
 ```typescript
-// Interactive calculator for exploring valuation improvements
-const ValueImprovementCalculator = {
-  // Load user's assessment data
-  loadAssessmentData: async (assessmentId: string) => {
-    const assessment = await storage.getAssessment(assessmentId);
-    return {
-      currentScores: assessment.valueDriverScores,
-      currentValuation: assessment.calculatedValuation,
-      industryMultiplier: assessment.industryMultiplier
-    };
+// Main Value Calculator Component
+const ValueCalculator = {
+  // Route: /value-calculator
+  // Requires: Completed assessment to access
+  // Features: Real-time grade adjustment with immediate valuation updates
+  
+  // Assessment Data Loading
+  loadAssessmentData: async (assessmentId?: string) => {
+    // Fetch all user assessments
+    const assessments = await fetch('/api/analytics/assessments');
+    
+    // Use specific assessment ID if provided, otherwise use most recent
+    const targetAssessment = assessmentId 
+      ? assessments.find(a => a.id.toString() === assessmentId)
+      : assessments[assessments.length - 1];
+    
+    // Extract current EBITDA and overall grade
+    const currentEbitda = parseFloat(targetAssessment.adjustedEbitda) || 1379841;
+    const baseGrade = targetAssessment.overallScore?.charAt(0) as OperationalGrade || 'C';
+    
+    return { targetAssessment, currentEbitda, baseGrade };
   },
 
-  // Calculate potential improvements
-  calculatePotentialGain: (currentScores, improvedScores, industryData) => {
-    const currentMultiplier = calculateValueDriverMultiplier(currentScores);
-    const improvedMultiplier = calculateValueDriverMultiplier(improvedScores);
-    
-    const currentValuation = baseEbitda * industryData.baseMultiplier * currentMultiplier;
-    const improvedValuation = baseEbitda * industryData.baseMultiplier * improvedMultiplier;
-    
-    return {
-      potentialGain: improvedValuation - currentValuation,
-      percentageIncrease: ((improvedValuation / currentValuation) - 1) * 100,
-      newValuation: improvedValuation
-    };
+  // Grade System (A-F with specific multipliers)
+  gradeMultipliers: {
+    'A': 7.5, // Excellent Operations - Premium multiple
+    'B': 5.7, // Good Operations - Above average
+    'C': 4.2, // Average Operations - Market standard
+    'D': 3.0, // Needs Improvement - Below market
+    'F': 2.0  // At Risk - Distressed multiple
   },
 
-  // Interactive grade adjustment interface
-  renderGradeSelector: (valueDriver, currentGrade, onGradeChange) => (
-    <InteractiveGradeSlider
-      valueDriver={valueDriver}
-      currentGrade={currentGrade}
-      onChange={(newGrade) => {
-        onGradeChange(valueDriver, newGrade);
-        updatePotentialGain();
-      }}
-    />
-  )
+  // Real-time Valuation Calculation
+  calculateValuation: (grade: OperationalGrade, ebitda: number) => {
+    const multiple = gradeMultipliers[grade];
+    return ebitda * multiple;
+  },
+
+  // Potential Gain Analysis
+  calculatePotentialGain: (currentGrade: string, targetGrade: string, ebitda: number) => {
+    const currentValuation = calculateValuation(currentGrade, ebitda);
+    const targetValuation = calculateValuation(targetGrade, ebitda);
+    
+    return {
+      potentialGain: targetValuation - currentValuation,
+      percentageIncrease: ((targetValuation / currentValuation) - 1) * 100,
+      newValuation: targetValuation,
+      currentValuation
+    };
+  }
 };
 ```
+
+#### Interactive Grade Slider Component
+```typescript
+// Interactive Valuation Slider with Real-time Updates
+const InteractiveValuationSlider = {
+  // State Management
+  state: {
+    sliderGrade: 'C', // Current slider position
+    baseGrade: 'C',   // User's actual assessment grade
+    currentEbitda: 0, // Loaded from assessment
+    showBooking: false // Consultation booking modal
+  },
+
+  // Grade to Number Conversion (for slider)
+  gradeToNumber: (grade: OperationalGrade) => {
+    const mapping = { 'A': 4, 'B': 3, 'C': 2, 'D': 1, 'F': 0 };
+    return mapping[grade];
+  },
+
+  numberToGrade: (num: number) => {
+    const mapping = { 4: 'A', 3: 'B', 2: 'C', 1: 'D', 0: 'F' };
+    return mapping[num] || 'F';
+  },
+
+  // Slider Change Handler
+  handleSliderChange: (value: number[]) => {
+    const newGrade = numberToGrade(value[0]);
+    setSliderGrade(newGrade);
+    // Automatically triggers recalculation through React state
+  },
+
+  // Grade Information with Visual Styling
+  getGradeInfo: (grade: OperationalGrade) => ({
+    'A': {
+      bg: 'bg-green-500/85',
+      border: 'border-green-400',
+      gradient: 'from-green-50 to-emerald-50',
+      badgeBg: 'bg-green-500',
+      description: 'Excellent Operations',
+      multiple: '7.5x EBITDA'
+    },
+    'B': {
+      bg: 'bg-blue-500/80',
+      border: 'border-blue-400', 
+      gradient: 'from-blue-50 to-indigo-50',
+      badgeBg: 'bg-blue-500',
+      description: 'Good Operations',
+      multiple: '5.7x EBITDA'
+    },
+    'C': {
+      bg: 'bg-yellow-500/75',
+      border: 'border-yellow-400',
+      gradient: 'from-yellow-50 to-amber-50',
+      badgeBg: 'bg-yellow-500',
+      description: 'Average Operations',
+      multiple: '4.2x EBITDA'
+    },
+    'D': {
+      bg: 'bg-orange-500/70',
+      border: 'border-orange-400',
+      gradient: 'from-orange-50 to-red-50',
+      badgeBg: 'bg-orange-500',
+      description: 'Needs Improvement',
+      multiple: '3.0x EBITDA'
+    },
+    'F': {
+      bg: 'bg-red-500/65',
+      border: 'border-red-400',
+      gradient: 'from-red-50 to-pink-50',
+      badgeBg: 'bg-red-500',
+      description: 'At Risk',
+      multiple: '2.0x EBITDA'
+    }
+  }[grade])
+};
+```
+
+#### Operational Grade Gauge (Glassmorphism Component)
+```typescript
+// Animated Semi-Circle Grade Gauge with Glass Effect
+const OperationalGradeGauge = {
+  // Visual Design: Glassmorphism with backdrop blur
+  containerStyles: 'bg-black/20 backdrop-blur-md rounded-2xl shadow-2xl border border-white/10',
+  
+  // Grade Segments (Semi-circle from 0° to 180°)
+  gradeSegments: [
+    { grade: 'F', color: 'bg-red-500', angle: 0, label: 'Poor' },
+    { grade: 'D', color: 'bg-orange-400', angle: 36, label: 'Below Average' },
+    { grade: 'C', color: 'bg-yellow-300', angle: 72, label: 'Average' },
+    { grade: 'B', color: 'bg-sky-400', angle: 108, label: 'Good' },
+    { grade: 'A', color: 'bg-emerald-500', angle: 144, label: 'Excellent' }
+  ],
+
+  // Needle Animation (1.5 second easing)
+  animateNeedle: (targetGrade: string) => {
+    const targetAngle = getTargetAngle(targetGrade);
+    const duration = 1500; // 1.5 seconds
+    
+    // Cubic easing function for smooth movement
+    const easeOut = (progress: number) => 1 - Math.pow(1 - progress, 3);
+    
+    // Animate from current position to target
+    animateToAngle(targetAngle, duration, easeOut);
+  },
+
+  // SVG Arc Generation
+  createArcPath: (startAngle: number, endAngle: number, radius: number) => {
+    // Convert angles to semi-circle coordinates
+    // Creates smooth arc segments for visual gauge
+    return svgPath;
+  },
+
+  // Needle Positioning
+  calculateNeedlePosition: (angle: number) => {
+    const needleAngleRad = (angle + 180) * (Math.PI / 180);
+    const needleLength = 75;
+    const centerX = 150, centerY = 120;
+    
+    return {
+      x: centerX + needleLength * Math.cos(needleAngleRad),
+      y: centerY + needleLength * Math.sin(needleAngleRad)
+    };
+  }
+};
+```
+
+#### Two-Panel Layout System
+```typescript
+// Side-by-Side Current vs Potential Value Display
+const ValueComparisonLayout = {
+  // Layout: 3 columns gauge, 2 columns potential gain display
+  layout: 'grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6',
+
+  // Current Value Card (Glassmorphism)
+  currentValueCard: {
+    container: 'bg-black/20 backdrop-blur-md rounded-2xl shadow-xl border border-white/10',
+    title: 'Current Business Value',
+    display: 'Real-time EBITDA × Current Grade Multiplier',
+    styling: 'White text on dark glass background'
+  },
+
+  // Potential Value Card (Dynamic Styling)
+  potentialValueCard: {
+    container: 'Dynamic background based on improvement potential',
+    conditionalStyling: {
+      noImprovement: 'bg-slate-100 border-slate-200',
+      hasImprovement: 'bg-gradient-to-br from-emerald-50 to-green-100 border-emerald-200'
+    },
+    title: 'Potential Value at [Target Grade]',
+    gain: 'Prominent gain display with percentage increase'
+  },
+
+  // Responsive Design
+  responsive: {
+    mobile: 'Single column stack',
+    tablet: 'Side-by-side with reduced spacing',
+    desktop: 'Full side-by-side with optimal spacing'
+  }
+};
+```
+
+#### Tier-Based Access Control
+```typescript
+// Access Control for Value Calculator Features
+const ValueCalculatorAccess = {
+  // Free Tier: View-Only Access
+  freeTier: {
+    access: 'Basic calculator view',
+    features: [
+      'View current valuation',
+      'Basic grade slider interaction',
+      'Simple improvement calculations'
+    ],
+    restrictions: [
+      'No scenario saving',
+      'No detailed improvement plans',
+      'Limited grade explanations'
+    ]
+  },
+
+  // Growth Tier: Full Interactive Access
+  growthTier: {
+    access: 'Complete calculator functionality',
+    features: [
+      'Full interactive grade adjustments',
+      'Scenario planning and saving',
+      'Detailed improvement roadmaps',
+      'Industry comparison data',
+      'AI-powered recommendations',
+      'Consultation booking integration'
+    ],
+    enhancements: [
+      'Detailed grade descriptions',
+      'Specific action plans per grade improvement',
+      'ROI calculations for improvements',
+      'Timeline planning tools'
+    ]
+  },
+
+  // Access Verification
+  verifyAccess: async (userId: string, feature: string) => {
+    const user = await getUser(userId);
+    const requiredTier = featureTierMapping[feature];
+    
+    return user.tier === 'growth' || user.tier === 'capital' 
+      ? { hasAccess: true }
+      : { hasAccess: false, upgradeRequired: true };
+  }
+};
+```
+
+#### Integration with Assessment Results
+```typescript
+// Seamless Integration from Assessment Results
+const AssessmentIntegration = {
+  // "Explore Value Improvements" Button
+  resultsPageIntegration: {
+    buttonPlacement: 'Assessment results page',
+    functionality: 'Redirect with assessment ID parameter',
+    route: '/value-calculator?assessmentId=${results.id}',
+    styling: 'Consistent brand styling with calculator icon'
+  },
+
+  // Assessment Data Persistence
+  dataFlow: {
+    from: 'Completed valuation assessment',
+    to: 'Value improvement calculator',
+    parameters: [
+      'Assessment ID for specific data loading',
+      'EBITDA values for calculations',
+      'Current grade for baseline',
+      'Industry multipliers for context'
+    ]
+  },
+
+  // Real-time Updates
+  liveCalculations: {
+    trigger: 'Slider movement',
+    updates: [
+      'Gauge needle animation',
+      'Value card recalculation',
+      'Potential gain display',
+      'Percentage increase calculation'
+    ],
+    performance: 'Instant updates without API calls'
+  }
+};
+```
+
+#### Key Implementation Features
+
+1. **Real-time Interactivity**: Immediate visual feedback on grade adjustments
+2. **Glassmorphism Design**: Modern glass effect with backdrop blur and transparency
+3. **Smooth Animations**: 1.5-second eased needle movements and transitions
+4. **Responsive Layout**: Optimized for mobile, tablet, and desktop viewing
+5. **Assessment Integration**: Direct linking from results with parameter passing
+6. **Tier-based Access**: Different functionality levels based on user subscription
+7. **Consultation Booking**: Integrated GoHighLevel booking widget access
+8. **Professional Styling**: Consistent brand colors and enterprise-grade design
+
+#### Navigation Flow
+```
+Assessment Results → "Explore Value Improvements" Button → Value Calculator
+                                    ↓
+              Load User's Assessment Data → Display Current Grade & Valuation
+                                    ↓
+              Interactive Grade Slider → Real-time Valuation Updates
+                                    ↓
+              Potential Gain Display → "Book Consultation" CTA
+```
+
+This Value Improvement Calculator provides users with an engaging, interactive way to understand how operational improvements directly translate to increased business value, encouraging them to take action on their assessment recommendations.
 
 ### 4. Tier-Based Access Control System
 ```typescript
