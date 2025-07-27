@@ -66,15 +66,17 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
   const isSubmitting = form.formState.isSubmitting;
 
   return (
-    <div >
+    <div className="bg-white p-6 rounded-lg shadow-sm">
       {/* Executive Header Section */}
-      <div >
-        <div >
-          <User  />
+      <div className="flex items-center mb-6">
+        <div className="mr-4">
+          <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+            <User className="w-6 h-6 text-blue-600" />
+          </div>
         </div>
         <div>
-          <h1 >Contact Information</h1>
-          <p >
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Contact Information</h1>
+          <p className="text-gray-600">
             Please provide your contact details to begin the comprehensive valuation assessment.
           </p>
         </div>
@@ -82,28 +84,28 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
 
       {/* Pre-fill Notice for Authenticated Users */}
       {showPreFillOption && isPreFilled && (
-        <div >
-          <div >
-            <CheckCircle  />
-            <div >
-              <h4 >
+        <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+          <div className="flex items-center">
+            <CheckCircle className="w-5 h-5 text-green-600 mr-3" />
+            <div className="flex-1">
+              <h4 className="font-semibold text-green-800 mb-1">
                 Welcome back, {(user as any)?.firstName}!
               </h4>
-              <p >
+              <p className="text-green-700 text-sm mb-3">
                 We've pre-filled your contact information from your profile. You can skip to the next step or update any details below.
               </p>
-              <div >
+              <div className="flex gap-2">
                 <Button
                   onClick={handleSkipToNext}
-                  
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm"
                 >
-                  <SkipForward  />
+                  <SkipForward className="w-4 h-4 mr-2" />
                   Skip to EBITDA Entry
                 </Button>
                 <Button
-                  variant="outline"
+                  variant="outlined"
                   onClick={() => setShowPreFillOption(false)}
-                  
+                  className="border border-gray-300 hover:bg-gray-50 text-gray-700 px-4 py-2 rounded-md text-sm"
                 >
                   Update My Information
                 </Button>
