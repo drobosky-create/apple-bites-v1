@@ -28,7 +28,7 @@ interface DashboardUser {
 const mockUser: DashboardUser = {
   name: 'Demo User',
   email: 'demo@applebites.ai',
-  tier: 'capital',
+  tier: 'free',
   firstName: 'Demo',
   lastName: 'User'
 };
@@ -211,7 +211,10 @@ function DashboardMainContent({ user }: { user: DashboardUser }) {
             backgroundColor: 'white',
             borderRadius: 2,
             padding: 3,
-            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+            display: 'flex',
+            flexDirection: 'column',
+            minHeight: 200
           }}
         >
           <MDBox display="flex" alignItems="center" mb={2}>
@@ -233,9 +236,11 @@ function DashboardMainContent({ user }: { user: DashboardUser }) {
               New Assessment
             </MDTypography>
           </MDBox>
-          <MDTypography variant="body2" color="text" mb={3}>
-            Create a new business valuation assessment to get insights into your company's worth.
-          </MDTypography>
+          <MDBox flexGrow={1}>
+            <MDTypography variant="body2" color="text" mb={3}>
+              Create a new business valuation assessment to get insights into your company's worth.
+            </MDTypography>
+          </MDBox>
           <Link href="/assessment/free">
             <MDButton variant="outlined" color="primary" fullWidth>
               Get Started
@@ -250,7 +255,10 @@ function DashboardMainContent({ user }: { user: DashboardUser }) {
               backgroundColor: 'white',
               borderRadius: 2,
               padding: 3,
-              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+              display: 'flex',
+              flexDirection: 'column',
+              minHeight: 200
             }}
           >
             <MDBox display="flex" alignItems="center" mb={2}>
@@ -272,9 +280,11 @@ function DashboardMainContent({ user }: { user: DashboardUser }) {
                 Upgrade Plan
               </MDTypography>
             </MDBox>
-            <MDTypography variant="body2" color="text" mb={3}>
-              Unlock premium features including detailed industry analysis and AI-powered insights.
-            </MDTypography>
+            <MDBox flexGrow={1}>
+              <MDTypography variant="body2" color="text" mb={3}>
+                Unlock premium features including detailed industry analysis and AI-powered insights.
+              </MDTypography>
+            </MDBox>
             <MDButton 
               variant="gradient" 
               color="warning" 
@@ -291,7 +301,10 @@ function DashboardMainContent({ user }: { user: DashboardUser }) {
               backgroundColor: 'white',
               borderRadius: 2,
               padding: 3,
-              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+              display: 'flex',
+              flexDirection: 'column',
+              minHeight: 200
             }}
           >
             <MDBox display="flex" alignItems="center" mb={2}>
@@ -313,9 +326,11 @@ function DashboardMainContent({ user }: { user: DashboardUser }) {
                 View Reports
               </MDTypography>
             </MDBox>
-            <MDTypography variant="body2" color="text" mb={3}>
-              Access your detailed valuation reports and premium analytics.
-            </MDTypography>
+            <MDBox flexGrow={1}>
+              <MDTypography variant="body2" color="text" mb={3}>
+                Access your detailed valuation reports and premium analytics.
+              </MDTypography>
+            </MDBox>
             <MDButton variant="outlined" color="success" fullWidth>
               View Reports
             </MDButton>
