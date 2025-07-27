@@ -15,6 +15,7 @@ import Dashboard from "@/pages/dashboard";
 import SimpleDashboard from "@/pages/dashboard-simple";
 // import WorkingDashboard from "@/pages/dashboard-working"; // Removed due to JSX syntax errors
 import CompleteDashboard from "@/pages/dashboard-complete";
+import DashboardClean from "@/pages/dashboard-clean";
 import AssessmentResults from "@/pages/assessment-results";
 import MaterialDashboardDemo from "@/pages/material-dashboard-demo";
 
@@ -25,12 +26,13 @@ function Router() {
     <div style={{ minHeight: '100vh', backgroundColor: 'white' }}>
       <Switch>
         {/* Core routes only */}
-        <Route path="/" component={CompleteDashboard} />
-        <Route path="/dashboard" component={CompleteDashboard} />
+        <Route path="/" component={DashboardClean} />
+        <Route path="/dashboard" component={DashboardClean} />
         <Route path="/dashboard/:tier" component={CompleteDashboard} />
         <Route path="/dashboard-old" component={Dashboard} />
         <Route path="/dashboard-simple" component={SimpleDashboard} />
         <Route path="/dashboard-complete" component={CompleteDashboard} />
+        <Route path="/dashboard-clean" component={DashboardClean} />
         
         {/* Assessment pages */}
         <Route path="/assessment/free" component={FreeAssessment} />
