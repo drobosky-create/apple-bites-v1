@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+
+
+
 import { Lightbulb, TrendingUp, DollarSign, Clock, Target, Loader2, Brain } from 'lucide-react';
 import { apiRequest } from '@/lib/queryClient';
 

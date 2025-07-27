@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useQuery } from "@tanstack/react-query";
 import { useLocation } from "wouter";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Slider } from "@/components/ui/slider";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+
+
+
+
 import { TrendingUp, ArrowRight, Phone } from "lucide-react";
 import ModernGradeChart from './modern-grade-chart';
 import OperationalGradeGauge from './OperationalGradeGauge';

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Typography, Box } from '@mui/material';
-import MaterialDashboardWrapper from '@/components/ui/MaterialDashboardWrapper';
+
 import {
   MaterialCard,
   MaterialCardHeader,

@@ -1,6 +1,6 @@
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+
+
+
 import { CheckCircle, Star, ArrowLeft } from 'lucide-react';
 import type { ValuationFormData } from '@/hooks/use-valuation-form';
 

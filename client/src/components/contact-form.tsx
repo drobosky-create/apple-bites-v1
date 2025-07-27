@@ -1,7 +1,7 @@
 import { UseFormReturn } from "react-hook-form";
 import { ContactInfo } from "@shared/schema";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+
+
 import { 
   MaterialCard, 
   MaterialCardBody, 
@@ -11,7 +11,7 @@ import { Typography } from '@mui/material';
 import { Shield, ArrowRight, User, CheckCircle, SkipForward } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
+
 
 interface ContactFormProps {
   form: UseFormReturn<ContactInfo>;

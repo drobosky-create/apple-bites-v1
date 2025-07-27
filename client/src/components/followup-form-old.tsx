@@ -1,8 +1,8 @@
 import { UseFormReturn } from "react-hook-form";
 import { FollowUpData } from "@shared/schema";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
+
+
+
 import { ArrowLeft, ArrowRight, Send, Clock } from "lucide-react";
 
 interface FollowUpFormProps {

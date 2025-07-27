@@ -2,7 +2,7 @@ import InteractiveValuationSlider from "@/components/interactive-valuation-slide
 import { useQuery } from "@tanstack/react-query";
 import { useLocation } from "wouter";
 import { useEffect } from "react";
-import { Button } from "@/components/ui/button";
+
 import { ArrowLeft, Lock, Home, FileText, TrendingUp, ExternalLink, LogOut } from "lucide-react";
 import type { ValuationAssessment } from "@shared/schema";
 import { useAuth } from "@/hooks/useAuth";

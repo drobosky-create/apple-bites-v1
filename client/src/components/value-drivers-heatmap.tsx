@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+
+
 import { Info, TrendingUp, TrendingDown, Minus } from 'lucide-react';
 import type { ValuationAssessment } from '@shared/schema';
 
