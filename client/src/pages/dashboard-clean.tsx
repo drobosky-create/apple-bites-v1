@@ -28,7 +28,7 @@ interface DashboardUser {
 const mockUser: DashboardUser = {
   name: 'Demo User',
   email: 'demo@applebites.ai',
-  tier: 'free',
+  tier: 'capital',
   firstName: 'Demo',
   lastName: 'User'
 };
