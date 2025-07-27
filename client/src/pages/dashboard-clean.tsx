@@ -37,8 +37,8 @@ function DashboardSidebar({ user }: { user: DashboardUser }) {
   const getTierColor = (tier: string) => {
     switch (tier) {
       case 'free': return 'secondary';
-      case 'growth': return 'primary';
-      case 'capital': return 'success';
+      case 'growth': return 'info';
+      case 'capital': return 'warning';
       default: return 'secondary';
     }
   };
@@ -154,7 +154,7 @@ function DashboardMainContent({ user }: { user: DashboardUser }) {
     switch (tier) {
       case 'free': return 'Your Free Assessment Dashboard';
       case 'growth': return 'Your Growth Plan Dashboard';
-      case 'capital': return 'Your Capital Plan Dashboard';
+      case 'capital': return 'Your Capital Readiness Dashboard';
       default: return 'Your Dashboard';
     }
   };
@@ -200,11 +200,6 @@ function DashboardMainContent({ user }: { user: DashboardUser }) {
               }
             </MDTypography>
           </MDBox>
-          <Link href="/assessment/free">
-            <MDButton variant="gradient" color="primary">
-              Start Assessment
-            </MDButton>
-          </Link>
         </MDBox>
       </MDBox>
 
@@ -248,45 +243,38 @@ function DashboardMainContent({ user }: { user: DashboardUser }) {
           </Link>
         </MDBox>
 
-        {/* Upgrade/Report Card */}
-        <MDBox
-          sx={{
-            backgroundColor: 'white',
-            borderRadius: 2,
-            padding: 3,
-            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-          }}
-        >
-          <MDBox display="flex" alignItems="center" mb={2}>
-            <MDBox
-              sx={{
-                backgroundColor: user.tier === 'free' ? '#fff3e0' : '#e8f5e8',
-                borderRadius: '50%',
-                width: 48,
-                height: 48,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                mr: 2
-              }}
-            >
-              {user.tier === 'free' ? (
+        {/* Upgrade/Report Card - Only show upgrade for free users */}
+        {user.tier === 'free' ? (
+          <MDBox
+            sx={{
+              backgroundColor: 'white',
+              borderRadius: 2,
+              padding: 3,
+              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+            }}
+          >
+            <MDBox display="flex" alignItems="center" mb={2}>
+              <MDBox
+                sx={{
+                  backgroundColor: '#fff3e0',
+                  borderRadius: '50%',
+                  width: 48,
+                  height: 48,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  mr: 2
+                }}
+              >
                 <Crown size={24} color="#ff9800" />
-              ) : (
-                <BarChart3 size={24} color="#4caf50" />
-              )}
+              </MDBox>
+              <MDTypography variant="h6" fontWeight="medium">
+                Upgrade Plan
+              </MDTypography>
             </MDBox>
-            <MDTypography variant="h6" fontWeight="medium">
-              {user.tier === 'free' ? 'Upgrade Plan' : 'View Reports'}
+            <MDTypography variant="body2" color="text" mb={3}>
+              Unlock premium features including detailed industry analysis and AI-powered insights.
             </MDTypography>
-          </MDBox>
-          <MDTypography variant="body2" color="text" mb={3}>
-            {user.tier === 'free' 
-              ? 'Unlock premium features including detailed industry analysis and AI-powered insights.'
-              : 'Access your detailed valuation reports and premium analytics.'
-            }
-          </MDTypography>
-          {user.tier === 'free' ? (
             <MDButton 
               variant="gradient" 
               color="warning" 
@@ -296,12 +284,43 @@ function DashboardMainContent({ user }: { user: DashboardUser }) {
             >
               Upgrade Now
             </MDButton>
-          ) : (
+          </MDBox>
+        ) : (
+          <MDBox
+            sx={{
+              backgroundColor: 'white',
+              borderRadius: 2,
+              padding: 3,
+              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+            }}
+          >
+            <MDBox display="flex" alignItems="center" mb={2}>
+              <MDBox
+                sx={{
+                  backgroundColor: '#e8f5e8',
+                  borderRadius: '50%',
+                  width: 48,
+                  height: 48,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  mr: 2
+                }}
+              >
+                <BarChart3 size={24} color="#4caf50" />
+              </MDBox>
+              <MDTypography variant="h6" fontWeight="medium">
+                View Reports
+              </MDTypography>
+            </MDBox>
+            <MDTypography variant="body2" color="text" mb={3}>
+              Access your detailed valuation reports and premium analytics.
+            </MDTypography>
             <MDButton variant="outlined" color="success" fullWidth>
               View Reports
             </MDButton>
-          )}
-        </MDBox>
+          </MDBox>
+        )}
       </MDBox>
 
       {/* Past Assessments */}
@@ -327,10 +346,27 @@ function DashboardMainContent({ user }: { user: DashboardUser }) {
             textAlign: 'center',
             py: 6,
             borderRadius: 1,
-            backgroundColor: '#f8f9fa'
+            backgroundColor: '#f8f9fa',
+            transition: 'all 0.3s ease',
+            '&:hover': {
+              backgroundColor: '#f0f2f5',
+              transform: 'translateY(-2px)'
+            }
           }}
         >
-          <Clock size={48} color="#9e9e9e" style={{ marginBottom: 16 }} />
+          <MDBox
+            sx={{
+              display: 'inline-block',
+              animation: 'pulse 2s infinite',
+              '@keyframes pulse': {
+                '0%': { opacity: 0.6 },
+                '50%': { opacity: 1 },
+                '100%': { opacity: 0.6 }
+              }
+            }}
+          >
+            <Clock size={48} color="#9e9e9e" style={{ marginBottom: 16 }} />
+          </MDBox>
           <MDTypography variant="h6" color="text" mb={1}>
             No assessments yet
           </MDTypography>
