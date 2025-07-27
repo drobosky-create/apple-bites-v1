@@ -6,7 +6,8 @@ import {
   ListItemIcon, 
   ListItemText, 
   Box, 
-  Typography 
+  Typography,
+  Divider
 } from "@mui/material";
 import {
   Dashboard as DashboardIcon,
@@ -17,7 +18,7 @@ import {
 } from "@mui/icons-material";
 import { useLocation } from "wouter";
 
-const drawerWidth = 240;
+const drawerWidth = 280;
 
 const menuItems = [
   { text: "Dashboard", icon: <DashboardIcon />, path: "/dashboard" },
@@ -39,42 +40,88 @@ export default function Sidebar() {
         '& .MuiDrawer-paper': {
           width: drawerWidth,
           boxSizing: 'border-box',
-          backgroundColor: '#0b2147',
+          background: 'linear-gradient(195deg, #42424a, #191919)',
           color: 'white',
+          borderRight: 'none',
         },
       }}
     >
-      <Box sx={{ p: 2 }}>
-        <Typography variant="h6" sx={{ color: 'white', fontWeight: 'bold' }}>
+      {/* Logo Section */}
+      <Box sx={{ 
+        p: 3, 
+        textAlign: 'center',
+        background: 'rgba(255, 255, 255, 0.1)',
+        backdropFilter: 'blur(10px)',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
+      }}>
+        <Typography 
+          variant="h5" 
+          sx={{ 
+            color: 'white', 
+            fontWeight: 'bold',
+            background: 'linear-gradient(45deg, #81e5d8, #4493de)',
+            backgroundClip: 'text',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent'
+          }}
+        >
           Apple Bites
         </Typography>
+        <Typography variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
+          Business Valuation Platform
+        </Typography>
       </Box>
-      <List>
-        {menuItems.map((item) => (
-          <ListItem key={item.text} disablePadding>
-            <ListItemButton
-              selected={location === item.path}
-              sx={{
-                '&.Mui-selected': {
-                  backgroundColor: '#81e5d8',
-                  color: '#0b2147',
-                  '&:hover': {
-                    backgroundColor: '#81e5d8',
+
+      <Box sx={{ flex: 1, p: 2 }}>
+        <List sx={{ p: 0 }}>
+          {menuItems.map((item) => (
+            <ListItem key={item.text} disablePadding sx={{ mb: 1 }}>
+              <ListItemButton
+                selected={location === item.path}
+                sx={{
+                  borderRadius: 2,
+                  minHeight: 48,
+                  color: 'rgba(255, 255, 255, 0.8)',
+                  '&.Mui-selected': {
+                    background: 'linear-gradient(195deg, #81e5d8, #4493de)',
+                    color: 'white',
+                    boxShadow: '0 4px 20px 0 rgba(129, 229, 216, 0.4)',
+                    '&:hover': {
+                      background: 'linear-gradient(195deg, #81e5d8, #4493de)',
+                    },
                   },
-                },
-                '&:hover': {
-                  backgroundColor: 'rgba(129, 229, 216, 0.1)',
-                },
-              }}
-            >
-              <ListItemIcon sx={{ color: 'inherit' }}>
-                {item.icon}
-              </ListItemIcon>
-              <ListItemText primary={item.text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
+                  '&:hover': {
+                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                  },
+                }}
+              >
+                <ListItemIcon 
+                  sx={{ 
+                    color: 'inherit',
+                    minWidth: 40,
+                  }}
+                >
+                  {item.icon}
+                </ListItemIcon>
+                <ListItemText 
+                  primary={item.text}
+                  primaryTypographyProps={{
+                    fontSize: '0.875rem',
+                    fontWeight: 500,
+                  }}
+                />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+      </Box>
+
+      {/* Footer */}
+      <Box sx={{ p: 2, borderTop: '1px solid rgba(255, 255, 255, 0.1)' }}>
+        <Typography variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.6)' }}>
+          © 2025 Meritage Partners
+        </Typography>
+      </Box>
     </Drawer>
   );
 }
