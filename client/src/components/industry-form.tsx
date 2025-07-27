@@ -90,20 +90,20 @@ export default function IndustryForm({ form, onNext, onPrev, onDataChange }: Ind
   }, [watchedValues, onDataChange]);
 
   return (
-    <Card className="w-full max-w-4xl mx-auto">
-      <CardHeader className="text-center">
-        <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <Building2 className="w-8 h-8 text-blue-600" />
+    <Card >
+      <CardHeader >
+        <div >
+          <Building2  />
         </div>
-        <CardTitle className="text-2xl text-gray-900">Industry Classification</CardTitle>
-        <p className="text-gray-600 mt-2">
+        <CardTitle >Industry Classification</CardTitle>
+        <p >
           Help us provide industry-specific analysis by identifying your business sector and NAICS code
         </p>
       </CardHeader>
       
       <CardContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+          <form onSubmit={form.handleSubmit(handleSubmit)} >
             
             {/* Business Sector Selection */}
             <FormField
@@ -111,7 +111,7 @@ export default function IndustryForm({ form, onNext, onPrev, onDataChange }: Ind
               name="businessSector"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-base font-semibold">Primary Business Sector</FormLabel>
+                  <FormLabel >Primary Business Sector</FormLabel>
                   <Select 
                     onValueChange={(value) => {
                       field.onChange(value);
@@ -120,7 +120,7 @@ export default function IndustryForm({ form, onNext, onPrev, onDataChange }: Ind
                     defaultValue={field.value}
                   >
                     <FormControl>
-                      <SelectTrigger className="h-12">
+                      <SelectTrigger >
                         <SelectValue placeholder="Select your business sector" />
                       </SelectTrigger>
                     </FormControl>
@@ -139,15 +139,15 @@ export default function IndustryForm({ form, onNext, onPrev, onDataChange }: Ind
 
             {/* Industry Search */}
             {selectedSector && (
-              <div className="space-y-4">
-                <FormLabel className="text-base font-semibold">Find Your Specific Industry</FormLabel>
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <div >
+                <FormLabel >Find Your Specific Industry</FormLabel>
+                <div >
+                  <Search  />
                   <Input
                     placeholder="Search for your specific industry..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10 h-12"
+                    
                   />
                 </div>
 
@@ -160,16 +160,16 @@ export default function IndustryForm({ form, onNext, onPrev, onDataChange }: Ind
                       <FormLabel>NAICS Industry Code</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
-                          <SelectTrigger className="h-12">
+                          <SelectTrigger >
                             <SelectValue placeholder="Select your industry classification" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
                           {availableIndustries.map((industry) => (
                             <SelectItem key={industry.code} value={industry.code}>
-                              <div className="flex flex-col">
-                                <span className="font-medium">{industry.title}</span>
-                                <span className="text-sm text-gray-500">
+                              <div >
+                                <span >{industry.title}</span>
+                                <span >
                                   Code: {industry.code} | Multiplier: {industry.multiplier}x
                                 </span>
                               </div>
@@ -190,15 +190,15 @@ export default function IndustryForm({ form, onNext, onPrev, onDataChange }: Ind
               name="businessDescription"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-base font-semibold">Detailed Business Description</FormLabel>
+                  <FormLabel >Detailed Business Description</FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder="Describe your business operations, products/services, target market, and key differentiators..."
-                      className="min-h-[120px] resize-none"
+                      
                       {...field}
                     />
                   </FormControl>
-                  <p className="text-sm text-gray-500">
+                  <p >
                     This helps us provide more accurate industry comparisons and insights
                   </p>
                   <FormMessage />
@@ -207,18 +207,18 @@ export default function IndustryForm({ form, onNext, onPrev, onDataChange }: Ind
             />
 
             {/* Years in Business */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div >
               <FormField
                 control={form.control}
                 name="yearsInBusiness"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-base font-semibold">Years in Business</FormLabel>
+                    <FormLabel >Years in Business</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
                         placeholder="e.g., 5"
-                        className="h-12"
+                        
                         {...field}
                       />
                     </FormControl>
@@ -232,12 +232,12 @@ export default function IndustryForm({ form, onNext, onPrev, onDataChange }: Ind
                 name="numberOfEmployees"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-base font-semibold">Number of Employees</FormLabel>
+                    <FormLabel >Number of Employees</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
                         placeholder="e.g., 25"
-                        className="h-12"
+                        
                         {...field}
                       />
                     </FormControl>
@@ -253,10 +253,10 @@ export default function IndustryForm({ form, onNext, onPrev, onDataChange }: Ind
               name="marketPosition"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-base font-semibold">Market Position</FormLabel>
+                  <FormLabel >Market Position</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
-                      <SelectTrigger className="h-12">
+                      <SelectTrigger >
                         <SelectValue placeholder="How would you describe your market position?" />
                       </SelectTrigger>
                     </FormControl>
@@ -279,11 +279,11 @@ export default function IndustryForm({ form, onNext, onPrev, onDataChange }: Ind
               name="competitiveAdvantages"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-base font-semibold">Key Competitive Advantages</FormLabel>
+                  <FormLabel >Key Competitive Advantages</FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder="What sets your business apart from competitors? (e.g., proprietary technology, exclusive contracts, brand recognition, etc.)"
-                      className="min-h-[100px] resize-none"
+                      
                       {...field}
                     />
                   </FormControl>
@@ -293,18 +293,18 @@ export default function IndustryForm({ form, onNext, onPrev, onDataChange }: Ind
             />
 
             {/* Navigation Buttons */}
-            <div className="flex justify-between pt-6">
+            <div >
               <Button
                 type="button"
                 variant="outline"
                 onClick={onPrev}
-                className="px-8 border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400"
+                
               >
                 Previous
               </Button>
               <Button
                 type="submit"
-                className="px-8 bg-blue-600 hover:bg-blue-700"
+                
               >
                 Continue to EBITDA Analysis
               </Button>

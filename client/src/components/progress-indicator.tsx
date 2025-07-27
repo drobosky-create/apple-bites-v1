@@ -25,10 +25,10 @@ export default function ProgressIndicator({ currentStep }: ProgressIndicatorProp
         const isUpcoming = step.number > currentStepNumber;
         
         return (
-          <div key={step.id} className="relative">
+          <div key={step.id} >
             {/* Vertical Progress Line */}
             {index < steps.length - 1 && (
-              <div className="absolute left-[23px] top-16 w-0.5 h-8 bg-white/20" />
+              <div  />
             )}
             
             {/* Step Item - Professional SaaS Style */}
@@ -51,11 +51,11 @@ export default function ProgressIndicator({ currentStep }: ProgressIndicatorProp
                     : "bg-white/20 text-white backdrop-blur-sm"
                 }`}
               >
-                <IconComponent className="w-6 h-6" />
+                <IconComponent  />
               </div>
               
               {/* Step Content - Larger Text */}
-              <div className="flex-1">
+              <div >
                 <div className={`text-lg font-semibold ${
                   isCurrent ? "text-[#0b2147]" : "text-current"
                 }`}>
@@ -66,19 +66,19 @@ export default function ProgressIndicator({ currentStep }: ProgressIndicatorProp
                 }`}>
                   Step {step.number}
                   {isCurrent && (
-                    <span className="ml-2 inline-block bg-[#0b2147]/10 text-[#0b2147] text-xs px-2 py-1 rounded-full font-medium">
+                    <span >
                       Current
                     </span>
                   )}
                   {isCompleted && (
-                    <CheckCircle className="w-4 h-4 ml-2 text-emerald-400" />
+                    <CheckCircle  />
                   )}
                 </div>
               </div>
               
               {/* Subtle pulse animation for current step */}
               {isCurrent && (
-                <div className="absolute inset-0 rounded-lg bg-white/5 animate-pulse" />
+                <div  />
               )}
             </div>
           </div>

@@ -17,14 +17,14 @@ export default function MiniProgressBar({ currentStep }: MiniProgressBarProps) {
   const currentStepNumber = steps.find((step) => step.id === currentStep)?.number || 1;
 
   return (
-    <div className="flex justify-between gap-2 px-6 py-4 bg-white rounded-xl shadow-sm border border-gray-100 mb-6">
+    <div >
       {steps.map((step, index) => {
         const IconComponent = step.icon;
         const isCurrent = step.number === currentStepNumber;
         const isCompleted = step.number < currentStepNumber;
 
         return (
-          <div key={step.id} className="flex items-center space-x-2 flex-1 min-w-0">
+          <div key={step.id} >
             {/* Step Circle */}
             <div
               className={`w-8 h-8 rounded-full flex items-center justify-center font-semibold text-xs transition-all duration-300 flex-shrink-0 ${
@@ -36,14 +36,14 @@ export default function MiniProgressBar({ currentStep }: MiniProgressBarProps) {
               }`}
             >
               {isCompleted ? (
-                <CheckCircle className="w-4 h-4" />
+                <CheckCircle  />
               ) : (
-                <IconComponent className="w-4 h-4" />
+                <IconComponent  />
               )}
             </div>
             
             {/* Step Label */}
-            <div className="flex-1 min-w-0">
+            <div >
               <p
                 className={`text-xs font-semibold truncate ${
                   isCurrent ? "text-[#0b2147]" : isCompleted ? "text-emerald-600" : "text-slate-400"
@@ -52,7 +52,7 @@ export default function MiniProgressBar({ currentStep }: MiniProgressBarProps) {
                 {step.label}
               </p>
               {isCurrent && (
-                <p className="text-xs text-[#0b2147]/70 font-medium">Current</p>
+                <p >Current</p>
               )}
             </div>
 

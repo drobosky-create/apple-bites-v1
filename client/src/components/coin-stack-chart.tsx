@@ -38,7 +38,7 @@ export default function CoinStackChart({
     return (
       <div
         key={gradeData.grade}
-        className="flex flex-col items-center cursor-pointer group"
+        
         onClick={() => onGradeSelect(gradeData.grade as any)}
         onMouseEnter={() => setHoveredGrade(gradeData.grade)}
         onMouseLeave={() => setHoveredGrade(null)}
@@ -52,7 +52,7 @@ export default function CoinStackChart({
           }`}>
             ${(valuation / 1000000).toFixed(1)}M
           </div>
-          <div className="text-xs text-gray-500">
+          <div >
             {gradeData.multiplier.toFixed(1)}x EBITDA
           </div>
         </div>
@@ -86,7 +86,7 @@ export default function CoinStackChart({
           {/* Glow Effect for Current Grade */}
           {isCurrent && (
             <div 
-              className="absolute inset-0 rounded-full animate-pulse"
+              
               style={{
                 boxShadow: `0 0 20px ${gradeData.color}40`,
                 zIndex: -1
@@ -97,7 +97,7 @@ export default function CoinStackChart({
           {/* Selection Ring */}
           {isSelected && gradeData.grade !== currentGrade && (
             <div 
-              className="absolute inset-0 rounded-full border-2 border-blue-400"
+              
               style={{
                 width: '120%',
                 height: '120%',
@@ -110,20 +110,20 @@ export default function CoinStackChart({
         </div>
 
         {/* Grade Label */}
-        <div className="mt-3 text-center">
+        <div >
           <div className={`text-2xl font-bold ${
             isSelected ? 'text-blue-600' : isCurrent ? 'text-orange-600' : 'text-gray-700'
           }`}>
             {gradeData.grade}
           </div>
-          <div className="text-xs text-gray-500 font-medium">
+          <div >
             {gradeData.label}
           </div>
           
           {/* Current Badge */}
           {isCurrent && (
-            <div className="mt-1">
-              <span className="inline-block px-2 py-1 text-xs font-semibold text-white bg-orange-500 rounded-full">
+            <div >
+              <span >
                 You are here
               </span>
             </div>
@@ -131,8 +131,8 @@ export default function CoinStackChart({
           
           {/* Selected Badge */}
           {isSelected && gradeData.grade !== currentGrade && (
-            <div className="mt-1">
-              <span className="inline-block px-2 py-1 text-xs font-semibold text-white bg-blue-500 rounded-full">
+            <div >
+              <span >
                 Selected
               </span>
             </div>
@@ -141,15 +141,15 @@ export default function CoinStackChart({
 
         {/* Hover Tooltip */}
         {isHovered && (
-          <div className="absolute top-0 z-10 px-3 py-2 text-sm text-white bg-gray-800 rounded-lg shadow-lg transform -translate-y-full -translate-x-1/2 left-1/2">
-            <div className="font-semibold">{gradeData.label} Operations</div>
-            <div className="text-gray-200">
+          <div >
+            <div >{gradeData.label} Operations</div>
+            <div >
               Valuation: ${(valuation / 1000000).toFixed(2)}M
             </div>
-            <div className="text-gray-200">
+            <div >
               {gradeData.multiplier.toFixed(1)}x EBITDA Multiple
             </div>
-            <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-800"></div>
+            <div ></div>
           </div>
         )}
       </div>
@@ -157,31 +157,31 @@ export default function CoinStackChart({
   };
 
   return (
-    <div className="w-full">
+    <div >
       {/* Chart Title */}
-      <div className="text-center mb-8">
-        <h3 className="text-2xl font-bold text-gray-800 mb-2">
+      <div >
+        <h3 >
           Valuation Growth Stack
         </h3>
-        <p className="text-gray-600">
+        <p >
           Click any grade to see how operational improvements impact your business value
         </p>
       </div>
 
       {/* Coin Stacks */}
-      <div className="flex justify-center items-end space-x-8 py-8 px-4 bg-gradient-to-b from-blue-50 to-white rounded-xl border border-gray-200">
+      <div >
         {grades.map((gradeData, index) => renderCoinStack(gradeData, index))}
       </div>
 
       {/* Legend */}
-      <div className="mt-6 text-center text-sm text-gray-600">
-        <p className="mb-2">
-          <span className="inline-block w-3 h-3 bg-orange-500 rounded-full mr-2"></span>
+      <div >
+        <p >
+          <span ></span>
           Current Grade
-          <span className="inline-block w-3 h-3 bg-blue-500 rounded-full mr-2 ml-6"></span>
+          <span ></span>
           Selected Target
         </p>
-        <p className="text-xs text-gray-500">
+        <p >
           Stack height represents EBITDA multiple • Hover for detailed valuations
         </p>
       </div>

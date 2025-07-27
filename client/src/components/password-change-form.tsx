@@ -6,7 +6,6 @@ import { z } from 'zod';
 
 
 
-import { useToast } from '@/hooks/use-toast';
 import { Eye, EyeOff } from 'lucide-react';
 
 const passwordChangeSchema = z.object({
@@ -83,7 +82,7 @@ export default function PasswordChangeForm({ userId }: PasswordChangeFormProps) 
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={form.handleSubmit(onSubmit)} >
         <FormField
           control={form.control}
           name="currentPassword"
@@ -91,20 +90,20 @@ export default function PasswordChangeForm({ userId }: PasswordChangeFormProps) 
             <FormItem>
               <FormLabel>Current Password</FormLabel>
               <FormControl>
-                <div className="relative">
+                <div >
                   <Input 
                     {...field} 
                     type={showCurrentPassword ? "text" : "password"} 
-                    className="pr-10 bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20"
+                    
                   />
                   <Button
                     type="button"
                     variant="ghost"
                     size="sm"
-                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                    
                     onClick={() => setShowCurrentPassword(!showCurrentPassword)}
                   >
-                    {showCurrentPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    {showCurrentPassword ? <EyeOff  /> : <Eye  />}
                   </Button>
                 </div>
               </FormControl>
@@ -119,20 +118,20 @@ export default function PasswordChangeForm({ userId }: PasswordChangeFormProps) 
             <FormItem>
               <FormLabel>New Password</FormLabel>
               <FormControl>
-                <div className="relative">
+                <div >
                   <Input 
                     {...field} 
                     type={showNewPassword ? "text" : "password"} 
-                    className="pr-10 bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20"
+                    
                   />
                   <Button
                     type="button"
                     variant="ghost"
                     size="sm"
-                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                    
                     onClick={() => setShowNewPassword(!showNewPassword)}
                   >
-                    {showNewPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    {showNewPassword ? <EyeOff  /> : <Eye  />}
                   </Button>
                 </div>
               </FormControl>
@@ -147,20 +146,20 @@ export default function PasswordChangeForm({ userId }: PasswordChangeFormProps) 
             <FormItem>
               <FormLabel>Confirm New Password</FormLabel>
               <FormControl>
-                <div className="relative">
+                <div >
                   <Input 
                     {...field} 
                     type={showConfirmPassword ? "text" : "password"} 
-                    className="pr-10 bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20"
+                    
                   />
                   <Button
                     type="button"
                     variant="ghost"
                     size="sm"
-                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                    
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   >
-                    {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    {showConfirmPassword ? <EyeOff  /> : <Eye  />}
                   </Button>
                 </div>
               </FormControl>
@@ -168,7 +167,7 @@ export default function PasswordChangeForm({ userId }: PasswordChangeFormProps) 
             </FormItem>
           )}
         />
-        <div className="flex justify-end gap-2 pt-4">
+        <div >
           <Button
             type="button"
             variant="outline"
@@ -179,7 +178,7 @@ export default function PasswordChangeForm({ userId }: PasswordChangeFormProps) 
           <Button 
             type="submit" 
             disabled={changePasswordMutation.isPending}
-            className="bg-blue-600 hover:bg-blue-700 text-white"
+            
           >
             {changePasswordMutation.isPending ? 'Changing...' : 'Change Password'}
           </Button>

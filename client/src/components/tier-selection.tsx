@@ -5,7 +5,6 @@ import { useState } from 'react';
 
 
 
-import { useToast } from '@/hooks/use-toast';
 import { CheckCircle, Star, Download, TrendingUp, FileText, Zap } from 'lucide-react';
 import { apiRequest } from '@/lib/queryClient';
 import type { ValuationAssessment } from '@shared/schema';
@@ -117,44 +116,44 @@ export default function TierSelection({ assessment, onTierSelect }: TierSelectio
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
-      <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-[#1a2332] mb-4">Choose Your Report Type</h1>
-        <p className="text-[#1a2332]/70 max-w-2xl mx-auto">
+    <div >
+      <div >
+        <h1 >Choose Your Report Type</h1>
+        <p >
           Get instant insights with our starter report, or unlock comprehensive strategic analysis 
           with industry-specific multipliers and AI-powered recommendations.
         </p>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-8 mb-8">
+      <div >
         {/* Free Tier */}
-        <Card className="p-6 border-2 border-gray-200 hover:border-blue-300 transition-colors">
-          <div className="text-center mb-6">
-            <Badge variant="secondary" className="mb-4">STARTER REPORT</Badge>
-            <h2 className="text-2xl font-bold text-[#1a2332] mb-2">Free Assessment</h2>
-            <div className="text-3xl font-bold text-[#1a2332] mb-4">$0</div>
-            <p className="text-gray-600">Quick valuation overview with basic insights</p>
+        <Card >
+          <div >
+            <Badge variant="secondary" >STARTER REPORT</Badge>
+            <h2 >Free Assessment</h2>
+            <div >$0</div>
+            <p >Quick valuation overview with basic insights</p>
           </div>
 
-          <div className="space-y-4 mb-6">
-            <div className="flex items-center gap-3">
-              <CheckCircle className="w-5 h-5 text-green-600" />
+          <div >
+            <div >
+              <CheckCircle  />
               <span>General business valuation (3x-8x multiplier)</span>
             </div>
-            <div className="flex items-center gap-3">
-              <CheckCircle className="w-5 h-5 text-green-600" />
+            <div >
+              <CheckCircle  />
               <span>A-F grades for key value drivers</span>
             </div>
-            <div className="flex items-center gap-3">
-              <CheckCircle className="w-5 h-5 text-green-600" />
+            <div >
+              <CheckCircle  />
               <span>Interactive grade slider visualization</span>
             </div>
-            <div className="flex items-center gap-3">
-              <CheckCircle className="w-5 h-5 text-green-600" />
+            <div >
+              <CheckCircle  />
               <span>Downloadable PDF report</span>
             </div>
-            <div className="flex items-center gap-3">
-              <CheckCircle className="w-5 h-5 text-green-600" />
+            <div >
+              <CheckCircle  />
               <span>Current valuation: {formatCurrency(assessment.midEstimate)}</span>
             </div>
           </div>
@@ -162,59 +161,59 @@ export default function TierSelection({ assessment, onTierSelect }: TierSelectio
           <Button 
             onClick={handleFreeTierDownload}
             disabled={isGenerating}
-            className="w-full bg-blue-600 hover:bg-blue-700"
+            
           >
-            <Download className="w-4 h-4 mr-2" />
+            <Download  />
             {isGenerating ? 'Generating...' : 'Download Starter Report'}
           </Button>
         </Card>
 
         {/* Paid Tier */}
-        <Card className="p-6 border-2 border-[#415A77] hover:border-[#1B263B] transition-colors relative">
-          <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-            <Badge className="bg-[#415A77] text-white font-bold px-4 py-1">
-              <Star className="w-4 h-4 mr-1" />
+        <Card >
+          <div >
+            <Badge >
+              <Star  />
               MOST POPULAR
             </Badge>
           </div>
           
-          <div className="text-center mb-6 mt-4">
-            <Badge variant="outline" className="mb-4 border-[#415A77] text-[#415A77]">STRATEGIC REPORT</Badge>
-            <h2 className="text-2xl font-bold text-[#1a2332] mb-2">Professional Analysis</h2>
-            <div className="text-3xl font-bold text-[#1a2332] mb-1">$395</div>
-            <p className="text-sm text-gray-500 mb-4">One-time payment</p>
-            <p className="text-gray-600">Comprehensive industry-specific valuation analysis</p>
+          <div >
+            <Badge variant="outline" >STRATEGIC REPORT</Badge>
+            <h2 >Professional Analysis</h2>
+            <div >$395</div>
+            <p >One-time payment</p>
+            <p >Comprehensive industry-specific valuation analysis</p>
           </div>
 
-          <div className="space-y-4 mb-6">
-            <div className="flex items-center gap-3">
-              <CheckCircle className="w-5 h-5 text-green-600" />
-              <span className="font-medium">Everything in Starter Report, plus:</span>
+          <div >
+            <div >
+              <CheckCircle  />
+              <span >Everything in Starter Report, plus:</span>
             </div>
-            <div className="flex items-center gap-3">
-              <TrendingUp className="w-5 h-5 text-[#415A77]" />
+            <div >
+              <TrendingUp  />
               <span>NAICS/SIC industry-specific multipliers</span>
             </div>
-            <div className="flex items-center gap-3">
-              <Zap className="w-5 h-5 text-[#415A77]" />
+            <div >
+              <Zap  />
               <span>AI-powered strategic narrative & insights</span>
             </div>
-            <div className="flex items-center gap-3">
-              <FileText className="w-5 h-5 text-[#415A77]" />
+            <div >
+              <FileText  />
               <span>Professional presentation-ready PDF</span>
             </div>
-            <div className="flex items-center gap-3">
-              <TrendingUp className="w-5 h-5 text-[#415A77]" />
+            <div >
+              <TrendingUp  />
               <span>Industry valuation bell curve analysis</span>
             </div>
-            <div className="flex items-center gap-3">
-              <CheckCircle className="w-5 h-5 text-green-600" />
+            <div >
+              <CheckCircle  />
               <span>Score-weighted precise multiplier calculation</span>
             </div>
           </div>
 
           {selectedTier === 'paid' ? (
-            <div className="space-y-4 mb-6">
+            <div >
               <div>
                 <Label htmlFor="naicsCode">NAICS Code *</Label>
                 <Input
@@ -223,7 +222,7 @@ export default function TierSelection({ assessment, onTierSelect }: TierSelectio
                   value={paidTierData.naicsCode}
                   onChange={(e) => setPaidTierData(prev => ({ ...prev, naicsCode: e.target.value }))}
                 />
-                <p className="text-sm text-gray-500 mt-1">6-digit NAICS industry classification code</p>
+                <p >6-digit NAICS industry classification code</p>
               </div>
               
               <div>
@@ -263,15 +262,15 @@ export default function TierSelection({ assessment, onTierSelect }: TierSelectio
             <Button 
               onClick={handlePaidTierGenerate}
               disabled={isGenerating || !paidTierData.naicsCode || !paidTierData.industryDescription}
-              className="w-full bg-[#415A77] hover:bg-[#1B263B] text-white font-bold"
+              
             >
-              <TrendingUp className="w-4 h-4 mr-2" />
+              <TrendingUp  />
               {isGenerating ? 'Generating Strategic Report...' : 'Generate Strategic Report'}
             </Button>
           ) : (
             <Button 
               onClick={() => setSelectedTier('paid')}
-              className="w-full bg-[#415A77] hover:bg-[#1B263B] text-white font-bold"
+              
             >
               Upgrade to Strategic Report
             </Button>
@@ -279,7 +278,7 @@ export default function TierSelection({ assessment, onTierSelect }: TierSelectio
         </Card>
       </div>
 
-      <div className="text-center text-sm text-gray-500">
+      <div >
         <p>
           All reports include comprehensive value driver analysis and professional insights. 
           Strategic reports provide industry-specific accuracy and AI-powered recommendations 

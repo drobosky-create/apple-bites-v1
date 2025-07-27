@@ -51,9 +51,9 @@ export default function ValueDriversHeatmap({ assessment }: ValueDriversHeatmapP
 
   const getTrendIcon = (grade: Grade) => {
     const score = getGradeScore(grade);
-    if (score >= 4) return <TrendingUp className="w-4 h-4 text-green-600" />;
-    if (score <= 2) return <TrendingDown className="w-4 h-4 text-red-600" />;
-    return <Minus className="w-4 h-4 text-slate-600" />;
+    if (score >= 4) return <TrendingUp  />;
+    if (score <= 2) return <TrendingDown  />;
+    return <Minus  />;
   };
 
   const drivers: DriverData[] = [
@@ -173,21 +173,21 @@ export default function ValueDriversHeatmap({ assessment }: ValueDriversHeatmapP
   };
 
   return (
-    <div className="space-y-6">
-      <div className="text-center">
-        <h3 className="text-2xl font-bold text-slate-900 mb-2">Business Value Drivers Analysis</h3>
-        <p className="text-slate-600">Interactive visualization of your business performance across key value drivers</p>
+    <div >
+      <div >
+        <h3 >Business Value Drivers Analysis</h3>
+        <p >Interactive visualization of your business performance across key value drivers</p>
       </div>
 
-      <div className="space-y-4">
+      <div >
         {Object.entries(groupedDrivers).map(([category, categoryDrivers]) => (
           <Card key={category} className={`p-4 ${getCategoryColor(category)}`}>
-            <h4 className="font-semibold text-slate-900 mb-3 capitalize">
+            <h4 >
               {categoryLabels[category]}
             </h4>
-            <div className="space-y-2">
+            <div >
               {categoryDrivers.map((driver) => (
-                <div key={driver.key} className="space-y-2">
+                <div key={driver.key} >
                   <button
                     onClick={() => setSelectedDriver(selectedDriver?.key === driver.key ? null : driver)}
                     className={`
@@ -197,23 +197,23 @@ export default function ValueDriversHeatmap({ assessment }: ValueDriversHeatmapP
                       hover:scale-[1.02] cursor-pointer
                     `}
                   >
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm leading-tight">{driver.label}</span>
-                      <div className="flex items-center gap-2">
-                        <span className="text-lg font-bold">{driver.grade}</span>
+                    <div >
+                      <span >{driver.label}</span>
+                      <div >
+                        <span >{driver.grade}</span>
                         {getTrendIcon(driver.grade)}
                       </div>
                     </div>
                   </button>
                   
                   {selectedDriver?.key === driver.key && (
-                    <div className="bg-white/90 backdrop-blur-sm rounded-lg p-4 border-2 border-white/50 shadow-lg animate-in slide-in-from-top-2 duration-200">
-                      <div className="flex items-start justify-between mb-3">
+                    <div >
+                      <div >
                         <div>
-                          <h5 className="text-lg font-semibold text-slate-900 mb-1">
+                          <h5 >
                             {selectedDriver.label}
                           </h5>
-                          <div className="flex items-center gap-2">
+                          <div >
                             <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium text-white ${getGradeColor(selectedDriver.grade)}`}>
                               Grade {selectedDriver.grade}
                             </span>
@@ -222,29 +222,29 @@ export default function ValueDriversHeatmap({ assessment }: ValueDriversHeatmapP
                         </div>
                       </div>
                       
-                      <p className="text-slate-700 mb-3 text-sm">
+                      <p >
                         {selectedDriver.description}
                       </p>
 
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <div className="bg-slate-50 rounded-lg p-3">
-                          <h6 className="font-medium text-slate-900 mb-2 text-sm">Performance Level</h6>
-                          <div className="flex items-center gap-2">
-                            <div className="flex-1 bg-slate-200 rounded-full h-2">
+                      <div >
+                        <div >
+                          <h6 >Performance Level</h6>
+                          <div >
+                            <div >
                               <div 
                                 className={`h-2 rounded-full ${getGradeColor(selectedDriver.grade).split(' ')[0]}`}
                                 style={{ width: `${(getGradeScore(selectedDriver.grade) / 5) * 100}%` }}
                               ></div>
                             </div>
-                            <span className="text-xs font-medium text-slate-600">
+                            <span >
                               {getGradeScore(selectedDriver.grade)}/5
                             </span>
                           </div>
                         </div>
 
-                        <div className="bg-slate-50 rounded-lg p-3">
-                          <h6 className="font-medium text-slate-900 mb-2 text-sm">Impact on Valuation</h6>
-                          <p className="text-xs text-slate-600 capitalize">
+                        <div >
+                          <h6 >Impact on Valuation</h6>
+                          <p >
                             <strong>{selectedDriver.impact}</strong> impact on overall business valuation
                           </p>
                         </div>
@@ -258,13 +258,13 @@ export default function ValueDriversHeatmap({ assessment }: ValueDriversHeatmapP
         ))}
       </div>
 
-      <div className="bg-slate-50 rounded-lg p-4">
-        <h4 className="font-medium text-slate-900 mb-2">Grade Legend</h4>
-        <div className="flex flex-wrap gap-2">
+      <div >
+        <h4 >Grade Legend</h4>
+        <div >
           {(['A', 'B', 'C', 'D', 'F'] as Grade[]).map((grade) => (
-            <div key={grade} className="flex items-center gap-2">
+            <div key={grade} >
               <div className={`w-4 h-4 rounded ${getGradeColor(grade)}`}></div>
-              <span className="text-sm text-slate-600">
+              <span >
                 {grade} - {grade === 'A' ? 'Excellent' : grade === 'B' ? 'Good' : grade === 'C' ? 'Average' : grade === 'D' ? 'Needs Improvement' : 'At Risk'}
               </span>
             </div>

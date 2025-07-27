@@ -72,23 +72,23 @@ const AICoachingTips: React.FC<AICoachingTipsProps> = ({ financialData }) => {
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case 'Revenue Growth': return <TrendingUp className="w-4 h-4" />;
-      case 'Cost Management': return <DollarSign className="w-4 h-4" />;
-      case 'Strategic Planning': return <Target className="w-4 h-4" />;
-      default: return <Lightbulb className="w-4 h-4" />;
+      case 'Revenue Growth': return <TrendingUp  />;
+      case 'Cost Management': return <DollarSign  />;
+      case 'Strategic Planning': return <Target  />;
+      default: return <Lightbulb  />;
     }
   };
 
   return (
-    <div className="space-y-6">
+    <div >
       {/* Header */}
-      <Card className="border-indigo-200 bg-gradient-to-r from-indigo-50 to-purple-50">
+      <Card >
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-indigo-800">
-            <Brain className="w-5 h-5" />
+          <CardTitle >
+            <Brain  />
             AI-Powered Financial Coaching
           </CardTitle>
-          <p className="text-sm text-gray-600">
+          <p >
             Get personalized recommendations to improve your business valuation based on your financial data and industry benchmarks.
           </p>
         </CardHeader>
@@ -96,16 +96,16 @@ const AICoachingTips: React.FC<AICoachingTipsProps> = ({ financialData }) => {
           <Button 
             onClick={fetchCoachingData}
             disabled={loading}
-            className="w-full bg-indigo-600 hover:bg-indigo-700"
+            
           >
             {loading ? (
               <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                <Loader2  />
                 Analyzing Your Business...
               </>
             ) : (
               <>
-                <Brain className="w-4 h-4 mr-2" />
+                <Brain  />
                 Get AI Coaching Recommendations
               </>
             )}
@@ -115,9 +115,9 @@ const AICoachingTips: React.FC<AICoachingTipsProps> = ({ financialData }) => {
 
       {/* Error State */}
       {error && (
-        <Card className="border-red-200 bg-red-50">
-          <CardContent className="pt-6">
-            <p className="text-red-800 text-sm">{error}</p>
+        <Card >
+          <CardContent >
+            <p >{error}</p>
           </CardContent>
         </Card>
       )}
@@ -126,65 +126,65 @@ const AICoachingTips: React.FC<AICoachingTipsProps> = ({ financialData }) => {
       {insights && (
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Lightbulb className="w-5 h-5 text-blue-500" />
+            <CardTitle >
+              <Lightbulb  />
               Business Analysis Insights
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-gray-700 leading-relaxed">{insights}</p>
+            <p >{insights}</p>
           </CardContent>
         </Card>
       )}
 
       {/* Coaching Tips */}
       {tips.length > 0 && (
-        <div className="space-y-4">
-          <h3 className="text-lg font-semibold text-gray-800">Personalized Recommendations</h3>
-          <div className="grid gap-4">
+        <div >
+          <h3 >Personalized Recommendations</h3>
+          <div >
             {tips.map((tip, index) => (
-              <Card key={index} className="hover:shadow-md transition-shadow">
-                <CardHeader className="pb-3">
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-center gap-2">
+              <Card key={index} >
+                <CardHeader >
+                  <div >
+                    <div >
                       {getCategoryIcon(tip.category)}
-                      <CardTitle className="text-lg">{tip.title}</CardTitle>
+                      <CardTitle >{tip.title}</CardTitle>
                     </div>
                     <Badge className={getPriorityColor(tip.priority)}>
                       {tip.priority.toUpperCase()}
                     </Badge>
                   </div>
-                  <p className="text-sm text-gray-600">{tip.category}</p>
+                  <p >{tip.category}</p>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <p className="text-gray-700 no-underline" style={{ textDecoration: 'none' }}>{tip.description}</p>
+                <CardContent >
+                  <p  style={{ textDecoration: 'none' }}>{tip.description}</p>
                   
                   <div>
-                    <h4 className="font-medium text-gray-800 mb-2">Action Items:</h4>
-                    <ul className="space-y-1">
+                    <h4 >Action Items:</h4>
+                    <ul >
                       {tip.actionItems.map((action, actionIndex) => (
-                        <li key={actionIndex} className="text-sm text-gray-600 flex items-start gap-2">
-                          <span className="w-1.5 h-1.5 bg-indigo-500 rounded-full mt-2 flex-shrink-0"></span>
+                        <li key={actionIndex} >
+                          <span ></span>
                           {action}
                         </li>
                       ))}
                     </ul>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4 pt-3 border-t">
+                  <div >
                     <div>
-                      <div className="flex items-center gap-1 text-sm text-gray-600 mb-1">
-                        <Target className="w-3 h-3" />
+                      <div >
+                        <Target  />
                         Potential Impact
                       </div>
-                      <p className="text-sm font-medium text-green-700">{tip.potentialImpact}</p>
+                      <p >{tip.potentialImpact}</p>
                     </div>
                     <div>
-                      <div className="flex items-center gap-1 text-sm text-gray-600 mb-1">
-                        <Clock className="w-3 h-3" />
+                      <div >
+                        <Clock  />
                         Timeline
                       </div>
-                      <p className="text-sm font-medium text-blue-700">{tip.timeline}</p>
+                      <p >{tip.timeline}</p>
                     </div>
                   </div>
                 </CardContent>

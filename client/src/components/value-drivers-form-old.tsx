@@ -79,16 +79,16 @@ function GradeRadioGroup({ name, value, onChange, size = "large" }: GradeRadioGr
   const sizeClasses = size === "small" ? "w-8 h-8 text-sm" : "w-10 h-10";
   
   return (
-    <div className="flex space-x-2">
+    <div >
       {grades.map((grade) => (
-        <label key={grade} className="flex items-center cursor-pointer">
+        <label key={grade} >
           <input
             type="radio"
             name={name}
             value={grade}
             checked={value === grade}
             onChange={() => onChange(grade)}
-            className="sr-only"
+            
           />
           <div
             className={`${sizeClasses} rounded-full border-2 flex items-center justify-center font-semibold transition-colors ${
@@ -112,33 +112,33 @@ export default function ValueDriversForm({ form, onNext, onPrev, onDataChange }:
   };
 
   return (
-    <div className="space-y-8">
+    <div >
       {/* Executive Header Section */}
-      <div className="text-center space-y-4">
-        <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-[#0b2147] to-[#1a365d] flex items-center justify-center shadow-xl mx-auto">
-          <Info className="h-8 w-8 text-white" />
+      <div >
+        <div >
+          <Info  />
         </div>
         <div>
-          <h1 className="text-3xl font-bold text-[#0b2147] mb-2">Value Drivers Assessment</h1>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
+          <h1 >Value Drivers Assessment</h1>
+          <p >
             Rate your business on these key value drivers. Your scores will influence the valuation multiple.
           </p>
         </div>
       </div>
 
       {/* Form Container */}
-      <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-8 md:p-12">
+      <div >
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <form onSubmit={form.handleSubmit(onSubmit)} >
             {/* Scoring Guide */}
-            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200">
-              <div className="flex items-start space-x-4">
-                <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center flex-shrink-0">
-                  <Info className="w-6 h-6 text-blue-600" />
+            <div >
+              <div >
+                <div >
+                  <Info  />
                 </div>
                 <div>
-                  <h4 className="text-lg font-semibold text-blue-900 mb-2">Scoring Guide</h4>
-                  <p className="text-sm text-blue-700 leading-relaxed">
+                  <h4 >Scoring Guide</h4>
+                  <p >
                     <strong>A:</strong> Excellent/Industry Leading | <strong>B:</strong> Above Average | <strong>C:</strong> Average | <strong>D:</strong> Below Average | <strong>F:</strong> Poor/Significant Issues
                   </p>
                 </div>
@@ -146,10 +146,10 @@ export default function ValueDriversForm({ form, onNext, onPrev, onDataChange }:
             </div>
 
             {/* Value Drivers Section */}
-            <div className="space-y-6">
-              <h3 className="text-xl font-semibold text-[#0b2147] mb-6 pb-3 border-b border-slate-200">Business Value Drivers</h3>
+            <div >
+              <h3 >Business Value Drivers</h3>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div >
             {valueDrivers.map((driver) => (
               <FormField
                 key={driver.name}
@@ -157,9 +157,9 @@ export default function ValueDriversForm({ form, onNext, onPrev, onDataChange }:
                 name={driver.name as keyof ValueDriversData}
                 render={({ field }) => (
                   <FormItem>
-                    <div className="border border-slate-200 rounded-lg p-4">
-                      <FormLabel className="font-semibold text-slate-900 mb-2 block">{driver.title}</FormLabel>
-                      <p className="text-sm text-slate-600 mb-3">{driver.description}</p>
+                    <div >
+                      <FormLabel >{driver.title}</FormLabel>
+                      <p >{driver.description}</p>
                       <FormControl>
                         <GradeRadioGroup
                           name={driver.name}
@@ -172,26 +172,26 @@ export default function ValueDriversForm({ form, onNext, onPrev, onDataChange }:
                         />
                       </FormControl>
                     </div>
-                    <FormMessage className="form-error" />
+                    <FormMessage  />
                   </FormItem>
                 )}
               />
             ))}
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-3 sm:justify-between pt-6 mt-8">
+          <div >
             <Button 
               type="button" 
               variant="ghost" 
               onClick={onPrev}
-              className="bg-gradient-to-r from-slate-500 to-slate-600 text-white px-6 sm:px-8 py-3 rounded-lg font-medium hover:from-slate-600 hover:to-slate-700 transition-all duration-200 shadow-md hover:shadow-lg order-2 sm:order-1"
+              
             >
-              <ArrowLeft className="mr-2 w-4 h-4" />
+              <ArrowLeft  />
               Previous
             </Button>
-            <Button type="submit" className="heritage-gradient px-6 sm:px-8 py-3 rounded-lg font-medium shadow-sm hover:shadow-md transition-all duration-200 order-1 sm:order-2 text-[#ffffff]">
+            <Button type="submit" >
               Next: Follow-up Preferences
-              <ArrowRight className="ml-2 w-4 h-4" />
+              <ArrowRight  />
             </Button>
           </div>
         </form>

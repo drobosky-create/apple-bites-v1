@@ -113,9 +113,9 @@ export default function AssessmentResults() {
             </Typography>
             <Button 
               onClick={() => setLocation('/value-calculator')}
-              className="w-full bg-blue-600 text-white hover:bg-blue-700 font-semibold py-3 rounded-lg transition-all duration-200"
+              
             >
-              <ArrowLeft className="w-4 h-4 mr-2" />
+              <ArrowLeft  />
               Back to Value Calculator
             </Button>
           </Box>
@@ -343,9 +343,9 @@ export default function AssessmentResults() {
             </Box>
             <Button
               onClick={() => setLocation('/value-calculator')}
-              className="bg-gray-500 text-white hover:bg-gray-600 font-semibold px-6 py-3 rounded-lg transition-all duration-200"
+              
             >
-              <ArrowLeft className="w-4 h-4 mr-2" />
+              <ArrowLeft  />
               Back to Calculator
             </Button>
           </Box>

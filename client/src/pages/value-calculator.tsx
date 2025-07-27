@@ -117,9 +117,9 @@ export default function ValueCalculator() {
             </Typography>
             <Button 
               onClick={() => setLocation('/assessment/free')}
-              className="w-full bg-blue-600 text-white hover:bg-blue-700 font-semibold py-3 rounded-lg transition-all duration-200"
+              
             >
-              <ArrowLeft className="w-4 h-4 mr-2" />
+              <ArrowLeft  />
               Start Valuation Assessment
             </Button>
           </Box>
@@ -342,9 +342,9 @@ export default function ValueCalculator() {
             </Box>
             <Button
               onClick={() => setLocation('/')}
-              className="bg-gradient-to-br from-[#191919] to-[#42424a] text-white font-semibold px-4 py-2 rounded-lg shadow-md backdrop-blur-md bg-opacity-80 border border-white/10 hover:brightness-110 transition-all duration-300"
+              
             >
-              <ArrowLeft className="w-4 h-4 mr-2" />
+              <ArrowLeft  />
               Back to Dashboard
             </Button>
           </Box>

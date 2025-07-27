@@ -80,16 +80,16 @@ function GradeRadioGroup({ name, value, onChange, size = "large" }: GradeRadioGr
   const sizeClasses = size === "small" ? "w-8 h-8 text-sm" : "w-12 h-12 text-base";
   
   return (
-    <div className="flex space-x-3">
+    <div >
       {grades.map((grade) => (
-        <label key={grade} className="flex items-center cursor-pointer">
+        <label key={grade} >
           <input
             type="radio"
             name={name}
             value={grade}
             checked={value === grade}
             onChange={() => onChange(grade)}
-            className="sr-only"
+            
           />
           <div
             className={`${sizeClasses} rounded-xl border-2 flex items-center justify-center font-bold transition-all ${
@@ -118,33 +118,33 @@ export default function ValueDriversForm({ form, onNext, onPrev, onDataChange }:
   };
 
   return (
-    <div className="space-y-8">
+    <div >
       {/* Executive Header Section */}
-      <div className="text-center space-y-4">
-        <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-[#0b2147] to-[#1a365d] flex items-center justify-center shadow-xl mx-auto">
-          <Info className="h-8 w-8 text-white" />
+      <div >
+        <div >
+          <Info  />
         </div>
         <div>
-          <h1 className="text-3xl font-bold text-[#0b2147] mb-2">Value Drivers Assessment</h1>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
+          <h1 >Value Drivers Assessment</h1>
+          <p >
             Rate your business on these key value drivers. Your scores will influence the valuation multiple.
           </p>
         </div>
       </div>
 
       {/* Form Container */}
-      <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-8 md:p-12">
+      <div >
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <form onSubmit={form.handleSubmit(onSubmit)} >
             {/* Scoring Guide */}
-            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200">
-              <div className="flex items-start space-x-4">
-                <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center flex-shrink-0">
-                  <Info className="w-6 h-6 text-blue-600" />
+            <div >
+              <div >
+                <div >
+                  <Info  />
                 </div>
                 <div>
-                  <h4 className="text-lg font-semibold text-blue-900 mb-2">Scoring Guide</h4>
-                  <p className="text-sm text-blue-700 leading-relaxed">
+                  <h4 >Scoring Guide</h4>
+                  <p >
                     <strong>A:</strong> Excellent/Industry Leading | <strong>B:</strong> Above Average | <strong>C:</strong> Average | <strong>D:</strong> Below Average | <strong>F:</strong> Poor/Significant Issues
                   </p>
                 </div>
@@ -152,22 +152,22 @@ export default function ValueDriversForm({ form, onNext, onPrev, onDataChange }:
             </div>
 
             {/* Value Drivers Section */}
-            <div className="space-y-6">
-              <h3 className="text-xl font-semibold text-[#0b2147] mb-6 pb-3 border-b border-slate-200">Business Value Drivers</h3>
+            <div >
+              <h3 >Business Value Drivers</h3>
 
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div >
                 {valueDrivers.map((driver) => (
                   <FormField
                     key={driver.name}
                     control={form.control}
                     name={driver.name as keyof ValueDriversData}
                     render={({ field }) => (
-                      <FormItem className="space-y-4">
+                      <FormItem >
                         <div>
-                          <FormLabel className="text-base font-semibold text-[#0b2147] mb-2 block">
+                          <FormLabel >
                             {driver.title}
                           </FormLabel>
-                          <p className="text-sm text-slate-600 mb-4">
+                          <p >
                             {driver.description}
                           </p>
                         </div>
@@ -181,7 +181,7 @@ export default function ValueDriversForm({ form, onNext, onPrev, onDataChange }:
                             }}
                           />
                         </FormControl>
-                        <FormMessage className="text-red-500 text-sm" />
+                        <FormMessage  />
                       </FormItem>
                     )}
                   />
@@ -190,21 +190,21 @@ export default function ValueDriversForm({ form, onNext, onPrev, onDataChange }:
             </div>
 
             {/* Navigation Buttons */}
-            <div className="flex flex-col sm:flex-row gap-6 sm:justify-between pt-8 mt-8 border-t border-slate-200">
+            <div >
               <button 
                 type="button" 
                 onClick={onPrev}
-                className="order-2 sm:order-1 px-8 py-3 text-base font-medium rounded-xl border-2 border-[#0b2147] text-[#0b2147] bg-white hover:bg-[#0b2147] hover:text-white transition-all duration-200 flex items-center justify-center shadow-sm hover:shadow-md"
+                
               >
-                <ArrowLeft className="mr-2 w-5 h-5" />
+                <ArrowLeft  />
                 Previous
               </button>
               <button 
                 type="submit" 
-                className="order-1 sm:order-2 px-8 py-3 text-base font-medium rounded-xl bg-gradient-to-r from-[#0b2147] to-[#1a365d] text-white hover:from-[#1a365d] hover:to-[#0b2147] transition-all duration-200 flex items-center justify-center shadow-md hover:shadow-lg"
+                
               >
                 Next: Follow-up
-                <ArrowRight className="ml-2 w-5 h-5" />
+                <ArrowRight  />
               </button>
             </div>
           </form>

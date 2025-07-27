@@ -56,7 +56,7 @@ export default function ModernGradeChart({
         )}
 
         {/* Grade Circle */}
-        <div className="flex justify-center mb-4">
+        <div >
           <div 
             className={`w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold text-white shadow-lg ${
               isSelected || isCurrent ? 'ring-4 ring-white' : ''
@@ -68,19 +68,19 @@ export default function ModernGradeChart({
         </div>
 
         {/* Valuation Display */}
-        <div className="text-center mb-3">
+        <div >
           <div className={`text-2xl font-bold mb-1 ${
             isSelected ? 'text-blue-700' : isCurrent ? 'text-orange-700' : 'text-slate-800'
           }`}>
             ${(valuation / 1000000).toFixed(1)}M
           </div>
-          <div className="text-sm text-slate-600 font-medium">
+          <div >
             {multiple.toFixed(1)}x EBITDA
           </div>
         </div>
 
         {/* Label */}
-        <div className="text-center">
+        <div >
           <div className={`text-lg font-semibold ${
             isSelected ? 'text-blue-700' : isCurrent ? 'text-orange-700' : 'text-slate-700'
           }`}>
@@ -91,7 +91,7 @@ export default function ModernGradeChart({
         {/* Hover Effect Glow */}
         {isHovered && (
           <div 
-            className="absolute inset-0 rounded-2xl animate-pulse pointer-events-none opacity-30"
+            
             style={{
               boxShadow: `0 0 40px ${gradeData.color}`,
               zIndex: -1
@@ -103,33 +103,33 @@ export default function ModernGradeChart({
   };
 
   return (
-    <div className="w-full">
+    <div >
       {/* Chart Title */}
-      <div className="text-center mb-8">
-        <h3 className="text-2xl sm:text-3xl font-bold text-[#0F172A] mb-3 tracking-wide">
+      <div >
+        <h3 >
           Operational Grade Impact Analysis
         </h3>
-        <p className="text-base sm:text-lg text-[#475569] font-medium">
+        <p >
           Click any grade to see how operational improvements impact your business value
         </p>
       </div>
 
       {/* Grade Cards Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6 mb-8">
+      <div >
         {grades.map(renderGradeCard)}
       </div>
 
       {/* Legend */}
-      <div className="flex flex-wrap justify-center items-center gap-6 text-sm text-slate-600">
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded-full bg-orange-500"></div>
+      <div >
+        <div >
+          <div ></div>
           <span>Current Grade</span>
         </div>
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded-full bg-blue-500"></div>
+        <div >
+          <div ></div>
           <span>Selected Target</span>
         </div>
-        <div className="text-xs text-slate-500">
+        <div >
           Valuations based on EBITDA multiple × Hover for details
         </div>
       </div>

@@ -23,10 +23,10 @@ export default function AnalyticsDashboard() {
   // Show authentication loading state
   if (authLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Checking authentication...</p>
+      <div >
+        <div >
+          <div ></div>
+          <p >Checking authentication...</p>
         </div>
       </div>
     );
@@ -39,12 +39,12 @@ export default function AnalyticsDashboard() {
 
   if (isLoading) {
     return (
-      <div className="max-w-7xl mx-auto p-6">
-        <div className="animate-pulse">
-          <div className="h-8 bg-slate-200 rounded w-1/3 mb-6"></div>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+      <div >
+        <div >
+          <div ></div>
+          <div >
             {[...Array(4)].map((_, i) => (
-              <div key={i} className="h-32 bg-slate-200 rounded"></div>
+              <div key={i} ></div>
             ))}
           </div>
         </div>
@@ -79,102 +79,102 @@ export default function AnalyticsDashboard() {
   const pieColors = ['#8B5CF6', '#06B6D4', '#10B981', '#F59E0B', '#EF4444'];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-      <div className="mb-8 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
-        <div className="flex items-center gap-4 w-full lg:w-auto">
+    <div >
+      <div >
+        <div >
           <Button 
             variant="outline" 
             onClick={() => navigate('/team')}
-            className="flex items-center gap-2 text-[#1a2332] hover:text-white hover:bg-[#1a2332] border-[#1a2332] flex-shrink-0"
+            
           >
-            <ArrowLeft className="w-4 h-4" />
-            <span className="hidden sm:inline">Back to Dashboard</span>
-            <span className="sm:hidden">Back</span>
+            <ArrowLeft  />
+            <span >Back to Dashboard</span>
+            <span >Back</span>
           </Button>
-          <div className="flex-1 min-w-0">
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 truncate">Analytics Dashboard</h1>
-            <p className="text-slate-600 mt-2 text-sm sm:text-base lg:text-lg">Comprehensive insights into business valuations and lead performance</p>
+          <div >
+            <h1 >Analytics Dashboard</h1>
+            <p >Comprehensive insights into business valuations and lead performance</p>
           </div>
         </div>
-        <Button variant="outline" onClick={logout} className="flex items-center gap-2 w-full sm:w-auto lg:w-auto flex-shrink-0">
-          <LogOut className="w-4 h-4" />
+        <Button variant="outline" onClick={logout} >
+          <LogOut  />
           Logout
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 mb-8">
+      <div >
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Assessments</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
+          <CardHeader >
+            <CardTitle >Total Assessments</CardTitle>
+            <Users  />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{totalAssessments}</div>
-            <p className="text-xs text-muted-foreground">
+            <div >{totalAssessments}</div>
+            <p >
               {completedAssessments} completed
             </p>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Avg Valuation</CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
+          <CardHeader >
+            <CardTitle >Avg Valuation</CardTitle>
+            <TrendingUp  />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
+            <div >
               ${Math.round(avgValuation).toLocaleString()}
             </div>
-            <p className="text-xs text-muted-foreground">
+            <p >
               Mid-point estimate
             </p>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total EBITDA</CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
+          <CardHeader >
+            <CardTitle >Total EBITDA</CardTitle>
+            <DollarSign  />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
+            <div >
               ${Math.round(totalEBITDA).toLocaleString()}
             </div>
-            <p className="text-xs text-muted-foreground">
+            <p >
               Combined adjusted EBITDA
             </p>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Completion Rate</CardTitle>
-            <FileText className="h-4 w-4 text-muted-foreground" />
+          <CardHeader >
+            <CardTitle >Completion Rate</CardTitle>
+            <FileText  />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
+            <div >
               {totalAssessments > 0 ? Math.round((completedAssessments / totalAssessments) * 100) : 0}%
             </div>
-            <p className="text-xs text-muted-foreground">
+            <p >
               Successfully processed
             </p>
           </CardContent>
         </Card>
       </div>
 
-      <Tabs defaultValue="overview" className="space-y-6">
+      <Tabs defaultValue="overview" >
         <TabsList>
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="assessments">All Assessments</TabsTrigger>
           <TabsTrigger value="trends">Trends</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="overview" className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card className="bg-gradient-to-br from-purple-50 via-white to-blue-50 border-0 shadow-lg">
+        <TabsContent value="overview" >
+          <div >
+            <Card >
               <CardHeader>
-                <CardTitle className="text-slate-800">Follow-up Intent</CardTitle>
-                <CardDescription className="text-slate-600">Distribution of client interest levels</CardDescription>
+                <CardTitle >Follow-up Intent</CardTitle>
+                <CardDescription >Distribution of client interest levels</CardDescription>
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={350}>
@@ -237,10 +237,10 @@ export default function AnalyticsDashboard() {
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-emerald-50 via-white to-cyan-50 border-0 shadow-lg">
+            <Card >
               <CardHeader>
-                <CardTitle className="text-slate-800">Overall Score Distribution</CardTitle>
-                <CardDescription className="text-slate-600">Business performance grades</CardDescription>
+                <CardTitle >Overall Score Distribution</CardTitle>
+                <CardDescription >Business performance grades</CardDescription>
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={380}>
@@ -306,10 +306,10 @@ export default function AnalyticsDashboard() {
         </TabsContent>
 
         <TabsContent value="assessments">
-          <Card className="bg-gradient-to-br from-slate-50 via-white to-gray-50 border-0 shadow-lg">
+          <Card >
             <CardHeader>
-              <CardTitle className="text-slate-800">All Valuations</CardTitle>
-              <CardDescription className="text-slate-600">Complete list of business assessments</CardDescription>
+              <CardTitle >All Valuations</CardTitle>
+              <CardDescription >Complete list of business assessments</CardDescription>
             </CardHeader>
             <CardContent>
               <Table>
@@ -327,12 +327,12 @@ export default function AnalyticsDashboard() {
                 </TableHeader>
                 <TableBody>
                   {assessments?.map((assessment) => (
-                    <TableRow key={assessment.id} className="border-b border-blue-200">
-                      <TableCell className="font-medium">{assessment.company}</TableCell>
+                    <TableRow key={assessment.id} >
+                      <TableCell >{assessment.company}</TableCell>
                       <TableCell>
                         <div>
                           <div>{assessment.firstName} {assessment.lastName}</div>
-                          <div className="text-sm text-slate-500">{assessment.email}</div>
+                          <div >{assessment.email}</div>
                         </div>
                       </TableCell>
                       <TableCell>
@@ -342,7 +342,7 @@ export default function AnalyticsDashboard() {
                         ${Math.round(parseFloat(assessment.adjustedEbitda || "0")).toLocaleString()}
                       </TableCell>
                       <TableCell>
-                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-500 text-white font-bold text-sm">
+                        <div >
                           {assessment.overallScore}
                         </div>
                       </TableCell>
@@ -355,13 +355,13 @@ export default function AnalyticsDashboard() {
                         {new Date(assessment.createdAt || '').toLocaleDateString()}
                       </TableCell>
                       <TableCell>
-                        <div className="flex space-x-2">
+                        <div >
                           <Button size="sm" variant="outline">
-                            <Eye className="h-4 w-4" />
+                            <Eye  />
                           </Button>
                           {assessment.pdfUrl && (
                             <Button size="sm" variant="outline">
-                              <Download className="h-4 w-4" />
+                              <Download  />
                             </Button>
                           )}
                         </div>
@@ -375,10 +375,10 @@ export default function AnalyticsDashboard() {
         </TabsContent>
 
         <TabsContent value="trends">
-          <Card className="bg-gradient-to-br from-rose-50 via-white to-orange-50 border-0 shadow-lg">
+          <Card >
             <CardHeader>
-              <CardTitle className="text-slate-800">Assessment Trends</CardTitle>
-              <CardDescription className="text-slate-600">Valuations over time</CardDescription>
+              <CardTitle >Assessment Trends</CardTitle>
+              <CardDescription >Valuations over time</CardDescription>
             </CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={420}>

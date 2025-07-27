@@ -36,7 +36,8 @@ import {
   Step,
   StepLabel,
   Stepper,
-  Chip
+  Chip,
+  Button
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 const appleBitesLogo = '/assets/logos/apple-bites-logo-variant-4.png';
@@ -165,10 +166,10 @@ export default function FreeAssessment() {
   if (location === '/results') {
     if (assessmentsLoading) {
       return (
-        <div className="min-h-screen bg-gradient-to-br from-ghl-navy to-ghl-navy-dark flex items-center justify-center">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-ghl-primary mx-auto mb-4"></div>
-            <p className="text-white/80">Loading your assessment results...</p>
+        <div >
+          <div >
+            <div ></div>
+            <p >Loading your assessment results...</p>
           </div>
         </div>
       );
@@ -177,12 +178,12 @@ export default function FreeAssessment() {
     const latestAssessment = assessments?.[0];
     if (!latestAssessment) {
       return (
-        <div className="min-h-screen bg-gradient-to-br from-ghl-navy to-ghl-navy-dark flex items-center justify-center">
-          <div className="text-center">
-            <p className="text-white/80">No assessment found. Please complete an assessment first.</p>
+        <div >
+          <div >
+            <p >No assessment found. Please complete an assessment first.</p>
             <Button 
               onClick={() => window.location.href = '/'}
-              className="mt-4 ghl-primary-button"
+              
             >
               Start New Assessment
             </Button>
@@ -192,8 +193,8 @@ export default function FreeAssessment() {
     }
 
     return (
-      <div className="min-h-screen bg-gradient-to-br from-ghl-navy to-ghl-navy-dark py-4">
-        <div className="container mx-auto px-4">
+      <div >
+        <div >
           <ValuationResults results={latestAssessment} />
         </div>
       </div>

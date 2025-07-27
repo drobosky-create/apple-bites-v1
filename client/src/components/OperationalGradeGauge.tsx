@@ -90,18 +90,18 @@ const OperationalGradeGauge: React.FC<OperationalGradeGaugeProps> = ({
   const currentSegment = gradeSegments.find(s => s.grade === grade);
 
   return (
-    <div className="flex justify-center items-center">
+    <div >
       {/* Glass card */}
-        <div className="relative bg-slate/60 backdrop-blur-md rounded-2xl shadow-2xl px-4 py-3 pb-0 w-full max-w-[500px] border border-white/10 ">
+        <div >
           {/* Title */}
-          <div className="text-center -mb-2">
-            <h3 className="text-lg font-bold text-#1c2534">{title}</h3>
-            <p className="text-sm text-#1c2534 mt-1">Current Performance Level</p>
+          <div >
+            <h3 >{title}</h3>
+            <p >Current Performance Level</p>
           </div>
 
           {/* Gauge */}
-          <div className="flex justify-center">
-            <svg width="100%" height="200" viewBox="0 0 300 130" className="overflow-visible drop-shadow-lg">
+          <div >
+            <svg width="100%" height="200" viewBox="0 0 300 130" >
           {/* Material Dashboard Gradient Definitions */}
           <defs>
             {/* F Grade - Deep Red Material Gradient */}
@@ -169,7 +169,7 @@ const OperationalGradeGauge: React.FC<OperationalGradeGaugeProps> = ({
                   fill={isActive ? `url(#${gradientId})` : 'rgb(248, 250, 252)'}
                   stroke="white"
                   strokeWidth="3"
-                  className="transition-all duration-300"
+                  
                   style={{
                     filter: isActive ? 'drop-shadow(0 4px 8px rgba(0,0,0,0.15))' : 'none',
                     opacity: isActive ? 1 : 0.3
@@ -196,7 +196,7 @@ const OperationalGradeGauge: React.FC<OperationalGradeGaugeProps> = ({
           })}
           
           {/* Needle with Material Design gradient */}
-          <g className="transition-transform duration-1000 ease-out">
+          <g >
             <defs>
               <linearGradient id="needleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" stopColor="#37474f" />

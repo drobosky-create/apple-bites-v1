@@ -6,7 +6,6 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useToast } from '@/hooks/use-toast';
 import { apiRequest } from '@/lib/queryClient';
 import { AlertCircle, Lock } from 'lucide-react';
 
@@ -68,33 +67,33 @@ export default function PasswordChangeModal({ isOpen, onSuccess, userEmail }: Pa
 
   return (
     <Dialog open={isOpen} onOpenChange={() => {}}>
-      <DialogContent className="sm:max-w-md" onPointerDownOutside={(e) => e.preventDefault()}>
+      <DialogContent  onPointerDownOutside={(e) => e.preventDefault()}>
         <DialogHeader>
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-100">
-              <Lock className="h-5 w-5 text-amber-600" />
+          <div >
+            <div >
+              <Lock  />
             </div>
             <div>
               <DialogTitle>Password Change Required</DialogTitle>
-              <DialogDescription className="text-sm text-gray-600">
+              <DialogDescription >
                 For security reasons, you must change your temporary password before continuing.
               </DialogDescription>
             </div>
           </div>
         </DialogHeader>
 
-        <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-4">
-          <div className="flex items-start gap-2">
-            <AlertCircle className="h-4 w-4 text-amber-600 mt-0.5 flex-shrink-0" />
-            <div className="text-sm text-amber-800">
-              <p className="font-medium">Account: {userEmail}</p>
-              <p className="mt-1">You're using a temporary password. Please create a secure password to continue.</p>
+        <div >
+          <div >
+            <AlertCircle  />
+            <div >
+              <p >Account: {userEmail}</p>
+              <p >You're using a temporary password. Please create a secure password to continue.</p>
             </div>
           </div>
         </div>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <form onSubmit={form.handleSubmit(onSubmit)} >
             <FormField
               control={form.control}
               name="currentPassword"
@@ -106,7 +105,7 @@ export default function PasswordChangeModal({ isOpen, onSuccess, userEmail }: Pa
                       {...field} 
                       type="password" 
                       placeholder="Enter your temporary password"
-                      className="bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500"
+                      
                     />
                   </FormControl>
                   <FormMessage />
@@ -125,7 +124,7 @@ export default function PasswordChangeModal({ isOpen, onSuccess, userEmail }: Pa
                       {...field} 
                       type="password" 
                       placeholder="Create a new secure password"
-                      className="bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500"
+                      
                     />
                   </FormControl>
                   <FormMessage />
@@ -144,7 +143,7 @@ export default function PasswordChangeModal({ isOpen, onSuccess, userEmail }: Pa
                       {...field} 
                       type="password" 
                       placeholder="Confirm your new password"
-                      className="bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500"
+                      
                     />
                   </FormControl>
                   <FormMessage />
@@ -152,11 +151,11 @@ export default function PasswordChangeModal({ isOpen, onSuccess, userEmail }: Pa
               )}
             />
 
-            <div className="flex justify-end pt-4">
+            <div >
               <Button 
                 type="submit" 
                 disabled={isLoading}
-                className="bg-blue-600 hover:bg-blue-700 text-white min-w-[120px]"
+                
               >
                 {isLoading ? 'Updating...' : 'Update Password'}
               </Button>

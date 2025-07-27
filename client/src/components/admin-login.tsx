@@ -65,18 +65,18 @@ export default function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-      <Card className="w-full max-w-md p-8">
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
-            <Lock className="w-8 h-8 text-blue-600" />
+    <div >
+      <Card >
+        <div >
+          <div >
+            <Lock  />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Admin Login</h1>
-          <p className="text-gray-600">Access leads and analytics dashboard</p>
+          <h1 >Admin Login</h1>
+          <p >Access leads and analytics dashboard</p>
         </div>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <form onSubmit={form.handleSubmit(onSubmit)} >
             <FormField
               control={form.control}
               name="username"
@@ -84,13 +84,13 @@ export default function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
                 <FormItem>
                   <FormLabel>Username</FormLabel>
                   <FormControl>
-                    <div className="relative">
-                      <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                    <div >
+                      <User  />
                       <Input
                         {...field}
                         type="text"
                         placeholder="Enter your username"
-                        className="bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20 pl-10"
+                        
                         disabled={loginMutation.isPending}
                       />
                     </div>
@@ -107,13 +107,13 @@ export default function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <div className="relative">
-                      <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                    <div >
+                      <Lock  />
                       <Input
                         {...field}
                         type="password"
                         placeholder="Enter your password"
-                        className="bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20 pl-10"
+                        
                         disabled={loginMutation.isPending}
                       />
                     </div>
@@ -131,7 +131,7 @@ export default function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
 
             <Button
               type="submit"
-              className="w-full"
+              
               disabled={loginMutation.isPending}
             >
               {loginMutation.isPending ? 'Signing in...' : 'Sign In'}
@@ -139,7 +139,7 @@ export default function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
           </form>
         </Form>
 
-        <div className="mt-6 text-center text-sm text-gray-500">
+        <div >
           Contact your administrator if you need access credentials
         </div>
       </Card>

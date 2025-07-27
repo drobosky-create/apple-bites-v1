@@ -596,12 +596,12 @@ function GrowthExitAssessment() {
   const renderProgressBar = () => {
     const progress = (currentStep / totalSteps) * 100;
     return (
-      <div className="w-full bg-gray-200 rounded-full h-2 mb-8">
+      <div >
         <div 
-          className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+          
           style={{ width: `${progress}%` }}
         ></div>
-        <div className="flex justify-between mt-2 text-sm text-gray-600">
+        <div >
           <span>Step {currentStep} of {totalSteps}</span>
           <span>{Math.round(progress)}% Complete</span>
         </div>
@@ -613,54 +613,54 @@ function GrowthExitAssessment() {
     switch (currentStep) {
       case 1:
         return (
-          <Card className="w-full max-w-2xl mx-auto">
-            <CardHeader className="text-center">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Building2 className="w-8 h-8 text-blue-600" />
+          <Card >
+            <CardHeader >
+              <div >
+                <Building2  />
               </div>
-              <CardTitle className="text-2xl">Contact Information</CardTitle>
-              <p className="text-gray-600">Let's start with your basic information</p>
+              <CardTitle >Contact Information</CardTitle>
+              <p >Let's start with your basic information</p>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+            <CardContent >
+              <div >
                 <div>
-                  <label className="block text-sm font-medium mb-2">First Name *</label>
+                  <label >First Name *</label>
                   <input 
                     type="text" 
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    
                     placeholder="John"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-2">Last Name *</label>
+                  <label >Last Name *</label>
                   <input 
                     type="text" 
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    
                     placeholder="Smith"
                   />
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2">Email Address *</label>
+                <label >Email Address *</label>
                 <input 
                   type="email" 
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  
                   placeholder="john@company.com"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2">Company Name *</label>
+                <label >Company Name *</label>
                 <input 
                   type="text" 
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  
                   placeholder="Your Company LLC"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2">Phone Number</label>
+                <label >Phone Number</label>
                 <input 
                   type="tel" 
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  
                   placeholder="(555) 123-4567"
                 />
               </div>
@@ -670,19 +670,19 @@ function GrowthExitAssessment() {
 
       case 2:
         return (
-          <Card className="w-full max-w-2xl mx-auto">
-            <CardHeader className="text-center">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <TrendingUp className="w-8 h-8 text-green-600" />
+          <Card >
+            <CardHeader >
+              <div >
+                <TrendingUp  />
               </div>
-              <CardTitle className="text-2xl">Industry Classification</CardTitle>
-              <p className="text-gray-600">Help us understand your business sector</p>
+              <CardTitle >Industry Classification</CardTitle>
+              <p >Help us understand your business sector</p>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent >
               <div>
-                <label className="block text-sm font-medium mb-2">Primary Sector *</label>
+                <label >Primary Sector *</label>
                 <select 
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
+                  
                   value={selectedSectorCode}
                   onChange={(e) => handleSectorChange(e.target.value)}
                   disabled={sectorsLoading}
@@ -696,9 +696,9 @@ function GrowthExitAssessment() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2">Specific Industry</label>
+                <label >Specific Industry</label>
                 <select 
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
+                  
                   disabled={!selectedSectorCode || industriesLoading}
                   value={formData.naicsCode || ""}
                   onChange={(e) => handleIndustryChange(e.target.value)}
@@ -720,30 +720,30 @@ function GrowthExitAssessment() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2">Business Description *</label>
+                <label >Business Description *</label>
                 <textarea 
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 h-24 resize-none text-gray-900 bg-white"
+                  
                   placeholder="Describe your business operations, products/services, and target market..."
                   value={formData.businessDescription}
                   onChange={(e) => handleFormChange('businessDescription', e.target.value)}
                 />
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div >
                 <div>
-                  <label className="block text-sm font-medium mb-2">Years in Business</label>
+                  <label >Years in Business</label>
                   <input 
                     type="number" 
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
+                    
                     placeholder="5"
                     value={formData.yearsInBusiness}
                     onChange={(e) => handleFormChange('yearsInBusiness', e.target.value)}
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-2">Number of Employees</label>
+                  <label >Number of Employees</label>
                   <input 
                     type="number" 
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
+                    
                     placeholder="25"
                     value={formData.numberOfEmployees}
                     onChange={(e) => handleFormChange('numberOfEmployees', e.target.value)}
@@ -756,17 +756,17 @@ function GrowthExitAssessment() {
 
       case 3:
         return (
-          <Card className="w-full max-w-2xl mx-auto">
-            <CardHeader className="text-center">
-              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <DollarSign className="w-8 h-8 text-purple-600" />
+          <Card >
+            <CardHeader >
+              <div >
+                <DollarSign  />
               </div>
-              <CardTitle className="text-2xl">Financial Information</CardTitle>
-              <p className="text-gray-600">Provide your key financial metrics</p>
+              <CardTitle >Financial Information</CardTitle>
+              <p >Provide your key financial metrics</p>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent >
               <div>
-                <label className="block text-sm font-medium mb-2">Annual Revenue (Last 12 Months) *</label>
+                <label >Annual Revenue (Last 12 Months) *</label>
                 <input 
                   type="number" 
                   value={formData.financials.annualRevenue}
@@ -774,12 +774,12 @@ function GrowthExitAssessment() {
                     ...prev,
                     financials: { ...prev.financials, annualRevenue: e.target.value }
                   }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  
                   placeholder="1000000"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2">Cost of Goods Sold (COGS)</label>
+                <label >Cost of Goods Sold (COGS)</label>
                 <input 
                   type="number" 
                   value={formData.financials.costOfGoodsSold}
@@ -787,12 +787,12 @@ function GrowthExitAssessment() {
                     ...prev,
                     financials: { ...prev.financials, costOfGoodsSold: e.target.value }
                   }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  
                   placeholder="400000"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2">Total Operating Expenses *</label>
+                <label >Total Operating Expenses *</label>
                 <input 
                   type="number" 
                   value={formData.financials.operatingExpenses}
@@ -800,19 +800,19 @@ function GrowthExitAssessment() {
                     ...prev,
                     financials: { ...prev.financials, operatingExpenses: e.target.value }
                   }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  
                   placeholder="350000"
                 />
               </div>
-              <div className="bg-blue-50 p-4 rounded-lg">
-                <div className="flex items-center mb-2">
-                  <Calculator className="w-5 h-5 text-blue-600 mr-2" />
-                  <span className="font-medium text-blue-900">Calculated EBITDA</span>
+              <div >
+                <div >
+                  <Calculator  />
+                  <span >Calculated EBITDA</span>
                 </div>
-                <div className="text-2xl font-bold text-blue-600">
+                <div >
                   ${calculateEBITDA().toLocaleString()}
                 </div>
-                <p className="text-sm text-blue-700">This will be refined with your adjustments</p>
+                <p >This will be refined with your adjustments</p>
               </div>
             </CardContent>
           </Card>
@@ -820,17 +820,17 @@ function GrowthExitAssessment() {
 
       case 4:
         return (
-          <Card className="w-full max-w-2xl mx-auto">
-            <CardHeader className="text-center">
-              <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Zap className="w-8 h-8 text-orange-600" />
+          <Card >
+            <CardHeader >
+              <div >
+                <Zap  />
               </div>
-              <CardTitle className="text-2xl">EBITDA Adjustments</CardTitle>
-              <p className="text-gray-600">Normalize your earnings for valuation</p>
+              <CardTitle >EBITDA Adjustments</CardTitle>
+              <p >Normalize your earnings for valuation</p>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent >
               <div>
-                <label className="block text-sm font-medium mb-2">Owner's Salary Above Market Rate</label>
+                <label >Owner's Salary Above Market Rate</label>
                 <input 
                   type="number" 
                   value={formData.adjustments.ownerSalary}
@@ -838,12 +838,12 @@ function GrowthExitAssessment() {
                     ...prev,
                     adjustments: { ...prev.adjustments, ownerSalary: e.target.value }
                   }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  
                   placeholder="50000"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2">Personal Expenses Run Through Business</label>
+                <label >Personal Expenses Run Through Business</label>
                 <input 
                   type="number" 
                   value={formData.adjustments.personalExpenses}
@@ -851,12 +851,12 @@ function GrowthExitAssessment() {
                     ...prev,
                     adjustments: { ...prev.adjustments, personalExpenses: e.target.value }
                   }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  
                   placeholder="25000"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2">One-Time Expenses</label>
+                <label >One-Time Expenses</label>
                 <input 
                   type="number" 
                   value={formData.adjustments.oneTimeExpenses}
@@ -864,12 +864,12 @@ function GrowthExitAssessment() {
                     ...prev,
                     adjustments: { ...prev.adjustments, oneTimeExpenses: e.target.value }
                   }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  
                   placeholder="15000"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2">Other Adjustments</label>
+                <label >Other Adjustments</label>
                 <input 
                   type="number" 
                   value={formData.adjustments.otherAdjustments}
@@ -877,19 +877,19 @@ function GrowthExitAssessment() {
                     ...prev,
                     adjustments: { ...prev.adjustments, otherAdjustments: e.target.value }
                   }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  
                   placeholder="10000"
                 />
               </div>
-              <div className="bg-green-50 p-4 rounded-lg">
-                <div className="flex items-center mb-2">
-                  <TrendingUp className="w-5 h-5 text-green-600 mr-2" />
-                  <span className="font-medium text-green-900">Adjusted EBITDA</span>
+              <div >
+                <div >
+                  <TrendingUp  />
+                  <span >Adjusted EBITDA</span>
                 </div>
-                <div className="text-2xl font-bold text-green-600">
+                <div >
                   ${calculateAdjustedEBITDA().toLocaleString()}
                 </div>
-                <p className="text-sm text-green-700">Ready for value driver analysis</p>
+                <p >Ready for value driver analysis</p>
               </div>
             </CardContent>
           </Card>
@@ -897,35 +897,35 @@ function GrowthExitAssessment() {
 
       case 5:
         return (
-          <Card className="w-full max-w-2xl mx-auto">
-            <CardHeader className="text-center">
-              <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Star className="w-8 h-8 text-indigo-600" />
+          <Card >
+            <CardHeader >
+              <div >
+                <Star  />
               </div>
-              <CardTitle className="text-2xl">Growth & Exit Value Drivers</CardTitle>
-              <p className="text-gray-600">Answer these questions to assess your business value</p>
+              <CardTitle >Growth & Exit Value Drivers</CardTitle>
+              <p >Answer these questions to assess your business value</p>
             </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent >
               {/* Dynamic comprehensive questionnaire */}
               {valuationQuestions.map((question, index) => (
-                <div key={question.id} className="space-y-4">
+                <div key={question.id} >
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">
+                    <label >
                       {question.question}
                     </label>
                   </div>
-                  <div className="space-y-2">
+                  <div >
                     {question.options.map((option, optionIndex) => (
-                      <label key={`${question.id}-${optionIndex}`} className="flex items-center space-x-3 cursor-pointer">
+                      <label key={`${question.id}-${optionIndex}`} >
                         <input
                           type="radio"
                           name={question.id}
                           value={question.weights[optionIndex].toString()}
                           checked={formData.valueDrivers[question.id] === question.weights[optionIndex].toString()}
                           onChange={(e) => handleValueDriverChange(question.id, e.target.value)}
-                          className="w-4 h-4 text-indigo-600 border-gray-300 focus:ring-indigo-500"
+                          
                         />
-                        <span className="text-sm text-gray-700">{option}</span>
+                        <span >{option}</span>
                       </label>
                     ))}
                   </div>
@@ -933,60 +933,60 @@ function GrowthExitAssessment() {
               ))}
               
               {/* Progress indicator */}
-              <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-                <div className="flex items-center mb-2">
-                  <Calculator className="w-5 h-5 text-gray-600 mr-2" />
-                  <span className="text-sm font-medium text-gray-700">
+              <div >
+                <div >
+                  <Calculator  />
+                  <span >
                     Progress: {Object.values(formData.valueDrivers).filter(v => v !== "").length} of {valuationQuestions.length} questions completed
                   </span>
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
+                <div >
                   <div 
-                    className="bg-indigo-600 h-2 rounded-full transition-all duration-300"
+                    
                     style={{ width: `${(Object.values(formData.valueDrivers).filter(v => v !== "").length / valuationQuestions.length) * 100}%` }}
                   />
                 </div>
               </div>
               
               {/* Real-time Valuation Preview using Valuation Engine */}
-              <div className="bg-gradient-to-r from-indigo-50 to-purple-50 p-6 rounded-lg border">
-                <div className="flex items-center mb-3">
-                  <Calculator className="w-5 h-5 text-indigo-600 mr-2" />
-                  <span className="font-medium text-indigo-900">Live Valuation Analysis</span>
+              <div >
+                <div >
+                  <Calculator  />
+                  <span >Live Valuation Analysis</span>
                 </div>
                 {(() => {
                   const valuationResults = getValuationResults();
                   return (
                     <>
-                      <div className="grid grid-cols-3 gap-4 mb-4">
+                      <div >
                         <div>
-                          <span className="text-sm text-gray-600">Overall Score:</span>
-                          <div className="text-lg font-bold text-indigo-600">{valuationResults.overallScore}/100</div>
+                          <span >Overall Score:</span>
+                          <div >{valuationResults.overallScore}/100</div>
                         </div>
                         <div>
-                          <span className="text-sm text-gray-600">Adjusted EBITDA:</span>
-                          <div className="text-lg font-bold text-purple-600">${valuationResults.ebitda?.toLocaleString() || "0"}</div>
+                          <span >Adjusted EBITDA:</span>
+                          <div >${valuationResults.ebitda?.toLocaleString() || "0"}</div>
                         </div>
                         <div>
-                          <span className="text-sm text-gray-600">Value Range:</span>
-                          <div className="text-lg font-bold text-green-600">
+                          <span >Value Range:</span>
+                          <div >
                             ${valuationResults.valuation?.low?.toLocaleString() || "0"} - ${valuationResults.valuation?.high?.toLocaleString() || "0"}
                           </div>
                         </div>
                       </div>
-                      <div className="pt-4 border-t border-indigo-200">
-                        <span className="text-sm text-gray-600">Estimated Business Value:</span>
-                        <div className="text-3xl font-bold text-green-600">
+                      <div >
+                        <span >Estimated Business Value:</span>
+                        <div >
                           ${valuationResults.valuation?.mean?.toLocaleString() || "0"}
                         </div>
-                        <p className="text-xs text-gray-600 mt-1">
+                        <p >
                           Based on comprehensive financial and strategic analysis
                         </p>
                       </div>
                       {valuationResults.recommendations && valuationResults.recommendations.length > 0 && (
-                        <div className="mt-4 pt-4 border-t border-indigo-200">
-                          <span className="text-sm font-medium text-indigo-900">Improvement Areas:</span>
-                          <ul className="text-xs text-gray-600 mt-1 space-y-1">
+                        <div >
+                          <span >Improvement Areas:</span>
+                          <ul >
                             {valuationResults.recommendations.slice(0, 2).map((rec, idx) => (
                               <li key={idx}>• {rec}</li>
                             ))}
@@ -999,14 +999,14 @@ function GrowthExitAssessment() {
               </div>
               
               {/* Progress Indicator */}
-              <div className="bg-blue-50 p-4 rounded-lg">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-blue-900">Assessment Progress</span>
-                  <span className="text-sm text-blue-700">{Object.values(formData.valueDrivers).filter(v => v !== "").length}/{valuationQuestions.length} completed</span>
+              <div >
+                <div >
+                  <span >Assessment Progress</span>
+                  <span >{Object.values(formData.valueDrivers).filter(v => v !== "").length}/{valuationQuestions.length} completed</span>
                 </div>
-                <div className="mt-2 bg-blue-200 rounded-full h-2 overflow-hidden">
+                <div >
                   <div 
-                    className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                    
                     style={{ width: `${Math.min(100, (Object.values(formData.valueDrivers).filter(v => v !== "").length / valuationQuestions.length) * 100)}%` }}
                   />
                 </div>
@@ -1017,15 +1017,15 @@ function GrowthExitAssessment() {
 
       case 6:
         return (
-          <Card className="w-full max-w-2xl mx-auto">
-            <CardHeader className="text-center">
-              <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <FileText className="w-8 h-8 text-red-600" />
+          <Card >
+            <CardHeader >
+              <div >
+                <FileText  />
               </div>
-              <CardTitle className="text-2xl">Complete Your Assessment</CardTitle>
-              <p className="text-gray-600">Review and finalize your strategic valuation</p>
+              <CardTitle >Complete Your Assessment</CardTitle>
+              <p >Review and finalize your strategic valuation</p>
             </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent >
               {(() => {
                 const valuationResults = getValuationResults();
                 const selectedIndustry = sectorIndustries?.find(i => i.code === formData.naicsCode);
@@ -1034,48 +1034,48 @@ function GrowthExitAssessment() {
                 
                 return (
                   <>
-                    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-lg">
-                      <h3 className="text-lg font-bold mb-4">Assessment Summary</h3>
-                      <div className="grid grid-cols-2 gap-4 text-sm">
+                    <div >
+                      <h3 >Assessment Summary</h3>
+                      <div >
                         <div>
-                          <span className="text-gray-600">Adjusted EBITDA:</span>
-                          <div className="font-bold text-lg">${valuationResults.ebitda?.toLocaleString() || "0"}</div>
+                          <span >Adjusted EBITDA:</span>
+                          <div >${valuationResults.ebitda?.toLocaleString() || "0"}</div>
                         </div>
                         <div>
-                          <span className="text-gray-600">Your Multiple:</span>
-                          <div className="font-bold text-lg">{userMultiple.toFixed(1)}x</div>
+                          <span >Your Multiple:</span>
+                          <div >{userMultiple.toFixed(1)}x</div>
                         </div>
                         <div>
-                          <span className="text-gray-600">Estimated Value:</span>
-                          <div className="font-bold text-xl text-green-600">${valuationResults.valuation?.mean?.toLocaleString() || "0"}</div>
+                          <span >Estimated Value:</span>
+                          <div >${valuationResults.valuation?.mean?.toLocaleString() || "0"}</div>
                         </div>
                         <div>
-                          <span className="text-gray-600">Value Range:</span>
-                          <div className="font-bold text-lg">${valuationResults.valuation?.low?.toLocaleString() || "0"} - ${valuationResults.valuation?.high?.toLocaleString() || "0"}</div>
+                          <span >Value Range:</span>
+                          <div >${valuationResults.valuation?.low?.toLocaleString() || "0"} - ${valuationResults.valuation?.high?.toLocaleString() || "0"}</div>
                         </div>
                       </div>
                     </div>
                     {/* Industry Comparison Chart */}
-                    <div className="bg-white p-6 rounded-lg border">
-                      <div className="text-center mb-6">
-                        <h3 className="text-xl font-bold text-gray-800 mb-2">Estimated Business Value</h3>
-                        <div className="space-y-1 text-gray-700">
-                          <p>Low Estimate: <strong className="text-lg">${valuationResults.valuation?.low?.toLocaleString() || "0"}</strong></p>
-                          <p>High Estimate: <strong className="text-lg">${valuationResults.valuation?.high?.toLocaleString() || "0"}</strong></p>
-                          <p>Mean Estimate: <strong className="text-xl text-indigo-600">${valuationResults.valuation?.mean?.toLocaleString() || "0"}</strong></p>
+                    <div >
+                      <div >
+                        <h3 >Estimated Business Value</h3>
+                        <div >
+                          <p>Low Estimate: <strong >${valuationResults.valuation?.low?.toLocaleString() || "0"}</strong></p>
+                          <p>High Estimate: <strong >${valuationResults.valuation?.high?.toLocaleString() || "0"}</strong></p>
+                          <p>Mean Estimate: <strong >${valuationResults.valuation?.mean?.toLocaleString() || "0"}</strong></p>
                         </div>
                       </div>
                       
-                      <div className="mb-6">
-                        <p className="text-gray-600 mb-2 text-[18px] font-bold">
+                      <div >
+                        <p >
                           Industry: {selectedIndustry?.title || `${formData.naicsCode} – Industry Classification`}
                         </p>
-                        <h4 className="text-lg font-bold text-gray-800 mt-[48px] mb-[48px] pt-[0px] pb-[0px]">Industry-Based Valuation Range</h4>
+                        <h4 >Industry-Based Valuation Range</h4>
                         
                         {/* Gradient Bar with Indicators */}
-                        <div className="relative mb-4">
+                        <div >
                           <div 
-                            className="h-8 rounded-lg"
+                            
                             style={{
                               background: 'linear-gradient(to right, #f44336 0%, #ff9800 25%, #ffc107 50%, #4caf50 75%, #2e7d32 100%)'
                             }}
@@ -1092,33 +1092,33 @@ function GrowthExitAssessment() {
                               <>
                                 {/* You indicator */}
                                 <div 
-                                  className="absolute -top-6 transform -translate-x-1/2"
+                                  
                                   style={{ left: `${userPos}%` }}
                                 >
-                                  <div className="w-0.5 h-14 bg-black"></div>
-                                  <div className="absolute -top-5 left-1/2 transform -translate-x-1/2 text-xs font-semibold text-black">
+                                  <div ></div>
+                                  <div >
                                     ▲ You
                                   </div>
                                 </div>
                                 
                                 {/* Average indicator */}
                                 <div 
-                                  className="absolute -top-6 transform -translate-x-1/2"
+                                  
                                   style={{ left: `${avgPos}%` }}
                                 >
-                                  <div className="w-0.5 h-14 bg-blue-600"></div>
-                                  <div className="absolute -top-5 left-1/2 transform -translate-x-1/2 text-xs font-semibold text-blue-600">
+                                  <div ></div>
+                                  <div >
                                     Avg
                                   </div>
                                 </div>
                                 
                                 {/* Strategic indicator */}
                                 <div 
-                                  className="absolute -top-6 transform -translate-x-1/2"
+                                  
                                   style={{ left: `${strategicPos}%` }}
                                 >
-                                  <div className="w-0.5 h-14 bg-green-800"></div>
-                                  <div className="absolute -top-5 left-1/2 transform -translate-x-1/2 text-xs font-semibold text-green-800">
+                                  <div ></div>
+                                  <div >
                                     Target
                                   </div>
                                 </div>
@@ -1128,7 +1128,7 @@ function GrowthExitAssessment() {
                         </div>
                         
                         {/* Range Labels */}
-                        <div className="flex justify-between text-sm text-gray-600 mt-2">
+                        <div >
                           <span>Low: 2.0x</span>
                           <span>Avg: {getIndustryComparisonData().find(d => d.name === 'Industry Average')?.value}x</span>
                           <span>High: 6.0x</span>
@@ -1136,9 +1136,9 @@ function GrowthExitAssessment() {
                       </div>
                       
                       {/* Value Driver Breakdown */}
-                      <div className="mb-6">
-                        <h4 className="text-lg font-bold text-gray-800 mb-4">Value Driver Breakdown</h4>
-                        <div className="space-y-3">
+                      <div >
+                        <h4 >Value Driver Breakdown</h4>
+                        <div >
                           {(() => {
                             const driverScores = getValueDriversScores();
                             const driverNames = {
@@ -1157,16 +1157,16 @@ function GrowthExitAssessment() {
                               };
                               
                               return (
-                                <div key={driver} className="relative mb-2">
-                                  <div className="flex items-center justify-between mb-1">
-                                    <span className="text-sm font-medium text-gray-700">
+                                <div key={driver} >
+                                  <div >
+                                    <span >
                                       {driverNames[driver] || driver}
                                     </span>
-                                    <span className="text-sm font-medium text-gray-600">
+                                    <span >
                                       {percentage}%
                                     </span>
                                   </div>
-                                  <div className="bg-gray-200 rounded-full h-4 overflow-hidden">
+                                  <div >
                                     <div 
                                       className={`h-full ${getBarColor(percentage)} transition-all duration-300`}
                                       style={{ width: `${Math.max(percentage, 5)}%` }}
@@ -1180,9 +1180,9 @@ function GrowthExitAssessment() {
                       </div>
                       
                       {/* Key Opportunities */}
-                      <div className="mb-6">
-                        <h4 className="text-lg font-bold text-gray-800 mb-4">Key Opportunities to Improve</h4>
-                        <ul className="space-y-2 text-sm text-gray-700">
+                      <div >
+                        <h4 >Key Opportunities to Improve</h4>
+                        <ul >
                           <li>• Enhance your recurring revenue through contracts or subscriptions</li>
                           <li>• Clarify what makes your offering unique or defensible</li>
                           <li>• Explore new geographies or client segments to drive growth</li>
@@ -1211,21 +1211,21 @@ function GrowthExitAssessment() {
               })()}
               
               <div>
-                <label className="block text-sm font-medium mb-2">Additional Comments</label>
+                <label >Additional Comments</label>
                 <textarea 
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 h-20 resize-none"
+                  
                   placeholder="Any additional information about your business..."
                 />
               </div>
 
-              <div className="text-center">
+              <div >
                 <Button 
                   onClick={handlePaygateClick}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 text-lg font-bold"
+                  
                 >
                   Get Growth & Exit Assessment - $795
                 </Button>
-                <p className="text-sm text-gray-500 mt-2">
+                <p >
                   Secure payment processed by Stripe • Includes 60-minute Discovery Call
                 </p>
               </div>
@@ -1236,22 +1236,22 @@ function GrowthExitAssessment() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      <div className="container mx-auto px-4 py-8">
+    <div >
+      <div >
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+        <div >
           <Button 
             variant="ghost" 
             onClick={handleBack}
-            className="flex items-center text-gray-600 hover:text-gray-900"
+            
           >
-            <ArrowLeft className="w-4 h-4 mr-2" />
+            <ArrowLeft  />
             Back to Home
           </Button>
           
-          <div className="flex items-center space-x-2">
-            <Shield className="w-5 h-5 text-green-600" />
-            <Badge className="bg-green-100 text-green-800">Secure Assessment</Badge>
+          <div >
+            <Shield  />
+            <Badge >Secure Assessment</Badge>
           </div>
         </div>
 
@@ -1262,12 +1262,12 @@ function GrowthExitAssessment() {
         {renderStepContent()}
 
         {/* Navigation Buttons */}
-        <div className="flex justify-between mt-8 max-w-2xl mx-auto">
+        <div >
           <Button
             variant="outline"
             onClick={prevStep}
             disabled={currentStep === 1}
-            className="px-6 border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400 bg-white"
+            
           >
             Previous
           </Button>
@@ -1275,13 +1275,13 @@ function GrowthExitAssessment() {
           {currentStep < totalSteps ? (
             <Button
               onClick={nextStep}
-              className="px-6 bg-blue-600 hover:bg-blue-700"
+              
             >
               Continue
             </Button>
           ) : (
-            <div className="flex items-center text-sm text-gray-500">
-              <FileText className="w-4 h-4 mr-1" />
+            <div >
+              <FileText  />
               Complete assessment above
             </div>
           )}

@@ -16,7 +16,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { insertTeamMemberSchema, type InsertTeamMember, type TeamMember } from '@shared/schema';
 import TeamLogin from '@/components/team-login';
 import { useTeamAuth } from '@/hooks/use-team-auth';
-import { useToast } from '@/hooks/use-toast';
 import PasswordChangeForm from '@/components/password-change-form';
 import PasswordChangeModal from '@/components/password-change-modal';
 import appleBitesLogoImage from '@assets/Apple Bites_1752266454888.png';
@@ -124,10 +123,10 @@ export default function TeamDashboard() {
   // Show authentication loading state
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Checking authentication...</p>
+      <div >
+        <div >
+          <div ></div>
+          <p >Checking authentication...</p>
         </div>
       </div>
     );
@@ -157,31 +156,31 @@ export default function TeamDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div >
+      <div >
         {/* Top Navigation */}
-        <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <div className="flex items-center gap-4">
+        <div >
+          <div >
             <img 
               src={_2} 
               alt="Apple Bites Business Assessment" 
-              className="h-10 sm:h-12 w-auto"
+              
             />
-            <div className="border-l border-slate-300 pl-4">
-              <h1 className="text-xl sm:text-2xl font-bold text-slate-900">Team Dashboard</h1>
+            <div >
+              <h1 >Team Dashboard</h1>
             </div>
           </div>
-          <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
-            <Link href="/admin/leads" className="flex-1 sm:flex-none">
+          <div >
+            <Link href="/admin/leads" >
               <Button 
-                className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white w-full sm:w-auto text-sm"
+                
               >
                 Leads
               </Button>
             </Link>
-            <Link href="/admin/analytics" className="flex-1 sm:flex-none">
+            <Link href="/admin/analytics" >
               <Button 
-                className="flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white w-full sm:w-auto text-sm"
+                
               >
                 Analytics
               </Button>
@@ -190,28 +189,28 @@ export default function TeamDashboard() {
         </div>
 
         {/* User Info and Actions */}
-        <div className="mb-8 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
-          <div className="flex items-center gap-4 bg-slate-50 rounded-xl shadow-sm border border-slate-200 px-4 sm:px-6 lg:px-8 py-4 w-full lg:w-auto flex-1 lg:flex-initial">
-            <div className="text-sm text-slate-700">
-              <div className="font-semibold text-base sm:text-lg lg:text-xl">Welcome, {user?.firstName} {user?.lastName}</div>
-              <div className="flex items-center gap-2 mt-1">
-                <Shield className="w-3 h-3 text-slate-400" />
+        <div >
+          <div >
+            <div >
+              <div >Welcome, {user?.firstName} {user?.lastName}</div>
+              <div >
+                <Shield  />
                 <Badge className={`${getRoleBadgeColor(user?.role || '')} text-xs lg:text-sm`}>
                   {user?.role?.toUpperCase()}
                 </Badge>
               </div>
             </div>
           </div>
-          <div className="flex items-center gap-2 sm:gap-3 lg:gap-4 w-full sm:w-auto lg:w-auto flex-shrink-0">
+          <div >
             <Dialog>
               <DialogTrigger asChild>
-                <Button variant="outline" className="flex items-center gap-2 flex-1 sm:flex-none text-sm">
-                  <Settings className="w-4 h-4" />
-                  <span className="hidden sm:inline">Change Password</span>
-                  <span className="sm:hidden">Password</span>
+                <Button variant="outline" >
+                  <Settings  />
+                  <span >Change Password</span>
+                  <span >Password</span>
                 </Button>
               </DialogTrigger>
-              <DialogContent className="sm:max-w-md bg-white border-slate-300 shadow-lg">
+              <DialogContent >
                 <DialogHeader>
                   <DialogTitle>Change Password</DialogTitle>
                   <DialogDescription>
@@ -221,8 +220,8 @@ export default function TeamDashboard() {
                 <PasswordChangeForm userId={user?.id} />
               </DialogContent>
             </Dialog>
-            <Button variant="outline" onClick={logout} className="flex items-center gap-2 hover:bg-red-50 hover:border-red-200 flex-1 sm:flex-none text-sm">
-              <LogOut className="w-4 h-4" />
+            <Button variant="outline" onClick={logout} >
+              <LogOut  />
               Logout
             </Button>
           </div>
@@ -232,66 +231,66 @@ export default function TeamDashboard() {
         {hasRole('admin') ? (
           <>
             {/* Admin Dashboard */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-8">
-              <Card className="border-0 shadow-sm bg-gradient-to-br from-blue-50 to-blue-100/50 hover:shadow-md transition-all duration-200">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-                  <CardTitle className="text-sm font-medium text-slate-600">Total Members</CardTitle>
-                  <div className="p-2 bg-blue-500/10 rounded-lg">
-                    <Users className="h-5 w-5 text-blue-600" />
+            <div >
+              <Card >
+                <CardHeader >
+                  <CardTitle >Total Members</CardTitle>
+                  <div >
+                    <Users  />
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-3xl font-bold text-slate-900">{teamMembers?.length || 0}</div>
-                  <p className="text-xs text-slate-500 mt-1">registered accounts</p>
+                  <div >{teamMembers?.length || 0}</div>
+                  <p >registered accounts</p>
                 </CardContent>
               </Card>
 
-              <Card className="border-0 shadow-sm bg-gradient-to-br from-emerald-50 to-emerald-100/50 hover:shadow-md transition-all duration-200">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-                  <CardTitle className="text-sm font-medium text-slate-600">Active Members</CardTitle>
-                  <div className="p-2 bg-emerald-500/10 rounded-lg">
-                    <Shield className="h-5 w-5 text-emerald-600" />
+              <Card >
+                <CardHeader >
+                  <CardTitle >Active Members</CardTitle>
+                  <div >
+                    <Shield  />
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-3xl font-bold text-emerald-700">
+                  <div >
                     {teamMembers?.filter(m => m.isActive).length || 0}
                   </div>
-                  <p className="text-xs text-slate-500 mt-1">currently active</p>
+                  <p >currently active</p>
                 </CardContent>
               </Card>
 
-              <Card className="border-0 shadow-sm bg-gradient-to-br from-purple-50 to-purple-100/50 hover:shadow-md transition-all duration-200">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-                  <CardTitle className="text-sm font-medium text-slate-600">Admins</CardTitle>
-                  <div className="p-2 bg-purple-500/10 rounded-lg">
-                    <Settings className="h-5 w-5 text-purple-600" />
+              <Card >
+                <CardHeader >
+                  <CardTitle >Admins</CardTitle>
+                  <div >
+                    <Settings  />
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-3xl font-bold text-purple-700">
+                  <div >
                     {teamMembers?.filter(m => m.role === 'admin').length || 0}
                   </div>
-                  <p className="text-xs text-slate-500 mt-1">with admin access</p>
+                  <p >with admin access</p>
                 </CardContent>
               </Card>
             </div>
 
             {/* Team Members Management */}
-            <Card className="border-0 shadow-sm">
-              <CardHeader className="flex flex-row items-center justify-between bg-gradient-to-r from-slate-50 to-slate-100/50 rounded-t-lg border-b border-slate-200">
+            <Card >
+              <CardHeader >
                 <div>
-                  <CardTitle className="text-xl text-slate-900">Team Members</CardTitle>
-                  <p className="text-sm text-slate-600 mt-1">Manage access and permissions</p>
+                  <CardTitle >Team Members</CardTitle>
+                  <p >Manage access and permissions</p>
                 </div>
                 <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
                   <DialogTrigger asChild>
-                    <Button className="flex items-center gap-2 slate-gradient text-white shadow-sm hover:shadow-md transition-all duration-200">
-                      <UserPlus className="w-4 h-4" />
+                    <Button >
+                      <UserPlus  />
                       Add Member
                     </Button>
                   </DialogTrigger>
-                  <DialogContent className="sm:max-w-md bg-white max-w-[95vw] mx-auto">
+                  <DialogContent >
                     <DialogHeader>
                       <DialogTitle>Add Team Member</DialogTitle>
                       <DialogDescription>
@@ -299,8 +298,8 @@ export default function TeamDashboard() {
                       </DialogDescription>
                     </DialogHeader>
                     <Form {...form}>
-                      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <form onSubmit={form.handleSubmit(onSubmit)} >
+                        <div >
                           <FormField
                             control={form.control}
                             name="firstName"
@@ -308,7 +307,7 @@ export default function TeamDashboard() {
                               <FormItem>
                                 <FormLabel>First Name</FormLabel>
                                 <FormControl>
-                                  <Input {...field} className="bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20" />
+                                  <Input {...field}  />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -321,7 +320,7 @@ export default function TeamDashboard() {
                               <FormItem>
                                 <FormLabel>Last Name</FormLabel>
                                 <FormControl>
-                                  <Input {...field} className="bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20" />
+                                  <Input {...field}  />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -335,7 +334,7 @@ export default function TeamDashboard() {
                             <FormItem>
                               <FormLabel>Email</FormLabel>
                               <FormControl>
-                                <Input {...field} type="email" className="bg-slate-50 border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20" />
+                                <Input {...field} type="email"  />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -353,10 +352,10 @@ export default function TeamDashboard() {
                                     <SelectValue placeholder="Select a role" />
                                   </SelectTrigger>
                                 </FormControl>
-                                <SelectContent className="bg-white border-[#1a2332] shadow-lg">
-                                  <SelectItem value="member" className="hover:bg-[#1a2332]/10 focus:bg-[#1a2332]/10">Member</SelectItem>
-                                  <SelectItem value="manager" className="hover:bg-[#1a2332]/10 focus:bg-[#1a2332]/10">Manager</SelectItem>
-                                  <SelectItem value="admin" className="hover:bg-[#1a2332]/10 focus:bg-[#1a2332]/10">Admin</SelectItem>
+                                <SelectContent >
+                                  <SelectItem value="member" >Member</SelectItem>
+                                  <SelectItem value="manager" >Manager</SelectItem>
+                                  <SelectItem value="admin" >Admin</SelectItem>
                                 </SelectContent>
                               </Select>
                               <FormMessage />
@@ -370,22 +369,22 @@ export default function TeamDashboard() {
                             <FormItem>
                               <FormLabel>Password</FormLabel>
                               <FormControl>
-                                <Input {...field} type="password" className="bg-white border-slate-300 focus:bg-slate-100 focus:border-blue-500 focus:ring-blue-500/20" />
+                                <Input {...field} type="password"  />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
                           )}
                         />
-                        <div className="flex flex-col sm:flex-row justify-end gap-2">
+                        <div >
                           <Button
                             type="button"
                             variant="outline"
                             onClick={() => setIsAddDialogOpen(false)}
-                            className="w-full sm:w-auto"
+                            
                           >
                             Cancel
                           </Button>
-                          <Button type="submit" disabled={createMemberMutation.isPending} className="w-full sm:w-auto">
+                          <Button type="submit" disabled={createMemberMutation.isPending} >
                             {createMemberMutation.isPending ? 'Creating...' : 'Create Member'}
                           </Button>
                         </div>
@@ -394,35 +393,35 @@ export default function TeamDashboard() {
                   </DialogContent>
                 </Dialog>
               </CardHeader>
-              <CardContent className="p-0">
+              <CardContent >
                 {membersLoading ? (
-                  <div className="text-center py-8">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                  <div >
+                    <div ></div>
                     <p>Loading team members...</p>
                   </div>
                 ) : (
-                  <div className="overflow-x-auto">
+                  <div >
                     <Table>
                       <TableHeader>
-                        <TableRow className="bg-slate-50 hover:bg-slate-50">
-                          <TableHead className="text-slate-900 bg-slate-50 font-semibold min-w-[120px] lg:w-auto">Name</TableHead>
-                          <TableHead className="text-slate-900 bg-slate-50 font-semibold min-w-[200px] lg:w-auto">Email</TableHead>
-                          <TableHead className="text-slate-900 bg-slate-50 font-semibold min-w-[100px] lg:w-auto">Role</TableHead>
-                          <TableHead className="text-slate-900 bg-slate-50 font-semibold min-w-[100px] lg:w-auto">Status</TableHead>
-                          <TableHead className="text-slate-900 bg-slate-50 font-semibold min-w-[120px] lg:w-auto">Last Login</TableHead>
-                          <TableHead className="text-slate-900 bg-slate-50 font-semibold min-w-[140px] lg:w-auto">Actions</TableHead>
+                        <TableRow >
+                          <TableHead >Name</TableHead>
+                          <TableHead >Email</TableHead>
+                          <TableHead >Role</TableHead>
+                          <TableHead >Status</TableHead>
+                          <TableHead >Last Login</TableHead>
+                          <TableHead >Actions</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {membersLoading ? (
                         <TableRow>
-                          <TableCell colSpan={6} className="text-center py-8 text-gray-500">
+                          <TableCell colSpan={6} >
                             Loading team members...
                           </TableCell>
                         </TableRow>
                       ) : !teamMembers || teamMembers.length === 0 ? (
                         <TableRow>
-                          <TableCell colSpan={6} className="text-center py-8 text-gray-500">
+                          <TableCell colSpan={6} >
                             {!isAuthenticated ? 'Please log in to view team members' : 
                              !hasRole('admin') ? 'Admin access required to view team members' :
                              'No team members found. Create your first team member to get started.'}
@@ -430,8 +429,8 @@ export default function TeamDashboard() {
                         </TableRow>
                       ) : (
                         teamMembers.map((member) => (
-                          <TableRow key={member.id} className="hover:bg-slate-50/50 border-b border-blue-200">
-                            <TableCell className="font-medium">
+                          <TableRow key={member.id} >
+                            <TableCell >
                               {member.firstName} {member.lastName}
                             </TableCell>
                             <TableCell>{member.email}</TableCell>
@@ -451,7 +450,7 @@ export default function TeamDashboard() {
                                 : 'Never'}
                             </TableCell>
                             <TableCell>
-                              <div className="flex flex-col sm:flex-row gap-2 lg:gap-3">
+                              <div >
                                 <Button
                                   size="sm"
                                   variant="outline"
@@ -461,7 +460,7 @@ export default function TeamDashboard() {
                                       updates: { isActive: !member.isActive },
                                     })
                                   }
-                                  className="text-xs lg:text-sm whitespace-nowrap"
+                                  
                                 >
                                   {member.isActive ? 'Deactivate' : 'Activate'}
                                 </Button>
@@ -471,10 +470,10 @@ export default function TeamDashboard() {
                                       <Button
                                         size="sm"
                                         variant="outline"
-                                        className="text-red-600 hover:text-red-700 text-xs lg:text-sm"
+                                        
                                       >
-                                        <Trash2 className="w-4 h-4" />
-                                        <span className="hidden lg:inline ml-1">Delete</span>
+                                        <Trash2  />
+                                        <span >Delete</span>
                                       </Button>
                                     </AlertDialogTrigger>
                                     <AlertDialogContent>
@@ -488,7 +487,7 @@ export default function TeamDashboard() {
                                         <AlertDialogCancel>Cancel</AlertDialogCancel>
                                         <AlertDialogAction
                                           onClick={() => deleteMemberMutation.mutate(member.id)}
-                                          className="bg-red-600 hover:bg-red-700"
+                                          
                                         >
                                           Delete User
                                         </AlertDialogAction>
@@ -516,10 +515,10 @@ export default function TeamDashboard() {
                 <CardTitle>Welcome to the Team Dashboard</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">
+                <p >
                   You are logged in as a {user?.role}. Your permissions allow you to:
                 </p>
-                <ul className="list-disc list-inside space-y-2 text-gray-600">
+                <ul >
                   {user?.role === 'manager' ? (
                     <>
                       <li>View team analytics and reports</li>
