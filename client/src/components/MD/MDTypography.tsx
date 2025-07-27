@@ -2,89 +2,58 @@ import React, { forwardRef } from "react";
 import { Typography, TypographyProps } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-interface MDTypographyProps extends Omit<TypographyProps, 'color'> {
-  color?: "inherit" | "primary" | "secondary" | "info" | "success" | "warning" | "error" | "light" | "dark" | "text" | "white";
-  fontWeight?: "light" | "regular" | "medium" | "bold" | false;
+interface MDTypographyProps extends TypographyProps {
+  color?: "primary" | "secondary" | "info" | "success" | "warning" | "error" | "dark" | "white" | "text" | "light";
+  fontWeight?: "light" | "regular" | "medium" | "bold";
   textTransform?: "none" | "capitalize" | "uppercase" | "lowercase";
-  verticalAlign?: "unset" | "baseline" | "sub" | "super" | "text-top" | "text-bottom" | "middle" | "top" | "bottom";
-  textGradient?: boolean;
-  opacity?: number;
 }
 
-const MDTypographyRoot = styled(Typography)<{ ownerState: MDTypographyProps }>(({ theme, ownerState }) => {
-  const { palette, typography, functions } = theme as any;
-  const { color, textTransform, verticalAlign, fontWeight, opacity, textGradient } = ownerState;
+const MDTypographyRoot = styled(Typography)<{ mdProps: MDTypographyProps }>(({ theme, mdProps }) => {
+  const { color, fontWeight, textTransform } = mdProps;
 
-  const { gradients, transparent, white } = palette;
-  const { fontWeightLight, fontWeightRegular, fontWeightMedium, fontWeightBold } = typography;
-  const { linearGradient } = functions || {};
-
-  // Font weight mapping
-  const fontWeights = {
-    light: fontWeightLight,
-    regular: fontWeightRegular,
-    medium: fontWeightMedium,
-    bold: fontWeightBold,
+  const colors = {
+    primary: "#e91e63",
+    secondary: "#7b1fa2",
+    info: "#1A73E8",
+    success: "#4CAF50",
+    warning: "#fb8c00",
+    error: "#F44335",
+    dark: "#344767",
+    white: "#ffffff",
+    text: "#67748e",
+    light: "#f0f2f5",
   };
 
-  // Gradient styles
-  const gradientStyles = () => ({
-    backgroundImage:
-      color !== "inherit" && color !== "text" && color !== "white" && gradients?.[color] && linearGradient
-        ? linearGradient(gradients[color].main, gradients[color].state)
-        : linearGradient ? linearGradient(gradients?.dark?.main || "#42424a", gradients?.dark?.state || "#191919") : "none",
-    display: "inline-block",
-    WebkitBackgroundClip: "text",
-    WebkitTextFillColor: transparent?.main || "transparent",
-    position: "relative" as const,
-    zIndex: 1,
-  });
-
-  // Color logic
-  let colorValue = "inherit";
-  
-  if (color === "inherit") {
-    colorValue = "inherit";
-  } else if (color === "text") {
-    colorValue = palette.text?.main || "#333";
-  } else if (color === "white") {
-    colorValue = white?.main || "#ffffff";
-  } else if (color === "dark") {
-    colorValue = palette.grey?.[700] || "#424242";
-  } else if (color && palette[color]) {
-    colorValue = palette[color].main;
-  }
+  const fontWeights = {
+    light: 300,
+    regular: 400,
+    medium: 500,
+    bold: 700,
+  };
 
   return {
-    opacity,
-    textTransform,
-    verticalAlign,
-    textDecoration: "none",
-    color: colorValue,
-    fontWeight: fontWeight && fontWeights[fontWeight] ? fontWeights[fontWeight] : undefined,
-    ...(textGradient && gradientStyles()),
+    color: color && colors[color] ? colors[color] : "inherit",
+    fontWeight: fontWeight ? fontWeights[fontWeight] : "inherit",
+    textTransform: textTransform || "none",
+    opacity: 1,
   };
 });
 
-const MDTypography = forwardRef<HTMLSpanElement, MDTypographyProps>(
-  ({ 
-    color = "dark", 
-    fontWeight = false, 
-    textTransform = "none", 
-    verticalAlign = "unset", 
-    textGradient = false, 
-    opacity = 1, 
-    children, 
-    ...rest 
-  }, ref) => (
-    <MDTypographyRoot
-      {...rest}
-      ref={ref}
-      ownerState={{ color, fontWeight, textTransform, verticalAlign, textGradient, opacity }}
-    >
-      {children}
-    </MDTypographyRoot>
-  )
+const MDTypography = forwardRef<HTMLElement, MDTypographyProps>(
+  ({ color = "dark", fontWeight = "regular", textTransform = "none", children, ...rest }, ref) => {
+    // Remove mdProps from DOM to prevent React warnings
+    const { color: _, fontWeight: __, textTransform: ___, ...domProps } = rest;
+    
+    return (
+      <MDTypographyRoot
+        {...domProps}
+        ref={ref}
+        mdProps={{ color, fontWeight, textTransform }}
+      >
+        {children}
+      </MDTypographyRoot>
+    );
+  }
 );
 
 MDTypography.displayName = "MDTypography";

@@ -12,6 +12,8 @@ import ValueCalculator from "@/pages/value-calculator";
 import LeadsDashboard from "@/pages/leads-dashboard";
 import TeamDashboard from "@/pages/team-dashboard";
 import Dashboard from "@/pages/dashboard";
+import SimpleDashboard from "@/pages/dashboard-simple";
+import WorkingDashboard from "@/pages/dashboard-working";
 import AssessmentResults from "@/pages/assessment-results";
 import MaterialDashboardDemo from "@/pages/material-dashboard-demo";
 
@@ -22,9 +24,11 @@ function Router() {
     <div style={{ minHeight: '100vh', backgroundColor: 'white' }}>
       <Switch>
         {/* Core routes only */}
-        <Route path="/" component={Dashboard} />
-        <Route path="/dashboard" component={Dashboard} />
-        <Route path="/dashboard/:tier" component={Dashboard} />
+        <Route path="/" component={WorkingDashboard} />
+        <Route path="/dashboard" component={WorkingDashboard} />
+        <Route path="/dashboard/:tier" component={WorkingDashboard} />
+        <Route path="/dashboard-old" component={Dashboard} />
+        <Route path="/dashboard-simple" component={SimpleDashboard} />
         
         {/* Assessment pages */}
         <Route path="/assessment/free" component={FreeAssessment} />

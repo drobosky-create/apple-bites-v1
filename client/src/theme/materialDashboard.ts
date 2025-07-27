@@ -85,4 +85,29 @@ declare module '@mui/material/styles' {
     borders: typeof materialDashboardTheme.borders;
     functions: typeof materialDashboardTheme.functions;
   }
+  
+  interface ThemeOptions {
+    gradients?: typeof materialDashboardTheme.gradients;
+    boxShadows?: typeof materialDashboardTheme.boxShadows;
+    borders?: typeof materialDashboardTheme.borders;
+    functions?: typeof materialDashboardTheme.functions;
+  }
+  
+  interface Palette {
+    white?: {
+      main: string;
+    };
+    transparent?: {
+      main: string;
+    };
+  }
+  
+  interface PaletteOptions {
+    white?: {
+      main: string;
+    };
+    transparent?: {
+      main: string;
+    };
+  }
 }

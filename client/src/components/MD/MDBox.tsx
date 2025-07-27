@@ -2,83 +2,99 @@ import React, { forwardRef } from "react";
 import { Box, BoxProps } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-interface MDBoxProps extends Omit<BoxProps, 'color'> {
+interface MDBoxProps extends BoxProps {
   variant?: "contained" | "gradient";
   bgColor?: string;
-  color?: string;
-  opacity?: number;
-  borderRadius?: string;
-  shadow?: string;
+  borderRadius?: "xs" | "sm" | "md" | "lg" | "xl" | "xxl" | "section";
+  shadow?: "xs" | "sm" | "md" | "lg" | "xl" | "xxl" | "inset" | "none";
   coloredShadow?: "primary" | "secondary" | "info" | "success" | "warning" | "error" | "light" | "dark" | "none";
 }
 
-const MDBoxRoot = styled(Box)<{ ownerState: MDBoxProps }>(({ theme, ownerState }) => {
-  const { palette, functions, borders, boxShadows } = theme as any;
-  const { variant, bgColor, color, opacity, borderRadius, shadow, coloredShadow } = ownerState;
+const MDBoxRoot = styled(Box)<{ mdProps: MDBoxProps }>(({ theme, mdProps }) => {
+  const { variant, bgColor, borderRadius, shadow, coloredShadow } = mdProps;
 
-  const { gradients, grey, white } = palette;
-  const { linearGradient } = functions || {};
-  const { borderRadius: radius } = borders || {};
+  // Material Dashboard gradients
+  const gradients = {
+    primary: "linear-gradient(195deg, #e91e63, #ad1457)",
+    secondary: "linear-gradient(195deg, #7b1fa2, #6a1b9a)",
+    info: "linear-gradient(195deg, #1A73E8, #1662C4)",
+    success: "linear-gradient(195deg, #4CAF50, #43A047)",
+    warning: "linear-gradient(195deg, #fb8c00, #f57c00)",
+    error: "linear-gradient(195deg, #F44335, #D32F2F)",
+    dark: "linear-gradient(195deg, #42424a, #191919)",
+    light: "linear-gradient(195deg, #f0f2f5, #e9ecef)",
+  };
 
-  // Background color logic
-  let backgroundValue = "transparent";
-  
-  if (variant === "gradient" && bgColor && gradients?.[bgColor]) {
-    backgroundValue = linearGradient ? linearGradient(gradients[bgColor].main, gradients[bgColor].state) : bgColor;
+  const borderRadiusMap = {
+    xs: "0.125rem",
+    sm: "0.25rem",
+    md: "0.375rem",
+    lg: "0.5rem",
+    xl: "0.75rem",
+    xxl: "1.25rem",
+    section: "1.5rem",
+  };
+
+  const boxShadowMap = {
+    xs: "0 2px 9px -5px rgba(0, 0, 0, 0.15)",
+    sm: "0 5px 13px -5px rgba(0, 0, 0, 0.20)",
+    md: "0 8px 26px -4px rgba(0, 0, 0, 0.15)",
+    lg: "0 23px 45px -11px rgba(0, 0, 0, 0.25)",
+    xl: "0 35px 65px -12px rgba(0, 0, 0, 0.35)",
+    xxl: "0 54px 100px -12px rgba(0, 0, 0, 0.35)",
+    inset: "inset 0 1px 2px rgba(0, 0, 0, 0.075)",
+    none: "none",
+  };
+
+  const coloredShadowMap = {
+    primary: "0 4px 20px 0 rgba(233, 30, 99, 0.14)",
+    secondary: "0 4px 20px 0 rgba(123, 31, 162, 0.14)",
+    info: "0 4px 20px 0 rgba(26, 115, 232, 0.14)",
+    success: "0 4px 20px 0 rgba(76, 175, 80, 0.14)",
+    warning: "0 4px 20px 0 rgba(251, 140, 0, 0.14)",
+    error: "0 4px 20px 0 rgba(244, 67, 53, 0.14)",
+    light: "0 4px 20px 0 rgba(240, 242, 245, 0.14)",
+    dark: "0 4px 20px 0 rgba(66, 66, 74, 0.14)",
+    none: "none",
+  };
+
+  let background = "rgba(0, 0, 0, 0)"; // Use transparent rgba instead
+  if (variant === "gradient" && bgColor && gradients[bgColor as keyof typeof gradients]) {
+    background = gradients[bgColor as keyof typeof gradients];
   } else if (bgColor === "white") {
-    backgroundValue = white?.main || "#ffffff";
-  } else if (bgColor && palette[bgColor]) {
-    backgroundValue = palette[bgColor].main;
+    background = "#ffffff";
+  } else if (bgColor === "transparent") {
+    background = "rgba(0, 0, 0, 0)";
   } else if (bgColor) {
-    backgroundValue = bgColor;
+    background = bgColor;
   }
 
-  // Border radius logic
-  let borderRadiusValue = "0px";
-  if (radius) {
-    if (borderRadius === "xs") borderRadiusValue = radius.xs || "0.125rem";
-    else if (borderRadius === "sm") borderRadiusValue = radius.sm || "0.25rem";
-    else if (borderRadius === "md") borderRadiusValue = radius.md || "0.375rem";
-    else if (borderRadius === "lg") borderRadiusValue = radius.lg || "0.5rem";
-    else if (borderRadius === "xl") borderRadiusValue = radius.xl || "0.75rem";
-    else if (borderRadius === "xxl") borderRadiusValue = radius.xxl || "1.25rem";
-    else if (borderRadius === "section") borderRadiusValue = radius.section || "1.5rem";
-  }
-  if (borderRadius && !borderRadiusValue.startsWith("0")) borderRadiusValue = borderRadius;
-
-  // Shadow logic
-  let boxShadowValue = "none";
-  if (boxShadows) {
-    if (shadow === "xs") boxShadowValue = boxShadows.xs || "0 2px 9px -5px rgba(0, 0, 0, 0.15)";
-    else if (shadow === "sm") boxShadowValue = boxShadows.sm || "0 5px 13px -5px rgba(0, 0, 0, 0.20)";
-    else if (shadow === "md") boxShadowValue = boxShadows.md || "0 8px 26px -4px rgba(0, 0, 0, 0.15)";
-    else if (shadow === "lg") boxShadowValue = boxShadows.lg || "0 23px 45px -11px rgba(0, 0, 0, 0.25)";
-    else if (shadow === "xl") boxShadowValue = boxShadows.xl || "0 35px 65px -12px rgba(0, 0, 0, 0.35)";
-    else if (shadow === "xxl") boxShadowValue = boxShadows.xxl || "0 54px 100px -12px rgba(0, 0, 0, 0.35)";
-    else if (shadow === "inset") boxShadowValue = boxShadows.inset || "inset 0 1px 2px rgba(0, 0, 0, 0.075)";
-
-    // Colored shadow logic
-    if (coloredShadow && coloredShadow !== "none" && boxShadows.colored?.[coloredShadow]) {
-      boxShadowValue = boxShadows.colored[coloredShadow];
-    }
-  }
+  const borderRadiusValue = borderRadius ? borderRadiusMap[borderRadius] : "0";
+  const boxShadowValue = shadow ? boxShadowMap[shadow] : "none";
+  const coloredShadowValue = coloredShadow && coloredShadow !== "none" ? coloredShadowMap[coloredShadow] : null;
 
   return {
-    opacity,
-    background: backgroundValue,
+    background,
     borderRadius: borderRadiusValue,
-    boxShadow: boxShadowValue,
+    boxShadow: coloredShadowValue || boxShadowValue,
   };
 });
 
 const MDBox = forwardRef<HTMLDivElement, MDBoxProps>(
-  ({ variant = "contained", bgColor = "transparent", color = "dark", opacity = 1, borderRadius = "none", shadow = "none", coloredShadow = "none", ...rest }, ref) => (
-    <MDBoxRoot
-      {...rest}
-      ref={ref}
-      ownerState={{ variant, bgColor, color, opacity, borderRadius, shadow, coloredShadow }}
-    />
-  )
+  ({ variant = "contained", bgColor = "transparent", borderRadius = "none", shadow = "none", coloredShadow = "none", children, ...rest }, ref) => {
+    // Remove mdProps from DOM to prevent React warnings
+    const { variant: _, bgColor: __, borderRadius: ___, shadow: ____, coloredShadow: _____, ...domProps } = rest;
+    
+    return (
+      <MDBoxRoot
+        {...domProps}
+        ref={ref}
+        mdProps={{ variant, bgColor, borderRadius, shadow, coloredShadow }}
+      >
+        {children}
+      </MDBoxRoot>
+    );
+  }
 );
 
 MDBox.displayName = "MDBox";
