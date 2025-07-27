@@ -206,9 +206,9 @@ const PastAssessmentsSection = ({ userEmail, setLocation }: { userEmail: string,
     retry: false,
   });
 
-  const userAssessments = assessments?.filter?.((assessment: Assessment) => 
+  const userAssessments = Array.isArray(assessments) ? assessments.filter((assessment: Assessment) => 
     assessment.email === userEmail
-  ) || [];
+  ) : [];
 
   if (isLoading) {
     return (
@@ -322,7 +322,8 @@ const PastAssessmentsSection = ({ userEmail, setLocation }: { userEmail: string,
 
 export default function Dashboard() {
   const [, setLocation] = useLocation();
-  const { toast } = useToast();
+  // Commenting out useToast temporarily as it's not available in this component
+  // const { toast } = useToast();
   const { user: authUser, isLoading: authLoading } = useAuth();
 
   const { data: user, isLoading, error } = useQuery({
@@ -335,10 +336,8 @@ export default function Dashboard() {
       window.location.href = '/api/logout';
     },
     onSuccess: () => {
-      toast({
-        title: "Logging out...",
-        description: "You are being logged out of your account.",
-      });
+      // Temporarily commenting out toast notification
+      console.log("Logging out...");
     },
   });
 

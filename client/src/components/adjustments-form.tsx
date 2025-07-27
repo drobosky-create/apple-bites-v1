@@ -7,8 +7,9 @@ import { AdjustmentsData } from "@shared/schema";
 import { 
   Card, 
   CardContent, 
-  Button 
-import { Typography } from '@mui/material';
+  Button,
+  Typography 
+} from '@mui/material';
 import { ArrowLeft, ArrowRight, Settings } from "lucide-react";
 
 interface AdjustmentsFormProps {

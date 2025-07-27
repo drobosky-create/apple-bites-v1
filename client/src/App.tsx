@@ -13,6 +13,7 @@ import LeadsDashboard from "@/pages/leads-dashboard";
 import TeamDashboard from "@/pages/team-dashboard";
 import Dashboard from "@/pages/dashboard";
 import AssessmentResults from "@/pages/assessment-results";
+import MaterialDashboardDemo from "@/pages/material-dashboard-demo";
 
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -30,6 +31,7 @@ function Router() {
         <Route path="/assessment/paid" component={GrowthExitAssessment} />
         <Route path="/results/:id" component={AssessmentResults} />
         <Route path="/value-calculator" component={ValueCalculator} />
+        <Route path="/material-demo" component={MaterialDashboardDemo} />
         
         {/* Admin/Team pages */}
         <Route path="/admin" component={TeamDashboard} />
