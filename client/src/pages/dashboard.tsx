@@ -22,6 +22,8 @@ import {
   AppBar,
   Toolbar,
 } from '@mui/material';
+// Import Material Dashboard components
+import { MDBox, MDTypography, MDButton } from "@/components/MD";
 import { styled } from '@mui/material/styles';
 import { 
   FileText, 
@@ -81,37 +83,35 @@ const GradeBox = ({ grade }: { grade: string }) => {
   const { borderColor, textColor, bgColor } = getGradeStyles(grade);
 
   return (
-    <Box
+    <MDBox
+      width="64px"
+      height="64px"
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      bgColor={bgColor}
+      borderRadius="12px"
+      shadow="lg"
       sx={{
-        width: '64px',
-        height: '64px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: bgColor,
         backdropFilter: 'blur(12px)',
         border: '2px solid',
         borderColor,
-        borderRadius: '12px',
-        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
         ml: 2,
       }}
     >
-      <Typography
+      <MDTypography
         variant="h5"
-        sx={{
-          fontWeight: 'bold',
-          color: textColor,
-        }}
+        fontWeight="bold"
+        sx={{ color: textColor }}
       >
         {grade}
-      </Typography>
-    </Box>
+      </MDTypography>
+    </MDBox>
   );
 };
 
 // Material Dashboard Styled Components
-const DashboardBackground = styled(Box)(({ theme }) => ({
+const DashboardBackground = styled(MDBox)(({ theme }) => ({
   display: 'flex',
   minHeight: '100vh',
   backgroundColor: '#f8f9fa',
@@ -120,7 +120,7 @@ const DashboardBackground = styled(Box)(({ theme }) => ({
 
 const drawerWidth = 280;
 
-const MainContent = styled(Box)(({ theme }) => ({
+const MainContent = styled(MDBox)(({ theme }) => ({
   flexGrow: 1,
   padding: '16px 24px 24px 8px', // Top, Right, Bottom, Left - minimal left padding
   marginLeft: 0, // Remove margin since drawer is permanent
@@ -163,7 +163,7 @@ const StatCard = styled(Card)(({ theme }) => ({
   },
 }));
 
-const ActionButton = styled(Button)(({ theme }) => ({
+const ActionButton = styled(MDButton)(({ theme }) => ({
   borderRadius: '8px',
   textTransform: 'none',
   fontWeight: 600,
@@ -212,40 +212,42 @@ const PastAssessmentsSection = ({ userEmail, setLocation }: { userEmail: string,
 
   if (isLoading) {
     return (
-      <Box display="flex" justifyContent="center" py={4}>
-        <Typography color="#67748e">Loading assessments...</Typography>
-      </Box>
+      <MDBox display="flex" justifyContent="center" py={4}>
+        <MDTypography color="text">Loading assessments...</MDTypography>
+      </MDBox>
     );
   }
 
   if (userAssessments.length === 0) {
     return (
-      <Box textAlign="center" py={4}>
+      <MDBox textAlign="center" py={4}>
         <FileText size={48} color="#67748e" style={{ marginBottom: 16 }} />
-        <Typography variant="h6" color="#344767" mb={1}>
+        <MDTypography variant="h6" color="dark" fontWeight="medium" mb={1}>
           No assessments yet
-        </Typography>
-        <Typography variant="body2" color="#67748e" mb={3}>
+        </MDTypography>
+        <MDTypography variant="body2" color="text" mb={3}>
           Complete your first business valuation assessment to see your results here
-        </Typography>
-      </Box>
+        </MDTypography>
+      </MDBox>
     );
   }
 
   return (
-    <Box>
+    <MDBox>
       {userAssessments.slice(0, 3).map((assessment: Assessment) => (
-        <Box
+        <MDBox
           key={assessment.id}
           onClick={() => {
             console.log('Assessment clicked, ID:', assessment.id);
             setLocation(`/assessment-results/${assessment.id}`);
           }}
+          bgColor="white"
+          borderRadius="lg"
+          shadow="sm"
           sx={{
             p: 3,
             mb: 2,
             border: '1px solid #e3e6ea',
-            borderRadius: '12px',
             cursor: 'pointer',
             transition: 'all 0.2s ease',
             '&:hover': {
@@ -256,67 +258,61 @@ const PastAssessmentsSection = ({ userEmail, setLocation }: { userEmail: string,
             }
           }}
         >
-          <Box display="flex" justifyContent="space-between" alignItems="start">
-            <Box flex={1}>
-              <Box display="flex" alignItems="center" gap={2} mb={1}>
+          <MDBox display="flex" justifyContent="space-between" alignItems="start">
+            <MDBox flex={1}>
+              <MDBox display="flex" alignItems="center" gap={2} mb={1}>
                 <BarChart3 size={20} color="#2152ff" />
-                <Typography variant="h6" fontWeight="bold" color="#344767">
+                <MDTypography variant="h6" fontWeight="bold" color="dark">
                   {assessment.company || 'Business Assessment'}
-                </Typography>
-              </Box>
+                </MDTypography>
+              </MDBox>
               
-              <Box display="flex" gap={4} mb={2}>
-                <Box>
-                  <Typography variant="body2" color="#67748e">Valuation</Typography>
-                  <Typography variant="h6" color="#344767" fontWeight="bold">
+              <MDBox display="flex" gap={4} mb={2}>
+                <MDBox>
+                  <MDTypography variant="body2" color="text">Valuation</MDTypography>
+                  <MDTypography variant="h6" color="dark" fontWeight="bold">
                     ${typeof assessment.midEstimate === 'string' ? 
                       parseFloat(assessment.midEstimate).toLocaleString() : 
                       assessment.midEstimate?.toLocaleString() || 'N/A'}
-                  </Typography>
-                </Box>
-                <Box>
-                  <Typography variant="body2" color="#67748e">EBITDA</Typography>
-                  <Typography variant="h6" color="#344767" fontWeight="bold">
+                  </MDTypography>
+                </MDBox>
+                <MDBox>
+                  <MDTypography variant="body2" color="text">EBITDA</MDTypography>
+                  <MDTypography variant="h6" color="dark" fontWeight="bold">
                     ${typeof assessment.adjustedEbitda === 'string' ? 
                       parseFloat(assessment.adjustedEbitda).toLocaleString() : 
                       assessment.adjustedEbitda?.toLocaleString() || 'N/A'}
-                  </Typography>
-                </Box>
-                <Box>
-                  <Typography variant="body2" color="#67748e">Date</Typography>
-                  <Box display="flex" alignItems="center" gap={1}>
+                  </MDTypography>
+                </MDBox>
+                <MDBox>
+                  <MDTypography variant="body2" color="text">Date</MDTypography>
+                  <MDBox display="flex" alignItems="center" gap={1}>
                     <Calendar size={16} color="#67748e" />
-                    <Typography variant="body2" color="#67748e">
+                    <MDTypography variant="body2" color="text">
                       {assessment.createdAt ? new Date(assessment.createdAt).toLocaleDateString() : 'Invalid Date'}
-                    </Typography>
-                  </Box>
-                </Box>
-              </Box>
-            </Box>
+                    </MDTypography>
+                  </MDBox>
+                </MDBox>
+              </MDBox>
+            </MDBox>
             
             <GradeBox grade={assessment.overallScore || 'C'} />
 
-          </Box>
-        </Box>
+          </MDBox>
+        </MDBox>
       ))}
       
       {userAssessments.length > 3 && (
-        <Box textAlign="center" mt={2}>
-          <Button
+        <MDBox textAlign="center" mt={2}>
+          <MDButton
             variant="text"
-            sx={{
-              color: '#2152ff',
-              textTransform: 'none',
-              '&:hover': {
-                backgroundColor: 'rgba(33, 82, 255, 0.04)',
-              }
-            }}
+            color="info"
           >
             View All {userAssessments.length} Assessments
-          </Button>
-        </Box>
+          </MDButton>
+        </MDBox>
       )}
-    </Box>
+    </MDBox>
   );
 };
 
@@ -442,7 +438,7 @@ export default function Dashboard() {
           },
         }}
       >
-        <Box sx={{ p: 2, textAlign: 'center' }}>
+        <MDBox sx={{ p: 2, textAlign: 'center' }}>
           <Box component="img"
             src="/assets/logos/apple-bites-logo-variant-3.png"
             alt="Apple Bites Business Assessment"
@@ -455,12 +451,12 @@ export default function Dashboard() {
               display: 'block',
             }}
           />
-          <Typography variant="h6" fontWeight="bold" color="white" gutterBottom>
+          <MDTypography variant="h6" fontWeight="bold" color="white" gutterBottom>
             {displayUser.firstName} {displayUser.lastName}
-          </Typography>
-          <Typography variant="body2" color="rgba(255,255,255,0.7)" gutterBottom>
+          </MDTypography>
+          <MDTypography variant="body2" color="white" sx={{ opacity: 0.7 }} gutterBottom>
             {displayUser.email}
-          </Typography>
+          </MDTypography>
           <Chip 
             label={tierInfo.name}
             size="small"
@@ -470,7 +466,7 @@ export default function Dashboard() {
               border: '1px solid rgba(255,255,255,0.3)'
             }}
           />
-        </Box>
+        </MDBox>
 
         <Divider sx={{ borderColor: 'rgba(255,255,255,0.12)' }} />
 
