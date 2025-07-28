@@ -1,8 +1,11 @@
 import { ValuationAssessment } from "@shared/schema";
-
 import { CheckCircle, Calendar, Calculator } from "lucide-react";
 import { useLocation } from "wouter";
+import { Button, Card, CardContent, Typography, Box } from '@mui/material';
 import ValueDriversHeatmap from "./value-drivers-heatmap";
+import MDBox from "@/components/MD/MDBox";
+import MDTypography from "@/components/MD/MDTypography";
+import MDButton from "@/components/MD/MDButton";
 
 interface ValuationResultsProps {
   results: ValuationAssessment;
@@ -131,22 +134,24 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
           {/* Primary CTAs after valuation */}
           <div >
             <div >
-              <Button 
+              <MDButton 
                 onClick={handleExploreImprovements}
-                variant="outline"
-                
+                variant="outlined"
+                color="info"
+                startIcon={<Calculator size={16} />}
+                sx={{ mr: 2 }}
               >
-                <Calculator  />
                 Explore Value Improvements
-              </Button>
+              </MDButton>
 
-              <Button 
+              <MDButton 
                 onClick={handleScheduleConsultation}
-                
+                variant="gradient"
+                color="primary"
+                startIcon={<Calendar size={16} />}
               >
-                <Calendar  />
                 Schedule Consultation
-              </Button>
+              </MDButton>
             </div>
           </div>
         </div>
@@ -196,13 +201,15 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
           <div >
             <h5 >Schedule Your Strategy Session</h5>
             <div >
-              <Button 
+              <MDButton 
                 onClick={handleScheduleConsultation}
-                
+                variant="gradient"
+                color="success"
+                startIcon={<Calendar size={16} />}
+                size="large"
               >
-                <Calendar  />
                 Schedule Your Strategy Session
-              </Button>
+              </MDButton>
             </div>
             <p >
               No obligation • 30-minute consultation • Expert M&A guidance

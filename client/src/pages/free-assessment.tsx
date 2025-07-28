@@ -174,12 +174,23 @@ export default function FreeAssessment() {
 
 
 
+  // Show results in full screen layout
+  if (currentStep === "results" && results) {
+    return (
+      <Box sx={{ minHeight: '100vh', backgroundColor: '#f8f9fa', p: 2 }}>
+        <ValuationResults results={results} />
+      </Box>
+    );
+  }
+
   return (
     <AssessmentBackground>
       {/* Main Content Area */}
       <MainContent>
-        {/* Assessment Stepper */}
-        <AssessmentStepper activeStep={getStepIndex(currentStep)} />
+        {/* Assessment Stepper - only show for form steps */}
+        {currentStep !== "results" && (
+          <AssessmentStepper activeStep={getStepIndex(currentStep)} />
+        )}
         
         <FormCard>
           <CardContent sx={{ p: 3, minHeight: '500px' }}>
@@ -226,10 +237,6 @@ export default function FreeAssessment() {
                   onDataChange={(data) => updateFormData("followUp", data)}
                   isSubmitting={isSubmitting}
                 />
-              )}
-
-              {currentStep === "results" && results && (
-                <ValuationResults results={results} />
               )}
             </Box>
           </CardContent>
