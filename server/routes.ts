@@ -1189,6 +1189,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.error("Error fetching analytics data:", error);
       res.status(500).json({ message: "Failed to fetch analytics data" });
     }
+  })
+
+  // GET /api/assessments - Get all assessments for Past Assessments page
+  app.get("/api/assessments", async (req, res) => {
+    try {
+      const assessments = await storage.getAllValuationAssessments();
+      // Sort by creation date, newest first
+      const sortedAssessments = assessments.sort((a, b) => 
+        new Date(b.createdAt || '').getTime() - new Date(a.createdAt || '').getTime()
+      );
+      res.json(sortedAssessments);
+    } catch (error) {
+      console.error("Error fetching assessments:", error);
+      res.status(500).json({ error: "Failed to fetch assessments" });
+    }
   });
 
 
