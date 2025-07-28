@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, Typography, Box, Chip } from '@mui/material';
-import { Calendar, TrendingUp, FileText, Eye } from "lucide-react";
-import { useLocation } from "wouter";
+import { Calendar, TrendingUp, FileText, Eye, Plus, BarChart3, Crown, User, Clock } from "lucide-react";
+import { useLocation, Link } from "wouter";
 // Assessment interface for Past Assessments
 interface Assessment {
   id: number;
@@ -100,19 +100,210 @@ export default function PastAssessments() {
   }
 
   return (
-    <MDBox sx={{ maxWidth: '1200px', margin: '0 auto', p: 3 }}>
-      {/* Header */}
-      <MDBox mb={4}>
-        <MDTypography variant="h4" fontWeight="bold" color="dark" mb={2}>
-          Past Business Valuations
-        </MDTypography>
-        <MDTypography variant="h6" color="text">
-          Review your completed business valuation assessments and track your progress over time.
-        </MDTypography>
+    <MDBox display="flex" minHeight="100vh" sx={{ backgroundColor: '#f8f9fa' }}>
+      {/* Sidebar */}
+      <MDBox
+        sx={{
+          position: 'fixed',
+          top: 24,
+          left: 24,
+          bottom: 24,
+          width: 280,
+          background: 'linear-gradient(135deg, #0A1F44 0%, #1C2D5A 100%)',
+          borderRadius: '20px',
+          backdropFilter: 'blur(20px)',
+          boxShadow: '0 20px 40px rgba(10, 31, 68, 0.3)',
+          zIndex: 1000,
+          display: 'flex',
+          flexDirection: 'column',
+          overflow: 'hidden'
+        }}
+      >
+        {/* User Profile Section */}
+        <MDBox sx={{ p: 3, borderBottom: '1px solid rgba(255, 255, 255, 0.1)' }}>
+          <MDBox display="flex" alignItems="center" gap={2} mb={2}>
+            <MDBox
+              sx={{
+                width: 40,
+                height: 40,
+                borderRadius: '50%',  
+                background: 'linear-gradient(135deg, #00BFA6 0%, #5EEAD4 100%)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: 'white',
+                fontWeight: 'bold',
+                fontSize: '16px'
+              }}
+            >
+              SJ
+            </MDBox>
+            <MDBox>
+              <MDTypography variant="h6" sx={{ color: 'white', fontSize: '14px', fontWeight: 600 }}>
+                Sarah Johnson
+              </MDTypography>
+              <MDTypography variant="body2" sx={{ color: '#dbdce1', fontSize: '12px' }}>
+                sarah.johnson@democorp.com
+              </MDTypography>
+            </MDBox>
+          </MDBox>
+          
+          <MDBox
+            sx={{
+              background: 'linear-gradient(135deg, #00BFA6 0%, #5EEAD4 100%)',
+              borderRadius: '20px',
+              px: 2,
+              py: 1,
+              display: 'inline-block'
+            }}
+          >
+            <MDTypography variant="caption" sx={{ color: 'white', fontWeight: 600, fontSize: '11px' }}>
+              FREE ASSESSMENT
+            </MDTypography>
+          </MDBox>
+        </MDBox>
+
+        {/* Navigation Buttons */}
+        <MDBox display="flex" flexDirection="column" gap={2} sx={{ p: 3, flex: 1 }}>
+          <Link href="/assessment/free">
+            <MDButton
+              sx={{
+                background: 'transparent',
+                border: '1px solid rgba(255, 255, 255, 0.3)',
+                color: '#dbdce1',
+                '&:hover': {
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  transform: 'translateY(-2px)'
+                },
+                transition: 'all 0.3s ease',
+                width: '100%',
+                py: 1.5
+              }}
+              startIcon={<Plus size={18} />}
+            >
+              New Assessment
+            </MDButton>
+          </Link>
+
+          <Link href="/value-calculator">
+            <MDButton
+              sx={{
+                background: 'transparent',
+                border: '1px solid rgba(255, 255, 255, 0.3)',
+                color: '#dbdce1',
+                '&:hover': {
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  transform: 'translateY(-2px)'
+                },
+                transition: 'all 0.3s ease',
+                width: '100%',
+                py: 1.5
+              }}
+              startIcon={<BarChart3 size={18} />}
+            >
+              Value Calculator
+            </MDButton>
+          </Link>
+
+          <MDButton
+            sx={{
+              background: 'transparent',
+              border: '1px solid rgba(255, 255, 255, 0.3)',
+              color: '#dbdce1',
+              '&:hover': {
+                background: 'rgba(255, 255, 255, 0.1)',
+                transform: 'translateY(-2px)'
+              },
+              transition: 'all 0.3s ease',
+              width: '100%',
+              py: 1.5
+            }}
+            startIcon={<Crown size={18} />}
+          >
+            Upgrade Plan  
+          </MDButton>
+
+          <Link href="/dashboard">
+            <MDButton
+              sx={{
+                background: 'transparent',
+                border: '1px solid rgba(255, 255, 255, 0.3)',
+                color: '#dbdce1',
+                '&:hover': {
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  transform: 'translateY(-2px)'
+                },
+                transition: 'all 0.3s ease',
+                width: '100%',
+                py: 1.5
+              }}
+              startIcon={<User size={18} />}
+            >
+              Dashboard
+            </MDButton>
+          </Link>
+
+          <MDButton
+            sx={{
+              background: 'linear-gradient(135deg, #00BFA6 0%, #5EEAD4 100%)',
+              color: 'white',
+              '&:hover': {
+                background: 'linear-gradient(135deg, #00BFA6 0%, #5EEAD4 100%)',
+                transform: 'translateY(-2px)',
+                boxShadow: '0 8px 25px -8px rgba(0, 191, 166, 0.6)'
+              },
+              transition: 'all 0.3s ease',
+              width: '100%',
+              py: 1.5
+            }}
+            startIcon={<Clock size={18} />}
+          >
+            Past Assessments
+          </MDButton>
+        </MDBox>
+
+        {/* Apple Bites Branding Footer */}
+        <MDBox sx={{ p: 3, textAlign: 'center' }}>
+          <MDBox sx={{ mb: 2 }}>
+            <MDTypography variant="h6" sx={{ color: '#5EEAD4', fontSize: '12px', fontWeight: 600, letterSpacing: '1px' }}>
+              MERITAGE
+            </MDTypography>
+            <MDTypography variant="h6" sx={{ color: '#5EEAD4', fontSize: '12px', fontWeight: 600, letterSpacing: '1px' }}>
+              PARTNERS
+            </MDTypography>
+          </MDBox>
+          
+          <MDBox sx={{ width: 60, height: 60, mx: 'auto', mb: 2 }}>
+            <img 
+              src="/assets/logos/apple-bites-logo-3.png" 
+              alt="Apple Bites"
+              style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+            />
+          </MDBox>
+          
+          <MDTypography variant="h6" sx={{ color: '#5EEAD4', fontSize: '14px', fontWeight: 600, letterSpacing: '1px' }}>
+            APPLE BITES
+          </MDTypography>
+          <MDTypography variant="body2" sx={{ color: '#5EEAD4', fontSize: '10px', fontWeight: 400, letterSpacing: '1px' }}>
+            BUSINESS ASSESSMENT
+          </MDTypography>
+        </MDBox>
       </MDBox>
 
-      {/* Assessments Grid */}
-      {assessments && assessments.length > 0 ? (
+      {/* Main Content */}
+      <MDBox sx={{ marginLeft: '328px', flex: 1, p: 3 }}>
+        {/* Header */}
+        <MDBox mb={4}>
+          <MDTypography variant="h4" fontWeight="bold" color="dark" mb={2}>
+            Past Business Valuations
+          </MDTypography>
+          <MDTypography variant="h6" color="text">
+            Review your completed business valuation assessments and track your progress over time.
+          </MDTypography>
+        </MDBox>
+
+        {/* Assessments Grid */}
+        {assessments && assessments.length > 0 ? (
         <MDBox display="grid" gridTemplateColumns={{ xs: '1fr', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' }} gap={3}>
           {assessments.map((assessment) => (
             <Card key={assessment.id} sx={{ height: 'fit-content', cursor: 'pointer' }} onClick={() => viewAssessment(assessment)}>
@@ -238,6 +429,7 @@ export default function PastAssessments() {
           </CardContent>
         </Card>
       )}
+      </MDBox>
     </MDBox>
   );
 }
