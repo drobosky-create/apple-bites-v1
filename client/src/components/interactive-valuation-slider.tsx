@@ -111,10 +111,10 @@ export default function InteractiveValuationSlider() {
         border: '#3B82F6'
       },
       'C': { 
-        primary: '#6B7280', 
-        light: '#F3F4F6', 
-        bg: 'linear-gradient(135deg, #F9FAFB 0%, #F3F4F6 100%)',
-        border: '#6B7280'
+        primary: '#0891B2', 
+        light: '#E0F7FA', 
+        bg: 'linear-gradient(135deg, #F0F9FF 0%, #E0F7FA 100%)',
+        border: '#0891B2'
       },
       'D': { 
         primary: '#F59E0B', 
@@ -149,7 +149,7 @@ export default function InteractiveValuationSlider() {
     switch (grade) {
       case 'A': return { label: "Excellent Operations", color: "#065F46", bgColor: "#10B981" };
       case 'B': return { label: "Good Operations", color: "#1E40AF", bgColor: "#3B82F6" };
-      case 'C': return { label: "Average Operations", color: "#374151", bgColor: "#6B7280" };
+      case 'C': return { label: "Average Operations", color: "#0c4a6e", bgColor: "#0891B2" };
       case 'D': return { label: "Below Average", color: "#92400E", bgColor: "#F59E0B" };
       case 'F': return { label: "Poor Operations", color: "#991B1B", bgColor: "#EF4444" };
     }
