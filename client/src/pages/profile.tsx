@@ -143,7 +143,7 @@ export default function ProfilePage() {
               px: 2,
               py: 1,
               background: 'linear-gradient(to right, #00B4AA, #002E4D)',
-              color: 'white',
+              color: '#F9FAFB',
               borderRadius: '6px',
               '&:hover': {
                 background: 'linear-gradient(to right, #008E88, #001C2F)'
@@ -314,14 +314,10 @@ export default function ProfilePage() {
                         variant="outlined"
                         sx={{
                           '& .MuiOutlinedInput-root': {
-                            backgroundColor: 'white',
-                            border: editMode ? '1px solid #D1D5DB' : '1px solid transparent',
+                            backgroundColor: 'transparent',
+                            border: 'none',
                             borderRadius: '6px',
-                            boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
-                            '&:focus-within': {
-                              outline: editMode ? '2px solid #00B4AA' : 'none',
-                              outlineOffset: '2px'
-                            },
+                            boxShadow: 'none',
                             '& .MuiOutlinedInput-notchedOutline': {
                               border: 'none'
                             }
@@ -407,13 +403,13 @@ export default function ProfilePage() {
                     disabled={!editMode}
                     sx={{
                       '& .MuiSwitch-switchBase.Mui-checked': {
-                        color: '#00BFA6',
+                        color: '#0A1F44',
                         '&:hover': {
-                          backgroundColor: 'rgba(0, 191, 166, 0.04)',
+                          backgroundColor: 'rgba(10, 31, 68, 0.04)',
                         },
                       },
                       '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
-                        backgroundColor: '#00BFA6',
+                        backgroundColor: '#0A1F44',
                       },
                       '& .MuiSwitch-track': {
                         backgroundColor: '#D1D5DB',
