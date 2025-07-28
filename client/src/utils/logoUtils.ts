@@ -15,10 +15,10 @@ export const LEGACY_LOGOS = {
 
 // Logo sizing utilities
 export const LOGO_SIZES = {
-  small: 32,
-  medium: 48,
-  large: 64,
-  xl: 128
+  small: 100,
+  medium: 100,
+  large: 100,
+  xl: 100
 } as const;
 
 export type LogoSize = keyof typeof LOGO_SIZES;

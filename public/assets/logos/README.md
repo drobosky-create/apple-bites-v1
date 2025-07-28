@@ -38,9 +38,7 @@ The universal logo features:
 - Full brand identity with company names and service description
 
 ## Component Sizes
-- **small**: 32x32px - Navigation, buttons
-- **medium**: 48x48px - Default, cards  
-- **large**: 64x64px - Headers, prominent placement
-- **xl**: 128x128px - Landing pages, hero sections
+- **All sizes**: 100x100px - Unified size for optimal logo visibility and brand recognition
+- Use size variants for semantic meaning while maintaining consistent visual size
 
 Last Updated: July 28, 2025

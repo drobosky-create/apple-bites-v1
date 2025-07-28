@@ -21,10 +21,10 @@ interface AppleBitesLogoProps {
 }
 
 const sizeMap = {
-  small: { width: 32, height: 32 },
-  medium: { width: 48, height: 48 },
-  large: { width: 64, height: 64 },
-  xl: { width: 128, height: 128 }
+  small: { width: 100, height: 100 },
+  medium: { width: 100, height: 100 },
+  large: { width: 100, height: 100 },
+  xl: { width: 100, height: 100 }
 };
 
 export function AppleBitesLogo({
