@@ -1,4 +1,4 @@
-import { useValuationForm } from "@/hooks/use-valuation-form";
+import { useValuationForm, type FormStep } from "@/hooks/use-valuation-form";
 import { useEffect } from "react";
 import ProgressIndicator from "@/components/progress-indicator";
 import ContactForm from "@/components/contact-form";
@@ -122,12 +122,13 @@ export default function FreeAssessment() {
 
   // Helper function to convert step name to index
   const getStepIndex = (step: FormStep): number => {
-    const stepMap = {
-      ebitda: 0, 
-      adjustments: 1,
-      valueDrivers: 2,
-      followUp: 3,
-      results: 3
+    const stepMap: Record<FormStep, number> = {
+      contact: 0,
+      ebitda: 1, 
+      adjustments: 2,
+      valueDrivers: 3,
+      followUp: 4,
+      results: 4
     };
     return stepMap[step] || 0;
   };

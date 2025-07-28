@@ -33,8 +33,7 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
   };
 
   const handleFieldChange = (fieldName: keyof EbitdaData, value: string) => {
-    const numValue = Number(value) || 0;
-    form.setValue(fieldName, numValue);
+    form.setValue(fieldName, value);
     onDataChange(form.getValues());
   };
 
@@ -167,7 +166,7 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
                       Net Income:
                     </Typography>
                     <Typography variant="body2" sx={{ color: '#F9FAFB' }}>
-                      {formatCurrency(watchedValues.netIncome || 0)}
+                      {formatCurrency(parseFloat(watchedValues.netIncome || "0") || 0)}
                     </Typography>
                   </MDBox>
                   
@@ -176,7 +175,7 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
                       + Interest:
                     </Typography>
                     <Typography variant="body2" sx={{ color: '#F9FAFB' }}>
-                      {formatCurrency(watchedValues.interest || 0)}
+                      {formatCurrency(parseFloat(watchedValues.interest || "0") || 0)}
                     </Typography>
                   </MDBox>
                   
@@ -185,7 +184,7 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
                       + Taxes:
                     </Typography>
                     <Typography variant="body2" sx={{ color: '#F9FAFB' }}>
-                      {formatCurrency(watchedValues.taxes || 0)}
+                      {formatCurrency(parseFloat(watchedValues.taxes || "0") || 0)}
                     </Typography>
                   </MDBox>
                   
@@ -194,7 +193,7 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
                       + Depreciation & Amortization:
                     </Typography>
                     <Typography variant="body2" sx={{ color: '#F9FAFB' }}>
-                      {formatCurrency(watchedValues.depreciation || 0)}
+                      {formatCurrency(parseFloat(watchedValues.depreciation || "0") || 0)}
                     </Typography>
                   </MDBox>
                   
