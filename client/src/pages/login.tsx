@@ -116,13 +116,12 @@ export default function HybridLoginPage() {
       <Grid item xs={12} sm={7} md={6}>
         <Box
           sx={{
-            height: '100%',
-            background: { xs: 'linear-gradient(135deg, #0A1F44 0%, #1B2C4F 100%)', sm: '#F8F9FA' },
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            px: 4,
-            py: 6
+            minHeight: '100vh',
+            background: { xs: 'linear-gradient(135deg, #0A1F44 0%, #1B2C4F 100%)', sm: '#F8F9FA' },
+            px: 4
           }}
         >
           <Box
@@ -130,7 +129,7 @@ export default function HybridLoginPage() {
             onSubmit={handleSubmit}
             sx={{
               width: '100%',
-              maxWidth: 450,
+              maxWidth: { xs: '100%', sm: 450 },
               backgroundColor: 'white',
               borderRadius: 3,
               p: 4,
