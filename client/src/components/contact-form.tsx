@@ -1,12 +1,22 @@
 import { UseFormReturn } from "react-hook-form";
 import { ContactInfo } from "@shared/schema";
-
-
-import { Typography, Card, CardContent, Button } from '@mui/material';
+import { 
+  Typography, 
+  Card, 
+  CardContent, 
+  Button, 
+  TextField, 
+  Box, 
+  Grid,
+  Alert,
+  IconButton
+} from '@mui/material';
 import { Shield, ArrowRight, User, CheckCircle, SkipForward } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useEffect, useState } from "react";
-
+import MDBox from "@/components/MD/MDBox";
+import MDTypography from "@/components/MD/MDTypography";
+import MDButton from "@/components/MD/MDButton";
 
 interface ContactFormProps {
   form: UseFormReturn<ContactInfo>;
@@ -64,241 +74,274 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
   };
 
   const isSubmitting = form.formState.isSubmitting;
+  const { register, handleSubmit, formState: { errors } } = form;
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-sm">
+    <MDBox>
       {/* Executive Header Section */}
-      <div className="flex items-center mb-6">
-        <div className="mr-4">
-          <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-            <User className="w-6 h-6 text-blue-600" />
-          </div>
-        </div>
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Contact Information</h1>
-          <p className="text-gray-600">
+      <MDBox display="flex" alignItems="center" mb={4}>
+        <MDBox mr={3}>
+          <MDBox 
+            width="48px" 
+            height="48px" 
+            borderRadius="50%" 
+            display="flex" 
+            alignItems="center" 
+            justifyContent="center"
+            sx={{ 
+              background: 'linear-gradient(135deg, #00BFA6 0%, #5EEAD4 100%)',
+              boxShadow: '0 4px 12px rgba(0, 191, 166, 0.3)'
+            }}
+          >
+            <User size={24} color="white" />
+          </MDBox>
+        </MDBox>
+        <MDBox>
+          <MDTypography variant="h3" fontWeight="bold" color="dark" mb={1}>
+            Contact Information
+          </MDTypography>
+          <MDTypography variant="body1" color="text" opacity={0.8}>
             Please provide your contact details to begin the comprehensive valuation assessment.
-          </p>
-        </div>
-      </div>
+          </MDTypography>
+        </MDBox>
+      </MDBox>
 
       {/* Pre-fill Notice for Authenticated Users */}
       {showPreFillOption && isPreFilled && (
-        <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
-          <div className="flex items-center">
-            <CheckCircle className="w-5 h-5 text-green-600 mr-3" />
-            <div className="flex-1">
-              <h4 className="font-semibold text-green-800 mb-1">
+        <MDBox mb={4}>
+          <Alert 
+            severity="success" 
+            sx={{ 
+              borderRadius: '12px',
+              '& .MuiAlert-icon': { fontSize: '20px' }
+            }}
+          >
+            <MDBox>
+              <MDTypography variant="h6" fontWeight="medium" color="success" mb={1}>
                 Welcome back, {(user as any)?.firstName}!
-              </h4>
-              <p className="text-green-700 text-sm mb-3">
+              </MDTypography>
+              <MDTypography variant="body2" color="success" mb={2}>
                 We've pre-filled your contact information from your profile. You can skip to the next step or update any details below.
-              </p>
-              <div className="flex gap-2">
-                <Button
+              </MDTypography>
+              <MDBox display="flex" gap={2}>
+                <MDButton
                   onClick={handleSkipToNext}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm"
+                  variant="gradient"
+                  color="primary"
+                  size="small"
                 >
-                  <SkipForward className="w-4 h-4 mr-2" />
+                  <SkipForward size={16} style={{ marginRight: '8px' }} />
                   Skip to EBITDA Entry
-                </Button>
-                <Button
-                  variant="outlined"
+                </MDButton>
+                <MDButton
                   onClick={() => setShowPreFillOption(false)}
-                  className="border border-gray-300 hover:bg-gray-50 text-gray-700 px-4 py-2 rounded-md text-sm"
+                  variant="outlined"
+                  color="primary"
+                  size="small"
                 >
                   Update My Information
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
+                </MDButton>
+              </MDBox>
+            </MDBox>
+          </Alert>
+        </MDBox>
       )}
 
       {/* Form Container */}
-      <div >
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} >
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Card sx={{ borderRadius: '16px', boxShadow: '0 8px 20px rgba(0,0,0,0.1)' }}>
+          <CardContent sx={{ padding: '32px' }}>
             {/* Contact Details Section */}
-            <div >
-              <h3 >Contact Details</h3>
-            
-            {/* Name Fields */}
-            <div >
-              <FormField
-                control={form.control}
-                name="firstName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel >
-                      First Name <span >*</span>
-                    </FormLabel>
-                    <FormControl>
-                      <Input 
-                        {...field} 
-                        placeholder="Enter your first name" 
-                        
-                      />
-                    </FormControl>
-                    <FormMessage  />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="lastName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel >
-                      Last Name <span >*</span>
-                    </FormLabel>
-                    <FormControl>
-                      <Input 
-                        {...field} 
-                        placeholder="Enter your last name" 
-                        
-                      />
-                    </FormControl>
-                    <FormMessage  />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            {/* Email and Phone Fields */}
-            <div >
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel >
-                      Email Address <span >*</span>
-                    </FormLabel>
-                    <FormControl>
-                      <Input 
-                        {...field} 
-                        type="email"
-                        placeholder="Enter your email address" 
-                        
-                      />
-                    </FormControl>
-                    <FormMessage  />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="phone"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel >
-                      Phone Number <span >*</span>
-                    </FormLabel>
-                    <FormControl>
-                      <Input 
-                        {...field} 
-                        type="tel"
-                        placeholder="(555) 123-4567" 
-                        
-                      />
-                    </FormControl>
-                    <FormMessage  />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </div>
-
-          {/* Business Information Section */}
-          <div >
-            <h3 >Business Information</h3>
-            
-            <div >
-              <FormField
-                control={form.control}
-                name="company"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel >
-                      Company Name <span >*</span>
-                    </FormLabel>
-                    <FormControl>
-                      <Input 
-                        {...field} 
-                        placeholder="Enter your company name" 
-                        
-                      />
-                    </FormControl>
-                    <FormMessage  />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="jobTitle"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel >
-                      Job Title <span >*</span>
-                    </FormLabel>
-                    <FormControl>
-                      <Input 
-                        {...field} 
-                        placeholder="e.g., CEO, Owner, President" 
-                        
-                      />
-                    </FormControl>
-                    <FormMessage  />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </div>
-
-          {/* Enhanced Continue Button */}
-          <div >
-            <button
-              type="submit"
-              disabled={isSubmitting}
+            <MDBox mb={4}>
+              <MDTypography variant="h5" fontWeight="medium" color="dark" mb={3}>
+                Contact Details
+              </MDTypography>
               
-            >
-              {isSubmitting ? (
-                <>
-                  <div  />
-                  Processing...
-                </>
-              ) : (
-                <>
-                  <span>Continue Assessment</span>
-                  <ArrowRight  />
-                </>
-              )}
-            </button>
-          </div>
-        </form>
-      </Form>
-      </div>
+              {/* Name Fields */}
+              <Grid container spacing={3} mb={3}>
+                <Grid item xs={12} md={6}>
+                  <MDBox>
+                    <MDTypography variant="body2" fontWeight="medium" color="dark" mb={1}>
+                      First Name <span style={{ color: '#f44336' }}>*</span>
+                    </MDTypography>
+                    <TextField
+                      {...register('firstName', { required: 'First name is required' })}
+                      fullWidth
+                      placeholder="Enter your first name"
+                      error={!!errors.firstName}
+                      helperText={errors.firstName?.message}
+                      sx={{
+                        '& .MuiOutlinedInput-root': {
+                          borderRadius: '8px',
+                          height: '48px'
+                        }
+                      }}
+                    />
+                  </MDBox>
+                </Grid>
 
-      {/* Enhanced Privacy Notice */}
-      <div >
-        <div >
-          <div >
-            <Shield  />
-          </div>
-          <div>
-            <h4 >
-              Your Information is Secure
-            </h4>
-            <p >
-              We use enterprise-grade security to protect your data. Your information will only be used for your valuation report and follow-up communications. We never share your data with third parties.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
+                <Grid item xs={12} md={6}>
+                  <MDBox>
+                    <MDTypography variant="body2" fontWeight="medium" color="dark" mb={1}>
+                      Last Name <span style={{ color: '#f44336' }}>*</span>
+                    </MDTypography>
+                    <TextField
+                      {...register('lastName', { required: 'Last name is required' })}
+                      fullWidth
+                      placeholder="Enter your last name"
+                      error={!!errors.lastName}
+                      helperText={errors.lastName?.message}
+                      sx={{
+                        '& .MuiOutlinedInput-root': {
+                          borderRadius: '8px',
+                          height: '48px'
+                        }
+                      }}
+                    />
+                  </MDBox>
+                </Grid>
+              </Grid>
+
+              {/* Email and Phone Fields */}
+              <Grid container spacing={3} mb={3}>
+                <Grid item xs={12} md={6}>
+                  <MDBox>
+                    <MDTypography variant="body2" fontWeight="medium" color="dark" mb={1}>
+                      Email Address <span style={{ color: '#f44336' }}>*</span>
+                    </MDTypography>
+                    <TextField
+                      {...register('email', { 
+                        required: 'Email is required',
+                        pattern: {
+                          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                          message: 'Invalid email address'
+                        }
+                      })}
+                      fullWidth
+                      type="email"
+                      placeholder="Enter your email address"
+                      error={!!errors.email}
+                      helperText={errors.email?.message}
+                      sx={{
+                        '& .MuiOutlinedInput-root': {
+                          borderRadius: '8px',
+                          height: '48px'
+                        }
+                      }}
+                    />
+                  </MDBox>
+                </Grid>
+
+                <Grid item xs={12} md={6}>
+                  <MDBox>
+                    <MDTypography variant="body2" fontWeight="medium" color="dark" mb={1}>
+                      Phone Number
+                    </MDTypography>
+                    <TextField
+                      {...register('phone')}
+                      fullWidth
+                      placeholder="Enter your phone number"
+                      error={!!errors.phone}
+                      helperText={errors.phone?.message}
+                      sx={{
+                        '& .MuiOutlinedInput-root': {
+                          borderRadius: '8px',
+                          height: '48px'
+                        }
+                      }}
+                    />
+                  </MDBox>
+                </Grid>
+              </Grid>
+            </MDBox>
+
+            {/* Business Information Section */}
+            <MDBox mb={4}>
+              <MDTypography variant="h5" fontWeight="medium" color="dark" mb={3}>
+                Business Information
+              </MDTypography>
+              
+              <Grid container spacing={3}>
+                <Grid item xs={12} md={6}>
+                  <MDBox>
+                    <MDTypography variant="body2" fontWeight="medium" color="dark" mb={1}>
+                      Company Name <span style={{ color: '#f44336' }}>*</span>
+                    </MDTypography>
+                    <TextField
+                      {...register('company', { required: 'Company name is required' })}
+                      fullWidth
+                      placeholder="Enter your company name"
+                      error={!!errors.company}
+                      helperText={errors.company?.message}
+                      sx={{
+                        '& .MuiOutlinedInput-root': {
+                          borderRadius: '8px',
+                          height: '48px'
+                        }
+                      }}
+                    />
+                  </MDBox>
+                </Grid>
+
+                <Grid item xs={12} md={6}>
+                  <MDBox>
+                    <MDTypography variant="body2" fontWeight="medium" color="dark" mb={1}>
+                      Job Title
+                    </MDTypography>
+                    <TextField
+                      {...register('jobTitle')}
+                      fullWidth
+                      placeholder="Enter your job title"
+                      error={!!errors.jobTitle}
+                      helperText={errors.jobTitle?.message}
+                      sx={{
+                        '& .MuiOutlinedInput-root': {
+                          borderRadius: '8px',
+                          height: '48px'
+                        }
+                      }}
+                    />
+                  </MDBox>
+                </Grid>
+              </Grid>
+            </MDBox>
+
+            {/* Privacy Notice */}
+            <MDBox mb={4}>
+              <Alert 
+                severity="info" 
+                sx={{ 
+                  borderRadius: '12px',
+                  backgroundColor: 'rgba(0, 191, 166, 0.1)',
+                  border: '1px solid rgba(0, 191, 166, 0.3)'
+                }}
+              >
+                <MDBox display="flex" alignItems="center">
+                  <Shield size={20} style={{ marginRight: '12px', color: '#00BFA6' }} />
+                  <MDTypography variant="body2" color="dark">
+                    Your information is secure and will only be used for your business valuation assessment.
+                  </MDTypography>
+                </MDBox>
+              </Alert>
+            </MDBox>
+
+            {/* Continue Button */}
+            <MDBox display="flex" justifyContent="flex-end">
+              <MDButton
+                type="submit"
+                variant="gradient"
+                color="primary"
+                size="large"
+                disabled={isSubmitting}
+                sx={{ minWidth: '200px' }}
+              >
+                {isSubmitting ? 'Processing...' : 'Continue to EBITDA'}
+                <ArrowRight size={20} style={{ marginLeft: '8px' }} />
+              </MDButton>
+            </MDBox>
+          </CardContent>
+        </Card>
+      </form>
+    </MDBox>
   );
 }
