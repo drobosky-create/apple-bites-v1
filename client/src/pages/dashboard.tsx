@@ -17,7 +17,11 @@ import {
   ExternalLink,
   Eye,
   Calendar,
-  LogOut
+  LogOut,
+  Check,
+  Lock,
+  Star,
+  TrendingUp
 } from 'lucide-react';
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, Typography, Chip } from '@mui/material';
@@ -497,6 +501,244 @@ function DashboardSidebar({ user, onSignOut }: { user: DashboardUser; onSignOut:
   );
 }
 
+// Upgrade Benefits Component for Free Tier
+function UpgradeBenefitsSection() {
+  const freeFeatures = [
+    {
+      title: "Basic Valuation Analysis",
+      description: "General EBITDA multipliers and financial assessment",
+      included: true
+    },
+    {
+      title: "Value Driver Scoring",
+      description: "A-F grade assessment across 10 key business factors",
+      included: true
+    },
+    {
+      title: "PDF Report Generation",
+      description: "Professional report with valuation range and insights",
+      included: true
+    },
+    {
+      title: "Email Delivery",
+      description: "Automated report delivery to your inbox",
+      included: true
+    }
+  ];
+
+  const premiumFeatures = [
+    {
+      title: "Industry-Specific Analysis",
+      description: "NAICS-specific multipliers and benchmarks",
+      tier: "Growth",
+      price: "$795"
+    },
+    {
+      title: "AI-Powered Business Insights",
+      description: "GPT-4 powered recommendations and strategies",
+      tier: "Growth",
+      price: "$795"
+    },
+    {
+      title: "Advanced Financial Modeling",
+      description: "Detailed cash flow and scenario analysis",
+      tier: "Capital",
+      price: "$2,500"
+    },
+    {
+      title: "Executive Presentation",
+      description: "Investment-grade presentation materials",
+      tier: "Capital",
+      price: "$2,500"
+    }
+  ];
+
+  return (
+    <MDBox
+      sx={{
+        backgroundColor: 'white',
+        borderRadius: 2,
+        padding: 4,
+        mb: 4,
+        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+        border: '1px solid #E5E7EB'
+      }}
+    >
+      {/* Header */}
+      <MDBox display="flex" justifyContent="space-between" alignItems="center" mb={4}>
+        <MDBox>
+          <MDTypography variant="h5" fontWeight="bold" sx={{ color: '#111827', mb: 1 }}>
+            What's Included in Your Free Assessment
+          </MDTypography>
+          <MDTypography variant="body2" sx={{ color: '#6B7280' }}>
+            Compare features and unlock premium capabilities
+          </MDTypography>
+        </MDBox>
+        <MDButton
+          sx={{
+            background: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)',
+            color: 'white',
+            px: 3,
+            py: 1.5,
+            borderRadius: '8px',
+            fontWeight: 'bold',
+            '&:hover': {
+              background: 'linear-gradient(135deg, #D97706 0%, #B45309 100%)',
+              transform: 'translateY(-1px)',
+              boxShadow: '0 8px 25px -8px rgba(245, 158, 11, 0.4)'
+            },
+            transition: 'all 0.3s ease'
+          }}
+          startIcon={<Crown size={18} />}
+          onClick={() => window.open('https://products.applebites.ai/', '_blank')}
+        >
+          Upgrade Now
+        </MDButton>
+      </MDBox>
+
+      {/* Features Grid */}
+      <MDBox display="grid" gridTemplateColumns={{ xs: '1fr', md: 'repeat(2, 1fr)' }} gap={3} mb={4}>
+        {/* Free Features */}
+        {freeFeatures.map((feature, index) => (
+          <MDBox
+            key={index}
+            sx={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              gap: 2,
+              p: 2,
+              borderRadius: '8px',
+              backgroundColor: '#F0FDF4',
+              border: '1px solid #BBF7D0'
+            }}
+          >
+            <MDBox
+              sx={{
+                width: 24,
+                height: 24,
+                borderRadius: '50%',
+                backgroundColor: '#10B981',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0,
+                mt: 0.5
+              }}
+            >
+              <Check size={14} color="white" />
+            </MDBox>
+            <MDBox>
+              <MDTypography variant="h6" fontWeight="bold" sx={{ color: '#111827', mb: 0.5 }}>
+                {feature.title}
+              </MDTypography>
+              <MDTypography variant="body2" sx={{ color: '#6B7280' }}>
+                {feature.description}
+              </MDTypography>
+            </MDBox>
+          </MDBox>
+        ))}
+
+        {/* Premium Features */}
+        {premiumFeatures.map((feature, index) => (
+          <MDBox
+            key={index}
+            sx={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              gap: 2,
+              p: 2,
+              borderRadius: '8px',
+              backgroundColor: '#FEF3C7',
+              border: '1px solid #FDE68A',
+              opacity: 0.8
+            }}
+          >
+            <MDBox
+              sx={{
+                width: 24,
+                height: 24,
+                borderRadius: '50%',
+                backgroundColor: '#F59E0B',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0,
+                mt: 0.5
+              }}
+            >
+              <Lock size={14} color="white" />
+            </MDBox>
+            <MDBox flex={1}>
+              <MDBox display="flex" justifyContent="space-between" alignItems="flex-start" mb={0.5}>
+                <MDTypography variant="h6" fontWeight="bold" sx={{ color: '#92400E' }}>
+                  {feature.title}
+                </MDTypography>
+                <MDBox
+                  sx={{
+                    backgroundColor: '#F59E0B',
+                    color: 'white',
+                    px: 1.5,
+                    py: 0.5,
+                    borderRadius: '12px',
+                    fontSize: '11px',
+                    fontWeight: 'bold'
+                  }}
+                >
+                  {feature.tier}
+                </MDBox>
+              </MDBox>
+              <MDTypography variant="body2" sx={{ color: '#92400E', opacity: 0.8 }}>
+                {feature.description}
+              </MDTypography>
+            </MDBox>
+          </MDBox>
+        ))}
+      </MDBox>
+
+      {/* Unlock Premium CTA */}
+      <MDBox
+        sx={{
+          background: 'linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%)',
+          borderRadius: '12px',
+          p: 3,
+          border: '2px solid #F59E0B',
+          textAlign: 'center'
+        }}
+      >
+        <MDBox display="flex" justifyContent="center" mb={2}>
+          <Star size={32} color="#F59E0B" />
+        </MDBox>
+        <MDTypography variant="h6" fontWeight="bold" sx={{ color: '#92400E', mb: 1 }}>
+          Unlock Premium Features
+        </MDTypography>
+        <MDTypography variant="body2" sx={{ color: '#92400E', mb: 3, maxWidth: '600px', mx: 'auto' }}>
+          Upgrade to Growth or Capital tier for industry-specific analysis, AI insights, and executive-grade reports.
+        </MDTypography>
+        <MDButton
+          sx={{
+            background: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)',
+            color: 'white',
+            px: 4,
+            py: 1.5,
+            borderRadius: '8px',
+            fontWeight: 'bold',
+            '&:hover': {
+              background: 'linear-gradient(135deg, #D97706 0%, #B45309 100%)',
+              transform: 'translateY(-2px)',
+              boxShadow: '0 12px 30px -12px rgba(245, 158, 11, 0.5)'
+            },
+            transition: 'all 0.3s ease'
+          }}
+          startIcon={<ExternalLink size={18} />}
+          onClick={() => window.open('https://products.applebites.ai/', '_blank')}
+        >
+          View Upgrade Options
+        </MDButton>
+      </MDBox>
+    </MDBox>
+  );
+}
+
 function DashboardMainContent({ user, setupDemoSession }: { user: DashboardUser; setupDemoSession: () => void }) {
   // Apple Bites Brand Colors
   const colors = {
@@ -713,6 +955,9 @@ function DashboardMainContent({ user, setupDemoSession }: { user: DashboardUser;
           </MDBox>
         )}
       </MDBox>
+
+      {/* Upgrade Benefits Section - Only show for free tier */}
+      {user.tier === 'free' && <UpgradeBenefitsSection />}
 
       {/* Past Assessments */}
       <PastAssessmentsSection />
