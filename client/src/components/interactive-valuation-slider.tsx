@@ -187,18 +187,18 @@ export default function InteractiveValuationSlider() {
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      {/* Header */}
-      <Box sx={{ textAlign: 'center', mb: 4 }}>
+    <Box sx={{ p: 0 }}>
+      {/* Header with better spacing */}
+      <Box sx={{ textAlign: 'center', mb: 6 }}>
         {targetAssessment && (
-          <Typography variant="h6" sx={{ color: '#666', mb: 3 }}>
+          <Typography variant="h6" sx={{ color: '#666', mb: 4, lineHeight: 1.6 }}>
             Based on your assessment data
           </Typography>
         )}
       </Box>
 
-      {/* Current vs Potential Value Cards */}
-      <Grid container spacing={3} sx={{ mb: 4 }}>
+      {/* Current vs Potential Value Cards with increased spacing */}
+      <Grid container spacing={4} sx={{ mb: 6 }}>
         {/* Current Value Card */}
         <Grid size={{ xs: 12, md: 6 }}>
           <Card sx={{ 
@@ -229,7 +229,7 @@ export default function InteractiveValuationSlider() {
                 ${currentValuation.toLocaleString()}
               </Typography>
               <Typography variant="h6" sx={{ mb: 2, opacity: 0.9 }}>
-                {currentMultiple}x EBITDA Multiple
+                ${currentMultiple}x EBITDA Multiple
               </Typography>
               <Chip 
                 label={currentCategory.label}
@@ -275,7 +275,7 @@ export default function InteractiveValuationSlider() {
                 ${sliderValuation.toLocaleString()}
               </Typography>
               <Typography variant="h6" sx={{ mb: 2, opacity: 0.9 }}>
-                {sliderMultiple}x EBITDA Multiple
+                ${sliderMultiple}x EBITDA Multiple
               </Typography>
               <Chip 
                 label={sliderCategory.label}
@@ -289,12 +289,12 @@ export default function InteractiveValuationSlider() {
         </Grid>
       </Grid>
 
-      {/* Gauge and Potential Gain Section */}
-      <Card sx={{ mb: 4, background: 'linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%)' }}>
-        <CardContent sx={{ p: 4 }}>
-          <Grid container spacing={4} alignItems="center">
+      {/* Gauge and Potential Gain Section with increased spacing */}
+      <Card sx={{ mb: 6, background: 'linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%)' }}>
+        <CardContent sx={{ p: 5 }}>
+          <Grid container spacing={4} alignItems="stretch">
             {/* Gauge Section */}
-            <Grid size={{ xs: 12, md: 8 }}>
+            <Grid size={{ xs: 12, md: 7 }}>
               <OperationalGradeGauge 
                 grade={sliderGrade}
                 title="Operational Grade Impact Analysis"
@@ -303,7 +303,7 @@ export default function InteractiveValuationSlider() {
             </Grid>
             
             {/* Potential Gain Display */}
-            <Grid size={{ xs: 12, md: 4 }}>
+            <Grid size={{ xs: 12, md: 5 }}>
               {sliderGrade !== baseGrade ? (
                 <Card sx={{ 
                   background: potentialIncrease > 0 
@@ -345,14 +345,14 @@ export default function InteractiveValuationSlider() {
         </CardContent>
       </Card>
 
-      {/* Grade Selection Section */}
-      <Card sx={{ mb: 4 }}>
-        <CardContent sx={{ p: 4 }}>
-          <Typography variant="h5" sx={{ fontWeight: 'bold', color: '#0A1F44', textAlign: 'center', mb: 4 }}>
+      {/* Grade Selection Section with increased spacing */}
+      <Card sx={{ mb: 6 }}>
+        <CardContent sx={{ p: 5 }}>
+          <Typography variant="h5" sx={{ fontWeight: 'bold', color: '#0A1F44', textAlign: 'center', mb: 5, lineHeight: 1.6 }}>
             Click any grade to see how operational improvements impact your business value
           </Typography>
           
-          <Grid container spacing={2} justifyContent="center">
+          <Grid container spacing={3} justifyContent="center">
             {(['F', 'D', 'C', 'B', 'A'] as const).map((grade) => {
               const gradeInfo = getGradeInfo(grade);
               const isSelected = grade === sliderGrade;
@@ -445,7 +445,7 @@ export default function InteractiveValuationSlider() {
                            grade === 'B' ? 'Good Performance' : 'Excellent Performance'}
                         </Typography>
                         <Typography variant="h4" sx={{ fontWeight: 'bold', color: gradeInfo.primary, mb: 0.5 }}>
-                          {gradeInfo.multiplier.toFixed(1)}x
+                          ${gradeInfo.multiplier.toFixed(1)}x
                         </Typography>
                         <Typography variant="body2" sx={{ color: '#6B7280' }}>
                           EBITDA Multiple
@@ -471,7 +471,7 @@ export default function InteractiveValuationSlider() {
           </Box>
           
           <Typography variant="body2" sx={{ textAlign: 'center', color: '#6B7280', mt: 2 }}>
-            Valuations based on EBITDA multiple × Click to select target grade
+            Valuations based on $EBITDA multiple × Click to select target grade
           </Typography>
         </CardContent>
       </Card>
