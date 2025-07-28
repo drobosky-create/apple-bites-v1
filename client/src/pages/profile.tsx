@@ -7,17 +7,20 @@ import MDBox from '@/components/MD/MDBox';
 import MDTypography from '@/components/MD/MDTypography';
 import MDButton from '@/components/MD/MDButton';
 import { TextField } from '@mui/material';
-import { ArrowLeft, User } from 'lucide-react';
+import { ArrowLeft, User, Phone } from 'lucide-react';
+import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa';
 
 interface ProfileData {
   name: string;
   email: string;
+  phone: string;
   title: string;
   company: string;
   about: string;
+  facebook: string;
   twitter: string;
+  instagram: string;
   linkedin: string;
-  github: string;
 }
 
 export default function ProfilePage() {
@@ -27,12 +30,14 @@ export default function ProfilePage() {
   const [profile, setProfile] = useState<ProfileData>({
     name: 'Daniel Robosky',
     email: 'daniel@applebites.ai',
+    phone: '(555) 123-4567',
     title: 'Director of Operations',
     company: 'Meritage Partners',
     about: "I'm like Thanos: decisive. If you can't decide, the answer is no. The equally difficult path, the more painful one in the short term — that's usually the right one.",
+    facebook: '',
     twitter: '',
+    instagram: '',
     linkedin: '',
-    github: '',
   });
 
   // Initialize profile data from user when available
@@ -42,6 +47,7 @@ export default function ProfilePage() {
         ...prev,
         name: `${user.firstName || ''} ${user.lastName || ''}`.trim() || prev.name,
         email: user.email || prev.email,
+        phone: user.phone || prev.phone,
         title: user.jobTitle || prev.title,
         company: user.company || prev.company,
       }));
@@ -171,7 +177,7 @@ export default function ProfilePage() {
 
         {/* Form Fields */}
         <MDBox sx={{ space: 2 }}>
-          {['name', 'email', 'title', 'company'].map((field) => (
+          {['name', 'email', 'phone', 'title', 'company'].map((field) => (
             <MDBox key={field} mb={2}>
               <MDTypography 
                 variant="body2" 
@@ -181,7 +187,7 @@ export default function ProfilePage() {
                 {field}
               </MDTypography>
               <TextField
-                type="text"
+                type={field === 'email' ? 'email' : field === 'phone' ? 'tel' : 'text'}
                 value={profile[field as keyof ProfileData]}
                 onChange={(e: any) => handleChange(field, e.target.value)}
                 disabled={!editMode}
@@ -243,22 +249,34 @@ export default function ProfilePage() {
           {/* Social Links */}
           <MDBox 
             display="grid" 
-            gridTemplateColumns={{ xs: '1fr', sm: 'repeat(3, 1fr)' }} 
+            gridTemplateColumns={{ xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' }} 
             gap={2}
           >
-            {['twitter', 'linkedin', 'github'].map((social) => (
-              <MDBox key={social}>
+            {[
+              { key: 'facebook', label: 'Facebook', icon: FaFacebook, color: '#1877F2' },
+              { key: 'twitter', label: 'X (Twitter)', icon: FaTwitter, color: '#000000' },
+              { key: 'instagram', label: 'Instagram', icon: FaInstagram, color: '#E4405F' },
+              { key: 'linkedin', label: 'LinkedIn', icon: FaLinkedin, color: '#0A66C2' }
+            ].map((social) => (
+              <MDBox key={social.key}>
                 <MDTypography 
                   variant="body2" 
                   fontWeight="500" 
-                  sx={{ color: '#374151', textTransform: 'capitalize', mb: 0.5 }}
+                  sx={{ 
+                    color: '#374151', 
+                    mb: 0.5,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 1
+                  }}
                 >
-                  {social}
+                  <social.icon size={16} style={{ color: social.color }} />
+                  {social.label}
                 </MDTypography>
                 <TextField
                   type="url"
-                  value={profile[social as keyof ProfileData]}
-                  onChange={(e: any) => handleChange(social, e.target.value)}
+                  value={profile[social.key as keyof ProfileData]}
+                  onChange={(e: any) => handleChange(social.key, e.target.value)}
                   disabled={!editMode}
                   fullWidth
                   variant="outlined"
