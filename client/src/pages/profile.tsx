@@ -413,17 +413,25 @@ export default function ProfilePage() {
                     disabled={!editMode}
                     sx={{
                       '& .MuiSwitch-switchBase.Mui-checked': {
-                        color: '#0A1F44',
+                        color: '#0A1F44 !important',
                         '&:hover': {
-                          backgroundColor: 'rgba(10, 31, 68, 0.04)',
+                          backgroundColor: 'rgba(10, 31, 68, 0.04) !important',
                         },
                       },
                       '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
-                        backgroundColor: '#0A1F44',
+                        backgroundColor: '#0A1F44 !important',
                       },
                       '& .MuiSwitch-track': {
-                        backgroundColor: '#D1D5DB',
+                        backgroundColor: '#D1D5DB !important',
                       },
+                      '& .MuiSwitch-thumb': {
+                        color: '#ffffff !important',
+                      },
+                      '& .MuiSwitch-switchBase': {
+                        '&:not(.Mui-checked)': {
+                          color: '#ffffff !important',
+                        }
+                      }
                     }}
                   />
                 </MDBox>
