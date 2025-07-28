@@ -188,14 +188,7 @@ export default function InteractiveValuationSlider() {
 
   return (
     <Box sx={{ p: 0 }}>
-      {/* Header with better spacing */}
-      <Box sx={{ textAlign: 'center', mb: 6 }}>
-        {targetAssessment && (
-          <Typography variant="h6" sx={{ color: '#666', mb: 4, lineHeight: 1.6 }}>
-            Based on your assessment data
-          </Typography>
-        )}
-      </Box>
+      
 
       {/* Current vs Potential Value Cards with increased spacing */}
       <Grid container spacing={4} sx={{ mb: 6 }}>
