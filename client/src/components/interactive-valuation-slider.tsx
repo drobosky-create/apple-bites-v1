@@ -294,12 +294,13 @@ export default function InteractiveValuationSlider() {
               <Box
                 sx={{
                   transform: 'scale(1.25)',
-                  transformOrigin: 'center left',
+                  transformOrigin: 'top left',
                   display: 'flex',
                   justifyContent: 'flex-start',
-                  alignItems: 'center',
+                  alignItems: 'flex-start',
                   height: '100%',
-                  paddingLeft: '10%'
+                  ml: -4,
+                  mt: -4
                 }}
               >
                 <OperationalGradeGauge 
