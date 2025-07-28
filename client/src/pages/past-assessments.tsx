@@ -2,7 +2,26 @@ import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, Typography, Box, Chip } from '@mui/material';
 import { Calendar, TrendingUp, FileText, Eye } from "lucide-react";
 import { useLocation } from "wouter";
-import type { ValuationAssessment } from "@shared/schema";
+// Assessment interface for Past Assessments
+interface Assessment {
+  id: number;
+  firstName: string;
+  lastName: string;
+  company: string;
+  email: string;
+  adjustedEbitda: string;
+  midEstimate: string;
+  lowEstimate: string;
+  highEstimate: string;
+  valuationMultiple: string;
+  overallScore: string;
+  tier: string;
+  reportTier: string;
+  createdAt: string;
+  pdfUrl?: string;
+  isProcessed: boolean;
+  executiveSummary?: string;
+}
 import MDBox from "@/components/MD/MDBox";
 import MDTypography from "@/components/MD/MDTypography";
 import MDButton from "@/components/MD/MDButton";
@@ -10,7 +29,7 @@ import MDButton from "@/components/MD/MDButton";
 export default function PastAssessments() {
   const [, setLocation] = useLocation();
 
-  const { data: assessments, isLoading } = useQuery<ValuationAssessment[]>({
+  const { data: assessments, isLoading } = useQuery<Assessment[]>({
     queryKey: ['/api/assessments'],
   });
 
@@ -66,7 +85,7 @@ export default function PastAssessments() {
     }
   };
 
-  const viewAssessment = (assessment: ValuationAssessment) => {
+  const viewAssessment = (assessment: Assessment) => {
     setLocation(`/value-calculator?assessmentId=${assessment.id}`);
   };
 
