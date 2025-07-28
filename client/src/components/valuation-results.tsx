@@ -57,11 +57,11 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
   };
 
   return (
-    <MDBox sx={{ maxWidth: '1200px', margin: '0 auto', p: 3 }}>
+    <MDBox sx={{ maxWidth: '1200px', margin: '0 auto', p: 2 }}>
       {/* Header Section */}
-      <MDBox textAlign="center" mb={4}>
-        <CheckCircle size={64} color="#4CAF50" style={{ marginBottom: '16px' }} />
-        <MDTypography variant="h3" fontWeight="bold" color="dark" mb={2}>
+      <MDBox textAlign="center" mb={1}>
+        <CheckCircle size={32} color="#4CAF50" style={{ marginBottom: '16px' }} />
+        <MDTypography variant="h4" fontWeight="bold" color="dark" mb={2}>
           Your Business Valuation Results
         </MDTypography>
         <MDTypography variant="h6" color="text" mb={3}>
@@ -205,20 +205,6 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
             </MDTypography>
             <MDTypography variant="body1" color="text" sx={{ lineHeight: 1.7, mb: 3 }}>
               {results.executiveSummary}
-            </MDTypography>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Business Analysis Narrative */}
-      {results.narrativeSummary && (
-        <Card sx={{ mb: 4 }}>
-          <CardContent sx={{ p: 4 }}>
-            <MDTypography variant="h5" fontWeight="bold" color="dark" mb={3}>
-              Detailed Business Analysis
-            </MDTypography>
-            <MDTypography variant="body1" color="text" sx={{ lineHeight: 1.7, mb: 3 }}>
-              {results.narrativeSummary}
             </MDTypography>
           </CardContent>
         </Card>
