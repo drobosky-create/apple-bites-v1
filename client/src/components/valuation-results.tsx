@@ -196,6 +196,34 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
         </Card>
       </MDBox>
 
+      {/* AI Executive Summary */}
+      {results.executiveSummary && (
+        <Card sx={{ mb: 4 }}>
+          <CardContent sx={{ p: 4 }}>
+            <MDTypography variant="h5" fontWeight="bold" color="dark" mb={3}>
+              AI Executive Summary
+            </MDTypography>
+            <MDTypography variant="body1" color="text" sx={{ lineHeight: 1.7, mb: 3 }}>
+              {results.executiveSummary}
+            </MDTypography>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Business Analysis Narrative */}
+      {results.narrativeSummary && (
+        <Card sx={{ mb: 4 }}>
+          <CardContent sx={{ p: 4 }}>
+            <MDTypography variant="h5" fontWeight="bold" color="dark" mb={3}>
+              Detailed Business Analysis
+            </MDTypography>
+            <MDTypography variant="body1" color="text" sx={{ lineHeight: 1.7, mb: 3 }}>
+              {results.narrativeSummary}
+            </MDTypography>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Value Drivers Heatmap */}
       <Card sx={{ mb: 4 }}>
         <CardContent sx={{ p: 3 }}>
