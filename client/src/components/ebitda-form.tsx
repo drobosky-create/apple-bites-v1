@@ -55,8 +55,8 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
             boxShadow: '0 2px 6px rgba(0, 0, 0, 0.12)', // optional
           }}
         >
-          <span className="material-icons-round" style={{ color: '#ffffff', fontSize: 28 }}>
-            attach_money
+          <span style={{ color: '#ffffff', fontSize: 28, fontWeight: 'bold' }}>
+            $
           </span>
         </MDBox>
 
