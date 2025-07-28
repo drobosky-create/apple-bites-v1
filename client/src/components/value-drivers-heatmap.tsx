@@ -1,6 +1,5 @@
 import { useState } from 'react';
-
-
+import { Card, CardContent, Typography, Box, Chip } from '@mui/material';
 import { Info, TrendingUp, TrendingDown, Minus } from 'lucide-react';
 import type { ValuationAssessment } from '@shared/schema';
 
@@ -156,7 +155,7 @@ export default function ValueDriversHeatmap({ assessment }: ValueDriversHeatmapP
       'low': { color: 'bg-green-100 text-green-800', label: 'Low Impact' }
     };
     const config = impactConfig[impact];
-    return <Badge className={config.color}>{config.label}</Badge>;
+    return <Chip label={config.label} size="small" sx={{ backgroundColor: config.color.includes('red') ? '#FEE2E2' : config.color.includes('blue') ? '#DBEAFE' : '#D1FAE5', color: config.color.includes('red') ? '#DC2626' : config.color.includes('blue') ? '#2563EB' : '#059669' }} />;
   };
 
   const groupedDrivers = drivers.reduce((acc, driver) => {

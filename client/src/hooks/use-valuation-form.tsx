@@ -73,6 +73,7 @@ export function useValuationForm() {
   const [currentStep, setCurrentStep] = useState<FormStep>("ebitda");
   const [formData, setFormData] = useState<ValuationFormData>(defaultFormData);
   const [results, setResults] = useState<ValuationAssessment | null>(null);
+  const [isGeneratingReport, setIsGeneratingReport] = useState(false);
 
   const contactForm = useForm<ContactInfo>({
     resolver: zodResolver(contactInfoSchema),
@@ -108,12 +109,17 @@ export function useValuationForm() {
 
   const submitMutation = useMutation({
     mutationFn: async (data: ValuationFormData) => {
+      setIsGeneratingReport(true);
       const response = await apiRequest("POST", "/api/valuation", data);
       return response.json();
     },
     onSuccess: (data: ValuationAssessment) => {
+      setIsGeneratingReport(false);
       setResults(data);
       setCurrentStep("results");
+    },
+    onError: () => {
+      setIsGeneratingReport(false);
     },
   });
 
@@ -190,6 +196,7 @@ export function useValuationForm() {
     submitAssessment,
     results,
     isSubmitting: submitMutation.isPending,
+    isGeneratingReport,
     forms: {
       contact: contactForm,
       ebitda: ebitdaForm,

@@ -7,7 +7,7 @@ import AdjustmentsForm from "@/components/adjustments-form";
 import ValueDriversForm from "@/components/value-drivers-form";
 import FollowUpForm from "@/components/followup-form";
 import ValuationResults from "@/components/valuation-results";
-import LoadingModal from "@/components/loading-modal";
+import LoadingPopup from "@/components/LoadingPopup";
 import AssessmentStepper from "@/components/AssessmentStepper";
 import { 
   ArrowLeft, 
@@ -90,6 +90,7 @@ export default function FreeAssessment() {
     submitAssessment,
     results,
     isSubmitting,
+    isGeneratingReport,
     forms,
   } = useValuationForm();
   
@@ -243,9 +244,8 @@ export default function FreeAssessment() {
         </FormCard>
       </MainContent>
 
-      <LoadingModal 
-        isVisible={isSubmitting} 
-        message="Analyzing your business data and calculating valuation..."
+      <LoadingPopup 
+        open={isGeneratingReport} 
       />
     </AssessmentBackground>
   );
