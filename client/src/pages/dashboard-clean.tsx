@@ -187,6 +187,7 @@ function DashboardSidebar({ user }: { user: DashboardUser }) {
         )}
 
         <MDButton
+          className="text-[#dbdce1]"
           sx={{
             background: 'transparent',
             border: `1px solid rgba(255, 255, 255, 0.3)`,
