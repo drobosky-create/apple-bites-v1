@@ -176,6 +176,7 @@ export default function ValueCalculator() {
         sx={{
           width: drawerWidth,
           flexShrink: 0,
+          display: { xs: 'none', md: 'block' }, // Hide on mobile, show on desktop
           '& .MuiDrawer-paper': {
             width: drawerWidth,
             boxSizing: 'border-box',
@@ -191,9 +192,9 @@ export default function ValueCalculator() {
               left: 0,
               right: 0,
               bottom: 0,
-              background: 'rgba(11, 20, 38, 0.45)',
+              background: 'rgba(11, 20, 38, 0.45)', // Even lighter overlay for better visibility
               backdropFilter: 'blur(20px) saturate(180%)',
-              WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+              WebkitBackdropFilter: 'blur(20px) saturate(180%)', // Safari support
               border: '1px solid rgba(255, 255, 255, 0.1)',
               zIndex: 1,
             },
@@ -209,7 +210,7 @@ export default function ValueCalculator() {
             src="/assets/logos/apple-bites-logo-variant-3.png"
             alt="Apple Bites Business Assessment"
             sx={{
-              width: '80%',
+              width: '80%',        // Responsive width inside sidebar
               maxWidth: 200,
               mt: 1,
               mb: 1,
@@ -325,16 +326,25 @@ export default function ValueCalculator() {
       <MainContent>
         <Container maxWidth="xl" sx={{ py: 0 }}>
           {/* Page Header */}
-          <Box sx={{ mb: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <Box sx={{ 
+            mb: 4, 
+            p: 4,
+            backgroundColor: 'white',
+            borderRadius: '16px',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'space-between' 
+          }}>
             <Box>
-              <Typography variant="h5" sx={{ 
+              <Typography variant="h4" sx={{ 
                 color: '#344767', 
                 fontWeight: 700,
-                mb: 0.5
+                mb: 1
               }}>
                 Value Improvement Calculator
               </Typography>
-              <Typography variant="body1" sx={{ 
+              <Typography variant="h6" sx={{ 
                 color: '#67748e', 
                 fontWeight: 400
               }}>
@@ -342,20 +352,34 @@ export default function ValueCalculator() {
               </Typography>
             </Box>
             <Button
-              onClick={() => setLocation('/')}
-              
+              variant="outlined"
+              startIcon={<ArrowLeft size={20} />}
+              onClick={() => setLocation('/dashboard')}
+              sx={{
+                borderColor: '#00BFA6',
+                color: '#00BFA6',
+                fontWeight: 600,
+                px: 3,
+                py: 1.5,
+                borderRadius: '12px',
+                textTransform: 'none',
+                fontSize: '0.875rem',
+                '&:hover': {
+                  backgroundColor: 'rgba(0, 191, 166, 0.1)',
+                  borderColor: '#4DD0C7',
+                }
+              }}
             >
-              <ArrowLeft  />
-              Back to Dashboard
+              BACK TO DASHBOARD
             </Button>
           </Box>
 
-          {/* Main Calculator Container with Dark Background for Glass Effect */}
+          {/* Main Calculator Container */}
           <Box sx={{
-            background: 'linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 90%)',
+            backgroundColor: 'white',
             borderRadius: '16px',
-            p: 3,
-            boxShadow: '0 10px 25px rgba(0,0,0,0.15)'
+            boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+            overflow: 'hidden'
           }}>
             <InteractiveValuationSlider />
           </Box>

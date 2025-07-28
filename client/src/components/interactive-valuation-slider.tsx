@@ -200,7 +200,7 @@ export default function InteractiveValuationSlider() {
       {/* Current vs Potential Value Cards */}
       <Grid container spacing={3} sx={{ mb: 4 }}>
         {/* Current Value Card */}
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Card sx={{ 
             background: 'linear-gradient(135deg, #374151 0%, #4B5563 100%)',
             color: 'white',
@@ -244,7 +244,7 @@ export default function InteractiveValuationSlider() {
         </Grid>
 
         {/* Potential Value Card */}
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Card sx={{ 
             background: sliderGrade !== baseGrade ? 
               (potentialIncrease > 0 ? 
@@ -294,7 +294,7 @@ export default function InteractiveValuationSlider() {
         <CardContent sx={{ p: 4 }}>
           <Grid container spacing={4} alignItems="center">
             {/* Gauge Section */}
-            <Grid item xs={12} md={8}>
+            <Grid size={{ xs: 12, md: 8 }}>
               <OperationalGradeGauge 
                 grade={sliderGrade}
                 title="Operational Grade Impact Analysis"
@@ -303,7 +303,7 @@ export default function InteractiveValuationSlider() {
             </Grid>
             
             {/* Potential Gain Display */}
-            <Grid item xs={12} md={4}>
+            <Grid size={{ xs: 12, md: 4 }}>
               {sliderGrade !== baseGrade ? (
                 <Card sx={{ 
                   background: potentialIncrease > 0 
@@ -360,7 +360,7 @@ export default function InteractiveValuationSlider() {
               const valuation = calculateValuation(grade);
               
               return (
-                <Grid item xs={12} sm={6} md={2.4} key={grade}>
+                <Grid size={{ xs: 12, sm: 6, md: 2.4 }} key={grade}>
                   <Card
                     onClick={() => setSliderGrade(grade)}
                     sx={{
