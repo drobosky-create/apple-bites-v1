@@ -50,14 +50,14 @@ const drawerWidth = 280;
 
 const MainContent = styled(Box)(({ theme }) => ({
   flexGrow: 1,
-  padding: '24px',
+  padding: '16px',
   width: '100%',
   maxWidth: '1200px',
   margin: '0 auto',
   minHeight: '100vh',
   backgroundColor: '#f8f9fa',
   [theme.breakpoints.down('md')]: {
-    padding: '16px',
+    padding: '12px',
   },
 }));
 
@@ -181,7 +181,7 @@ export default function FreeAssessment() {
         <AssessmentStepper activeStep={getStepIndex(currentStep)} />
         
         <FormCard>
-          <CardContent sx={{ p: 4, minHeight: '600px' }}>
+          <CardContent sx={{ p: 3, minHeight: '500px' }}>
             {/* Form Content */}
             <Box>
               {currentStep === "ebitda" && (

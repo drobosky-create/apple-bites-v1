@@ -41,7 +41,7 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
   return (
     <MDBox>
       {/* Executive Header Section */}
-      <MDBox mb={4} display="flex" alignItems="center">
+      <MDBox mb={2} display="flex" alignItems="center">
         <MDBox
           sx={{
             backgroundColor: '#1B2C4F', // or gradient if needed
@@ -72,15 +72,15 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
 
       {/* Form Container */}
       <Card sx={{ borderRadius: 2, boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }}>
-        <CardContent sx={{ p: 4 }}>
+        <CardContent sx={{ p: 3 }}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             {/* Financial Data Section */}
-            <MDBox mb={4}>
-              <MDTypography variant="h6" fontWeight="medium" color="dark" mb={3}>
+            <MDBox mb={3}>
+              <MDTypography variant="h6" fontWeight="medium" color="dark" mb={2}>
                 Financial Data
               </MDTypography>
               
-              <MDBox mb={3}>
+              <MDBox mb={2}>
                 <TextField
                   label="Net Income *"
                   type="number"
@@ -96,7 +96,7 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
                 />
               </MDBox>
 
-              <MDBox mb={3}>
+              <MDBox mb={2}>
                 <TextField
                   label="Interest Expense *"
                   type="number"
@@ -112,7 +112,7 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
                 />
               </MDBox>
 
-              <MDBox mb={3}>
+              <MDBox mb={2}>
                 <TextField
                   label="Tax Expense *"
                   type="number"
@@ -128,7 +128,7 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
                 />
               </MDBox>
 
-              <MDBox mb={3}>
+              <MDBox mb={2}>
                 <TextField
                   label="Depreciation & Amortization *"
                   type="number"
