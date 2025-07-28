@@ -26,33 +26,32 @@ export default function ValueDriversHeatmap({ assessment }: ValueDriversHeatmapP
     return gradeMap[grade] || 3;
   };
 
-  const getGradeColor = (grade: Grade): string => {
-    const colorMap: Record<Grade, string> = {
-      'A': 'bg-green-500 hover:bg-green-600',
-      'B': 'bg-blue-500 hover:bg-blue-600', 
-      'C': 'bg-slate-500 hover:bg-slate-600',
-      'D': 'bg-orange-500 hover:bg-orange-600',
-      'F': 'bg-red-500 hover:bg-red-600'
-    };
-    return colorMap[grade];
-  };
-
-  const getGradeBorderColor = (grade: Grade): string => {
-    const borderMap: Record<Grade, string> = {
-      'A': 'border-green-600',
-      'B': 'border-blue-600',
-      'C': 'border-slate-600', 
-      'D': 'border-orange-600',
-      'F': 'border-red-600'
-    };
-    return borderMap[grade];
-  };
-
   const getTrendIcon = (grade: Grade) => {
     const score = getGradeScore(grade);
-    if (score >= 4) return <TrendingUp  />;
-    if (score <= 2) return <TrendingDown  />;
-    return <Minus  />;
+    if (score >= 4) return <TrendingUp size={16} />;
+    if (score <= 2) return <TrendingDown size={16} />;
+    return <Minus size={16} />;
+  };
+
+  const getImpactBadge = (impact: string) => {
+    const impactConfig: Record<string, { color: string; label: string }> = {
+      'high': { color: '#DC2626', label: 'High Impact' },
+      'medium': { color: '#2563EB', label: 'Medium Impact' },
+      'low': { color: '#059669', label: 'Low Impact' }
+    };
+    const config = impactConfig[impact];
+    return (
+      <Chip 
+        label={config.label} 
+        size="small" 
+        sx={{ 
+          backgroundColor: impact === 'high' ? '#FEE2E2' : impact === 'medium' ? '#DBEAFE' : '#D1FAE5',
+          color: config.color,
+          fontWeight: 'bold',
+          fontSize: '11px'
+        }} 
+      />
+    );
   };
 
   const drivers: DriverData[] = [
@@ -60,15 +59,15 @@ export default function ValueDriversHeatmap({ assessment }: ValueDriversHeatmapP
       key: 'financialPerformance',
       label: 'Financial Performance',
       grade: (assessment.financialPerformance || 'C') as Grade,
-      description: 'Revenue growth, profitability margins, and cash flow generation',
+      description: 'Revenue growth, profitability margins, and financial stability',
       impact: 'high',
       category: 'financial'
     },
     {
-      key: 'customerConcentration', 
+      key: 'customerConcentration',
       label: 'Customer Concentration',
       grade: (assessment.customerConcentration || 'C') as Grade,
-      description: 'Diversification of customer base and revenue streams',
+      description: 'Diversification of customer base and revenue sources',
       impact: 'high',
       category: 'risk'
     },
@@ -76,15 +75,15 @@ export default function ValueDriversHeatmap({ assessment }: ValueDriversHeatmapP
       key: 'managementTeam',
       label: 'Management Team',
       grade: (assessment.managementTeam || 'C') as Grade,
-      description: 'Leadership capability, experience, and succession planning',
+      description: 'Leadership strength, experience, and organizational depth',
       impact: 'high',
       category: 'operational'
     },
     {
       key: 'competitivePosition',
-      label: 'Competitive Position', 
+      label: 'Competitive Position',
       grade: (assessment.competitivePosition || 'C') as Grade,
-      description: 'Market share, differentiation, and competitive advantages',
+      description: 'Market position, competitive advantages, and differentiation',
       impact: 'high',
       category: 'strategic'
     },
@@ -92,7 +91,7 @@ export default function ValueDriversHeatmap({ assessment }: ValueDriversHeatmapP
       key: 'growthProspects',
       label: 'Growth Prospects',
       grade: (assessment.growthProspects || 'C') as Grade,
-      description: 'Market opportunities, scalability, and expansion potential',
+      description: 'Future growth opportunities and market expansion potential',
       impact: 'high',
       category: 'strategic'
     },
@@ -138,26 +137,6 @@ export default function ValueDriversHeatmap({ assessment }: ValueDriversHeatmapP
     }
   ];
 
-  const getCategoryColor = (category: string): string => {
-    const categoryColors: Record<string, string> = {
-      'financial': 'bg-blue-50 border-blue-200',
-      'operational': 'bg-green-50 border-green-200',
-      'strategic': 'bg-purple-50 border-purple-200',
-      'risk': 'bg-red-50 border-red-200'
-    };
-    return categoryColors[category] || 'bg-gray-50 border-gray-200';
-  };
-
-  const getImpactBadge = (impact: string) => {
-    const impactConfig: Record<string, { color: string; label: string }> = {
-      'high': { color: 'bg-red-100 text-red-800', label: 'High Impact' },
-      'medium': { color: 'bg-blue-100 text-blue-800', label: 'Medium Impact' },
-      'low': { color: 'bg-green-100 text-green-800', label: 'Low Impact' }
-    };
-    const config = impactConfig[impact];
-    return <Chip label={config.label} size="small" sx={{ backgroundColor: config.color.includes('red') ? '#FEE2E2' : config.color.includes('blue') ? '#DBEAFE' : '#D1FAE5', color: config.color.includes('red') ? '#DC2626' : config.color.includes('blue') ? '#2563EB' : '#059669' }} />;
-  };
-
   const groupedDrivers = drivers.reduce((acc, driver) => {
     if (!acc[driver.category]) acc[driver.category] = [];
     acc[driver.category].push(driver);
@@ -172,104 +151,228 @@ export default function ValueDriversHeatmap({ assessment }: ValueDriversHeatmapP
   };
 
   return (
-    <div >
-      <div >
-        <h3 >Business Value Drivers Analysis</h3>
-        <p >Interactive visualization of your business performance across key value drivers</p>
-      </div>
+    <Box sx={{ mt: 4, p: 3 }}>
+      {/* Header */}
+      <Box sx={{ textAlign: 'center', mb: 4 }}>
+        <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#0A1F44', mb: 1 }}>
+          Business Value Drivers Analysis
+        </Typography>
+        <Typography variant="h6" sx={{ color: '#666', mb: 3 }}>
+          Interactive visualization of your business performance across key value drivers
+        </Typography>
+      </Box>
 
-      <div >
+      {/* Categories Grid */}
+      <Box sx={{ display: 'grid', gap: 3, mb: 4 }}>
         {Object.entries(groupedDrivers).map(([category, categoryDrivers]) => (
-          <Card key={category} className={`p-4 ${getCategoryColor(category)}`}>
-            <h4 >
-              {categoryLabels[category]}
-            </h4>
-            <div >
-              {categoryDrivers.map((driver) => (
-                <div key={driver.key} >
-                  <button
+          <Card 
+            key={category} 
+            sx={{ 
+              background: category === 'financial' ? 'linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%)' :
+                         category === 'operational' ? 'linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%)' :
+                         category === 'strategic' ? 'linear-gradient(135deg, #FAF5FF 0%, #F3E8FF 100%)' :
+                         'linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%)',
+              border: category === 'financial' ? '1px solid #BFDBFE' :
+                     category === 'operational' ? '1px solid #BBF7D0' :
+                     category === 'strategic' ? '1px solid #E9D5FF' :
+                     '1px solid #FECACA',
+              borderRadius: '16px',
+              overflow: 'hidden'
+            }}
+          >
+            <CardContent sx={{ p: 3 }}>
+              {/* Category Header */}
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+                <Box sx={{ 
+                  width: 8, 
+                  height: 8, 
+                  borderRadius: '50%', 
+                  backgroundColor: category === 'financial' ? '#3B82F6' :
+                                  category === 'operational' ? '#10B981' :
+                                  category === 'strategic' ? '#8B5CF6' :
+                                  '#EF4444',
+                  mr: 2 
+                }} />
+                <Typography variant="h6" sx={{ 
+                  fontWeight: 'bold', 
+                  color: category === 'financial' ? '#1E40AF' :
+                         category === 'operational' ? '#065F46' :
+                         category === 'strategic' ? '#5B21B6' :
+                         '#991B1B'
+                }}>
+                  {categoryLabels[category]}
+                </Typography>
+              </Box>
+
+              {/* Driver Cards Grid */}
+              <Box sx={{ display: 'grid', gap: 2 }}>
+                {categoryDrivers.map((driver) => (
+                  <Card 
+                    key={driver.key} 
+                    sx={{ 
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease',
+                      background: selectedDriver?.key === driver.key ? 
+                        'linear-gradient(135deg, #0A1F44 0%, #1B2C4F 100%)' :
+                        '#FFFFFF',
+                      border: selectedDriver?.key === driver.key ? 
+                        '2px solid #5EEAD4' : 
+                        '1px solid #E5E7EB',
+                      transform: selectedDriver?.key === driver.key ? 'scale(1.02)' : 'scale(1)',
+                      boxShadow: selectedDriver?.key === driver.key ? 
+                        '0 8px 25px rgba(0,0,0,0.15)' : 
+                        '0 2px 8px rgba(0,0,0,0.1)',
+                      '&:hover': {
+                        transform: 'scale(1.02)',
+                        boxShadow: '0 8px 25px rgba(0,0,0,0.15)'
+                      }
+                    }}
                     onClick={() => setSelectedDriver(selectedDriver?.key === driver.key ? null : driver)}
-                    className={`
-                      w-full p-3 rounded-lg text-white font-medium text-sm transition-all duration-200 
-                      ${getGradeColor(driver.grade)} 
-                      ${selectedDriver?.key === driver.key ? `ring-2 ring-offset-2 ${getGradeBorderColor(driver.grade).replace('border-', 'ring-')}` : ''}
-                      hover:scale-[1.02] cursor-pointer
-                    `}
                   >
-                    <div >
-                      <span >{driver.label}</span>
-                      <div >
-                        <span >{driver.grade}</span>
-                        {getTrendIcon(driver.grade)}
-                      </div>
-                    </div>
-                  </button>
-                  
-                  {selectedDriver?.key === driver.key && (
-                    <div >
-                      <div >
-                        <div>
-                          <h5 >
-                            {selectedDriver.label}
-                          </h5>
-                          <div >
-                            <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium text-white ${getGradeColor(selectedDriver.grade)}`}>
-                              Grade {selectedDriver.grade}
-                            </span>
-                            {getImpactBadge(selectedDriver.impact)}
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <p >
-                        {selectedDriver.description}
-                      </p>
+                    <CardContent sx={{ p: 2.5 }}>
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <Box sx={{ flex: 1 }}>
+                          <Typography 
+                            variant="subtitle1" 
+                            sx={{ 
+                              fontWeight: 'bold', 
+                              color: selectedDriver?.key === driver.key ? '#FFFFFF' : '#374151',
+                              mb: 0.5 
+                            }}
+                          >
+                            {driver.label}
+                          </Typography>
+                          {selectedDriver?.key === driver.key && (
+                            <Typography 
+                              variant="body2" 
+                              sx={{ color: 'rgba(255,255,255,0.8)', fontSize: '14px' }}
+                            >
+                              {driver.description}
+                            </Typography>
+                          )}
+                        </Box>
 
-                      <div >
-                        <div >
-                          <h6 >Performance Level</h6>
-                          <div >
-                            <div >
-                              <div 
-                                className={`h-2 rounded-full ${getGradeColor(selectedDriver.grade).split(' ')[0]}`}
-                                style={{ width: `${(getGradeScore(selectedDriver.grade) / 5) * 100}%` }}
-                              ></div>
-                            </div>
-                            <span >
-                              {getGradeScore(selectedDriver.grade)}/5
-                            </span>
-                          </div>
-                        </div>
+                        {/* Grade Badge and Trend */}
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                          <Chip
+                            label={`Grade ${driver.grade}`}
+                            size="small"
+                            sx={{
+                              backgroundColor: driver.grade === 'A' ? '#10B981' :
+                                              driver.grade === 'B' ? '#3B82F6' :
+                                              driver.grade === 'C' ? '#6B7280' :
+                                              driver.grade === 'D' ? '#F59E0B' :
+                                              '#EF4444',
+                              color: '#FFFFFF',
+                              fontWeight: 'bold',
+                              fontSize: '12px'
+                            }}
+                          />
+                          <Box sx={{ color: selectedDriver?.key === driver.key ? '#5EEAD4' : '#9CA3AF' }}>
+                            {getTrendIcon(driver.grade)}
+                          </Box>
+                        </Box>
+                      </Box>
 
-                        <div >
-                          <h6 >Impact on Valuation</h6>
-                          <p >
-                            <strong>{selectedDriver.impact}</strong> impact on overall business valuation
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
+                      {/* Expanded Details */}
+                      {selectedDriver?.key === driver.key && (
+                        <Box sx={{ mt: 2, pt: 2, borderTop: '1px solid rgba(255,255,255,0.2)' }}>
+                          <Box sx={{ display: 'grid', gap: 2 }}>
+                            {/* Impact Badge */}
+                            <Box>
+                              {getImpactBadge(selectedDriver.impact)}
+                            </Box>
+
+                            {/* Performance Meter */}
+                            <Box>
+                              <Typography 
+                                variant="body2" 
+                                sx={{ color: '#FFFFFF', fontWeight: 'bold', mb: 1 }}
+                              >
+                                Performance Level
+                              </Typography>
+                              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                                <Box sx={{ 
+                                  flex: 1, 
+                                  height: 8, 
+                                  backgroundColor: 'rgba(255,255,255,0.2)', 
+                                  borderRadius: '4px',
+                                  overflow: 'hidden'
+                                }}>
+                                  <Box sx={{ 
+                                    height: '100%', 
+                                    backgroundColor: '#5EEAD4',
+                                    width: `${(getGradeScore(selectedDriver.grade) / 5) * 100}%`,
+                                    transition: 'width 0.3s ease'
+                                  }} />
+                                </Box>
+                                <Typography 
+                                  variant="body2" 
+                                  sx={{ color: '#FFFFFF', fontWeight: 'bold', minWidth: '40px' }}
+                                >
+                                  {getGradeScore(selectedDriver.grade)}/5
+                                </Typography>
+                              </Box>
+                            </Box>
+
+                            {/* Impact Description */}
+                            <Box>
+                              <Typography 
+                                variant="body2" 
+                                sx={{ color: '#FFFFFF', fontWeight: 'bold', mb: 0.5 }}
+                              >
+                                Impact on Valuation
+                              </Typography>
+                              <Typography 
+                                variant="body2" 
+                                sx={{ color: 'rgba(255,255,255,0.8)' }}
+                              >
+                                <strong style={{ color: '#5EEAD4' }}>{selectedDriver.impact}</strong> impact on overall business valuation
+                              </Typography>
+                            </Box>
+                          </Box>
+                        </Box>
+                      )}
+                    </CardContent>
+                  </Card>
+                ))}
+              </Box>
+            </CardContent>
           </Card>
         ))}
-      </div>
+      </Box>
 
-      <div >
-        <h4 >Grade Legend</h4>
-        <div >
-          {(['A', 'B', 'C', 'D', 'F'] as Grade[]).map((grade) => (
-            <div key={grade} >
-              <div className={`w-4 h-4 rounded ${getGradeColor(grade)}`}></div>
-              <span >
-                {grade} - {grade === 'A' ? 'Excellent' : grade === 'B' ? 'Good' : grade === 'C' ? 'Average' : grade === 'D' ? 'Needs Improvement' : 'At Risk'}
-              </span>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
+      {/* Grade Legend */}
+      <Card sx={{ 
+        background: 'linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%)', 
+        border: '1px solid #E2E8F0',
+        borderRadius: '16px' 
+      }}>
+        <CardContent sx={{ p: 3 }}>
+          <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#0A1F44', mb: 3 }}>
+            Grade Legend
+          </Typography>
+          <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 2 }}>
+            {(['A', 'B', 'C', 'D', 'F'] as Grade[]).map((grade) => (
+              <Box key={grade} sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                <Box sx={{ 
+                  width: 16, 
+                  height: 16, 
+                  borderRadius: '4px',
+                  backgroundColor: grade === 'A' ? '#10B981' :
+                                  grade === 'B' ? '#3B82F6' :
+                                  grade === 'C' ? '#6B7280' :
+                                  grade === 'D' ? '#F59E0B' :
+                                  '#EF4444'
+                }} />
+                <Typography variant="body2" sx={{ color: '#374151', fontWeight: 'medium' }}>
+                  <strong>{grade}</strong> - {grade === 'A' ? 'Excellent' : grade === 'B' ? 'Good' : grade === 'C' ? 'Average' : grade === 'D' ? 'Needs Improvement' : 'At Risk'}
+                </Typography>
+              </Box>
+            ))}
+          </Box>
+        </CardContent>
+      </Card>
+    </Box>
   );
 }
