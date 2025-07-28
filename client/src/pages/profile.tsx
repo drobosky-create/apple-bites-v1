@@ -312,12 +312,22 @@ export default function ProfilePage() {
                         disabled={!editMode}
                         fullWidth
                         variant="outlined"
+                        placeholder={
+                          social.key === 'facebook' ? 'https://facebook.com/yourprofile' :
+                          social.key === 'twitter' ? 'https://x.com/yourhandle' :
+                          social.key === 'instagram' ? 'https://instagram.com/yourprofile' :
+                          social.key === 'linkedin' ? 'https://linkedin.com/in/yourprofile' : ''
+                        }
                         sx={{
                           '& .MuiOutlinedInput-root': {
-                            backgroundColor: 'transparent',
-                            border: 'none',
+                            backgroundColor: 'white',
+                            border: editMode ? '1px solid #D1D5DB' : '1px solid transparent',
                             borderRadius: '6px',
-                            boxShadow: 'none',
+                            boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+                            '&:focus-within': {
+                              outline: editMode ? '2px solid #00B4AA' : 'none',
+                              outlineOffset: '2px'
+                            },
                             '& .MuiOutlinedInput-notchedOutline': {
                               border: 'none'
                             }
