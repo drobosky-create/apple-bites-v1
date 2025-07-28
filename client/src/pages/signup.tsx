@@ -304,7 +304,7 @@ export default function HybridSignupPage() {
                   }}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={6}>
                 <Typography variant="body2" fontWeight="medium" sx={{ color: '#374151', mb: 1 }}>
                   Email Address
                 </Typography>
@@ -325,7 +325,7 @@ export default function HybridSignupPage() {
                   }}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={6}>
                 <Typography variant="body2" fontWeight="medium" sx={{ color: '#374151', mb: 1 }}>
                   Phone Number
                 </Typography>
@@ -383,7 +383,7 @@ export default function HybridSignupPage() {
                   }}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={6}>
                 <Typography variant="body2" fontWeight="medium" sx={{ color: '#374151', mb: 1 }}>
                   Password
                 </Typography>
@@ -418,24 +418,8 @@ export default function HybridSignupPage() {
                     }
                   }}
                 />
-                
-                {/* Password Requirements */}
-                {formData.password && (
-                  <Box mt={2} p={2} sx={{ backgroundColor: '#F9FAFB', borderRadius: 2 }}>
-                    <Typography variant="caption" fontWeight="medium" sx={{ color: '#374151', mb: 1, display: 'block' }}>
-                      Password Requirements:
-                    </Typography>
-                    {Object.entries(passwordRequirements).map(([key, met]) => (
-                      <PasswordRequirement 
-                        key={key} 
-                        met={met} 
-                        text={requirementLabels[key as keyof typeof requirementLabels]} 
-                      />
-                    ))}
-                  </Box>
-                )}
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={6}>
                 <Typography variant="body2" fontWeight="medium" sx={{ color: '#374151', mb: 1 }}>
                   Confirm Password
                 </Typography>
@@ -476,6 +460,23 @@ export default function HybridSignupPage() {
                   <Typography variant="caption" sx={{ color: '#EF4444', mt: 1, display: 'block' }}>
                     Passwords do not match
                   </Typography>
+                )}
+              </Grid>
+              <Grid item xs={12}>
+                {/* Password Requirements */}
+                {formData.password && (
+                  <Box mt={1} p={2} sx={{ backgroundColor: '#F9FAFB', borderRadius: 2 }}>
+                    <Typography variant="caption" fontWeight="medium" sx={{ color: '#374151', mb: 1, display: 'block' }}>
+                      Password Requirements:
+                    </Typography>
+                    {Object.entries(passwordRequirements).map(([key, met]) => (
+                      <PasswordRequirement 
+                        key={key} 
+                        met={met} 
+                        text={requirementLabels[key as keyof typeof requirementLabels]} 
+                      />
+                    ))}
+                  </Box>
                 )}
               </Grid>
             </Grid>
