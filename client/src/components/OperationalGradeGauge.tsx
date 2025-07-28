@@ -4,12 +4,14 @@ interface OperationalGradeGaugeProps {
   grade: 'A' | 'B' | 'C' | 'D' | 'F';
   title?: string;
   animated?: boolean;
+  onGradeClick?: (grade: 'A' | 'B' | 'C' | 'D' | 'F') => void;
 }
 
 const OperationalGradeGauge: React.FC<OperationalGradeGaugeProps> = ({ 
   grade, 
   title = "Operational Grade",
-  animated = true 
+  animated = true,
+  onGradeClick
 }) => {
   const [animatedAngle, setAnimatedAngle] = useState(0);
   
@@ -164,11 +166,12 @@ const OperationalGradeGauge: React.FC<OperationalGradeGaugeProps> = ({
                   fill={isActive ? `url(#${gradientId})` : 'rgb(248, 250, 252)'}
                   stroke="white"
                   strokeWidth="6"
-                  
                   style={{
                     filter: isActive ? 'drop-shadow(0 4px 8px rgba(0,0,0,0.15))' : 'none',
-                    opacity: isActive ? 1 : 0.3
+                    opacity: isActive ? 1 : 0.3,
+                    cursor: onGradeClick ? 'pointer' : 'default'
                   }}
+                  onClick={() => onGradeClick && onGradeClick(segment.grade as 'A' | 'B' | 'C' | 'D' | 'F')}
                 />
                 
                 {/* Grade labels */}
@@ -181,8 +184,10 @@ const OperationalGradeGauge: React.FC<OperationalGradeGaugeProps> = ({
                   style={{
                     fontSize: '48px',
                     fontWeight: '900',
-                    textShadow: isActive ? '1px 1px 2px rgba(0,0,0,0.3)' : 'none'
+                    textShadow: isActive ? '1px 1px 2px rgba(0,0,0,0.3)' : 'none',
+                    cursor: onGradeClick ? 'pointer' : 'default'
                   }}
+                  onClick={() => onGradeClick && onGradeClick(segment.grade as 'A' | 'B' | 'C' | 'D' | 'F')}
                 >
                   {segment.grade}
                 </text>

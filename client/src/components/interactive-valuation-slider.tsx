@@ -111,16 +111,16 @@ export default function InteractiveValuationSlider() {
         border: '#3B82F6'
       },
       'C': { 
-        primary: '#0891B2', 
-        light: '#E0F7FA', 
-        bg: 'linear-gradient(135deg, #F0F9FF 0%, #E0F7FA 100%)',
-        border: '#0891B2'
-      },
-      'D': { 
         primary: '#F59E0B', 
         light: '#FEF3C7', 
         bg: 'linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%)',
         border: '#F59E0B'
+      },
+      'D': { 
+        primary: '#F97316', 
+        light: '#FFEDD5', 
+        bg: 'linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%)',
+        border: '#F97316'
       },
       'F': { 
         primary: '#EF4444', 
@@ -307,6 +307,7 @@ export default function InteractiveValuationSlider() {
                   grade={sliderGrade}
                   title="Operational Grade Impact Analysis"
                   animated={true}
+                  onGradeClick={setSliderGrade}
                 />
               </Box>
             </Grid>
