@@ -15,6 +15,8 @@ import Dashboard from "@/pages/dashboard";
 import AssessmentResults from "@/pages/assessment-results";
 import Profile from "@/pages/profile";
 import PastAssessments from "@/pages/past-assessments";
+import SignupPage from "@/pages/signup";
+import LoginPage from "@/pages/login";
 
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -22,6 +24,10 @@ function Router() {
   return (
     <div style={{ minHeight: '100vh', backgroundColor: 'white' }}>
       <Switch>
+        {/* Authentication routes */}
+        <Route path="/signup" component={SignupPage} />
+        <Route path="/login" component={LoginPage} />
+        
         {/* Core routes only */}
         <Route path="/" component={Dashboard} />
         <Route path="/dashboard" component={Dashboard} />
