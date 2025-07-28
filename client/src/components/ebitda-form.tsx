@@ -1,11 +1,10 @@
 import { UseFormReturn } from "react-hook-form";
 import { EbitdaData } from "@shared/schema";
-
-
-
-
-import { Typography, Card, CardContent, Button } from '@mui/material';
+import { Typography, Card, CardContent, TextField, InputAdornment } from '@mui/material';
 import { ArrowLeft, ArrowRight, Calculator } from "lucide-react";
+import MDBox from "@/components/MD/MDBox";
+import MDTypography from "@/components/MD/MDTypography";
+import MDButton from "@/components/MD/MDButton";
 
 interface EbitdaFormProps {
   form: UseFormReturn<EbitdaData>;
@@ -33,245 +32,216 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
     }).format(value);
   };
 
+  const handleFieldChange = (fieldName: keyof EbitdaData, value: string) => {
+    const numValue = Number(value) || 0;
+    form.setValue(fieldName, numValue);
+    onDataChange(form.getValues());
+  };
+
   return (
-    <div >
+    <MDBox>
       {/* Executive Header Section */}
-      <div >
-        <div >
-          <Calculator  />
-        </div>
-        <div>
-          <h1 >Financial Information</h1>
-          <p >
+      <MDBox mb={4} display="flex" alignItems="center">
+        <MDBox
+          sx={{
+            backgroundColor: '#0A1F44',
+            borderRadius: '50%',
+            width: 64,
+            height: 64,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            mr: 3
+          }}
+        >
+          <Calculator size={32} color="#00BFA6" />
+        </MDBox>
+        <MDBox>
+          <MDTypography variant="h4" fontWeight="bold" color="dark" mb={1}>
+            Financial Information
+          </MDTypography>
+          <MDTypography variant="body1" color="text">
             Please provide your company's financial information for the most recent fiscal year to calculate EBITDA.
-          </p>
-        </div>
-      </div>
+          </MDTypography>
+        </MDBox>
+      </MDBox>
 
       {/* Form Container */}
-      <div >
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} >
+      <Card sx={{ borderRadius: 2, boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }}>
+        <CardContent sx={{ p: 4 }}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
             {/* Financial Data Section */}
-            <div >
-              <h3 >Financial Data</h3>
+            <MDBox mb={4}>
+              <MDTypography variant="h6" fontWeight="medium" color="dark" mb={3}>
+                Financial Data
+              </MDTypography>
               
-              <div >
-            <FormField
-              control={form.control}
-              name="netIncome"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel >
-                    Net Income <span >*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <div >
-                      <span >$</span>
-                      <Input 
-                        {...field} 
-                        type="number" 
-                        placeholder="0" 
-                        
-                        onChange={(e) => {
-                          field.onChange(e);
-                          onDataChange(form.getValues());
-                        }}
-                      />
-                    </div>
-                  </FormControl>
-                  <ArgonTypography variant="caption" color="text" >
-                    Your company's net income for the most recent fiscal year
-                  </ArgonTypography>
-                  <FormMessage  />
-                </FormItem>
-              )}
-            />
+              <MDBox mb={3}>
+                <TextField
+                  label="Net Income *"
+                  type="number"
+                  placeholder="0"
+                  fullWidth
+                  variant="outlined"
+                  {...form.register("netIncome")}
+                  onChange={(e) => handleFieldChange("netIncome", e.target.value)}
+                  helperText="Your company's net income for the most recent fiscal year"
+                  InputProps={{
+                    startAdornment: <InputAdornment position="start">$</InputAdornment>
+                  }}
+                />
+              </MDBox>
 
-            <FormField
-              control={form.control}
-              name="interest"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel >
-                    Interest Expense <span >*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <div >
-                      <span >$</span>
-                      <Input 
-                        {...field} 
-                        type="number" 
-                        placeholder="0" 
-                        
-                        onChange={(e) => {
-                          field.onChange(e);
-                          onDataChange(form.getValues());
-                        }}
-                      />
-                    </div>
-                  </FormControl>
-                  <ArgonTypography variant="caption" color="text" >
-                    Interest paid on loans and credit facilities
-                  </ArgonTypography>
-                  <FormMessage  />
-                </FormItem>
-              )}
-            />
-          </div>
+              <MDBox mb={3}>
+                <TextField
+                  label="Interest Expense *"
+                  type="number"
+                  placeholder="0"
+                  fullWidth
+                  variant="outlined"
+                  {...form.register("interest")}
+                  onChange={(e) => handleFieldChange("interest", e.target.value)}
+                  helperText="Interest paid on loans and credit facilities"
+                  InputProps={{
+                    startAdornment: <InputAdornment position="start">$</InputAdornment>
+                  }}
+                />
+              </MDBox>
 
-          <div >
-            <FormField
-              control={form.control}
-              name="taxes"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel >
-                    Tax Expense <span >*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <div >
-                      <span >$</span>
-                      <Input 
-                        {...field} 
-                        type="number" 
-                        placeholder="0" 
-                        
-                        onChange={(e) => {
-                          field.onChange(e);
-                          onDataChange(form.getValues());
-                        }}
-                      />
-                    </div>
-                  </FormControl>
-                  <ArgonTypography variant="caption" color="text" >
-                    Federal, state, and local income taxes
-                  </ArgonTypography>
-                  <FormMessage  />
-                </FormItem>
-              )}
-            />
+              <MDBox mb={3}>
+                <TextField
+                  label="Tax Expense *"
+                  type="number"
+                  placeholder="0"
+                  fullWidth
+                  variant="outlined"
+                  {...form.register("taxes")}
+                  onChange={(e) => handleFieldChange("taxes", e.target.value)}
+                  helperText="Income tax expenses for the fiscal year"
+                  InputProps={{
+                    startAdornment: <InputAdornment position="start">$</InputAdornment>
+                  }}
+                />
+              </MDBox>
 
-            <FormField
-              control={form.control}
-              name="depreciation"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel >
-                    Depreciation <span >*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <div >
-                      <span >$</span>
-                      <Input 
-                        {...field} 
-                        type="number" 
-                        placeholder="0" 
-                        
-                        onChange={(e) => {
-                          field.onChange(e);
-                          onDataChange(form.getValues());
-                        }}
-                      />
-                    </div>
-                  </FormControl>
-                  <ArgonTypography variant="caption" color="text" >
-                    Depreciation of physical assets
-                  </ArgonTypography>
-                  <FormMessage  />
-                </FormItem>
-              )}
-            />
-          </div>
+              <MDBox mb={3}>
+                <TextField
+                  label="Depreciation & Amortization *"
+                  type="number"
+                  placeholder="0"
+                  fullWidth
+                  variant="outlined"
+                  {...form.register("depreciation")}
+                  onChange={(e) => handleFieldChange("depreciation", e.target.value)}
+                  helperText="Total depreciation and amortization expenses"
+                  InputProps={{
+                    startAdornment: <InputAdornment position="start">$</InputAdornment>
+                  }}
+                />
+              </MDBox>
+            </MDBox>
 
-          <div >
-            <FormField
-              control={form.control}
-              name="amortization"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel >
-                    Amortization <span >*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <div >
-                      <span >$</span>
-                      <Input 
-                        {...field} 
-                        type="number" 
-                        placeholder="0" 
-                        
-                        onChange={(e) => {
-                          field.onChange(e);
-                          onDataChange(form.getValues());
-                        }}
-                      />
-                    </div>
-                  </FormControl>
-                  <ArgonTypography variant="caption" color="text" >
-                    Amortization of intangible assets
-                  </ArgonTypography>
-                  <FormMessage  />
-                </FormItem>
-              )}
-            />
-            
-            {/* Empty column to maintain grid balance */}
-            <div></div>
-          </div>
-
-          <div >
-            <h4 >EBITDA Calculation</h4>
-            <div >
-              <div >
-                <span >Net Income</span>
-                <span >{formatCurrency(parseFloat(watchedValues.netIncome || "0"))}</span>
-              </div>
-              <div >
-                <span >+ Interest Expense</span>
-                <span >{formatCurrency(parseFloat(watchedValues.interest || "0"))}</span>
-              </div>
-              <div >
-                <span >+ Tax Expense</span>
-                <span >{formatCurrency(parseFloat(watchedValues.taxes || "0"))}</span>
-              </div>
-              <div >
-                <span >+ Depreciation</span>
-                <span >{formatCurrency(parseFloat(watchedValues.depreciation || "0"))}</span>
-              </div>
-              <div >
-                <span >+ Amortization</span>
-                <span >{formatCurrency(parseFloat(watchedValues.amortization || "0"))}</span>
-              </div>
-              <hr  />
-              <div >
-                <span >EBITDA</span>
-                <span >{formatCurrency(ebitdaTotal)}</span>
-              </div>
-            </div>
-          </div>
-
-            <div >
-              <button 
-                type="button" 
-                onClick={onPrev}
-                
+            {/* EBITDA Summary Card */}
+            <MDBox mb={4}>
+              <Card
+                sx={{
+                  background: 'linear-gradient(135deg, #00BFA6 0%, #0A1F44 100%)',
+                  color: 'white',
+                  borderRadius: 2,
+                  p: 3
+                }}
               >
-                <ArrowLeft  />
-                Previous
-              </button>
-              <button 
-                type="submit" 
+                <MDBox display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+                  <MDTypography variant="h6" fontWeight="medium" sx={{ color: 'white' }}>
+                    EBITDA Calculation
+                  </MDTypography>
+                </MDBox>
                 
+                <MDBox>
+                  <MDBox display="flex" justifyContent="space-between" mb={1}>
+                    <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)' }}>
+                      Net Income:
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: 'white' }}>
+                      {formatCurrency(watchedValues.netIncome || 0)}
+                    </Typography>
+                  </MDBox>
+                  
+                  <MDBox display="flex" justifyContent="space-between" mb={1}>
+                    <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)' }}>
+                      + Interest:
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: 'white' }}>
+                      {formatCurrency(watchedValues.interest || 0)}
+                    </Typography>
+                  </MDBox>
+                  
+                  <MDBox display="flex" justifyContent="space-between" mb={1}>
+                    <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)' }}>
+                      + Taxes:
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: 'white' }}>
+                      {formatCurrency(watchedValues.taxes || 0)}
+                    </Typography>
+                  </MDBox>
+                  
+                  <MDBox display="flex" justifyContent="space-between" mb={2}>
+                    <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)' }}>
+                      + Depreciation & Amortization:
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: 'white' }}>
+                      {formatCurrency(watchedValues.depreciation || 0)}
+                    </Typography>
+                  </MDBox>
+                  
+                  <MDBox
+                    sx={{
+                      borderTop: '1px solid rgba(255,255,255,0.2)',
+                      pt: 2
+                    }}
+                  >
+                    <MDBox display="flex" justifyContent="space-between" alignItems="center">
+                      <MDTypography variant="h6" fontWeight="bold" sx={{ color: 'white' }}>
+                        EBITDA:
+                      </MDTypography>
+                      <MDTypography variant="h6" fontWeight="bold" sx={{ color: '#5EEAD4' }}>
+                        {formatCurrency(ebitdaTotal)}
+                      </MDTypography>
+                    </MDBox>
+                  </MDBox>
+                </MDBox>
+              </Card>
+            </MDBox>
+
+            {/* Navigation Buttons */}
+            <MDBox display="flex" justifyContent="space-between" alignItems="center">
+              <MDButton
+                variant="outlined"
+                color="secondary"
+                onClick={onPrev}
+                startIcon={<ArrowLeft size={16} />}
+              >
+                Previous
+              </MDButton>
+              
+              <MDButton
+                type="submit"
+                variant="gradient"
+                color="primary"
+                endIcon={<ArrowRight size={16} />}
+                sx={{
+                  background: 'linear-gradient(135deg, #C41261 0%, #E91E63 100%)',
+                  '&:hover': {
+                    background: 'linear-gradient(135deg, #AD0E55 0%, #C2185B 100%)',
+                  }
+                }}
               >
                 Next: Adjustments
-                <ArrowRight  />
-              </button>
-            </div>
-            </div>
+              </MDButton>
+            </MDBox>
           </form>
-        </Form>
-      </div>
-    </div>
+        </CardContent>
+      </Card>
+    </MDBox>
   );
 }
