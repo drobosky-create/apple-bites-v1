@@ -376,29 +376,29 @@ export default function ValueCalculator() {
 
       {/* Main Content - Match Reference Layout */}
       <MainContent>
-        <Container maxWidth="xl" sx={{ py: 4, px: 4 }}>
+        <Container maxWidth="xl" sx={{ py: 3, px: 3 }}>
           {/* Page Header - Clean and Simple */}
           <MDBox 
             sx={{ 
-              mb: 3,
-              p: 3,
+              mb: 2,
+              p: 2.5,
               backgroundColor: 'white',
-              borderRadius: '16px',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+              borderRadius: '12px',
+              boxShadow: '0 1px 6px rgba(0,0,0,0.08)',
               display: 'flex', 
               alignItems: 'center', 
               justifyContent: 'space-between' 
             }}
           >
             <MDBox>
-              <MDTypography variant="h4" sx={{ 
+              <MDTypography variant="h5" sx={{ 
                 color: '#344767', 
                 fontWeight: 700,
-                mb: 1
+                mb: 0.5
               }}>
                 Value Improvement Calculator
               </MDTypography>
-              <MDTypography variant="h6" sx={{ 
+              <MDTypography variant="body1" sx={{ 
                 color: '#67748e', 
                 fontWeight: 400
               }}>
@@ -407,14 +407,15 @@ export default function ValueCalculator() {
             </MDBox>
             <Button
               variant="outlined"
-              startIcon={<ArrowLeft size={20} />}
+              startIcon={<ArrowLeft size={18} />}
               onClick={() => setLocation('/dashboard')}
               sx={{
                 borderColor: '#0A1F44',
                 color: '#0A1F44',
-                px: 3,
-                py: 1.5,
-                borderRadius: '8px',
+                px: 2,
+                py: 1,
+                fontSize: '0.875rem',
+                borderRadius: '6px',
                 '&:hover': {
                   borderColor: '#0A1F44',
                   backgroundColor: 'rgba(10, 31, 68, 0.04)'
@@ -428,10 +429,10 @@ export default function ValueCalculator() {
           {/* Main Calculator Container */}
           <MDBox sx={{
             backgroundColor: 'white',
-            borderRadius: '16px',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+            borderRadius: '12px',
+            boxShadow: '0 1px 6px rgba(0,0,0,0.08)',
             overflow: 'hidden',
-            p: 3
+            p: 2.5
           }}>
             <InteractiveValuationSlider />
           </MDBox>
