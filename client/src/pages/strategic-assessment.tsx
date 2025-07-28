@@ -48,47 +48,51 @@ const PaidAssessmentStepper = ({ activeStep }: { activeStep: number }) => {
           border: '1px solid rgba(255, 255, 255, 0.1)'
         }}
       >
-        {steps.map((step, index) => {
-          const Icon = step.icon;
-          const isActive = index === activeStep;
-          const isCompleted = index < activeStep;
-          
-          return (
-            <Box key={step.label} sx={{ 
-              display: 'inline-flex',
-              alignItems: 'center',
-              mr: index < steps.length - 1 ? 4 : 0
-            }}>
-              <Box sx={{
-                width: 32,
-                height: 32,
-                borderRadius: '50%',
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+          {steps.map((step, index) => {
+            const Icon = step.icon;
+            const isActive = index === activeStep;
+            const isCompleted = index < activeStep;
+            
+            return (
+              <Box key={step.label} sx={{ 
                 display: 'flex',
+                flexDirection: 'column',
                 alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: isActive || isCompleted ? '#ffffff' : '#fff',
-                color: isActive || isCompleted ? '#0A1F44' : '#B0B7C3',
-                border: '2px solid',
-                borderColor: isCompleted ? '#ffffff' : '#E0E0E0',
-                mr: 1,
-                fontSize: '14px',
-                fontWeight: 600
+                flex: 1
               }}>
-                {isCompleted ? '✓' : index + 1}
+                <Box sx={{
+                  width: 32,
+                  height: 32,
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  backgroundColor: isActive || isCompleted ? '#ffffff' : '#fff',
+                  color: isActive || isCompleted ? '#0A1F44' : '#B0B7C3',
+                  border: '2px solid',
+                  borderColor: isCompleted ? '#ffffff' : '#E0E0E0',
+                  mb: 1,
+                  fontSize: '14px',
+                  fontWeight: 600
+                }}>
+                  {isCompleted ? '✓' : index + 1}
+                </Box>
+                <Typography
+                  variant="caption"
+                  sx={{
+                    fontWeight: isActive ? 600 : 400,
+                    color: isActive ? '#ffffff' : 'rgba(255,255,255,0.8)',
+                    fontSize: '0.875rem',
+                    textAlign: 'center'
+                  }}
+                >
+                  {step.label}
+                </Typography>
               </Box>
-              <Typography
-                variant="caption"
-                sx={{
-                  fontWeight: isActive ? 600 : 400,
-                  color: isActive ? '#ffffff' : 'rgba(255,255,255,0.8)',
-                  fontSize: '0.875rem',
-                }}
-              >
-                {step.label}
-              </Typography>
-            </Box>
-          );
-        })}
+            );
+          })}
+        </Box>
       </Box>
     </Box>
   );
@@ -698,152 +702,199 @@ function GrowthExitAssessment() {
     switch (currentStep) {
       case 1:
         return (
-          <Card >
-            <CardHeader >
-              <div >
-                <TrendingUp  />
-              </div>
-              <Typography variant="h6" component="div">Industry Classification</Typography>
-              <p >Help us understand your business sector</p>
-            </CardHeader>
-            <CardContent >
-              <div>
-                <label >Primary Sector *</label>
-                <select 
-                  
+          <MDBox>
+            <MDBox sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 3 }}>
+              <MDBox sx={{
+                width: 48,
+                height: 48,
+                borderRadius: 2,
+                background: 'linear-gradient(135deg, #00BFA6 0%, #0A1F44 100%)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                <TrendingUp size={24} color="white" />
+              </MDBox>
+              <MDBox>
+                <MDTypography variant="h5" fontWeight="bold" gutterBottom>
+                  Industry Classification
+                </MDTypography>
+                <MDTypography variant="body2" color="text.secondary">
+                  Select your business sector and specific industry
+                </MDTypography>
+              </MDBox>
+            </MDBox>
+            
+            <Box sx={{ display: 'grid', gap: 3, gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' } }}>
+              <FormControl fullWidth>
+                <InputLabel>Primary Sector *</InputLabel>
+                <Select
                   value={selectedSectorCode}
                   onChange={(e) => handleSectorChange(e.target.value)}
                   disabled={sectorsLoading}
+                  label="Primary Sector *"
                 >
-                  <option value="">{sectorsLoading ? 'Loading sectors...' : 'Select a sector...'}</option>
+                  <MenuItem value="">{sectorsLoading ? 'Loading sectors...' : 'Select a sector...'}</MenuItem>
                   {sectors.map((sector) => (
-                    <option key={sector.code} value={sector.code}>
+                    <MenuItem key={sector.code} value={sector.code}>
                       {sector.code} – {sector.title}
-                    </option>
+                    </MenuItem>
                   ))}
-                </select>
-              </div>
-              <div>
-                <label >Specific Industry</label>
-                <select 
-                  
-                  disabled={!selectedSectorCode || industriesLoading}
+                </Select>
+              </FormControl>
+
+              <FormControl fullWidth disabled={!selectedSectorCode || industriesLoading}>
+                <InputLabel>Specific Industry *</InputLabel>
+                <Select
                   value={formData.naicsCode || ""}
                   onChange={(e) => handleIndustryChange(e.target.value)}
+                  label="Specific Industry *"
                 >
                   {!selectedSectorCode ? (
-                    <option value="">First select a sector above...</option>
+                    <MenuItem value="">First select a sector above...</MenuItem>
                   ) : industriesLoading ? (
-                    <option value="">Loading industries...</option>
+                    <MenuItem value="">Loading industries...</MenuItem>
                   ) : (
                     <>
-                      <option value="">Select your industry...</option>
+                      <MenuItem value="">Select your industry...</MenuItem>
                       {sectorIndustries.map((industry: NAICSIndustry) => (
-                        <option key={industry.code} value={industry.code}>
+                        <MenuItem key={industry.code} value={industry.code}>
                           {industry.title}
-                        </option>
+                        </MenuItem>
                       ))}
                     </>
                   )}
-                </select>
-              </div>
-              <div>
-                <label >Business Description *</label>
-                <textarea 
-                  
+                </Select>
+              </FormControl>
+              
+              <Box sx={{ gridColumn: { xs: '1', md: '1 / -1' } }}>
+                <TextField
+                  fullWidth
+                  label="Business Description *"
+                  multiline
+                  rows={4}
                   placeholder="Describe your business operations, products/services, and target market..."
+                  variant="outlined"
                   value={formData.businessDescription}
                   onChange={(e) => handleFormChange('businessDescription', e.target.value)}
                 />
-              </div>
-              <div >
-                <div>
-                  <label >Years in Business</label>
-                  <input 
-                    type="number" 
-                    
-                    placeholder="5"
-                    value={formData.yearsInBusiness}
-                    onChange={(e) => handleFormChange('yearsInBusiness', e.target.value)}
-                  />
-                </div>
-                <div>
-                  <label >Number of Employees</label>
-                  <input 
-                    type="number" 
-                    
-                    placeholder="25"
-                    value={formData.numberOfEmployees}
-                    onChange={(e) => handleFormChange('numberOfEmployees', e.target.value)}
-                  />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+              </Box>
+              
+              <TextField
+                fullWidth
+                label="Years in Business"
+                type="number"
+                placeholder="5"
+                variant="outlined"
+                value={formData.yearsInBusiness}
+                onChange={(e) => handleFormChange('yearsInBusiness', e.target.value)}
+              />
+              
+              <TextField
+                fullWidth
+                label="Number of Employees"
+                type="number"
+                placeholder="25"
+                variant="outlined"
+                value={formData.numberOfEmployees}
+                onChange={(e) => handleFormChange('numberOfEmployees', e.target.value)}
+              />
+            </Box>
+          </MDBox>
         );
 
       case 2:
         return (
-          <Card >
-            <CardHeader >
-              <div >
-                <DollarSign  />
-              </div>
-              <Typography variant="h6" component="div">Financial Information</Typography>
-              <p >Provide your key financial metrics</p>
-            </CardHeader>
-            <CardContent >
-              <div>
-                <label >Annual Revenue (Last 12 Months) *</label>
-                <input 
-                  type="number" 
+          <MDBox>
+            <MDBox sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 3 }}>
+              <MDBox sx={{
+                width: 48,
+                height: 48,
+                borderRadius: 2,
+                background: 'linear-gradient(135deg, #00BFA6 0%, #0A1F44 100%)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                <DollarSign size={24} color="white" />
+              </MDBox>
+              <MDBox>
+                <MDTypography variant="h5" fontWeight="bold" gutterBottom>
+                  Financial Information
+                </MDTypography>
+                <MDTypography variant="body2" color="text.secondary">
+                  Provide your key financial metrics
+                </MDTypography>
+              </MDBox>
+            </MDBox>
+            
+            <Box sx={{ display: 'grid', gap: 3, gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' } }}>
+              <Box sx={{ gridColumn: { xs: '1', md: '1 / -1' } }}>
+                <TextField
+                  fullWidth
+                  label="Annual Revenue (Last 12 Months) *"
+                  type="number"
+                  placeholder="1000000"
+                  variant="outlined"
                   value={formData.financials.annualRevenue}
                   onChange={(e) => setFormData(prev => ({
                     ...prev,
                     financials: { ...prev.financials, annualRevenue: e.target.value }
                   }))}
-                  
-                  placeholder="1000000"
                 />
-              </div>
-              <div>
-                <label >Cost of Goods Sold (COGS)</label>
-                <input 
-                  type="number" 
-                  value={formData.financials.costOfGoodsSold}
-                  onChange={(e) => setFormData(prev => ({
-                    ...prev,
-                    financials: { ...prev.financials, costOfGoodsSold: e.target.value }
-                  }))}
-                  
-                  placeholder="400000"
-                />
-              </div>
-              <div>
-                <label >Total Operating Expenses *</label>
-                <input 
-                  type="number" 
-                  value={formData.financials.operatingExpenses}
-                  onChange={(e) => setFormData(prev => ({
-                    ...prev,
-                    financials: { ...prev.financials, operatingExpenses: e.target.value }
-                  }))}
-                  
-                  placeholder="350000"
-                />
-              </div>
-              <div >
-                <div >
-                  <Calculator  />
-                  <span >Calculated EBITDA</span>
-                </div>
-                <div >
-                  ${calculateEBITDA().toLocaleString()}
-                </div>
-                <p >This will be refined with your adjustments</p>
-              </div>
-            </CardContent>
-          </Card>
+              </Box>
+              
+              <TextField
+                fullWidth
+                label="Cost of Goods Sold (COGS)"
+                type="number"
+                placeholder="400000"
+                variant="outlined"
+                value={formData.financials.costOfGoodsSold}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  financials: { ...prev.financials, costOfGoodsSold: e.target.value }
+                }))}
+              />
+              
+              <TextField
+                fullWidth
+                label="Total Operating Expenses *"
+                type="number"
+                placeholder="350000"
+                variant="outlined"
+                value={formData.financials.operatingExpenses}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  financials: { ...prev.financials, operatingExpenses: e.target.value }
+                }))}
+              />
+              
+              <Box sx={{ 
+                gridColumn: { xs: '1', md: '1 / -1' },
+                mt: 2,
+                p: 2,
+                backgroundColor: '#f8f9fa',
+                borderRadius: 2,
+                display: 'flex',
+                alignItems: 'center',
+                gap: 2
+              }}>
+                <Calculator size={24} color="#0A1F44" />
+                <Box>
+                  <MDTypography variant="body2" color="text.secondary">
+                    Calculated EBITDA
+                  </MDTypography>
+                  <MDTypography variant="h6" fontWeight="bold" color="#0A1F44">
+                    ${calculateEBITDA().toLocaleString()}
+                  </MDTypography>
+                  <MDTypography variant="body2" color="text.secondary">
+                    This will be refined with your adjustments
+                  </MDTypography>
+                </Box>
+              </Box>
+            </Box>
+          </MDBox>
         );
 
       case 3:
