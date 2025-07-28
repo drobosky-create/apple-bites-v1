@@ -773,30 +773,7 @@ function DashboardMainContent({ user, setupDemoSession }: { user: DashboardUser;
         </MDTypography>
       </MDBox>
 
-      {/* Status Widget */}
-      <MDBox
-        sx={{
-          backgroundColor: 'white',
-          borderRadius: 2,
-          padding: 3,
-          mb: 3,
-          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-        }}
-      >
-        <MDBox display="flex" justifyContent="space-between" alignItems="center">
-          <MDBox>
-            <MDTypography variant="h6" fontWeight="medium" mb={1}>
-              Assessment Status
-            </MDTypography>
-            <MDTypography variant="body2" color="text">
-              {user.tier === 'free' 
-                ? 'Ready to start your free business valuation assessment'
-                : 'Access your premium assessment tools and reports'
-              }
-            </MDTypography>
-          </MDBox>
-        </MDBox>
-      </MDBox>
+      
 
       {/* Quick Actions Grid */}
       <MDBox display="grid" gridTemplateColumns="repeat(auto-fit, minmax(300px, 1fr))" gap={3} mb={4}>
