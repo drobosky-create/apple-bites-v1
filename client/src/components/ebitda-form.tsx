@@ -19,7 +19,9 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
   const ebitdaTotal = calculateEbitda();
 
   const onSubmit = (data: EbitdaData) => {
+    console.log("EBITDA form submitted with data:", data);
     onDataChange(data);
+    console.log("Calling onNext...");
     onNext();
   };
 
@@ -232,12 +234,17 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
                 variant="gradient"
                 color="primary"
                 endIcon={<ArrowRight size={16} />}
+                onClick={() => {
+                  console.log("Button clicked");
+                  console.log("Form errors:", form.formState.errors);
+                  console.log("Form values:", form.getValues());
+                  console.log("Form is valid:", form.formState.isValid);
+                }}
                 sx={{
                   background: 'linear-gradient(135deg, #00BFA6 0%, #0A1F44 100%)',
                   '&:hover': {
                     background: 'linear-gradient(135deg, #008e7e 0%, #07152E 100%)'
                   }
-
                 }}
               >
                 Next: Adjustments

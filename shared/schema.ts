@@ -330,11 +330,11 @@ export const contactInfoSchema = z.object({
 });
 
 export const ebitdaSchema = z.object({
-  netIncome: z.string().min(1, "Net income is required"),
-  interest: z.string().min(1, "Interest expense is required"),
-  taxes: z.string().min(1, "Tax expense is required"),
-  depreciation: z.string().min(1, "Depreciation is required"),
-  amortization: z.string().min(1, "Amortization is required"),
+  netIncome: z.string().optional().default("0"),
+  interest: z.string().optional().default("0"),
+  taxes: z.string().optional().default("0"),
+  depreciation: z.string().optional().default("0"),
+  amortization: z.string().optional().default("0"),
   adjustmentNotes: z.string().optional(),
 });
 

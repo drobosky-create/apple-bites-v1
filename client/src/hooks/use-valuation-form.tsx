@@ -37,11 +37,11 @@ const defaultFormData: ValuationFormData = {
     jobTitle: "",
   },
   ebitda: {
-    netIncome: "",
-    interest: "",
-    taxes: "",
-    depreciation: "",
-    amortization: "",
+    netIncome: "0",
+    interest: "0",
+    taxes: "0",
+    depreciation: "0",
+    amortization: "0",
     adjustmentNotes: "",
   },
   adjustments: {
@@ -81,7 +81,14 @@ export function useValuationForm() {
 
   const ebitdaForm = useForm<EbitdaData>({
     resolver: zodResolver(ebitdaSchema),
-    defaultValues: formData.ebitda,
+    defaultValues: {
+      netIncome: "0",
+      interest: "0",
+      taxes: "0",
+      depreciation: "0",
+      amortization: "0",
+      adjustmentNotes: "",
+    },
   });
 
   const adjustmentsForm = useForm<AdjustmentsData>({
