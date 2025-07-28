@@ -64,7 +64,7 @@ export default function TeamLogin({ onLoginSuccess }: TeamLoginProps) {
       <Card >
         <div >
           <img 
-            src={_1} 
+            src={appleBitesLogo} 
             alt="Meritage Partners" 
             
           />
