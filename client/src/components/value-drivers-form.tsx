@@ -89,15 +89,15 @@ interface GradeRadioGroupProps {
 
 function GradeRadioGroup({ name, value, onChange }: GradeRadioGroupProps) {
   return (
-    <MDBox display="flex" gap={1} justifyContent="center">
+    <MDBox display="flex" gap={1} justifyContent="flex-end">
       {grades.map((grade) => (
         <MDBox
           key={grade}
           onClick={() => onChange(grade)}
           sx={{
-            width: 40,
-            height: 40,
-            borderRadius: '8px',
+            width: 32,
+            height: 32,
+            borderRadius: '6px',
             border: value === grade ? '2px solid #0A1F44' : '2px solid #E0E0E0',
             backgroundColor: value === grade ? getGradeColor(grade) : '#ffffff',
             color: value === grade ? '#ffffff' : '#666666',
@@ -192,23 +192,27 @@ export default function ValueDriversForm({ form, onNext, onPrev, onDataChange }:
               </MDTypography>
               
               {valueDrivers.map((driver, index) => (
-                <MDBox key={driver.name} mb={3}>
+                <MDBox key={driver.name} mb={2}>
                   <Card sx={{ backgroundColor: '#F8F9FA', border: '1px solid #E9ECEF' }}>
-                    <CardContent sx={{ p: 2 }}>
-                      <MDBox mb={2}>
-                        <MDTypography variant="h6" fontWeight="medium" color="dark" mb={1}>
-                          {driver.title}
-                        </MDTypography>
-                        <Typography variant="body2" color="textSecondary">
-                          {driver.description}
-                        </Typography>
+                    <CardContent sx={{ p: 1.5 }}>
+                      <MDBox display="flex" justifyContent="space-between" alignItems="flex-start">
+                        <MDBox flex={1} mr={2}>
+                          <MDTypography variant="h6" fontWeight="medium" color="dark" mb={0.5}>
+                            {driver.title}
+                          </MDTypography>
+                          <Typography variant="body2" color="textSecondary" sx={{ fontSize: '0.875rem' }}>
+                            {driver.description}
+                          </Typography>
+                        </MDBox>
+                        
+                        <MDBox flexShrink={0}>
+                          <GradeRadioGroup
+                            name={driver.name}
+                            value={watchedValues[driver.name as keyof ValueDriversData] as Grade || "C"}
+                            onChange={(grade) => handleGradeChange(driver.name as keyof ValueDriversData, grade)}
+                          />
+                        </MDBox>
                       </MDBox>
-                      
-                      <GradeRadioGroup
-                        name={driver.name}
-                        value={watchedValues[driver.name as keyof ValueDriversData] as Grade || "C"}
-                        onChange={(grade) => handleGradeChange(driver.name as keyof ValueDriversData, grade)}
-                      />
                     </CardContent>
                   </Card>
                 </MDBox>
@@ -216,36 +220,30 @@ export default function ValueDriversForm({ form, onNext, onPrev, onDataChange }:
             </MDBox>
 
             {/* Overall Grade Summary Card */}
-            <MDBox mb={4}>
+            <MDBox mb={3}>
               <Card
                 sx={{
                   background: '#1B2C4F',
                   color: 'white',
                   borderRadius: 2,
-                  p: 3
+                  p: 2
                 }}
               >
-                <MDBox display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-                  <MDTypography variant="h6" fontWeight="medium" sx={{ color: '#ebfafb' }}>
-                    Overall Value Driver Assessment
-                  </MDTypography>
-                </MDBox>
-                
                 <MDBox display="flex" justifyContent="space-between" alignItems="center">
-                  <Typography variant="body1" sx={{ color: 'rgba(255,255,255,0.8)' }}>
-                    Your overall business grade:
-                  </Typography>
+                  <MDTypography variant="h6" fontWeight="medium" sx={{ color: '#ebfafb' }}>
+                    Overall Grade: 
+                  </MDTypography>
                   <MDBox
                     sx={{
-                      width: 50,
-                      height: 50,
-                      borderRadius: '8px',
+                      width: 40,
+                      height: 40,
+                      borderRadius: '6px',
                       backgroundColor: getGradeColor(getOverallGrade()),
                       color: '#ffffff',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      fontSize: '24px',
+                      fontSize: '20px',
                       fontWeight: 'bold',
                       border: '2px solid rgba(255,255,255,0.3)',
                     }}
