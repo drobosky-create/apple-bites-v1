@@ -60,7 +60,7 @@ function AdminSidebar({ user, onSignOut }: { user: any; onSignOut: () => void })
         top: '24px',
         left: '24px',
         width: 280,
-        height: 'calc(100vh - 48px)',
+        height: 'calc(100vh - 24px)', // Increased height by removing bottom margin
         background: gradients.dark,
         borderRadius: '20px',
         border: `1px solid rgba(255, 255, 255, 0.15)`,
@@ -119,7 +119,7 @@ function AdminSidebar({ user, onSignOut }: { user: any; onSignOut: () => void })
       </MDBox>
 
       {/* Navigation Buttons - Exact structure from user dashboard */}
-      <MDBox display="flex" flexDirection="column" gap={2}>
+      <MDBox display="flex" flexDirection="column" gap={1.5}>
         <Link href="/admin">
           <MDButton
             sx={{
@@ -132,7 +132,7 @@ function AdminSidebar({ user, onSignOut }: { user: any; onSignOut: () => void })
               },
               transition: 'all 0.3s ease',
               width: '100%',
-              py: 1.5
+              py: 1.2
             }}
             startIcon={<Home size={18} />}
           >
@@ -153,7 +153,7 @@ function AdminSidebar({ user, onSignOut }: { user: any; onSignOut: () => void })
               },
               transition: 'all 0.3s ease',
               width: '100%',
-              py: 1.5
+              py: 1.2
             }}
             startIcon={<Users size={18} />}
           >
@@ -174,7 +174,7 @@ function AdminSidebar({ user, onSignOut }: { user: any; onSignOut: () => void })
               },
               transition: 'all 0.3s ease',
               width: '100%',
-              py: 1.5
+              py: 1.2
             }}
             startIcon={<FileText size={18} />}
           >
@@ -195,7 +195,7 @@ function AdminSidebar({ user, onSignOut }: { user: any; onSignOut: () => void })
               },
               transition: 'all 0.3s ease',
               width: '100%',
-              py: 1.5
+              py: 1.2
             }}
             startIcon={<BarChart3 size={18} />}
           >
@@ -217,7 +217,7 @@ function AdminSidebar({ user, onSignOut }: { user: any; onSignOut: () => void })
             },
             transition: 'all 0.3s ease',
             width: '100%',
-            py: 1.5
+            py: 1.2
           }}
           startIcon={<LogOut size={18} />}
         >
