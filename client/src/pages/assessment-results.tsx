@@ -2,7 +2,7 @@ import { useRoute, useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
 
-import { ArrowLeft, Home, FileText, TrendingUp, ExternalLink, LogOut } from "lucide-react";
+import { ArrowLeft, Home, FileText, TrendingUp, ExternalLink, LogOut, User } from "lucide-react";
 import ValuationResults from "@/components/valuation-results";
 import type { ValuationAssessment } from "@shared/schema";
 import {
@@ -166,160 +166,17 @@ export default function AssessmentResults() {
 
   return (
     <DashboardBackground>
-      {/* Sidebar Drawer */}
-      <Drawer
-        variant="permanent"
-        sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-          '& .MuiDrawer-paper': {
-            width: drawerWidth,
-            boxSizing: 'border-box',
-            backgroundImage: 'url(/assets/twilight-city-skyline.png)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-            color: 'white',
-            '&::before': {
-              content: '""',
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              background: 'rgba(11, 20, 38, 0.45)',
-              backdropFilter: 'blur(20px) saturate(180%)',
-              WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              zIndex: 1,
-            },
-            '& > *': {
-              position: 'relative',
-              zIndex: 2,
-            },
-          },
-        }}
-      >
-        <Box sx={{ p: 2, textAlign: 'center' }}>
-          <Box component="img"
-            src="/assets/logos/apple-bites-logo-variant-3.png"
-            alt="Apple Bites Business Assessment"
-            sx={{
-              width: '80%',
-              maxWidth: 200,
-              mt: 1,
-              mb: 1,
-              mx: 'auto',
-              display: 'block',
-            }}
-          />
-          <Typography variant="h6" fontWeight="bold" color="white" gutterBottom>
-            {displayUser.firstName} {displayUser.lastName}
-          </Typography>
-          <Typography variant="body2" color="rgba(255,255,255,0.7)" gutterBottom>
-            {displayUser.email}
-          </Typography>
-          <Chip 
-            label={tierInfo.name}
-            size="small"
-            sx={{
-              backgroundColor: 'rgba(255,255,255,0.2)',
-              color: 'white',
-              fontSize: '0.75rem',
-              mt: 1
-            }}
-          />
-        </Box>
-
-        <Divider sx={{ borderColor: 'rgba(255,255,255,0.12)', my: 2 }} />
-
-        <List sx={{ px: 2 }}>
-          <ListItem disablePadding>
-            <ListItemButton 
-              onClick={() => setLocation('/dashboard')}
-              sx={{ 
-                borderRadius: '12px',
-                mb: 1,
-                '&:hover': { backgroundColor: 'rgba(255,255,255,0.1)' }
-              }}
-            >
-              <ListItemIcon sx={{ color: 'white', minWidth: 40 }}>
-                <Home size={20} />
-              </ListItemIcon>
-              <ListItemText 
-                primary="Dashboard" 
-                primaryTypographyProps={{ color: 'white', fontWeight: 500 }}
-              />
-            </ListItemButton>
-          </ListItem>
-
-          <ListItem disablePadding>
-            <ListItemButton 
-              onClick={() => setLocation('/value-calculator')}
-              sx={{ 
-                borderRadius: '12px',
-                mb: 1,
-                '&:hover': { backgroundColor: 'rgba(255,255,255,0.1)' }
-              }}
-            >
-              <ListItemIcon sx={{ color: 'white', minWidth: 40 }}>
-                <TrendingUp size={20} />
-              </ListItemIcon>
-              <ListItemText 
-                primary="Value Calculator" 
-                primaryTypographyProps={{ color: 'white', fontWeight: 500 }}
-              />
-            </ListItemButton>
-          </ListItem>
-
-          <ListItem disablePadding>
-            <ListItemButton 
-              sx={{ 
-                borderRadius: '12px',
-                mb: 1,
-                backgroundColor: 'rgba(255,255,255,0.2)',
-                '&:hover': { backgroundColor: 'rgba(255,255,255,0.25)' }
-              }}
-            >
-              <ListItemIcon sx={{ color: 'white', minWidth: 40 }}>
-                <FileText size={20} />
-              </ListItemIcon>
-              <ListItemText 
-                primary="Assessment Results" 
-                primaryTypographyProps={{ color: 'white', fontWeight: 600 }}
-              />
-            </ListItemButton>
-          </ListItem>
-
-          <ListItem disablePadding>
-            <ListItemButton 
-              onClick={() => window.open('https://products.applebites.ai/', '_blank')}
-              sx={{ 
-                borderRadius: '12px',
-                mb: 1,
-                '&:hover': { backgroundColor: 'rgba(255,255,255,0.1)' }
-              }}
-            >
-              <ListItemIcon sx={{ color: 'white', minWidth: 40 }}>
-                <ExternalLink size={20} />
-              </ListItemIcon>
-              <ListItemText 
-                primary="Upgrade Plan" 
-                primaryTypographyProps={{ color: 'white', fontWeight: 500 }}
-              />
-            </ListItemButton>
-          </ListItem>
-        </List>
-
-        <Box sx={{ mt: 'auto', p: 2, borderTop: '1px solid rgba(255,255,255,0.12)' }}>
-          <Typography variant="caption" color="rgba(255,255,255,0.6)" textAlign="center" display="block">
-            © 2025 Meritage Partners
-          </Typography>
-        </Box>
-      </Drawer>
+      {/* Apple Bites Unified Sidebar */}
+      <DashboardSidebar user={{
+        name: `${assessment.firstName} ${assessment.lastName}`,
+        email: assessment.email || 'user@applebites.ai',
+        tier: assessment.tier as 'free' | 'growth' | 'capital',
+        firstName: assessment.firstName,
+        lastName: assessment.lastName
+      }} />
 
       {/* Main Content */}
-      <MainContent>
+      <MainContent sx={{ marginLeft: '328px', width: 'calc(100vw - 328px)' }}>
         <Container maxWidth="xl" sx={{ py: 0 }}>
           {/* Page Header */}
           <Box sx={{ mb: 4, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -343,25 +200,211 @@ export default function AssessmentResults() {
               </Typography>
             </Box>
             <Button
-              onClick={() => setLocation('/value-calculator')}
-              
+              onClick={() => setLocation('/dashboard')}
+              variant="outlined"
+              startIcon={<ArrowLeft size={18} />}
             >
-              <ArrowLeft  />
-              Back to Calculator
+              Back to Dashboard
             </Button>
           </Box>
 
-          {/* Assessment Results Container */}
-          <Box sx={{
-            backgroundColor: 'white',
-            borderRadius: '16px',
-            boxShadow: '0 8px 20px rgba(0,0,0,0.1)',
-            overflow: 'hidden'
-          }}>
-            <ValuationResults results={assessment} />
-          </Box>
+          <ValuationResults results={assessment} />
         </Container>
       </MainContent>
     </DashboardBackground>
+  );
+}
+
+// DashboardSidebar Component (copied from dashboard.tsx)
+function DashboardSidebar({ user }: { user: { name: string; email: string; tier: 'free' | 'growth' | 'capital'; firstName?: string; lastName?: string; } }) {
+  // Apple Bites Brand Colors
+  const colors = {
+    primary: "#00BFA6",
+    secondary: "#0A1F44", 
+    accent: "#5EEAD4",
+    grayLight: "#F7FAFC",
+    gray: "#CBD5E1"
+  };
+
+  const gradients = {
+    primary: "linear-gradient(135deg, #00BFA6 0%, #0A1F44 100%)",
+    light: "linear-gradient(135deg, #00BFA6 0%, #5EEAD4 100%)",
+    dark: "linear-gradient(135deg, #0A1F44 0%, #1C2D5A 100%)",
+    glow: "linear-gradient(135deg, #00BFA6 0%, #33FFC5 100%)"
+  };
+
+  const getTierGradient = (tier: string) => {
+    switch (tier) {
+      case 'free': return 'linear-gradient(135deg, #CBD5E1 0%, #94A3B8 100%)';
+      case 'growth': return gradients.primary;
+      case 'capital': return gradients.glow;
+      default: return 'linear-gradient(135deg, #CBD5E1 0%, #94A3B8 100%)';
+    }
+  };
+
+  const getTierLabel = (tier: string) => {
+    switch (tier) {
+      case 'free': return 'Free';
+      case 'growth': return 'Growth';
+      case 'capital': return 'Capital';
+      default: return 'Free';
+    }
+  };
+
+  return (
+    <Box
+      sx={{
+        position: 'fixed',
+        top: '24px',
+        left: '24px',
+        width: 280,
+        height: 'calc(100vh - 48px)',
+        background: gradients.dark,
+        borderRadius: '20px',
+        border: `1px solid rgba(255, 255, 255, 0.15)`,
+        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+        backdropFilter: 'blur(8px)',
+        padding: 3,
+        display: 'flex',
+        flexDirection: 'column',
+        zIndex: 1000,
+        overflow: 'hidden'
+      }}
+    >
+      {/* User Info Section */}
+      <Box mb={4}>
+        <Box display="flex" alignItems="center" mb={2}>
+          <Box
+            sx={{
+              width: 40,
+              height: 40,
+              borderRadius: '50%',  
+              background: 'linear-gradient(135deg, #00BFA6 0%, #5EEAD4 100%)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'white',
+              fontWeight: 'bold',
+              fontSize: '16px',
+              mr: 2
+            }}
+          >
+            {user.firstName?.[0]}{user.lastName?.[0]}
+          </Box>
+          <Box>
+            <Typography variant="h6" sx={{ color: 'white', fontSize: '14px', fontWeight: 600 }}>
+              {user.firstName} {user.lastName}
+            </Typography>
+            <Typography variant="body2" sx={{ color: '#dbdce1', fontSize: '12px' }}>
+              {user.email}
+            </Typography>
+          </Box>
+        </Box>
+        
+        <Box
+          sx={{
+            background: getTierGradient(user.tier),
+            borderRadius: '20px',
+            px: 2,
+            py: 1,
+            display: 'inline-block'
+          }}
+        >
+          <Typography variant="caption" sx={{ color: 'white', fontWeight: 600, fontSize: '11px' }}>
+            {getTierLabel(user.tier).toUpperCase()} ASSESSMENT
+          </Typography>
+        </Box>
+      </Box>
+
+      {/* Navigation Buttons */}
+      <Box display="flex" flexDirection="column" gap={2} sx={{ p: 3, flex: 1 }}>
+        <Button
+          onClick={() => window.location.href = '/dashboard'}
+          sx={{
+            background: 'transparent',
+            border: '1px solid rgba(255, 255, 255, 0.3)',
+            color: '#dbdce1',
+            '&:hover': {
+              background: 'rgba(255, 255, 255, 0.1)',
+              transform: 'translateY(-2px)'
+            },
+            transition: 'all 0.3s ease',
+            width: '100%',
+            py: 1.5,
+            justifyContent: 'flex-start'
+          }}
+          startIcon={<Home size={18} />}
+        >
+          Dashboard
+        </Button>
+
+        <Button
+          onClick={() => window.location.href = '/past-assessments'}
+          sx={{
+            background: 'transparent',
+            border: '1px solid rgba(255, 255, 255, 0.3)',
+            color: '#dbdce1',
+            '&:hover': {
+              background: 'rgba(255, 255, 255, 0.1)',
+              transform: 'translateY(-2px)'
+            },
+            transition: 'all 0.3s ease',
+            width: '100%',
+            py: 1.5,
+            justifyContent: 'flex-start'
+          }}
+          startIcon={<FileText size={18} />}
+        >
+          Past Assessments
+        </Button>
+
+        <Button
+          onClick={() => window.location.href = '/value-calculator'}
+          sx={{
+            background: 'transparent',
+            border: '1px solid rgba(255, 255, 255, 0.3)',
+            color: '#dbdce1',
+            '&:hover': {
+              background: 'rgba(255, 255, 255, 0.1)',
+              transform: 'translateY(-2px)'
+            },
+            transition: 'all 0.3s ease',
+            width: '100%',
+            py: 1.5,
+            justifyContent: 'flex-start'
+          }}
+          startIcon={<TrendingUp size={18} />}
+        >
+          Value Calculator
+        </Button>
+
+        <Button
+          onClick={() => window.location.href = '/profile'}
+          sx={{
+            background: 'transparent',
+            border: '1px solid rgba(255, 255, 255, 0.3)',
+            color: '#dbdce1',
+            '&:hover': {
+              background: 'rgba(255, 255, 255, 0.1)',
+              transform: 'translateY(-2px)'
+            },
+            transition: 'all 0.3s ease',
+            width: '100%',
+            py: 1.5,
+            justifyContent: 'flex-start'
+          }}
+          startIcon={<User size={18} />}
+        >
+          Profile
+        </Button>
+      </Box>
+
+      {/* Apple Bites Footer */}
+      <Box sx={{ mt: 'auto', p: 2, borderTop: '1px solid rgba(255,255,255,0.12)' }}>
+        <Typography variant="caption" color="rgba(255,255,255,0.6)" textAlign="center" display="block">
+          © 2025 Apple Bites
+        </Typography>
+      </Box>
+    </Box>
   );
 }
