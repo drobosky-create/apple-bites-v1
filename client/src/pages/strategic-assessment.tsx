@@ -21,7 +21,6 @@ const CardTitle = ({ children, ...props }: any) => (
 // Paid Assessment Stepper Component
 const PaidAssessmentStepper = ({ activeStep }: { activeStep: number }) => {
   const steps = [
-    { label: 'Contact', icon: Building2, color: '#0b2147' },
     { label: 'Industry', icon: TrendingUp, color: '#0b2147' },
     { label: 'Financials', icon: DollarSign, color: '#0b2147' },
     { label: 'Adjustments', icon: Zap, color: '#0b2147' },
@@ -30,45 +29,25 @@ const PaidAssessmentStepper = ({ activeStep }: { activeStep: number }) => {
   ];
 
   return (
-    <Box sx={{
-      width: '95%',
-      margin: '0 auto 24px auto',
-      background: 'linear-gradient(135deg, #0A1F44 0%, #1B2C4F 100%)',
-      borderRadius: '20px',
-      padding: '16px 24px',
-      position: 'relative',
-      overflow: 'hidden',
-      '&::before': {
-        content: '""',
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundImage: `radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-                         radial-gradient(circle at 75% 75%, rgba(255, 255, 255, 0.05) 0%, transparent 50%)`,
-        pointerEvents: 'none'
-      }
-    }}>
-      {/* Progress Bar */}
-      <Box sx={{
-        width: '100%',
-        height: '6px',
-        backgroundColor: 'rgba(255, 255, 255, 0.2)',
-        borderRadius: '3px',
-        mb: 2,
-        overflow: 'hidden'
-      }}>
-        <Box sx={{
-          width: `${((activeStep + 1) / steps.length) * 100}%`,
-          height: '100%',
-          background: 'linear-gradient(90deg, #00BFA6 0%, #5EEAD4 100%)',
-          borderRadius: '3px',
-          transition: 'width 0.3s ease'
-        }} />
-      </Box>
-      
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+    <Box 
+      sx={{ 
+        width: '95%',
+        margin: '0 auto',
+        mb: -2, // Negative margin to overlap the white form card
+        position: 'relative',
+        zIndex: 2 // Ensure it sits above the form card
+      }}
+    >
+      {/* Navy Pillbox Container */}
+      <Box
+        sx={{
+          backgroundColor: '#0A1F44',
+          borderRadius: '25px',
+          padding: '16px 24px',
+          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+          border: '1px solid rgba(255, 255, 255, 0.1)'
+        }}
+      >
         {steps.map((step, index) => {
           const Icon = step.icon;
           const isActive = index === activeStep;
@@ -76,42 +55,33 @@ const PaidAssessmentStepper = ({ activeStep }: { activeStep: number }) => {
           
           return (
             <Box key={step.label} sx={{ 
-              display: 'flex', 
-              flexDirection: 'column', 
+              display: 'inline-flex',
               alignItems: 'center',
-              flex: 1
+              mr: index < steps.length - 1 ? 4 : 0
             }}>
               <Box sx={{
-                width: 36,
-                height: 36,
+                width: 32,
+                height: 32,
                 borderRadius: '50%',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                background: isActive ? 'rgba(255, 255, 255, 0.9)' : 
-                           isCompleted ? 'rgba(0, 191, 166, 0.9)' : 'rgba(255, 255, 255, 0.3)',
-                mb: 1,
-                transition: 'all 0.3s ease',
-                ...(isActive && {
-                  animation: 'pulse 2s infinite',
-                  '@keyframes pulse': {
-                    '0%': { boxShadow: '0 0 0 0 rgba(255, 255, 255, 0.7)' },
-                    '70%': { boxShadow: '0 0 0 8px rgba(255, 255, 255, 0)' },
-                    '100%': { boxShadow: '0 0 0 0 rgba(255, 255, 255, 0)' }
-                  }
-                })
+                backgroundColor: isActive || isCompleted ? '#ffffff' : '#fff',
+                color: isActive || isCompleted ? '#0A1F44' : '#B0B7C3',
+                border: '2px solid',
+                borderColor: isCompleted ? '#ffffff' : '#E0E0E0',
+                mr: 1,
+                fontSize: '14px',
+                fontWeight: 600
               }}>
-                <Icon 
-                  size={18} 
-                  color={isActive ? '#0A1F44' : isCompleted ? 'white' : 'rgba(255, 255, 255, 0.7)'} 
-                />
+                {isCompleted ? '✓' : index + 1}
               </Box>
-              <Typography 
-                variant="caption" 
-                sx={{ 
-                  color: isActive ? 'white' : 'rgba(255, 255, 255, 0.7)',
+              <Typography
+                variant="caption"
+                sx={{
                   fontWeight: isActive ? 600 : 400,
-                  fontSize: '0.75rem'
+                  color: isActive ? '#ffffff' : 'rgba(255,255,255,0.8)',
+                  fontSize: '0.875rem',
                 }}
               >
                 {step.label}
@@ -190,7 +160,7 @@ function GrowthExitAssessment() {
   });
   const [selectedSector, setSelectedSector] = useState("");
   const [selectedSectorCode, setSelectedSectorCode] = useState("");
-  const totalSteps = 6;
+  const totalSteps = 5;
 
   // Comprehensive Value Driver Questions (10 drivers, 2 questions each)
   const valuationQuestions = [
@@ -728,82 +698,6 @@ function GrowthExitAssessment() {
     switch (currentStep) {
       case 1:
         return (
-          <MDBox>
-            <MDBox sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 3 }}>
-              <MDBox sx={{
-                width: 48,
-                height: 48,
-                borderRadius: 2,
-                background: 'linear-gradient(135deg, #00BFA6 0%, #0A1F44 100%)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}>
-                <Building2 size={24} color="white" />
-              </MDBox>
-              <MDBox>
-                <MDTypography variant="h5" fontWeight="bold" gutterBottom>
-                  Contact Information
-                </MDTypography>
-                <MDTypography variant="body2" color="text.secondary">
-                  Let's start with your basic information
-                </MDTypography>
-              </MDBox>
-            </MDBox>
-            
-            <Box sx={{ display: 'grid', gap: 3, gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' } }}>
-              <TextField
-                fullWidth
-                label="First Name *"
-                placeholder="John"
-                variant="outlined"
-                value={formData.firstName}
-                onChange={(e) => handleFormChange('firstName', e.target.value)}
-              />
-              <TextField
-                fullWidth
-                label="Last Name *"
-                placeholder="Smith"
-                variant="outlined"
-                value={formData.lastName}
-                onChange={(e) => handleFormChange('lastName', e.target.value)}
-              />
-              <Box sx={{ gridColumn: { xs: '1', md: '1 / -1' } }}>
-                <TextField
-                  fullWidth
-                  label="Email Address *"
-                  type="email"
-                  placeholder="john@company.com"
-                  variant="outlined"
-                  value={formData.email}
-                  onChange={(e) => handleFormChange('email', e.target.value)}
-                />
-              </Box>
-              <Box sx={{ gridColumn: { xs: '1', md: '1 / 2' } }}>
-                <TextField
-                  fullWidth
-                  label="Company Name *"
-                  placeholder="Your Company LLC"
-                  variant="outlined"
-                  value={formData.companyName}
-                  onChange={(e) => handleFormChange('companyName', e.target.value)}
-                />
-              </Box>
-              <TextField
-                fullWidth
-                label="Phone Number"
-                type="tel"
-                placeholder="(555) 123-4567"
-                variant="outlined"
-                value={formData.phone}
-                onChange={(e) => handleFormChange('phone', e.target.value)}
-              />
-            </Box>
-          </MDBox>
-        );
-
-      case 2:
-        return (
           <Card >
             <CardHeader >
               <div >
@@ -888,7 +782,7 @@ function GrowthExitAssessment() {
           </Card>
         );
 
-      case 3:
+      case 2:
         return (
           <Card >
             <CardHeader >
@@ -952,7 +846,7 @@ function GrowthExitAssessment() {
           </Card>
         );
 
-      case 4:
+      case 3:
         return (
           <Card >
             <CardHeader >
@@ -1029,7 +923,7 @@ function GrowthExitAssessment() {
           </Card>
         );
 
-      case 5:
+      case 4:
         return (
           <Card >
             <CardHeader >
@@ -1149,7 +1043,7 @@ function GrowthExitAssessment() {
           </Card>
         );
 
-      case 6:
+      case 5:
         return (
           <Card >
             <CardHeader >
