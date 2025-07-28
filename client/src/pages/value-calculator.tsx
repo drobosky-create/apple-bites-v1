@@ -11,7 +11,6 @@ import {
   Container,
   Button,
   Avatar,
-  Chip,
 } from '@mui/material';
 import { MDBox, MDTypography, MDButton } from "@/components/MD";
 import { Link } from "wouter";
@@ -176,208 +175,201 @@ export default function ValueCalculator() {
 
   return (
     <DashboardBackground>
-      {/* Unified Dashboard Sidebar */}
+      {/* Correct Single MDBox Sidebar */}
       <MDBox
-        width={drawerWidth}
-        height="100vh"
-        display={{ xs: 'none', md: 'flex' }}
-        flexDirection="column"
-        position="fixed"
-        top={0}
-        left={0}
-        zIndex={1200}
         sx={{
+          position: 'fixed',
+          top: '24px',
+          left: '24px',
+          width: 280,
+          height: 'calc(100vh - 48px)',
           background: 'linear-gradient(135deg, #0A1F44 0%, #1C2D5A 100%)',
+          borderRadius: '20px',
+          border: '1px solid rgba(255, 255, 255, 0.15)',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+          backdropFilter: 'blur(8px)',
+          padding: 3,
+          display: 'flex',
+          flexDirection: 'column',
+          zIndex: 1000,
+          overflow: 'hidden'
         }}
       >
-        {/* User Profile Section */}
-        <MDBox p={3} textAlign="center">
-          <Avatar
-            sx={{
-              background: 'linear-gradient(135deg, #00BFA6 0%, #5EEAD4 100%)',
-              width: 64,
-              height: 64,
-              fontSize: '1.5rem',
-              fontWeight: 'bold',
-              mx: 'auto',
-              mb: 2
-            }}
-          >
-            {displayUser.firstName?.charAt(0) || 'D'}{displayUser.lastName?.charAt(0) || 'U'}
-          </Avatar>
+        {/* User Info Section */}
+        <MDBox mb={4}>
+          <MDBox display="flex" alignItems="center" mb={2}>
+            <Avatar
+              sx={{
+                background: 'linear-gradient(135deg, #00BFA6 0%, #5EEAD4 100%)',
+                width: 48,
+                height: 48,
+                mr: 2
+              }}
+            >
+              {displayUser.firstName?.charAt(0) || 'D'}{displayUser.lastName?.charAt(0) || 'U'}
+            </Avatar>
+            <MDBox>
+              <MDTypography variant="h6" fontWeight="medium" sx={{ color: 'white' }}>
+                {displayUser.firstName} {displayUser.lastName}
+              </MDTypography>
+              <MDTypography variant="caption" sx={{ color: '#5EEAD4' }}>
+                {displayUser.email}
+              </MDTypography>
+            </MDBox>
+          </MDBox>
           
-          <Typography variant="h6" sx={{ color: 'white', fontWeight: 'bold', mb: 0.5 }}>
-            {displayUser.firstName} {displayUser.lastName}
-          </Typography>
-          
-          <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.7)', mb: 2 }}>
-            {displayUser.email}
-          </Typography>
-          
-          <Chip
-            label={tierInfo.name.toUpperCase()}
-            size="small"
-            sx={{
-              background: 'rgba(255,255,255,0.2)',
-              color: 'white',
-              borderRadius: '16px',
-              fontSize: '0.75rem',
-              fontWeight: 500,
-              border: '1px solid rgba(255,255,255,0.3)'
-            }}
-          />
+          <MDBox display="flex" alignItems="center">
+            <MDTypography variant="body2" mr={1} sx={{ color: 'white' }}>
+              Tier:
+            </MDTypography>
+            <MDBox
+              sx={{
+                background: tierInfo.name === 'Free' 
+                  ? 'linear-gradient(135deg, #CBD5E1 0%, #94A3B8 100%)'
+                  : tierInfo.name === 'Growth' 
+                  ? 'linear-gradient(135deg, #00BFA6 0%, #0A1F44 100%)'
+                  : 'linear-gradient(135deg, #00BFA6 0%, #33FFC5 100%)',
+                color: 'white',
+                px: 2,
+                py: 0.5,
+                borderRadius: 2,
+                fontSize: '0.75rem',
+                fontWeight: 600,
+                textTransform: 'uppercase',
+                letterSpacing: '0.5px'
+              }}
+            >
+              {tierInfo.name.toUpperCase()}
+            </MDBox>
+          </MDBox>
         </MDBox>
 
-        {/* Navigation Menu */}
-        <MDBox flex={1} px={2}>
-          {/* Dashboard */}
-          <Link href="/dashboard">
-            <Button
-              fullWidth
-              variant="text"
-              sx={{
-                justifyContent: 'flex-start',
-                py: 1.5,
-                px: 2,
-                mb: 1,
-                borderRadius: '12px',
-                textTransform: 'none',
-                fontSize: '1rem',
-                fontWeight: 500,
-                color: 'white',
-                '&:hover': {
-                  backgroundColor: 'rgba(255,255,255,0.1)'
-                }
-              }}
-            >
-              <User size={20} style={{ marginRight: 12 }} />
-              Dashboard
-            </Button>
-          </Link>
-
-          {/* New Assessment */}
+        {/* Navigation Buttons */}
+        <MDBox display="flex" flexDirection="column" gap={2}>
           <Link href="/assessment/free">
-            <Button
-              fullWidth
-              variant="text"
+            <MDButton
               sx={{
-                justifyContent: 'flex-start',
-                py: 1.5,
-                px: 2,
-                mb: 1,
-                borderRadius: '12px',
-                textTransform: 'none',
-                fontSize: '1rem',
-                fontWeight: 500,
+                background: 'linear-gradient(135deg, #00BFA6 0%, #5EEAD4 100%)',
                 color: 'white',
                 '&:hover': {
-                  backgroundColor: 'rgba(255,255,255,0.1)'
-                }
+                  background: 'linear-gradient(135deg, #00BFA6 0%, #5EEAD4 100%)',
+                  transform: 'translateY(-2px)',
+                  boxShadow: '0 8px 25px -8px rgba(0, 191, 166, 0.6)'
+                },
+                transition: 'all 0.3s ease',
+                width: '100%',
+                py: 1.5
               }}
+              startIcon={<Plus size={18} />}
             >
-              <Plus size={20} style={{ marginRight: 12 }} />
               New Assessment
-            </Button>
+            </MDButton>
           </Link>
 
           {/* Value Calculator - Active */}
-          <Button
-            fullWidth
-            variant="contained"
+          <MDButton
             sx={{
-              justifyContent: 'flex-start',
-              py: 1.5,
-              px: 2,
-              mb: 1,
-              borderRadius: '12px',
-              textTransform: 'none',
-              fontSize: '1rem',
-              fontWeight: 600,
               background: 'linear-gradient(135deg, #00BFA6 0%, #5EEAD4 100%)',
               color: '#0A1F44',
+              fontWeight: 600,
               boxShadow: '0 4px 20px rgba(0, 191, 166, 0.4)',
               '&:hover': {
                 background: 'linear-gradient(135deg, #00BFA6 0%, #5EEAD4 100%)',
+                transform: 'translateY(-2px)',
                 boxShadow: '0 6px 24px rgba(0, 191, 166, 0.5)'
-              }
+              },
+              transition: 'all 0.3s ease',
+              width: '100%',
+              py: 1.5
             }}
+            startIcon={<BarChart3 size={18} />}
           >
-            <BarChart3 size={20} style={{ marginRight: 12 }} />
             Value Calculator
-          </Button>
+          </MDButton>
 
-          {/* Past Assessments */}
-          <Link href="/past-assessments">
-            <Button
-              fullWidth
-              variant="text"
+          {displayUser.tier === 'free' && (
+            <MDButton
               sx={{
-                justifyContent: 'flex-start',
-                py: 1.5,
-                px: 2,
-                mb: 1,
-                borderRadius: '12px',
-                textTransform: 'none',
-                fontSize: '1rem',
-                fontWeight: 500,
-                color: 'white',
+                background: 'transparent',
+                border: '2px solid #5EEAD4',
+                color: '#5EEAD4',
                 '&:hover': {
-                  backgroundColor: 'rgba(255,255,255,0.1)'
-                }
+                  background: '#5EEAD4',
+                  color: '#0A1F44',
+                  transform: 'translateY(-2px)'
+                },
+                transition: 'all 0.3s ease',
+                width: '100%',
+                py: 1.5
               }}
+              startIcon={<Crown size={18} />}
+              onClick={() => window.open('https://products.applebites.ai/', '_blank')}
             >
-              <Clock size={20} style={{ marginRight: 12 }} />
-              Past Assessments
-            </Button>
+              Upgrade Plan
+            </MDButton>
+          )}
+
+          <Link href="/dashboard">
+            <MDButton
+              className="text-[#dbdce1]"
+              sx={{
+                background: 'transparent',
+                border: '1px solid rgba(255, 255, 255, 0.3)',
+                color: '#dbdce1',
+                '&:hover': {
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  transform: 'translateY(-2px)'
+                },
+                transition: 'all 0.3s ease',
+                width: '100%',
+                py: 1.5
+              }}
+              startIcon={<User size={18} />}
+            >
+              Dashboard
+            </MDButton>
           </Link>
 
-          {/* Upgrade Plan */}
-          <Button
-            fullWidth
-            variant="text"
-            onClick={() => window.open('https://products.applebites.ai/', '_blank')}
-            sx={{
-              justifyContent: 'flex-start',
-              py: 1.5,
-              px: 2,
-              mb: 1,
-              borderRadius: '12px',
-              textTransform: 'none',
-              fontSize: '1rem',
-              fontWeight: 500,
-              color: 'white',
-              '&:hover': {
-                backgroundColor: 'rgba(255,255,255,0.1)'
-              }
-            }}
-          >
-            <Crown size={20} style={{ marginRight: 12 }} />
-            Upgrade Plan
-          </Button>
+          <Link href="/past-assessments">
+            <MDButton
+              className="text-[#dbdce1]"
+              sx={{
+                background: 'transparent',
+                border: '1px solid rgba(255, 255, 255, 0.3)',
+                color: '#dbdce1',
+                '&:hover': {
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  transform: 'translateY(-2px)'
+                },
+                transition: 'all 0.3s ease',
+                width: '100%',
+                py: 1.5
+              }}
+              startIcon={<Clock size={18} />}
+            >
+              Past Assessments
+            </MDButton>
+          </Link>
         </MDBox>
 
-        {/* Apple Bites Branding */}
-        <MDBox p={3} textAlign="center" borderTop="1px solid rgba(255,255,255,0.1)">
-          <Box component="img"
-            src="/assets/logos/apple-bites-logo-variant-3.png"
-            alt="Apple Bites"
-            sx={{
-              width: 60,
-              height: 60,
-              mx: 'auto',
-              mb: 2,
-              display: 'block',
-            }}
-          />
-          <Typography variant="h6" sx={{ color: '#00BFA6', fontWeight: 'bold', mb: 0.5 }}>
-            APPLE BITES
-          </Typography>
-          <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.7)' }}>
-            Business Assessment Platform
-          </Typography>
-          <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.5)', display: 'block', mt: 1 }}>
-            © 2025 Meritage Partners
-          </Typography>
+        {/* Spacer */}
+        <MDBox flexGrow={1} />
+
+        {/* Footer */}
+        <MDBox mt={4} pt={2} borderTop="1px solid rgba(255, 255, 255, 0.2)">
+          <MDBox display="flex" flexDirection="column" alignItems="center" gap={1}>
+            <Box
+              component="img"
+              src="/assets/logos/apple-bites-meritage-logo.png"
+              alt="Apple Bites by Meritage Partners"
+              sx={{
+                width: 250,
+                height: 250,
+                objectFit: 'contain',
+                maxWidth: '100%'
+              }}
+            />
+          </MDBox>
         </MDBox>
       </MDBox>
 
