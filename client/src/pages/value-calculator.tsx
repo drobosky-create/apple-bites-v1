@@ -28,13 +28,14 @@ const DashboardBackground = styled(MDBox)(({ theme }) => ({
 const drawerWidth = 280;
 
 const MainContent = styled(MDBox)(({ theme }) => ({
-  flexGrow: 1,
-  padding: '16px 24px 24px 8px',
-  marginLeft: 0,
-  minHeight: '100vh',
-  width: `calc(100vw - ${drawerWidth}px)`,
+  flex: 1,
+  marginLeft: '328px', // Account for sidebar width (280px) + margins (24px * 2)
   backgroundColor: '#f8f9fa',
+  padding: 4,
+  minHeight: '100vh',
+  overflow: 'auto',
   [theme.breakpoints.down('md')]: {
+    marginLeft: 0,
     width: '100vw',
     padding: '16px',
   },
