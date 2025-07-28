@@ -3,7 +3,7 @@ import { Link, useLocation } from 'wouter';
 import { Grid, Box, Typography, Button, useTheme } from '@mui/material';
 import { Eye, EyeOff, Mail, LogIn } from 'lucide-react';
 import MDInput from '@/components/MD/MDInput';
-import appleBitesLogo from '@assets/apple-bites-logo.png';
+const appleBitesLogo = '/assets/logos/apple-bites-meritage-logo.png';
 
 interface LoginFormData {
   email: string;
@@ -127,7 +127,7 @@ export default function HybridLoginPage() {
             onSubmit={handleSubmit}
             sx={{
               width: '100%',
-              maxWidth: { xs: '100%', md: 420 },
+              maxWidth: { xs: '100%', md: 600 },
               backgroundColor: { xs: 'white', md: 'transparent' },
               borderRadius: { xs: 3, md: 0 },
               p: { xs: 4, md: 0 },
