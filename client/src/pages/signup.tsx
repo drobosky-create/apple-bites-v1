@@ -132,11 +132,8 @@ export default function HybridSignupPage() {
         }}
       >
         <Box sx={{ textAlign: 'center', zIndex: 1, px: 4 }}>
-          <Typography variant="h3" sx={{ color: 'white', fontWeight: 'bold', mb: 2 }}>
+          <Typography variant="h3" sx={{ color: 'white', fontWeight: 'bold', mb: 4 }}>
             Welcome to Apple Bites
-          </Typography>
-          <Typography variant="h6" sx={{ color: '#B0BEC5', mb: 4 }}>
-            Your AI-powered business valuation platform
           </Typography>
           <Box
             component="img"
