@@ -18,10 +18,26 @@ import { Card, CardContent, Grid, Container, Box, Button, Typography, Modal, Tex
 
 const appleBitesLogoPath = '/assets/logos/apple-bites-meritage-logo.png';
 
-// Sidebar Component matching main dashboard
-function AdminSidebar() {
+// Sidebar Component with pillbox styling matching main dashboard
+function AdminSidebar({ user }: { user: any }) {
   const [, setLocation] = useLocation();
   
+  // Apple Bites Brand Colors (matching main dashboard)
+  const colors = {
+    primary: "#00BFA6",
+    secondary: "#0A1F44", 
+    accent: "#5EEAD4",
+    grayLight: "#F7FAFC",
+    gray: "#CBD5E1"
+  };
+
+  const gradients = {
+    primary: "linear-gradient(135deg, #00BFA6 0%, #0A1F44 100%)",
+    light: "linear-gradient(135deg, #00BFA6 0%, #5EEAD4 100%)",
+    dark: "linear-gradient(135deg, #0A1F44 0%, #1C2D5A 100%)",
+    glow: "linear-gradient(135deg, #00BFA6 0%, #33FFC5 100%)"
+  };
+
   const sidebarItems = [
     { icon: Home, label: 'Dashboard', href: '/admin' },
     { icon: Users, label: 'Team Members', href: '/admin/team' },
@@ -34,74 +50,118 @@ function AdminSidebar() {
     <MDBox
       sx={{
         position: 'fixed',
-        top: 0,
-        left: 0,
-        height: '100vh',
-        width: '280px',
-        background: 'linear-gradient(135deg, #0A1F44 0%, #1B2C4F 100%)',
-        zIndex: 1000,
+        top: '24px',
+        left: '24px',
+        width: 280,
+        height: 'calc(100vh - 48px)',
+        background: gradients.dark,
+        borderRadius: '20px',
+        border: `1px solid rgba(255, 255, 255, 0.15)`,
+        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+        backdropFilter: 'blur(8px)',
+        padding: 3,
         display: 'flex',
         flexDirection: 'column',
-        '&::before': {
-          content: '""',
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: 'url("data:image/svg+xml,%3Csvg width="100" height="100" xmlns="http://www.w3.org/2000/svg"%3E%3Cdefs%3E%3Cpattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse"%3E%3Cpath d="M 100 0 L 0 0 0 100" fill="none" stroke="%23ffffff" stroke-width="0.5" opacity="0.1"/%3E%3C/pattern%3E%3C/defs%3E%3Crect width="100%25" height="100%25" fill="url(%23grid)" /%3E%3C/svg%3E")',
-          opacity: 0.3
-        }
+        zIndex: 1000,
+        overflow: 'hidden'
       }}
     >
-      {/* Logo Section */}
-      <MDBox sx={{ p: 3, textAlign: 'center', zIndex: 1 }}>
+      {/* User Info Section */}
+      <MDBox mb={4}>
+        <MDBox display="flex" alignItems="center" mb={2}>
+          <MDBox
+            sx={{
+              background: gradients.glow,
+              width: 48,
+              height: 48,
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              mr: 2
+            }}
+          >
+            <User size={24} color="white" />
+          </MDBox>
+          <MDBox>
+            <MDTypography variant="h6" fontWeight="medium" sx={{ color: 'white' }}>
+              {user?.firstName} {user?.lastName}
+            </MDTypography>
+            <MDTypography variant="caption" sx={{ color: colors.accent }}>
+              {user?.email}
+            </MDTypography>
+          </MDBox>
+        </MDBox>
+        
+        <MDBox display="flex" alignItems="center">
+          <MDTypography variant="body2" mr={1} sx={{ color: 'white' }}>
+            Role:
+          </MDTypography>
+          <MDBox
+            sx={{
+              background: gradients.primary,
+              color: 'white',
+              px: 2,
+              py: 0.5,
+              borderRadius: 2,
+              fontSize: '0.75rem',
+              fontWeight: 600,
+              textTransform: 'uppercase',
+              letterSpacing: '0.5px'
+            }}
+          >
+            ADMIN
+          </MDBox>
+        </MDBox>
+      </MDBox>
+
+      {/* Navigation Items */}
+      <MDBox display="flex" flexDirection="column" gap={1}>
+        {sidebarItems.map((item, index) => (
+          <MDButton
+            key={index}
+            onClick={() => setLocation(item.href)}
+            sx={{
+              background: 'transparent',
+              border: `1px solid rgba(255, 255, 255, 0.2)`,
+              color: 'white',
+              justifyContent: 'flex-start',
+              px: 2,
+              py: 1.5,
+              '&:hover': {
+                background: 'rgba(255, 255, 255, 0.1)',
+                transform: 'translateY(-2px)',
+                borderColor: colors.accent
+              },
+              transition: 'all 0.3s ease',
+              width: '100%'
+            }}
+            startIcon={<item.icon size={18} />}
+          >
+            {item.label}
+          </MDButton>
+        ))}
+      </MDBox>
+
+      {/* Spacer */}
+      <MDBox flexGrow={1} />
+
+      {/* Footer */}
+      <MDBox mt={4} pt={2} borderTop={`1px solid rgba(255, 255, 255, 0.1)`}>
         <Box
           component="img"
           src={appleBitesLogoPath}
           alt="Apple Bites"
           sx={{
-            height: 80,
+            height: 40,
             width: 'auto',
-            filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))'
+            display: 'block',
+            mx: 'auto',
+            mb: 2,
+            filter: 'brightness(0) invert(1)'
           }}
         />
-        <MDTypography variant="h6" sx={{ color: 'white', mt: 2, fontWeight: 'bold' }}>
-          Admin Dashboard
-        </MDTypography>
-      </MDBox>
-
-      {/* Navigation Items */}
-      <MDBox sx={{ flex: 1, px: 2, zIndex: 1 }}>
-        {sidebarItems.map((item, index) => (
-          <MDBox
-            key={index}
-            onClick={() => setLocation(item.href)}
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              p: 2,
-              mb: 1,
-              borderRadius: '8px',
-              cursor: 'pointer',
-              transition: 'all 0.3s ease',
-              '&:hover': {
-                backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                transform: 'translateX(4px)'
-              }
-            }}
-          >
-            <item.icon size={20} color="white" />
-            <MDTypography variant="body2" sx={{ color: 'white', ml: 2, fontWeight: 'medium' }}>
-              {item.label}
-            </MDTypography>
-          </MDBox>
-        ))}
-      </MDBox>
-
-      {/* Footer */}
-      <MDBox sx={{ p: 3, zIndex: 1 }}>
-        <MDTypography variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.6)', textAlign: 'center' }}>
+        <MDTypography variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.6)', textAlign: 'center', display: 'block' }}>
           © 2025 Meritage Partners
         </MDTypography>
       </MDBox>
@@ -267,13 +327,13 @@ export default function AdminDashboard() {
 
   return (
     <MDBox sx={{ display: 'flex', minHeight: '100vh', backgroundColor: '#f8f9fa' }}>
-      <AdminSidebar />
+      <AdminSidebar user={user} />
       
       {/* Main Content */}
       <MDBox
         sx={{
           flex: 1,
-          marginLeft: '280px',
+          marginLeft: '328px', // Account for pillbox sidebar width + margins
           p: 4,
           minHeight: '100vh'
         }}
