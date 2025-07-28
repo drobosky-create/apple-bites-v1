@@ -2449,7 +2449,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.put("/api/profile", async (req, res) => {
     try {
       // Check if user is authenticated (works with both Replit Auth and custom auth)
-      const isReplitAuth = req.isAuthenticated && req.isAuthenticated() && req.user?.claims?.sub;
+      const isReplitAuth = req.isAuthenticated && req.isAuthenticated() && (req.user as any)?.claims?.sub;
       const isCustomAuth = req.session?.customUserSessionId;
       const isDemoAuth = (req.session as any)?.isAuthenticated && (req.session as any)?.user;
 
