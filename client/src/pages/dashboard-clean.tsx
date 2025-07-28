@@ -81,13 +81,20 @@ function DashboardSidebar({ user }: { user: DashboardUser }) {
   return (
     <MDBox
       sx={{
+        position: 'fixed',
+        top: '24px',
+        left: '24px',
         width: 280,
-        height: '100vh',
+        height: 'calc(100vh - 48px)',
         background: gradients.dark,
-        borderRight: `1px solid ${colors.secondary}`,
+        borderRadius: '20px',
+        border: `1px solid rgba(255, 255, 255, 0.15)`,
+        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+        backdropFilter: 'blur(8px)',
         padding: 3,
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        zIndex: 1000
       }}
     >
       {/* User Info Section */}
@@ -204,10 +211,16 @@ function DashboardSidebar({ user }: { user: DashboardUser }) {
       {/* Footer */}
       <MDBox mt={4} pt={2} borderTop={`1px solid rgba(255, 255, 255, 0.2)`}>
         <MDBox display="flex" flexDirection="column" alignItems="center" gap={1}>
-          <AppleBitesLogo size="small" />
-          <MDTypography variant="caption" textAlign="center" sx={{ color: colors.accent }}>
-            Apple Bites
-          </MDTypography>
+          <img
+            src="/assets/logos/apple-bites-meritage-logo.png"
+            alt="Apple Bites by Meritage Partners"
+            width={250}
+            height={250}
+            style={{
+              objectFit: 'contain',
+              maxWidth: '100%'
+            }}
+          />
         </MDBox>
       </MDBox>
     </MDBox>
@@ -242,6 +255,7 @@ function DashboardMainContent({ user }: { user: DashboardUser }) {
     <MDBox
       sx={{
         flex: 1,
+        marginLeft: '328px', // Account for pillbox sidebar width + margins
         backgroundColor: colors.grayLight,
         padding: 4,
         overflow: 'auto'
