@@ -273,6 +273,13 @@ export default function HybridSignupPage() {
                   required
                   fullWidth
                   startAdornment={<User size={18} color="#9CA3AF" />}
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      '& fieldset': { borderColor: '#D1D5DB' },
+                      '&:hover fieldset': { borderColor: '#00BFA6' },
+                      '&.Mui-focused fieldset': { borderColor: '#00BFA6' }
+                    }
+                  }}
                 />
               </Grid>
               <Grid item xs={6}>
@@ -286,6 +293,13 @@ export default function HybridSignupPage() {
                   required
                   fullWidth
                   startAdornment={<User size={18} color="#9CA3AF" />}
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      '& fieldset': { borderColor: '#D1D5DB' },
+                      '&:hover fieldset': { borderColor: '#00BFA6' },
+                      '&.Mui-focused fieldset': { borderColor: '#00BFA6' }
+                    }
+                  }}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -300,6 +314,13 @@ export default function HybridSignupPage() {
                   required
                   fullWidth
                   startAdornment={<Mail size={18} color="#9CA3AF" />}
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      '& fieldset': { borderColor: '#D1D5DB' },
+                      '&:hover fieldset': { borderColor: '#00BFA6' },
+                      '&.Mui-focused fieldset': { borderColor: '#00BFA6' }
+                    }
+                  }}
                 />
               </Grid>
               <Grid item xs={6}>
@@ -312,6 +333,13 @@ export default function HybridSignupPage() {
                   onChange={handleInputChange('company')}
                   fullWidth
                   startAdornment={<Building size={18} color="#9CA3AF" />}
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      '& fieldset': { borderColor: '#D1D5DB' },
+                      '&:hover fieldset': { borderColor: '#00BFA6' },
+                      '&.Mui-focused fieldset': { borderColor: '#00BFA6' }
+                    }
+                  }}
                 />
               </Grid>
               <Grid item xs={6}>
@@ -323,6 +351,14 @@ export default function HybridSignupPage() {
                   value={formData.title}
                   onChange={handleInputChange('title')}
                   fullWidth
+                  startAdornment={<User size={18} color="#9CA3AF" />}
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      '& fieldset': { borderColor: '#D1D5DB' },
+                      '&:hover fieldset': { borderColor: '#00BFA6' },
+                      '&.Mui-focused fieldset': { borderColor: '#00BFA6' }
+                    }
+                  }}
                 />
               </Grid>
               <Grid item xs={12}>
