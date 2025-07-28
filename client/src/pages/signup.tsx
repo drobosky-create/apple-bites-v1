@@ -132,15 +132,12 @@ export default function HybridSignupPage() {
         }}
       >
         <Box sx={{ textAlign: 'center', zIndex: 1, px: 4 }}>
-          <Typography variant="h3" sx={{ color: 'white', fontWeight: 'bold', mb: 4 }}>
-            Welcome to Apple Bites
-          </Typography>
           <Box
             component="img"
             src={appleBitesLogo}
             alt="Apple Bites"
             sx={{
-              height: 120,
+              height: 420,
               width: 'auto',
               filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))'
             }}
