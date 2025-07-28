@@ -95,7 +95,7 @@ export default function HybridLoginPage() {
             src={appleBitesLogo}
             alt="Apple Bites"
             sx={{
-              height: 120,
+              height: 420,
               width: 'auto',
               filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))'
             }}

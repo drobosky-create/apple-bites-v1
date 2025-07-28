@@ -11,6 +11,7 @@ import AnalyticsDashboard from "@/pages/analytics-dashboard";
 import ValueCalculator from "@/pages/value-calculator";
 import LeadsDashboard from "@/pages/leads-dashboard";
 import TeamDashboard from "@/pages/team-dashboard";
+import AdminDashboard from "@/pages/admin-dashboard";
 import Dashboard from "@/pages/dashboard";
 import AssessmentResults from "@/pages/assessment-results";
 import Profile from "@/pages/profile";
@@ -41,7 +42,7 @@ function Router() {
         <Route path="/past-assessments" component={PastAssessments} />
         
         {/* Admin/Team pages */}
-        <Route path="/admin" component={TeamDashboard} />
+        <Route path="/admin" component={AdminDashboard} />
         <Route path="/admin/analytics" component={AnalyticsDashboard} />
         <Route path="/admin/leads" component={LeadsDashboard} />
         <Route path="/team" component={TeamDashboard} />
