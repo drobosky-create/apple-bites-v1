@@ -190,8 +190,8 @@ export default function InteractiveValuationSlider() {
     <Box sx={{ p: 0 }}>
       
 
-      {/* Current vs Potential Value Cards with increased spacing */}
-      <Grid container spacing={4} sx={{ mb: 6 }}>
+      {/* Current vs Potential Value Cards with reduced spacing */}
+      <Grid container spacing={2} sx={{ mb: 3 }}>
         {/* Current Value Card */}
         <Grid size={{ xs: 12, md: 6 }}>
           <Card sx={{ 
@@ -203,8 +203,8 @@ export default function InteractiveValuationSlider() {
               color: 'white !important'
             }
           }}>
-            <CardContent sx={{ p: 4 }}>
-              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+            <CardContent sx={{ p: 2.5 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
                 <Typography variant="h5" sx={{ fontWeight: 'bold', flex: 1, color: 'white !important' }}>
                   Current Value
                 </Typography>
@@ -260,8 +260,8 @@ export default function InteractiveValuationSlider() {
                 '0 10px 25px rgba(239, 68, 68, 0.2)'
               ) : '0 2px 8px rgba(0,0,0,0.1)'
           }}>
-            <CardContent sx={{ p: 4 }}>
-              <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 2 }}>
+            <CardContent sx={{ p: 2.5 }}>
+              <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 1.5 }}>
                 Potential Value
               </Typography>
               <Typography variant="body1" sx={{ mb: 3, opacity: 0.8 }}>
@@ -285,10 +285,10 @@ export default function InteractiveValuationSlider() {
         </Grid>
       </Grid>
 
-      {/* Gauge and Potential Gain Section with increased spacing */}
-      <Card sx={{ mb: 6, background: 'linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%)' }}>
-        <CardContent sx={{ p: 5 }}>
-          <Grid container spacing={4} alignItems="stretch">
+      {/* Gauge and Potential Gain Section with reduced spacing */}
+      <Card sx={{ mb: 3, background: 'linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%)' }}>
+        <CardContent sx={{ p: 3 }}>
+          <Grid container spacing={2} alignItems="stretch">
             {/* Gauge Section */}
             <Grid size={{ xs: 12, md: 7 }}>
               <Box
@@ -322,8 +322,8 @@ export default function InteractiveValuationSlider() {
                   color: 'white',
                   textAlign: 'center'
                 }}>
-                  <CardContent sx={{ p: 3 }}>
-                    <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 2 }}>
+                  <CardContent sx={{ p: 2 }}>
+                    <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 1.5 }}>
                       {potentialIncrease > 0 ? '💰 POTENTIAL GAIN' : '⚠️ POTENTIAL LOSS'}
                     </Typography>
                     <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1 }}>
@@ -343,8 +343,8 @@ export default function InteractiveValuationSlider() {
                     color: 'white !important'
                   }
                 }}>
-                  <CardContent sx={{ p: 3 }}>
-                    <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 2, color: 'white !important' }}>
+                  <CardContent sx={{ p: 2 }}>
+                    <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 1.5, color: 'white !important' }}>
                       Select a different grade to see potential impact
                     </Typography>
                     <Typography variant="body1" sx={{ color: 'white !important' }}>
@@ -359,14 +359,14 @@ export default function InteractiveValuationSlider() {
         </CardContent>
       </Card>
 
-      {/* Grade Selection Section with increased spacing */}
-      <Card sx={{ mb: 6 }}>
-        <CardContent sx={{ p: 5 }}>
-          <Typography variant="h5" sx={{ fontWeight: 'bold', color: '#0A1F44', textAlign: 'center', mb: 5, lineHeight: 1.6 }}>
+      {/* Grade Selection Section with reduced spacing */}
+      <Card sx={{ mb: 2 }}>
+        <CardContent sx={{ p: 2.5 }}>
+          <Typography variant="h5" sx={{ fontWeight: 'bold', color: '#0A1F44', textAlign: 'center', mb: 3, lineHeight: 1.6 }}>
             Click any grade to see how operational improvements impact your business value
           </Typography>
           
-          <Grid container spacing={3} justifyContent="center">
+          <Grid container spacing={2} justifyContent="center">
             {(['F', 'D', 'C', 'B', 'A'] as const).map((grade) => {
               const gradeInfo = getGradeInfo(grade);
               const isSelected = grade === sliderGrade;
@@ -452,17 +452,17 @@ export default function InteractiveValuationSlider() {
                       </Typography>
                     </Box>
 
-                    <CardContent sx={{ pt: 6, px: 3, pb: 3, textAlign: 'center' }}>
+                    <CardContent sx={{ pt: 4, px: 2, pb: 2, textAlign: 'center' }}>
                       
                       {/* Content */}
-                      <Box sx={{ mt: 2 }}>
-                        <Typography variant="body1" sx={{ fontSize: '0.875rem', fontWeight: 500 }}>
+                      <Box sx={{ mt: -3 }}>
+                        <Typography variant="body1" sx={{ fontSize: '1.2rem', fontWeight: 500 }}>
                           {getGradeCategory(grade).label}
                         </Typography>
-                        <Typography variant="h5" sx={{ color: gradeInfo.primary, mt: 1 }}>
+                        <Typography variant="h4" sx={{ color: gradeInfo.primary, mt: 1 }}>
                           ${gradeInfo.multiplier}x
                         </Typography>
-                        <Typography variant="body2" color="text.secondary">
+                        <Typography variant="h6" color="text.secondary">
                           EBITDA Multiple
                         </Typography>
                         <Typography variant="h6" sx={{ color: '#111827', mt: 2, fontWeight: 'bold' }}>
@@ -477,7 +477,7 @@ export default function InteractiveValuationSlider() {
           </Grid>
           
           {/* Legend */}
-          <Box sx={{ display: 'flex', justifyContent: 'center', gap: 4, mt: 4 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'center', gap: 3, mt: 3 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <Box sx={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: '#F59E0B' }} />
               <Typography variant="body2" sx={{ color: '#6B7280' }}>Current Grade</Typography>
@@ -488,7 +488,7 @@ export default function InteractiveValuationSlider() {
             </Box>
           </Box>
           
-          <Typography variant="body2" sx={{ textAlign: 'center', color: '#6B7280', mt: 2 }}>
+          <Typography variant="body2" sx={{ textAlign: 'center', color: '#6B7280', mt: 1.5 }}>
             Valuations based on $EBITDA multiple × Click to select target grade
           </Typography>
         </CardContent>

@@ -259,7 +259,7 @@ const OperationalGradeGauge: React.FC<OperationalGradeGaugeProps> = ({
         </div>
         
         {/* Title positioned below the gauge */}
-        <div style={{ textAlign: 'center', marginTop: '20px' }}>
+        <div style={{ textAlign: 'center', marginTop: '10px' }}>
           <h3 style={{ 
             fontSize: '1.5rem', 
             fontWeight: 'bold', 
