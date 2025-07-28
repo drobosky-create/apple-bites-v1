@@ -241,7 +241,7 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
                   console.log("Form is valid:", form.formState.isValid);
                 }}
                 sx={{
-                  background: 'linear-gradient(135deg, #00BFA6 0%, #0A1F44 100%)',
+                  background: 'linear-gradient(135deg, #00718d 0%, #0A1F44 100%)',
                   '&:hover': {
                     background: 'linear-gradient(135deg, #008e7e 0%, #07152E 100%)'
                   }

@@ -15,7 +15,7 @@ const MDBoxRoot = styled(Box)<{ mdProps: MDBoxProps }>(({ theme, mdProps }) => {
 
   // Material Dashboard gradients
   const gradients = {
-    primary: "linear-gradient(195deg, #00BFA6, #0A1F44)",
+    primary: "linear-gradient(195deg, #00718d, #0A1F44)",
     secondary: "linear-gradient(195deg, #7b1fa2, #6a1b9a)",
     info: "linear-gradient(195deg, #1A73E8, #1662C4)",
     success: "linear-gradient(195deg, #4CAF50, #43A047)",

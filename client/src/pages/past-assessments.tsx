@@ -127,7 +127,7 @@ export default function PastAssessments() {
                 width: 40,
                 height: 40,
                 borderRadius: '50%',  
-                background: 'linear-gradient(135deg, #00BFA6 0%, #5EEAD4 100%)',
+                background: 'linear-gradient(135deg, #00718d 0%, #5EEAD4 100%)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -150,7 +150,7 @@ export default function PastAssessments() {
           
           <MDBox
             sx={{
-              background: 'linear-gradient(135deg, #00BFA6 0%, #5EEAD4 100%)',
+              background: 'linear-gradient(135deg, #00718d 0%, #5EEAD4 100%)',
               borderRadius: '20px',
               px: 2,
               py: 1,
@@ -245,10 +245,10 @@ export default function PastAssessments() {
 
           <MDButton
             sx={{
-              background: 'linear-gradient(135deg, #00BFA6 0%, #5EEAD4 100%)',
+              background: 'linear-gradient(135deg, #00718d 0%, #5EEAD4 100%)',
               color: 'white',
               '&:hover': {
-                background: 'linear-gradient(135deg, #00BFA6 0%, #5EEAD4 100%)',
+                background: 'linear-gradient(135deg, #00718d 0%, #5EEAD4 100%)',
                 transform: 'translateY(-2px)',
                 boxShadow: '0 8px 25px -8px rgba(0, 191, 166, 0.6)'
               },

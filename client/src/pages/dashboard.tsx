@@ -265,7 +265,7 @@ function PastAssessmentsSection() {
 function DashboardSidebar({ user, onSignOut }: { user: DashboardUser; onSignOut: () => void }) {
   // Apple Bites Brand Colors
   const colors = {
-    primary: "#00BFA6",
+    primary: "#00718d",
     secondary: "#0A1F44", 
     accent: "#5EEAD4",
     grayLight: "#F7FAFC",
@@ -273,10 +273,10 @@ function DashboardSidebar({ user, onSignOut }: { user: DashboardUser; onSignOut:
   };
 
   const gradients = {
-    primary: "linear-gradient(135deg, #00BFA6 0%, #0A1F44 100%)",
-    light: "linear-gradient(135deg, #00BFA6 0%, #5EEAD4 100%)",
+    primary: "linear-gradient(135deg, #00718d 0%, #0A1F44 100%)",
+    light: "linear-gradient(135deg, #00718d 0%, #5EEAD4 100%)",
     dark: "linear-gradient(135deg, #0A1F44 0%, #1C2D5A 100%)",
-    glow: "linear-gradient(135deg, #00BFA6 0%, #33FFC5 100%)"
+    glow: "linear-gradient(135deg, #00718d 0%, #33FFC5 100%)"
   };
 
   const getTierColor = (tier: string) => {
@@ -709,16 +709,16 @@ function UpgradeBenefitsSection() {
 function DashboardMainContent({ user, setupDemoSession }: { user: DashboardUser; setupDemoSession: () => void }) {
   // Apple Bites Brand Colors
   const colors = {
-    primary: "#00BFA6",
+    primary: "#00718d",
     secondary: "#0A1F44", 
     accent: "#5EEAD4",
     grayLight: "#F7FAFC"
   };
 
   const gradients = {
-    primary: "linear-gradient(135deg, #00BFA6 0%, #0A1F44 100%)",
-    light: "linear-gradient(135deg, #00BFA6 0%, #5EEAD4 100%)",
-    glow: "linear-gradient(135deg, #00BFA6 0%, #33FFC5 100%)"
+    primary: "linear-gradient(135deg, #00718d 0%, #0A1F44 100%)",
+    light: "linear-gradient(135deg, #00718d 0%, #5EEAD4 100%)",
+    glow: "linear-gradient(135deg, #00718d 0%, #33FFC5 100%)"
   };
 
   const getDashboardTitle = (tier: string) => {

@@ -59,7 +59,7 @@ export default function Sidebar() {
           sx={{ 
             color: 'white', 
             fontWeight: 'bold',
-            background: 'linear-gradient(45deg, #81e5d8, #4493de)',
+            background: 'linear-gradient(45deg, #005b8c, #4493de)',
             backgroundClip: 'text',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent'
@@ -83,11 +83,11 @@ export default function Sidebar() {
                   minHeight: 48,
                   color: 'rgba(255, 255, 255, 0.8)',
                   '&.Mui-selected': {
-                    background: 'linear-gradient(195deg, #81e5d8, #4493de)',
+                    background: 'linear-gradient(195deg, #005b8c, #4493de)',
                     color: 'white',
                     boxShadow: '0 4px 20px 0 rgba(129, 229, 216, 0.4)',
                     '&:hover': {
-                      background: 'linear-gradient(195deg, #81e5d8, #4493de)',
+                      background: 'linear-gradient(195deg, #005b8c, #4493de)',
                     },
                   },
                   '&:hover': {

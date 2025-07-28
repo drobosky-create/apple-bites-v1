@@ -201,7 +201,7 @@ export default function HybridSignupPage() {
                   textTransform: 'none',
                   fontWeight: 'medium',
                   '&:hover': {
-                    borderColor: '#00BFA6',
+                    borderColor: '#00718d',
                     backgroundColor: '#F9FAFB'
                   }
                 }}
@@ -227,7 +227,7 @@ export default function HybridSignupPage() {
                   textTransform: 'none',
                   fontWeight: 'medium',
                   '&:hover': {
-                    borderColor: '#00BFA6',
+                    borderColor: '#00718d',
                     backgroundColor: '#F9FAFB'
                   }
                 }}
@@ -278,8 +278,8 @@ export default function HybridSignupPage() {
                   sx={{
                     '& .MuiOutlinedInput-root': {
                       '& fieldset': { borderColor: '#D1D5DB' },
-                      '&:hover fieldset': { borderColor: '#00BFA6' },
-                      '&.Mui-focused fieldset': { borderColor: '#00BFA6' }
+                      '&:hover fieldset': { borderColor: '#00718d' },
+                      '&.Mui-focused fieldset': { borderColor: '#00718d' }
                     }
                   }}
                 />
@@ -299,8 +299,8 @@ export default function HybridSignupPage() {
                   sx={{
                     '& .MuiOutlinedInput-root': {
                       '& fieldset': { borderColor: '#D1D5DB' },
-                      '&:hover fieldset': { borderColor: '#00BFA6' },
-                      '&.Mui-focused fieldset': { borderColor: '#00BFA6' }
+                      '&:hover fieldset': { borderColor: '#00718d' },
+                      '&.Mui-focused fieldset': { borderColor: '#00718d' }
                     }
                   }}
                 />
@@ -321,8 +321,8 @@ export default function HybridSignupPage() {
                   sx={{
                     '& .MuiOutlinedInput-root': {
                       '& fieldset': { borderColor: '#D1D5DB' },
-                      '&:hover fieldset': { borderColor: '#00BFA6' },
-                      '&.Mui-focused fieldset': { borderColor: '#00BFA6' }
+                      '&:hover fieldset': { borderColor: '#00718d' },
+                      '&.Mui-focused fieldset': { borderColor: '#00718d' }
                     }
                   }}
                 />
@@ -342,8 +342,8 @@ export default function HybridSignupPage() {
                   sx={{
                     '& .MuiOutlinedInput-root': {
                       '& fieldset': { borderColor: '#D1D5DB' },
-                      '&:hover fieldset': { borderColor: '#00BFA6' },
-                      '&.Mui-focused fieldset': { borderColor: '#00BFA6' }
+                      '&:hover fieldset': { borderColor: '#00718d' },
+                      '&.Mui-focused fieldset': { borderColor: '#00718d' }
                     }
                   }}
                 />
@@ -362,8 +362,8 @@ export default function HybridSignupPage() {
                   sx={{
                     '& .MuiOutlinedInput-root': {
                       '& fieldset': { borderColor: '#D1D5DB' },
-                      '&:hover fieldset': { borderColor: '#00BFA6' },
-                      '&.Mui-focused fieldset': { borderColor: '#00BFA6' }
+                      '&:hover fieldset': { borderColor: '#00718d' },
+                      '&.Mui-focused fieldset': { borderColor: '#00718d' }
                     }
                   }}
                 />
@@ -382,8 +382,8 @@ export default function HybridSignupPage() {
                   sx={{
                     '& .MuiOutlinedInput-root': {
                       '& fieldset': { borderColor: '#D1D5DB' },
-                      '&:hover fieldset': { borderColor: '#00BFA6' },
-                      '&.Mui-focused fieldset': { borderColor: '#00BFA6' }
+                      '&:hover fieldset': { borderColor: '#00718d' },
+                      '&.Mui-focused fieldset': { borderColor: '#00718d' }
                     }
                   }}
                 />
@@ -419,8 +419,8 @@ export default function HybridSignupPage() {
                   sx={{
                     '& .MuiOutlinedInput-root': {
                       '& fieldset': { borderColor: '#D1D5DB' },
-                      '&:hover fieldset': { borderColor: '#00BFA6' },
-                      '&.Mui-focused fieldset': { borderColor: '#00BFA6' }
+                      '&:hover fieldset': { borderColor: '#00718d' },
+                      '&.Mui-focused fieldset': { borderColor: '#00718d' }
                     }
                   }}
                 />
@@ -458,8 +458,8 @@ export default function HybridSignupPage() {
                       '& fieldset': { 
                         borderColor: formData.confirmPassword && !passwordsMatch ? '#EF4444' : '#D1D5DB' 
                       },
-                      '&:hover fieldset': { borderColor: '#00BFA6' },
-                      '&.Mui-focused fieldset': { borderColor: '#00BFA6' }
+                      '&:hover fieldset': { borderColor: '#00718d' },
+                      '&.Mui-focused fieldset': { borderColor: '#00718d' }
                     }
                   }}
                 />
@@ -498,12 +498,12 @@ export default function HybridSignupPage() {
                 width: '100%',
                 py: 1.5,
                 fontWeight: 'bold',
-                background: 'linear-gradient(135deg, #00BFA6 0%, #0A1F44 100%)',
+                background: 'linear-gradient(135deg, #00718d 0%, #0A1F44 100%)',
                 color: 'white',
                 borderRadius: 2,
                 textTransform: 'none',
                 '&:hover': {
-                  background: 'linear-gradient(135deg, #00BFA6 0%, #33FFC5 100%)',
+                  background: 'linear-gradient(135deg, #00718d 0%, #33FFC5 100%)',
                   boxShadow: '0 8px 25px -8px rgba(0,191,166,0.4)'
                 },
                 '&:disabled': {
@@ -523,7 +523,7 @@ export default function HybridSignupPage() {
                   <Typography 
                     component="span" 
                     sx={{ 
-                      color: '#00BFA6', 
+                      color: '#00718d', 
                       fontWeight: 'medium', 
                       cursor: 'pointer',
                       textDecoration: 'none',

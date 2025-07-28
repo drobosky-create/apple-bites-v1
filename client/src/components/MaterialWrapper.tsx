@@ -17,7 +17,7 @@ interface MaterialWrapperProps {
 const mdTheme = createTheme({
   palette: {
     primary: {
-      main: '#00BFA6',      // Apple Bites Teal
+      main: '#00718d',      // Apple Bites Teal
       dark: '#008e7e',      // Apple Bites Teal Dark
     },
     secondary: {
@@ -25,7 +25,7 @@ const mdTheme = createTheme({
       dark: '#07152E',      // Apple Bites Deeper Navy
     },
     info: {
-      main: '#00BFA6',      // Apple Bites Teal
+      main: '#00718d',      // Apple Bites Teal
       dark: '#008e7e',      // Apple Bites Teal Dark
     },
     success: {

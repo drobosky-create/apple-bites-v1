@@ -72,7 +72,7 @@ const grades: Grade[] = ["A", "B", "C", "D", "F"];
 
 const getGradeColor = (grade: Grade): string => {
   switch (grade) {
-    case "A": return "#00BFA6";
+    case "A": return "#00718d";
     case "B": return "#66BB6A";
     case "C": return "#FFA726";
     case "D": return "#FF7043";

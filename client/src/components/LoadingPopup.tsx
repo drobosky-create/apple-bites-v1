@@ -60,7 +60,7 @@ export default function LoadingPopup({ open, onClose }: LoadingPopupProps) {
             >
               <FileText 
                 size={20} 
-                color="#00BFA6" 
+                color="#00718d" 
                 style={{ 
                   position: 'absolute', 
                   top: '0', 
@@ -70,7 +70,7 @@ export default function LoadingPopup({ open, onClose }: LoadingPopupProps) {
               />
               <TrendingUp 
                 size={20} 
-                color="#00BFA6" 
+                color="#00718d" 
                 style={{ 
                   position: 'absolute', 
                   bottom: '0', 

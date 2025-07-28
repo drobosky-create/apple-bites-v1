@@ -2,16 +2,16 @@
 export const materialDashboardTheme = {
   gradients: {
     primary: {
-      main: "#00BFA6",  // Apple Bites Teal
-      state: "#008e7e"  // Apple Bites Teal Dark
+      main: "#00718d",  // Apple Bites Teal
+      state: "#005b6c"  // Apple Bites Teal Dark
     },
     secondary: {
       main: "#0A1F44",  // Apple Bites Navy
       state: "#07152E"  // Apple Bites Deeper Navy
     },
     info: {
-      main: "#00BFA6",  // Apple Bites Teal
-      state: "#008e7e"  // Apple Bites Teal Dark
+      main: "#00718d",  // Apple Bites Teal
+      state: "#005b6c"  // Apple Bites Teal Dark
     },
     success: {
       main: "#16A34A",  // Apple Bites Green
@@ -45,9 +45,9 @@ export const materialDashboardTheme = {
     inset: "inset 0 1px 2px rgba(0, 0, 0, 0.075)",
     
     colored: {
-      primary: "0 4px 20px 0 rgba(0, 191, 166, 0.14)",     // Apple Bites Teal
+      primary: "0 4px 20px 0 rgba(0, 113, 141, 0.14)",     // Apple Bites Teal
       secondary: "0 4px 20px 0 rgba(10, 31, 68, 0.14)",   // Apple Bites Navy
-      info: "0 4px 20px 0 rgba(0, 191, 166, 0.14)",       // Apple Bites Teal
+      info: "0 4px 20px 0 rgba(0, 113, 141, 0.14)",       // Apple Bites Teal
       success: "0 4px 20px 0 rgba(22, 163, 74, 0.14)",    // Apple Bites Green
       warning: "0 4px 20px 0 rgba(245, 158, 11, 0.14)",   // Apple Bites Amber
       error: "0 4px 20px 0 rgba(220, 38, 38, 0.14)",      // Apple Bites Red

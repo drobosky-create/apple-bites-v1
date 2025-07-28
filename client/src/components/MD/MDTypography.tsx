@@ -12,7 +12,7 @@ const MDTypographyRoot = styled(Typography)<{ mdProps: MDTypographyProps }>(({ t
   const { color, fontWeight, textTransform } = mdProps;
 
   const colors = {
-    primary: "#00BFA6",
+    primary: "#00718d",
     secondary: "#7b1fa2",
     info: "#1A73E8",
     success: "#4CAF50",

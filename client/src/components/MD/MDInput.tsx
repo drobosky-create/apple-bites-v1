@@ -32,7 +32,7 @@ const MDInput = forwardRef<HTMLInputElement, MDInputProps>(
               borderColor: '#9CA3AF',
             },
             '&.Mui-focused fieldset': {
-              borderColor: '#00BFA6',
+              borderColor: '#00718d',
               borderWidth: 2,
             },
           },

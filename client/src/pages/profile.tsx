@@ -261,7 +261,7 @@ export default function ProfilePage() {
               borderRadius: '50%',
               border: '1px solid white',
               boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-              background: 'linear-gradient(135deg, #00BFA6 0%, #5EEAD4 100%)',
+              background: 'linear-gradient(135deg, #00718d 0%, #5EEAD4 100%)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',

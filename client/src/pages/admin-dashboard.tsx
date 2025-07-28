@@ -23,7 +23,7 @@ const appleBitesLogoPath = '/assets/logos/apple-bites-meritage-logo.png';
 function AdminSidebar({ user, onSignOut }: { user: any; onSignOut: () => void }) {
   // Apple Bites Brand Colors - Exact copy from user dashboard
   const colors = {
-    primary: "#00BFA6",
+    primary: "#00718d",
     secondary: "#0A1F44", 
     accent: "#5EEAD4",
     grayLight: "#F7FAFC",
@@ -31,10 +31,10 @@ function AdminSidebar({ user, onSignOut }: { user: any; onSignOut: () => void })
   };
 
   const gradients = {
-    primary: "linear-gradient(135deg, #00BFA6 0%, #0A1F44 100%)",
-    light: "linear-gradient(135deg, #00BFA6 0%, #5EEAD4 100%)",
+    primary: "linear-gradient(135deg, #00718d 0%, #0A1F44 100%)",
+    light: "linear-gradient(135deg, #00718d 0%, #5EEAD4 100%)",
     dark: "linear-gradient(135deg, #0A1F44 0%, #1C2D5A 100%)",
-    glow: "linear-gradient(135deg, #00BFA6 0%, #33FFC5 100%)"
+    glow: "linear-gradient(135deg, #00718d 0%, #33FFC5 100%)"
   };
 
   const getTierGradient = (role: string) => {
@@ -257,7 +257,7 @@ function StatsCard({ title, value, subtitle, icon: Icon, color }: {
 }) {
   const getGradient = (color: string) => {
     const gradients = {
-      primary: 'linear-gradient(135deg, #00BFA6 0%, #0A1F44 100%)',
+      primary: 'linear-gradient(135deg, #00718d 0%, #0A1F44 100%)',
       success: 'linear-gradient(135deg, #16A34A 0%, #059669 100%)',
       warning: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)',
       info: 'linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%)',

@@ -201,7 +201,7 @@ export default function ValueCalculator() {
           <MDBox display="flex" alignItems="center" mb={2}>
             <Avatar
               sx={{
-                background: 'linear-gradient(135deg, #00BFA6 0%, #5EEAD4 100%)',
+                background: 'linear-gradient(135deg, #00718d 0%, #5EEAD4 100%)',
                 width: 48,
                 height: 48,
                 mr: 2
@@ -228,8 +228,8 @@ export default function ValueCalculator() {
                 background: tierInfo.name === 'Free' 
                   ? 'linear-gradient(135deg, #CBD5E1 0%, #94A3B8 100%)'
                   : tierInfo.name === 'Growth' 
-                  ? 'linear-gradient(135deg, #00BFA6 0%, #0A1F44 100%)'
-                  : 'linear-gradient(135deg, #00BFA6 0%, #33FFC5 100%)',
+                  ? 'linear-gradient(135deg, #00718d 0%, #0A1F44 100%)'
+                  : 'linear-gradient(135deg, #00718d 0%, #33FFC5 100%)',
                 color: 'white',
                 px: 2,
                 py: 0.5,
@@ -270,12 +270,12 @@ export default function ValueCalculator() {
           {/* Value Calculator - Active */}
           <MDButton
             sx={{
-              background: 'linear-gradient(135deg, #00BFA6 0%, #5EEAD4 100%)',
+              background: 'linear-gradient(135deg, #00718d 0%, #5EEAD4 100%)',
               color: '#0A1F44',
               fontWeight: 600,
               boxShadow: '0 4px 20px rgba(0, 191, 166, 0.4)',
               '&:hover': {
-                background: 'linear-gradient(135deg, #00BFA6 0%, #5EEAD4 100%)',
+                background: 'linear-gradient(135deg, #00718d 0%, #5EEAD4 100%)',
                 transform: 'translateY(-2px)',
                 boxShadow: '0 6px 24px rgba(0, 191, 166, 0.5)'
               },

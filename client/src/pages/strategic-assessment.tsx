@@ -708,7 +708,7 @@ function GrowthExitAssessment() {
                 width: 48,
                 height: 48,
                 borderRadius: 2,
-                background: 'linear-gradient(135deg, #00BFA6 0%, #0A1F44 100%)',
+                background: 'linear-gradient(135deg, #00718d 0%, #0A1F44 100%)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center'
@@ -811,7 +811,7 @@ function GrowthExitAssessment() {
                 width: 48,
                 height: 48,
                 borderRadius: 2,
-                background: 'linear-gradient(135deg, #00BFA6 0%, #0A1F44 100%)',
+                background: 'linear-gradient(135deg, #00718d 0%, #0A1F44 100%)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center'
@@ -1374,7 +1374,7 @@ function GrowthExitAssessment() {
                   onClick={nextStep}
                   variant="contained"
                   sx={{
-                    background: 'linear-gradient(135deg, #00BFA6 0%, #0b2147 100%)',
+                    background: 'linear-gradient(135deg, #00718d 0%, #0b2147 100%)',
                     '&:hover': {
                       background: 'linear-gradient(135deg, #00a693 0%, #091d3a 100%)',
                     }

@@ -89,7 +89,7 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
             alignItems="center" 
             justifyContent="center"
             sx={{ 
-              background: 'linear-gradient(135deg, #00BFA6 0%, #5EEAD4 100%)',
+              background: 'linear-gradient(135deg, #00718d 0%, #5EEAD4 100%)',
               boxShadow: '0 4px 12px rgba(0, 191, 166, 0.3)'
             }}
           >
@@ -322,7 +322,7 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
                 disabled={isSubmitting}
                 sx={{ 
                   minWidth: '200px',
-                  background: '#00BFA6',
+                  background: '#00718d',
                   borderRadius: '8px',
                   '&:hover': {
                     background: '#008e7e',
@@ -348,7 +348,7 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
                 }}
               >
                 <MDBox display="flex" alignItems="center">
-                  <Shield size={16} style={{ marginRight: '8px', color: '#00BFA6' }} />
+                  <Shield size={16} style={{ marginRight: '8px', color: '#00718d' }} />
                   <MDTypography variant="body2" color="dark">
                     Your information is secure and will only be used for your business valuation assessment.
                   </MDTypography>
