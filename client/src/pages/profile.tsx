@@ -6,7 +6,7 @@ import { apiRequest } from '@/lib/queryClient';
 import MDBox from '@/components/MD/MDBox';
 import MDTypography from '@/components/MD/MDTypography';
 import MDButton from '@/components/MD/MDButton';
-import MDInput from '@/components/MD/MDInput';
+import { TextField } from '@mui/material';
 import { ArrowLeft, User } from 'lucide-react';
 
 interface ProfileData {
@@ -179,12 +179,13 @@ export default function ProfilePage() {
               >
                 {field}
               </MDTypography>
-              <MDInput
+              <TextField
                 type="text"
                 value={profile[field as keyof ProfileData]}
                 onChange={(e: any) => handleChange(field, e.target.value)}
                 disabled={!editMode}
                 fullWidth
+                variant="outlined"
                 sx={{
                   '& .MuiOutlinedInput-root': {
                     backgroundColor: 'white',
@@ -212,13 +213,14 @@ export default function ProfilePage() {
             >
               About
             </MDTypography>
-            <MDInput
+            <TextField
               multiline
               rows={4}
               value={profile.about}
               onChange={(e: any) => handleChange('about', e.target.value)}
               disabled={!editMode}
               fullWidth
+              variant="outlined"
               sx={{
                 '& .MuiOutlinedInput-root': {
                   backgroundColor: 'white',
@@ -252,12 +254,13 @@ export default function ProfilePage() {
                 >
                   {social}
                 </MDTypography>
-                <MDInput
+                <TextField
                   type="url"
                   value={profile[social as keyof ProfileData]}
                   onChange={(e: any) => handleChange(social, e.target.value)}
                   disabled={!editMode}
                   fullWidth
+                  variant="outlined"
                   sx={{
                     '& .MuiOutlinedInput-root': {
                       backgroundColor: 'white',
