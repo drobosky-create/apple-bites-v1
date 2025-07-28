@@ -393,7 +393,7 @@ export default function InteractiveValuationSlider() {
                       borderRadius: '12px',
                       '&:hover': {
                         transform: 'scale(1.05)',
-                        boxShadow: '0 8px 25px rgba(0,0,0,0.15)'
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
                       }
                     }}
                   >

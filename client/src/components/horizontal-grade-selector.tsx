@@ -28,7 +28,7 @@ const getGradientStyle = (grade: string, isSelected: boolean, isCurrent: boolean
       background: 'linear-gradient(310deg, #fb6340, #fbb140)',
       color: '#ffffff',
       transform: 'scale(1.05)',
-      boxShadow: '0 8px 26px -4px rgba(251, 99, 64, 0.4)',
+      boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
     };
   }
   
@@ -38,7 +38,7 @@ const getGradientStyle = (grade: string, isSelected: boolean, isCurrent: boolean
       background: 'linear-gradient(310deg, #5e72e4, #825ee4)',
       color: '#ffffff',
       transform: 'scale(1.02)',
-      boxShadow: '0 8px 26px -4px rgba(94, 114, 228, 0.4)',
+      boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
     };
   }
   
@@ -98,12 +98,12 @@ const HorizontalGradeSelector: React.FC<HorizontalGradeSelectorProps> = ({
     ...(isSelected && {
       background: 'linear-gradient(135deg, #5e72e4 0%, #825ee4 100%)',
       color: '#ffffff',
-      boxShadow: '0 8px 16px rgba(94, 114, 228, 0.4)',
+      boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
     }),
     ...(isCurrent && !isSelected && {
       background: 'linear-gradient(135deg, #fb6340 0%, #fbb140 100%)',
       color: '#ffffff',
-      boxShadow: '0 8px 16px rgba(251, 99, 64, 0.4)',
+      boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
     }),
     ...(!isSelected && !isCurrent && {
       background: 'rgba(248, 249, 250, 0.8)',

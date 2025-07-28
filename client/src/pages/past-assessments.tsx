@@ -112,7 +112,7 @@ export default function PastAssessments() {
           background: 'linear-gradient(135deg, #0A1F44 0%, #1C2D5A 100%)',
           borderRadius: '20px',
           backdropFilter: 'blur(20px)',
-          boxShadow: '0 20px 40px rgba(10, 31, 68, 0.3)',
+          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
           zIndex: 1000,
           display: 'flex',
           flexDirection: 'column',
@@ -250,7 +250,7 @@ export default function PastAssessments() {
               '&:hover': {
                 background: 'linear-gradient(135deg, #00718d 0%, #005b8c 100%)',
                 transform: 'translateY(-2px)',
-                boxShadow: '0 8px 25px -8px rgba(0, 191, 166, 0.6)'
+
               },
               transition: 'all 0.3s ease',
               width: '100%',

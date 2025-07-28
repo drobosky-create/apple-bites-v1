@@ -258,7 +258,7 @@ function DashboardSidebar({ user }: { user: { name: string; email: string; tier:
         background: gradients.dark,
         borderRadius: '20px',
         border: `1px solid rgba(255, 255, 255, 0.15)`,
-        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+        boxShadow: '0 4px 12px rgba(0,0,0,0.15), 0 0 0 1px rgba(255, 255, 255, 0.1)',
         backdropFilter: 'blur(8px)',
         padding: 3,
         display: 'flex',
@@ -322,7 +322,7 @@ function DashboardSidebar({ user }: { user: { name: string; email: string; tier:
               '&:hover': {
                 background: gradients.light,
                 transform: 'translateY(-2px)',
-                boxShadow: `0 8px 25px -8px ${colors.primary}`
+
               },
               transition: 'all 0.3s ease',
               width: '100%',

@@ -187,7 +187,7 @@ export default function ValueCalculator() {
           background: 'linear-gradient(135deg, #0A1F44 0%, #1C2D5A 100%)',
           borderRadius: '20px',
           border: '1px solid rgba(255, 255, 255, 0.15)',
-          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.15), 0 0 0 1px rgba(255, 255, 255, 0.1)',
           backdropFilter: 'blur(8px)',
           padding: 3,
           display: 'flex',
@@ -273,11 +273,11 @@ export default function ValueCalculator() {
               background: 'linear-gradient(135deg, #00718d 0%, #005b8c 100%)',
               color: '#0A1F44',
               fontWeight: 600,
-              boxShadow: '0 4px 20px rgba(0, 191, 166, 0.4)',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
               '&:hover': {
                 background: 'linear-gradient(135deg, #00718d 0%, #005b8c 100%)',
                 transform: 'translateY(-2px)',
-                boxShadow: '0 6px 24px rgba(0, 191, 166, 0.5)'
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)'
               },
               transition: 'all 0.3s ease',
               width: '100%',

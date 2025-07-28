@@ -247,11 +247,11 @@ export default function ValueDriversHeatmap({ assessment }: ValueDriversHeatmapP
                         '1px solid #E5E7EB',
                       transform: selectedDriver?.key === driver.key ? 'scale(1.02)' : 'scale(1)',
                       boxShadow: selectedDriver?.key === driver.key ? 
-                        '0 8px 25px rgba(0,0,0,0.15)' : 
+                        '0 2px 8px rgba(0,0,0,0.1)' : 
                         '0 2px 8px rgba(0,0,0,0.1)',
                       '&:hover': {
                         transform: 'scale(1.02)',
-                        boxShadow: '0 8px 25px rgba(0,0,0,0.15)'
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
                       }
                     }}
                     onClick={() => setSelectedDriver(selectedDriver?.key === driver.key ? null : driver)}

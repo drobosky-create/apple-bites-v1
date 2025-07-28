@@ -19,7 +19,7 @@ const ContactCard = styled(Card)(({ theme }) => ({
   background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
   color: 'white',
   borderRadius: '16px',
-  boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
+  boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
   backdropFilter: 'blur(10px)',
   border: '1px solid rgba(255,255,255,0.2)',
 }));
@@ -44,7 +44,7 @@ const MainFab = styled(Fab)(({ theme }) => ({
   color: 'white',
   width: '60px',
   height: '60px',
-  boxShadow: '0 4px 20px rgba(102, 126, 234, 0.4)',
+  boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
   '&:hover': {
     background: 'linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%)',
     transform: 'scale(1.05)',

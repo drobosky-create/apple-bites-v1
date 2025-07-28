@@ -504,7 +504,7 @@ export default function HybridSignupPage() {
                 textTransform: 'none',
                 '&:hover': {
                   background: 'linear-gradient(135deg, #00718d 0%, #3B82F6 100%)',
-                  boxShadow: '0 8px 25px -8px rgba(0,191,166,0.4)'
+
                 },
                 '&:disabled': {
                   background: '#E5E7EB',

@@ -90,7 +90,7 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
             justifyContent="center"
             sx={{ 
               background: 'linear-gradient(135deg, #00718d 0%, #005b8c 100%)',
-              boxShadow: '0 4px 12px rgba(0, 191, 166, 0.3)'
+              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)'
             }}
           >
             <User size={24} color="white" />
@@ -327,7 +327,7 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
                   '&:hover': {
                     background: '#008e7e',
                     transform: 'translateY(-1px)',
-                    boxShadow: '0 6px 16px rgba(0, 191, 166, 0.3)'
+                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)'
                   },
                   transition: 'all 0.3s ease'
                 }}

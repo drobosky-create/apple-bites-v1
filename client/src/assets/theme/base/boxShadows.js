@@ -5,7 +5,7 @@
 const boxShadows = {
   xs: "0 2px 9px -5px rgba(0, 0, 0, 0.2)",
   sm: "0 5px 13px -5px rgba(0, 0, 0, 0.2)",
-  md: "0 8px 26px -4px rgba(0, 0, 0, 0.15)",
+  md: "0 2px 8px rgba(0,0,0,0.15)",
   lg: "0 23px 45px -11px rgba(0, 0, 0, 0.25)",
   xl: "0 35px 65px -12px rgba(0, 0, 0, 0.35)",
   xxl: "0 54px 104px -18px rgba(0, 0, 0, 0.45)",

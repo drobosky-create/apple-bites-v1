@@ -38,7 +38,7 @@ export const materialDashboardTheme = {
   boxShadows: {
     xs: "0 2px 9px -5px rgba(0, 0, 0, 0.15)",
     sm: "0 5px 13px -5px rgba(0, 0, 0, 0.20)",
-    md: "0 8px 26px -4px rgba(0, 0, 0, 0.15)",
+    md: "0 2px 8px rgba(0,0,0,0.15)",
     lg: "0 23px 45px -11px rgba(0, 0, 0, 0.25)",
     xl: "0 35px 65px -12px rgba(0, 0, 0, 0.35)",
     xxl: "0 54px 100px -12px rgba(0, 0, 0, 0.35)",

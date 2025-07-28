@@ -85,7 +85,7 @@ export default function Sidebar() {
                   '&.Mui-selected': {
                     background: 'linear-gradient(195deg, #005b8c, #4493de)',
                     color: 'white',
-                    boxShadow: '0 4px 20px 0 rgba(129, 229, 216, 0.4)',
+                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
                     '&:hover': {
                       background: 'linear-gradient(195deg, #005b8c, #4493de)',
                     },

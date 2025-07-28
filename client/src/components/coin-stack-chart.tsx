@@ -103,7 +103,7 @@ export default function CoinStackChart({
                 height: '120%',
                 left: '-10%',
                 top: '-10%',
-                boxShadow: '0 0 15px rgba(59, 130, 246, 0.5)'
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)'
               }}
             />
           )}

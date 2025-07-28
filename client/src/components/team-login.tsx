@@ -69,7 +69,7 @@ export default function TeamLogin({ onLoginSuccess }: TeamLoginProps) {
         p: 3
       }}
     >
-      <Card sx={{ maxWidth: 400, width: '100%', boxShadow: '0 8px 32px rgba(0,0,0,0.3)' }}>
+      <Card sx={{ maxWidth: 400, width: '100%', boxShadow: '0 4px 12px rgba(0,0,0,0.15)' }}>
         <CardContent sx={{ p: 4 }}>
           <MDBox textAlign="center" mb={3}>
             <Users size={48} color="#0A1F44" />
