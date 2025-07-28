@@ -26,8 +26,8 @@ export const materialDashboardTheme = {
       state: "#B91C1C"  // Red Dark
     },
     light: {
-      main: "#5EEAD4",  // Apple Bites Aqua Accent
-      state: "#33FFC5"  // Apple Bites Glow Accent
+      main: "#005b8c",  // Apple Bites Aqua Accent
+      state: "#3B82F6"  // Apple Bites Glow Accent
     },
     dark: {
       main: "#0A1F44",  // Apple Bites Navy
@@ -51,7 +51,7 @@ export const materialDashboardTheme = {
       success: "0 4px 20px 0 rgba(22, 163, 74, 0.14)",    // Apple Bites Green
       warning: "0 4px 20px 0 rgba(245, 158, 11, 0.14)",   // Apple Bites Amber
       error: "0 4px 20px 0 rgba(220, 38, 38, 0.14)",      // Apple Bites Red
-      light: "0 4px 20px 0 rgba(94, 234, 212, 0.14)",     // Apple Bites Aqua
+      light: "0 4px 20px 0 rgba(0, 91, 140, 0.14)",       // Apple Bites Blue
       dark: "0 4px 20px 0 rgba(10, 31, 68, 0.14)"         // Apple Bites Navy
     }
   },

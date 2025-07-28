@@ -89,7 +89,7 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
             alignItems="center" 
             justifyContent="center"
             sx={{ 
-              background: 'linear-gradient(135deg, #00718d 0%, #5EEAD4 100%)',
+              background: 'linear-gradient(135deg, #00718d 0%, #005b8c 100%)',
               boxShadow: '0 4px 12px rgba(0, 191, 166, 0.3)'
             }}
           >

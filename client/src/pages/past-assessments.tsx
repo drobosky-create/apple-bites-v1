@@ -127,7 +127,7 @@ export default function PastAssessments() {
                 width: 40,
                 height: 40,
                 borderRadius: '50%',  
-                background: 'linear-gradient(135deg, #00718d 0%, #5EEAD4 100%)',
+                background: 'linear-gradient(135deg, #00718d 0%, #005b8c 100%)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -150,7 +150,7 @@ export default function PastAssessments() {
           
           <MDBox
             sx={{
-              background: 'linear-gradient(135deg, #00718d 0%, #5EEAD4 100%)',
+              background: 'linear-gradient(135deg, #00718d 0%, #005b8c 100%)',
               borderRadius: '20px',
               px: 2,
               py: 1,
@@ -245,10 +245,10 @@ export default function PastAssessments() {
 
           <MDButton
             sx={{
-              background: 'linear-gradient(135deg, #00718d 0%, #5EEAD4 100%)',
+              background: 'linear-gradient(135deg, #00718d 0%, #005b8c 100%)',
               color: 'white',
               '&:hover': {
-                background: 'linear-gradient(135deg, #00718d 0%, #5EEAD4 100%)',
+                background: 'linear-gradient(135deg, #00718d 0%, #005b8c 100%)',
                 transform: 'translateY(-2px)',
                 boxShadow: '0 8px 25px -8px rgba(0, 191, 166, 0.6)'
               },
@@ -265,10 +265,10 @@ export default function PastAssessments() {
         {/* Apple Bites Branding Footer */}
         <MDBox sx={{ p: 3, textAlign: 'center' }}>
           <MDBox sx={{ mb: 2 }}>
-            <MDTypography variant="h6" sx={{ color: '#5EEAD4', fontSize: '12px', fontWeight: 600, letterSpacing: '1px' }}>
+            <MDTypography variant="h6" sx={{ color: '#005b8c', fontSize: '12px', fontWeight: 600, letterSpacing: '1px' }}>
               MERITAGE
             </MDTypography>
-            <MDTypography variant="h6" sx={{ color: '#5EEAD4', fontSize: '12px', fontWeight: 600, letterSpacing: '1px' }}>
+            <MDTypography variant="h6" sx={{ color: '#005b8c', fontSize: '12px', fontWeight: 600, letterSpacing: '1px' }}>
               PARTNERS
             </MDTypography>
           </MDBox>
@@ -281,10 +281,10 @@ export default function PastAssessments() {
             />
           </MDBox>
           
-          <MDTypography variant="h6" sx={{ color: '#5EEAD4', fontSize: '14px', fontWeight: 600, letterSpacing: '1px' }}>
+          <MDTypography variant="h6" sx={{ color: '#005b8c', fontSize: '14px', fontWeight: 600, letterSpacing: '1px' }}>
             APPLE BITES
           </MDTypography>
-          <MDTypography variant="body2" sx={{ color: '#5EEAD4', fontSize: '10px', fontWeight: 400, letterSpacing: '1px' }}>
+          <MDTypography variant="body2" sx={{ color: '#005b8c', fontSize: '10px', fontWeight: 400, letterSpacing: '1px' }}>
             BUSINESS ASSESSMENT
           </MDTypography>
         </MDBox>
@@ -343,7 +343,7 @@ export default function PastAssessments() {
                   <MDTypography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)', mb: 1 }}>
                     Estimated Value
                   </MDTypography>
-                  <MDTypography variant="h5" fontWeight="bold" sx={{ color: '#5EEAD4' }}>
+                  <MDTypography variant="h5" fontWeight="bold" sx={{ color: '#005b8c' }}>
                     {formatCurrency(assessment.midEstimate)}
                   </MDTypography>
                   <MDBox display="flex" justifyContent="space-between" mt={1}>

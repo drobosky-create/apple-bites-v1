@@ -25,16 +25,16 @@ function AdminSidebar({ user, onSignOut }: { user: any; onSignOut: () => void })
   const colors = {
     primary: "#00718d",
     secondary: "#0A1F44", 
-    accent: "#5EEAD4",
+    accent: "#005b8c",
     grayLight: "#F7FAFC",
     gray: "#CBD5E1"
   };
 
   const gradients = {
     primary: "linear-gradient(135deg, #00718d 0%, #0A1F44 100%)",
-    light: "linear-gradient(135deg, #00718d 0%, #5EEAD4 100%)",
+    light: "linear-gradient(135deg, #00718d 0%, #005b8c 100%)",
     dark: "linear-gradient(135deg, #0A1F44 0%, #1C2D5A 100%)",
-    glow: "linear-gradient(135deg, #00718d 0%, #33FFC5 100%)"
+    glow: "linear-gradient(135deg, #00718d 0%, #3B82F6 100%)"
   };
 
   const getTierGradient = (role: string) => {

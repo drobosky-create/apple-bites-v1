@@ -243,7 +243,7 @@ export default function ValueDriversHeatmap({ assessment }: ValueDriversHeatmapP
                         'linear-gradient(135deg, #0A1F44 0%, #1B2C4F 100%)' :
                         '#FFFFFF',
                       border: selectedDriver?.key === driver.key ? 
-                        '2px solid #5EEAD4' : 
+                        '2px solid #005b8c' : 
                         '1px solid #E5E7EB',
                       transform: selectedDriver?.key === driver.key ? 'scale(1.02)' : 'scale(1)',
                       boxShadow: selectedDriver?.key === driver.key ? 
@@ -295,7 +295,7 @@ export default function ValueDriversHeatmap({ assessment }: ValueDriversHeatmapP
                               fontSize: '12px'
                             }}
                           />
-                          <Box sx={{ color: selectedDriver?.key === driver.key ? '#5EEAD4' : '#9CA3AF' }}>
+                          <Box sx={{ color: selectedDriver?.key === driver.key ? '#005b8c' : '#9CA3AF' }}>
                             {getTrendIcon(driver.grade)}
                           </Box>
                         </Box>
@@ -328,7 +328,7 @@ export default function ValueDriversHeatmap({ assessment }: ValueDriversHeatmapP
                                 }}>
                                   <Box sx={{ 
                                     height: '100%', 
-                                    backgroundColor: '#5EEAD4',
+                                    backgroundColor: '#005b8c',
                                     width: `${(getGradeScore(selectedDriver.grade) / 5) * 100}%`,
                                     transition: 'width 0.3s ease'
                                   }} />
@@ -354,7 +354,7 @@ export default function ValueDriversHeatmap({ assessment }: ValueDriversHeatmapP
                                 variant="body2" 
                                 sx={{ color: 'rgba(255,255,255,0.8)' }}
                               >
-                                <strong style={{ color: '#5EEAD4' }}>{selectedDriver.impact}</strong> impact on overall business valuation
+                                <strong style={{ color: '#005b8c' }}>{selectedDriver.impact}</strong> impact on overall business valuation
                               </Typography>
                             </Box>
                           </Box>

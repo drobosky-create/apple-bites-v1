@@ -73,7 +73,7 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
       <Card sx={{ mb: 4, background: 'linear-gradient(135deg, #0A1F44 0%, #1B2C4F 100%)', color: 'white' }}>
         <CardContent sx={{ p: 4 }}>
           <MDBox textAlign="center">
-            <MDTypography variant="h4" fontWeight="bold" sx={{ color: '#5EEAD4', mb: 2 }}>
+            <MDTypography variant="h4" fontWeight="bold" sx={{ color: '#005b8c', mb: 2 }}>
               Estimated Business Value
             </MDTypography>
             
@@ -88,7 +88,7 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
               </MDBox>
               
               <MDBox textAlign="center">
-                <MDTypography variant="h3" fontWeight="bold" sx={{ color: '#5EEAD4', mb: 1 }}>
+                <MDTypography variant="h3" fontWeight="bold" sx={{ color: '#005b8c', mb: 1 }}>
                   {formatCurrency(results.midEstimate)}
                 </MDTypography>
                 <MDTypography variant="body1" sx={{ color: '#ffffff', fontWeight: 'medium' }}>
@@ -111,8 +111,8 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
                 onClick={handleExploreImprovements}
                 variant="outlined"
                 sx={{ 
-                  color: '#5EEAD4', 
-                  borderColor: '#5EEAD4',
+                  color: '#005b8c', 
+                  borderColor: '#005b8c',
                   '&:hover': { backgroundColor: 'rgba(94, 234, 212, 0.1)' }
                 }}
                 startIcon={<Calculator size={16} />}
@@ -124,7 +124,7 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
                 onClick={handleScheduleConsultation}
                 variant="contained"
                 sx={{ 
-                  background: '#5EEAD4',
+                  background: '#005b8c',
                   color: '#0A1F44',
                   '&:hover': { background: '#4DD0C7' }
                 }}

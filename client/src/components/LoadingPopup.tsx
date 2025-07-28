@@ -39,7 +39,7 @@ export default function LoadingPopup({ open, onClose }: LoadingPopupProps) {
                 }
               }}
             >
-              <Calculator size={64} color="#5EEAD4" />
+              <Calculator size={64} color="#005b8c" />
             </Box>
             
             {/* Orbiting Icons */}
@@ -86,7 +86,7 @@ export default function LoadingPopup({ open, onClose }: LoadingPopupProps) {
             size={60} 
             thickness={4}
             sx={{ 
-              color: '#5EEAD4',
+              color: '#005b8c',
               '& .MuiCircularProgress-circle': {
                 strokeLinecap: 'round'
               }
@@ -94,7 +94,7 @@ export default function LoadingPopup({ open, onClose }: LoadingPopupProps) {
           />
 
           {/* Title */}
-          <MDTypography variant="h4" fontWeight="bold" sx={{ color: '#5EEAD4' }}>
+          <MDTypography variant="h4" fontWeight="bold" sx={{ color: '#005b8c' }}>
             Generating Your Report
           </MDTypography>
 
@@ -112,7 +112,7 @@ export default function LoadingPopup({ open, onClose }: LoadingPopupProps) {
                     width: 8,
                     height: 8,
                     borderRadius: '50%',
-                    backgroundColor: '#5EEAD4',
+                    backgroundColor: '#005b8c',
                     animation: 'blink 1.5s ease-in-out infinite',
                     '@keyframes blink': {
                       '0%, 50%': { opacity: 1 },
@@ -131,7 +131,7 @@ export default function LoadingPopup({ open, onClose }: LoadingPopupProps) {
                     width: 8,
                     height: 8,
                     borderRadius: '50%',
-                    backgroundColor: '#5EEAD4',
+                    backgroundColor: '#005b8c',
                     animation: 'blink 1.5s ease-in-out infinite 0.5s',
                     '@keyframes blink': {
                       '0%, 50%': { opacity: 1 },
@@ -150,7 +150,7 @@ export default function LoadingPopup({ open, onClose }: LoadingPopupProps) {
                     width: 8,
                     height: 8,
                     borderRadius: '50%',
-                    backgroundColor: '#5EEAD4',
+                    backgroundColor: '#005b8c',
                     animation: 'blink 1.5s ease-in-out infinite 1s',
                     '@keyframes blink': {
                       '0%, 50%': { opacity: 1 },

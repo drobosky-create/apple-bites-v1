@@ -511,7 +511,7 @@ export default function InteractiveValuationSlider() {
             </Typography>
             <Typography variant="h6" sx={{ mb: 3, opacity: 0.9 }}>
               By improving your operational grade from {baseGrade} to {sliderGrade}, 
-              you could add <strong style={{ color: '#5EEAD4' }}>${Math.round(potentialIncrease).toLocaleString()}</strong> to your business value.
+              you could add <strong style={{ color: '#005b8c' }}>${Math.round(potentialIncrease).toLocaleString()}</strong> to your business value.
             </Typography>
             <Button 
               variant="contained"
@@ -519,7 +519,7 @@ export default function InteractiveValuationSlider() {
               startIcon={<Phone />}
               onClick={() => window.open('https://api.leadconnectorhq.com/widget/bookings/applebites', '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes')}
               sx={{
-                background: 'linear-gradient(135deg, #5EEAD4 0%, #4DD0C7 100%)',
+                background: 'linear-gradient(135deg, #005b8c 0%, #4DD0C7 100%)',
                 color: '#0A1F44',
                 fontWeight: 'bold',
                 py: 2,

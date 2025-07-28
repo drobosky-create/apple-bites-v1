@@ -209,7 +209,7 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
                       <MDTypography variant="h6" fontWeight="bold" sx={{ color: '#F9FAFB' }}>
                         EBITDA:
                       </MDTypography>
-                      <MDTypography variant="h6" fontWeight="bold" sx={{ color: '#5EEAD4' }}>
+                      <MDTypography variant="h6" fontWeight="bold" sx={{ color: '#005b8c' }}>
                         {formatCurrency(ebitdaTotal)}
                       </MDTypography>
                     </MDBox>

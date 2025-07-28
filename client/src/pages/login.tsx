@@ -307,7 +307,7 @@ export default function HybridLoginPage() {
                 borderRadius: 2,
                 textTransform: 'none',
                 '&:hover': {
-                  background: 'linear-gradient(135deg, #00718d 0%, #33FFC5 100%)',
+                  background: 'linear-gradient(135deg, #00718d 0%, #3B82F6 100%)',
                   boxShadow: '0 8px 25px -8px rgba(0,191,166,0.4)'
                 },
                 '&:disabled': {
