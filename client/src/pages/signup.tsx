@@ -165,7 +165,7 @@ export default function HybridSignupPage() {
             onSubmit={handleSubmit}
             sx={{
               width: '100%',
-              maxWidth: { xs: '100%', md: 480 },
+              maxWidth: { xs: '100%', md: 600 },
               backgroundColor: { xs: 'white', md: 'transparent' },
               borderRadius: { xs: 3, md: 0 },
               p: { xs: 4, md: 0 },
