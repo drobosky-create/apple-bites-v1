@@ -203,13 +203,16 @@ export default function InteractiveValuationSlider() {
         <Grid size={{ xs: 12, md: 6 }}>
           <Card sx={{ 
             background: 'linear-gradient(135deg, #0A1F44 0%, #1B2C4F 100%)',
-            color: 'white',
+            color: 'white !important',
             position: 'relative',
-            overflow: 'hidden'
+            overflow: 'hidden',
+            '& *': {
+              color: 'white !important'
+            }
           }}>
             <CardContent sx={{ p: 4 }}>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                <Typography variant="h5" sx={{ fontWeight: 'bold', flex: 1, color: 'white' }}>
+                <Typography variant="h5" sx={{ fontWeight: 'bold', flex: 1, color: 'white !important' }}>
                   Current Value
                 </Typography>
                 <Chip 
@@ -222,13 +225,13 @@ export default function InteractiveValuationSlider() {
                   }}
                 />
               </Box>
-              <Typography variant="body1" sx={{ mb: 3, opacity: 0.8, color: 'white' }}>
+              <Typography variant="body1" sx={{ mb: 3, opacity: 0.8, color: 'white !important' }}>
                 Based on your Operational Grade of {baseGrade}
               </Typography>
-              <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 2, color: 'white' }}>
+              <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 2, color: 'white !important' }}>
                 ${currentValuation.toLocaleString()}
               </Typography>
-              <Typography variant="h6" sx={{ mb: 2, opacity: 0.9, color: 'white' }}>
+              <Typography variant="h6" sx={{ mb: 2, opacity: 0.9, color: 'white !important' }}>
                 ${currentMultiple}x EBITDA Multiple
               </Typography>
               <Chip 
@@ -327,14 +330,17 @@ export default function InteractiveValuationSlider() {
               ) : (
                 <Card sx={{ 
                   background: 'linear-gradient(135deg, #0A1F44 0%, #1B2C4F 100%)',
-                  color: 'white',
-                  textAlign: 'center'
+                  color: 'white !important',
+                  textAlign: 'center',
+                  '& *': {
+                    color: 'white !important'
+                  }
                 }}>
                   <CardContent sx={{ p: 3 }}>
-                    <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 2, color: 'white' }}>
+                    <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 2, color: 'white !important' }}>
                       Select a different grade to see potential impact
                     </Typography>
-                    <Typography variant="body1" sx={{ color: 'white' }}>
+                    <Typography variant="body1" sx={{ color: 'white !important' }}>
                       Use the grade buttons below to explore value changes
                     </Typography>
                   </CardContent>
