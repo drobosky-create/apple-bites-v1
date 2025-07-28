@@ -74,7 +74,8 @@ export default function AssessmentStepper({ activeStep }: AssessmentStepperProps
   return (
     <Box 
       sx={{ 
-        width: '100%', 
+        width: '95%',
+        margin: '0 auto',
         mb: -2, // Negative margin to overlap the white form card
         position: 'relative',
         zIndex: 2 // Ensure it sits above the form card
@@ -84,10 +85,11 @@ export default function AssessmentStepper({ activeStep }: AssessmentStepperProps
       <Box
         sx={{
           backgroundColor: '#0A1F44',
-          borderRadius: '50px',
+          borderRadius: '25px',
           padding: '24px 32px',
           boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
           border: '1px solid rgba(255, 255, 255, 0.1)'
+          
         }}
       >
         <Stepper
