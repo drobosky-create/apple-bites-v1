@@ -1,410 +1,136 @@
+import React from "react";
+import { Container } from '@mui/material';
 import { useRoute, useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
 
-import { ArrowLeft, Home, FileText, TrendingUp, ExternalLink, LogOut, User } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import ValuationResults from "@/components/valuation-results";
 import type { ValuationAssessment } from "@shared/schema";
+import DashboardLayout from "@/components/DashboardLayout";
 import {
   Box,
   Typography,
-  Container,
-  Drawer,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Divider,
-  Chip,
-  Button,
+  Button
 } from '@mui/material';
-import { styled } from '@mui/material/styles';
-
-// Material Dashboard Styled Components (matching dashboard.tsx exactly)
-const DashboardBackground = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  minHeight: '100vh',
-  backgroundColor: '#f8f9fa',
-  gap: 0,
-}));
 
 const drawerWidth = 280;
-
-const MainContent = styled(Box)(({ theme }) => ({
-  flexGrow: 1,
-  padding: '16px 24px 24px 8px',
-  marginLeft: 0,
-  minHeight: '100vh',
-  width: `calc(100vw - ${drawerWidth}px)`,
-  backgroundColor: '#f8f9fa',
-}));
-
-interface User {
-  id: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  profileImageUrl: string;
-  tier: 'free' | 'growth' | 'capital';
-  resultReady: boolean;
-}
 
 export default function AssessmentResults() {
   const [, params] = useRoute("/assessment-results/:id");
   const [, setLocation] = useLocation();
-  const { user: authUser, isLoading: authLoading } = useAuth();
-  
-  const assessmentId = params?.id;
+  const { user } = useAuth();
 
-  // Fetch all assessments to find the specific one
-  const { data: assessments, isLoading: assessmentsLoading } = useQuery<ValuationAssessment[]>({
-    queryKey: ['/api/analytics/assessments'],
-    enabled: !!assessmentId,
+  const { data: assessment, isLoading, error } = useQuery<ValuationAssessment>({
+    queryKey: [`/api/assessment/${params?.id}`],
+    enabled: !!params?.id,
   });
 
-  // Find the specific assessment
-  const assessment = assessments?.find(a => a.id.toString() === assessmentId);
-
-  const { data: user } = useQuery({
-    queryKey: ['/api/auth/user'],
-    enabled: !!authUser,
-  });
-
-  if (authLoading || assessmentsLoading) {
-    return (
-      <DashboardBackground>
-        <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
-          <Box sx={{ 
-            width: 40, 
-            height: 40, 
-            border: '3px solid #f3f3f3',
-            borderTop: '3px solid #2152ff',
-            borderRadius: '50%',
-            animation: 'spin 1s linear infinite',
-            '@keyframes spin': {
-              '0%': { transform: 'rotate(0deg)' },
-              '100%': { transform: 'rotate(360deg)' },
-            }
-          }} />
-        </Box>
-      </DashboardBackground>
-    );
-  }
-
-  if (!assessment) {
-    return (
-      <DashboardBackground>
-        <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh" p={3}>
-          <Box sx={{ 
-            maxWidth: 400, 
-            width: '100%',
-            backgroundColor: 'white',
-            borderRadius: '16px',
-            boxShadow: '0 8px 20px rgba(0,0,0,0.1)',
-            p: 4,
-            textAlign: 'center'
-          }}>
-            <FileText size={64} color="#67748e" style={{ marginBottom: 16 }} />
-            <Typography variant="h4" sx={{ color: '#344767', fontWeight: 700, mb: 2 }}>
-              Assessment Not Found
-            </Typography>
-            <Typography variant="body1" sx={{ color: '#67748e', mb: 3 }}>
-              The requested assessment could not be found or you don't have access to it.
-            </Typography>
-            <Button 
-              onClick={() => setLocation('/value-calculator')}
-              
-            >
-              <ArrowLeft  />
-              Back to Value Calculator
-            </Button>
-          </Box>
-        </Box>
-      </DashboardBackground>
-    );
-  }
-
-  // Use actual user data or default to free tier
-  const displayUser: User = (user as User) || {
-    id: "demo-user",
-    email: "demo@applebites.ai",
+  // Demo user for display purposes
+  const displayUser = user || {
     firstName: "Demo",
     lastName: "User", 
-    profileImageUrl: "/default-avatar.png",
-    tier: 'free' as const,
-    resultReady: false
+    email: "demo@applebites.ai",
+    tier: "free"
   };
 
-  const getTierInfo = (tier: string) => {
-    switch (tier) {
-      case 'growth':
-        return {
-          name: 'Growth & Exit Assessment',
-          color: 'primary',
-          description: 'Professional industry-specific analysis with AI insights',
-          price: '$795',
-        };
-      case 'capital':
-        return {
-          name: 'Capital Readiness Assessment',
-          color: 'secondary',
-          description: 'Comprehensive capital readiness analysis and strategic planning',
-          price: '$2,500',
-        };
-      default:
-        return {
-          name: 'Free Assessment',
-          color: 'default',
-          description: 'Basic business valuation analysis',
-          price: 'Free',
-        };
-    }
-  };
+  if (isLoading) {
+    return (
+      <DashboardLayout currentPage="assessment-results">
+        <Box
+          sx={{
+            backgroundColor: 'rgba(255, 255, 255, 0.95)',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
+            borderRadius: '20px',
+            p: 4,
+            minHeight: 'calc(100vh - 48px)',
+            boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+            border: '1px solid rgba(255, 255, 255, 0.18)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        >
+          <Typography variant="h6" color="text.secondary">
+            Loading assessment...
+          </Typography>
+        </Box>
+      </DashboardLayout>
+    );
+  }
 
-  const tierInfo = getTierInfo(displayUser.tier);
+  if (error || !assessment) {
+    return (
+      <DashboardLayout currentPage="assessment-results">
+        <Box
+          sx={{
+            backgroundColor: 'rgba(255, 255, 255, 0.95)',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
+            borderRadius: '20px',
+            p: 4,
+            minHeight: 'calc(100vh - 48px)',
+            boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+            border: '1px solid rgba(255, 255, 255, 0.18)',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        >
+          <Typography variant="h6" color="error" gutterBottom>
+            Assessment not found
+          </Typography>
+          <Button
+            variant="contained"
+            onClick={() => setLocation('/dashboard')}
+            startIcon={<ArrowLeft size={18} />}
+            sx={{ mt: 2 }}
+          >
+            Back to Dashboard
+          </Button>
+        </Box>
+      </DashboardLayout>
+    );
+  }
 
   return (
-    <DashboardBackground>
-      {/* Apple Bites Unified Sidebar */}
-      <DashboardSidebar user={{
-        name: `${assessment.firstName} ${assessment.lastName}`,
-        email: assessment.email || 'user@applebites.ai',
-        tier: assessment.tier as 'free' | 'growth' | 'capital',
-        firstName: assessment.firstName,
-        lastName: assessment.lastName
-      }} />
-
-      {/* Main Content */}
-      <MainContent sx={{ marginLeft: '328px', width: 'calc(100vw - 328px)' }}>
-        <Container maxWidth="xl" sx={{ py: 0 }}>
-          {/* Page Header */}
-          <Box sx={{ mb: 4, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <Box>
-              <Typography variant="h4" sx={{ 
-                color: '#344767', 
-                fontWeight: 700,
-                mb: 1
-              }}>
-                Assessment Results
-              </Typography>
-              <Typography variant="h6" sx={{ 
-                color: '#67748e', 
-                fontWeight: 400
-              }}>
-                {assessment.firstName} {assessment.lastName} - {new Date(assessment.createdAt || Date.now()).toLocaleDateString('en-US', { 
-                  year: 'numeric', 
-                  month: 'long', 
-                  day: 'numeric' 
-                })}
-              </Typography>
-            </Box>
+    <DashboardLayout currentPage="assessment-results">
+      <Container maxWidth="lg" sx={{ py: 0 }}>
+        <Box
+          sx={{
+            backgroundColor: 'rgba(255, 255, 255, 0.95)',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
+            borderRadius: '20px',
+            p: 4,
+            minHeight: 'calc(100vh - 48px)',
+            boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+            border: '1px solid rgba(255, 255, 255, 0.18)',
+          }}
+        >
+          <Box sx={{ mb: 3 }}>
             <Button
-              onClick={() => setLocation('/dashboard')}
               variant="outlined"
+              onClick={() => setLocation('/dashboard')}
               startIcon={<ArrowLeft size={18} />}
+              sx={{
+                borderColor: '#0A1F44',
+                color: '#0A1F44',
+                '&:hover': {
+                  borderColor: '#00BFA6',
+                  backgroundColor: 'rgba(0, 191, 166, 0.04)'
+                }
+              }}
             >
               Back to Dashboard
             </Button>
           </Box>
 
           <ValuationResults results={assessment} />
-        </Container>
-      </MainContent>
-    </DashboardBackground>
-  );
-}
-
-// DashboardSidebar Component (copied from dashboard.tsx)
-function DashboardSidebar({ user }: { user: { name: string; email: string; tier: 'free' | 'growth' | 'capital'; firstName?: string; lastName?: string; } }) {
-  // Apple Bites Brand Colors
-  const colors = {
-    primary: "#00BFA6",
-    secondary: "#0A1F44", 
-    accent: "#5EEAD4",
-    grayLight: "#F7FAFC",
-    gray: "#CBD5E1"
-  };
-
-  const gradients = {
-    primary: "linear-gradient(135deg, #00BFA6 0%, #0A1F44 100%)",
-    light: "linear-gradient(135deg, #00BFA6 0%, #5EEAD4 100%)",
-    dark: "linear-gradient(135deg, #0A1F44 0%, #1C2D5A 100%)",
-    glow: "linear-gradient(135deg, #00BFA6 0%, #33FFC5 100%)"
-  };
-
-  const getTierGradient = (tier: string) => {
-    switch (tier) {
-      case 'free': return 'linear-gradient(135deg, #CBD5E1 0%, #94A3B8 100%)';
-      case 'growth': return gradients.primary;
-      case 'capital': return gradients.glow;
-      default: return 'linear-gradient(135deg, #CBD5E1 0%, #94A3B8 100%)';
-    }
-  };
-
-  const getTierLabel = (tier: string) => {
-    switch (tier) {
-      case 'free': return 'Free';
-      case 'growth': return 'Growth';
-      case 'capital': return 'Capital';
-      default: return 'Free';
-    }
-  };
-
-  return (
-    <Box
-      sx={{
-        position: 'fixed',
-        top: '24px',
-        left: '24px',
-        width: 280,
-        height: 'calc(100vh - 48px)',
-        background: gradients.dark,
-        borderRadius: '20px',
-        border: `1px solid rgba(255, 255, 255, 0.15)`,
-        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1)',
-        backdropFilter: 'blur(8px)',
-        padding: 3,
-        display: 'flex',
-        flexDirection: 'column',
-        zIndex: 1000,
-        overflow: 'hidden'
-      }}
-    >
-      {/* User Info Section */}
-      <Box mb={4}>
-        <Box display="flex" alignItems="center" mb={2}>
-          <Box
-            sx={{
-              width: 40,
-              height: 40,
-              borderRadius: '50%',  
-              background: 'linear-gradient(135deg, #00BFA6 0%, #5EEAD4 100%)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: 'white',
-              fontWeight: 'bold',
-              fontSize: '16px',
-              mr: 2
-            }}
-          >
-            {user.firstName?.[0]}{user.lastName?.[0]}
-          </Box>
-          <Box>
-            <Typography variant="h6" sx={{ color: 'white', fontSize: '14px', fontWeight: 600 }}>
-              {user.firstName} {user.lastName}
-            </Typography>
-            <Typography variant="body2" sx={{ color: '#dbdce1', fontSize: '12px' }}>
-              {user.email}
-            </Typography>
-          </Box>
         </Box>
-        
-        <Box
-          sx={{
-            background: getTierGradient(user.tier),
-            borderRadius: '20px',
-            px: 2,
-            py: 1,
-            display: 'inline-block'
-          }}
-        >
-          <Typography variant="caption" sx={{ color: 'white', fontWeight: 600, fontSize: '11px' }}>
-            {getTierLabel(user.tier).toUpperCase()} ASSESSMENT
-          </Typography>
-        </Box>
-      </Box>
-
-      {/* Navigation Buttons */}
-      <Box display="flex" flexDirection="column" gap={2} sx={{ p: 3, flex: 1 }}>
-        <Button
-          onClick={() => window.location.href = '/dashboard'}
-          sx={{
-            background: 'transparent',
-            border: '1px solid rgba(255, 255, 255, 0.3)',
-            color: '#dbdce1',
-            '&:hover': {
-              background: 'rgba(255, 255, 255, 0.1)',
-              transform: 'translateY(-2px)'
-            },
-            transition: 'all 0.3s ease',
-            width: '100%',
-            py: 1.5,
-            justifyContent: 'flex-start'
-          }}
-          startIcon={<Home size={18} />}
-        >
-          Dashboard
-        </Button>
-
-        <Button
-          onClick={() => window.location.href = '/past-assessments'}
-          sx={{
-            background: 'transparent',
-            border: '1px solid rgba(255, 255, 255, 0.3)',
-            color: '#dbdce1',
-            '&:hover': {
-              background: 'rgba(255, 255, 255, 0.1)',
-              transform: 'translateY(-2px)'
-            },
-            transition: 'all 0.3s ease',
-            width: '100%',
-            py: 1.5,
-            justifyContent: 'flex-start'
-          }}
-          startIcon={<FileText size={18} />}
-        >
-          Past Assessments
-        </Button>
-
-        <Button
-          onClick={() => window.location.href = '/value-calculator'}
-          sx={{
-            background: 'transparent',
-            border: '1px solid rgba(255, 255, 255, 0.3)',
-            color: '#dbdce1',
-            '&:hover': {
-              background: 'rgba(255, 255, 255, 0.1)',
-              transform: 'translateY(-2px)'
-            },
-            transition: 'all 0.3s ease',
-            width: '100%',
-            py: 1.5,
-            justifyContent: 'flex-start'
-          }}
-          startIcon={<TrendingUp size={18} />}
-        >
-          Value Calculator
-        </Button>
-
-        <Button
-          onClick={() => window.location.href = '/profile'}
-          sx={{
-            background: 'transparent',
-            border: '1px solid rgba(255, 255, 255, 0.3)',
-            color: '#dbdce1',
-            '&:hover': {
-              background: 'rgba(255, 255, 255, 0.1)',
-              transform: 'translateY(-2px)'
-            },
-            transition: 'all 0.3s ease',
-            width: '100%',
-            py: 1.5,
-            justifyContent: 'flex-start'
-          }}
-          startIcon={<User size={18} />}
-        >
-          Profile
-        </Button>
-      </Box>
-
-      {/* Apple Bites Footer */}
-      <Box sx={{ mt: 'auto', p: 2, borderTop: '1px solid rgba(255,255,255,0.12)' }}>
-        <Typography variant="caption" color="rgba(255,255,255,0.6)" textAlign="center" display="block">
-          © 2025 Apple Bites
-        </Typography>
-      </Box>
-    </Box>
+      </Container>
+    </DashboardLayout>
   );
 }
