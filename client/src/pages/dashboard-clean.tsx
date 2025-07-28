@@ -34,12 +34,37 @@ const mockUser: DashboardUser = {
 };
 
 function DashboardSidebar({ user }: { user: DashboardUser }) {
+  // Apple Bites Brand Colors
+  const colors = {
+    primary: "#00BFA6",
+    secondary: "#0A1F44", 
+    accent: "#5EEAD4",
+    grayLight: "#F7FAFC",
+    gray: "#CBD5E1"
+  };
+
+  const gradients = {
+    primary: "linear-gradient(135deg, #00BFA6 0%, #0A1F44 100%)",
+    light: "linear-gradient(135deg, #00BFA6 0%, #5EEAD4 100%)",
+    dark: "linear-gradient(135deg, #0A1F44 0%, #1C2D5A 100%)",
+    glow: "linear-gradient(135deg, #00BFA6 0%, #33FFC5 100%)"
+  };
+
   const getTierColor = (tier: string) => {
     switch (tier) {
-      case 'free': return 'secondary';
-      case 'growth': return 'info';
-      case 'capital': return 'warning';
-      default: return 'secondary';
+      case 'free': return colors.gray;
+      case 'growth': return colors.primary;
+      case 'capital': return colors.accent;
+      default: return colors.gray;
+    }
+  };
+
+  const getTierGradient = (tier: string) => {
+    switch (tier) {
+      case 'free': return 'linear-gradient(135deg, #CBD5E1 0%, #94A3B8 100%)';
+      case 'growth': return gradients.primary;
+      case 'capital': return gradients.glow;
+      default: return 'linear-gradient(135deg, #CBD5E1 0%, #94A3B8 100%)';
     }
   };
 
@@ -57,8 +82,8 @@ function DashboardSidebar({ user }: { user: DashboardUser }) {
       sx={{
         width: 280,
         height: '100vh',
-        backgroundColor: 'white',
-        borderRight: '1px solid #e0e6ed',
+        background: gradients.dark,
+        borderRight: `1px solid ${colors.secondary}`,
         padding: 3,
         display: 'flex',
         flexDirection: 'column'
@@ -69,7 +94,7 @@ function DashboardSidebar({ user }: { user: DashboardUser }) {
         <MDBox display="flex" alignItems="center" mb={2}>
           <MDAvatar
             sx={{
-              backgroundColor: '#1976d2',
+              background: gradients.glow,
               width: 48,
               height: 48,
               mr: 2
@@ -78,26 +103,34 @@ function DashboardSidebar({ user }: { user: DashboardUser }) {
             <User size={24} color="white" />
           </MDAvatar>
           <MDBox>
-            <MDTypography variant="h6" fontWeight="medium">
+            <MDTypography variant="h6" fontWeight="medium" sx={{ color: 'white' }}>
               {user.name}
             </MDTypography>
-            <MDTypography variant="caption" color="text">
+            <MDTypography variant="caption" sx={{ color: colors.accent }}>
               {user.email}
             </MDTypography>
           </MDBox>
         </MDBox>
         
         <MDBox display="flex" alignItems="center">
-          <MDTypography variant="body2" mr={1}>
+          <MDTypography variant="body2" mr={1} sx={{ color: 'white' }}>
             Tier:
           </MDTypography>
-          <MDBadge 
-            variant="gradient" 
-            color={getTierColor(user.tier)}
-            size="sm"
+          <MDBox
+            sx={{
+              background: getTierGradient(user.tier),
+              color: 'white',
+              px: 2,
+              py: 0.5,
+              borderRadius: 2,
+              fontSize: '0.75rem',
+              fontWeight: 600,
+              textTransform: 'uppercase',
+              letterSpacing: '0.5px'
+            }}
           >
             {getTierLabel(user.tier)}
-          </MDBadge>
+          </MDBox>
         </MDBox>
       </MDBox>
 
@@ -105,9 +138,18 @@ function DashboardSidebar({ user }: { user: DashboardUser }) {
       <MDBox display="flex" flexDirection="column" gap={2}>
         <Link href="/assessment/free">
           <MDButton
-            variant="gradient"
-            color="primary"
-            fullWidth
+            sx={{
+              background: gradients.glow,
+              color: 'white',
+              '&:hover': {
+                background: gradients.light,
+                transform: 'translateY(-2px)',
+                boxShadow: `0 8px 25px -8px ${colors.primary}`
+              },
+              transition: 'all 0.3s ease',
+              width: '100%',
+              py: 1.5
+            }}
             startIcon={<Plus size={18} />}
           >
             New Assessment
@@ -116,9 +158,19 @@ function DashboardSidebar({ user }: { user: DashboardUser }) {
 
         {user.tier === 'free' && (
           <MDButton
-            variant="outlined"
-            color="warning"
-            fullWidth
+            sx={{
+              background: 'transparent',
+              border: `2px solid ${colors.accent}`,
+              color: colors.accent,
+              '&:hover': {
+                background: colors.accent,
+                color: colors.secondary,
+                transform: 'translateY(-2px)'
+              },
+              transition: 'all 0.3s ease',
+              width: '100%',
+              py: 1.5
+            }}
             startIcon={<Crown size={18} />}
             onClick={() => window.open('https://products.applebites.ai/', '_blank')}
           >
@@ -127,9 +179,18 @@ function DashboardSidebar({ user }: { user: DashboardUser }) {
         )}
 
         <MDButton
-          variant="outlined"
-          color="secondary"
-          fullWidth
+          sx={{
+            background: 'transparent',
+            border: `1px solid rgba(255, 255, 255, 0.3)`,
+            color: 'white',
+            '&:hover': {
+              background: 'rgba(255, 255, 255, 0.1)',
+              transform: 'translateY(-2px)'
+            },
+            transition: 'all 0.3s ease',
+            width: '100%',
+            py: 1.5
+          }}
           startIcon={<Clock size={18} />}
         >
           Past Assessments
@@ -140,8 +201,8 @@ function DashboardSidebar({ user }: { user: DashboardUser }) {
       <MDBox flexGrow={1} />
 
       {/* Footer */}
-      <MDBox mt={4} pt={2} borderTop="1px solid #e0e6ed">
-        <MDTypography variant="caption" color="text" textAlign="center">
+      <MDBox mt={4} pt={2} borderTop={`1px solid rgba(255, 255, 255, 0.2)`}>
+        <MDTypography variant="caption" textAlign="center" sx={{ color: colors.accent }}>
           Powered by Apple Bites
         </MDTypography>
       </MDBox>
@@ -150,6 +211,20 @@ function DashboardSidebar({ user }: { user: DashboardUser }) {
 }
 
 function DashboardMainContent({ user }: { user: DashboardUser }) {
+  // Apple Bites Brand Colors
+  const colors = {
+    primary: "#00BFA6",
+    secondary: "#0A1F44", 
+    accent: "#5EEAD4",
+    grayLight: "#F7FAFC"
+  };
+
+  const gradients = {
+    primary: "linear-gradient(135deg, #00BFA6 0%, #0A1F44 100%)",
+    light: "linear-gradient(135deg, #00BFA6 0%, #5EEAD4 100%)",
+    glow: "linear-gradient(135deg, #00BFA6 0%, #33FFC5 100%)"
+  };
+
   const getDashboardTitle = (tier: string) => {
     switch (tier) {
       case 'free': return 'Your Free Assessment Dashboard';
@@ -163,17 +238,17 @@ function DashboardMainContent({ user }: { user: DashboardUser }) {
     <MDBox
       sx={{
         flex: 1,
-        backgroundColor: '#f8f9fa',
+        backgroundColor: colors.grayLight,
         padding: 4,
         overflow: 'auto'
       }}
     >
       {/* Header */}
       <MDBox mb={4}>
-        <MDTypography variant="h4" fontWeight="bold" mb={1}>
+        <MDTypography variant="h4" fontWeight="bold" mb={1} sx={{ color: colors.secondary }}>
           {getDashboardTitle(user.tier)}
         </MDTypography>
-        <MDTypography variant="body1" color="text">
+        <MDTypography variant="body1" sx={{ color: colors.secondary, opacity: 0.7 }}>
           Manage your business valuation assessments and track your progress.
         </MDTypography>
       </MDBox>
@@ -220,7 +295,7 @@ function DashboardMainContent({ user }: { user: DashboardUser }) {
           <MDBox display="flex" alignItems="center" mb={2}>
             <MDBox
               sx={{
-                backgroundColor: '#e3f2fd',
+                background: gradients.light,
                 borderRadius: '50%',
                 width: 48,
                 height: 48,
@@ -230,7 +305,7 @@ function DashboardMainContent({ user }: { user: DashboardUser }) {
                 mr: 2
               }}
             >
-              <FileText size={24} color="#1976d2" />
+              <FileText size={24} color="white" />
             </MDBox>
             <MDTypography variant="h6" fontWeight="medium">
               New Assessment
@@ -242,7 +317,19 @@ function DashboardMainContent({ user }: { user: DashboardUser }) {
             </MDTypography>
           </MDBox>
           <Link href="/assessment/free">
-            <MDButton variant="outlined" color="primary" fullWidth>
+            <MDButton 
+              sx={{
+                background: gradients.primary,
+                color: 'white',
+                '&:hover': {
+                  background: gradients.glow,
+                  transform: 'translateY(-2px)',
+                  boxShadow: `0 8px 25px -8px ${colors.primary}`
+                },
+                transition: 'all 0.3s ease',
+                width: '100%'
+              }}
+            >
               Get Started
             </MDButton>
           </Link>
