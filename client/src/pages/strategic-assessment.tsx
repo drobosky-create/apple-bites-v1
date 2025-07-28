@@ -1,13 +1,21 @@
 import { useState, useEffect } from "react";
-
-
-
+import { Card, CardContent, CardHeader, Box, Typography, Button, Badge, Grid, TextField, FormControl, InputLabel, Select, MenuItem, Radio, RadioGroup, FormControlLabel, FormLabel } from '@mui/material';
+import MDBox from "@/components/MD/MDBox";
+import MDButton from "@/components/MD/MDButton";
+import MDTypography from "@/components/MD/MDTypography";
 import { ArrowLeft, Shield, Star, Building2, TrendingUp, DollarSign, FileText, Calculator, Zap, BarChart3 } from "lucide-react";
 import { useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import calculateValuation from "@/utils/valuationEngine";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import AICoachingTips from '@/components/AICoachingTips';
+
+// Create CardTitle component since it's missing from MUI
+const CardTitle = ({ children, ...props }: any) => (
+  <Typography variant="h6" component="div" {...props}>
+    {children}
+  </Typography>
+);
 
 // Type definitions for NAICS data
 interface NAICSIndustry {
@@ -618,7 +626,7 @@ function GrowthExitAssessment() {
               <div >
                 <Building2  />
               </div>
-              <CardTitle >Contact Information</CardTitle>
+              <Typography variant="h6" component="div">Contact Information</Typography>
               <p >Let's start with your basic information</p>
             </CardHeader>
             <CardContent >
@@ -675,7 +683,7 @@ function GrowthExitAssessment() {
               <div >
                 <TrendingUp  />
               </div>
-              <CardTitle >Industry Classification</CardTitle>
+              <Typography variant="h6" component="div">Industry Classification</Typography>
               <p >Help us understand your business sector</p>
             </CardHeader>
             <CardContent >
@@ -761,7 +769,7 @@ function GrowthExitAssessment() {
               <div >
                 <DollarSign  />
               </div>
-              <CardTitle >Financial Information</CardTitle>
+              <Typography variant="h6" component="div">Financial Information</Typography>
               <p >Provide your key financial metrics</p>
             </CardHeader>
             <CardContent >
@@ -825,7 +833,7 @@ function GrowthExitAssessment() {
               <div >
                 <Zap  />
               </div>
-              <CardTitle >EBITDA Adjustments</CardTitle>
+              <Typography variant="h6" component="div">EBITDA Adjustments</Typography>
               <p >Normalize your earnings for valuation</p>
             </CardHeader>
             <CardContent >
@@ -902,7 +910,7 @@ function GrowthExitAssessment() {
               <div >
                 <Star  />
               </div>
-              <CardTitle >Growth & Exit Value Drivers</CardTitle>
+              <Typography variant="h6" component="div">Growth & Exit Value Drivers</Typography>
               <p >Answer these questions to assess your business value</p>
             </CardHeader>
             <CardContent >
@@ -1022,7 +1030,7 @@ function GrowthExitAssessment() {
               <div >
                 <FileText  />
               </div>
-              <CardTitle >Complete Your Assessment</CardTitle>
+              <Typography variant="h6" component="div">Complete Your Assessment</Typography>
               <p >Review and finalize your strategic valuation</p>
             </CardHeader>
             <CardContent >
