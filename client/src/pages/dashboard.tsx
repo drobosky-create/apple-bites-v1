@@ -16,9 +16,10 @@ import {
   Plus,
   ExternalLink,
   Eye,
-  Calendar
+  Calendar,
+  LogOut
 } from 'lucide-react';
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, Typography, Chip } from '@mui/material';
 
 interface DashboardUser {
@@ -257,7 +258,7 @@ function PastAssessmentsSection() {
   );
 }
 
-function DashboardSidebar({ user }: { user: DashboardUser }) {
+function DashboardSidebar({ user, onSignOut }: { user: DashboardUser; onSignOut: () => void }) {
   // Apple Bites Brand Colors
   const colors = {
     primary: "#00BFA6",
@@ -451,6 +452,27 @@ function DashboardSidebar({ user }: { user: DashboardUser }) {
             Past Assessments
           </MDButton>
         </Link>
+
+        <MDButton
+          onClick={onSignOut}
+          className="text-[#dbdce1]"
+          sx={{
+            background: 'transparent',
+            border: `1px solid #EF4444`,
+            color: '#EF4444',
+            '&:hover': {
+              background: 'rgba(239, 68, 68, 0.1)',
+              borderColor: '#DC2626',
+              transform: 'translateY(-2px)'
+            },
+            transition: 'all 0.3s ease',
+            width: '100%',
+            py: 1.5
+          }}
+          startIcon={<LogOut size={18} />}
+        >
+          Sign Out
+        </MDButton>
       </MDBox>
 
       {/* Spacer */}
@@ -700,9 +722,27 @@ function DashboardMainContent({ user, setupDemoSession }: { user: DashboardUser;
 
 export default function DashboardClean() {
   const { user, isAuthenticated } = useAuth();
+  const queryClient = useQueryClient();
   
   // Use actual user data or fallback to mock for testing
   const displayUser = (user as DashboardUser) || mockUser;
+
+  const handleSignOut = async () => {
+    try {
+      // Try multiple logout endpoints for compatibility
+      await fetch('/api/logout', { credentials: 'include' });
+      await fetch('/api/users/logout', { method: 'POST', credentials: 'include' });
+      
+      // Invalidate queries and redirect
+      queryClient.clear();
+      window.location.href = '/';
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Even if logout fails, clear local state and redirect
+      queryClient.clear();
+      window.location.href = '/';
+    }
+  };
 
   // Function to setup demo session for testing
   const setupDemoSession = async () => {
@@ -730,7 +770,7 @@ export default function DashboardClean() {
 
   return (
     <MDBox display="flex" minHeight="100vh">
-      <DashboardSidebar user={displayUser} />
+      <DashboardSidebar user={displayUser} onSignOut={handleSignOut} />
       <DashboardMainContent user={displayUser} setupDemoSession={setupDemoSession} />
     </MDBox>
   );

@@ -7,7 +7,7 @@ import MDBox from '@/components/MD/MDBox';
 import MDTypography from '@/components/MD/MDTypography';
 import MDButton from '@/components/MD/MDButton';
 import { TextField } from '@mui/material';
-import { ArrowLeft, User, Phone } from 'lucide-react';
+import { ArrowLeft, User, Phone, LogOut } from 'lucide-react';
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa';
 import { Switch, styled } from '@mui/material';
 
@@ -130,6 +130,23 @@ export default function ProfilePage() {
     }
   };
 
+  const handleSignOut = async () => {
+    try {
+      // Try multiple logout endpoints for compatibility
+      await fetch('/api/logout', { credentials: 'include' });
+      await fetch('/api/users/logout', { method: 'POST', credentials: 'include' });
+      
+      // Invalidate queries and redirect
+      queryClient.clear();
+      window.location.href = '/';
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Even if logout fails, clear local state and redirect
+      queryClient.clear();
+      window.location.href = '/';
+    }
+  };
+
   // Demo mode - show profile interface even without authentication
   // if (!isAuthenticated) {
   //   return (
@@ -182,26 +199,49 @@ export default function ProfilePage() {
               Profile
             </MDTypography>
           </MDBox>
-          <MDButton
-            onClick={handleSave}
-            disabled={updateProfileMutation.isPending}
-            className="text-[#ffffff]"
-            sx={{
-              px: 2,
-              py: 1,
-              background: 'linear-gradient(to right, #00B4AA, #002E4D)',
-              color: '#F9FAFB',
-              borderRadius: '6px',
-              '&:hover': {
-                background: 'linear-gradient(to right, #008E88, #001C2F)'
-              },
-              '&:disabled': {
-                opacity: 0.6
-              }
-            }}
-          >
-            {updateProfileMutation.isPending ? 'Saving...' : editMode ? 'Save' : 'Edit Profile'}
-          </MDButton>
+          <MDBox sx={{ display: 'flex', gap: 2 }}>
+            <MDButton
+              onClick={handleSignOut}
+              sx={{
+                px: 2,
+                py: 1,
+                background: 'transparent',
+                color: '#EF4444',
+                border: '1px solid #EF4444',
+                borderRadius: '6px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 1,
+                '&:hover': {
+                  background: 'rgba(239, 68, 68, 0.1)',
+                  borderColor: '#DC2626'
+                }
+              }}
+            >
+              <LogOut size={16} />
+              Sign Out
+            </MDButton>
+            <MDButton
+              onClick={handleSave}
+              disabled={updateProfileMutation.isPending}
+              className="text-[#ffffff]"
+              sx={{
+                px: 2,
+                py: 1,
+                background: 'linear-gradient(to right, #00B4AA, #002E4D)',
+                color: '#F9FAFB',
+                borderRadius: '6px',
+                '&:hover': {
+                  background: 'linear-gradient(to right, #008E88, #001C2F)'
+                },
+                '&:disabled': {
+                  opacity: 0.6
+                }
+              }}
+            >
+              {updateProfileMutation.isPending ? 'Saving...' : editMode ? 'Save' : 'Edit Profile'}
+            </MDButton>
+          </MDBox>
         </MDBox>
 
         {/* Avatar Section */}
