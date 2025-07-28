@@ -188,14 +188,10 @@ export default function ProfilePage() {
           </MDBox>
         </MDBox>
 
-        {/* Two Column Layout */}
-        <MDBox 
-          display="grid" 
-          gridTemplateColumns={{ xs: '1fr', lg: '1fr 1fr' }} 
-          gap={4}
-        >
-          {/* Left Column - Profile Information */}
-          <MDBox>
+        {/* Two Row Layout */}
+        <MDBox>
+          {/* First Row - Profile Information */}
+          <MDBox mb={6}>
             <MDTypography 
               variant="h6" 
               fontWeight="600" 
@@ -339,7 +335,7 @@ export default function ProfilePage() {
             </MDBox>
           </MDBox>
 
-          {/* Right Column - Notification Preferences */}
+          {/* Second Row - Notification Preferences */}
           <MDBox>
             <MDTypography 
               variant="h6" 
