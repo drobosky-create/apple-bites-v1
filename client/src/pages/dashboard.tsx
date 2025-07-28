@@ -134,48 +134,7 @@ function PastAssessmentsSection() {
             Loading assessments...
           </MDTypography>
         </MDBox>
-      ) : !assessments || assessments.length === 0 ? (
-        <MDBox
-          sx={{
-            textAlign: 'center',
-            py: 6,
-            borderRadius: 1,
-            backgroundColor: '#f8f9fa',
-            transition: 'all 0.3s ease',
-            '&:hover': {
-              backgroundColor: '#f0f2f5',
-              transform: 'translateY(-2px)'
-            }
-          }}
-        >
-          <MDBox
-            sx={{
-              display: 'inline-block',
-              animation: 'pulse 2s infinite',
-              '@keyframes pulse': {
-                '0%': { opacity: 0.6 },
-                '50%': { opacity: 1 },
-                '100%': { opacity: 0.6 }
-              }
-            }}
-          >
-            <Clock size={48} color="#9e9e9e" style={{ marginBottom: 16 }} />
-          </MDBox>
-          <MDTypography variant="h6" color="text" mb={1}>
-            No assessments yet
-          </MDTypography>
-          <MDTypography variant="body2" color="text" mb={3}>
-            Your completed assessments will appear here. Start your first assessment to see your business valuation.
-          </MDTypography>
-          <MDBox display="flex" gap={2} justifyContent="center" flexWrap="wrap">
-            <Link href="/assessment/free">
-              <MDButton variant="gradient" color="primary">
-                Start Assessment
-              </MDButton>
-            </Link>
-          </MDBox>
-        </MDBox>
-      ) : (
+      ) : assessments && assessments.length > 0 ? (
         <MDBox display="flex" flexDirection="column" gap={2}>
           {assessments.slice(0, 3).map((assessment) => (
             <Card key={assessment.id} sx={{ cursor: 'pointer' }}>
@@ -249,6 +208,47 @@ function PastAssessmentsSection() {
               </CardContent>
             </Card>
           ))}
+        </MDBox>
+      ) : (
+        <MDBox
+          sx={{
+            textAlign: 'center',
+            py: 6,
+            borderRadius: 1,
+            backgroundColor: '#f8f9fa',
+            transition: 'all 0.3s ease',
+            '&:hover': {
+              backgroundColor: '#f0f2f5',
+              transform: 'translateY(-2px)'
+            }
+          }}
+        >
+          <MDBox
+            sx={{
+              display: 'inline-block',
+              animation: 'pulse 2s infinite',
+              '@keyframes pulse': {
+                '0%': { opacity: 0.6 },
+                '50%': { opacity: 1 },
+                '100%': { opacity: 0.6 }
+              }
+            }}
+          >
+            <Clock size={48} color="#9e9e9e" style={{ marginBottom: 16 }} />
+          </MDBox>
+          <MDTypography variant="h6" color="text" mb={1}>
+            No assessments yet
+          </MDTypography>
+          <MDTypography variant="body2" color="text" mb={3}>
+            Your completed assessments will appear here. Start your first assessment to see your business valuation.
+          </MDTypography>
+          <MDBox display="flex" gap={2} justifyContent="center" flexWrap="wrap">
+            <Link href="/assessment/free">
+              <MDButton variant="gradient" color="primary">
+                Start Assessment
+              </MDButton>
+            </Link>
+          </MDBox>
         </MDBox>
       )}
     </MDBox>
