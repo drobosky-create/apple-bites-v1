@@ -264,7 +264,7 @@ export default function HybridSignupPage() {
 
             {/* Form Fields */}
             <Grid container spacing={4} sx={{ width: '100%' }}>
-              <Grid item xs={6}>
+              <Grid item xs={12}>
                 <Typography variant="body2" fontWeight="medium" sx={{ color: '#374151', mb: 1 }}>
                   First Name
                 </Typography>
@@ -284,7 +284,7 @@ export default function HybridSignupPage() {
                   }}
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={12}>
                 <Typography variant="body2" fontWeight="medium" sx={{ color: '#374151', mb: 1 }}>
                   Last Name
                 </Typography>
