@@ -2,10 +2,11 @@
 
 ## Universal Logo Implementation
 
-**Primary Logo**: `/public/apple-bites-logo.png` - Universal Apple Bites logo for all contexts
+**Primary Logo**: `/public/apple-bites-logo.png` - Universal Apple Bites logo (variant 3 with full branding)
 
 ### Available Assets
-- **apple-bites-logo-premium.png** - High-detail metallic apple with sophisticated money design and cyan accents
+- **apple-bites-logo-3.png** - Source for primary logo: Metallic apple + cyan glow + Meritage Partners + Business Assessment branding
+- **apple-bites-logo-premium.png** - High-detail metallic apple with sophisticated money design (logo only)
 - **apple-bites-business-context.png** - Logo shown in professional business context  
 - **apple-bites-meritage-logo.png** - Combined Apple Bites + Meritage Partners branding
 
@@ -30,9 +31,11 @@ import { AppleBitesLogo } from '@/components/AppleBitesLogo';
 
 The universal logo features:
 - Dark metallic apple with cyan glow effects (#00BFA6 teal brand color)
+- Complete Meritage Partners and Apple Bites Business Assessment branding
 - Professional money design symbolizing business valuation
 - Optimal for both light and dark backgrounds
 - Matches Apple Bites teal/navy theme system
+- Full brand identity with company names and service description
 
 ## Component Sizes
 - **small**: 32x32px - Navigation, buttons
