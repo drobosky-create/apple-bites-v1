@@ -296,9 +296,10 @@ export default function InteractiveValuationSlider() {
                   transform: 'scale(1.25)',
                   transformOrigin: 'center left',
                   display: 'flex',
-                  justifyContent: 'center',
+                  justifyContent: 'flex-start',
                   alignItems: 'center',
-                  height: '100%'
+                  height: '100%',
+                  paddingLeft: '10%'
                 }}
               >
                 <OperationalGradeGauge 
@@ -310,7 +311,7 @@ export default function InteractiveValuationSlider() {
             </Grid>
             
             {/* Potential Gain Display */}
-            <Grid size={{ xs: 12, md: 5 }} sx={{ display: 'flex', alignItems: 'center', height: '100%' }}>
+            <Grid size={{ xs: 12, md: 5 }} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
               <Box sx={{ width: '100%' }}>
                 {sliderGrade !== baseGrade ? (
                 <Card sx={{ 
