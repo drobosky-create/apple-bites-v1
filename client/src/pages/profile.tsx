@@ -9,6 +9,7 @@ import MDButton from '@/components/MD/MDButton';
 import { TextField } from '@mui/material';
 import { ArrowLeft, User, Phone } from 'lucide-react';
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa';
+import { Switch } from '@mui/material';
 
 interface ProfileData {
   name: string;
@@ -21,6 +22,12 @@ interface ProfileData {
   twitter: string;
   instagram: string;
   linkedin: string;
+  // Notification preferences
+  emailResults: boolean;
+  textResults: boolean;
+  monthlyWebinars: boolean;
+  marketUpdates: boolean;
+  newFeatures: boolean;
 }
 
 export default function ProfilePage() {
@@ -38,6 +45,12 @@ export default function ProfilePage() {
     twitter: '',
     instagram: '',
     linkedin: '',
+    // Notification preferences
+    emailResults: true,
+    textResults: false,
+    monthlyWebinars: true,
+    marketUpdates: false,
+    newFeatures: true,
   });
 
   // Initialize profile data from user when available
@@ -68,7 +81,7 @@ export default function ProfilePage() {
     }
   });
 
-  const handleChange = (field: string, value: string) => {
+  const handleChange = (field: string, value: string | boolean) => {
     setProfile((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -298,6 +311,96 @@ export default function ProfilePage() {
                 />
               </MDBox>
             ))}
+          </MDBox>
+
+          {/* Notification Preferences */}
+          <MDBox mt={4}>
+            <MDTypography 
+              variant="h6" 
+              fontWeight="600" 
+              sx={{ color: '#111827', mb: 3 }}
+            >
+              Notification Preferences
+            </MDTypography>
+            
+            <MDBox sx={{ space: 2 }}>
+              {[
+                { 
+                  key: 'emailResults', 
+                  label: 'Email me valuation results',
+                  description: 'Receive completed assessment reports via email'
+                },
+                { 
+                  key: 'textResults', 
+                  label: 'Text me when results are ready',
+                  description: 'Get SMS notifications when your valuation is complete'
+                },
+                { 
+                  key: 'monthlyWebinars', 
+                  label: 'Monthly webinar invitations',
+                  description: 'Business growth and valuation strategy webinars'
+                },
+                { 
+                  key: 'marketUpdates', 
+                  label: 'Market insight updates',
+                  description: 'Industry trends and valuation market reports'
+                },
+                { 
+                  key: 'newFeatures', 
+                  label: 'New feature announcements',
+                  description: 'Platform updates and new assessment tools'
+                }
+              ].map((setting) => (
+                <MDBox 
+                  key={setting.key} 
+                  display="flex" 
+                  justifyContent="space-between" 
+                  alignItems="center"
+                  py={2}
+                  sx={{
+                    borderBottom: '1px solid #F3F4F6',
+                    '&:last-child': {
+                      borderBottom: 'none'
+                    }
+                  }}
+                >
+                  <MDBox flex={1}>
+                    <MDTypography 
+                      variant="body1" 
+                      fontWeight="500"
+                      sx={{ color: '#111827', mb: 0.5 }}
+                    >
+                      {setting.label}
+                    </MDTypography>
+                    <MDTypography 
+                      variant="body2"
+                      sx={{ color: '#6B7280' }}
+                    >
+                      {setting.description}
+                    </MDTypography>
+                  </MDBox>
+                  <Switch
+                    checked={profile[setting.key as keyof ProfileData] as boolean}
+                    onChange={(e) => handleChange(setting.key, e.target.checked)}
+                    disabled={!editMode}
+                    sx={{
+                      '& .MuiSwitch-switchBase.Mui-checked': {
+                        color: '#00BFA6',
+                        '&:hover': {
+                          backgroundColor: 'rgba(0, 191, 166, 0.04)',
+                        },
+                      },
+                      '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+                        backgroundColor: '#00BFA6',
+                      },
+                      '& .MuiSwitch-track': {
+                        backgroundColor: '#D1D5DB',
+                      },
+                    }}
+                  />
+                </MDBox>
+              ))}
+            </MDBox>
           </MDBox>
         </MDBox>
       </MDBox>
