@@ -24,18 +24,8 @@ import {
 import {
   Box,
   Typography,
-  Drawer,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Divider,
   Card,
   CardContent,
-  Step,
-  StepLabel,
-  Stepper,
   Chip,
   Button
 } from '@mui/material';
@@ -57,13 +47,12 @@ const drawerWidth = 280;
 
 const MainContent = styled(Box)(({ theme }) => ({
   flexGrow: 1,
-  padding: '16px 24px 24px 8px',
-  marginLeft: 0,
+  padding: '24px',
+  marginLeft: '328px', // 280px sidebar + 48px margins
   minHeight: '100vh',
-  width: `calc(100vw - ${drawerWidth}px)`,
   backgroundColor: '#f8f9fa',
   [theme.breakpoints.down('md')]: {
-    width: '100vw',
+    marginLeft: 0,
     padding: '16px',
   },
 }));
@@ -211,239 +200,234 @@ export default function FreeAssessment() {
 
   const currentStepIndex = steps.findIndex(step => step.id === currentStep);
 
+  // Apple Bites Brand Colors
+  const colors = {
+    primary: "#00BFA6",
+    secondary: "#0A1F44", 
+    accent: "#5EEAD4",
+    grayLight: "#F7FAFC",
+    gray: "#CBD5E1"
+  };
+
+  const gradients = {
+    primary: "linear-gradient(135deg, #00BFA6 0%, #0A1F44 100%)",
+    light: "linear-gradient(135deg, #00BFA6 0%, #5EEAD4 100%)",
+    dark: "linear-gradient(135deg, #0A1F44 0%, #1C2D5A 100%)",
+    glow: "linear-gradient(135deg, #00BFA6 0%, #33FFC5 100%)"
+  };
+
   return (
     <AssessmentBackground>
-      {/* Material Dashboard Sidebar */}
-      <Drawer
-        variant="permanent"
+      {/* Pillbox Sidebar */}
+      <Box
         sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-          display: { xs: 'none', md: 'block' }, // Hide on mobile, show on desktop
-          '& .MuiDrawer-paper': {
-            width: drawerWidth,
-            boxSizing: 'border-box',
-            backgroundImage: 'url(/assets/twilight-city-skyline.png)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-            color: 'white',
-            border: 'none',
-            overflow: 'hidden',
-            '&::before': {
-              content: '""',
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              background: 'rgba(11, 20, 38, 0.45)',
-              backdropFilter: 'blur(20px) saturate(180%)',
-              WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              zIndex: 1,
-              pointerEvents: 'none',
-            },
-            '& > *': {
-              position: 'relative',
-              zIndex: 2,
-            },
-          },
+          position: 'fixed',
+          top: '24px',
+          left: '24px',
+          width: 280,
+          height: 'calc(100vh - 48px)',
+          background: gradients.dark,
+          borderRadius: '20px',
+          border: `1px solid rgba(255, 255, 255, 0.15)`,
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+          backdropFilter: 'blur(8px)',
+          padding: 3,
+          display: 'flex',
+          flexDirection: 'column',
+          zIndex: 1000,
+          overflow: 'hidden'
         }}
       >
-        <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
-          {/* Logo and User Info */}
-          <Box sx={{ p: 2, textAlign: 'center' }}>
-            <Box component="img"
-              src="/assets/logos/apple-bites-logo-variant-3.png"
-              alt="Apple Bites Business Assessment"
+        {/* User Info Section */}
+        <Box mb={3}>
+          <Box display="flex" alignItems="center" mb={2}>
+            <Box 
+              component="img"
+              src="/apple-bites-logo.png"
+              alt="Apple Bites"
+              sx={{ width: '100px', height: 'auto', mb: 1 }}
+            />
+          </Box>
+          
+          <Typography variant="h6" fontWeight="bold" color="white" gutterBottom>
+            Demo User
+          </Typography>
+          <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.7)' }} gutterBottom>
+            demo@example.com
+          </Typography>
+          
+          <Chip 
+            label="Free Plan"
+            size="small"
+            sx={{ 
+              background: 'linear-gradient(135deg, #CBD5E1 0%, #94A3B8 100%)',
+              color: 'white',
+              fontWeight: 'bold',
+              mt: 1
+            }}
+          />
+        </Box>
+
+        {/* Navigation */}
+        <Box mb={3}>
+          <Box display="flex" flexDirection="column" gap={1}>
+            <Button
+              onClick={() => window.location.href = '/dashboard'}
+              startIcon={<Home size={20} />}
               sx={{
-                width: '80%',
-                maxWidth: 200,
-                mt: 1,
-                mb: 1,
-                mx: 'auto',
-                display: 'block',
-              }}
-            />
-            <Typography variant="h6" fontWeight="bold" color="white" gutterBottom>
-              Demo User
-            </Typography>
-            <Typography variant="body2" color="rgba(255,255,255,0.7)" gutterBottom>
-              demo@example.com
-            </Typography>
-            <Chip 
-              label="Free Assessment"
-              size="small"
-              sx={{ 
-                backgroundColor: 'rgba(255,255,255,0.2)',
-                color: 'white',
-                border: '1px solid rgba(255,255,255,0.3)'
-              }}
-            />
-          </Box>
-
-          <Divider sx={{ borderColor: 'rgba(255,255,255,0.12)' }} />
-
-          <List sx={{ px: 2, py: 2 }}>
-            <ListItem disablePadding>
-              <ListItemButton 
-                onClick={() => window.location.href = '/dashboard'}
-                sx={{ 
-                  borderRadius: '12px',
-                  mb: 1,
-                  '&:hover': { backgroundColor: 'rgba(255,255,255,0.1)' }
-                }}
-              >
-                <ListItemIcon sx={{ color: 'white', minWidth: 40 }}>
-                  <Home size={20} />
-                </ListItemIcon>
-                <ListItemText 
-                  primary="Dashboard" 
-                  primaryTypographyProps={{ color: 'white', fontWeight: 500 }}
-                />
-              </ListItemButton>
-            </ListItem>
-
-            <ListItem disablePadding>
-              <ListItemButton 
-                sx={{ 
-                  borderRadius: '12px',
-                  mb: 1,
-                  backgroundColor: 'rgba(255,255,255,0.1)',
-                  '&:hover': { backgroundColor: 'rgba(255,255,255,0.2)' }
-                }}
-              >
-                <ListItemIcon sx={{ color: 'white', minWidth: 40 }}>
-                  <FileText size={20} />
-                </ListItemIcon>
-                <ListItemText 
-                  primary="New Assessment" 
-                  primaryTypographyProps={{ color: 'white', fontWeight: 500 }}
-                />
-              </ListItemButton>
-            </ListItem>
-
-            <ListItem disablePadding>
-              <ListItemButton 
-                onClick={() => window.open('https://products.applebites.ai/', '_blank')}
-                sx={{ 
-                  borderRadius: '12px',
-                  mb: 1,
-                  '&:hover': { backgroundColor: 'rgba(255,255,255,0.1)' }
-                }}
-              >
-                <ListItemIcon sx={{ color: 'white', minWidth: 40 }}>
-                  <TrendingUp size={20} />
-                </ListItemIcon>
-                <ListItemText 
-                  primary="Upgrade Plan" 
-                  primaryTypographyProps={{ color: 'white', fontWeight: 500 }}
-                />
-              </ListItemButton>
-            </ListItem>
-          </List>
-
-          <Divider sx={{ borderColor: 'rgba(255,255,255,0.12)' }} />
-
-          {/* Progress Steps */}
-          <Box sx={{ px: 2, py: 1, flex: 1 }}>
-            <Typography 
-              variant="caption" 
-              sx={{ 
-                color: 'rgba(255,255,255,0.7)', 
-                textTransform: 'uppercase',
-                letterSpacing: '0.1em',
-                fontWeight: 600,
+                justifyContent: 'flex-start',
+                color: '#dbdce1',
+                textTransform: 'none',
+                py: 1.5,
                 px: 2,
-                mb: 2,
-                display: 'block'
+                borderRadius: '12px',
+                '&:hover': {
+                  backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                  color: 'white'
+                }
               }}
             >
-              Assessment Progress
-            </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-              {steps.map((step, index) => {
-                const isActive = step.id === currentStep;
-                const isCompleted = index < currentStepIndex;
-                const StepIconComponent = step.icon;
-                
-                return (
-                  <Box key={step.id}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, py: 0.5 }}>
-                      <StepIcon active={isActive} completed={isCompleted}>
-                        {isCompleted ? (
-                          <CheckCircle size={18} />
-                        ) : (
-                          <StepIconComponent size={18} />
-                        )}
-                      </StepIcon>
-                      <Box sx={{ flex: 1 }}>
-                        <Typography 
-                          variant="body2" 
-                          sx={{ 
-                            color: isActive ? '#ffffff' : 'rgba(255,255,255,0.8)',
-                            fontWeight: isActive ? 600 : 400,
-                            fontSize: '13px',
-                            lineHeight: 1.2
-                          }}
-                        >
-                          {step.label}
-                        </Typography>
-                        <Typography 
-                          variant="caption" 
-                          sx={{ 
-                            color: 'rgba(255,255,255,0.6)',
-                            fontSize: '10px',
-                            lineHeight: 1.1
-                          }}
-                        >
-                          {step.description}
-                        </Typography>
-                      </Box>
-                      {isActive && (
-                        <Chip 
-                          label="Current" 
-                          size="small" 
-                          sx={{ 
-                            backgroundColor: '#ffffff',
-                            color: '#2152ff',
-                            fontSize: '8px',
-                            height: '16px'
-                          }} 
-                        />
-                      )}
-                    </Box>
-                    {index < steps.length - 1 && (
-                      <Box sx={{ 
-                        ml: 2.75, 
-                        height: 16, 
-                        width: 2, 
-                        backgroundColor: 'rgba(255,255,255,0.2)',
-                        borderRadius: 1
-                      }} />
-                    )}
-                  </Box>
-                );
-              })}
-            </Box>
-          </Box>
-
-          {/* Footer */}
-          <Box sx={{ mt: 'auto', p: 2 }}>
-            <Typography 
-              variant="caption" 
-              sx={{ 
-                color: 'rgba(255,255,255,0.5)',
-                display: 'block',
-                textAlign: 'center'
+              Dashboard
+            </Button>
+            
+            <Button
+              startIcon={<FileText size={20} />}
+              sx={{
+                justifyContent: 'flex-start',
+                color: 'white',
+                textTransform: 'none',
+                py: 1.5,
+                px: 2,
+                borderRadius: '12px',
+                backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                '&:hover': {
+                  backgroundColor: 'rgba(255, 255, 255, 0.2)'
+                }
               }}
             >
-              © 2025 Meritage Partners
-            </Typography>
+              New Assessment
+            </Button>
+            
+            <Button
+              onClick={() => window.open('https://products.applebites.ai/', '_blank')}
+              startIcon={<TrendingUp size={20} />}
+              sx={{
+                justifyContent: 'flex-start',
+                color: '#dbdce1',
+                textTransform: 'none',
+                py: 1.5,
+                px: 2,
+                borderRadius: '12px',
+                '&:hover': {
+                  backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                  color: 'white'
+                }
+              }}
+            >
+              Upgrade Plan
+            </Button>
           </Box>
         </Box>
-      </Drawer>
+
+        {/* Assessment Progress */}
+        <Box flex={1}>
+          <Typography 
+            variant="caption" 
+            sx={{ 
+              color: 'rgba(255,255,255,0.7)', 
+              textTransform: 'uppercase',
+              letterSpacing: '0.1em',
+              fontWeight: 600,
+              mb: 2,
+              display: 'block'
+            }}
+          >
+            Assessment Progress
+          </Typography>
+          
+          <Box display="flex" flexDirection="column" gap={1}>
+            {steps.map((step, index) => {
+              const isActive = step.id === currentStep;
+              const isCompleted = index < currentStepIndex;
+              const StepIconComponent = step.icon;
+              
+              return (
+                <Box key={step.id}>
+                  <Box display="flex" alignItems="center" gap={2} py={0.5}>
+                    <StepIcon active={isActive} completed={isCompleted}>
+                      {isCompleted ? (
+                        <CheckCircle size={18} />
+                      ) : (
+                        <StepIconComponent size={18} />
+                      )}
+                    </StepIcon>
+                    <Box flex={1}>
+                      <Typography 
+                        variant="body2" 
+                        sx={{ 
+                          color: isActive ? '#ffffff' : 'rgba(255,255,255,0.8)',
+                          fontWeight: isActive ? 600 : 400,
+                          fontSize: '13px',
+                          lineHeight: 1.2
+                        }}
+                      >
+                        {step.label}
+                      </Typography>
+                      <Typography 
+                        variant="caption" 
+                        sx={{ 
+                          color: 'rgba(255,255,255,0.6)',
+                          fontSize: '10px',
+                          lineHeight: 1.1
+                        }}
+                      >
+                        {step.description}
+                      </Typography>
+                    </Box>
+                    {isActive && (
+                      <Chip 
+                        label="Current" 
+                        size="small" 
+                        sx={{ 
+                          backgroundColor: colors.primary,
+                          color: 'white',
+                          fontSize: '8px',
+                          height: '16px',
+                          fontWeight: 'bold'
+                        }} 
+                      />
+                    )}
+                  </Box>
+                  {index < steps.length - 1 && (
+                    <Box sx={{ 
+                      ml: 3, 
+                      height: 16, 
+                      width: 2, 
+                      backgroundColor: 'rgba(255,255,255,0.2)',
+                      borderRadius: 1
+                    }} />
+                  )}
+                </Box>
+              );
+            })}
+          </Box>
+        </Box>
+
+        {/* Footer */}
+        <Box mt="auto">
+          <Box 
+            component="img"
+            src="/assets/logos/apple-bites-meritage-logo.png"
+            alt="Meritage Partners"
+            sx={{ 
+              width: '250px', 
+              height: 'auto',
+              opacity: 0.8,
+              filter: 'brightness(1.2)'
+            }}
+          />
+        </Box>
+      </Box>
 
       {/* Main Content Area */}
       <MainContent>
