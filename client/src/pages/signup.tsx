@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'wouter';
+import { Grid, Box, Typography, Button, useTheme } from '@mui/material';
 import { Eye, EyeOff, Mail, User, Building, CheckCircle, X } from 'lucide-react';
-import MDBox from '@/components/MD/MDBox';
-import MDTypography from '@/components/MD/MDTypography';
-import MDButton from '@/components/MD/MDButton';
 import MDInput from '@/components/MD/MDInput';
 import appleBitesLogo from '@assets/apple-bites-logo.png';
 
@@ -18,20 +16,26 @@ interface SignupFormData {
 }
 
 const PasswordRequirement = ({ met, text }: { met: boolean; text: string }) => (
-  <MDBox display="flex" alignItems="center" gap={1} mb={0.5}>
-    {met ? (
-      <CheckCircle size={14} color="#10B981" />
-    ) : (
-      <X size={14} color="#EF4444" />
-    )}
-    <MDTypography variant="caption" sx={{ color: met ? '#10B981' : '#6B7280', fontSize: '12px' }}>
+  <Box display="flex" alignItems="center" gap={1} mb={0.5}>
+    {met ? <CheckCircle size={14} color="#10B981" /> : <X size={14} color="#EF4444" />}
+    <Typography fontSize={12} sx={{ color: met ? '#10B981' : '#6B7280' }}>
       {text}
-    </MDTypography>
-  </MDBox>
+    </Typography>
+  </Box>
 );
 
-export default function SignupPage() {
+const requirementLabels = {
+  length: 'At least 8 characters',
+  uppercase: 'One uppercase letter',
+  lowercase: 'One lowercase letter',
+  number: 'One number',
+  special: 'One special character'
+};
+
+export default function HybridSignupPage() {
+  const theme = useTheme();
   const [, setLocation] = useLocation();
+
   const [formData, setFormData] = useState<SignupFormData>({
     firstName: '',
     lastName: '',
@@ -41,12 +45,12 @@ export default function SignupPage() {
     company: '',
     title: ''
   });
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Password validation
   const passwordRequirements = {
     length: formData.password.length >= 8,
     uppercase: /[A-Z]/.test(formData.password),
@@ -59,378 +63,423 @@ export default function SignupPage() {
   const passwordsMatch = formData.password === formData.confirmPassword && formData.confirmPassword.length > 0;
 
   const handleInputChange = (field: keyof SignupFormData) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: e.target.value
-    }));
+    setFormData(prev => ({ ...prev, [field]: e.target.value }));
     if (error) setError('');
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isPasswordValid) return setError('Password does not meet requirements');
+    if (!passwordsMatch) return setError('Passwords do not match');
+    
     setIsLoading(true);
     setError('');
-
-    // Validate form
-    if (!isPasswordValid) {
-      setError('Password does not meet requirements');
-      setIsLoading(false);
-      return;
-    }
-
-    if (!passwordsMatch) {
-      setError('Passwords do not match');
-      setIsLoading(false);
-      return;
-    }
 
     try {
       const response = await fetch('/api/signup', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          email: formData.email,
-          password: formData.password,
-          company: formData.company,
-          title: formData.title
-        }),
+        body: JSON.stringify(formData)
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        // Redirect to dashboard on successful signup
         setLocation('/dashboard');
       } else {
-        setError(data.message || 'Failed to create account');
+        setError(data.message || 'Signup failed. Please try again.');
       }
-    } catch (error) {
+    } catch (err) {
+      console.error('Signup error:', err);
       setError('Network error. Please try again.');
     } finally {
       setIsLoading(false);
     }
   };
 
+  // Handle Google OAuth
+  const handleGoogleSignup = () => {
+    window.location.href = '/api/auth/google';
+  };
+
+  // Handle Demo Account
+  const handleDemoSignup = () => {
+    setLocation('/dashboard');
+  };
+
   return (
-    <MDBox
-      sx={{
-        minHeight: '100vh',
-        background: 'linear-gradient(135deg, #0A1F44 0%, #1B2C4F 100%)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 3
-      }}
-    >
-      <MDBox
+    <Grid container sx={{ minHeight: '100vh' }}>
+      {/* Left Visual Section */}
+      <Grid
+        item
+        xs={false}
+        sm={5}
+        md={6}
         sx={{
-          maxWidth: 480,
-          width: '100%',
-          backgroundColor: 'white',
-          borderRadius: 3,
-          padding: 4,
-          boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'
+          background: 'linear-gradient(135deg, #0A1F44 0%, #1B2C4F 100%)',
+          display: { xs: 'none', sm: 'flex' },
+          alignItems: 'center',
+          justifyContent: 'center',
+          position: 'relative',
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'url("data:image/svg+xml,%3Csvg width="100" height="100" xmlns="http://www.w3.org/2000/svg"%3E%3Cdefs%3E%3Cpattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse"%3E%3Cpath d="M 100 0 L 0 0 0 100" fill="none" stroke="%23ffffff" stroke-width="0.5" opacity="0.1"/%3E%3C/pattern%3E%3C/defs%3E%3Crect width="100%25" height="100%25" fill="url(%23grid)" /%3E%3C/svg%3E")',
+            opacity: 0.3
+          }
         }}
       >
-        {/* Header */}
-        <MDBox textAlign="center" mb={4}>
-          <img
+        <Box sx={{ textAlign: 'center', zIndex: 1, px: 4 }}>
+          <Typography variant="h3" sx={{ color: 'white', fontWeight: 'bold', mb: 2 }}>
+            Welcome to Apple Bites
+          </Typography>
+          <Typography variant="h6" sx={{ color: '#B0BEC5', mb: 4 }}>
+            Your AI-powered business valuation platform
+          </Typography>
+          <Box
+            component="img"
             src={appleBitesLogo}
             alt="Apple Bites"
-            style={{
-              height: 60,
+            sx={{
+              height: 120,
               width: 'auto',
-              marginBottom: 16
+              filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))'
             }}
           />
-          <MDTypography variant="h4" fontWeight="bold" sx={{ color: '#0A1F44', mb: 1 }}>
-            Create Your Account
-          </MDTypography>
-          <MDTypography variant="body2" sx={{ color: '#6B7280' }}>
-            Start your business valuation journey with Apple Bites
-          </MDTypography>
-        </MDBox>
+        </Box>
+      </Grid>
 
-        {/* Error Message */}
-        {error && (
-          <MDBox
+      {/* Right Signup Form */}
+      <Grid item xs={12} sm={7} md={6}>
+        <Box
+          sx={{
+            height: '100%',
+            background: { xs: 'linear-gradient(135deg, #0A1F44 0%, #1B2C4F 100%)', sm: '#F8F9FA' },
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            px: 4,
+            py: 6
+          }}
+        >
+          <Box
+            component="form"
+            onSubmit={handleSubmit}
             sx={{
-              backgroundColor: '#FEF2F2',
-              border: '1px solid #FECACA',
-              borderRadius: 2,
-              padding: 2,
-              mb: 3
-            }}
-          >
-            <MDTypography variant="body2" sx={{ color: '#DC2626' }}>
-              {error}
-            </MDTypography>
-          </MDBox>
-        )}
-
-        {/* Form */}
-        <form onSubmit={handleSubmit}>
-          {/* Name Fields */}
-          <MDBox display="grid" gridTemplateColumns="1fr 1fr" gap={2} mb={3}>
-            <MDBox>
-              <MDTypography variant="body2" fontWeight="medium" sx={{ color: '#374151', mb: 1 }}>
-                First Name
-              </MDTypography>
-              <MDInput
-                placeholder="John"
-                value={formData.firstName}
-                onChange={handleInputChange('firstName')}
-                required
-                fullWidth
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                    '& fieldset': { borderColor: '#D1D5DB' },
-                    '&:hover fieldset': { borderColor: '#00BFA6' },
-                    '&.Mui-focused fieldset': { borderColor: '#00BFA6' }
-                  }
-                }}
-              />
-            </MDBox>
-            <MDBox>
-              <MDTypography variant="body2" fontWeight="medium" sx={{ color: '#374151', mb: 1 }}>
-                Last Name
-              </MDTypography>
-              <MDInput
-                placeholder="Doe"
-                value={formData.lastName}
-                onChange={handleInputChange('lastName')}
-                required
-                fullWidth
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                    '& fieldset': { borderColor: '#D1D5DB' },
-                    '&:hover fieldset': { borderColor: '#00BFA6' },
-                    '&.Mui-focused fieldset': { borderColor: '#00BFA6' }
-                  }
-                }}
-              />
-            </MDBox>
-          </MDBox>
-
-          {/* Email */}
-          <MDBox mb={3}>
-            <MDTypography variant="body2" fontWeight="medium" sx={{ color: '#374151', mb: 1 }}>
-              Email Address
-            </MDTypography>
-            <MDInput
-              type="email"
-              placeholder="john@company.com"
-              value={formData.email}
-              onChange={handleInputChange('email')}
-              required
-              fullWidth
-              startAdornment={<Mail size={18} color="#9CA3AF" />}
-              sx={{
-                '& .MuiOutlinedInput-root': {
-                  '& fieldset': { borderColor: '#D1D5DB' },
-                  '&:hover fieldset': { borderColor: '#00BFA6' },
-                  '&.Mui-focused fieldset': { borderColor: '#00BFA6' }
-                }
-              }}
-            />
-          </MDBox>
-
-          {/* Company & Title */}
-          <MDBox display="grid" gridTemplateColumns="1fr 1fr" gap={2} mb={3}>
-            <MDBox>
-              <MDTypography variant="body2" fontWeight="medium" sx={{ color: '#374151', mb: 1 }}>
-                Company
-              </MDTypography>
-              <MDInput
-                placeholder="Your Company"
-                value={formData.company}
-                onChange={handleInputChange('company')}
-                fullWidth
-                startAdornment={<Building size={18} color="#9CA3AF" />}
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                    '& fieldset': { borderColor: '#D1D5DB' },
-                    '&:hover fieldset': { borderColor: '#00BFA6' },
-                    '&.Mui-focused fieldset': { borderColor: '#00BFA6' }
-                  }
-                }}
-              />
-            </MDBox>
-            <MDBox>
-              <MDTypography variant="body2" fontWeight="medium" sx={{ color: '#374151', mb: 1 }}>
-                Title
-              </MDTypography>
-              <MDInput
-                placeholder="CEO, CFO, etc."
-                value={formData.title}
-                onChange={handleInputChange('title')}
-                fullWidth
-                startAdornment={<User size={18} color="#9CA3AF" />}
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                    '& fieldset': { borderColor: '#D1D5DB' },
-                    '&:hover fieldset': { borderColor: '#00BFA6' },
-                    '&.Mui-focused fieldset': { borderColor: '#00BFA6' }
-                  }
-                }}
-              />
-            </MDBox>
-          </MDBox>
-
-          {/* Password */}
-          <MDBox mb={3}>
-            <MDTypography variant="body2" fontWeight="medium" sx={{ color: '#374151', mb: 1 }}>
-              Password
-            </MDTypography>
-            <MDInput
-              type={showPassword ? 'text' : 'password'}
-              placeholder="Create a strong password"
-              value={formData.password}
-              onChange={handleInputChange('password')}
-              required
-              fullWidth
-              endAdornment={
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    cursor: 'pointer',
-                    padding: 0,
-                    display: 'flex',
-                    alignItems: 'center'
-                  }}
-                >
-                  {showPassword ? <EyeOff size={18} color="#9CA3AF" /> : <Eye size={18} color="#9CA3AF" />}
-                </button>
-              }
-              sx={{
-                '& .MuiOutlinedInput-root': {
-                  '& fieldset': { borderColor: '#D1D5DB' },
-                  '&:hover fieldset': { borderColor: '#00BFA6' },
-                  '&.Mui-focused fieldset': { borderColor: '#00BFA6' }
-                }
-              }}
-            />
-            
-            {/* Password Requirements */}
-            {formData.password && (
-              <MDBox mt={2} p={2} sx={{ backgroundColor: '#F9FAFB', borderRadius: 2 }}>
-                <MDTypography variant="caption" fontWeight="medium" sx={{ color: '#374151', mb: 1, display: 'block' }}>
-                  Password Requirements:
-                </MDTypography>
-                <PasswordRequirement met={passwordRequirements.length} text="At least 8 characters" />
-                <PasswordRequirement met={passwordRequirements.uppercase} text="One uppercase letter" />
-                <PasswordRequirement met={passwordRequirements.lowercase} text="One lowercase letter" />
-                <PasswordRequirement met={passwordRequirements.number} text="One number" />
-                <PasswordRequirement met={passwordRequirements.special} text="One special character" />
-              </MDBox>
-            )}
-          </MDBox>
-
-          {/* Confirm Password */}
-          <MDBox mb={4}>
-            <MDTypography variant="body2" fontWeight="medium" sx={{ color: '#374151', mb: 1 }}>
-              Confirm Password
-            </MDTypography>
-            <MDInput
-              type={showConfirmPassword ? 'text' : 'password'}
-              placeholder="Confirm your password"
-              value={formData.confirmPassword}
-              onChange={handleInputChange('confirmPassword')}
-              required
-              fullWidth
-              endAdornment={
-                <button
-                  type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    cursor: 'pointer',
-                    padding: 0,
-                    display: 'flex',
-                    alignItems: 'center'
-                  }}
-                >
-                  {showConfirmPassword ? <EyeOff size={18} color="#9CA3AF" /> : <Eye size={18} color="#9CA3AF" />}
-                </button>
-              }
-              sx={{
-                '& .MuiOutlinedInput-root': {
-                  '& fieldset': { 
-                    borderColor: formData.confirmPassword && !passwordsMatch ? '#EF4444' : '#D1D5DB' 
-                  },
-                  '&:hover fieldset': { borderColor: '#00BFA6' },
-                  '&.Mui-focused fieldset': { borderColor: '#00BFA6' }
-                }
-              }}
-            />
-            {formData.confirmPassword && !passwordsMatch && (
-              <MDTypography variant="caption" sx={{ color: '#EF4444', mt: 1, display: 'block' }}>
-                Passwords do not match
-              </MDTypography>
-            )}
-          </MDBox>
-
-          {/* Submit Button */}
-          <MDButton
-            type="submit"
-            disabled={isLoading || !isPasswordValid || !passwordsMatch}
-            sx={{
-              background: 'linear-gradient(135deg, #00BFA6 0%, #0A1F44 100%)',
-              color: 'white',
               width: '100%',
-              py: 1.5,
-              borderRadius: 2,
-              fontWeight: 'bold',
-              textTransform: 'none',
-              '&:hover': {
-                background: 'linear-gradient(135deg, #00BFA6 0%, #33FFC5 100%)',
-                transform: 'translateY(-1px)',
-                boxShadow: '0 8px 25px -8px rgba(0, 191, 166, 0.4)'
-              },
-              '&:disabled': {
-                background: '#D1D5DB',
-                color: '#9CA3AF',
-                transform: 'none',
-                boxShadow: 'none'
-              },
-              transition: 'all 0.3s ease'
+              maxWidth: 500,
+              backgroundColor: 'white',
+              borderRadius: 3,
+              p: 4,
+              boxShadow: 4
             }}
           >
-            {isLoading ? 'Creating Account...' : 'Create Account'}
-          </MDButton>
-        </form>
+            {/* Logo for mobile */}
+            <Box textAlign="center" mb={3} sx={{ display: { sm: 'none' } }}>
+              <img src={appleBitesLogo} alt="Apple Bites" style={{ height: 60 }} />
+            </Box>
 
-        {/* Login Link */}
-        <MDBox textAlign="center" mt={4}>
-          <MDTypography variant="body2" sx={{ color: '#6B7280' }}>
-            Already have an account?{' '}
-            <Link href="/login">
-              <MDTypography
-                component="span"
-                variant="body2"
+            {/* Header */}
+            <Box textAlign="center" mb={3}>
+              <Typography variant="h5" fontWeight="bold" sx={{ color: '#374151', mb: 1 }}>
+                Create Your Account
+              </Typography>
+              <Typography variant="body2" sx={{ color: '#6B7280' }}>
+                Start your business valuation journey
+              </Typography>
+            </Box>
+
+            {/* Google & Demo Buttons */}
+            <Box mb={3}>
+              <Button
+                onClick={handleGoogleSignup}
+                fullWidth
+                variant="outlined"
                 sx={{
-                  color: '#00BFA6',
+                  mb: 2,
+                  py: 1.5,
+                  borderColor: '#D1D5DB',
+                  color: '#374151',
+                  textTransform: 'none',
                   fontWeight: 'medium',
-                  textDecoration: 'none',
-                  cursor: 'pointer',
-                  '&:hover': { textDecoration: 'underline' }
+                  '&:hover': {
+                    borderColor: '#00BFA6',
+                    backgroundColor: '#F9FAFB'
+                  }
                 }}
               >
-                Sign in here
-              </MDTypography>
-            </Link>
-          </MDTypography>
-        </MDBox>
-      </MDBox>
-    </MDBox>
+                <Box display="flex" alignItems="center" gap={2}>
+                  <img
+                    src="https://developers.google.com/identity/images/g-logo.png"
+                    alt="Google"
+                    style={{ width: 18, height: 18 }}
+                  />
+                  Continue with Google
+                </Box>
+              </Button>
+
+              <Button
+                onClick={handleDemoSignup}
+                fullWidth
+                variant="outlined"
+                sx={{
+                  py: 1.5,
+                  borderColor: '#D1D5DB',
+                  color: '#374151',
+                  textTransform: 'none',
+                  fontWeight: 'medium',
+                  '&:hover': {
+                    borderColor: '#00BFA6',
+                    backgroundColor: '#F9FAFB'
+                  }
+                }}
+              >
+                Try Demo Account
+              </Button>
+            </Box>
+
+            {/* Divider */}
+            <Box display="flex" alignItems="center" mb={3}>
+              <Box flex={1} sx={{ height: '1px', backgroundColor: '#E5E7EB' }} />
+              <Typography variant="body2" sx={{ color: '#9CA3AF', px: 2 }}>
+                or sign up with email
+              </Typography>
+              <Box flex={1} sx={{ height: '1px', backgroundColor: '#E5E7EB' }} />
+            </Box>
+
+            {/* Error Display */}
+            {error && (
+              <Box
+                sx={{
+                  backgroundColor: '#FEF2F2',
+                  border: '1px solid #FECACA',
+                  borderRadius: 2,
+                  p: 2,
+                  mb: 3
+                }}
+              >
+                <Typography sx={{ color: '#DC2626', fontSize: 14 }}>
+                  {error}
+                </Typography>
+              </Box>
+            )}
+
+            {/* Form Fields */}
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
+                <Typography variant="body2" fontWeight="medium" sx={{ color: '#374151', mb: 1 }}>
+                  First Name
+                </Typography>
+                <MDInput
+                  placeholder="Enter first name"
+                  value={formData.firstName}
+                  onChange={handleInputChange('firstName')}
+                  required
+                  fullWidth
+                  startAdornment={<User size={18} color="#9CA3AF" />}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <Typography variant="body2" fontWeight="medium" sx={{ color: '#374151', mb: 1 }}>
+                  Last Name
+                </Typography>
+                <MDInput
+                  placeholder="Enter last name"
+                  value={formData.lastName}
+                  onChange={handleInputChange('lastName')}
+                  required
+                  fullWidth
+                  startAdornment={<User size={18} color="#9CA3AF" />}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="body2" fontWeight="medium" sx={{ color: '#374151', mb: 1 }}>
+                  Email Address
+                </Typography>
+                <MDInput
+                  type="email"
+                  placeholder="Enter your email"
+                  value={formData.email}
+                  onChange={handleInputChange('email')}
+                  required
+                  fullWidth
+                  startAdornment={<Mail size={18} color="#9CA3AF" />}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <Typography variant="body2" fontWeight="medium" sx={{ color: '#374151', mb: 1 }}>
+                  Company
+                </Typography>
+                <MDInput
+                  placeholder="Company name"
+                  value={formData.company}
+                  onChange={handleInputChange('company')}
+                  fullWidth
+                  startAdornment={<Building size={18} color="#9CA3AF" />}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <Typography variant="body2" fontWeight="medium" sx={{ color: '#374151', mb: 1 }}>
+                  Job Title
+                </Typography>
+                <MDInput
+                  placeholder="Your title"
+                  value={formData.title}
+                  onChange={handleInputChange('title')}
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="body2" fontWeight="medium" sx={{ color: '#374151', mb: 1 }}>
+                  Password
+                </Typography>
+                <MDInput
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="Create a password"
+                  value={formData.password}
+                  onChange={handleInputChange('password')}
+                  required
+                  fullWidth
+                  endAdornment={
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        cursor: 'pointer',
+                        padding: 0,
+                        display: 'flex',
+                        alignItems: 'center'
+                      }}
+                    >
+                      {showPassword ? <EyeOff size={18} color="#9CA3AF" /> : <Eye size={18} color="#9CA3AF" />}
+                    </button>
+                  }
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      '& fieldset': { borderColor: '#D1D5DB' },
+                      '&:hover fieldset': { borderColor: '#00BFA6' },
+                      '&.Mui-focused fieldset': { borderColor: '#00BFA6' }
+                    }
+                  }}
+                />
+                
+                {/* Password Requirements */}
+                {formData.password && (
+                  <Box mt={2} p={2} sx={{ backgroundColor: '#F9FAFB', borderRadius: 2 }}>
+                    <Typography variant="caption" fontWeight="medium" sx={{ color: '#374151', mb: 1, display: 'block' }}>
+                      Password Requirements:
+                    </Typography>
+                    {Object.entries(passwordRequirements).map(([key, met]) => (
+                      <PasswordRequirement 
+                        key={key} 
+                        met={met} 
+                        text={requirementLabels[key as keyof typeof requirementLabels]} 
+                      />
+                    ))}
+                  </Box>
+                )}
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="body2" fontWeight="medium" sx={{ color: '#374151', mb: 1 }}>
+                  Confirm Password
+                </Typography>
+                <MDInput
+                  type={showConfirmPassword ? 'text' : 'password'}
+                  placeholder="Confirm your password"
+                  value={formData.confirmPassword}
+                  onChange={handleInputChange('confirmPassword')}
+                  required
+                  fullWidth
+                  endAdornment={
+                    <button
+                      type="button"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        cursor: 'pointer',
+                        padding: 0,
+                        display: 'flex',
+                        alignItems: 'center'
+                      }}
+                    >
+                      {showConfirmPassword ? <EyeOff size={18} color="#9CA3AF" /> : <Eye size={18} color="#9CA3AF" />}
+                    </button>
+                  }
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      '& fieldset': { 
+                        borderColor: formData.confirmPassword && !passwordsMatch ? '#EF4444' : '#D1D5DB' 
+                      },
+                      '&:hover fieldset': { borderColor: '#00BFA6' },
+                      '&.Mui-focused fieldset': { borderColor: '#00BFA6' }
+                    }
+                  }}
+                />
+                {formData.confirmPassword && !passwordsMatch && (
+                  <Typography variant="caption" sx={{ color: '#EF4444', mt: 1, display: 'block' }}>
+                    Passwords do not match
+                  </Typography>
+                )}
+              </Grid>
+            </Grid>
+
+            {/* Submit Button */}
+            <Button
+              type="submit"
+              disabled={isLoading || !isPasswordValid || !passwordsMatch}
+              sx={{
+                mt: 3,
+                width: '100%',
+                py: 1.5,
+                fontWeight: 'bold',
+                background: 'linear-gradient(135deg, #00BFA6 0%, #0A1F44 100%)',
+                color: 'white',
+                borderRadius: 2,
+                textTransform: 'none',
+                '&:hover': {
+                  background: 'linear-gradient(135deg, #00BFA6 0%, #33FFC5 100%)',
+                  boxShadow: '0 8px 25px -8px rgba(0,191,166,0.4)'
+                },
+                '&:disabled': {
+                  background: '#E5E7EB',
+                  color: '#9CA3AF'
+                }
+              }}
+            >
+              {isLoading ? 'Creating Account...' : 'Create Account'}
+            </Button>
+
+            {/* Sign In Redirect */}
+            <Box textAlign="center" mt={3}>
+              <Typography variant="body2" sx={{ color: '#6B7280' }}>
+                Already have an account?{' '}
+                <Link href="/login">
+                  <Typography 
+                    component="span" 
+                    sx={{ 
+                      color: '#00BFA6', 
+                      fontWeight: 'medium', 
+                      cursor: 'pointer',
+                      textDecoration: 'none',
+                      '&:hover': { textDecoration: 'underline' }
+                    }}
+                  >
+                    Sign in here
+                  </Typography>
+                </Link>
+              </Typography>
+            </Box>
+          </Box>
+        </Box>
+      </Grid>
+    </Grid>
   );
 }

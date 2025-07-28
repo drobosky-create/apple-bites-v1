@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'wouter';
+import { Grid, Box, Typography, Button, useTheme } from '@mui/material';
 import { Eye, EyeOff, Mail, LogIn } from 'lucide-react';
-import MDBox from '@/components/MD/MDBox';
-import MDTypography from '@/components/MD/MDTypography';
-import MDButton from '@/components/MD/MDButton';
 import MDInput from '@/components/MD/MDInput';
 import appleBitesLogo from '@assets/apple-bites-logo.png';
 
@@ -12,21 +10,21 @@ interface LoginFormData {
   password: string;
 }
 
-export default function LoginPage() {
+export default function HybridLoginPage() {
+  const theme = useTheme();
   const [, setLocation] = useLocation();
+
   const [formData, setFormData] = useState<LoginFormData>({
     email: '',
     password: ''
   });
+
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (field: keyof LoginFormData) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: e.target.value
-    }));
+    setFormData(prev => ({ ...prev, [field]: e.target.value }));
     if (error) setError('');
   };
 
@@ -38,315 +36,321 @@ export default function LoginPage() {
     try {
       const response = await fetch('/api/login', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password
-        }),
+        body: JSON.stringify(formData)
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        // Redirect to dashboard on successful login
         setLocation('/dashboard');
       } else {
-        setError(data.message || 'Invalid email or password');
+        setError(data.message || 'Login failed. Please check your credentials.');
       }
-    } catch (error) {
+    } catch (err) {
+      console.error('Login error:', err);
       setError('Network error. Please try again.');
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleGoogleSignIn = () => {
-    // Redirect to Replit Auth OAuth flow
+  // Handle Google OAuth
+  const handleGoogleLogin = () => {
     window.location.href = '/api/auth/google';
   };
 
-  const handleDemoLogin = async () => {
-    setIsLoading(true);
-    try {
-      const response = await fetch('/api/setup-demo', {
-        method: 'GET',
-        credentials: 'include',
-      });
-      
-      if (response.ok) {
-        setLocation('/dashboard');
-      } else {
-        setError('Failed to setup demo session');
-      }
-    } catch (error) {
-      setError('Failed to setup demo session');
-    } finally {
-      setIsLoading(false);
-    }
+  // Handle Demo Account
+  const handleDemoLogin = () => {
+    setLocation('/dashboard');
   };
 
   return (
-    <MDBox
-      sx={{
-        minHeight: '100vh',
-        background: 'linear-gradient(135deg, #0A1F44 0%, #1B2C4F 100%)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 3
-      }}
-    >
-      <MDBox
+    <Grid container sx={{ minHeight: '100vh' }}>
+      {/* Left Visual Section */}
+      <Grid
+        item
+        xs={false}
+        sm={5}
+        md={6}
         sx={{
-          maxWidth: 420,
-          width: '100%',
-          backgroundColor: 'white',
-          borderRadius: 3,
-          padding: 4,
-          boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'
+          background: 'linear-gradient(135deg, #0A1F44 0%, #1B2C4F 100%)',
+          display: { xs: 'none', sm: 'flex' },
+          alignItems: 'center',
+          justifyContent: 'center',
+          position: 'relative',
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'url("data:image/svg+xml,%3Csvg width="100" height="100" xmlns="http://www.w3.org/2000/svg"%3E%3Cdefs%3E%3Cpattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse"%3E%3Cpath d="M 100 0 L 0 0 0 100" fill="none" stroke="%23ffffff" stroke-width="0.5" opacity="0.1"/%3E%3C/pattern%3E%3C/defs%3E%3Crect width="100%25" height="100%25" fill="url(%23grid)" /%3E%3C/svg%3E")',
+            opacity: 0.3
+          }
         }}
       >
-        {/* Header */}
-        <MDBox textAlign="center" mb={4}>
-          <img
+        <Box sx={{ textAlign: 'center', zIndex: 1, px: 4 }}>
+          <Typography variant="h3" sx={{ color: 'white', fontWeight: 'bold', mb: 2 }}>
+            Welcome Back
+          </Typography>
+          <Typography variant="h6" sx={{ color: '#B0BEC5', mb: 4 }}>
+            Continue your business valuation journey
+          </Typography>
+          <Box
+            component="img"
             src={appleBitesLogo}
             alt="Apple Bites"
-            style={{
-              height: 60,
+            sx={{
+              height: 120,
               width: 'auto',
-              marginBottom: 16
+              filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))'
             }}
           />
-          <MDTypography variant="h4" fontWeight="bold" sx={{ color: '#0A1F44', mb: 1 }}>
-            Welcome Back
-          </MDTypography>
-          <MDTypography variant="body2" sx={{ color: '#6B7280' }}>
-            Sign in to access your business valuation dashboard
-          </MDTypography>
-        </MDBox>
+        </Box>
+      </Grid>
 
-        {/* Error Message */}
-        {error && (
-          <MDBox
-            sx={{
-              backgroundColor: '#FEF2F2',
-              border: '1px solid #FECACA',
-              borderRadius: 2,
-              padding: 2,
-              mb: 3
-            }}
-          >
-            <MDTypography variant="body2" sx={{ color: '#DC2626' }}>
-              {error}
-            </MDTypography>
-          </MDBox>
-        )}
-
-        {/* OAuth Buttons */}
-        <MDBox mb={4}>
-          <MDButton
-            onClick={handleGoogleSignIn}
-            disabled={isLoading}
+      {/* Right Login Form */}
+      <Grid item xs={12} sm={7} md={6}>
+        <Box
+          sx={{
+            height: '100%',
+            background: { xs: 'linear-gradient(135deg, #0A1F44 0%, #1B2C4F 100%)', sm: '#F8F9FA' },
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            px: 4,
+            py: 6
+          }}
+        >
+          <Box
+            component="form"
+            onSubmit={handleSubmit}
             sx={{
               width: '100%',
-              py: 1.5,
-              border: '1px solid #D1D5DB',
+              maxWidth: 450,
               backgroundColor: 'white',
-              color: '#374151',
-              borderRadius: 2,
-              fontWeight: 'medium',
-              textTransform: 'none',
-              mb: 2,
-              '&:hover': {
-                backgroundColor: '#F9FAFB',
-                borderColor: '#9CA3AF'
-              },
-              '&:disabled': {
-                backgroundColor: '#F3F4F6',
-                color: '#9CA3AF'
-              }
+              borderRadius: 3,
+              p: 4,
+              boxShadow: 4
             }}
           >
-            <MDBox display="flex" alignItems="center" gap={2}>
-              <img
-                src="https://developers.google.com/identity/images/g-logo.png"
-                alt="Google"
-                style={{ width: 18, height: 18 }}
-              />
-              Continue with Google
-            </MDBox>
-          </MDButton>
+            {/* Logo for mobile */}
+            <Box textAlign="center" mb={3} sx={{ display: { sm: 'none' } }}>
+              <img src={appleBitesLogo} alt="Apple Bites" style={{ height: 60 }} />
+            </Box>
 
-          <MDButton
-            onClick={handleDemoLogin}
-            disabled={isLoading}
-            sx={{
-              width: '100%',
-              py: 1.5,
-              border: '1px solid #00BFA6',
-              backgroundColor: 'white',
-              color: '#00BFA6',
-              borderRadius: 2,
-              fontWeight: 'medium',
-              textTransform: 'none',
-              '&:hover': {
-                backgroundColor: '#F0FDFA',
-                borderColor: '#0A1F44'
-              },
-              '&:disabled': {
-                backgroundColor: '#F3F4F6',
-                color: '#9CA3AF',
-                borderColor: '#D1D5DB'
-              }
-            }}
-          >
-            Try Demo Account
-          </MDButton>
-        </MDBox>
+            {/* Header */}
+            <Box textAlign="center" mb={3}>
+              <Typography variant="h5" fontWeight="bold" sx={{ color: '#374151', mb: 1 }}>
+                Sign In
+              </Typography>
+              <Typography variant="body2" sx={{ color: '#6B7280' }}>
+                Access your business valuation dashboard
+              </Typography>
+            </Box>
 
-        {/* Divider */}
-        <MDBox display="flex" alignItems="center" mb={4}>
-          <MDBox flex={1} sx={{ height: '1px', backgroundColor: '#E5E7EB' }} />
-          <MDTypography variant="body2" sx={{ color: '#9CA3AF', px: 2 }}>
-            or sign in with email
-          </MDTypography>
-          <MDBox flex={1} sx={{ height: '1px', backgroundColor: '#E5E7EB' }} />
-        </MDBox>
-
-        {/* Email/Password Form */}
-        <form onSubmit={handleSubmit}>
-          {/* Email */}
-          <MDBox mb={3}>
-            <MDTypography variant="body2" fontWeight="medium" sx={{ color: '#374151', mb: 1 }}>
-              Email Address
-            </MDTypography>
-            <MDInput
-              type="email"
-              placeholder="Enter your email"
-              value={formData.email}
-              onChange={handleInputChange('email')}
-              required
-              fullWidth
-              startAdornment={<Mail size={18} color="#9CA3AF" />}
-              sx={{
-                '& .MuiOutlinedInput-root': {
-                  '& fieldset': { borderColor: '#D1D5DB' },
-                  '&:hover fieldset': { borderColor: '#00BFA6' },
-                  '&.Mui-focused fieldset': { borderColor: '#00BFA6' }
-                }
-              }}
-            />
-          </MDBox>
-
-          {/* Password */}
-          <MDBox mb={4}>
-            <MDBox display="flex" justifyContent="space-between" alignItems="center" mb={1}>
-              <MDTypography variant="body2" fontWeight="medium" sx={{ color: '#374151' }}>
-                Password
-              </MDTypography>
-              <Link href="/forgot-password">
-                <MDTypography
-                  variant="caption"
-                  sx={{
-                    color: '#00BFA6',
-                    textDecoration: 'none',
-                    cursor: 'pointer',
-                    '&:hover': { textDecoration: 'underline' }
-                  }}
-                >
-                  Forgot password?
-                </MDTypography>
-              </Link>
-            </MDBox>
-            <MDInput
-              type={showPassword ? 'text' : 'password'}
-              placeholder="Enter your password"
-              value={formData.password}
-              onChange={handleInputChange('password')}
-              required
-              fullWidth
-              endAdornment={
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    cursor: 'pointer',
-                    padding: 0,
-                    display: 'flex',
-                    alignItems: 'center'
-                  }}
-                >
-                  {showPassword ? <EyeOff size={18} color="#9CA3AF" /> : <Eye size={18} color="#9CA3AF" />}
-                </button>
-              }
-              sx={{
-                '& .MuiOutlinedInput-root': {
-                  '& fieldset': { borderColor: '#D1D5DB' },
-                  '&:hover fieldset': { borderColor: '#00BFA6' },
-                  '&.Mui-focused fieldset': { borderColor: '#00BFA6' }
-                }
-              }}
-            />
-          </MDBox>
-
-          {/* Submit Button */}
-          <MDButton
-            type="submit"
-            disabled={isLoading}
-            sx={{
-              background: 'linear-gradient(135deg, #00BFA6 0%, #0A1F44 100%)',
-              color: 'white',
-              width: '100%',
-              py: 1.5,
-              borderRadius: 2,
-              fontWeight: 'bold',
-              textTransform: 'none',
-              '&:hover': {
-                background: 'linear-gradient(135deg, #00BFA6 0%, #33FFC5 100%)',
-                transform: 'translateY(-1px)',
-                boxShadow: '0 8px 25px -8px rgba(0, 191, 166, 0.4)'
-              },
-              '&:disabled': {
-                background: '#D1D5DB',
-                color: '#9CA3AF',
-                transform: 'none',
-                boxShadow: 'none'
-              },
-              transition: 'all 0.3s ease'
-            }}
-            startIcon={<LogIn size={18} />}
-          >
-            {isLoading ? 'Signing In...' : 'Sign In'}
-          </MDButton>
-        </form>
-
-        {/* Signup Link */}
-        <MDBox textAlign="center" mt={4}>
-          <MDTypography variant="body2" sx={{ color: '#6B7280' }}>
-            Don't have an account?{' '}
-            <Link href="/signup">
-              <MDTypography
-                component="span"
-                variant="body2"
+            {/* Google & Demo Buttons */}
+            <Box mb={3}>
+              <Button
+                onClick={handleGoogleLogin}
+                fullWidth
+                variant="outlined"
                 sx={{
-                  color: '#00BFA6',
+                  mb: 2,
+                  py: 1.5,
+                  borderColor: '#D1D5DB',
+                  color: '#374151',
+                  textTransform: 'none',
                   fontWeight: 'medium',
-                  textDecoration: 'none',
-                  cursor: 'pointer',
-                  '&:hover': { textDecoration: 'underline' }
+                  '&:hover': {
+                    borderColor: '#00BFA6',
+                    backgroundColor: '#F9FAFB'
+                  }
                 }}
               >
-                Create one here
-              </MDTypography>
-            </Link>
-          </MDTypography>
-        </MDBox>
-      </MDBox>
-    </MDBox>
+                <Box display="flex" alignItems="center" gap={2}>
+                  <img
+                    src="https://developers.google.com/identity/images/g-logo.png"
+                    alt="Google"
+                    style={{ width: 18, height: 18 }}
+                  />
+                  Continue with Google
+                </Box>
+              </Button>
+
+              <Button
+                onClick={handleDemoLogin}
+                fullWidth
+                variant="outlined"
+                sx={{
+                  py: 1.5,
+                  borderColor: '#D1D5DB',
+                  color: '#374151',
+                  textTransform: 'none',
+                  fontWeight: 'medium',
+                  '&:hover': {
+                    borderColor: '#00BFA6',
+                    backgroundColor: '#F9FAFB'
+                  }
+                }}
+              >
+                Try Demo Account
+              </Button>
+            </Box>
+
+            {/* Divider */}
+            <Box display="flex" alignItems="center" mb={3}>
+              <Box flex={1} sx={{ height: '1px', backgroundColor: '#E5E7EB' }} />
+              <Typography variant="body2" sx={{ color: '#9CA3AF', px: 2 }}>
+                or sign in with email
+              </Typography>
+              <Box flex={1} sx={{ height: '1px', backgroundColor: '#E5E7EB' }} />
+            </Box>
+
+            {/* Error Display */}
+            {error && (
+              <Box
+                sx={{
+                  backgroundColor: '#FEF2F2',
+                  border: '1px solid #FECACA',
+                  borderRadius: 2,
+                  p: 2,
+                  mb: 3
+                }}
+              >
+                <Typography sx={{ color: '#DC2626', fontSize: 14 }}>
+                  {error}
+                </Typography>
+              </Box>
+            )}
+
+            {/* Email Field */}
+            <Box mb={3}>
+              <Typography variant="body2" fontWeight="medium" sx={{ color: '#374151', mb: 1 }}>
+                Email Address
+              </Typography>
+              <MDInput
+                type="email"
+                placeholder="Enter your email"
+                value={formData.email}
+                onChange={handleInputChange('email')}
+                required
+                fullWidth
+                startAdornment={<Mail size={18} color="#9CA3AF" />}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset': { borderColor: '#D1D5DB' },
+                    '&:hover fieldset': { borderColor: '#00BFA6' },
+                    '&.Mui-focused fieldset': { borderColor: '#00BFA6' }
+                  }
+                }}
+              />
+            </Box>
+
+            {/* Password Field */}
+            <Box mb={4}>
+              <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
+                <Typography variant="body2" fontWeight="medium" sx={{ color: '#374151' }}>
+                  Password
+                </Typography>
+                <Link href="/forgot-password">
+                  <Typography
+                    variant="caption"
+                    sx={{
+                      color: '#00BFA6',
+                      textDecoration: 'none',
+                      cursor: 'pointer',
+                      '&:hover': { textDecoration: 'underline' }
+                    }}
+                  >
+                    Forgot password?
+                  </Typography>
+                </Link>
+              </Box>
+              <MDInput
+                type={showPassword ? 'text' : 'password'}
+                placeholder="Enter your password"
+                value={formData.password}
+                onChange={handleInputChange('password')}
+                required
+                fullWidth
+                endAdornment={
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      cursor: 'pointer',
+                      padding: 0,
+                      display: 'flex',
+                      alignItems: 'center'
+                    }}
+                  >
+                    {showPassword ? <EyeOff size={18} color="#9CA3AF" /> : <Eye size={18} color="#9CA3AF" />}
+                  </button>
+                }
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset': { borderColor: '#D1D5DB' },
+                    '&:hover fieldset': { borderColor: '#00BFA6' },
+                    '&.Mui-focused fieldset': { borderColor: '#00BFA6' }
+                  }
+                }}
+              />
+            </Box>
+
+            {/* Submit Button */}
+            <Button
+              type="submit"
+              disabled={isLoading}
+              sx={{
+                width: '100%',
+                py: 1.5,
+                fontWeight: 'bold',
+                background: 'linear-gradient(135deg, #00BFA6 0%, #0A1F44 100%)',
+                color: 'white',
+                borderRadius: 2,
+                textTransform: 'none',
+                '&:hover': {
+                  background: 'linear-gradient(135deg, #00BFA6 0%, #33FFC5 100%)',
+                  boxShadow: '0 8px 25px -8px rgba(0,191,166,0.4)'
+                },
+                '&:disabled': {
+                  background: '#E5E7EB',
+                  color: '#9CA3AF'
+                }
+              }}
+            >
+              {isLoading ? 'Signing In...' : 'Sign In'}
+            </Button>
+
+            {/* Sign Up Redirect */}
+            <Box textAlign="center" mt={3}>
+              <Typography variant="body2" sx={{ color: '#6B7280' }}>
+                Don't have an account?{' '}
+                <Link href="/signup">
+                  <Typography 
+                    component="span" 
+                    sx={{ 
+                      color: '#00BFA6', 
+                      fontWeight: 'medium', 
+                      cursor: 'pointer',
+                      textDecoration: 'none',
+                      '&:hover': { textDecoration: 'underline' }
+                    }}
+                  >
+                    Create one here
+                  </Typography>
+                </Link>
+              </Typography>
+            </Box>
+          </Box>
+        </Box>
+      </Grid>
+    </Grid>
   );
 }
