@@ -10,7 +10,7 @@ import { Users, Mail, Lock } from 'lucide-react';
 import { useMutation } from '@tanstack/react-query';
 import { loginSchema, type LoginCredentials } from '@shared/schema';
 
-import _1 from "@assets/1.png";
+import appleBitesLogo from "@assets/apple-bites-logo.png";
 
 interface TeamLoginProps {
   onLoginSuccess: (user: any) => void;
