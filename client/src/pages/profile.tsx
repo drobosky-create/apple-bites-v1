@@ -58,6 +58,10 @@ export default function ProfilePage() {
   const { user, isAuthenticated } = useAuth();
   const queryClient = useQueryClient();
   const [editMode, setEditMode] = useState(false);
+  
+  // Show demo profile for non-authenticated users
+  const isDemoMode = !isAuthenticated;
+  
   const [profile, setProfile] = useState<ProfileData>({
     name: 'Daniel Robosky',
     email: 'daniel@applebites.ai',
@@ -115,28 +119,33 @@ export default function ProfilePage() {
   };
 
   const handleSave = () => {
-    if (editMode) {
+    if (isDemoMode && editMode) {
+      // In demo mode, just show success and exit edit mode
+      console.log('Demo mode: Profile changes saved locally');
+      setEditMode(false);
+    } else if (editMode) {
       updateProfileMutation.mutate(profile);
     } else {
       setEditMode(true);
     }
   };
 
-  if (!isAuthenticated) {
-    return (
-      <MDBox 
-        display="flex" 
-        justifyContent="center" 
-        alignItems="center" 
-        minHeight="100vh"
-        sx={{ backgroundColor: '#F7FAFC' }}
-      >
-        <MDTypography variant="h6" color="text">
-          Please log in to view your profile
-        </MDTypography>
-      </MDBox>
-    );
-  }
+  // Demo mode - show profile interface even without authentication
+  // if (!isAuthenticated) {
+  //   return (
+  //     <MDBox 
+  //       display="flex" 
+  //       justifyContent="center" 
+  //       alignItems="center" 
+  //       minHeight="100vh"
+  //       sx={{ backgroundColor: '#F7FAFC' }}
+  //     >
+  //       <MDTypography variant="h6" color="text">
+  //         Please log in to view your profile
+  //       </MDTypography>
+  //     </MDBox>
+  //   );
+  // }
 
   return (
     <MDBox sx={{ backgroundColor: '#F7FAFC', minHeight: '100vh', py: 4 }}>
