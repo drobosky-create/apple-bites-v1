@@ -54,7 +54,6 @@ function CustomStepIcon(props: CustomStepIconProps) {
     2: '2',
     3: '3',
     4: '4',
-    5: '5',
   };
 
   return (
@@ -64,8 +63,8 @@ function CustomStepIcon(props: CustomStepIconProps) {
   );
 }
 
-// Labels for each step
-const steps = ['Contact', 'EBITDA', 'Adjustments', 'Value Drivers', 'Report'];
+// Labels for each step  
+const steps = ['EBITDA', 'Adjustments', 'Value Drivers', 'Report'];
 
 interface AssessmentStepperProps {
   activeStep: number;

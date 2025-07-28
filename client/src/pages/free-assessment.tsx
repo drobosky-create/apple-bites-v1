@@ -123,12 +123,11 @@ export default function FreeAssessment() {
   // Helper function to convert step name to index
   const getStepIndex = (step: FormStep): number => {
     const stepMap = {
-      contact: 0,
-      ebitda: 1, 
-      adjustments: 2,
-      valueDrivers: 3,
-      followUp: 4,
-      results: 4
+      ebitda: 0, 
+      adjustments: 1,
+      valueDrivers: 2,
+      followUp: 3,
+      results: 3
     };
     return stepMap[step] || 0;
   };
@@ -185,55 +184,6 @@ export default function FreeAssessment() {
           <CardContent sx={{ p: 4, minHeight: '600px' }}>
             {/* Form Content */}
             <Box>
-              {currentStep === "contact" && !hasCompleteProfile && (
-                <ContactForm
-                  form={forms.contact}
-                  onNext={nextStep}
-                  onDataChange={(data) => updateFormData("contact", data)}
-                />
-              )}
-
-              {currentStep === "contact" && hasCompleteProfile && (
-                <Box 
-                  display="flex" 
-                  flexDirection="column" 
-                  alignItems="center" 
-                  justifyContent="center" 
-                  minHeight="400px"
-                  textAlign="center"
-                >
-                  <Box mb={3}>
-                    <CheckCircle size={64} color="#00BFA6" />
-                  </Box>
-                  <Typography variant="h5" fontWeight="bold" color="#0A1F44" mb={2}>
-                    Welcome back, {(user as any)?.firstName}!
-                  </Typography>
-                  <Typography variant="body1" color="text.secondary" mb={3}>
-                    Using your existing profile information. Proceeding to financial assessment...
-                  </Typography>
-                  <Box 
-                    width="200px" 
-                    height="4px" 
-                    bgcolor="#E3E6EA" 
-                    borderRadius="4px" 
-                    overflow="hidden"
-                  >
-                    <Box 
-                      width="100%" 
-                      height="100%" 
-                      bgcolor="#00BFA6"
-                      sx={{
-                        animation: 'progress 2s ease-in-out infinite',
-                        '@keyframes progress': {
-                          '0%': { transform: 'translateX(-100%)' },
-                          '100%': { transform: 'translateX(100%)' }
-                        }
-                      }}
-                    />
-                  </Box>
-                </Box>
-              )}
-
               {currentStep === "ebitda" && (
                 <EbitdaForm
                   form={forms.ebitda}

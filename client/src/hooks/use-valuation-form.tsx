@@ -70,7 +70,7 @@ const defaultFormData: ValuationFormData = {
 };
 
 export function useValuationForm() {
-  const [currentStep, setCurrentStep] = useState<FormStep>("contact");
+  const [currentStep, setCurrentStep] = useState<FormStep>("ebitda");
   const [formData, setFormData] = useState<ValuationFormData>(defaultFormData);
   const [results, setResults] = useState<ValuationAssessment | null>(null);
 
@@ -121,7 +121,7 @@ export function useValuationForm() {
   };
 
   const nextStep = () => {
-    const steps: FormStep[] = ["contact", "ebitda", "adjustments", "valueDrivers", "followUp"];
+    const steps: FormStep[] = ["ebitda", "adjustments", "valueDrivers", "followUp"];
     const currentIndex = steps.indexOf(currentStep);
     if (currentIndex < steps.length - 1) {
       setCurrentStep(steps[currentIndex + 1]);
@@ -133,7 +133,7 @@ export function useValuationForm() {
   };
 
   const prevStep = () => {
-    const steps: FormStep[] = ["contact", "ebitda", "adjustments", "valueDrivers", "followUp"];
+    const steps: FormStep[] = ["ebitda", "adjustments", "valueDrivers", "followUp"];
     const currentIndex = steps.indexOf(currentStep);
     if (currentIndex > 0) {
       setCurrentStep(steps[currentIndex - 1]);

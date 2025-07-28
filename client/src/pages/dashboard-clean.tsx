@@ -187,6 +187,27 @@ function DashboardSidebar({ user }: { user: DashboardUser }) {
           </MDButton>
         )}
 
+        <Link href="/profile">
+          <MDButton
+            className="text-[#dbdce1]"
+            sx={{
+              background: 'transparent',
+              border: `1px solid rgba(255, 255, 255, 0.3)`,
+              color: '#dbdce1',
+              '&:hover': {
+                background: 'rgba(255, 255, 255, 0.1)',
+                transform: 'translateY(-2px)'
+              },
+              transition: 'all 0.3s ease',
+              width: '100%',
+              py: 1.5
+            }}
+            startIcon={<User size={18} />}
+          >
+            My Profile
+          </MDButton>
+        </Link>
+
         <MDButton
           className="text-[#dbdce1]"
           sx={{

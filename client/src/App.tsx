@@ -19,6 +19,7 @@ import DashboardClean from "@/pages/dashboard-clean";
 import DashboardTestTiers from "@/pages/dashboard-test-tiers";
 import AssessmentResults from "@/pages/assessment-results";
 import MaterialDashboardDemo from "@/pages/material-dashboard-demo";
+import Profile from "@/pages/profile";
 
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -42,6 +43,7 @@ function Router() {
         <Route path="/results/:id" component={AssessmentResults} />
         <Route path="/value-calculator" component={ValueCalculator} />
         <Route path="/material-demo" component={MaterialDashboardDemo} />
+        <Route path="/profile" component={Profile} />
         
         {/* Admin/Team pages */}
         <Route path="/admin" component={TeamDashboard} />
