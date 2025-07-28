@@ -266,33 +266,33 @@ function StatsCard({ title, value, subtitle, icon: Icon, color }: {
   };
 
   return (
-    <Card sx={{ height: '100%', boxShadow: '0 4px 20px -8px rgba(0,0,0,0.15)' }}>
-      <CardContent sx={{ p: 3 }}>
+    <Card sx={{ height: '100%', boxShadow: '0 2px 8px -4px rgba(0,0,0,0.1)' }}>
+      <CardContent sx={{ p: 2 }}>
         <MDBox display="flex" justifyContent="space-between" alignItems="center">
           <MDBox>
-            <MDTypography variant="h4" fontWeight="bold" sx={{ color: '#344767', mb: 1 }}>
+            <MDTypography variant="h5" fontWeight="bold" sx={{ color: '#344767', mb: 0.5 }}>
               {value}
             </MDTypography>
-            <MDTypography variant="h6" sx={{ color: '#67748e', mb: 0.5 }}>
+            <MDTypography variant="body2" sx={{ color: '#67748e', mb: 0.25, fontSize: '0.9rem' }}>
               {title}
             </MDTypography>
-            <MDTypography variant="body2" sx={{ color: '#67748e' }}>
+            <MDTypography variant="caption" sx={{ color: '#67748e', fontSize: '0.75rem' }}>
               {subtitle}
             </MDTypography>
           </MDBox>
           <MDBox
             sx={{
               background: getGradient(color),
-              borderRadius: '12px',
-              p: 2,
+              borderRadius: '8px',
+              p: 1.5,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              minWidth: '48px',
-              minHeight: '48px'
+              minWidth: '36px',
+              minHeight: '36px'
             }}
           >
-            <Icon size={24} color="white" />
+            <Icon size={18} color="white" />
           </MDBox>
         </MDBox>
       </CardContent>
@@ -423,7 +423,7 @@ export default function AdminDashboard() {
       >
         <Container maxWidth="xl">
           {/* Header */}
-          <MDBox mb={4} display="flex" justifyContent="space-between" alignItems="center">
+          <MDBox mb={3} display="flex" justifyContent="space-between" alignItems="center">
             <MDBox>
               <MDTypography variant="h4" fontWeight="bold" sx={{ color: '#344767', mb: 1 }}>
                 Team Management
@@ -445,7 +445,7 @@ export default function AdminDashboard() {
           </MDBox>
 
           {/* Stats Cards */}
-          <Grid container spacing={3} mb={4}>
+          <Grid container spacing={2} mb={3}>
             <Grid item xs={12} sm={6} md={3}>
               <StatsCard
                 title="Total Members"
@@ -485,8 +485,8 @@ export default function AdminDashboard() {
           </Grid>
 
           {/* Team Members Table */}
-          <Card sx={{ boxShadow: '0 4px 20px -8px rgba(0,0,0,0.15)' }}>
-            <MDBox p={3} display="flex" justifyContent="space-between" alignItems="center">
+          <Card sx={{ boxShadow: '0 2px 8px -4px rgba(0,0,0,0.1)' }}>
+            <MDBox p={2.5} display="flex" justifyContent="space-between" alignItems="center">
               <MDTypography variant="h6" fontWeight="bold" sx={{ color: '#344767' }}>
                 Team Members
               </MDTypography>
