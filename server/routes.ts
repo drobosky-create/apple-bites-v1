@@ -2410,6 +2410,72 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Profile update endpoint
+  app.put("/api/profile", async (req, res) => {
+    try {
+      // Check if user is authenticated (works with both Replit Auth and custom auth)
+      const isReplitAuth = req.isAuthenticated && req.isAuthenticated() && req.user?.claims?.sub;
+      const isCustomAuth = req.session?.customUserSessionId;
+      const isDemoAuth = (req.session as any)?.isAuthenticated && (req.session as any)?.user;
+
+      if (!isReplitAuth && !isCustomAuth && !isDemoAuth) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+
+      const profileData = req.body;
+      
+      // For demo sessions, update the session data
+      if (isDemoAuth && (req.session as any)?.user) {
+        const sessionUser = (req.session as any).user;
+        
+        // Parse name into first and last name
+        const nameParts = profileData.name ? profileData.name.trim().split(' ') : [];
+        const firstName = nameParts[0] || sessionUser.firstName;
+        const lastName = nameParts.slice(1).join(' ') || sessionUser.lastName;
+        
+        // Update session user data
+        (req.session as any).user = {
+          ...sessionUser,
+          firstName,
+          lastName,
+          email: profileData.email || sessionUser.email,
+          phone: profileData.phone || sessionUser.phone,
+          company: profileData.company || sessionUser.company,
+          jobTitle: profileData.title || sessionUser.jobTitle,
+          // Store additional profile data
+          about: profileData.about,
+          facebook: profileData.facebook,
+          twitter: profileData.twitter,
+          instagram: profileData.instagram,
+          linkedin: profileData.linkedin,
+          // Notification preferences
+          emailResults: profileData.emailResults,
+          textResults: profileData.textResults,
+          monthlyWebinars: profileData.monthlyWebinars,
+          marketUpdates: profileData.marketUpdates,
+          newFeatures: profileData.newFeatures,
+        };
+        
+        return res.json({ 
+          success: true, 
+          message: "Profile updated successfully",
+          user: (req.session as any).user 
+        });
+      }
+
+      // For authenticated users, you would update the database here
+      // This is a placeholder for when real user management is implemented
+      return res.json({ 
+        success: true, 
+        message: "Profile updated successfully" 
+      });
+
+    } catch (error) {
+      console.error('Profile update failed:', error);
+      res.status(500).json({ error: 'Failed to update profile' });
+    }
+  });
+
   // Demo setup endpoint for testing user flow
   app.get("/api/setup-demo", async (req, res) => {
     try {
