@@ -322,12 +322,12 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
                 disabled={isSubmitting}
                 sx={{ 
                   minWidth: '200px',
-                  background: '#C41261',
+                  background: '#00BFA6',
                   borderRadius: '8px',
                   '&:hover': {
-                    background: '#A10E51',
+                    background: '#008e7e',
                     transform: 'translateY(-1px)',
-                    boxShadow: '0 6px 16px rgba(196, 18, 97, 0.3)'
+                    boxShadow: '0 6px 16px rgba(0, 191, 166, 0.3)'
                   },
                   transition: 'all 0.3s ease'
                 }}

@@ -11,7 +11,7 @@ interface MDButtonProps extends Omit<ButtonProps, 'color'> {
 const MDButtonRoot = styled(Button)<{ mdvariant?: string; mdcolor?: string }>(({ theme, mdvariant, mdcolor }) => {
   // Material Dashboard gradients
   const gradients = {
-    primary: "linear-gradient(195deg, #e91e63, #ad1457)",
+    primary: "linear-gradient(195deg, #00BFA6, #0A1F44)",
     secondary: "linear-gradient(195deg, #7b1fa2, #6a1b9a)",
     info: "linear-gradient(195deg, #1A73E8, #1662C4)",
     success: "linear-gradient(195deg, #4CAF50, #43A047)",
@@ -22,7 +22,7 @@ const MDButtonRoot = styled(Button)<{ mdvariant?: string; mdcolor?: string }>(({
   };
 
   const shadows = {
-    primary: "0 4px 20px 0 rgba(233, 30, 99, 0.14)",
+    primary: "0 4px 20px 0 rgba(0, 191, 166, 0.14)",
     secondary: "0 4px 20px 0 rgba(123, 31, 162, 0.14)",
     info: "0 4px 20px 0 rgba(26, 115, 232, 0.14)",
     success: "0 4px 20px 0 rgba(76, 175, 80, 0.14)",

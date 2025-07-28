@@ -230,10 +230,11 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
                 color="primary"
                 endIcon={<ArrowRight size={16} />}
                 sx={{
-                  background: 'linear-gradient(135deg, #C41261 0%, #E91E63 100%)',
+                  background: 'linear-gradient(135deg, #00BFA6 0%, #0A1F44 100%)',
                   '&:hover': {
-                    background: 'linear-gradient(135deg, #AD0E55 0%, #C2185B 100%)',
+                    background: 'linear-gradient(135deg, #008e7e 0%, #07152E 100%)'
                   }
+
                 }}
               >
                 Next: Adjustments
