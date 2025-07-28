@@ -518,16 +518,29 @@ function DashboardMainContent({ user, setupDemoSession }: { user: DashboardUser;
 }
 
 export default function DashboardClean() {
-  // In real implementation, get user from auth context
-  // const { user, isAuthenticated } = useAuth();
-  const user = mockUser; // Replace with actual user data
+  const { user, isAuthenticated } = useAuth();
+  
+  // Use actual user data or fallback to mock for testing
+  const displayUser = (user as DashboardUser) || mockUser;
 
   // Function to setup demo session for testing
   const setupDemoSession = async () => {
     try {
-      const response = await fetch('/api/setup-demo');
+      const response = await fetch('/api/setup-demo', {
+        method: 'GET',
+        credentials: 'include', // Include cookies for session
+      });
+      
       if (response.ok) {
-        window.location.reload(); // Reload to pick up the new session
+        const result = await response.json();
+        console.log('Demo session created:', result);
+        
+        // Force React Query to refetch user data
+        setTimeout(() => {
+          window.location.reload(); // Reload to pick up the new session
+        }, 100);
+      } else {
+        console.error('Failed to setup demo session');
       }
     } catch (error) {
       console.error('Failed to setup demo session:', error);
@@ -536,8 +549,8 @@ export default function DashboardClean() {
 
   return (
     <MDBox display="flex" minHeight="100vh">
-      <DashboardSidebar user={user} />
-      <DashboardMainContent user={user} setupDemoSession={setupDemoSession} />
+      <DashboardSidebar user={displayUser} />
+      <DashboardMainContent user={displayUser} setupDemoSession={setupDemoSession} />
     </MDBox>
   );
 }
