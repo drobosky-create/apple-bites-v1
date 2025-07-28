@@ -416,39 +416,41 @@ export default function InteractiveValuationSlider() {
                     )}
                     
                     <CardContent sx={{ p: 3, textAlign: 'center', position: 'relative' }}>
-                      {/* Grade Icon */}
+                      {/* Corner-Attached Grade Badge */}
                       <Box sx={{ 
                         position: 'absolute',
-                        top: -20,
-                        left: -8,
-                        width: 48,
-                        height: 48,
-                        borderRadius: '12px',
-                        background: gradeInfo.primary,
+                        top: -12,
+                        left: -12,
+                        width: 44,
+                        height: 44,
+                        backgroundColor: gradeInfo.primary,
+                        borderTopLeftRadius: '12px',
+                        borderBottomRightRadius: '12px',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-                        border: '2px solid white'
+                        color: 'white',
+                        boxShadow: '0 4px 10px rgba(0,0,0,0.1)',
+                        zIndex: 2
                       }}>
-                        <Typography variant="h5" sx={{ color: 'white', fontWeight: 'bold' }}>
+                        <Typography variant="h6" fontWeight="bold" sx={{ fontSize: '1rem' }}>
                           {grade}
                         </Typography>
                       </Box>
                       
                       {/* Content */}
                       <Box sx={{ mt: 2 }}>
-                        <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#374151', mb: 1 }}>
-                          {grade === 'F' ? 'Poor Performance' :
-                           grade === 'D' ? 'Below Average' :
-                           grade === 'C' ? 'Average Performance' :
-                           grade === 'B' ? 'Good Performance' : 'Excellent Performance'}
+                        <Typography variant="body1" sx={{ fontSize: '0.875rem', fontWeight: 500 }}>
+                          {getGradeCategory(grade).label}
                         </Typography>
-                        <Typography variant="h4" sx={{ fontWeight: 'bold', color: gradeInfo.primary, mb: 0.5 }}>
-                          ${gradeInfo.multiplier.toFixed(1)}x
+                        <Typography variant="h5" sx={{ color: gradeInfo.primary, mt: 1 }}>
+                          ${gradeInfo.multiplier}x
                         </Typography>
-                        <Typography variant="body2" sx={{ color: '#6B7280' }}>
+                        <Typography variant="body2" color="text.secondary">
                           EBITDA Multiple
+                        </Typography>
+                        <Typography variant="h6" sx={{ color: '#111827', mt: 2, fontWeight: 'bold' }}>
+                          ${valuation.toLocaleString()}
                         </Typography>
                       </Box>
                     </CardContent>
