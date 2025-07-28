@@ -37,8 +37,8 @@ const MDInput = forwardRef<HTMLInputElement, MDInputProps>(
             },
           },
           '& .MuiInputBase-input': {
-            padding: '12px 14px',
-            fontSize: '14px',
+            padding: '14px 16px',
+            fontSize: '15px',
           },
           ...sx,
         }}
