@@ -1,10 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useQuery } from "@tanstack/react-query";
 import { useLocation } from "wouter";
-
-
-
-
+import { Box, Card, CardContent, Typography, Button, Chip, Grid } from '@mui/material';
 import { TrendingUp, ArrowRight, Phone } from "lucide-react";
 import ModernGradeChart from './modern-grade-chart';
 import OperationalGradeGauge from './OperationalGradeGauge';
@@ -101,16 +98,36 @@ export default function InteractiveValuationSlider() {
   const getGradeInfo = (grade: 'A' | 'B' | 'C' | 'D' | 'F') => {
     const multiplier = getMultipleForGrade(grade);
     const colorMap = {
-      'A': { bg: 'bg-green-500/85', border: 'border-green-400', gradient: 'from-green-50 to-emerald-50', borderColor: 'border-green-200/30',badgeBg: 'bg-green-500',
-             badgeTextColor: 'text-white', },
-      'B': { bg: 'bg-blue-500/80', border: 'border-blue-400', gradient: 'from-blue-50 to-indigo-50', borderColor: 'border-blue-200/50',badgeBg: 'bg-blue-500',
-             badgeTextColor: 'text-white', },
-      'C': { bg: 'bg-yellow-500/85', border: 'border-yellow-400', gradient: 'from-yellow-50 to-orange-50', borderColor: 'border-yellow-200/30',badgeBg: 'bg-yellow-400',
-             badgeTextColor: 'text-gray-900', },
-      'D': { bg: 'bg-orange-500/85', border: 'border-orange-400', gradient: 'from-orange-50 to-red-50', borderColor: 'border-orange-200/30', badgeBg: 'bg-orange-500',
-             badgeTextColor: 'text-white', },
-      'F': { bg: 'bg-red-500/85', border: 'border-red-400', gradient: 'from-red-50 to-pink-50', borderColor: 'border-red-200/30', badgeBg: 'bg-red-500',
-             badgeTextColor: 'text-white', }
+      'A': { 
+        primary: '#10B981', 
+        light: '#D1FAE5', 
+        bg: 'linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%)',
+        border: '#10B981'
+      },
+      'B': { 
+        primary: '#3B82F6', 
+        light: '#DBEAFE', 
+        bg: 'linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%)',
+        border: '#3B82F6'
+      },
+      'C': { 
+        primary: '#6B7280', 
+        light: '#F3F4F6', 
+        bg: 'linear-gradient(135deg, #F9FAFB 0%, #F3F4F6 100%)',
+        border: '#6B7280'
+      },
+      'D': { 
+        primary: '#F59E0B', 
+        light: '#FEF3C7', 
+        bg: 'linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%)',
+        border: '#F59E0B'
+      },
+      'F': { 
+        primary: '#EF4444', 
+        light: '#FEE2E2', 
+        bg: 'linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%)',
+        border: '#EF4444'
+      }
     };
     return { 
       multiplier, 
@@ -128,29 +145,13 @@ export default function InteractiveValuationSlider() {
   const currentMultiple = getMultipleForGrade(baseGrade);
   const sliderMultiple = getMultipleForGrade(sliderGrade);
 
-  // Data for the comparison chart
-  const chartData = [
-    {
-      category: 'Current',
-      valuation: Math.round(currentValuation),
-      multiple: currentMultiple.toFixed(1),
-      grade: baseGrade
-    },
-    {
-      category: 'Potential',
-      valuation: Math.round(sliderValuation),
-      multiple: sliderMultiple.toFixed(1),
-      grade: sliderGrade
-    }
-  ];
-
   const getGradeCategory = (grade: OperationalGrade): { label: string; color: string; bgColor: string } => {
     switch (grade) {
-      case 'A': return { label: "Excellent Operations", color: "text-green-800", bgColor: "bg-green-500" };
-      case 'B': return { label: "Good Operations", color: "text-green-700", bgColor: "bg-green-400" };
-      case 'C': return { label: "Average Operations", color: "text-slate-700", bgColor: "bg-slate-500" };
-      case 'D': return { label: "Below Average", color: "text-red-700", bgColor: "bg-red-400" };
-      case 'F': return { label: "Poor Operations", color: "text-red-800", bgColor: "bg-red-500" };
+      case 'A': return { label: "Excellent Operations", color: "#065F46", bgColor: "#10B981" };
+      case 'B': return { label: "Good Operations", color: "#1E40AF", bgColor: "#3B82F6" };
+      case 'C': return { label: "Average Operations", color: "#374151", bgColor: "#6B7280" };
+      case 'D': return { label: "Below Average", color: "#92400E", bgColor: "#F59E0B" };
+      case 'F': return { label: "Poor Operations", color: "#991B1B", bgColor: "#EF4444" };
     }
   };
 
@@ -168,361 +169,348 @@ export default function InteractiveValuationSlider() {
 
   if (isLoading) {
     return (
-      <div >
-        <div >
-          <div ></div>
-          <div >
-            <div ></div>
-            <div ></div>
-          </div>
-        </div>
-      </div>
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
+        <Box sx={{ 
+          width: 40, 
+          height: 40, 
+          border: '3px solid #f3f3f3',
+          borderTop: '3px solid #0A1F44',
+          borderRadius: '50%',
+          animation: 'spin 1s linear infinite',
+          '@keyframes spin': {
+            '0%': { transform: 'rotate(0deg)' },
+            '100%': { transform: 'rotate(360deg)' },
+          }
+        }} />
+      </Box>
     );
   }
 
   return (
-    <div >
-      <div >
+    <Box sx={{ p: 3 }}>
+      {/* Header */}
+      <Box sx={{ textAlign: 'center', mb: 4 }}>
         {targetAssessment && (
-          <p >
+          <Typography variant="h6" sx={{ color: '#666', mb: 3 }}>
             Based on your assessment data
-          </p>
+          </Typography>
         )}
-      </div>
-      {/* Current vs Potential Value Cards with Glassmorphism */}
-      <div >
+      </Box>
+
+      {/* Current vs Potential Value Cards */}
+      <Grid container spacing={3} sx={{ mb: 4 }}>
         {/* Current Value Card */}
-        <div >
-          
-          <h3 >
-            Current Value 
-            <span >
-              You are here
-            </span>
-          </h3>
-          <p >Based on your Operational Grade of {baseGrade}</p>
-          <div >
-            ${currentValuation.toLocaleString()}
-          </div>
-          <div >
-            {currentMultiple}x EBITDA Multiple
-          </div>
-          <span >
-            {currentCategory.label}
-          </span>
-        </div>
+        <Grid item xs={12} md={6}>
+          <Card sx={{ 
+            background: 'linear-gradient(135deg, #374151 0%, #4B5563 100%)',
+            color: 'white',
+            position: 'relative',
+            overflow: 'hidden'
+          }}>
+            <CardContent sx={{ p: 4 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                <Typography variant="h5" sx={{ fontWeight: 'bold', flex: 1 }}>
+                  Current Value
+                </Typography>
+                <Chip 
+                  label="You are here"
+                  size="small"
+                  sx={{ 
+                    backgroundColor: '#F59E0B',
+                    color: 'white',
+                    fontWeight: 'bold'
+                  }}
+                />
+              </Box>
+              <Typography variant="body1" sx={{ mb: 3, opacity: 0.8 }}>
+                Based on your Operational Grade of {baseGrade}
+              </Typography>
+              <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 2 }}>
+                ${currentValuation.toLocaleString()}
+              </Typography>
+              <Typography variant="h6" sx={{ mb: 2, opacity: 0.9 }}>
+                {currentMultiple}x EBITDA Multiple
+              </Typography>
+              <Chip 
+                label={currentCategory.label}
+                sx={{ 
+                  backgroundColor: 'rgba(255,255,255,0.2)',
+                  color: 'white',
+                  border: '1px solid rgba(255,255,255,0.3)'
+                }}
+              />
+            </CardContent>
+          </Card>
+        </Grid>
 
         {/* Potential Value Card */}
-        <div className={`backdrop-blur-md rounded-xl shadow-2xl border p-4 sm:p-6 value-card-hover relative overflow-hidden transition-all duration-300 ${
-          sliderGrade !== baseGrade ? 
-            (potentialIncrease > 0 ? 
-              'bg-green-500/20 border-green-400/40 ring-2 ring-green-400 ring-opacity-50 shadow-2xl shadow-green-400/30' : 
-              'bg-red-500/20 border-red-400/40 ring-2 ring-red-400 ring-opacity-50 shadow-2xl shadow-red-400/30'
-            )
-            : 'bg-black/60 border-white/10'
-        }`}>
-          
-          <div >
-            <h3 className={`text-lg sm:text-xl font-semibold mb-2 tracking-wide ${
-              sliderGrade !== baseGrade ? 'text-black' : 'text-white'
-            }`}>Potential Value</h3>
-            {sliderGrade !== baseGrade ? (
-              <p className={`text-sm sm:text-base mb-3 ${
-                sliderGrade !== baseGrade ? 'text-black/80' : 'text-white/80'
-              }`}>
+        <Grid item xs={12} md={6}>
+          <Card sx={{ 
+            background: sliderGrade !== baseGrade ? 
+              (potentialIncrease > 0 ? 
+                'linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%)' : 
+                'linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%)'
+              ) :
+              'linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%)',
+            color: sliderGrade !== baseGrade ? '#111827' : '#374151',
+            border: sliderGrade !== baseGrade ? 
+              (potentialIncrease > 0 ? '2px solid #10B981' : '2px solid #EF4444') :
+              '1px solid #E2E8F0',
+            transform: sliderGrade !== baseGrade ? 'scale(1.02)' : 'scale(1)',
+            transition: 'all 0.3s ease',
+            boxShadow: sliderGrade !== baseGrade ? 
+              (potentialIncrease > 0 ? 
+                '0 10px 25px rgba(16, 185, 129, 0.2)' : 
+                '0 10px 25px rgba(239, 68, 68, 0.2)'
+              ) : '0 2px 8px rgba(0,0,0,0.1)'
+          }}>
+            <CardContent sx={{ p: 4 }}>
+              <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 2 }}>
+                Potential Value
+              </Typography>
+              <Typography variant="body1" sx={{ mb: 3, opacity: 0.8 }}>
                 Based on selected grade ({sliderGrade})
-              </p>
-            ) : (
-              <p className={`text-sm sm:text-base mb-3 ${
-                sliderGrade !== baseGrade ? 'text-black/80' : 'text-white/80'
-              }`}>
-                Based on selected grade ({sliderGrade})
-              </p>
-            )}
-            <div className={`text-3xl sm:text-4xl font-bold mb-3 ${
-              sliderGrade !== baseGrade ? 'text-black' : 'text-white'
-            }`}>
-              ${sliderValuation.toLocaleString()}
-            </div>
-            <div className={`text-sm sm:text-base font-semibold mb-3 ${
-              sliderGrade !== baseGrade ? 'text-black/90' : 'text-white/90'
-            }`}>
-              {sliderMultiple}x EBITDA Multiple
-            </div>
-            <span className={`inline-flex items-center rounded-full px-4 py-1 text-sm font-medium bg-white/20 border border-white/30 ${
-              sliderGrade !== baseGrade ? 'text-black' : 'text-white'
-            }`}>
-              {sliderCategory.label}
-            </span>
-          </div>
-        </div>
-      </div>
+              </Typography>
+              <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 2 }}>
+                ${sliderValuation.toLocaleString()}
+              </Typography>
+              <Typography variant="h6" sx={{ mb: 2, opacity: 0.9 }}>
+                {sliderMultiple}x EBITDA Multiple
+              </Typography>
+              <Chip 
+                label={sliderCategory.label}
+                sx={{ 
+                  backgroundColor: sliderCategory.bgColor,
+                  color: 'white'
+                }}
+              />
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
 
-
-      {/* Combined Gauge and Grade Selection */}
-      <div >
-        {/* Gauge and Potential Gain Side by Side */}
-        <div >
-          {/* Gauge Section */}
-          <div >
-            <OperationalGradeGauge 
-              grade={sliderGrade}
-              title="Operational Grade Impact Analysis"
-              animated={true}
-            />
-          </div>
-          
-          {/* Potential Gain Display */}
-          <div >
-            {sliderGrade !== baseGrade ? (
-              <div className={`w-full rounded-xl p-4 text-center transition-all duration-300 ${
-                potentialIncrease > 0 
-                  ? 'bg-green-500/80 border-green-400/40 border-2 shadow-lg shadow-green-400/20' 
-                  : 'bg-red-500/80 border-red-400/40 border-2 shadow-lg shadow-red-400/20'
-              }`}>
-                <div >
-                  {potentialIncrease > 0 ? '💰 POTENTIAL GAIN' : '⚠️ POTENTIAL LOSS'}
-                </div>
-                <div >
-                  {potentialIncrease > 0 ? '+' : '-'}${Math.abs(potentialIncrease).toLocaleString()}
-                </div>
-                <div >
-                  {potentialIncrease > 0 ? '+' : '-'}{Math.abs(percentageIncrease).toFixed(1)}% {potentialIncrease > 0 ? 'increase' : 'decrease'}
-                </div>
-              </div>
-            ) : (
-              <div >
-                <div >
-                  Select a different grade to see potential impact
-                </div>
-                <div >
-                  Use the grade buttons below to explore value changes
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-        
-        <h3 >
-          Click any grade to see how operational improvements impact your business value
-        </h3>
-        <div >
-          {(['F', 'D', 'C', 'B', 'A'] as const).map((grade) => {
-            const gradeInfo = getGradeInfo(grade);
-            const isSelected = grade === sliderGrade;
-            const isCurrent = grade === baseGrade;
-            const valuation = calculateValuation(grade);
+      {/* Gauge and Potential Gain Section */}
+      <Card sx={{ mb: 4, background: 'linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%)' }}>
+        <CardContent sx={{ p: 4 }}>
+          <Grid container spacing={4} alignItems="center">
+            {/* Gauge Section */}
+            <Grid item xs={12} md={8}>
+              <OperationalGradeGauge 
+                grade={sliderGrade}
+                title="Operational Grade Impact Analysis"
+                animated={true}
+              />
+            </Grid>
             
-            return (
-              <button
-                key={grade}
-                onClick={() => setSliderGrade(grade)}
-                className={`relative p-4 rounded-xl border transition-all duration-200 hover:shadow-md ${
-                  isSelected 
-                    ? 'border-blue-500 shadow-md bg-blue-50' 
-                    : 'border-gray-300 hover:border-gray-400 bg-white'
-                }`}
-              >
-                {isCurrent && (
-                  <div >
-                    <span >
-                      Current
-                    </span>
-                  </div>
-                )}
-                {isSelected && !isCurrent && (
-                  <div >
-                    <span >
-                      Selected
-                    </span>
-                  </div>
-                )}
-                
-                <div >
-                  {/* Icon Section */}
-                  <div
-                    className={`absolute -top-6 -left-2 z-10 w-12 h-12 rounded-xl flex items-center justify-center ${gradeInfo.bg} backdrop-blur-md border border-white/20 shadow-lg`}
+            {/* Potential Gain Display */}
+            <Grid item xs={12} md={4}>
+              {sliderGrade !== baseGrade ? (
+                <Card sx={{ 
+                  background: potentialIncrease > 0 
+                    ? 'linear-gradient(135deg, #10B981 0%, #059669 100%)' 
+                    : 'linear-gradient(135deg, #EF4444 0%, #DC2626 100%)',
+                  color: 'white',
+                  textAlign: 'center'
+                }}>
+                  <CardContent sx={{ p: 3 }}>
+                    <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 2 }}>
+                      {potentialIncrease > 0 ? '💰 POTENTIAL GAIN' : '⚠️ POTENTIAL LOSS'}
+                    </Typography>
+                    <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1 }}>
+                      {potentialIncrease > 0 ? '+' : '-'}${Math.abs(potentialIncrease).toLocaleString()}
+                    </Typography>
+                    <Typography variant="h6">
+                      {potentialIncrease > 0 ? '+' : '-'}{Math.abs(percentageIncrease).toFixed(1)}% {potentialIncrease > 0 ? 'increase' : 'decrease'}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              ) : (
+                <Card sx={{ 
+                  background: 'linear-gradient(135deg, #6B7280 0%, #4B5563 100%)',
+                  color: 'white',
+                  textAlign: 'center'
+                }}>
+                  <CardContent sx={{ p: 3 }}>
+                    <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 2 }}>
+                      Select a different grade to see potential impact
+                    </Typography>
+                    <Typography variant="body1">
+                      Use the grade buttons below to explore value changes
+                    </Typography>
+                  </CardContent>
+                </Card>
+              )}
+            </Grid>
+          </Grid>
+        </CardContent>
+      </Card>
+
+      {/* Grade Selection Section */}
+      <Card sx={{ mb: 4 }}>
+        <CardContent sx={{ p: 4 }}>
+          <Typography variant="h5" sx={{ fontWeight: 'bold', color: '#0A1F44', textAlign: 'center', mb: 4 }}>
+            Click any grade to see how operational improvements impact your business value
+          </Typography>
+          
+          <Grid container spacing={2} justifyContent="center">
+            {(['F', 'D', 'C', 'B', 'A'] as const).map((grade) => {
+              const gradeInfo = getGradeInfo(grade);
+              const isSelected = grade === sliderGrade;
+              const isCurrent = grade === baseGrade;
+              const valuation = calculateValuation(grade);
+              
+              return (
+                <Grid item xs={12} sm={6} md={2.4} key={grade}>
+                  <Card
+                    onClick={() => setSliderGrade(grade)}
+                    sx={{
+                      cursor: 'pointer',
+                      position: 'relative',
+                      background: isSelected ? gradeInfo.bg : '#FFFFFF',
+                      border: isSelected ? `2px solid ${gradeInfo.border}` : '1px solid #E2E8F0',
+                      transform: isSelected ? 'scale(1.05)' : 'scale(1)',
+                      transition: 'all 0.2s ease',
+                      '&:hover': {
+                        transform: 'scale(1.05)',
+                        boxShadow: '0 8px 25px rgba(0,0,0,0.15)'
+                      }
+                    }}
                   >
-                    <span >{grade}</span>
-                  </div>
-                  
-                  {/* Content Section */}
-                  <div >
-                    <div >
-                      {grade === 'F' ? 'Poor Performance' :
-                       grade === 'D' ? 'Below Average' :
-                       grade === 'C' ? 'Average Performance' :
-                       grade === 'B' ? 'Good Performance' : 'Excellent Performance'}
-                    </div>
-                    <div >
-                      {gradeInfo.multiplier.toFixed(1)}x
-                    </div>
-                    <div >
-                      EBITDA Multiple
-                    </div>
-                  </div>
-                </div>
-              </button>
-            );
-          })}
-        </div>
-        
-        <div >
-          <div >
-            <div ></div>
-            <span >Current Grade</span>
-          </div>
-          <div >
-            <div ></div>
-            <span >Selected Target</span>
-          </div>
-        </div>
-        
-        <p >
-          Valuations based on EBITDA multiple × Click to select target grade
-        </p>
-      </div>
+                    {isCurrent && (
+                      <Box sx={{ 
+                        position: 'absolute', 
+                        top: -8, 
+                        left: '50%', 
+                        transform: 'translateX(-50%)',
+                        zIndex: 10
+                      }}>
+                        <Chip 
+                          label="Current"
+                          size="small"
+                          sx={{ 
+                            backgroundColor: '#F59E0B',
+                            color: 'white',
+                            fontWeight: 'bold'
+                          }}
+                        />
+                      </Box>
+                    )}
+                    {isSelected && !isCurrent && (
+                      <Box sx={{ 
+                        position: 'absolute', 
+                        top: -8, 
+                        left: '50%', 
+                        transform: 'translateX(-50%)',
+                        zIndex: 10
+                      }}>
+                        <Chip 
+                          label="Selected"
+                          size="small"
+                          sx={{ 
+                            backgroundColor: '#3B82F6',
+                            color: 'white',
+                            fontWeight: 'bold'
+                          }}
+                        />
+                      </Box>
+                    )}
+                    
+                    <CardContent sx={{ p: 3, textAlign: 'center', position: 'relative' }}>
+                      {/* Grade Icon */}
+                      <Box sx={{ 
+                        position: 'absolute',
+                        top: -20,
+                        left: -8,
+                        width: 48,
+                        height: 48,
+                        borderRadius: '12px',
+                        background: gradeInfo.primary,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                        border: '2px solid white'
+                      }}>
+                        <Typography variant="h5" sx={{ color: 'white', fontWeight: 'bold' }}>
+                          {grade}
+                        </Typography>
+                      </Box>
+                      
+                      {/* Content */}
+                      <Box sx={{ mt: 2 }}>
+                        <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#374151', mb: 1 }}>
+                          {grade === 'F' ? 'Poor Performance' :
+                           grade === 'D' ? 'Below Average' :
+                           grade === 'C' ? 'Average Performance' :
+                           grade === 'B' ? 'Good Performance' : 'Excellent Performance'}
+                        </Typography>
+                        <Typography variant="h4" sx={{ fontWeight: 'bold', color: gradeInfo.primary, mb: 0.5 }}>
+                          {gradeInfo.multiplier.toFixed(1)}x
+                        </Typography>
+                        <Typography variant="body2" sx={{ color: '#6B7280' }}>
+                          EBITDA Multiple
+                        </Typography>
+                      </Box>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              );
+            })}
+          </Grid>
+          
+          {/* Legend */}
+          <Box sx={{ display: 'flex', justifyContent: 'center', gap: 4, mt: 4 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Box sx={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: '#F59E0B' }} />
+              <Typography variant="body2" sx={{ color: '#6B7280' }}>Current Grade</Typography>
+            </Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Box sx={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: '#3B82F6' }} />
+              <Typography variant="body2" sx={{ color: '#6B7280' }}>Selected Target</Typography>
+            </Box>
+          </Box>
+          
+          <Typography variant="body2" sx={{ textAlign: 'center', color: '#6B7280', mt: 2 }}>
+            Valuations based on EBITDA multiple × Click to select target grade
+          </Typography>
+        </CardContent>
+      </Card>
+
       {/* Call to Action */}
       {showBooking && (
-        <div >
-          <div >
-            <h3 >
+        <Card sx={{ 
+          background: 'linear-gradient(135deg, #0A1F44 0%, #1B2C4F 100%)',
+          color: 'white'
+        }}>
+          <CardContent sx={{ p: 4, textAlign: 'center' }}>
+            <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 2 }}>
               Ready to Unlock Your Business Value?
-            </h3>
-            <p >
+            </Typography>
+            <Typography variant="h6" sx={{ mb: 3, opacity: 0.9 }}>
               By improving your operational grade from {baseGrade} to {sliderGrade}, 
-              you could add <strong >${Math.round(potentialIncrease).toLocaleString()}</strong> to your business value.
-            </p>
-            <div >
-              <Button 
-                
-                onClick={() => window.open('https://api.leadconnectorhq.com/widget/bookings/applebites', '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes')}
-              >
-                <Phone  />
-                Get Your Customized Value Roadmap
-              </Button>
-            </div>
-          </div>
-        </div>
+              you could add <strong style={{ color: '#5EEAD4' }}>${Math.round(potentialIncrease).toLocaleString()}</strong> to your business value.
+            </Typography>
+            <Button 
+              variant="contained"
+              size="large"
+              startIcon={<Phone />}
+              onClick={() => window.open('https://api.leadconnectorhq.com/widget/bookings/applebites', '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes')}
+              sx={{
+                background: 'linear-gradient(135deg, #5EEAD4 0%, #4DD0C7 100%)',
+                color: '#0A1F44',
+                fontWeight: 'bold',
+                py: 2,
+                px: 4,
+                '&:hover': {
+                  background: 'linear-gradient(135deg, #4DD0C7 0%, #0891B2 100%)',
+                }
+              }}
+            >
+              Get Your Customized Value Roadmap
+            </Button>
+          </CardContent>
+        </Card>
       )}
-      {/* Educational Content */}
-      <div >
-        <div >
-          <h3 >
-            How to Improve Your Operational Grade
-          </h3>
-        </div>
-        <div >
-          {/* Financial Performance - Grade A */}
-          {(() => {
-            const gradeInfo = getGradeInfo('A');
-            return (
-              <div className={`bg-gradient-to-br ${gradeInfo.gradient}
-        rounded-xl p-4
-        border ${gradeInfo.borderColor}
-        backdrop-blur-md
-        bg-white/10
-        shadow-lg
-        hover:shadow-xl
-        transition-all duration-300 ease-in-out`}>
-                <div >
-                  <div className={`${gradeInfo.bg} bg-opacity-80 text-white px-2 py-1 rounded-full text-xs uppercase tracking-wider font-bold `}>
-                    {gradeInfo.label}
-                  </div>
-                </div>
-                <h4 >💰 Financial Performance</h4>
-                <p >Consistent profitability, strong cash flow management, and professional financial reporting</p>
-              </div>
-            );
-          })()}
-
-          {/* Operational Excellence - Grade B */}
-          {(() => {
-            const gradeInfo = getGradeInfo('B');
-            return (
-              <div className={`bg-gradient-to-br ${gradeInfo.gradient}
-        rounded-xl p-4
-        border ${gradeInfo.borderColor}
-        backdrop-blur-md
-        bg-white/10
-        shadow-lg
-        hover:shadow-xl
-        transition-all duration-300 ease-in-out`}>
-                <div >
-                  <div className={`${gradeInfo.bg} bg-opacity-90 text-white px-2 py-1 rounded-full text-xs uppercase tracking-wider font-bold `}>
-                    {gradeInfo.label}
-                  </div>
-                </div>
-                <h4 >⚙️ Operational Excellence</h4>
-                <p >Streamlined processes, quality management systems, and scalable operations</p>
-              </div>
-            );
-          })()}
-
-          {/* Market Position - Grade C */}
-          {(() => {
-            const gradeInfo = getGradeInfo('C');
-            return (
-              <div className={`bg-gradient-to-br ${gradeInfo.gradient}
-        rounded-xl p-4
-        border ${gradeInfo.borderColor}
-        backdrop-blur-md
-        bg-white/10
-        shadow-lg
-        hover:shadow-xl
-        transition-all duration-300 ease-in-out`}>
-                <div >
-                  <div className={`${gradeInfo.bg} bg-opacity-90 text-white px-2 py-1 rounded-full text-xs uppercase tracking-wider font-bold `}>
-                    {gradeInfo.label}
-                  </div>
-                </div>
-                <h4 >🎯 Market Position</h4>
-                <p >Competitive differentiation, customer loyalty, and market share protection</p>
-              </div>
-            );
-          })()}
-
-          {/* Risk Management - Grades D-F */}
-          {(() => {
-            const gradeInfo = getGradeInfo('D');
-            return (
-              <div className={`bg-gradient-to-br ${gradeInfo.gradient}
-                rounded-xl p-4
-                border ${gradeInfo.borderColor}
-                backdrop-blur-md
-                bg-white/10
-                shadow-lg
-                hover:shadow-xl
-                transition-all duration-300 ease-in-out`}>
-                <div >
-                  <div >
-                    Grades D-F: {getMultipleForGrade('D').toFixed(1)}-{getMultipleForGrade('F').toFixed(1)}x
-                  </div>
-                </div>
-                <h4 >🛡️ Risk Management</h4>
-                <p >Diversified revenue streams, reduced owner dependency, and operational stability</p>
-              </div>
-            );
-          })()}
-        </div>
-
-        {/* Final CTA Section */}
-        <div >
-          <h3 >
-            Want to See How Much More Your Business Could Be Worth?
-          </h3>
-          <button 
-            onClick={() => {
-              // Open GoHighLevel booking widget in new tab
-              window.open('https://api.leadconnectorhq.com/widget/bookings/applebites', '_blank');
-            }}
-            
-          >
-            Explore Your Full Valuation Roadmap 
-            <ArrowRight  />
-          </button>
-        </div>
-      </div>
-    </div>
+    </Box>
   );
 }
