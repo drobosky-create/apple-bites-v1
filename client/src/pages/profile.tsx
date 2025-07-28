@@ -9,7 +9,31 @@ import MDButton from '@/components/MD/MDButton';
 import { TextField } from '@mui/material';
 import { ArrowLeft, User, Phone } from 'lucide-react';
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa';
-import { Switch } from '@mui/material';
+import { Switch, styled } from '@mui/material';
+
+// Custom Navy Switch component with persistent styling
+const NavySwitch = styled(Switch)(({ theme }) => ({
+  '& .MuiSwitch-switchBase.Mui-checked': {
+    color: '#0A1F44 !important',
+    '&:hover': {
+      backgroundColor: 'rgba(10, 31, 68, 0.04) !important',
+    },
+  },
+  '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+    backgroundColor: '#0A1F44 !important',
+  },
+  '& .MuiSwitch-track': {
+    backgroundColor: '#D1D5DB !important',
+  },
+  '& .MuiSwitch-thumb': {
+    color: '#ffffff !important',
+  },
+  '& .MuiSwitch-switchBase': {
+    '&:not(.Mui-checked)': {
+      color: '#ffffff !important',
+    }
+  }
+}));
 
 interface ProfileData {
   name: string;
@@ -58,11 +82,11 @@ export default function ProfilePage() {
     if (user) {
       setProfile(prev => ({
         ...prev,
-        name: `${user.firstName || ''} ${user.lastName || ''}`.trim() || prev.name,
-        email: user.email || prev.email,
-        phone: user.phone || prev.phone,
-        title: user.jobTitle || prev.title,
-        company: user.company || prev.company,
+        name: `${(user as any).firstName || ''} ${(user as any).lastName || ''}`.trim() || prev.name,
+        email: (user as any).email || prev.email,
+        phone: (user as any).phone || prev.phone,
+        title: (user as any).jobTitle || prev.title,
+        company: (user as any).company || prev.company,
       }));
     }
   }, [user]);
@@ -70,9 +94,14 @@ export default function ProfilePage() {
   const updateProfileMutation = useMutation({
     mutationFn: async (data: Partial<ProfileData>) => {
       const response = await apiRequest('PUT', '/api/profile', data);
-      return response.json();
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const result = await response.json();
+      return result;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      console.log('Profile updated successfully:', data);
       queryClient.invalidateQueries({ queryKey: ['/api/auth/user'] });
       setEditMode(false);
     },
@@ -407,32 +436,10 @@ export default function ProfilePage() {
                       {setting.description}
                     </MDTypography>
                   </MDBox>
-                  <Switch
+                  <NavySwitch
                     checked={profile[setting.key as keyof ProfileData] as boolean}
                     onChange={(e) => handleChange(setting.key, e.target.checked)}
                     disabled={!editMode}
-                    sx={{
-                      '& .MuiSwitch-switchBase.Mui-checked': {
-                        color: '#0A1F44 !important',
-                        '&:hover': {
-                          backgroundColor: 'rgba(10, 31, 68, 0.04) !important',
-                        },
-                      },
-                      '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
-                        backgroundColor: '#0A1F44 !important',
-                      },
-                      '& .MuiSwitch-track': {
-                        backgroundColor: '#D1D5DB !important',
-                      },
-                      '& .MuiSwitch-thumb': {
-                        color: '#ffffff !important',
-                      },
-                      '& .MuiSwitch-switchBase': {
-                        '&:not(.Mui-checked)': {
-                          color: '#ffffff !important',
-                        }
-                      }
-                    }}
                   />
                 </MDBox>
               ))}
