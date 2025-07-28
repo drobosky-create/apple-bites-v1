@@ -1,31 +1,43 @@
 # Apple Bites Logo Assets
 
-This directory contains the professional Apple Bites logo variations for the business valuation platform.
+## Universal Logo Implementation
 
-## Logo Variants
+**Primary Logo**: `/public/apple-bites-logo.png` - Universal Apple Bites logo for all contexts
 
-### Primary Logos
-- **apple-bites-logo-variant-1.png** - Red apple with money and Meritage Partners branding, "BUSINESS ASSESSMENT" text
-- **apple-bites-logo-variant-2.png** - Red apple with money, clean design without additional text
-- **apple-bites-logo-variant-3.png** - Metallic dark apple with cyan glow effects and Meritage Partners branding
-- **apple-bites-logo-variant-4.png** - Metallic dark apple with cyan glow, "BUSINESS ASSESSMENT" text
-
-### Premium Variants
+### Available Assets
 - **apple-bites-logo-premium.png** - High-detail metallic apple with sophisticated money design and cyan accents
-- **apple-bites-business-context.png** - Logo shown in professional business context with person at computer
+- **apple-bites-business-context.png** - Logo shown in professional business context  
+- **apple-bites-meritage-logo.png** - Combined Apple Bites + Meritage Partners branding
 
-## Usage Guidelines
+## Usage
 
-- **Variant 3** is currently used in the assessment sidebar with white/10 background framing
-- All variants maintain the Apple Bites brand identity with apple and money symbolism
-- Metallic variants (3, 4, premium) work best on dark backgrounds
-- Red apple variants (1, 2) work well on light backgrounds
-- Context image demonstrates professional application
+Use the `AppleBitesLogo` component for consistent logo implementation:
 
-## Brand Colors
-- Apple Red: Traditional red apple color
-- Metallic Blue/Cyan: #00bcd4 (teal/cyan accents)
-- Navy Blue: #0b2147 (Meritage Partners brand)
-- Golden Yellow: Money/currency accent color
+```tsx
+import { AppleBitesLogo } from '@/components/AppleBitesLogo';
 
-Last Updated: July 19, 2025
+// Basic usage
+<AppleBitesLogo size="medium" />
+
+// Custom size
+<AppleBitesLogo width={100} height={100} />
+
+// With click handler
+<AppleBitesLogo size="large" onClick={() => navigate('/')} />
+```
+
+## Brand Integration
+
+The universal logo features:
+- Dark metallic apple with cyan glow effects (#00BFA6 teal brand color)
+- Professional money design symbolizing business valuation
+- Optimal for both light and dark backgrounds
+- Matches Apple Bites teal/navy theme system
+
+## Component Sizes
+- **small**: 32x32px - Navigation, buttons
+- **medium**: 48x48px - Default, cards  
+- **large**: 64x64px - Headers, prominent placement
+- **xl**: 128x128px - Landing pages, hero sections
+
+Last Updated: July 28, 2025

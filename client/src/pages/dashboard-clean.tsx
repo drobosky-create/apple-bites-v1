@@ -6,6 +6,7 @@ import MDTypography from '@/components/MD/MDTypography';
 import MDButton from '@/components/MD/MDButton';
 import MDAvatar from '@/components/MD/MDAvatar';
 import MDBadge from '@/components/MD/MDBadge';
+import { AppleBitesLogo } from '@/components/AppleBitesLogo';
 import { 
   User, 
   FileText, 
@@ -202,9 +203,12 @@ function DashboardSidebar({ user }: { user: DashboardUser }) {
 
       {/* Footer */}
       <MDBox mt={4} pt={2} borderTop={`1px solid rgba(255, 255, 255, 0.2)`}>
-        <MDTypography variant="caption" textAlign="center" sx={{ color: colors.accent }}>
-          Powered by Apple Bites
-        </MDTypography>
+        <MDBox display="flex" flexDirection="column" alignItems="center" gap={1}>
+          <AppleBitesLogo size="small" />
+          <MDTypography variant="caption" textAlign="center" sx={{ color: colors.accent }}>
+            Apple Bites
+          </MDTypography>
+        </MDBox>
       </MDBox>
     </MDBox>
   );
