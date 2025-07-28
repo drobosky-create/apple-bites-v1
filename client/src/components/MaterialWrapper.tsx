@@ -6,6 +6,7 @@
 import React from 'react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
+import { materialDashboardTheme } from '@/theme/materialDashboard';
 
 interface MaterialWrapperProps {
   children: React.ReactNode;
@@ -59,6 +60,10 @@ const mdTheme = createTheme({
       default: '#F7FAFC',   // Apple Bites Gray Light
       paper: '#ffffff',     // Apple Bites White
     },
+    // Material Dashboard specific palette extensions
+    white: {
+      main: '#ffffff',      // Apple Bites White
+    },
   },
   typography: {
     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
@@ -76,6 +81,11 @@ const mdTheme = createTheme({
   shape: {
     borderRadius: 12,
   },
+  // Inject Material Dashboard custom properties
+  gradients: materialDashboardTheme.gradients,
+  boxShadows: materialDashboardTheme.boxShadows,
+  borders: materialDashboardTheme.borders,
+  functions: materialDashboardTheme.functions,
 } as any);
 
 export default function MaterialWrapper({ children }: MaterialWrapperProps) {
