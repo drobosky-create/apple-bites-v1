@@ -188,108 +188,71 @@ export default function ProfilePage() {
           </MDBox>
         </MDBox>
 
-        {/* Form Fields */}
-        <MDBox sx={{ space: 2 }}>
-          {['name', 'email', 'phone', 'title', 'company'].map((field) => (
-            <MDBox key={field} mb={2}>
-              <MDTypography 
-                variant="body2" 
-                fontWeight="500" 
-                sx={{ color: '#374151', textTransform: 'capitalize', mb: 0.5 }}
-              >
-                {field}
-              </MDTypography>
-              <TextField
-                type={field === 'email' ? 'email' : field === 'phone' ? 'tel' : 'text'}
-                value={profile[field as keyof ProfileData]}
-                onChange={(e: any) => handleChange(field, e.target.value)}
-                disabled={!editMode}
-                fullWidth
-                variant="outlined"
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                    backgroundColor: 'white',
-                    border: editMode ? '1px solid #D1D5DB' : '1px solid transparent',
-                    borderRadius: '6px',
-                    boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
-                    '&:focus-within': {
-                      outline: editMode ? '2px solid #00B4AA' : 'none',
-                      outlineOffset: '2px'
-                    },
-                    '& .MuiOutlinedInput-notchedOutline': {
-                      border: 'none'
-                    }
-                  }
-                }}
-              />
-            </MDBox>
-          ))}
-
-          <MDBox mb={2}>
+        {/* Two Column Layout */}
+        <MDBox 
+          display="grid" 
+          gridTemplateColumns={{ xs: '1fr', lg: '1fr 1fr' }} 
+          gap={4}
+        >
+          {/* Left Column - Profile Information */}
+          <MDBox>
             <MDTypography 
-              variant="body2" 
-              fontWeight="500" 
-              sx={{ color: '#374151', mb: 0.5 }}
+              variant="h6" 
+              fontWeight="600" 
+              sx={{ color: '#111827', mb: 3 }}
             >
-              About
+              Profile Information
             </MDTypography>
-            <TextField
-              multiline
-              rows={4}
-              value={profile.about}
-              onChange={(e: any) => handleChange('about', e.target.value)}
-              disabled={!editMode}
-              fullWidth
-              variant="outlined"
-              sx={{
-                '& .MuiOutlinedInput-root': {
-                  backgroundColor: 'white',
-                  border: editMode ? '1px solid #D1D5DB' : '1px solid transparent',
-                  borderRadius: '6px',
-                  boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
-                  '&:focus-within': {
-                    outline: editMode ? '2px solid #00B4AA' : 'none',
-                    outlineOffset: '2px'
-                  },
-                  '& .MuiOutlinedInput-notchedOutline': {
-                    border: 'none'
-                  }
-                }
-              }}
-            />
-          </MDBox>
+            
+            <MDBox sx={{ space: 2 }}>
+              {['name', 'email', 'phone', 'title', 'company'].map((field) => (
+                <MDBox key={field} mb={2}>
+                  <MDTypography 
+                    variant="body2" 
+                    fontWeight="500" 
+                    sx={{ color: '#374151', textTransform: 'capitalize', mb: 0.5 }}
+                  >
+                    {field}
+                  </MDTypography>
+                  <TextField
+                    type={field === 'email' ? 'email' : field === 'phone' ? 'tel' : 'text'}
+                    value={profile[field as keyof ProfileData]}
+                    onChange={(e: any) => handleChange(field, e.target.value)}
+                    disabled={!editMode}
+                    fullWidth
+                    variant="outlined"
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        backgroundColor: 'white',
+                        border: editMode ? '1px solid #D1D5DB' : '1px solid transparent',
+                        borderRadius: '6px',
+                        boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+                        '&:focus-within': {
+                          outline: editMode ? '2px solid #00B4AA' : 'none',
+                          outlineOffset: '2px'
+                        },
+                        '& .MuiOutlinedInput-notchedOutline': {
+                          border: 'none'
+                        }
+                      }
+                    }}
+                  />
+                </MDBox>
+              ))}
 
-          {/* Social Links */}
-          <MDBox 
-            display="grid" 
-            gridTemplateColumns={{ xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' }} 
-            gap={2}
-          >
-            {[
-              { key: 'facebook', label: 'Facebook', icon: FaFacebook, color: '#1877F2' },
-              { key: 'twitter', label: 'X (Twitter)', icon: FaTwitter, color: '#000000' },
-              { key: 'instagram', label: 'Instagram', icon: FaInstagram, color: '#E4405F' },
-              { key: 'linkedin', label: 'LinkedIn', icon: FaLinkedin, color: '#0A66C2' }
-            ].map((social) => (
-              <MDBox key={social.key}>
+              <MDBox mb={2}>
                 <MDTypography 
                   variant="body2" 
                   fontWeight="500" 
-                  sx={{ 
-                    color: '#374151', 
-                    mb: 0.5,
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 1
-                  }}
+                  sx={{ color: '#374151', mb: 0.5 }}
                 >
-                  <social.icon size={16} style={{ color: social.color }} />
-                  {social.label}
+                  About
                 </MDTypography>
                 <TextField
-                  type="url"
-                  value={profile[social.key as keyof ProfileData]}
-                  onChange={(e: any) => handleChange(social.key, e.target.value)}
+                  multiline
+                  rows={4}
+                  value={profile.about}
+                  onChange={(e: any) => handleChange('about', e.target.value)}
                   disabled={!editMode}
                   fullWidth
                   variant="outlined"
@@ -310,11 +273,74 @@ export default function ProfilePage() {
                   }}
                 />
               </MDBox>
-            ))}
+
+              {/* Social Links */}
+              <MDBox mt={3}>
+                <MDTypography 
+                  variant="h6" 
+                  fontWeight="600" 
+                  sx={{ color: '#111827', mb: 2 }}
+                >
+                  Social Links
+                </MDTypography>
+                <MDBox 
+                  display="grid" 
+                  gridTemplateColumns={{ xs: '1fr', sm: 'repeat(2, 1fr)' }} 
+                  gap={2}
+                >
+                  {[
+                    { key: 'facebook', label: 'Facebook', icon: FaFacebook, color: '#1877F2' },
+                    { key: 'twitter', label: 'X (Twitter)', icon: FaTwitter, color: '#000000' },
+                    { key: 'instagram', label: 'Instagram', icon: FaInstagram, color: '#E4405F' },
+                    { key: 'linkedin', label: 'LinkedIn', icon: FaLinkedin, color: '#0A66C2' }
+                  ].map((social) => (
+                    <MDBox key={social.key}>
+                      <MDTypography 
+                        variant="body2" 
+                        fontWeight="500" 
+                        sx={{ 
+                          color: '#374151', 
+                          mb: 0.5,
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 1
+                        }}
+                      >
+                        <social.icon size={16} style={{ color: social.color }} />
+                        {social.label}
+                      </MDTypography>
+                      <TextField
+                        type="url"
+                        value={profile[social.key as keyof ProfileData]}
+                        onChange={(e: any) => handleChange(social.key, e.target.value)}
+                        disabled={!editMode}
+                        fullWidth
+                        variant="outlined"
+                        sx={{
+                          '& .MuiOutlinedInput-root': {
+                            backgroundColor: 'white',
+                            border: editMode ? '1px solid #D1D5DB' : '1px solid transparent',
+                            borderRadius: '6px',
+                            boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+                            '&:focus-within': {
+                              outline: editMode ? '2px solid #00B4AA' : 'none',
+                              outlineOffset: '2px'
+                            },
+                            '& .MuiOutlinedInput-notchedOutline': {
+                              border: 'none'
+                            }
+                          }
+                        }}
+                      />
+                    </MDBox>
+                  ))}
+                </MDBox>
+              </MDBox>
+            </MDBox>
           </MDBox>
 
-          {/* Notification Preferences */}
-          <MDBox mt={4}>
+          {/* Right Column - Notification Preferences */}
+          <MDBox>
             <MDTypography 
               variant="h6" 
               fontWeight="600" 
