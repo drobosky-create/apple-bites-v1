@@ -94,7 +94,8 @@ function DashboardSidebar({ user }: { user: DashboardUser }) {
         padding: 3,
         display: 'flex',
         flexDirection: 'column',
-        zIndex: 1000
+        zIndex: 1000,
+        overflow: 'hidden' // Prevent internal scrolling
       }}
     >
       {/* User Info Section */}
@@ -191,7 +192,7 @@ function DashboardSidebar({ user }: { user: DashboardUser }) {
           sx={{
             background: 'transparent',
             border: `1px solid rgba(255, 255, 255, 0.3)`,
-            color: 'white',
+            color: '#dbdce1',
             '&:hover': {
               background: 'rgba(255, 255, 255, 0.1)',
               transform: 'translateY(-2px)'
@@ -259,6 +260,7 @@ function DashboardMainContent({ user }: { user: DashboardUser }) {
         marginLeft: '328px', // Account for pillbox sidebar width + margins
         backgroundColor: colors.grayLight,
         padding: 4,
+        minHeight: '100vh',
         overflow: 'auto'
       }}
     >
