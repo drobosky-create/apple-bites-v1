@@ -240,15 +240,6 @@ export default function FreeAssessment() {
       >
         {/* User Info Section */}
         <Box mb={3}>
-          <Box display="flex" alignItems="center" mb={2}>
-            <Box 
-              component="img"
-              src="/apple-bites-logo.png"
-              alt="Apple Bites"
-              sx={{ width: '100px', height: 'auto', mb: 1 }}
-            />
-          </Box>
-          
           <Typography variant="h6" fontWeight="bold" color="white" gutterBottom>
             Demo User
           </Typography>
@@ -415,6 +406,12 @@ export default function FreeAssessment() {
 
         {/* Footer */}
         <Box mt="auto">
+          <Box 
+            component="img"
+            src="/apple-bites-logo.png"
+            alt="Apple Bites"
+            sx={{ width: '100px', height: 'auto', mb: 2 }}
+          />
           <Box 
             component="img"
             src="/assets/logos/apple-bites-meritage-logo.png"

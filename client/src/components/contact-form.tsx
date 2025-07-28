@@ -97,7 +97,7 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
           </MDBox>
         </MDBox>
         <MDBox>
-          <MDTypography variant="h3" fontWeight="bold" color="dark" mb={1}>
+          <MDTypography variant="h3" fontWeight="bold" color="dark" mb={1} sx={{ fontSize: '28px' }}>
             Contact Information
           </MDTypography>
           <MDTypography variant="body1" color="text" opacity={0.8}>
@@ -153,15 +153,15 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
           <CardContent sx={{ padding: '32px' }}>
             {/* Contact Details Section */}
             <MDBox mb={4}>
-              <MDTypography variant="h5" fontWeight="medium" color="dark" mb={3}>
+              <MDTypography variant="h5" fontWeight="bold" color="dark" mb={3} sx={{ fontSize: '28px' }}>
                 Contact Details
               </MDTypography>
               
               {/* Name Fields */}
               <Grid container spacing={3} mb={3}>
-                <Grid item xs={12} md={6}>
+                <Grid xs={12} md={6}>
                   <MDBox>
-                    <MDTypography variant="body2" fontWeight="medium" color="dark" mb={1}>
+                    <MDTypography variant="body1" fontWeight="medium" color="dark" mb={1} sx={{ fontSize: '16px' }}>
                       First Name <span style={{ color: '#f44336' }}>*</span>
                     </MDTypography>
                     <TextField
@@ -173,16 +173,17 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
                       sx={{
                         '& .MuiOutlinedInput-root': {
                           borderRadius: '8px',
-                          height: '48px'
+                          height: '48px',
+                          fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif'
                         }
                       }}
                     />
                   </MDBox>
                 </Grid>
 
-                <Grid item xs={12} md={6}>
+                <Grid xs={12} md={6}>
                   <MDBox>
-                    <MDTypography variant="body2" fontWeight="medium" color="dark" mb={1}>
+                    <MDTypography variant="body1" fontWeight="medium" color="dark" mb={1} sx={{ fontSize: '16px' }}>
                       Last Name <span style={{ color: '#f44336' }}>*</span>
                     </MDTypography>
                     <TextField
@@ -194,7 +195,8 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
                       sx={{
                         '& .MuiOutlinedInput-root': {
                           borderRadius: '8px',
-                          height: '48px'
+                          height: '48px',
+                          fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif'
                         }
                       }}
                     />
@@ -204,9 +206,9 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
 
               {/* Email and Phone Fields */}
               <Grid container spacing={3} mb={3}>
-                <Grid item xs={12} md={6}>
+                <Grid xs={12} md={6}>
                   <MDBox>
-                    <MDTypography variant="body2" fontWeight="medium" color="dark" mb={1}>
+                    <MDTypography variant="body1" fontWeight="medium" color="dark" mb={1} sx={{ fontSize: '16px' }}>
                       Email Address <span style={{ color: '#f44336' }}>*</span>
                     </MDTypography>
                     <TextField
@@ -225,16 +227,17 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
                       sx={{
                         '& .MuiOutlinedInput-root': {
                           borderRadius: '8px',
-                          height: '48px'
+                          height: '48px',
+                          fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif'
                         }
                       }}
                     />
                   </MDBox>
                 </Grid>
 
-                <Grid item xs={12} md={6}>
+                <Grid xs={12} md={6}>
                   <MDBox>
-                    <MDTypography variant="body2" fontWeight="medium" color="dark" mb={1}>
+                    <MDTypography variant="body1" fontWeight="medium" color="dark" mb={1} sx={{ fontSize: '16px' }}>
                       Phone Number
                     </MDTypography>
                     <TextField
@@ -246,7 +249,8 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
                       sx={{
                         '& .MuiOutlinedInput-root': {
                           borderRadius: '8px',
-                          height: '48px'
+                          height: '48px',
+                          fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif'
                         }
                       }}
                     />
@@ -257,14 +261,14 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
 
             {/* Business Information Section */}
             <MDBox mb={4}>
-              <MDTypography variant="h5" fontWeight="medium" color="dark" mb={3}>
+              <MDTypography variant="h5" fontWeight="bold" color="dark" mb={3} sx={{ fontSize: '28px' }}>
                 Business Information
               </MDTypography>
               
               <Grid container spacing={3}>
-                <Grid item xs={12} md={6}>
+                <Grid xs={12} md={6}>
                   <MDBox>
-                    <MDTypography variant="body2" fontWeight="medium" color="dark" mb={1}>
+                    <MDTypography variant="body1" fontWeight="medium" color="dark" mb={1} sx={{ fontSize: '16px' }}>
                       Company Name <span style={{ color: '#f44336' }}>*</span>
                     </MDTypography>
                     <TextField
@@ -276,16 +280,17 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
                       sx={{
                         '& .MuiOutlinedInput-root': {
                           borderRadius: '8px',
-                          height: '48px'
+                          height: '48px',
+                          fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif'
                         }
                       }}
                     />
                   </MDBox>
                 </Grid>
 
-                <Grid item xs={12} md={6}>
+                <Grid xs={12} md={6}>
                   <MDBox>
-                    <MDTypography variant="body2" fontWeight="medium" color="dark" mb={1}>
+                    <MDTypography variant="body1" fontWeight="medium" color="dark" mb={1} sx={{ fontSize: '16px' }}>
                       Job Title
                     </MDTypography>
                     <TextField
@@ -297,7 +302,8 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
                       sx={{
                         '& .MuiOutlinedInput-root': {
                           borderRadius: '8px',
-                          height: '48px'
+                          height: '48px',
+                          fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif'
                         }
                       }}
                     />
@@ -306,8 +312,33 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
               </Grid>
             </MDBox>
 
+            {/* Continue Button */}
+            <MDBox display="flex" justifyContent="flex-end" mb={4}>
+              <MDButton
+                type="submit"
+                variant="gradient"
+                color="primary"
+                size="large"
+                disabled={isSubmitting}
+                sx={{ 
+                  minWidth: '200px',
+                  background: '#C41261',
+                  borderRadius: '8px',
+                  '&:hover': {
+                    background: '#A10E51',
+                    transform: 'translateY(-1px)',
+                    boxShadow: '0 6px 16px rgba(196, 18, 97, 0.3)'
+                  },
+                  transition: 'all 0.3s ease'
+                }}
+              >
+                {isSubmitting ? 'Processing...' : 'Continue to EBITDA'}
+                <ArrowRight size={20} style={{ marginLeft: '8px' }} />
+              </MDButton>
+            </MDBox>
+
             {/* Privacy Notice */}
-            <MDBox mb={4}>
+            <MDBox>
               <Alert 
                 severity="info" 
                 sx={{ 
@@ -317,27 +348,12 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
                 }}
               >
                 <MDBox display="flex" alignItems="center">
-                  <Shield size={20} style={{ marginRight: '12px', color: '#00BFA6' }} />
+                  <Shield size={16} style={{ marginRight: '8px', color: '#00BFA6' }} />
                   <MDTypography variant="body2" color="dark">
                     Your information is secure and will only be used for your business valuation assessment.
                   </MDTypography>
                 </MDBox>
               </Alert>
-            </MDBox>
-
-            {/* Continue Button */}
-            <MDBox display="flex" justifyContent="flex-end">
-              <MDButton
-                type="submit"
-                variant="gradient"
-                color="primary"
-                size="large"
-                disabled={isSubmitting}
-                sx={{ minWidth: '200px' }}
-              >
-                {isSubmitting ? 'Processing...' : 'Continue to EBITDA'}
-                <ArrowRight size={20} style={{ marginLeft: '8px' }} />
-              </MDButton>
             </MDBox>
           </CardContent>
         </Card>
