@@ -209,7 +209,7 @@ export default function InteractiveValuationSlider() {
           }}>
             <CardContent sx={{ p: 4 }}>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                <Typography variant="h5" sx={{ fontWeight: 'bold', flex: 1 }}>
+                <Typography variant="h5" sx={{ fontWeight: 'bold', flex: 1, color: 'white' }}>
                   Current Value
                 </Typography>
                 <Chip 
@@ -222,13 +222,13 @@ export default function InteractiveValuationSlider() {
                   }}
                 />
               </Box>
-              <Typography variant="body1" sx={{ mb: 3, opacity: 0.8 }}>
+              <Typography variant="body1" sx={{ mb: 3, opacity: 0.8, color: 'white' }}>
                 Based on your Operational Grade of {baseGrade}
               </Typography>
-              <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 2 }}>
+              <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 2, color: 'white' }}>
                 ${currentValuation.toLocaleString()}
               </Typography>
-              <Typography variant="h6" sx={{ mb: 2, opacity: 0.9 }}>
+              <Typography variant="h6" sx={{ mb: 2, opacity: 0.9, color: 'white' }}>
                 ${currentMultiple}x EBITDA Multiple
               </Typography>
               <Chip 
