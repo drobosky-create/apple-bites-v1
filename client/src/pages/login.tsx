@@ -67,16 +67,13 @@ export default function HybridLoginPage() {
   };
 
   return (
-    <Grid container sx={{ minHeight: '100vh' }}>
-      {/* Left Visual Section */}
-      <Grid
-        item
-        xs={false}
-        sm={5}
-        md={6}
+    <Box sx={{ minHeight: '100vh', display: 'flex' }}>
+      {/* Left Visual Panel */}
+      <Box
         sx={{
+          flex: { xs: 0, md: 1 },
+          display: { xs: 'none', md: 'flex' },
           background: 'linear-gradient(135deg, #0A1F44 0%, #1B2C4F 100%)',
-          display: { xs: 'none', sm: 'flex' },
           alignItems: 'center',
           justifyContent: 'center',
           position: 'relative',
@@ -110,43 +107,44 @@ export default function HybridLoginPage() {
             }}
           />
         </Box>
-      </Grid>
+      </Box>
 
-      {/* Right Login Form */}
-      <Grid item xs={12} sm={7} md={6}>
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            minHeight: '100vh',
-            background: { xs: 'linear-gradient(135deg, #0A1F44 0%, #1B2C4F 100%)', sm: '#F8F9FA' },
-            px: 4
-          }}
-        >
+      {/* Right Form Panel */}
+      <Box
+        sx={{
+          flex: 1,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          minHeight: '100vh',
+          background: { xs: 'linear-gradient(135deg, #0A1F44 0%, #1B2C4F 100%)', md: '#FFFFFF' },
+          px: { xs: 3, md: 6 },
+          py: { xs: 4, md: 0 }
+        }}
+      >
           <Box
             component="form"
             onSubmit={handleSubmit}
             sx={{
               width: '100%',
-              maxWidth: { xs: '100%', sm: 450 },
-              backgroundColor: 'white',
-              borderRadius: 3,
-              p: 4,
-              boxShadow: 4
+              maxWidth: { xs: '100%', md: 420 },
+              backgroundColor: { xs: 'white', md: 'transparent' },
+              borderRadius: { xs: 3, md: 0 },
+              p: { xs: 4, md: 0 },
+              boxShadow: { xs: 4, md: 'none' }
             }}
           >
             {/* Logo for mobile */}
-            <Box textAlign="center" mb={3} sx={{ display: { sm: 'none' } }}>
+            <Box textAlign="center" mb={4} sx={{ display: { md: 'none' } }}>
               <img src={appleBitesLogo} alt="Apple Bites" style={{ height: 60 }} />
             </Box>
 
             {/* Header */}
-            <Box textAlign="center" mb={3}>
-              <Typography variant="h5" fontWeight="bold" sx={{ color: '#374151', mb: 1 }}>
+            <Box mb={4}>
+              <Typography variant="h4" fontWeight="bold" sx={{ color: '#1A202C', mb: 1 }}>
                 Sign In
               </Typography>
-              <Typography variant="body2" sx={{ color: '#6B7280' }}>
+              <Typography variant="body1" sx={{ color: '#718096' }}>
                 Access your business valuation dashboard
               </Typography>
             </Box>
@@ -348,8 +346,7 @@ export default function HybridLoginPage() {
               </Typography>
             </Box>
           </Box>
-        </Box>
-      </Grid>
-    </Grid>
+      </Box>
+    </Box>
   );
 }
