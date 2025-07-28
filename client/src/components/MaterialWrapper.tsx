@@ -13,56 +13,56 @@ interface MaterialWrapperProps {
   [key: string]: any;
 }
 
-// Create Material Dashboard enhanced MUI theme
+// Create Apple Bites Material Dashboard enhanced MUI theme
 const mdTheme = createTheme({
   palette: {
     primary: {
-      main: '#1A73E8',
-      dark: '#1662C4',
+      main: '#00BFA6',      // Apple Bites Teal
+      dark: '#008e7e',      // Apple Bites Teal Dark
     },
     secondary: {
-      main: '#7b1fa2',
-      dark: '#6a1b9a',
+      main: '#0A1F44',      // Apple Bites Navy
+      dark: '#07152E',      // Apple Bites Deeper Navy
     },
     info: {
-      main: '#1A73E8',
-      dark: '#1662C4',
+      main: '#00BFA6',      // Apple Bites Teal
+      dark: '#008e7e',      // Apple Bites Teal Dark
     },
     success: {
-      main: '#4CAF50',
-      dark: '#43A047',
+      main: '#16A34A',      // Apple Bites Green
+      dark: '#15803D',      // Green Dark
     },
     warning: {
-      main: '#fb8c00',
-      dark: '#f57c00',
+      main: '#F59E0B',      // Apple Bites Amber
+      dark: '#D97706',      // Amber Dark
     },
     error: {
-      main: '#F44335',
-      dark: '#D32F2F',
+      main: '#DC2626',      // Apple Bites Red
+      dark: '#B91C1C',      // Red Dark
     },
     grey: {
-      50: '#fafafa',
-      100: '#f5f5f5',
-      200: '#eeeeee',
-      300: '#e0e0e0',
-      400: '#bdbdbd',
-      500: '#9e9e9e',
-      600: '#757575',
-      700: '#616161',
-      800: '#424242',
-      900: '#212121',
+      50: '#F7FAFC',        // Apple Bites Gray Light
+      100: '#F1F5F9',
+      200: '#E2E8F0',
+      300: '#CBD5E1',       // Apple Bites Gray
+      400: '#94A3B8',
+      500: '#64748B',
+      600: '#475569',       // Apple Bites Gray Dark
+      700: '#334155',
+      800: '#1E293B',       // Apple Bites Gray Darker
+      900: '#0F172A',
     },
     text: {
-      primary: '#344767',
-      secondary: '#67748e',
+      primary: '#0A1F44',   // Apple Bites Navy
+      secondary: '#475569', // Apple Bites Gray Dark
     },
     background: {
-      default: '#f8f9fa',
-      paper: '#ffffff',
+      default: '#F7FAFC',   // Apple Bites Gray Light
+      paper: '#ffffff',     // Apple Bites White
     },
     // Material Dashboard specific palette extensions
     white: {
-      main: '#ffffff',
+      main: '#ffffff',      // Apple Bites White
     },
   },
   typography: {
@@ -71,6 +71,12 @@ const mdTheme = createTheme({
     fontWeightRegular: 400,
     fontWeightMedium: 500,
     fontWeightBold: 700,
+    h1: { color: '#0A1F44' },    // Apple Bites Navy
+    h2: { color: '#0A1F44' },    // Apple Bites Navy
+    h3: { color: '#0A1F44' },    // Apple Bites Navy
+    h4: { color: '#0A1F44' },    // Apple Bites Navy
+    h5: { color: '#0A1F44' },    // Apple Bites Navy
+    h6: { color: '#0A1F44' },    // Apple Bites Navy
   },
   shape: {
     borderRadius: 12,

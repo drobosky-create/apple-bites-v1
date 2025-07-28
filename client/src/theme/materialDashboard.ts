@@ -1,37 +1,37 @@
-// Material Dashboard theme extensions for MUI
+// Apple Bites Material Dashboard theme extensions for MUI
 export const materialDashboardTheme = {
   gradients: {
     primary: {
-      main: "#e91e63",
-      state: "#ad1457"
+      main: "#00BFA6",  // Apple Bites Teal
+      state: "#008e7e"  // Apple Bites Teal Dark
     },
     secondary: {
-      main: "#7b1fa2",
-      state: "#6a1b9a"
+      main: "#0A1F44",  // Apple Bites Navy
+      state: "#07152E"  // Apple Bites Deeper Navy
     },
     info: {
-      main: "#1A73E8",
-      state: "#1662C4"
+      main: "#00BFA6",  // Apple Bites Teal
+      state: "#008e7e"  // Apple Bites Teal Dark
     },
     success: {
-      main: "#4CAF50",
-      state: "#43A047"
+      main: "#16A34A",  // Apple Bites Green
+      state: "#15803D"  // Green Dark
     },
     warning: {
-      main: "#fb8c00",
-      state: "#f57c00"
+      main: "#F59E0B",  // Apple Bites Amber
+      state: "#D97706"  // Amber Dark
     },
     error: {
-      main: "#F44335",
-      state: "#D32F2F"
+      main: "#DC2626",  // Apple Bites Red
+      state: "#B91C1C"  // Red Dark
     },
     light: {
-      main: "#f0f2f5",
-      state: "#e9ecef"
+      main: "#5EEAD4",  // Apple Bites Aqua Accent
+      state: "#33FFC5"  // Apple Bites Glow Accent
     },
     dark: {
-      main: "#42424a",
-      state: "#191919"
+      main: "#0A1F44",  // Apple Bites Navy
+      state: "#1E293B"  // Apple Bites Gray Darker
     }
   },
   
@@ -45,14 +45,14 @@ export const materialDashboardTheme = {
     inset: "inset 0 1px 2px rgba(0, 0, 0, 0.075)",
     
     colored: {
-      primary: "0 4px 20px 0 rgba(233, 30, 99, 0.14)",
-      secondary: "0 4px 20px 0 rgba(123, 31, 162, 0.14)",
-      info: "0 4px 20px 0 rgba(26, 115, 232, 0.14)",
-      success: "0 4px 20px 0 rgba(76, 175, 80, 0.14)",
-      warning: "0 4px 20px 0 rgba(251, 140, 0, 0.14)",
-      error: "0 4px 20px 0 rgba(244, 67, 53, 0.14)",
-      light: "0 4px 20px 0 rgba(240, 242, 245, 0.14)",
-      dark: "0 4px 20px 0 rgba(66, 66, 74, 0.14)"
+      primary: "0 4px 20px 0 rgba(0, 191, 166, 0.14)",     // Apple Bites Teal
+      secondary: "0 4px 20px 0 rgba(10, 31, 68, 0.14)",   // Apple Bites Navy
+      info: "0 4px 20px 0 rgba(0, 191, 166, 0.14)",       // Apple Bites Teal
+      success: "0 4px 20px 0 rgba(22, 163, 74, 0.14)",    // Apple Bites Green
+      warning: "0 4px 20px 0 rgba(245, 158, 11, 0.14)",   // Apple Bites Amber
+      error: "0 4px 20px 0 rgba(220, 38, 38, 0.14)",      // Apple Bites Red
+      light: "0 4px 20px 0 rgba(94, 234, 212, 0.14)",     // Apple Bites Aqua
+      dark: "0 4px 20px 0 rgba(10, 31, 68, 0.14)"         // Apple Bites Navy
     }
   },
 
