@@ -574,28 +574,6 @@ function UpgradeBenefitsSection() {
             Free tier • Upgrade for advanced analytics
           </MDTypography>
         </MDBox>
-        <MDButton
-          size="small"
-          sx={{
-            background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
-            color: 'white',
-            px: 2.5,
-            py: 1,
-            borderRadius: '6px',
-            fontSize: '13px',
-            fontWeight: 'medium',
-            textTransform: 'none',
-            '&:hover': {
-              background: 'linear-gradient(135deg, #059669 0%, #047857 100%)',
-              transform: 'translateY(-1px)'
-            },
-            transition: 'all 0.2s ease'
-          }}
-          startIcon={<TrendingUp size={14} />}
-          onClick={() => window.open('https://products.applebites.ai/', '_blank')}
-        >
-          Upgrade
-        </MDButton>
       </MDBox>
 
       {/* Subtle Features List */}
