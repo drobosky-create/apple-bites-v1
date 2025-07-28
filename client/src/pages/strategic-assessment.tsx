@@ -621,59 +621,84 @@ function GrowthExitAssessment() {
     switch (currentStep) {
       case 1:
         return (
-          <Card >
-            <CardHeader >
-              <div >
-                <Building2  />
-              </div>
-              <Typography variant="h6" component="div">Contact Information</Typography>
-              <p >Let's start with your basic information</p>
-            </CardHeader>
-            <CardContent >
-              <div >
-                <div>
-                  <label >First Name *</label>
-                  <input 
-                    type="text" 
-                    
-                    placeholder="John"
-                  />
-                </div>
-                <div>
-                  <label >Last Name *</label>
-                  <input 
-                    type="text" 
-                    
-                    placeholder="Smith"
-                  />
-                </div>
-              </div>
-              <div>
-                <label >Email Address *</label>
-                <input 
-                  type="email" 
-                  
+          <MDBox>
+            <MDBox sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 3 }}>
+              <MDBox sx={{
+                width: 48,
+                height: 48,
+                borderRadius: 2,
+                background: 'linear-gradient(135deg, #00BFA6 0%, #0A1F44 100%)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                <Building2 size={24} color="white" />
+              </MDBox>
+              <MDBox>
+                <MDTypography variant="h5" fontWeight="bold" gutterBottom>
+                  Contact Information
+                </MDTypography>
+                <MDTypography variant="body2" color="text.secondary">
+                  Let's start with your basic information
+                </MDTypography>
+              </MDBox>
+            </MDBox>
+            
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  fullWidth
+                  label="First Name *"
+                  placeholder="John"
+                  variant="outlined"
+                  value={formData.firstName}
+                  onChange={(e) => handleFormChange('firstName', e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  fullWidth
+                  label="Last Name *"
+                  placeholder="Smith"
+                  variant="outlined"
+                  value={formData.lastName}
+                  onChange={(e) => handleFormChange('lastName', e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  label="Email Address *"
+                  type="email"
                   placeholder="john@company.com"
+                  variant="outlined"
+                  value={formData.email}
+                  onChange={(e) => handleFormChange('email', e.target.value)}
                 />
-              </div>
-              <div>
-                <label >Company Name *</label>
-                <input 
-                  type="text" 
-                  
+              </Grid>
+              <Grid item xs={12} md={8}>
+                <TextField
+                  fullWidth
+                  label="Company Name *"
                   placeholder="Your Company LLC"
+                  variant="outlined"
+                  value={formData.companyName}
+                  onChange={(e) => handleFormChange('companyName', e.target.value)}
                 />
-              </div>
-              <div>
-                <label >Phone Number</label>
-                <input 
-                  type="tel" 
-                  
+              </Grid>
+              <Grid item xs={12} md={4}>
+                <TextField
+                  fullWidth
+                  label="Phone Number"
+                  type="tel"
                   placeholder="(555) 123-4567"
+                  variant="outlined"
+                  value={formData.phone}
+                  onChange={(e) => handleFormChange('phone', e.target.value)}
                 />
-              </div>
-            </CardContent>
-          </Card>
+              </Grid>
+            </Grid>
+          </MDBox>
         );
 
       case 2:
@@ -1244,58 +1269,149 @@ function GrowthExitAssessment() {
   };
 
   return (
-    <div >
-      <div >
-        {/* Header */}
-        <div >
-          <Button 
-            variant="ghost" 
+    <MDBox sx={{ minHeight: '100vh', background: 'linear-gradient(135deg, #0A1F44 0%, #1B2C4F 100%)', p: 3 }}>
+      <MDBox sx={{ maxWidth: '900px', margin: '0 auto' }}>
+        {/* Header with Apple Bites Branding */}
+        <MDBox sx={{
+          background: 'linear-gradient(135deg, #0A1F44 0%, #1B2C4F 100%)',
+          borderRadius: '20px 20px 0 0',
+          p: 4,
+          position: 'relative',
+          border: '1px solid rgba(255, 255, 255, 0.15)',
+          backdropFilter: 'blur(8px)'
+        }}>
+          <MDButton 
             onClick={handleBack}
-            
+            sx={{
+              position: 'absolute',
+              top: 20,
+              left: 20,
+              background: 'rgba(255,255,255,0.15)',
+              color: 'white',
+              border: '1px solid rgba(255, 255, 255, 0.3)',
+              '&:hover': {
+                background: 'rgba(255,255,255,0.25)',
+                transform: 'translateY(-2px)'
+              },
+              transition: 'all 0.3s ease',
+              borderRadius: '12px'
+            }}
+            startIcon={<ArrowLeft size={16} />}
           >
-            <ArrowLeft  />
             Back to Home
-          </Button>
+          </MDButton>
           
-          <div >
-            <Shield  />
-            <Badge >Secure Assessment</Badge>
-          </div>
-        </div>
+          <MDBox sx={{ pt: 6, textAlign: 'center' }}>
+            <img
+              src="/apple-bites-logo.png"
+              alt="Apple Bites"
+              style={{ width: '120px', height: 'auto', marginBottom: '16px' }}
+            />
+            <MDTypography variant="h4" fontWeight="bold" color="white" mb={1}>
+              Growth & Exit Assessment
+            </MDTypography>
+            <MDTypography variant="body1" color="white" sx={{ opacity: 0.9 }}>
+              Professional business valuation with industry-specific analysis
+            </MDTypography>
+            
+            {/* Progress Bar */}
+            <MDBox sx={{ mt: 4, mb: 2 }}>
+              <MDBox sx={{
+                width: '95%',
+                height: '8px',
+                background: 'rgba(255, 255, 255, 0.2)',
+                borderRadius: '20px',
+                margin: '0 auto',
+                overflow: 'hidden'
+              }}>
+                <MDBox sx={{
+                  width: `${(currentStep / totalSteps) * 100}%`,
+                  height: '100%',
+                  background: 'linear-gradient(90deg, #00BFA6 0%, #5EEAD4 100%)',
+                  borderRadius: '20px',
+                  transition: 'width 0.3s ease'
+                }} />
+              </MDBox>
+              <MDBox sx={{ display: 'flex', justifyContent: 'space-between', mt: 1, px: 2 }}>
+                <MDTypography variant="caption" color="white">
+                  Step {currentStep} of {totalSteps}
+                </MDTypography>
+                <MDTypography variant="caption" color="white">
+                  {Math.round((currentStep / totalSteps) * 100)}% Complete
+                </MDTypography>
+              </MDBox>
+            </MDBox>
+          </MDBox>
+        </MDBox>
 
-        {/* Progress Bar */}
-        {renderProgressBar()}
+        {/* Content Card */}
+        <Card sx={{
+          borderRadius: '0 0 20px 20px',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+          border: '1px solid rgba(255, 255, 255, 0.15)',
+          minHeight: '500px'
+        }}>
+          <CardContent sx={{ p: 5 }}>
+            {renderStepContent()}
+          </CardContent>
+        </Card>
 
-        {/* Step Content */}
-        {renderStepContent()}
-
-        {/* Navigation Buttons */}
-        <div >
-          <Button
-            variant="outline"
+        {/* Navigation */}
+        <MDBox sx={{
+          mt: 3,
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center'
+        }}>
+          <MDButton
             onClick={prevStep}
             disabled={currentStep === 1}
-            
+            variant="outlined"
+            sx={{
+              color: 'white',
+              border: '1px solid rgba(255, 255, 255, 0.3)',
+              '&:hover': {
+                background: 'rgba(255, 255, 255, 0.1)',
+                transform: 'translateY(-2px)'
+              },
+              '&:disabled': {
+                opacity: 0.5,
+                color: 'rgba(255, 255, 255, 0.5)'
+              },
+              transition: 'all 0.3s ease'
+            }}
           >
             Previous
-          </Button>
+          </MDButton>
           
-          {currentStep < totalSteps ? (
-            <Button
-              onClick={nextStep}
-              
-            >
-              Continue
-            </Button>
-          ) : (
-            <div >
-              <FileText  />
-              Complete assessment above
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
+          <MDBox sx={{ display: 'flex', gap: 2 }}>
+            {currentStep < totalSteps ? (
+              <MDButton
+                onClick={nextStep}
+                variant="gradient"
+                color="primary"
+                sx={{
+                  background: 'linear-gradient(135deg, #00BFA6 0%, #0A1F44 100%)',
+                  '&:hover': {
+                    transform: 'translateY(-2px)',
+                    boxShadow: '0 8px 25px -8px #00BFA6'
+                  },
+                  transition: 'all 0.3s ease'
+                }}
+              >
+                Continue
+              </MDButton>
+            ) : (
+              <MDBox sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+                <MDTypography variant="body2" color="white" sx={{ opacity: 0.8 }}>
+                  Complete assessment above
+                </MDTypography>
+              </MDBox>
+            )}
+          </MDBox>
+        </MDBox>
+      </MDBox>
+    </MDBox>
   );
 }
 
