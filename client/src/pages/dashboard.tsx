@@ -1,978 +1,579 @@
-import React from "react";
-import { useQuery, useMutation } from "@tanstack/react-query";
-import { useLocation } from "wouter";
-import { useAuth } from "@/hooks/useAuth";
-import {
-  Box,
-  Typography,
-  Button,
-  Card,
-  CardContent,
-  Avatar,
-  Chip,
-  Container,
-  Drawer,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Divider,
-  IconButton,
-  AppBar,
-  Toolbar,
-} from '@mui/material';
-// Import Material Dashboard components
-import { MDBox, MDTypography, MDButton } from "@/components/MD";
-import { styled } from '@mui/material/styles';
+import { useState } from 'react';
+import { Link } from 'wouter';
+import { useAuth } from '@/hooks/useAuth';
+import MDBox from '@/components/MD/MDBox';
+import MDTypography from '@/components/MD/MDTypography';
+import MDButton from '@/components/MD/MDButton';
+import MDAvatar from '@/components/MD/MDAvatar';
+import MDBadge from '@/components/MD/MDBadge';
+import { AppleBitesLogo } from '@/components/AppleBitesLogo';
 import { 
+  User, 
   FileText, 
-  LogOut,
-  TrendingUp,
-  Crown,
-  CheckCircle,
-  Clock,
-  ExternalLink,
-  Home,
-  Settings,
-  BarChart3,
-  Calendar,
-  Download,
-  Lock,
-  X
-} from "lucide-react";
+  Crown, 
+  Clock, 
+  BarChart3, 
+  Plus,
+  ExternalLink
+} from 'lucide-react';
 
-const getGradeStyles = (grade: string) => {
-  switch (grade) {
-    case 'A+':
-    case 'A':
-      return {
-        borderColor: '#42a5f5', // Blue
-        textColor: '#42a5f5',
-        bgColor: 'rgba(66, 165, 245, 0.1)', // Light blue tint
-      };
-    case 'B+':
-    case 'B':
-    case 'B-':
-      return {
-        borderColor: '#8bc34a', // Green
-        textColor: '#8bc34a',
-        bgColor: 'rgba(139, 195, 74, 0.1)', // Light green tint
-      };
-    case 'C+':
-    case 'C':
-    case 'C-':
-      return {
-        borderColor: '#ff9800', // Orange
-        textColor: '#ff9800',
-        bgColor: 'rgba(255, 152, 0, 0.1)', // Light orange tint
-      };
-    case 'D+':
-    case 'D':
-    case 'D-':
-    default:
-      return {
-        borderColor: '#f44336', // Red
-        textColor: '#f44336',
-        bgColor: 'rgba(244, 67, 54, 0.1)', // Light red tint
-      };
-  }
-};
-
-const GradeBox = ({ grade }: { grade: string }) => {
-  const { borderColor, textColor, bgColor } = getGradeStyles(grade);
-
-  return (
-    <MDBox
-      width="64px"
-      height="64px"
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-      bgColor={bgColor}
-      borderRadius="12px"
-      shadow="lg"
-      sx={{
-        backdropFilter: 'blur(12px)',
-        border: '2px solid',
-        borderColor,
-        ml: 2,
-      }}
-    >
-      <MDTypography
-        variant="h5"
-        fontWeight="bold"
-        sx={{ color: textColor }}
-      >
-        {grade}
-      </MDTypography>
-    </MDBox>
-  );
-};
-
-// Material Dashboard Styled Components
-const DashboardBackground = styled(MDBox)(({ theme }) => ({
-  display: 'flex',
-  minHeight: '100vh',
-  backgroundColor: '#f8f9fa',
-  gap: 0, // Remove any gap between sidebar and content
-}));
-
-const drawerWidth = 280;
-
-const MainContent = styled(MDBox)(({ theme }) => ({
-  flexGrow: 1,
-  padding: '16px 24px 24px 8px', // Top, Right, Bottom, Left - minimal left padding
-  marginLeft: 0, // Remove margin since drawer is permanent
-  minHeight: '100vh',
-  width: `calc(100vw - ${drawerWidth}px)`,
-  backgroundColor: '#f8f9fa',
-  [theme.breakpoints.down('md')]: {
-    width: '100vw',
-    padding: '16px',
-  },
-}));
-
-const GradientAppBar = styled(AppBar)(({ theme }) => ({
-  background: '#747b8a !important',
-  backgroundColor: '#747b8a !important',
-  boxShadow: '0 4px 20px 0 rgba(0, 0, 0, 0.12)',
-  '& .MuiAppBar-root': {
-    backgroundColor: '#747b8a !important',
-  },
-  '&.MuiAppBar-root': {
-    backgroundColor: '#747b8a !important',
-  },
-}));
-
-const WelcomeCard = styled(Card)(({ theme }) => ({
-  backgroundColor: '#ffffff',
-  borderRadius: '16px',
-  boxShadow: '0 8px 20px rgba(0,0,0,0.1)',
-  marginBottom: theme.spacing(3),
-}));
-
-const StatCard = styled(Card)(({ theme }) => ({
-  backgroundColor: '#ffffff',
-  borderRadius: '16px',
-  boxShadow: '0 8px 20px rgba(0,0,0,0.1)',
-  transition: 'all 0.3s ease',
-  '&:hover': {
-    transform: 'translateY(-4px)',
-    boxShadow: '0 12px 28px rgba(0,0,0,0.15)',
-  },
-}));
-
-const ActionButton = styled(MDButton)(({ theme }) => ({
-  borderRadius: '8px',
-  textTransform: 'none',
-  fontWeight: 600,
-  padding: '12px 24px',
-  boxShadow: '0 4px 16px rgba(0,0,0,0.1)',
-  '&:hover': {
-    transform: 'translateY(-2px)',
-    boxShadow: '0 8px 20px rgba(0,0,0,0.15)',
-  },
-}));
-
-interface User {
-  id: string;
+interface DashboardUser {
+  name: string;
   email: string;
-  firstName: string;
-  lastName: string;
-  profileImageUrl: string;
   tier: 'free' | 'growth' | 'capital';
-  resultReady: boolean;
+  firstName?: string;
+  lastName?: string;
 }
 
-interface Assessment {
-  id: number;
-  firstName: string;
-  lastName: string;
-  email: string;
-  company?: string;
-  reportTier: string;
-  adjustedEbitda: number;
-  midEstimate: number;
-  overallScore: string;
-  createdAt: Date | null;
-  pdfUrl?: string;
-}
-
-// Past Assessments Component
-const PastAssessmentsSection = ({ userEmail, setLocation }: { userEmail: string, setLocation: (path: string) => void }) => {
-  const { data: assessments, isLoading } = useQuery({
-    queryKey: ['/api/analytics/assessments'],
-    retry: false,
-  });
-
-  const userAssessments = Array.isArray(assessments) ? assessments.filter((assessment: Assessment) => 
-    assessment.email === userEmail
-  ) : [];
-
-  if (isLoading) {
-    return (
-      <MDBox display="flex" justifyContent="center" py={4}>
-        <MDTypography color="text">Loading assessments...</MDTypography>
-      </MDBox>
-    );
-  }
-
-  if (userAssessments.length === 0) {
-    return (
-      <MDBox textAlign="center" py={4}>
-        <FileText size={48} color="#67748e" style={{ marginBottom: 16 }} />
-        <MDTypography variant="h6" color="dark" fontWeight="medium" mb={1}>
-          No assessments yet
-        </MDTypography>
-        <MDTypography variant="body2" color="text" mb={3}>
-          Complete your first business valuation assessment to see your results here
-        </MDTypography>
-      </MDBox>
-    );
-  }
-
-  return (
-    <MDBox>
-      {userAssessments.slice(0, 3).map((assessment: Assessment) => (
-        <MDBox
-          key={assessment.id}
-          onClick={() => {
-            console.log('Assessment clicked, ID:', assessment.id);
-            setLocation(`/assessment-results/${assessment.id}`);
-          }}
-          bgColor="white"
-          borderRadius="lg"
-          shadow="sm"
-          sx={{
-            p: 3,
-            mb: 2,
-            border: '1px solid #e3e6ea',
-            cursor: 'pointer',
-            transition: 'all 0.2s ease',
-            '&:hover': {
-              backgroundColor: '#f8f9fa',
-              borderColor: '#2152ff',
-              transform: 'translateY(-2px)',
-              boxShadow: '0 4px 12px rgba(33, 82, 255, 0.15)'
-            }
-          }}
-        >
-          <MDBox display="flex" justifyContent="space-between" alignItems="start">
-            <MDBox flex={1}>
-              <MDBox display="flex" alignItems="center" gap={2} mb={1}>
-                <BarChart3 size={20} color="#2152ff" />
-                <MDTypography variant="h6" fontWeight="bold" color="dark">
-                  {assessment.company || 'Business Assessment'}
-                </MDTypography>
-              </MDBox>
-              
-              <MDBox display="flex" gap={4} mb={2}>
-                <MDBox>
-                  <MDTypography variant="body2" color="text">Valuation</MDTypography>
-                  <MDTypography variant="h6" color="dark" fontWeight="bold">
-                    ${typeof assessment.midEstimate === 'string' ? 
-                      parseFloat(assessment.midEstimate).toLocaleString() : 
-                      assessment.midEstimate?.toLocaleString() || 'N/A'}
-                  </MDTypography>
-                </MDBox>
-                <MDBox>
-                  <MDTypography variant="body2" color="text">EBITDA</MDTypography>
-                  <MDTypography variant="h6" color="dark" fontWeight="bold">
-                    ${typeof assessment.adjustedEbitda === 'string' ? 
-                      parseFloat(assessment.adjustedEbitda).toLocaleString() : 
-                      assessment.adjustedEbitda?.toLocaleString() || 'N/A'}
-                  </MDTypography>
-                </MDBox>
-                <MDBox>
-                  <MDTypography variant="body2" color="text">Date</MDTypography>
-                  <MDBox display="flex" alignItems="center" gap={1}>
-                    <Calendar size={16} color="#67748e" />
-                    <MDTypography variant="body2" color="text">
-                      {assessment.createdAt ? new Date(assessment.createdAt).toLocaleDateString() : 'Invalid Date'}
-                    </MDTypography>
-                  </MDBox>
-                </MDBox>
-              </MDBox>
-            </MDBox>
-            
-            <GradeBox grade={assessment.overallScore || 'C'} />
-
-          </MDBox>
-        </MDBox>
-      ))}
-      
-      {userAssessments.length > 3 && (
-        <MDBox textAlign="center" mt={2}>
-          <MDButton
-            variant="text"
-            color="info"
-          >
-            View All {userAssessments.length} Assessments
-          </MDButton>
-        </MDBox>
-      )}
-    </MDBox>
-  );
+// Mock user data - replace with actual auth data
+const mockUser: DashboardUser = {
+  name: 'Demo User',
+  email: 'demo@applebites.ai',
+  tier: 'free',
+  firstName: 'Demo',
+  lastName: 'User'
 };
 
-export default function Dashboard() {
-  const [, setLocation] = useLocation();
-  // Commenting out useToast temporarily as it's not available in this component
-  // const { toast } = useToast();
-  const { user: authUser, isLoading: authLoading } = useAuth();
+function DashboardSidebar({ user }: { user: DashboardUser }) {
+  // Apple Bites Brand Colors
+  const colors = {
+    primary: "#00BFA6",
+    secondary: "#0A1F44", 
+    accent: "#5EEAD4",
+    grayLight: "#F7FAFC",
+    gray: "#CBD5E1"
+  };
 
-  const { data: user, isLoading, error } = useQuery({
-    queryKey: ['/api/auth/user'],
-    enabled: !!authUser,
-  });
+  const gradients = {
+    primary: "linear-gradient(135deg, #00BFA6 0%, #0A1F44 100%)",
+    light: "linear-gradient(135deg, #00BFA6 0%, #5EEAD4 100%)",
+    dark: "linear-gradient(135deg, #0A1F44 0%, #1C2D5A 100%)",
+    glow: "linear-gradient(135deg, #00BFA6 0%, #33FFC5 100%)"
+  };
 
-  const logoutMutation = useMutation({
-    mutationFn: async () => {
-      window.location.href = '/api/logout';
-    },
-    onSuccess: () => {
-      // Temporarily commenting out toast notification
-      console.log("Logging out...");
-    },
-  });
-
-  if (authLoading || isLoading) {
-    return (
-      <DashboardBackground>
-        <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
-          <Box sx={{ 
-            width: 40, 
-            height: 40, 
-            border: '3px solid #f3f3f3',
-            borderTop: '3px solid #2152ff',
-            borderRadius: '50%',
-            animation: 'spin 1s linear infinite',
-            '@keyframes spin': {
-              '0%': { transform: 'rotate(0deg)' },
-              '100%': { transform: 'rotate(360deg)' },
-            }
-          }} />
-        </Box>
-      </DashboardBackground>
-    );
-  }
-
-  const getTierInfo = (tier: string) => {
+  const getTierColor = (tier: string) => {
     switch (tier) {
-      case 'growth':
-        return {
-          name: 'Growth & Exit Assessment',
-          icon: TrendingUp,
-          color: 'primary',
-          description: 'Professional industry-specific analysis with AI insights',
-          price: '$795',
-        };
-      case 'capital':
-        return {
-          name: 'Capital Readiness Assessment',
-          icon: Crown,
-          color: 'secondary',
-          description: 'Comprehensive capital readiness analysis and strategic planning',
-          price: '$2,500',
-        };
-      default:
-        return {
-          name: 'Free Assessment',
-          icon: FileText,
-          color: 'default',
-          description: 'Basic business valuation analysis',
-          price: 'Free',
-        };
+      case 'free': return colors.gray;
+      case 'growth': return colors.primary;
+      case 'capital': return colors.accent;
+      default: return colors.gray;
     }
   };
 
-  // Use actual user data or default to free tier
-  const displayUser: User = (user as User) || {
-    id: "demo-user",
-    email: "demo@applebites.ai",
-    firstName: "Demo",
-    lastName: "User", 
-    profileImageUrl: "/default-avatar.png",
-    tier: 'free' as const,
-    resultReady: false
+  const getTierGradient = (tier: string) => {
+    switch (tier) {
+      case 'free': return 'linear-gradient(135deg, #CBD5E1 0%, #94A3B8 100%)';
+      case 'growth': return gradients.primary;
+      case 'capital': return gradients.glow;
+      default: return 'linear-gradient(135deg, #CBD5E1 0%, #94A3B8 100%)';
+    }
   };
 
-  const tierInfo = getTierInfo(displayUser.tier);
-  const TierIcon = tierInfo.icon;
+  const getTierLabel = (tier: string) => {
+    switch (tier) {
+      case 'free': return 'Free';
+      case 'growth': return 'Growth';
+      case 'capital': return 'Capital';
+      default: return 'Free';
+    }
+  };
 
   return (
-    <DashboardBackground>
-      {/* Sidebar Drawer */}
-      <Drawer
-        variant="permanent"
-        sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-          display: { xs: 'none', md: 'block' }, // Hide on mobile, show on desktop
-          '& .MuiDrawer-paper': {
-            width: drawerWidth,
-            boxSizing: 'border-box',
-            backgroundImage: 'url(/assets/twilight-city-skyline.png)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-            color: 'white',
-            '&::before': {
-              content: '""',
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              background: 'rgba(11, 20, 38, 0.45)', // Even lighter overlay for better visibility
-              backdropFilter: 'blur(20px) saturate(180%)',
-              WebkitBackdropFilter: 'blur(20px) saturate(180%)', // Safari support
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              zIndex: 1,
-            },
-            '& > *': {
-              position: 'relative',
-              zIndex: 2,
-            },
-          },
-        }}
-      >
-        <MDBox sx={{ p: 2, textAlign: 'center' }}>
-          <Box component="img"
-            src="/assets/logos/apple-bites-logo-variant-3.png"
-            alt="Apple Bites Business Assessment"
+    <MDBox
+      sx={{
+        position: 'fixed',
+        top: '24px',
+        left: '24px',
+        width: 280,
+        height: 'calc(100vh - 48px)',
+        background: gradients.dark,
+        borderRadius: '20px',
+        border: `1px solid rgba(255, 255, 255, 0.15)`,
+        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+        backdropFilter: 'blur(8px)',
+        padding: 3,
+        display: 'flex',
+        flexDirection: 'column',
+        zIndex: 1000,
+        overflow: 'hidden' // Prevent internal scrolling
+      }}
+    >
+      {/* User Info Section */}
+      <MDBox mb={4}>
+        <MDBox display="flex" alignItems="center" mb={2}>
+          <MDAvatar
             sx={{
-              width: '80%',        // Responsive width inside sidebar
-              maxWidth: 200,       // Cap the max width for consistency
-              mt: 1,               // Move logo up (margin top)
-              mb: 1,               // Space below logo
-              mx: 'auto',          // Center horizontally
-              display: 'block',
+              background: gradients.glow,
+              width: 48,
+              height: 48,
+              mr: 2
             }}
-          />
-          <MDTypography variant="h6" fontWeight="bold" color="white" gutterBottom>
-            {displayUser.firstName} {displayUser.lastName}
+          >
+            <User size={24} color="white" />
+          </MDAvatar>
+          <MDBox>
+            <MDTypography variant="h6" fontWeight="medium" sx={{ color: 'white' }}>
+              {user.name}
+            </MDTypography>
+            <MDTypography variant="caption" sx={{ color: colors.accent }}>
+              {user.email}
+            </MDTypography>
+          </MDBox>
+        </MDBox>
+        
+        <MDBox display="flex" alignItems="center">
+          <MDTypography variant="body2" mr={1} sx={{ color: 'white' }}>
+            Tier:
           </MDTypography>
-          <MDTypography variant="body2" color="white" sx={{ opacity: 0.7 }} gutterBottom>
-            {displayUser.email}
-          </MDTypography>
-          <Chip 
-            label={tierInfo.name}
-            size="small"
-            sx={{ 
-              backgroundColor: 'rgba(255,255,255,0.2)',
+          <MDBox
+            sx={{
+              background: getTierGradient(user.tier),
               color: 'white',
-              border: '1px solid rgba(255,255,255,0.3)'
+              px: 2,
+              py: 0.5,
+              borderRadius: 2,
+              fontSize: '0.75rem',
+              fontWeight: 600,
+              textTransform: 'uppercase',
+              letterSpacing: '0.5px'
+            }}
+          >
+            {getTierLabel(user.tier)}
+          </MDBox>
+        </MDBox>
+      </MDBox>
+
+      {/* Navigation Buttons */}
+      <MDBox display="flex" flexDirection="column" gap={2}>
+        <Link href="/assessment/free">
+          <MDButton
+            sx={{
+              background: gradients.glow,
+              color: 'white',
+              '&:hover': {
+                background: gradients.light,
+                transform: 'translateY(-2px)',
+                boxShadow: `0 8px 25px -8px ${colors.primary}`
+              },
+              transition: 'all 0.3s ease',
+              width: '100%',
+              py: 1.5
+            }}
+            startIcon={<Plus size={18} />}
+          >
+            New Assessment
+          </MDButton>
+        </Link>
+
+        {user.tier === 'free' && (
+          <MDButton
+            sx={{
+              background: 'transparent',
+              border: `2px solid ${colors.accent}`,
+              color: colors.accent,
+              '&:hover': {
+                background: colors.accent,
+                color: colors.secondary,
+                transform: 'translateY(-2px)'
+              },
+              transition: 'all 0.3s ease',
+              width: '100%',
+              py: 1.5
+            }}
+            startIcon={<Crown size={18} />}
+            onClick={() => window.open('https://products.applebites.ai/', '_blank')}
+          >
+            Upgrade Plan
+          </MDButton>
+        )}
+
+        <Link href="/profile">
+          <MDButton
+            className="text-[#dbdce1]"
+            sx={{
+              background: 'transparent',
+              border: `1px solid rgba(255, 255, 255, 0.3)`,
+              color: '#dbdce1',
+              '&:hover': {
+                background: 'rgba(255, 255, 255, 0.1)',
+                transform: 'translateY(-2px)'
+              },
+              transition: 'all 0.3s ease',
+              width: '100%',
+              py: 1.5
+            }}
+            startIcon={<User size={18} />}
+          >
+            My Profile
+          </MDButton>
+        </Link>
+
+        <Link href="/past-assessments">
+          <MDButton
+            className="text-[#dbdce1]"
+            sx={{
+              background: 'transparent',
+              border: `1px solid rgba(255, 255, 255, 0.3)`,
+              color: '#dbdce1',
+              '&:hover': {
+                background: 'rgba(255, 255, 255, 0.1)',
+                transform: 'translateY(-2px)'
+              },
+              transition: 'all 0.3s ease',
+              width: '100%',
+              py: 1.5
+            }}
+            startIcon={<Clock size={18} />}
+          >
+            Past Assessments
+          </MDButton>
+        </Link>
+      </MDBox>
+
+      {/* Spacer */}
+      <MDBox flexGrow={1} />
+
+      {/* Footer */}
+      <MDBox mt={4} pt={2} borderTop={`1px solid rgba(255, 255, 255, 0.2)`}>
+        <MDBox display="flex" flexDirection="column" alignItems="center" gap={1}>
+          <img
+            src="/assets/logos/apple-bites-meritage-logo.png"
+            alt="Apple Bites by Meritage Partners"
+            width={250}
+            height={250}
+            style={{
+              objectFit: 'contain',
+              maxWidth: '100%'
             }}
           />
         </MDBox>
+      </MDBox>
+    </MDBox>
+  );
+}
 
-        <Divider sx={{ borderColor: 'rgba(255,255,255,0.12)' }} />
+function DashboardMainContent({ user, setupDemoSession }: { user: DashboardUser; setupDemoSession: () => void }) {
+  // Apple Bites Brand Colors
+  const colors = {
+    primary: "#00BFA6",
+    secondary: "#0A1F44", 
+    accent: "#5EEAD4",
+    grayLight: "#F7FAFC"
+  };
 
-        <List sx={{ px: 2, py: 2 }}>
-          <ListItem disablePadding>
-            <ListItemButton 
-              sx={{ 
-                borderRadius: '12px',
-                mb: 1,
-                '&:hover': { backgroundColor: 'rgba(255,255,255,0.1)' }
+  const gradients = {
+    primary: "linear-gradient(135deg, #00BFA6 0%, #0A1F44 100%)",
+    light: "linear-gradient(135deg, #00BFA6 0%, #5EEAD4 100%)",
+    glow: "linear-gradient(135deg, #00BFA6 0%, #33FFC5 100%)"
+  };
+
+  const getDashboardTitle = (tier: string) => {
+    switch (tier) {
+      case 'free': return 'Your Free Assessment Dashboard';
+      case 'growth': return 'Your Growth Plan Dashboard';
+      case 'capital': return 'Your Capital Readiness Dashboard';
+      default: return 'Your Dashboard';
+    }
+  };
+
+  return (
+    <MDBox
+      sx={{
+        flex: 1,
+        marginLeft: '328px', // Account for pillbox sidebar width + margins
+        backgroundColor: colors.grayLight,
+        padding: 4,
+        minHeight: '100vh',
+        overflow: 'auto'
+      }}
+    >
+      {/* Header */}
+      <MDBox mb={4}>
+        <MDTypography variant="h4" fontWeight="bold" mb={1} sx={{ color: colors.secondary }}>
+          {getDashboardTitle(user.tier)}
+        </MDTypography>
+        <MDTypography variant="body1" sx={{ color: colors.secondary, opacity: 0.7 }}>
+          Manage your business valuation assessments and track your progress.
+        </MDTypography>
+      </MDBox>
+
+      {/* Status Widget */}
+      <MDBox
+        sx={{
+          backgroundColor: 'white',
+          borderRadius: 2,
+          padding: 3,
+          mb: 3,
+          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+        }}
+      >
+        <MDBox display="flex" justifyContent="space-between" alignItems="center">
+          <MDBox>
+            <MDTypography variant="h6" fontWeight="medium" mb={1}>
+              Assessment Status
+            </MDTypography>
+            <MDTypography variant="body2" color="text">
+              {user.tier === 'free' 
+                ? 'Ready to start your free business valuation assessment'
+                : 'Access your premium assessment tools and reports'
+              }
+            </MDTypography>
+          </MDBox>
+        </MDBox>
+      </MDBox>
+
+      {/* Quick Actions Grid */}
+      <MDBox display="grid" gridTemplateColumns="repeat(auto-fit, minmax(300px, 1fr))" gap={3} mb={4}>
+        {/* New Assessment Card */}
+        <MDBox
+          sx={{
+            backgroundColor: 'white',
+            borderRadius: 2,
+            padding: 3,
+            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+            display: 'flex',
+            flexDirection: 'column',
+            minHeight: 200
+          }}
+        >
+          <MDBox display="flex" alignItems="center" mb={2}>
+            <MDBox
+              sx={{
+                background: gradients.light,
+                borderRadius: '50%',
+                width: 48,
+                height: 48,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                mr: 2
               }}
             >
-              <ListItemIcon sx={{ color: 'white', minWidth: 40 }}>
-                <Home size={20} />
-              </ListItemIcon>
-              <ListItemText 
-                primary="Dashboard" 
-                primaryTypographyProps={{ color: 'white', fontWeight: 500 }}
-              />
-            </ListItemButton>
-          </ListItem>
-
-          <ListItem disablePadding>
-            <ListItemButton 
-              onClick={() => setLocation('/assessment/free')}
-              sx={{ 
-                borderRadius: '12px',
-                mb: 1,
-                '&:hover': { backgroundColor: 'rgba(255,255,255,0.1)' }
-              }}
-            >
-              <ListItemIcon sx={{ color: 'white', minWidth: 40 }}>
-                <FileText size={20} />
-              </ListItemIcon>
-              <ListItemText 
-                primary="New Assessment" 
-                primaryTypographyProps={{ color: 'white', fontWeight: 500 }}
-              />
-            </ListItemButton>
-          </ListItem>
-
-          <ListItem disablePadding>
-            <ListItemButton 
-              onClick={() => window.open('https://products.applebites.ai/', '_blank')}
-              sx={{ 
-                borderRadius: '12px',
-                mb: 1,
-                '&:hover': { backgroundColor: 'rgba(255,255,255,0.1)' }
-              }}
-            >
-              <ListItemIcon sx={{ color: 'white', minWidth: 40 }}>
-                <ExternalLink size={20} />
-              </ListItemIcon>
-              <ListItemText 
-                primary="Upgrade Plan" 
-                primaryTypographyProps={{ color: 'white', fontWeight: 500 }}
-              />
-            </ListItemButton>
-          </ListItem>
-        </List>
-
-        <Box sx={{ mt: 'auto', p: 2 }}>
-          <Button
-            fullWidth
-            variant="contained"
-            onClick={() => logoutMutation.mutate()}
-            disabled={logoutMutation.isPending}
-            sx={{
-              backgroundColor: '#747b8a',
-                color: '#ffffff',
-                borderRadius: '8px',
-                textTransform: 'none',
-                fontWeight: 500,
-                boxShadow: 'none',
+              <FileText size={24} color="white" />
+            </MDBox>
+            <MDTypography variant="h6" fontWeight="medium">
+              New Assessment
+            </MDTypography>
+          </MDBox>
+          <MDBox flexGrow={1}>
+            <MDTypography variant="body2" color="text" mb={3}>
+              Create a new business valuation assessment to get insights into your company's worth.
+            </MDTypography>
+          </MDBox>
+          <Link href="/assessment/free">
+            <MDButton 
+              sx={{
+                background: gradients.primary,
+                color: 'white',
                 '&:hover': {
-                  backgroundColor: '#495361',
+                  background: gradients.glow,
+                  transform: 'translateY(-2px)',
+                  boxShadow: `0 8px 25px -8px ${colors.primary}`
+                },
+                transition: 'all 0.3s ease',
+                width: '100%'
+              }}
+            >
+              Get Started
+            </MDButton>
+          </Link>
+        </MDBox>
+
+        {/* Upgrade/Report Card - Only show upgrade for free users */}
+        {user.tier === 'free' ? (
+          <MDBox
+            sx={{
+              backgroundColor: 'white',
+              borderRadius: 2,
+              padding: 3,
+              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+              display: 'flex',
+              flexDirection: 'column',
+              minHeight: 200
+            }}
+          >
+            <MDBox display="flex" alignItems="center" mb={2}>
+              <MDBox
+                sx={{
+                  backgroundColor: '#fff3e0',
+                  borderRadius: '50%',
+                  width: 48,
+                  height: 48,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  mr: 2
+                }}
+              >
+                <Crown size={24} color="#ff9800" />
+              </MDBox>
+              <MDTypography variant="h6" fontWeight="medium">
+                Upgrade Plan
+              </MDTypography>
+            </MDBox>
+            <MDBox flexGrow={1}>
+              <MDTypography variant="body2" color="text" mb={3}>
+                Unlock premium features including detailed industry analysis and AI-powered insights.
+              </MDTypography>
+            </MDBox>
+            <MDButton 
+              variant="gradient" 
+              color="warning" 
+              fullWidth
+              onClick={() => window.open('https://products.applebites.ai/', '_blank')}
+              endIcon={<ExternalLink size={16} />}
+            >
+              Upgrade Now
+            </MDButton>
+          </MDBox>
+        ) : (
+          <MDBox
+            sx={{
+              backgroundColor: 'white',
+              borderRadius: 2,
+              padding: 3,
+              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+              display: 'flex',
+              flexDirection: 'column',
+              minHeight: 200
+            }}
+          >
+            <MDBox display="flex" alignItems="center" mb={2}>
+              <MDBox
+                sx={{
+                  backgroundColor: '#e8f5e8',
+                  borderRadius: '50%',
+                  width: 48,
+                  height: 48,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  mr: 2
+                }}
+              >
+                <BarChart3 size={24} color="#4caf50" />
+              </MDBox>
+              <MDTypography variant="h6" fontWeight="medium">
+                View Reports
+              </MDTypography>
+            </MDBox>
+            <MDBox flexGrow={1}>
+              <MDTypography variant="body2" color="text" mb={3}>
+                Access your detailed valuation reports and premium analytics.
+              </MDTypography>
+            </MDBox>
+            <MDButton variant="outlined" color="success" fullWidth>
+              View Reports
+            </MDButton>
+          </MDBox>
+        )}
+      </MDBox>
+
+      {/* Past Assessments */}
+      <MDBox
+        sx={{
+          backgroundColor: 'white',
+          borderRadius: 2,
+          padding: 3,
+          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+        }}
+      >
+        <MDBox display="flex" justifyContent="space-between" alignItems="center" mb={3}>
+          <MDTypography variant="h6" fontWeight="medium">
+            Past Assessments
+          </MDTypography>
+          <MDButton variant="text" color="primary" size="small">
+            View All
+          </MDButton>
+        </MDBox>
+        
+        <MDBox
+          sx={{
+            textAlign: 'center',
+            py: 6,
+            borderRadius: 1,
+            backgroundColor: '#f8f9fa',
+            transition: 'all 0.3s ease',
+            '&:hover': {
+              backgroundColor: '#f0f2f5',
+              transform: 'translateY(-2px)'
+            }
+          }}
+        >
+          <MDBox
+            sx={{
+              display: 'inline-block',
+              animation: 'pulse 2s infinite',
+              '@keyframes pulse': {
+                '0%': { opacity: 0.6 },
+                '50%': { opacity: 1 },
+                '100%': { opacity: 0.6 }
               }
             }}
-            startIcon={<LogOut size={18} />}
           >
-            Logout
-          </Button>
-        </Box>
-      </Drawer>
+            <Clock size={48} color="#9e9e9e" style={{ marginBottom: 16 }} />
+          </MDBox>
+          <MDTypography variant="h6" color="text" mb={1}>
+            No assessments yet
+          </MDTypography>
+          <MDTypography variant="body2" color="text" mb={3}>
+            Your completed assessments will appear here. Start your first assessment to see your business valuation.
+          </MDTypography>
+          <MDBox display="flex" gap={2} justifyContent="center" flexWrap="wrap">
+            <Link href="/assessment/free">
+              <MDButton variant="gradient" color="primary">
+                Start Assessment
+              </MDButton>
+            </Link>
+            <MDButton 
+              variant="outlined" 
+              color="secondary" 
+              size="small"
+              onClick={setupDemoSession}
+            >
+              Setup Demo Data
+            </MDButton>
+          </MDBox>
+        </MDBox>
+      </MDBox>
+    </MDBox>
+  );
+}
 
-      {/* Main Content */}
-      <MainContent>
-        {/* Welcome Section */}
-        <WelcomeCard>
-          <CardContent sx={{ p: 4 }}>
-            <Box display="flex" alignItems="center" gap={3} mb={3}>
-              <Avatar sx={{ 
-                width: 80, 
-                height: 80, 
-                background: 'linear-gradient(135deg, #252160 0%, #00d7fe 100%)',
-                fontSize: '2rem',
-                fontWeight: 'bold'
-              }}>
-                {displayUser.firstName?.[0]}{displayUser.lastName?.[0]}
-              </Avatar>
-              <Box>
-                <Typography variant="h4" fontWeight="bold" color="#344767" gutterBottom>
-                  Your {tierInfo.name} Dashboard
-                </Typography>
-                <Typography variant="body1" color="#67748e" mb={2}>
-                  {tierInfo.description}
-                </Typography>
-                <Box display="flex" alignItems="center" gap={1}>
-                  <TierIcon size={20} color="#2152ff" />
-                  <Typography variant="h6" color="#344767" fontWeight="bold">
-                    {tierInfo.price}
-                  </Typography>
-                </Box>
-              </Box>
-            </Box>
-          </CardContent>
-        </WelcomeCard>
+export default function DashboardClean() {
+  const { user, isAuthenticated } = useAuth();
+  
+  // Use actual user data or fallback to mock for testing
+  const displayUser = (user as DashboardUser) || mockUser;
 
-        {/* Dashboard Content */}
-        <Box display="flex" flexDirection="column" gap={3}>
-          {/* Two Column Layout */}
-          <Box display="flex" gap={3} sx={{ flexDirection: { xs: 'column', md: 'row' } }}>
-            {/* Assessment Status */}
-            <Box sx={{ flex: 1 }}>
-              <StatCard sx={{ minHeight: 200 }}>
-                <CardContent sx={{ p: 3, height: '100%', display: 'flex', flexDirection: 'column' }}>
-                  <Box display="flex" alignItems="center" gap={2} mb={2}>
-                    <CheckCircle size={24} color={displayUser.resultReady ? "#4caf50" : "#ff9800"} />
-                    <Typography variant="h6" fontWeight="bold" color="#344767">
-                      Assessment Status
-                    </Typography>
-                  </Box>
-                  <Typography variant="body1" color="#67748e" sx={{ flexGrow: 1, mb: 3 }}>
-                    {displayUser.resultReady 
-                      ? "Your assessment is complete and ready for download"
-                      : "Complete your business assessment to get your valuation report"
-                    }
-                  </Typography>
-                  <ActionButton
-                    variant="contained"
-                    fullWidth
-                    onClick={() => setLocation('/assessment/free')}
-                    sx={{
-                      backgroundColor: '#747b8a',
-                      color: '#ffffff',
-                      borderRadius: '8px',
-                      textTransform: 'none',
-                      fontWeight: 500,
-                      boxShadow: 'none',
-                      '&:hover': {
-                        backgroundColor: '#495361',
-                      },
-                    }}
-                  >
-                    {displayUser.resultReady ? "View Results" : "Start Assessment"}
-                  </ActionButton>
-                </CardContent>
-              </StatCard>
-            </Box>
+  // Function to setup demo session for testing
+  const setupDemoSession = async () => {
+    try {
+      const response = await fetch('/api/setup-demo', {
+        method: 'GET',
+        credentials: 'include', // Include cookies for session
+      });
+      
+      if (response.ok) {
+        const result = await response.json();
+        console.log('Demo session created:', result);
+        
+        // Force React Query to refetch user data
+        setTimeout(() => {
+          window.location.reload(); // Reload to pick up the new session
+        }, 100);
+      } else {
+        console.error('Failed to setup demo session');
+      }
+    } catch (error) {
+      console.error('Failed to setup demo session:', error);
+    }
+  };
 
-            {/* Quick Actions */}
-            <Box sx={{ flex: 1 }}>
-              <StatCard sx={{ minHeight: 200 }}>
-                <CardContent sx={{ p: 3, height: '100%', display: 'flex', flexDirection: 'column' }}>
-                  <Box display="flex" alignItems="center" gap={2} mb={2}>
-                    <TierIcon size={24} color="#2152ff" />
-                    <Typography variant="h6" fontWeight="bold" color="#344767">
-                      Quick Actions
-                    </Typography>
-                  </Box>
-                  <Box display="flex" flexDirection="column" gap={2} sx={{ flexGrow: 1, justifyContent: 'flex-start' }}>
-                    <ActionButton
-                      variant="outlined"
-                      startIcon={<FileText size={18} />}
-                      onClick={() => setLocation('/assessment/free')}
-                      sx={{
-                        borderColor: '#2152ff',
-                        color: '#2152ff',
-                        '&:hover': {
-                          backgroundColor: 'rgba(33, 82, 255, 0.04)',
-                          borderColor: '#1e4bff',
-                        }
-                      }}
-                    >
-                      New Assessment
-                    </ActionButton>
-                    <ActionButton
-                      variant="outlined"
-                      startIcon={<ExternalLink size={18} />}
-                      onClick={() => window.open('https://products.applebites.ai/', '_blank')}
-                      sx={{
-                        borderColor: '#67748e',
-                        color: '#67748e',
-                        '&:hover': {
-                          backgroundColor: 'rgba(103, 116, 142, 0.04)',
-                          borderColor: '#344767',
-                        }
-                      }}
-                    >
-                      Upgrade Plan
-                    </ActionButton>
-                  </Box>
-                </CardContent>
-              </StatCard>
-            </Box>
-          </Box>
-
-          {/* Past Assessments */}
-          <StatCard>
-            <CardContent sx={{ p: 4 }}>
-              <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-                <Typography variant="h5" fontWeight="bold" color="#344767">
-                  Past Assessments
-                </Typography>
-                <Button
-                  variant="outlined"
-                  startIcon={<FileText size={18} />}
-                  onClick={() => setLocation('/assessment/free')}
-                  sx={{
-                    borderColor: '#2152ff',
-                    color: '#2152ff',
-                    textTransform: 'none',
-                    '&:hover': {
-                      backgroundColor: 'rgba(33, 82, 255, 0.04)',
-                      borderColor: '#1e4bff',
-                    }
-                  }}
-                >
-                  New Assessment
-                </Button>
-              </Box>
-              
-              <PastAssessmentsSection userEmail={displayUser.email} setLocation={setLocation} />
-            </CardContent>
-          </StatCard>
-
-          {/* Features Overview - Full Width */}
-          <StatCard>
-            <CardContent sx={{ p: 4 }}>
-              <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-                <Typography variant="h5" fontWeight="bold" color="#344767">
-                  What's Included in Your {tierInfo.name}
-                </Typography>
-                {displayUser.tier === 'free' && (
-                  <Button
-                    variant="contained"
-                    startIcon={<Crown size={18} />}
-                    onClick={() => window.open('https://products.applebites.ai/', '_blank')}
-                    sx={{
-                      backgroundColor: '#ff9800',
-                      color: 'white',
-                      textTransform: 'none',
-                      fontWeight: 600,
-                      '&:hover': {
-                        backgroundColor: '#f57c00',
-                      }
-                    }}
-                  >
-                    Upgrade Now
-                  </Button>
-                )}
-              </Box>
-              
-              <Box display="grid" gridTemplateColumns={{ xs: '1fr', md: 'repeat(2, 1fr)' }} gap={3}>
-                {/* Current Tier Features */}
-                <Box display="flex" alignItems="start" gap={2}>
-                  <CheckCircle size={20} color="#4caf50" style={{ marginTop: 2 }} />
-                  <Box>
-                    <Typography variant="body1" fontWeight="600" color="#344767">
-                      Basic Valuation Analysis
-                    </Typography>
-                    <Typography variant="body2" color="#67748e">
-                      General EBITDA multipliers and financial assessment
-                    </Typography>
-                  </Box>
-                </Box>
-
-                <Box display="flex" alignItems="start" gap={2}>
-                  <CheckCircle size={20} color="#4caf50" style={{ marginTop: 2 }} />
-                  <Box>
-                    <Typography variant="body1" fontWeight="600" color="#344767">
-                      Value Driver Scoring
-                    </Typography>
-                    <Typography variant="body2" color="#67748e">
-                      A-F grade assessment across 10 key business factors
-                    </Typography>
-                  </Box>
-                </Box>
-
-                <Box display="flex" alignItems="start" gap={2}>
-                  <CheckCircle size={20} color="#4caf50" style={{ marginTop: 2 }} />
-                  <Box>
-                    <Typography variant="body1" fontWeight="600" color="#344767">
-                      PDF Report Generation
-                    </Typography>
-                    <Typography variant="body2" color="#67748e">
-                      Professional report with valuation range and insights
-                    </Typography>
-                  </Box>
-                </Box>
-
-                <Box display="flex" alignItems="start" gap={2}>
-                  <CheckCircle size={20} color="#4caf50" style={{ marginTop: 2 }} />
-                  <Box>
-                    <Typography variant="body1" fontWeight="600" color="#344767">
-                      Email Delivery
-                    </Typography>
-                    <Typography variant="body2" color="#67748e">
-                      Automated report delivery to your inbox
-                    </Typography>
-                  </Box>
-                </Box>
-
-                {/* Growth Tier Features */}
-                {displayUser.tier === 'free' ? (
-                  <>
-                    <Box display="flex" alignItems="start" gap={2} sx={{ opacity: 0.6 }}>
-                      <Lock size={20} color="#ff9800" style={{ marginTop: 2 }} />
-                      <Box>
-                        <Typography variant="body1" fontWeight="600" color="#67748e" sx={{ textDecoration: 'line-through' }}>
-                          Industry-Specific Analysis
-                        </Typography>
-                        <Box display="flex" alignItems="center" gap={1}>
-                          <Chip 
-                            label="Upgrade Required" 
-                            size="small" 
-                            sx={{ 
-                              backgroundColor: '#ff9800', 
-                              color: 'white', 
-                              fontSize: '10px',
-                              height: '20px'
-                            }} 
-                          />
-                          <Typography variant="body2" color="#67748e">
-                            NAICS-specific multipliers and benchmarks
-                          </Typography>
-                        </Box>
-                      </Box>
-                    </Box>
-
-                    <Box display="flex" alignItems="start" gap={2} sx={{ opacity: 0.6 }}>
-                      <Lock size={20} color="#ff9800" style={{ marginTop: 2 }} />
-                      <Box>
-                        <Typography variant="body1" fontWeight="600" color="#67748e" sx={{ textDecoration: 'line-through' }}>
-                          AI-Powered Business Insights
-                        </Typography>
-                        <Box display="flex" alignItems="center" gap={1}>
-                          <Chip 
-                            label="Upgrade Required" 
-                            size="small" 
-                            sx={{ 
-                              backgroundColor: '#ff9800', 
-                              color: 'white', 
-                              fontSize: '10px',
-                              height: '20px'
-                            }} 
-                          />
-                          <Typography variant="body2" color="#67748e">
-                            GPT-4 powered recommendations and strategies
-                          </Typography>
-                        </Box>
-                      </Box>
-                    </Box>
-
-                    <Box display="flex" alignItems="start" gap={2} sx={{ opacity: 0.6 }}>
-                      <Lock size={20} color="#ff9800" style={{ marginTop: 2 }} />
-                      <Box>
-                        <Typography variant="body1" fontWeight="600" color="#67748e" sx={{ textDecoration: 'line-through' }}>
-                          Advanced Financial Modeling
-                        </Typography>
-                        <Box display="flex" alignItems="center" gap={1}>
-                          <Chip 
-                            label="Upgrade Required" 
-                            size="small" 
-                            sx={{ 
-                              backgroundColor: '#ff9800', 
-                              color: 'white', 
-                              fontSize: '10px',
-                              height: '20px'
-                            }} 
-                          />
-                          <Typography variant="body2" color="#67748e">
-                            Detailed cash flow and scenario analysis
-                          </Typography>
-                        </Box>
-                      </Box>
-                    </Box>
-
-                    <Box display="flex" alignItems="start" gap={2} sx={{ opacity: 0.6 }}>
-                      <Lock size={20} color="#ff9800" style={{ marginTop: 2 }} />
-                      <Box>
-                        <Typography variant="body1" fontWeight="600" color="#67748e" sx={{ textDecoration: 'line-through' }}>
-                          Executive Presentation
-                        </Typography>
-                        <Box display="flex" alignItems="center" gap={1}>
-                          <Chip 
-                            label="Upgrade Required" 
-                            size="small" 
-                            sx={{ 
-                              backgroundColor: '#ff9800', 
-                              color: 'white', 
-                              fontSize: '10px',
-                              height: '20px'
-                            }} 
-                          />
-                          <Typography variant="body2" color="#67748e">
-                            Investment-grade presentation materials
-                          </Typography>
-                        </Box>
-                      </Box>
-                    </Box>
-                  </>
-                ) : (
-                  <>
-                    <Box display="flex" alignItems="start" gap={2}>
-                      <CheckCircle size={20} color="#4caf50" style={{ marginTop: 2 }} />
-                      <Box>
-                        <Typography variant="body1" fontWeight="600" color="#344767">
-                          Industry-Specific Analysis
-                        </Typography>
-                        <Typography variant="body2" color="#67748e">
-                          NAICS-specific multipliers and benchmarks
-                        </Typography>
-                      </Box>
-                    </Box>
-
-                    <Box display="flex" alignItems="start" gap={2}>
-                      <CheckCircle size={20} color="#4caf50" style={{ marginTop: 2 }} />
-                      <Box>
-                        <Typography variant="body1" fontWeight="600" color="#344767">
-                          AI-Powered Business Insights
-                        </Typography>
-                        <Typography variant="body2" color="#67748e">
-                          GPT-4 powered recommendations and strategies
-                        </Typography>
-                      </Box>
-                    </Box>
-
-                    <Box display="flex" alignItems="start" gap={2}>
-                      <CheckCircle size={20} color="#4caf50" style={{ marginTop: 2 }} />
-                      <Box>
-                        <Typography variant="body1" fontWeight="600" color="#344767">
-                          Advanced Financial Modeling
-                        </Typography>
-                        <Typography variant="body2" color="#67748e">
-                          Detailed cash flow and scenario analysis
-                        </Typography>
-                      </Box>
-                    </Box>
-
-                    <Box display="flex" alignItems="start" gap={2}>
-                      <CheckCircle size={20} color="#4caf50" style={{ marginTop: 2 }} />
-                      <Box>
-                        <Typography variant="body1" fontWeight="600" color="#344767">
-                          Executive Presentation
-                        </Typography>
-                        <Typography variant="body2" color="#67748e">
-                          Investment-grade presentation materials
-                        </Typography>
-                      </Box>
-                    </Box>
-                  </>
-                )}
-              </Box>
-
-              {displayUser.tier === 'free' && (
-                <Box 
-                  mt={4} 
-                  p={3} 
-                  sx={{ 
-                    backgroundColor: '#fff3e0', 
-                    borderRadius: '12px',
-                    border: '1px solid #ffcc02'
-                  }}
-                >
-                  <Box display="flex" alignItems="center" gap={2} mb={2}>
-                    <Crown size={20} color="#ff9800" />
-                    <Typography variant="h6" fontWeight="bold" color="#e65100">
-                      Unlock Premium Features
-                    </Typography>
-                  </Box>
-                  <Typography variant="body2" color="#bf360c" mb={2}>
-                    Upgrade to Growth or Capital tier for industry-specific analysis, AI insights, and executive-grade reports.
-                  </Typography>
-                  <Button
-                    variant="contained"
-                    startIcon={<ExternalLink size={16} />}
-                    onClick={() => window.open('https://products.applebites.ai/', '_blank')}
-                    sx={{
-                      backgroundColor: '#ff9800',
-                      color: 'white',
-                      textTransform: 'none',
-                      fontWeight: 600,
-                      '&:hover': {
-                        backgroundColor: '#f57c00',
-                      }
-                    }}
-                  >
-                    View Upgrade Options
-                  </Button>
-                </Box>
-              )}
-            </CardContent>
-          </StatCard>
-        </Box>
-      </MainContent>
-    </DashboardBackground>
+  return (
+    <MDBox display="flex" minHeight="100vh">
+      <DashboardSidebar user={displayUser} />
+      <DashboardMainContent user={displayUser} setupDemoSession={setupDemoSession} />
+    </MDBox>
   );
 }
