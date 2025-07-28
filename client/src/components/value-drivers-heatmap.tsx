@@ -163,17 +163,18 @@ export default function ValueDriversHeatmap({ assessment }: ValueDriversHeatmapP
         <Box sx={{ 
           display: 'inline-flex', 
           alignItems: 'center', 
-          gap: 1, 
+          gap: 1.5, 
           backgroundColor: '#F0F9FF', 
           border: '1px solid #BAE6FD',
-          borderRadius: '8px',
-          px: 2,
-          py: 1,
-          mb: 3
+          borderRadius: '12px',
+          px: 4,
+          py: 2,
+          mb: 4,
+          minWidth: '400px'
         }}>
           <Box sx={{ 
-            width: 8, 
-            height: 8, 
+            width: 12, 
+            height: 12, 
             borderRadius: '50%', 
             backgroundColor: '#0EA5E9',
             animation: 'pulse 2s infinite',
@@ -182,7 +183,7 @@ export default function ValueDriversHeatmap({ assessment }: ValueDriversHeatmapP
               '50%': { opacity: 0.5 }
             }
           }} />
-          <Typography variant="body2" sx={{ color: '#0C4A6E', fontWeight: 'medium' }}>
+          <Typography variant="h6" sx={{ color: '#0C4A6E', fontWeight: 'bold', fontSize: '16px' }}>
             💡 Click on any grade card below to see detailed insights
           </Typography>
         </Box>
@@ -291,21 +292,7 @@ export default function ValueDriversHeatmap({ assessment }: ValueDriversHeatmapP
                                               '#EF4444',
                               color: '#FFFFFF',
                               fontWeight: 'bold',
-                              fontSize: '12px',
-                              position: 'relative',
-                              '&::after': selectedDriver?.key !== driver.key ? {
-                                content: '"👆"',
-                                position: 'absolute',
-                                top: '-8px',
-                                right: '-8px',
-                                fontSize: '10px',
-                                animation: 'bounce 2s infinite',
-                                '@keyframes bounce': {
-                                  '0%, 20%, 50%, 80%, 100%': { transform: 'translateY(0)' },
-                                  '40%': { transform: 'translateY(-4px)' },
-                                  '60%': { transform: 'translateY(-2px)' }
-                                }
-                              } : {}
+                              fontSize: '12px'
                             }}
                           />
                           <Box sx={{ color: selectedDriver?.key === driver.key ? '#5EEAD4' : '#9CA3AF' }}>
