@@ -202,7 +202,7 @@ export default function InteractiveValuationSlider() {
         {/* Current Value Card */}
         <Grid size={{ xs: 12, md: 6 }}>
           <Card sx={{ 
-            background: 'linear-gradient(135deg, #0891B2 0%, #0c4a6e 100%)',
+            background: 'linear-gradient(135deg, #0A1F44 0%, #1B2C4F 100%)',
             color: 'white',
             position: 'relative',
             overflow: 'hidden'
@@ -326,7 +326,7 @@ export default function InteractiveValuationSlider() {
                 </Card>
               ) : (
                 <Card sx={{ 
-                  background: 'linear-gradient(135deg, #0891B2 0%, #0c4a6e 100%)',
+                  background: 'linear-gradient(135deg, #0A1F44 0%, #1B2C4F 100%)',
                   color: 'white',
                   textAlign: 'center'
                 }}>
