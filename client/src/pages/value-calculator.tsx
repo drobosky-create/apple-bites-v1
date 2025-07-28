@@ -10,9 +10,12 @@ import {
   Typography,
   Container,
   Button,
+  Avatar,
+  Chip,
 } from '@mui/material';
-import { MDBox, MDTypography } from "@/components/MD";
-import { Home, FileText, TrendingUp, ExternalLink } from "lucide-react";
+import { MDBox, MDTypography, MDButton } from "@/components/MD";
+import { Link } from "wouter";
+import { Home, FileText, TrendingUp, ExternalLink, User, Plus, BarChart3, Clock, Crown } from "lucide-react";
 import { styled } from '@mui/material/styles';
 
 // Material Dashboard Layout (matching dashboard.tsx exactly)
@@ -173,221 +176,210 @@ export default function ValueCalculator() {
 
   return (
     <DashboardBackground>
-      {/* Clean Simple Sidebar - Match Reference Image */}
-      <Box sx={{
-        width: drawerWidth,
-        height: '100vh',
-        backgroundColor: '#1e3a8a', // Deep blue background
-        display: { xs: 'none', md: 'flex' },
-        flexDirection: 'column',
-        p: 3,
-        position: 'fixed',
-        left: 0,
-        top: 0,
-        zIndex: 1200,
-      }}>
+      {/* Unified Dashboard Sidebar */}
+      <MDBox
+        width={drawerWidth}
+        height="100vh"
+        display={{ xs: 'none', md: 'flex' }}
+        flexDirection="column"
+        position="fixed"
+        top={0}
+        left={0}
+        zIndex={1200}
+        sx={{
+          background: 'linear-gradient(135deg, #0A1F44 0%, #1C2D5A 100%)',
+        }}
+      >
         {/* User Profile Section */}
-        <Box sx={{ textAlign: 'center', mb: 4 }}>
-          <Box sx={{
-            width: 50,
-            height: 50,
-            borderRadius: '50%',
-            backgroundColor: '#00d4aa',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            mx: 'auto',
-            mb: 2
-          }}>
-            <Typography variant="h6" sx={{ color: 'white', fontWeight: 'bold' }}>
-              {displayUser.firstName?.charAt(0) || 'D'}{displayUser.lastName?.charAt(0) || 'U'}
-            </Typography>
-          </Box>
+        <MDBox p={3} textAlign="center">
+          <Avatar
+            sx={{
+              background: 'linear-gradient(135deg, #00BFA6 0%, #5EEAD4 100%)',
+              width: 64,
+              height: 64,
+              fontSize: '1.5rem',
+              fontWeight: 'bold',
+              mx: 'auto',
+              mb: 2
+            }}
+          >
+            {displayUser.firstName?.charAt(0) || 'D'}{displayUser.lastName?.charAt(0) || 'U'}
+          </Avatar>
+          
           <Typography variant="h6" sx={{ color: 'white', fontWeight: 'bold', mb: 0.5 }}>
             {displayUser.firstName} {displayUser.lastName}
           </Typography>
+          
           <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.7)', mb: 2 }}>
             {displayUser.email}
           </Typography>
-          <Box sx={{
-            backgroundColor: 'rgba(255,255,255,0.2)',
-            color: 'white',
-            px: 2,
-            py: 0.5,
-            borderRadius: '16px',
-            display: 'inline-block',
-            fontSize: '0.875rem',
-            fontWeight: 500
-          }}>
-            Tier: {tierInfo.name.toUpperCase()}
-          </Box>
-        </Box>
-
-        {/* Navigation Buttons - Match Reference Image Order */}
-        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
-          {/* Dashboard - Clean Button */}
-          <Button
-            onClick={() => setLocation('/dashboard')}
-            variant="outlined"
+          
+          <Chip
+            label={tierInfo.name.toUpperCase()}
+            size="small"
             sx={{
-              borderColor: 'rgba(255,255,255,0.3)',
+              background: 'rgba(255,255,255,0.2)',
               color: 'white',
-              py: 2,
+              borderRadius: '16px',
+              fontSize: '0.75rem',
+              fontWeight: 500,
+              border: '1px solid rgba(255,255,255,0.3)'
+            }}
+          />
+        </MDBox>
+
+        {/* Navigation Menu */}
+        <MDBox flex={1} px={2}>
+          {/* Dashboard */}
+          <Link href="/dashboard">
+            <Button
+              fullWidth
+              variant="text"
+              sx={{
+                justifyContent: 'flex-start',
+                py: 1.5,
+                px: 2,
+                mb: 1,
+                borderRadius: '12px',
+                textTransform: 'none',
+                fontSize: '1rem',
+                fontWeight: 500,
+                color: 'white',
+                '&:hover': {
+                  backgroundColor: 'rgba(255,255,255,0.1)'
+                }
+              }}
+            >
+              <User size={20} style={{ marginRight: 12 }} />
+              Dashboard
+            </Button>
+          </Link>
+
+          {/* New Assessment */}
+          <Link href="/assessment/free">
+            <Button
+              fullWidth
+              variant="text"
+              sx={{
+                justifyContent: 'flex-start',
+                py: 1.5,
+                px: 2,
+                mb: 1,
+                borderRadius: '12px',
+                textTransform: 'none',
+                fontSize: '1rem',
+                fontWeight: 500,
+                color: 'white',
+                '&:hover': {
+                  backgroundColor: 'rgba(255,255,255,0.1)'
+                }
+              }}
+            >
+              <Plus size={20} style={{ marginRight: 12 }} />
+              New Assessment
+            </Button>
+          </Link>
+
+          {/* Value Calculator - Active */}
+          <Button
+            fullWidth
+            variant="contained"
+            sx={{
+              justifyContent: 'flex-start',
+              py: 1.5,
+              px: 2,
+              mb: 1,
               borderRadius: '12px',
               textTransform: 'none',
               fontSize: '1rem',
-              justifyContent: 'flex-start',
-              px: 3,
+              fontWeight: 600,
+              background: 'linear-gradient(135deg, #00BFA6 0%, #5EEAD4 100%)',
+              color: '#0A1F44',
+              boxShadow: '0 4px 20px rgba(0, 191, 166, 0.4)',
               '&:hover': {
-                borderColor: 'rgba(255,255,255,0.5)',
-                backgroundColor: 'rgba(255,255,255,0.1)'
+                background: 'linear-gradient(135deg, #00BFA6 0%, #5EEAD4 100%)',
+                boxShadow: '0 6px 24px rgba(0, 191, 166, 0.5)'
               }
             }}
-            startIcon={<Home size={20} />}
           >
-            Dashboard
-          </Button>
-
-          {/* New Assessment - Clean Button */}
-          <Button
-            onClick={() => setLocation('/assessment/free')}
-            variant="outlined"
-            sx={{
-              borderColor: 'rgba(255,255,255,0.3)',
-              color: 'white',
-              py: 2,
-              borderRadius: '12px',
-              textTransform: 'none',
-              fontSize: '1rem',
-              justifyContent: 'flex-start',
-              px: 3,
-              '&:hover': {
-                borderColor: 'rgba(255,255,255,0.5)',
-                backgroundColor: 'rgba(255,255,255,0.1)'
-              }
-            }}
-            startIcon={<FileText size={20} />}
-          >
-            New Assessment
-          </Button>
-
-          {/* Value Calculator - Active/Selected */}
-          <Button
-            sx={{
-              backgroundColor: 'rgba(255,255,255,0.2)',
-              color: 'white',
-              py: 2,
-              borderRadius: '12px',
-              textTransform: 'none',
-              fontSize: '1rem',
-              fontWeight: 'bold',
-              justifyContent: 'flex-start',
-              px: 3,
-              '&:hover': {
-                backgroundColor: 'rgba(255,255,255,0.25)'
-              }
-            }}
-            startIcon={<TrendingUp size={20} />}
-          >
+            <BarChart3 size={20} style={{ marginRight: 12 }} />
             Value Calculator
           </Button>
 
           {/* Past Assessments */}
-          <Button
-            onClick={() => setLocation('/past-assessments')}
-            variant="outlined"
-            sx={{
-              borderColor: 'rgba(255,255,255,0.3)',
-              color: 'white',
-              py: 2,
-              borderRadius: '12px',
-              textTransform: 'none',
-              fontSize: '1rem',
-              justifyContent: 'flex-start',
-              px: 3,
-              '&:hover': {
-                borderColor: 'rgba(255,255,255,0.5)',
-                backgroundColor: 'rgba(255,255,255,0.1)'
-              }
-            }}
-            startIcon={<FileText size={20} />}
-          >
-            Past Assessments
-          </Button>
+          <Link href="/past-assessments">
+            <Button
+              fullWidth
+              variant="text"
+              sx={{
+                justifyContent: 'flex-start',
+                py: 1.5,
+                px: 2,
+                mb: 1,
+                borderRadius: '12px',
+                textTransform: 'none',
+                fontSize: '1rem',
+                fontWeight: 500,
+                color: 'white',
+                '&:hover': {
+                  backgroundColor: 'rgba(255,255,255,0.1)'
+                }
+              }}
+            >
+              <Clock size={20} style={{ marginRight: 12 }} />
+              Past Assessments
+            </Button>
+          </Link>
 
           {/* Upgrade Plan */}
           <Button
+            fullWidth
+            variant="text"
             onClick={() => window.open('https://products.applebites.ai/', '_blank')}
-            variant="outlined"
             sx={{
-              borderColor: 'rgba(255,255,255,0.3)',
-              color: 'white',
-              py: 2,
+              justifyContent: 'flex-start',
+              py: 1.5,
+              px: 2,
+              mb: 1,
               borderRadius: '12px',
               textTransform: 'none',
               fontSize: '1rem',
-              justifyContent: 'flex-start',
-              px: 3,
+              fontWeight: 500,
+              color: 'white',
               '&:hover': {
-                borderColor: 'rgba(255,255,255,0.5)',
                 backgroundColor: 'rgba(255,255,255,0.1)'
               }
             }}
-            startIcon={<ExternalLink size={20} />}
           >
+            <Crown size={20} style={{ marginRight: 12 }} />
             Upgrade Plan
           </Button>
-        </Box>
+        </MDBox>
 
-        {/* Logo Section at Bottom */}
-        <Box sx={{ mt: 'auto', textAlign: 'center' }}>
-          <Typography variant="h6" sx={{ 
-            color: '#00d4aa', 
-            fontWeight: 'bold',
-            mb: 1,
-            fontSize: '1.1rem'
-          }}>
-            MERITAGE
-          </Typography>
-          <Typography variant="body2" sx={{ 
-            color: '#00d4aa',
-            fontWeight: 'bold',
-            letterSpacing: '0.1em',
-            mb: 2
-          }}>
-            PARTNERS
-          </Typography>
-          
-          {/* Apple with Money Icon */}
-          <Box sx={{ mb: 2 }}>
-            <Box component="img"
-              src="/assets/logos/apple-bites-logo-variant-3.png"
-              alt="Apple Bites"
-              sx={{
-                width: 60,
-                height: 60,
-                mx: 'auto',
-                display: 'block',
-              }}
-            />
-          </Box>
-          
-          <Typography variant="h6" sx={{ 
-            color: '#00d4aa', 
-            fontWeight: 'bold',
-            fontSize: '1.1rem'
-          }}>
+        {/* Apple Bites Branding */}
+        <MDBox p={3} textAlign="center" borderTop="1px solid rgba(255,255,255,0.1)">
+          <Box component="img"
+            src="/assets/logos/apple-bites-logo-variant-3.png"
+            alt="Apple Bites"
+            sx={{
+              width: 60,
+              height: 60,
+              mx: 'auto',
+              mb: 2,
+              display: 'block',
+            }}
+          />
+          <Typography variant="h6" sx={{ color: '#00BFA6', fontWeight: 'bold', mb: 0.5 }}>
             APPLE BITES
           </Typography>
-          <Typography variant="body2" sx={{ 
-            color: '#00d4aa',
-            fontWeight: 'bold',
-            letterSpacing: '0.05em'
-          }}>
-            BUSINESS ASSESSMENT
+          <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.7)' }}>
+            Business Assessment Platform
           </Typography>
-        </Box>
-      </Box>
+          <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.5)', display: 'block', mt: 1 }}>
+            © 2025 Meritage Partners
+          </Typography>
+        </MDBox>
+      </MDBox>
 
       {/* Main Content - Match Reference Layout */}
       <MainContent>
