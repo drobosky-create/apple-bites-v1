@@ -1,7 +1,7 @@
 import { ValuationAssessment } from "@shared/schema";
-import { CheckCircle, Calendar, Calculator } from "lucide-react";
+import { CheckCircle, Calendar, Calculator, TrendingUp } from "lucide-react";
 import { useLocation } from "wouter";
-import { Button, Card, CardContent, Typography, Box } from '@mui/material';
+import { Card, CardContent, Typography, Box } from '@mui/material';
 import ValueDriversHeatmap from "./value-drivers-heatmap";
 import MDBox from "@/components/MD/MDBox";
 import MDTypography from "@/components/MD/MDTypography";
@@ -18,17 +18,7 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
     if (!value) return "$0";
     const numValue = parseFloat(value);
     
-    // Format for different value ranges with decimals
     if (numValue >= 1000000) {
-      return new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 1,
-        maximumFractionDigits: 1,
-        notation: 'compact',
-        compactDisplay: 'short'
-      }).format(numValue);
-    } else if (numValue >= 1000) {
       return new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'USD',
@@ -47,178 +37,202 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
     }
   };
 
-
+  const getGradeColor = (grade: string) => {
+    switch (grade) {
+      case "A": return "#4CAF50"; // Green
+      case "B": return "#8BC34A"; // Light Green  
+      case "C": return "#FF9800"; // Orange
+      case "D": return "#FF5722"; // Red Orange
+      case "F": return "#F44336"; // Red
+      default: return "#9E9E9E"; // Gray
+    }
+  };
 
   const handleScheduleConsultation = () => {
-    // Open GoHighLevel calendar widget in a new window
     window.open('https://api.leadconnectorhq.com/widget/bookings/applebites', '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
   };
 
   const handleExploreImprovements = () => {
-    // Redirect to value calculator with specific assessment ID
     setLocation(`/value-calculator?assessmentId=${results.id}`);
   };
 
   return (
-    <div >
-      <div >
-        <div >
-          <div >
-            <CheckCircle  />
-          </div>
-          <div>
-            <h3 >Valuation Complete</h3>
-            <p >Your business valuation report has been generated successfully.</p>
-          </div>
-        </div>
-      </div>
-      <div >
-        {/* AI Generated Executive Summary */}
-        {results.executiveSummary && (
-          <div >
-            <div >
-              <div >
-                <svg  fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                </svg>
-              </div>
-              <div >
-                <h4 >AI-Generated Executive Summary</h4>
-                <div >
-                  <p >{results.executiveSummary}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+    <MDBox sx={{ maxWidth: '1200px', margin: '0 auto', p: 3 }}>
+      {/* Header Section */}
+      <MDBox textAlign="center" mb={4}>
+        <CheckCircle size={64} color="#4CAF50" style={{ marginBottom: '16px' }} />
+        <MDTypography variant="h3" fontWeight="bold" color="dark" mb={2}>
+          Your Business Valuation Results
+        </MDTypography>
+        <MDTypography variant="h6" color="text" mb={3}>
+          Professional analysis complete - here's what your business is worth
+        </MDTypography>
+      </MDBox>
 
-        {/* AI Generated Business Analysis */}
-        {results.narrativeSummary && (
-          <div >
-            <div >
-              <div >
-                <svg  fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-              </div>
-              <div >
-                <h4 >Detailed Business Analysis</h4>
-                <div >
-                  <div >{results.narrativeSummary}</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+      {/* Main Valuation Card */}
+      <Card sx={{ mb: 4, background: 'linear-gradient(135deg, #0A1F44 0%, #1B2C4F 100%)', color: 'white' }}>
+        <CardContent sx={{ p: 4 }}>
+          <MDBox textAlign="center">
+            <MDTypography variant="h4" fontWeight="bold" sx={{ color: '#5EEAD4', mb: 2 }}>
+              Estimated Business Value
+            </MDTypography>
+            
+            <MDBox display="flex" justifyContent="space-around" mb={3}>
+              <MDBox textAlign="center">
+                <MDTypography variant="h5" fontWeight="bold" sx={{ color: '#ffffff', mb: 1 }}>
+                  {formatCurrency(results.lowEstimate)}
+                </MDTypography>
+                <MDTypography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)' }}>
+                  Conservative
+                </MDTypography>
+              </MDBox>
+              
+              <MDBox textAlign="center">
+                <MDTypography variant="h3" fontWeight="bold" sx={{ color: '#5EEAD4', mb: 1 }}>
+                  {formatCurrency(results.midEstimate)}
+                </MDTypography>
+                <MDTypography variant="body1" sx={{ color: '#ffffff', fontWeight: 'medium' }}>
+                  Most Likely Value
+                </MDTypography>
+              </MDBox>
+              
+              <MDBox textAlign="center">
+                <MDTypography variant="h5" fontWeight="bold" sx={{ color: '#ffffff', mb: 1 }}>
+                  {formatCurrency(results.highEstimate)}
+                </MDTypography>
+                <MDTypography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)' }}>
+                  Optimistic
+                </MDTypography>
+              </MDBox>
+            </MDBox>
 
-        {/* Valuation Summary */}
-        <div >
-          <h4 >Estimated Business Value</h4>
-          <div >
-            <div >
-              <div >
-                <div >{formatCurrency(results.lowEstimate)}</div>
-                <div >Low Estimate</div>
-              </div>
-              <div >
-                <div >{formatCurrency(results.midEstimate)}</div>
-                <div >Most Likely</div>
-              </div>
-              <div >
-                <div >{formatCurrency(results.highEstimate)}</div>
-                <div >High Estimate</div>
-              </div>
-            </div>
-          </div>
-          
-          {/* Primary CTAs after valuation */}
-          <div >
-            <div >
+            <MDBox display="flex" justifyContent="center" gap={2}>
               <MDButton 
                 onClick={handleExploreImprovements}
                 variant="outlined"
-                color="info"
+                sx={{ 
+                  color: '#5EEAD4', 
+                  borderColor: '#5EEAD4',
+                  '&:hover': { backgroundColor: 'rgba(94, 234, 212, 0.1)' }
+                }}
                 startIcon={<Calculator size={16} />}
-                sx={{ mr: 2 }}
               >
-                Explore Value Improvements
+                Explore Improvements
               </MDButton>
 
               <MDButton 
                 onClick={handleScheduleConsultation}
-                variant="gradient"
-                color="primary"
+                variant="contained"
+                sx={{ 
+                  background: '#5EEAD4',
+                  color: '#0A1F44',
+                  '&:hover': { background: '#4DD0C7' }
+                }}
                 startIcon={<Calendar size={16} />}
               >
                 Schedule Consultation
               </MDButton>
-            </div>
-          </div>
-        </div>
+            </MDBox>
+          </MDBox>
+        </CardContent>
+      </Card>
 
-        {/* Operational Grade Display */}
-        <div >
-          <h5 >Overall Operational Grade</h5>
-          <div >
-            <div >{results.overallScore}</div>
-          </div>
-          <p >With an Operational Grade of {results.overallScore}</p>
-        </div>
+      {/* Key Metrics Row */}
+      <MDBox display="flex" gap={3} mb={4} sx={{ flexDirection: { xs: 'column', md: 'row' } }}>
+        {/* Financial Summary */}
+        <Card sx={{ flex: 1 }}>
+          <CardContent sx={{ p: 3 }}>
+            <MDTypography variant="h6" fontWeight="medium" color="dark" mb={2}>
+              Financial Summary
+            </MDTypography>
+            
+            <MDBox mb={2}>
+              <MDBox display="flex" justifyContent="space-between" mb={1}>
+                <Typography variant="body2" color="textSecondary">Adjusted EBITDA:</Typography>
+                <Typography variant="h6" fontWeight="medium">{formatCurrency(results.adjustedEbitda)}</Typography>
+              </MDBox>
+              <MDBox display="flex" justifyContent="space-between" mb={1}>
+                <Typography variant="body2" color="textSecondary">Valuation Multiple:</Typography>
+                <Typography variant="h6" fontWeight="medium">{results.valuationMultiple}x</Typography>
+              </MDBox>
+            </MDBox>
+          </CardContent>
+        </Card>
 
-        {/* Key Metrics */}
-        <div >
-          <div >
-            <h5 >Financial Summary</h5>
-            <div >
-              <div >
-                <span >Adjusted EBITDA</span>
-                <span >{formatCurrency(results.adjustedEbitda)}</span>
-              </div>
-              <div >
-                <span >Multiple</span>
-                <span >{results.valuationMultiple}x</span>
-              </div>
-            </div>
-          </div>
+        {/* Overall Grade */}
+        <Card sx={{ flex: 1 }}>
+          <CardContent sx={{ p: 3, textAlign: 'center' }}>
+            <MDTypography variant="h6" fontWeight="medium" color="dark" mb={2}>
+              Overall Business Grade
+            </MDTypography>
+            
+            <MDBox
+              sx={{
+                width: 80,
+                height: 80,
+                borderRadius: '50%',
+                backgroundColor: getGradeColor(results.overallScore || 'C'),
+                color: '#ffffff',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '32px',
+                fontWeight: 'bold',
+                margin: '0 auto 16px',
+                boxShadow: '0 4px 8px rgba(0,0,0,0.2)'
+              }}
+            >
+              {results.overallScore}
+            </MDBox>
+            
+            <Typography variant="body2" color="textSecondary">
+              {results.overallScore === 'A' && 'Excellent Performance'}
+              {results.overallScore === 'B' && 'Good Performance'}
+              {results.overallScore === 'C' && 'Average Performance'}
+              {results.overallScore === 'D' && 'Below Average'}
+              {results.overallScore === 'F' && 'Needs Improvement'}
+            </Typography>
+          </CardContent>
+        </Card>
+      </MDBox>
 
-          <div >
-            <h5 >Top Drivers</h5>
-            <div >
-              <div >
-                <span >Growth</span>
-                <span >{results.growthProspects}</span>
-              </div>
-              <div >
-                <span >Financial</span>
-                <span >{results.financialPerformance}</span>
-              </div>
-            </div>
-          </div>
-        </div>
+      {/* Value Drivers Heatmap */}
+      <Card sx={{ mb: 4 }}>
+        <CardContent sx={{ p: 3 }}>
+          <MDTypography variant="h6" fontWeight="medium" color="dark" mb={3}>
+            Business Value Drivers Analysis
+          </MDTypography>
+          <ValueDriversHeatmap assessment={results} />
+        </CardContent>
+      </Card>
 
-        {/* Strategy Session CTA */}
-        <div >
-          <div >
-            <h5 >Schedule Your Strategy Session</h5>
-            <div >
-              <MDButton 
-                onClick={handleScheduleConsultation}
-                variant="gradient"
-                color="success"
-                startIcon={<Calendar size={16} />}
-                size="large"
-              >
-                Schedule Your Strategy Session
-              </MDButton>
-            </div>
-            <p >
-              No obligation • 30-minute consultation • Expert M&A guidance
-            </p>
-          </div>
-        </div>
+      {/* Next Steps */}
+      <Card sx={{ background: '#F8F9FA' }}>
+        <CardContent sx={{ p: 4, textAlign: 'center' }}>
+          <MDTypography variant="h5" fontWeight="bold" color="dark" mb={2}>
+            Ready to Maximize Your Business Value?
+          </MDTypography>
+          
+          <MDTypography variant="body1" color="text" mb={3}>
+            Schedule a complimentary 30-minute strategy session with our M&A experts to discuss your results and explore value enhancement opportunities.
+          </MDTypography>
 
-
-      </div>
-    </div>
+          <MDButton 
+            onClick={handleScheduleConsultation}
+            variant="gradient"
+            color="success"
+            size="large"
+            startIcon={<Calendar size={20} />}
+            sx={{ px: 4, py: 1.5 }}
+          >
+            Schedule Your Strategy Session
+          </MDButton>
+          
+          <MDTypography variant="body2" color="textSecondary" mt={2}>
+            No obligation • Expert M&A guidance • Personalized recommendations
+          </MDTypography>
+        </CardContent>
+      </Card>
+    </MDBox>
   );
 }
