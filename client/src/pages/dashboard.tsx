@@ -558,181 +558,170 @@ function UpgradeBenefitsSection() {
       sx={{
         backgroundColor: 'white',
         borderRadius: 2,
-        padding: 4,
-        mb: 4,
-        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-        border: '1px solid #E5E7EB'
+        padding: 3,
+        mb: 3,
+        boxShadow: '0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+        border: '1px solid #F3F4F6'
       }}
     >
-      {/* Header */}
-      <MDBox display="flex" justifyContent="space-between" alignItems="center" mb={4}>
+      {/* Compact Header */}
+      <MDBox display="flex" justifyContent="space-between" alignItems="center" mb={3}>
         <MDBox>
-          <MDTypography variant="h5" fontWeight="bold" sx={{ color: '#111827', mb: 1 }}>
-            What's Included in Your Free Assessment
+          <MDTypography variant="h6" fontWeight="medium" sx={{ color: '#374151', mb: 0.5 }}>
+            Your Current Plan Features
           </MDTypography>
-          <MDTypography variant="body2" sx={{ color: '#6B7280' }}>
-            Compare features and unlock premium capabilities
+          <MDTypography variant="body2" sx={{ color: '#9CA3AF', fontSize: '13px' }}>
+            Free tier • Upgrade for advanced analytics
           </MDTypography>
         </MDBox>
         <MDButton
+          size="small"
           sx={{
-            background: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)',
+            background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
             color: 'white',
-            px: 3,
-            py: 1.5,
-            borderRadius: '8px',
-            fontWeight: 'bold',
+            px: 2.5,
+            py: 1,
+            borderRadius: '6px',
+            fontSize: '13px',
+            fontWeight: 'medium',
+            textTransform: 'none',
             '&:hover': {
-              background: 'linear-gradient(135deg, #D97706 0%, #B45309 100%)',
-              transform: 'translateY(-1px)',
-              boxShadow: '0 8px 25px -8px rgba(245, 158, 11, 0.4)'
+              background: 'linear-gradient(135deg, #059669 0%, #047857 100%)',
+              transform: 'translateY(-1px)'
             },
-            transition: 'all 0.3s ease'
+            transition: 'all 0.2s ease'
           }}
-          startIcon={<Crown size={18} />}
+          startIcon={<TrendingUp size={14} />}
           onClick={() => window.open('https://products.applebites.ai/', '_blank')}
         >
-          Upgrade Now
+          Upgrade
         </MDButton>
       </MDBox>
 
-      {/* Features Grid */}
-      <MDBox display="grid" gridTemplateColumns={{ xs: '1fr', md: 'repeat(2, 1fr)' }} gap={3} mb={4}>
-        {/* Free Features */}
-        {freeFeatures.map((feature, index) => (
+      {/* Subtle Features List */}
+      <MDBox display="grid" gridTemplateColumns={{ xs: '1fr', md: 'repeat(2, 1fr)' }} gap={2}>
+        {/* Free Features - Subtle */}
+        {freeFeatures.slice(0, 2).map((feature, index) => (
           <MDBox
             key={index}
             sx={{
               display: 'flex',
-              alignItems: 'flex-start',
-              gap: 2,
-              p: 2,
-              borderRadius: '8px',
-              backgroundColor: '#F0FDF4',
-              border: '1px solid #BBF7D0'
+              alignItems: 'center',
+              gap: 1.5,
+              p: 1.5,
+              borderRadius: '6px',
+              backgroundColor: '#F9FAFB',
+              border: '1px solid #F3F4F6'
             }}
           >
             <MDBox
               sx={{
-                width: 24,
-                height: 24,
+                width: 16,
+                height: 16,
                 borderRadius: '50%',
                 backgroundColor: '#10B981',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                flexShrink: 0,
-                mt: 0.5
+                flexShrink: 0
               }}
             >
-              <Check size={14} color="white" />
+              <Check size={10} color="white" />
             </MDBox>
             <MDBox>
-              <MDTypography variant="h6" fontWeight="bold" sx={{ color: '#111827', mb: 0.5 }}>
+              <MDTypography variant="body2" fontWeight="medium" sx={{ color: '#374151', fontSize: '13px' }}>
                 {feature.title}
-              </MDTypography>
-              <MDTypography variant="body2" sx={{ color: '#6B7280' }}>
-                {feature.description}
               </MDTypography>
             </MDBox>
           </MDBox>
         ))}
 
-        {/* Premium Features */}
-        {premiumFeatures.map((feature, index) => (
+        {/* Premium Features - Very Subtle */}
+        {premiumFeatures.slice(0, 2).map((feature, index) => (
           <MDBox
             key={index}
             sx={{
               display: 'flex',
-              alignItems: 'flex-start',
-              gap: 2,
-              p: 2,
-              borderRadius: '8px',
-              backgroundColor: '#FEF3C7',
-              border: '1px solid #FDE68A',
-              opacity: 0.8
+              alignItems: 'center',
+              gap: 1.5,
+              p: 1.5,
+              borderRadius: '6px',
+              backgroundColor: '#FFFBEB',
+              border: '1px solid #FEF3C7',
+              opacity: 0.7
             }}
           >
             <MDBox
               sx={{
-                width: 24,
-                height: 24,
+                width: 16,
+                height: 16,
                 borderRadius: '50%',
-                backgroundColor: '#F59E0B',
+                backgroundColor: '#D1D5DB',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                flexShrink: 0,
-                mt: 0.5
+                flexShrink: 0
               }}
             >
-              <Lock size={14} color="white" />
+              <Lock size={9} color="#9CA3AF" />
             </MDBox>
             <MDBox flex={1}>
-              <MDBox display="flex" justifyContent="space-between" alignItems="flex-start" mb={0.5}>
-                <MDTypography variant="h6" fontWeight="bold" sx={{ color: '#92400E' }}>
+              <MDBox display="flex" justifyContent="space-between" alignItems="center">
+                <MDTypography variant="body2" fontWeight="medium" sx={{ color: '#9CA3AF', fontSize: '13px' }}>
                   {feature.title}
                 </MDTypography>
                 <MDBox
                   sx={{
-                    backgroundColor: '#F59E0B',
-                    color: 'white',
-                    px: 1.5,
-                    py: 0.5,
-                    borderRadius: '12px',
-                    fontSize: '11px',
-                    fontWeight: 'bold'
+                    backgroundColor: '#F3F4F6',
+                    color: '#6B7280',
+                    px: 1,
+                    py: 0.25,
+                    borderRadius: '8px',
+                    fontSize: '10px',
+                    fontWeight: 'medium'
                   }}
                 >
                   {feature.tier}
                 </MDBox>
               </MDBox>
-              <MDTypography variant="body2" sx={{ color: '#92400E', opacity: 0.8 }}>
-                {feature.description}
-              </MDTypography>
             </MDBox>
           </MDBox>
         ))}
       </MDBox>
 
-      {/* Unlock Premium CTA */}
+      {/* Minimal CTA */}
       <MDBox
         sx={{
-          background: 'linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%)',
-          borderRadius: '12px',
-          p: 3,
-          border: '2px solid #F59E0B',
+          mt: 3,
+          pt: 2,
+          borderTop: '1px solid #F3F4F6',
           textAlign: 'center'
         }}
       >
-        <MDBox display="flex" justifyContent="center" mb={2}>
-          <Star size={32} color="#F59E0B" />
-        </MDBox>
-        <MDTypography variant="h6" fontWeight="bold" sx={{ color: '#92400E', mb: 1 }}>
-          Unlock Premium Features
-        </MDTypography>
-        <MDTypography variant="body2" sx={{ color: '#92400E', mb: 3, maxWidth: '600px', mx: 'auto' }}>
-          Upgrade to Growth or Capital tier for industry-specific analysis, AI insights, and executive-grade reports.
+        <MDTypography variant="body2" sx={{ color: '#6B7280', mb: 1.5, fontSize: '12px' }}>
+          Need industry-specific analysis or AI insights?
         </MDTypography>
         <MDButton
+          size="small"
           sx={{
-            background: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)',
-            color: 'white',
-            px: 4,
-            py: 1.5,
-            borderRadius: '8px',
-            fontWeight: 'bold',
+            background: 'transparent',
+            color: '#6B7280',
+            px: 2,
+            py: 0.5,
+            borderRadius: '6px',
+            fontSize: '12px',
+            fontWeight: 'medium',
+            textTransform: 'none',
+            textDecoration: 'underline',
             '&:hover': {
-              background: 'linear-gradient(135deg, #D97706 0%, #B45309 100%)',
-              transform: 'translateY(-2px)',
-              boxShadow: '0 12px 30px -12px rgba(245, 158, 11, 0.5)'
+              background: '#F9FAFB',
+              color: '#374151'
             },
-            transition: 'all 0.3s ease'
+            transition: 'all 0.2s ease'
           }}
-          startIcon={<ExternalLink size={18} />}
           onClick={() => window.open('https://products.applebites.ai/', '_blank')}
         >
-          View Upgrade Options
+          View Premium Plans
         </MDButton>
       </MDBox>
     </MDBox>
