@@ -25,9 +25,9 @@ const AppleBitesConnector = styled(StepConnector)(({ theme }) => ({
 // Custom Step Icon with Apple Bites styling
 const StepIconRoot = styled('div')<{ ownerState: { active: boolean; completed: boolean } }>(({ theme, ownerState }) => ({
   backgroundColor:
-    ownerState.active || ownerState.completed ? '#00BFA6' : '#fff',
+    ownerState.active || ownerState.completed ? '#ffffff' : '#fff',
   zIndex: 1,
-  color: ownerState.active || ownerState.completed ? '#fff' : '#B0B7C3',
+  color: ownerState.active || ownerState.completed ? '#0A1F44' : '#B0B7C3',
   width: 32,
   height: 32,
   display: 'flex',
@@ -35,7 +35,7 @@ const StepIconRoot = styled('div')<{ ownerState: { active: boolean; completed: b
   justifyContent: 'center',
   alignItems: 'center',
   border: '2px solid',
-  borderColor: ownerState.completed ? '#00BFA6' : '#E0E0E0',
+  borderColor: ownerState.completed ? '#ffffff' : '#E0E0E0',
   fontSize: '14px',
   fontWeight: 600,
 }));
@@ -72,29 +72,47 @@ interface AssessmentStepperProps {
 
 export default function AssessmentStepper({ activeStep }: AssessmentStepperProps) {
   return (
-    <Box sx={{ width: '100%', mb: 4 }}>
-      <Stepper
-        alternativeLabel
-        activeStep={activeStep}
-        connector={<AppleBitesConnector />}
+    <Box 
+      sx={{ 
+        width: '100%', 
+        mb: -2, // Negative margin to overlap the white form card
+        position: 'relative',
+        zIndex: 2 // Ensure it sits above the form card
+      }}
+    >
+      {/* Navy Pillbox Container */}
+      <Box
+        sx={{
+          backgroundColor: '#0A1F44',
+          borderRadius: '50px',
+          padding: '24px 32px',
+          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+          border: '1px solid rgba(255, 255, 255, 0.1)'
+        }}
       >
-        {steps.map((label, index) => (
-          <Step key={label}>
-            <StepLabel StepIconComponent={CustomStepIcon}>
-              <Typography
-                variant="caption"
-                sx={{
-                  fontWeight: activeStep === index ? 600 : 400,
-                  color: activeStep === index ? '#00BFA6' : '#0A1F44',
-                  fontSize: '0.875rem',
-                }}
-              >
-                {label}
-              </Typography>
-            </StepLabel>
-          </Step>
-        ))}
-      </Stepper>
+        <Stepper
+          alternativeLabel
+          activeStep={activeStep}
+          connector={<AppleBitesConnector />}
+        >
+          {steps.map((label, index) => (
+            <Step key={label}>
+              <StepLabel StepIconComponent={CustomStepIcon}>
+                <Typography
+                  variant="caption"
+                  sx={{
+                    fontWeight: activeStep === index ? 600 : 400,
+                    color: activeStep === index ? '#ffffff' : 'rgba(255,255,255,0.8)',
+                    fontSize: '0.875rem',
+                  }}
+                >
+                  {label}
+                </Typography>
+              </StepLabel>
+            </Step>
+          ))}
+        </Stepper>
+      </Box>
     </Box>
   );
 }
