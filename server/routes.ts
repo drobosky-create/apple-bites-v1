@@ -1191,14 +1191,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   })
 
-  // GET /api/assessments - Get all assessments for Past Assessments page
+  // GET /api/assessments - Get last 3 assessments for Past Assessments page
   app.get("/api/assessments", async (req, res) => {
     try {
       const assessments = await storage.getAllValuationAssessments();
-      // Sort by creation date, newest first
-      const sortedAssessments = assessments.sort((a, b) => 
-        new Date(b.createdAt || '').getTime() - new Date(a.createdAt || '').getTime()
-      );
+      // Sort by creation date, newest first, and limit to 3
+      const sortedAssessments = assessments
+        .sort((a, b) => new Date(b.createdAt || '').getTime() - new Date(a.createdAt || '').getTime())
+        .slice(0, 3)
+        .map(assessment => ({
+          id: assessment.id,
+          firstName: assessment.firstName || 'Unknown',
+          lastName: assessment.lastName || 'User',
+          company: assessment.company || 'Business Assessment',
+          email: assessment.email,
+          adjustedEbitda: assessment.adjustedEbitda,
+          midEstimate: assessment.midEstimate,
+          lowEstimate: assessment.lowEstimate,
+          highEstimate: assessment.highEstimate,
+          valuationMultiple: assessment.valuationMultiple,
+          overallScore: assessment.overallScore,
+          tier: assessment.tier || 'free',
+          reportTier: assessment.reportTier || 'free',
+          createdAt: assessment.createdAt,
+          pdfUrl: assessment.pdfUrl,
+          isProcessed: assessment.isProcessed,
+          executiveSummary: assessment.executiveSummary
+        }));
+      
       res.json(sortedAssessments);
     } catch (error) {
       console.error("Error fetching assessments:", error);
