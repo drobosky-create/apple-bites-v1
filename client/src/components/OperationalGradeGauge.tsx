@@ -60,8 +60,8 @@ const OperationalGradeGauge: React.FC<OperationalGradeGaugeProps> = ({
 
   // Create SVG path for arc segments (semi-circle from left to right)
   const createArcPath = (startAngle: number, endAngle: number, radius: number) => {
-    const centerX = 150;
-    const centerY = 120;
+    const centerX = 300;
+    const centerY = 240;
     
     // Convert to semi-circle: 0° = left (180° in normal coords), 180° = right (0° in normal coords)
     const startAngleRad = (startAngle + 180) * (Math.PI / 180);
@@ -80,9 +80,9 @@ const OperationalGradeGauge: React.FC<OperationalGradeGaugeProps> = ({
   // Get needle position (semi-circle coordinates)
   const needleAngle = animatedAngle;
   const needleAngleRad = (needleAngle + 180) * (Math.PI / 180);
-  const needleLength = 75;
-  const centerX = 150;
-  const centerY = 120;
+  const needleLength = 150;
+  const centerX = 300;
+  const centerY = 240;
   const needleX = centerX + needleLength * Math.cos(needleAngleRad);
   const needleY = centerY + needleLength * Math.sin(needleAngleRad);
 
@@ -101,7 +101,7 @@ const OperationalGradeGauge: React.FC<OperationalGradeGaugeProps> = ({
 
           {/* Gauge */}
           <div >
-            <svg width="100%" height="200" viewBox="0 0 300 130" >
+            <svg width="100%" height="400" viewBox="0 0 600 260" >
           {/* Material Dashboard Gradient Definitions */}
           <defs>
             {/* F Grade - Deep Red Material Gradient */}
@@ -143,10 +143,10 @@ const OperationalGradeGauge: React.FC<OperationalGradeGaugeProps> = ({
           
           {/* Background arc */}
           <path
-            d={createArcPath(0, 180, 80)}
+            d={createArcPath(0, 180, 160)}
             fill="url(#backgroundGradient)"
             stroke="rgb(226, 232, 240)"
-            strokeWidth="1"
+            strokeWidth="2"
           />
           
           {/* Grade segments */}
@@ -165,10 +165,10 @@ const OperationalGradeGauge: React.FC<OperationalGradeGaugeProps> = ({
             return (
               <g key={segment.grade}>
                 <path
-                  d={createArcPath(startAngle, endAngle, 80)}
+                  d={createArcPath(startAngle, endAngle, 160)}
                   fill={isActive ? `url(#${gradientId})` : 'rgb(248, 250, 252)'}
                   stroke="white"
-                  strokeWidth="3"
+                  strokeWidth="6"
                   
                   style={{
                     filter: isActive ? 'drop-shadow(0 4px 8px rgba(0,0,0,0.15))' : 'none',
@@ -178,13 +178,13 @@ const OperationalGradeGauge: React.FC<OperationalGradeGaugeProps> = ({
                 
                 {/* Grade labels */}
                 <text
-                  x={centerX + 95 * Math.cos((segment.angle + 18 + 180) * (Math.PI / 180))}
-                  y={centerY + 95 * Math.sin((segment.angle + 18 + 180) * (Math.PI / 180))}
+                  x={centerX + 190 * Math.cos((segment.angle + 18 + 180) * (Math.PI / 180))}
+                  y={centerY + 190 * Math.sin((segment.angle + 18 + 180) * (Math.PI / 180))}
                   textAnchor="middle"
                   dominantBaseline="middle"
                   className={`text-3xl font-black ${isActive ? 'fill-white' : 'fill-gray-700'}`}
                   style={{
-                    fontSize: '24px',
+                    fontSize: '48px',
                     fontWeight: '900',
                     textShadow: isActive ? '1px 1px 2px rgba(0,0,0,0.3)' : 'none'
                   }}
@@ -210,7 +210,7 @@ const OperationalGradeGauge: React.FC<OperationalGradeGaugeProps> = ({
               x2={needleX}
               y2={needleY}
               stroke="url(#needleGradient)"
-              strokeWidth="4"
+              strokeWidth="8"
               strokeLinecap="round"
               style={{
                 filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))'
@@ -221,7 +221,7 @@ const OperationalGradeGauge: React.FC<OperationalGradeGaugeProps> = ({
             <circle
               cx={centerX}
               cy={centerY}
-              r="8"
+              r="16"
               fill="url(#needleGradient)"
               style={{
                 filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))'
@@ -230,7 +230,7 @@ const OperationalGradeGauge: React.FC<OperationalGradeGaugeProps> = ({
             <circle
               cx={centerX}
               cy={centerY}
-              r="4"
+              r="8"
               fill="white"
             />
           </g>
@@ -239,8 +239,8 @@ const OperationalGradeGauge: React.FC<OperationalGradeGaugeProps> = ({
           {gradeSegments.map((segment) => {
             const tickAngle = segment.angle;
             const tickAngleRad = (tickAngle + 180) * (Math.PI / 180);
-            const innerRadius = 65;
-            const outerRadius = 75;
+            const innerRadius = 130;
+            const outerRadius = 150;
             
             const x1 = centerX + innerRadius * Math.cos(tickAngleRad);
             const y1 = centerY + innerRadius * Math.sin(tickAngleRad);
@@ -255,7 +255,7 @@ const OperationalGradeGauge: React.FC<OperationalGradeGaugeProps> = ({
                 x2={x2}
                 y2={y2}
                 stroke="rgb(107, 114, 128)"
-                strokeWidth="2"
+                strokeWidth="4"
                 strokeLinecap="round"
               />
             );

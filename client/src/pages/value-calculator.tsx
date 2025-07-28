@@ -437,9 +437,9 @@ export default function ValueCalculator() {
             p: 1.5
           }}>
             <MDBox sx={{ 
-              transform: 'scale(1.4)', 
+              transform: 'scale(0.7)', 
               transformOrigin: 'top left',
-              width: '71.43%', // Compensate for scale to fill container
+              width: '142.86%', // Compensate for scale to fill container
               height: 'auto'
             }}>
               <InteractiveValuationSlider />
