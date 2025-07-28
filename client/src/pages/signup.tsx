@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'wouter';
 import { Grid, Box, Typography, Button, useTheme } from '@mui/material';
-import { Eye, EyeOff, Mail, User, Building, CheckCircle, X } from 'lucide-react';
+import { Eye, EyeOff, Mail, User, Building, CheckCircle, X, Phone } from 'lucide-react';
 import MDInput from '@/components/MD/MDInput';
 const appleBitesLogo = '/assets/logos/apple-bites-meritage-logo.png';
 
@@ -9,6 +9,7 @@ interface SignupFormData {
   firstName: string;
   lastName: string;
   email: string;
+  phone: string;
   password: string;
   confirmPassword: string;
   company: string;
@@ -40,6 +41,7 @@ export default function HybridSignupPage() {
     firstName: '',
     lastName: '',
     email: '',
+    phone: '',
     password: '',
     confirmPassword: '',
     company: '',
@@ -314,6 +316,26 @@ export default function HybridSignupPage() {
                   required
                   fullWidth
                   startAdornment={<Mail size={18} color="#9CA3AF" />}
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      '& fieldset': { borderColor: '#D1D5DB' },
+                      '&:hover fieldset': { borderColor: '#00BFA6' },
+                      '&.Mui-focused fieldset': { borderColor: '#00BFA6' }
+                    }
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="body2" fontWeight="medium" sx={{ color: '#374151', mb: 1 }}>
+                  Phone Number
+                </Typography>
+                <MDInput
+                  type="tel"
+                  placeholder="Enter your phone number"
+                  value={formData.phone}
+                  onChange={handleInputChange('phone')}
+                  fullWidth
+                  startAdornment={<Phone size={18} color="#9CA3AF" />}
                   sx={{
                     '& .MuiOutlinedInput-root': {
                       '& fieldset': { borderColor: '#D1D5DB' },
