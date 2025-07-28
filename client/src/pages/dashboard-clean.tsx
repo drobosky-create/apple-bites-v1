@@ -229,7 +229,7 @@ function DashboardSidebar({ user }: { user: DashboardUser }) {
   );
 }
 
-function DashboardMainContent({ user }: { user: DashboardUser }) {
+function DashboardMainContent({ user, setupDemoSession }: { user: DashboardUser; setupDemoSession: () => void }) {
   // Apple Bites Brand Colors
   const colors = {
     primary: "#00BFA6",
@@ -496,11 +496,21 @@ function DashboardMainContent({ user }: { user: DashboardUser }) {
           <MDTypography variant="body2" color="text" mb={3}>
             Your completed assessments will appear here. Start your first assessment to see your business valuation.
           </MDTypography>
-          <Link href="/assessment/free">
-            <MDButton variant="gradient" color="primary">
-              Start First Assessment
+          <MDBox display="flex" gap={2} justifyContent="center" flexWrap="wrap">
+            <Link href="/assessment/free">
+              <MDButton variant="gradient" color="primary">
+                Start Assessment
+              </MDButton>
+            </Link>
+            <MDButton 
+              variant="outlined" 
+              color="secondary" 
+              size="small"
+              onClick={setupDemoSession}
+            >
+              Setup Demo Data
             </MDButton>
-          </Link>
+          </MDBox>
         </MDBox>
       </MDBox>
     </MDBox>
@@ -512,10 +522,22 @@ export default function DashboardClean() {
   // const { user, isAuthenticated } = useAuth();
   const user = mockUser; // Replace with actual user data
 
+  // Function to setup demo session for testing
+  const setupDemoSession = async () => {
+    try {
+      const response = await fetch('/api/setup-demo');
+      if (response.ok) {
+        window.location.reload(); // Reload to pick up the new session
+      }
+    } catch (error) {
+      console.error('Failed to setup demo session:', error);
+    }
+  };
+
   return (
     <MDBox display="flex" minHeight="100vh">
       <DashboardSidebar user={user} />
-      <DashboardMainContent user={user} />
+      <DashboardMainContent user={user} setupDemoSession={setupDemoSession} />
     </MDBox>
   );
 }

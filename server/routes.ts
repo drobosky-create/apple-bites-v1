@@ -211,7 +211,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,
-        tier: "free",
+        phone: user.phone || "",
+        company: user.company || "",
+        jobTitle: user.jobTitle || "",
+        tier: user.tier || "free",
         authProvider: "demo"
       });
     }
@@ -2404,6 +2407,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error('Error testing comprehensive multiplier ranges:', error);
       res.status(500).json({ error: "Failed to test comprehensive multiplier ranges" });
+    }
+  });
+
+  // Demo setup endpoint for testing user flow
+  app.get("/api/setup-demo", async (req, res) => {
+    try {
+      // Set up demo session with complete user data
+      (req.session as any).isAuthenticated = true;
+      (req.session as any).user = {
+        id: "demo-user-123",
+        email: "sarah.johnson@democorp.com",
+        firstName: "Sarah",
+        lastName: "Johnson",
+        phone: "(555) 123-4567",
+        company: "Demo Manufacturing Co",
+        jobTitle: "Chief Executive Officer",
+        tier: "growth",
+        authProvider: "demo"
+      };
+
+      res.json({ 
+        success: true, 
+        message: "Demo user session created with complete profile",
+        user: (req.session as any).user 
+      });
+    } catch (error) {
+      console.error('Demo setup failed:', error);
+      res.status(500).json({ error: 'Failed to setup demo session' });
     }
   });
 
