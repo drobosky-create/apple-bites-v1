@@ -29,7 +29,7 @@ function Router() {
         {/* Assessment pages */}
         <Route path="/assessment/free" component={FreeAssessment} />
         <Route path="/assessment/paid" component={GrowthExitAssessment} />
-        <Route path="/results/:id" component={AssessmentResults} />
+        <Route path="/assessment-results/:id" component={AssessmentResults} />
         <Route path="/value-calculator" component={ValueCalculator} />
         <Route path="/profile" component={Profile} />
         <Route path="/past-assessments" component={PastAssessments} />

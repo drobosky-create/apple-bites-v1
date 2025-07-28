@@ -86,7 +86,7 @@ export default function PastAssessments() {
   };
 
   const viewAssessment = (assessment: Assessment) => {
-    setLocation(`/value-calculator?assessmentId=${assessment.id}`);
+    setLocation(`/assessment-results/${assessment.id}`);
   };
 
   if (isLoading) {

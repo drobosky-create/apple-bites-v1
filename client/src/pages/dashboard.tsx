@@ -196,14 +196,16 @@ function PastAssessmentsSection() {
                     </MDBox>
                   </MDBox>
 
-                  <MDButton 
-                    variant="outlined"
-                    color="info"
-                    size="small"
-                    startIcon={<Eye size={14} />}
-                  >
-                    View
-                  </MDButton>
+                  <Link href={`/assessment-results/${assessment.id}`}>
+                    <MDButton 
+                      variant="outlined"
+                      color="info"
+                      size="small"
+                      startIcon={<Eye size={14} />}
+                    >
+                      View
+                    </MDButton>
+                  </Link>
                 </MDBox>
               </CardContent>
             </Card>
