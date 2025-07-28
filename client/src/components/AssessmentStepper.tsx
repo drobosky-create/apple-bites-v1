@@ -41,8 +41,8 @@ const StepIconRoot = styled('div')<{ ownerState: { active: boolean; completed: b
 }));
 
 interface CustomStepIconProps {
-  active: boolean;
-  completed: boolean;
+  active?: boolean;
+  completed?: boolean;
   className?: string;
   icon: number;
 }

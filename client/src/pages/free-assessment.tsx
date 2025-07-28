@@ -120,6 +120,19 @@ export default function FreeAssessment() {
     }
   }, [hasCompleteProfile, currentStep, user, updateFormData, nextStep]);
 
+  // Helper function to convert step name to index
+  const getStepIndex = (step: FormStep): number => {
+    const stepMap = {
+      contact: 0,
+      ebitda: 1, 
+      adjustments: 2,
+      valueDrivers: 3,
+      followUp: 4,
+      results: 4
+    };
+    return stepMap[step] || 0;
+  };
+
   // If we're on /results route, show loading or latest assessment
   if (location === '/results') {
     if (assessmentsLoading) {
@@ -166,7 +179,7 @@ export default function FreeAssessment() {
       {/* Main Content Area */}
       <MainContent>
         {/* Assessment Stepper */}
-        <AssessmentStepper currentStep={currentStep} />
+        <AssessmentStepper activeStep={getStepIndex(currentStep)} />
         
         <FormCard>
           <CardContent sx={{ p: 4, minHeight: '600px' }}>
