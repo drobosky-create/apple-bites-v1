@@ -2423,7 +2423,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         phone: "(555) 123-4567",
         company: "Demo Manufacturing Co",
         jobTitle: "Chief Executive Officer",
-        tier: "growth",
+        tier: "free",
         authProvider: "demo"
       };
 
