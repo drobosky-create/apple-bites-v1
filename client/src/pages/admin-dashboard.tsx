@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Link, useLocation } from 'wouter';
-import { Users, Plus, Edit, Trash2, Shield, LogOut, UserPlus, Settings, Home, BarChart3, Calendar, FileText, User, Menu } from 'lucide-react';
+import { Users, Plus, Edit, Trash2, Shield, LogOut, UserPlus, Settings, Home, BarChart3, Calendar, FileText, User, Menu, Clock, Crown } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { insertTeamMemberSchema, type InsertTeamMember, type TeamMember } from '@shared/schema';
@@ -13,16 +13,15 @@ import { useToast } from '@/hooks/use-toast';
 import MDBox from '@/components/MD/MDBox';
 import MDTypography from '@/components/MD/MDTypography';
 import MDButton from '@/components/MD/MDButton';
+import { Avatar } from '@mui/material';
 import MDInput from '@/components/MD/MDInput';
 import { Card, CardContent, Grid, Container, Box, Button, Typography, Modal, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Chip } from '@mui/material';
 
 const appleBitesLogoPath = '/assets/logos/apple-bites-meritage-logo.png';
 
-// Sidebar Component with pillbox styling matching main dashboard
-function AdminSidebar({ user }: { user: any }) {
-  const [, setLocation] = useLocation();
-  
-  // Apple Bites Brand Colors (matching main dashboard)
+// Admin Sidebar Component - Exact copy from user dashboard structure
+function AdminSidebar({ user, onSignOut }: { user: any; onSignOut: () => void }) {
+  // Apple Bites Brand Colors - Exact copy from user dashboard
   const colors = {
     primary: "#00BFA6",
     secondary: "#0A1F44", 
@@ -38,13 +37,21 @@ function AdminSidebar({ user }: { user: any }) {
     glow: "linear-gradient(135deg, #00BFA6 0%, #33FFC5 100%)"
   };
 
-  const sidebarItems = [
-    { icon: Home, label: 'Dashboard', href: '/admin' },
-    { icon: Users, label: 'Team Members', href: '/admin/team' },
-    { icon: FileText, label: 'Leads', href: '/admin/leads' },
-    { icon: BarChart3, label: 'Analytics', href: '/admin/analytics' },
-    { icon: Settings, label: 'Settings', href: '/admin/settings' },
-  ];
+  const getTierGradient = (role: string) => {
+    switch (role) {
+      case 'admin': return gradients.primary;
+      case 'manager': return gradients.light;
+      default: return 'linear-gradient(135deg, #CBD5E1 0%, #94A3B8 100%)';
+    }
+  };
+
+  const getTierLabel = (role: string) => {
+    switch (role) {
+      case 'admin': return 'Admin';
+      case 'manager': return 'Manager';
+      default: return 'Member';
+    }
+  };
 
   return (
     <MDBox
@@ -63,26 +70,22 @@ function AdminSidebar({ user }: { user: any }) {
         display: 'flex',
         flexDirection: 'column',
         zIndex: 1000,
-        overflow: 'hidden'
+        overflow: 'hidden' // Prevent internal scrolling
       }}
     >
       {/* User Info Section */}
       <MDBox mb={4}>
         <MDBox display="flex" alignItems="center" mb={2}>
-          <MDBox
+          <Avatar
             sx={{
               background: gradients.glow,
               width: 48,
               height: 48,
-              borderRadius: '50%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
               mr: 2
             }}
           >
             <User size={24} color="white" />
-          </MDBox>
+          </Avatar>
           <MDBox>
             <MDTypography variant="h6" fontWeight="medium" sx={{ color: 'white' }}>
               {user?.firstName} {user?.lastName}
@@ -99,7 +102,7 @@ function AdminSidebar({ user }: { user: any }) {
           </MDTypography>
           <MDBox
             sx={{
-              background: gradients.primary,
+              background: getTierGradient(user?.role || 'admin'),
               color: 'white',
               px: 2,
               py: 0.5,
@@ -110,60 +113,135 @@ function AdminSidebar({ user }: { user: any }) {
               letterSpacing: '0.5px'
             }}
           >
-            ADMIN
+            {getTierLabel(user?.role || 'admin')}
           </MDBox>
         </MDBox>
       </MDBox>
 
-      {/* Navigation Items */}
-      <MDBox display="flex" flexDirection="column" gap={1}>
-        {sidebarItems.map((item, index) => (
+      {/* Navigation Buttons - Exact structure from user dashboard */}
+      <MDBox display="flex" flexDirection="column" gap={2}>
+        <Link href="/admin">
           <MDButton
-            key={index}
-            onClick={() => setLocation(item.href)}
             sx={{
-              background: 'transparent',
-              border: `1px solid rgba(255, 255, 255, 0.2)`,
+              background: gradients.glow,
               color: 'white',
-              justifyContent: 'flex-start',
-              px: 2,
-              py: 1.5,
               '&:hover': {
-                background: 'rgba(255, 255, 255, 0.1)',
+                background: gradients.light,
                 transform: 'translateY(-2px)',
-                borderColor: colors.accent
+                boxShadow: `0 8px 25px -8px ${colors.primary}`
               },
               transition: 'all 0.3s ease',
-              width: '100%'
+              width: '100%',
+              py: 1.5
             }}
-            startIcon={<item.icon size={18} />}
+            startIcon={<Home size={18} />}
           >
-            {item.label}
+            Admin Dashboard
           </MDButton>
-        ))}
+        </Link>
+
+        <Link href="/admin/team">
+          <MDButton
+            className="text-[#dbdce1]"
+            sx={{
+              background: 'transparent',
+              border: `1px solid rgba(255, 255, 255, 0.3)`,
+              color: '#dbdce1',
+              '&:hover': {
+                background: 'rgba(255, 255, 255, 0.1)',
+                transform: 'translateY(-2px)'
+              },
+              transition: 'all 0.3s ease',
+              width: '100%',
+              py: 1.5
+            }}
+            startIcon={<Users size={18} />}
+          >
+            Team Members
+          </MDButton>
+        </Link>
+
+        <Link href="/admin/leads">
+          <MDButton
+            className="text-[#dbdce1]"
+            sx={{
+              background: 'transparent',
+              border: `1px solid rgba(255, 255, 255, 0.3)`,
+              color: '#dbdce1',
+              '&:hover': {
+                background: 'rgba(255, 255, 255, 0.1)',
+                transform: 'translateY(-2px)'
+              },
+              transition: 'all 0.3s ease',
+              width: '100%',
+              py: 1.5
+            }}
+            startIcon={<FileText size={18} />}
+          >
+            Leads
+          </MDButton>
+        </Link>
+
+        <Link href="/admin/analytics">
+          <MDButton
+            className="text-[#dbdce1]"
+            sx={{
+              background: 'transparent',
+              border: `1px solid rgba(255, 255, 255, 0.3)`,
+              color: '#dbdce1',
+              '&:hover': {
+                background: 'rgba(255, 255, 255, 0.1)',
+                transform: 'translateY(-2px)'
+              },
+              transition: 'all 0.3s ease',
+              width: '100%',
+              py: 1.5
+            }}
+            startIcon={<BarChart3 size={18} />}
+          >
+            Analytics
+          </MDButton>
+        </Link>
+
+        <MDButton
+          onClick={onSignOut}
+          className="text-[#dbdce1]"
+          sx={{
+            background: 'transparent',
+            border: `1px solid #EF4444`,
+            color: '#EF4444',
+            '&:hover': {
+              background: 'rgba(239, 68, 68, 0.1)',
+              borderColor: '#DC2626',
+              transform: 'translateY(-2px)'
+            },
+            transition: 'all 0.3s ease',
+            width: '100%',
+            py: 1.5
+          }}
+          startIcon={<LogOut size={18} />}
+        >
+          Sign Out
+        </MDButton>
       </MDBox>
 
       {/* Spacer */}
       <MDBox flexGrow={1} />
 
-      {/* Footer */}
-      <MDBox mt={4} pt={2} borderTop={`1px solid rgba(255, 255, 255, 0.1)`}>
-        <Box
-          component="img"
-          src={appleBitesLogoPath}
-          alt="Apple Bites"
-          sx={{
-            height: 40,
-            width: 'auto',
-            display: 'block',
-            mx: 'auto',
-            mb: 2,
-            filter: 'brightness(0) invert(1)'
-          }}
-        />
-        <MDTypography variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.6)', textAlign: 'center', display: 'block' }}>
-          © 2025 Meritage Partners
-        </MDTypography>
+      {/* Footer - Exact copy from user dashboard */}
+      <MDBox mt={4} pt={2} borderTop={`1px solid rgba(255, 255, 255, 0.2)`}>
+        <MDBox display="flex" flexDirection="column" alignItems="center" gap={1}>
+          <img
+            src="/assets/logos/apple-bites-meritage-logo.png"
+            alt="Apple Bites by Meritage Partners"
+            width={250}
+            height={250}
+            style={{
+              objectFit: 'contain',
+              maxWidth: '100%'
+            }}
+          />
+        </MDBox>
       </MDBox>
     </MDBox>
   );
@@ -325,9 +403,14 @@ export default function AdminDashboard() {
     createMemberMutation.mutate(data);
   };
 
+  const handleSignOut = () => {
+    // Admin logout logic here
+    window.location.href = '/admin/login';
+  };
+
   return (
     <MDBox sx={{ display: 'flex', minHeight: '100vh', backgroundColor: '#f8f9fa' }}>
-      <AdminSidebar user={user} />
+      <AdminSidebar user={user} onSignOut={handleSignOut} />
       
       {/* Main Content */}
       <MDBox
