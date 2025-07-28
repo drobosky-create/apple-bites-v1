@@ -366,10 +366,12 @@ export default function InteractiveValuationSlider() {
                     sx={{
                       cursor: 'pointer',
                       position: 'relative',
+                      overflow: 'visible',
                       background: isSelected ? gradeInfo.bg : '#FFFFFF',
                       border: isSelected ? `2px solid ${gradeInfo.border}` : '1px solid #E2E8F0',
                       transform: isSelected ? 'scale(1.05)' : 'scale(1)',
                       transition: 'all 0.2s ease',
+                      borderRadius: '12px',
                       '&:hover': {
                         transform: 'scale(1.05)',
                         boxShadow: '0 8px 25px rgba(0,0,0,0.15)'
@@ -415,28 +417,29 @@ export default function InteractiveValuationSlider() {
                       </Box>
                     )}
                     
-                    <CardContent sx={{ p: 3, textAlign: 'center', position: 'relative' }}>
-                      {/* Corner-Attached Grade Badge */}
-                      <Box sx={{ 
-                        position: 'absolute',
-                        top: -12,
-                        left: -12,
-                        width: 44,
-                        height: 44,
-                        backgroundColor: gradeInfo.primary,
-                        borderTopLeftRadius: '12px',
-                        borderBottomRightRadius: '12px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: 'white',
-                        boxShadow: '0 4px 10px rgba(0,0,0,0.1)',
-                        zIndex: 2
-                      }}>
-                        <Typography variant="h6" fontWeight="bold" sx={{ fontSize: '1rem' }}>
-                          {grade}
-                        </Typography>
-                      </Box>
+                    {/* Corner-Attached Grade Badge */}
+                    <Box sx={{ 
+                      position: 'absolute',
+                      top: -20,
+                      left: -20,
+                      width: 44,
+                      height: 44,
+                      backgroundColor: gradeInfo.primary,
+                      borderTopLeftRadius: '12px',
+                      borderBottomRightRadius: '12px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: 'white',
+                      boxShadow: '0 4px 10px rgba(0,0,0,0.1)',
+                      zIndex: 10
+                    }}>
+                      <Typography variant="h6" fontWeight="bold" sx={{ fontSize: '1rem' }}>
+                        {grade}
+                      </Typography>
+                    </Box>
+
+                    <CardContent sx={{ pt: 6, px: 3, pb: 3, textAlign: 'center' }}>
                       
                       {/* Content */}
                       <Box sx={{ mt: 2 }}>
