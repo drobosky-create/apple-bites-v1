@@ -3,7 +3,7 @@ import { Link, useLocation } from 'wouter';
 import { Grid, Box, Typography, Button, useTheme } from '@mui/material';
 import { Eye, EyeOff, Mail, User, Building, CheckCircle, X } from 'lucide-react';
 import MDInput from '@/components/MD/MDInput';
-import appleBitesLogo from '@assets/apple-bites-logo.png';
+const appleBitesLogo = '/assets/logos/apple-bites-meritage-logo.png';
 
 interface SignupFormData {
   firstName: string;
