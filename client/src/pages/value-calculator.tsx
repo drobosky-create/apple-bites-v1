@@ -249,12 +249,12 @@ export default function ValueCalculator() {
           <Link href="/assessment/free">
             <MDButton
               sx={{
-                background: 'linear-gradient(135deg, #00BFA6 0%, #5EEAD4 100%)',
-                color: 'white',
+                background: 'transparent',
+                border: '1px solid rgba(255, 255, 255, 0.3)',
+                color: '#dbdce1',
                 '&:hover': {
-                  background: 'linear-gradient(135deg, #00BFA6 0%, #5EEAD4 100%)',
-                  transform: 'translateY(-2px)',
-                  boxShadow: '0 8px 25px -8px rgba(0, 191, 166, 0.6)'
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  transform: 'translateY(-2px)'
                 },
                 transition: 'all 0.3s ease',
                 width: '100%',
