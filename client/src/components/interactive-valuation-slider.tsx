@@ -293,13 +293,13 @@ export default function InteractiveValuationSlider() {
             <Grid size={{ xs: 12, md: 7 }}>
               <Box
                 sx={{
-                  transform: 'scale(1.25)',
+                  transform: 'scale(1.35)',
                   transformOrigin: 'top left',
                   display: 'flex',
                   justifyContent: 'flex-start',
                   alignItems: 'flex-start',
                   height: '100%',
-                  ml: -4,
+                  ml: -2,
                   mt: -4
                 }}
               >
