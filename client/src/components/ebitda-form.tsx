@@ -145,7 +145,7 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
             <MDBox mb={4}>
               <Card
                 sx={{
-                  background: 'linear-gradient(135deg, #00BFA6 0%, #0A1F44 100%)',
+                  background: '#1B2C4F',
                   color: 'white',
                   borderRadius: 2,
                   p: 3
@@ -162,7 +162,7 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
                     <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)' }}>
                       Net Income:
                     </Typography>
-                    <Typography variant="body2" sx={{ color: 'white' }}>
+                    <Typography variant="body2" sx={{ color: '#F9FAFB' }}>
                       {formatCurrency(watchedValues.netIncome || 0)}
                     </Typography>
                   </MDBox>
@@ -171,7 +171,7 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
                     <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)' }}>
                       + Interest:
                     </Typography>
-                    <Typography variant="body2" sx={{ color: 'white' }}>
+                    <Typography variant="body2" sx={{ color: '#F9FAFB' }}>
                       {formatCurrency(watchedValues.interest || 0)}
                     </Typography>
                   </MDBox>
@@ -180,7 +180,7 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
                     <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)' }}>
                       + Taxes:
                     </Typography>
-                    <Typography variant="body2" sx={{ color: 'white' }}>
+                    <Typography variant="body2" sx={{ color: '#F9FAFB' }}>
                       {formatCurrency(watchedValues.taxes || 0)}
                     </Typography>
                   </MDBox>
@@ -189,7 +189,7 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
                     <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)' }}>
                       + Depreciation & Amortization:
                     </Typography>
-                    <Typography variant="body2" sx={{ color: 'white' }}>
+                    <Typography variant="body2" sx={{ color: '#F9FAFB' }}>
                       {formatCurrency(watchedValues.depreciation || 0)}
                     </Typography>
                   </MDBox>
@@ -201,7 +201,7 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
                     }}
                   >
                     <MDBox display="flex" justifyContent="space-between" alignItems="center">
-                      <MDTypography variant="h6" fontWeight="bold" sx={{ color: 'white' }}>
+                      <MDTypography variant="h6" fontWeight="bold" sx={{ color: '#F9FAFB' }}>
                         EBITDA:
                       </MDTypography>
                       <MDTypography variant="h6" fontWeight="bold" sx={{ color: '#5EEAD4' }}>
