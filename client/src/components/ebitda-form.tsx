@@ -44,18 +44,22 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
       <MDBox mb={4} display="flex" alignItems="center">
         <MDBox
           sx={{
-            backgroundColor: '#0A1F44',
-            borderRadius: '50%',
-            width: 64,
-            height: 64,
+            backgroundColor: '#1B2C4F', // or gradient if needed
+            borderRadius: '8px',
+            width: 56,
+            height: 56,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            mr: 3
+            mr: 2,
+            boxShadow: '0 2px 6px rgba(0, 0, 0, 0.12)', // optional
           }}
         >
-          <Calculator size={32} color="#00BFA6" />
+          <span className="material-icons-round" style={{ color: '#ffffff', fontSize: 28 }}>
+            attach_money
+          </span>
         </MDBox>
+
         <MDBox>
           <MDTypography variant="h4" fontWeight="bold" color="dark" mb={1}>
             Financial Information
