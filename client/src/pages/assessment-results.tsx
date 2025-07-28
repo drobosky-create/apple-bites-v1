@@ -2,21 +2,18 @@ import { useRoute, useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
 
-import { ArrowLeft, Home, FileText, TrendingUp, ExternalLink, LogOut, User } from "lucide-react";
+import { ArrowLeft, Home, FileText, TrendingUp, ExternalLink, LogOut, User, Plus, Crown, Clock, BarChart3 } from "lucide-react";
 import ValuationResults from "@/components/valuation-results";
 import type { ValuationAssessment } from "@shared/schema";
+import { Link } from "wouter";
+import MDBox from "@/components/MD/MDBox";
+import MDTypography from "@/components/MD/MDTypography";
+import MDButton from "@/components/MD/MDButton";
+import MDAvatar from "@/components/MD/MDAvatar";
 import {
   Box,
   Typography,
   Container,
-  Drawer,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Divider,
-  Chip,
   Button,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
@@ -215,15 +212,14 @@ export default function AssessmentResults() {
   );
 }
 
-// DashboardSidebar Component (copied from dashboard.tsx)
+// DashboardSidebar Component (matching dashboard.tsx exactly)
 function DashboardSidebar({ user }: { user: { name: string; email: string; tier: 'free' | 'growth' | 'capital'; firstName?: string; lastName?: string; } }) {
   // Apple Bites Brand Colors
   const colors = {
     primary: "#00BFA6",
     secondary: "#0A1F44", 
     accent: "#5EEAD4",
-    grayLight: "#F7FAFC",
-    gray: "#CBD5E1"
+    grayLight: "#F7FAFC"
   };
 
   const gradients = {
@@ -252,7 +248,7 @@ function DashboardSidebar({ user }: { user: { name: string; email: string; tier:
   };
 
   return (
-    <Box
+    <MDBox
       sx={{
         position: 'fixed',
         top: '24px',
@@ -268,143 +264,159 @@ function DashboardSidebar({ user }: { user: { name: string; email: string; tier:
         display: 'flex',
         flexDirection: 'column',
         zIndex: 1000,
-        overflow: 'hidden'
+        overflow: 'hidden' // Prevent internal scrolling
       }}
     >
       {/* User Info Section */}
-      <Box mb={4}>
-        <Box display="flex" alignItems="center" mb={2}>
-          <Box
+      <MDBox mb={4}>
+        <MDBox display="flex" alignItems="center" mb={2}>
+          <MDAvatar
             sx={{
-              width: 40,
-              height: 40,
-              borderRadius: '50%',  
-              background: 'linear-gradient(135deg, #00BFA6 0%, #5EEAD4 100%)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: 'white',
-              fontWeight: 'bold',
-              fontSize: '16px',
+              background: gradients.glow,
+              width: 48,
+              height: 48,
               mr: 2
             }}
           >
-            {user.firstName?.[0]}{user.lastName?.[0]}
-          </Box>
-          <Box>
-            <Typography variant="h6" sx={{ color: 'white', fontSize: '14px', fontWeight: 600 }}>
-              {user.firstName} {user.lastName}
-            </Typography>
-            <Typography variant="body2" sx={{ color: '#dbdce1', fontSize: '12px' }}>
+            <User size={24} color="white" />
+          </MDAvatar>
+          <MDBox>
+            <MDTypography variant="h6" fontWeight="medium" sx={{ color: 'white' }}>
+              {user.name}
+            </MDTypography>
+            <MDTypography variant="caption" sx={{ color: colors.accent }}>
               {user.email}
-            </Typography>
-          </Box>
-        </Box>
+            </MDTypography>
+          </MDBox>
+        </MDBox>
         
-        <Box
-          sx={{
-            background: getTierGradient(user.tier),
-            borderRadius: '20px',
-            px: 2,
-            py: 1,
-            display: 'inline-block'
-          }}
-        >
-          <Typography variant="caption" sx={{ color: 'white', fontWeight: 600, fontSize: '11px' }}>
-            {getTierLabel(user.tier).toUpperCase()} ASSESSMENT
-          </Typography>
-        </Box>
-      </Box>
+        <MDBox display="flex" alignItems="center">
+          <MDTypography variant="body2" mr={1} sx={{ color: 'white' }}>
+            Tier:
+          </MDTypography>
+          <MDBox
+            sx={{
+              background: getTierGradient(user.tier),
+              color: 'white',
+              px: 2,
+              py: 0.5,
+              borderRadius: 2,
+              fontSize: '0.75rem',
+              fontWeight: 600,
+              textTransform: 'uppercase',
+              letterSpacing: '0.5px'
+            }}
+          >
+            {getTierLabel(user.tier)}
+          </MDBox>
+        </MDBox>
+      </MDBox>
 
       {/* Navigation Buttons */}
-      <Box display="flex" flexDirection="column" gap={2} sx={{ p: 3, flex: 1 }}>
-        <Button
-          onClick={() => window.location.href = '/dashboard'}
-          sx={{
-            background: 'transparent',
-            border: '1px solid rgba(255, 255, 255, 0.3)',
-            color: '#dbdce1',
-            '&:hover': {
-              background: 'rgba(255, 255, 255, 0.1)',
-              transform: 'translateY(-2px)'
-            },
-            transition: 'all 0.3s ease',
-            width: '100%',
-            py: 1.5,
-            justifyContent: 'flex-start'
-          }}
-          startIcon={<Home size={18} />}
-        >
-          Dashboard
-        </Button>
+      <MDBox display="flex" flexDirection="column" gap={2}>
+        <Link href="/assessment/free">
+          <MDButton
+            sx={{
+              background: gradients.glow,
+              color: 'white',
+              '&:hover': {
+                background: gradients.light,
+                transform: 'translateY(-2px)',
+                boxShadow: `0 8px 25px -8px ${colors.primary}`
+              },
+              transition: 'all 0.3s ease',
+              width: '100%',
+              py: 1.5
+            }}
+            startIcon={<Plus size={18} />}
+          >
+            New Assessment
+          </MDButton>
+        </Link>
 
-        <Button
-          onClick={() => window.location.href = '/past-assessments'}
-          sx={{
-            background: 'transparent',
-            border: '1px solid rgba(255, 255, 255, 0.3)',
-            color: '#dbdce1',
-            '&:hover': {
-              background: 'rgba(255, 255, 255, 0.1)',
-              transform: 'translateY(-2px)'
-            },
-            transition: 'all 0.3s ease',
-            width: '100%',
-            py: 1.5,
-            justifyContent: 'flex-start'
-          }}
-          startIcon={<FileText size={18} />}
-        >
-          Past Assessments
-        </Button>
+        {user.tier === 'free' && (
+          <MDButton
+            sx={{
+              background: 'transparent',
+              border: `2px solid ${colors.accent}`,
+              color: colors.accent,
+              '&:hover': {
+                background: colors.accent,
+                color: colors.secondary,
+                transform: 'translateY(-2px)'
+              },
+              transition: 'all 0.3s ease',
+              width: '100%',
+              py: 1.5
+            }}
+            startIcon={<Crown size={18} />}
+            onClick={() => window.open('https://products.applebites.ai/', '_blank')}
+          >
+            Upgrade Plan
+          </MDButton>
+        )}
 
-        <Button
-          onClick={() => window.location.href = '/value-calculator'}
-          sx={{
-            background: 'transparent',
-            border: '1px solid rgba(255, 255, 255, 0.3)',
-            color: '#dbdce1',
-            '&:hover': {
-              background: 'rgba(255, 255, 255, 0.1)',
-              transform: 'translateY(-2px)'
-            },
-            transition: 'all 0.3s ease',
-            width: '100%',
-            py: 1.5,
-            justifyContent: 'flex-start'
-          }}
-          startIcon={<TrendingUp size={18} />}
-        >
-          Value Calculator
-        </Button>
+        <Link href="/profile">
+          <MDButton
+            className="text-[#dbdce1]"
+            sx={{
+              background: 'transparent',
+              border: `1px solid rgba(255, 255, 255, 0.3)`,
+              color: '#dbdce1',
+              '&:hover': {
+                background: 'rgba(255, 255, 255, 0.1)',
+                transform: 'translateY(-2px)'
+              },
+              transition: 'all 0.3s ease',
+              width: '100%',
+              py: 1.5
+            }}
+            startIcon={<User size={18} />}
+          >
+            My Profile
+          </MDButton>
+        </Link>
 
-        <Button
-          onClick={() => window.location.href = '/profile'}
-          sx={{
-            background: 'transparent',
-            border: '1px solid rgba(255, 255, 255, 0.3)',
-            color: '#dbdce1',
-            '&:hover': {
-              background: 'rgba(255, 255, 255, 0.1)',
-              transform: 'translateY(-2px)'
-            },
-            transition: 'all 0.3s ease',
-            width: '100%',
-            py: 1.5,
-            justifyContent: 'flex-start'
-          }}
-          startIcon={<User size={18} />}
-        >
-          Profile
-        </Button>
-      </Box>
+        <Link href="/past-assessments">
+          <MDButton
+            className="text-[#dbdce1]"
+            sx={{
+              background: 'transparent',
+              border: `1px solid rgba(255, 255, 255, 0.3)`,
+              color: '#dbdce1',
+              '&:hover': {
+                background: 'rgba(255, 255, 255, 0.1)',
+                transform: 'translateY(-2px)'
+              },
+              transition: 'all 0.3s ease',
+              width: '100%',
+              py: 1.5
+            }}
+            startIcon={<Clock size={18} />}
+          >
+            Past Assessments
+          </MDButton>
+        </Link>
+      </MDBox>
 
-      {/* Apple Bites Footer */}
-      <Box sx={{ mt: 'auto', p: 2, borderTop: '1px solid rgba(255,255,255,0.12)' }}>
-        <Typography variant="caption" color="rgba(255,255,255,0.6)" textAlign="center" display="block">
-          © 2025 Apple Bites
-        </Typography>
-      </Box>
-    </Box>
+      {/* Spacer */}
+      <MDBox flexGrow={1} />
+
+      {/* Footer */}
+      <MDBox mt={4} pt={2} borderTop={`1px solid rgba(255, 255, 255, 0.2)`}>
+        <MDBox display="flex" flexDirection="column" alignItems="center" gap={1}>
+          <img
+            src="/assets/logos/apple-bites-meritage-logo.png"
+            alt="Apple Bites by Meritage Partners"
+            width={250}
+            height={250}
+            style={{
+              objectFit: 'contain',
+              maxWidth: '100%'
+            }}
+          />
+        </MDBox>
+      </MDBox>
+    </MDBox>
   );
 }
