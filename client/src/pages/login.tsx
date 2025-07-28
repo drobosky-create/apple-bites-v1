@@ -90,12 +90,6 @@ export default function HybridLoginPage() {
         }}
       >
         <Box sx={{ textAlign: 'center', zIndex: 1, px: 4 }}>
-          <Typography variant="h3" sx={{ color: 'white', fontWeight: 'bold', mb: 2 }}>
-            Welcome Back
-          </Typography>
-          <Typography variant="h6" sx={{ color: '#B0BEC5', mb: 4 }}>
-            Continue your business valuation journey
-          </Typography>
           <Box
             component="img"
             src={appleBitesLogo}
