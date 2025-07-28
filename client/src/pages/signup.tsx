@@ -263,7 +263,7 @@ export default function HybridSignupPage() {
             )}
 
             {/* Form Fields */}
-            <Grid container spacing={2}>
+            <Grid container spacing={3} sx={{ width: '100%' }}>
               <Grid item xs={6}>
                 <Typography variant="body2" fontWeight="medium" sx={{ color: '#374151', mb: 1 }}>
                   First Name
