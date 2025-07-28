@@ -1,4 +1,5 @@
 import { useValuationForm } from "@/hooks/use-valuation-form";
+import { useEffect } from "react";
 import ProgressIndicator from "@/components/progress-indicator";
 import ContactForm from "@/components/contact-form";
 import EbitdaForm from "@/components/ebitda-form";
@@ -35,6 +36,7 @@ const appleBitesLogo = '/assets/logos/apple-bites-logo-variant-4.png';
 import { useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import type { ValuationAssessment } from "@shared/schema";
+import { useAuth } from "@/hooks/useAuth";
 
 // Material Dashboard Styled Components
 const AssessmentBackground = styled(Box)(({ theme }) => ({
@@ -90,6 +92,33 @@ export default function FreeAssessment() {
     isSubmitting,
     forms,
   } = useValuationForm();
+  
+  const { user, isAuthenticated } = useAuth();
+
+  // Check if authenticated user has complete profile information
+  const hasCompleteProfile = isAuthenticated && user && 
+    (user as any).firstName && 
+    (user as any).lastName && 
+    (user as any).email;
+
+  // Auto-populate contact form and skip to EBITDA if user has complete profile
+  useEffect(() => {
+    if (hasCompleteProfile && currentStep === 'contact') {
+      // Auto-populate contact form with user data
+      const contactData = {
+        firstName: (user as any).firstName,
+        lastName: (user as any).lastName,
+        email: (user as any).email,
+        phone: (user as any).phone || '',
+        company: (user as any).company || '',
+        jobTitle: (user as any).jobTitle || ''
+      };
+      
+      // Update form data and skip to next step
+      updateFormData('contact', contactData);
+      setTimeout(() => nextStep(), 100); // Small delay to ensure form data is set
+    }
+  }, [hasCompleteProfile, currentStep, user, updateFormData, nextStep]);
 
   // If we're on /results route, show loading or latest assessment
   if (location === '/results') {
@@ -143,12 +172,53 @@ export default function FreeAssessment() {
           <CardContent sx={{ p: 4, minHeight: '600px' }}>
             {/* Form Content */}
             <Box>
-              {currentStep === "contact" && (
+              {currentStep === "contact" && !hasCompleteProfile && (
                 <ContactForm
                   form={forms.contact}
                   onNext={nextStep}
                   onDataChange={(data) => updateFormData("contact", data)}
                 />
+              )}
+
+              {currentStep === "contact" && hasCompleteProfile && (
+                <Box 
+                  display="flex" 
+                  flexDirection="column" 
+                  alignItems="center" 
+                  justifyContent="center" 
+                  minHeight="400px"
+                  textAlign="center"
+                >
+                  <Box mb={3}>
+                    <CheckCircle size={64} color="#00BFA6" />
+                  </Box>
+                  <Typography variant="h5" fontWeight="bold" color="#0A1F44" mb={2}>
+                    Welcome back, {(user as any)?.firstName}!
+                  </Typography>
+                  <Typography variant="body1" color="text.secondary" mb={3}>
+                    Using your existing profile information. Proceeding to financial assessment...
+                  </Typography>
+                  <Box 
+                    width="200px" 
+                    height="4px" 
+                    bgcolor="#E3E6EA" 
+                    borderRadius="4px" 
+                    overflow="hidden"
+                  >
+                    <Box 
+                      width="100%" 
+                      height="100%" 
+                      bgcolor="#00BFA6"
+                      sx={{
+                        animation: 'progress 2s ease-in-out infinite',
+                        '@keyframes progress': {
+                          '0%': { transform: 'translateX(-100%)' },
+                          '100%': { transform: 'translateX(100%)' }
+                        }
+                      }}
+                    />
+                  </Box>
+                </Box>
               )}
 
               {currentStep === "ebitda" && (
