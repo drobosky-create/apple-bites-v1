@@ -262,10 +262,10 @@ export default function HybridSignupPage() {
               </Box>
             )}
 
-            {/* Form Fields */}
-            <Grid container spacing={4} sx={{ width: '100%' }}>
-              <Grid item xs={12}>
-                <Typography variant="body2" fontWeight="medium" sx={{ color: '#374151', mb: 1 }}>
+            {/* Form Fields - Single Column */}
+            <Box sx={{ width: '100%' }}>
+              <Box mb={2}>
+                <Typography variant="body2" fontWeight="medium" sx={{ color: '#374151', mb: 0.5 }}>
                   First Name
                 </Typography>
                 <MDInput
@@ -283,9 +283,10 @@ export default function HybridSignupPage() {
                     }
                   }}
                 />
-              </Grid>
-              <Grid item xs={12}>
-                <Typography variant="body2" fontWeight="medium" sx={{ color: '#374151', mb: 1 }}>
+              </Box>
+              
+              <Box mb={2}>
+                <Typography variant="body2" fontWeight="medium" sx={{ color: '#374151', mb: 0.5 }}>
                   Last Name
                 </Typography>
                 <MDInput
@@ -303,9 +304,10 @@ export default function HybridSignupPage() {
                     }
                   }}
                 />
-              </Grid>
-              <Grid item xs={6}>
-                <Typography variant="body2" fontWeight="medium" sx={{ color: '#374151', mb: 1 }}>
+              </Box>
+              
+              <Box mb={2}>
+                <Typography variant="body2" fontWeight="medium" sx={{ color: '#374151', mb: 0.5 }}>
                   Email Address
                 </Typography>
                 <MDInput
@@ -324,9 +326,10 @@ export default function HybridSignupPage() {
                     }
                   }}
                 />
-              </Grid>
-              <Grid item xs={6}>
-                <Typography variant="body2" fontWeight="medium" sx={{ color: '#374151', mb: 1 }}>
+              </Box>
+              
+              <Box mb={2}>
+                <Typography variant="body2" fontWeight="medium" sx={{ color: '#374151', mb: 0.5 }}>
                   Phone Number
                 </Typography>
                 <MDInput
@@ -344,9 +347,10 @@ export default function HybridSignupPage() {
                     }
                   }}
                 />
-              </Grid>
-              <Grid item xs={6}>
-                <Typography variant="body2" fontWeight="medium" sx={{ color: '#374151', mb: 1 }}>
+              </Box>
+              
+              <Box mb={2}>
+                <Typography variant="body2" fontWeight="medium" sx={{ color: '#374151', mb: 0.5 }}>
                   Company
                 </Typography>
                 <MDInput
@@ -363,9 +367,10 @@ export default function HybridSignupPage() {
                     }
                   }}
                 />
-              </Grid>
-              <Grid item xs={6}>
-                <Typography variant="body2" fontWeight="medium" sx={{ color: '#374151', mb: 1 }}>
+              </Box>
+              
+              <Box mb={2}>
+                <Typography variant="body2" fontWeight="medium" sx={{ color: '#374151', mb: 0.5 }}>
                   Job Title
                 </Typography>
                 <MDInput
@@ -382,9 +387,10 @@ export default function HybridSignupPage() {
                     }
                   }}
                 />
-              </Grid>
-              <Grid item xs={6}>
-                <Typography variant="body2" fontWeight="medium" sx={{ color: '#374151', mb: 1 }}>
+              </Box>
+              
+              <Box mb={2}>
+                <Typography variant="body2" fontWeight="medium" sx={{ color: '#374151', mb: 0.5 }}>
                   Password
                 </Typography>
                 <MDInput
@@ -418,9 +424,10 @@ export default function HybridSignupPage() {
                     }
                   }}
                 />
-              </Grid>
-              <Grid item xs={6}>
-                <Typography variant="body2" fontWeight="medium" sx={{ color: '#374151', mb: 1 }}>
+              </Box>
+              
+              <Box mb={2}>
+                <Typography variant="body2" fontWeight="medium" sx={{ color: '#374151', mb: 0.5 }}>
                   Confirm Password
                 </Typography>
                 <MDInput
@@ -457,12 +464,13 @@ export default function HybridSignupPage() {
                   }}
                 />
                 {formData.confirmPassword && !passwordsMatch && (
-                  <Typography variant="caption" sx={{ color: '#EF4444', mt: 1, display: 'block' }}>
+                  <Typography variant="caption" sx={{ color: '#EF4444', mt: 0.5, display: 'block' }}>
                     Passwords do not match
                   </Typography>
                 )}
-              </Grid>
-              <Grid item xs={12}>
+              </Box>
+              
+              <Box>
                 {/* Password Requirements */}
                 {formData.password && (
                   <Box mt={1} p={2} sx={{ backgroundColor: '#F9FAFB', borderRadius: 2 }}>
@@ -478,8 +486,8 @@ export default function HybridSignupPage() {
                     ))}
                   </Box>
                 )}
-              </Grid>
-            </Grid>
+              </Box>
+            </Box>
 
             {/* Submit Button */}
             <Button
