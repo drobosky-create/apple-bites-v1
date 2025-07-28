@@ -119,6 +119,7 @@ export default function ProfilePage() {
           <MDButton
             onClick={handleSave}
             disabled={updateProfileMutation.isPending}
+            className="text-[#ffffff]"
             sx={{
               px: 2,
               py: 1,
