@@ -293,14 +293,14 @@ export default function InteractiveValuationSlider() {
             <Grid size={{ xs: 12, md: 7 }}>
               <Box
                 sx={{
-                  transform: 'scale(1.5)',
+                  transform: { xs: 'scale(1.0)', sm: 'scale(1.2)', md: 'scale(1.5)' },
                   transformOrigin: 'top left',
                   display: 'flex',
-                  justifyContent: 'flex-start',
+                  justifyContent: { xs: 'center', md: 'flex-start' },
                   alignItems: 'flex-start',
                   height: '100%',
-                  ml: -2,
-                  mt: -4
+                  ml: { xs: 0, md: -2 },
+                  mt: { xs: 0, md: -4 }
                 }}
               >
                 <OperationalGradeGauge 
@@ -367,7 +367,11 @@ export default function InteractiveValuationSlider() {
             Click any grade to see how operational improvements impact your business value
           </Typography>
           
-          <Grid container spacing={2} justifyContent="center">
+          <Grid container spacing={2} justifyContent="center" sx={{
+            '& > *': {
+              minWidth: { xs: '100%', sm: 'auto' }
+            }
+          }}>
             {(['F', 'D', 'C', 'B', 'A'] as const).map((grade) => {
               const gradeInfo = getGradeInfo(grade);
               const isSelected = grade === sliderGrade;

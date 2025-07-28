@@ -151,7 +151,16 @@ export default function ProfilePage() {
     <MDBox sx={{ backgroundColor: '#F7FAFC', minHeight: '100vh', py: 4 }}>
       <MDBox sx={{ maxWidth: '1024px', mx: 'auto', px: 3 }}>
         {/* Header */}
-        <MDBox display="flex" justifyContent="space-between" alignItems="center" mb={3}>
+        <MDBox 
+          display="flex" 
+          justifyContent="space-between" 
+          alignItems="center" 
+          mb={3}
+          sx={{
+            flexDirection: { xs: 'column', sm: 'row' },
+            gap: { xs: 2, sm: 0 }
+          }}
+        >
           <MDBox display="flex" alignItems="center">
             <Link href="/dashboard">
               <MDButton
@@ -196,7 +205,15 @@ export default function ProfilePage() {
         </MDBox>
 
         {/* Avatar Section */}
-        <MDBox display="flex" alignItems="center" mb={3}>
+        <MDBox 
+          display="flex" 
+          alignItems="center" 
+          mb={3}
+          sx={{
+            flexDirection: { xs: 'column', sm: 'row' },
+            textAlign: { xs: 'center', sm: 'left' }
+          }}
+        >
           <MDBox
             sx={{
               width: 80,
@@ -213,8 +230,8 @@ export default function ProfilePage() {
           >
             <User size={40} color="white" />
           </MDBox>
-          <MDBox ml={2}>
-            <MDTypography variant="h5" fontWeight="600" sx={{ color: '#1F2937' }}>
+          <MDBox sx={{ ml: { xs: 0, sm: 2 }, mt: { xs: 2, sm: 0 } }}>
+            <MDTypography variant="h5" fontWeight="bold" sx={{ color: '#1F2937' }}>
               {profile.name}
             </MDTypography>
             <MDTypography variant="body1" sx={{ color: '#6B7280' }}>
@@ -232,7 +249,7 @@ export default function ProfilePage() {
           <MDBox mb={6}>
             <MDTypography 
               variant="h6" 
-              fontWeight="600" 
+              fontWeight="bold" 
               sx={{ color: '#111827', mb: 3 }}
             >
               Profile Information
@@ -243,7 +260,7 @@ export default function ProfilePage() {
                 <MDBox key={field} mb={2}>
                   <MDTypography 
                     variant="body2" 
-                    fontWeight="500" 
+                    fontWeight="medium" 
                     sx={{ color: '#374151', textTransform: 'capitalize', mb: 0.5 }}
                   >
                     {field}
@@ -312,7 +329,7 @@ export default function ProfilePage() {
               <MDBox mt={3}>
                 <MDTypography 
                   variant="h6" 
-                  fontWeight="600" 
+                  fontWeight="bold" 
                   sx={{ color: '#111827', mb: 2 }}
                 >
                   Social Links
@@ -331,7 +348,7 @@ export default function ProfilePage() {
                     <MDBox key={social.key}>
                       <MDTypography 
                         variant="body2" 
-                        fontWeight="500" 
+                        fontWeight="medium" 
                         sx={{ 
                           color: '#374151', 
                           mb: 0.5,
@@ -383,7 +400,7 @@ export default function ProfilePage() {
           <MDBox>
             <MDTypography 
               variant="h6" 
-              fontWeight="600" 
+              fontWeight="bold" 
               sx={{ color: '#111827', mb: 3 }}
             >
               Notification Preferences
@@ -433,7 +450,7 @@ export default function ProfilePage() {
                   <MDBox flex={1}>
                     <MDTypography 
                       variant="body1" 
-                      fontWeight="500"
+                      fontWeight="medium"
                       sx={{ color: '#111827', mb: 0.5 }}
                     >
                       {setting.label}
