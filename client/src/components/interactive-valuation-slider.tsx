@@ -331,10 +331,10 @@ export default function InteractiveValuationSlider() {
                   textAlign: 'center'
                 }}>
                   <CardContent sx={{ p: 3 }}>
-                    <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 2 }}>
+                    <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 2, color: 'white' }}>
                       Select a different grade to see potential impact
                     </Typography>
-                    <Typography variant="body1">
+                    <Typography variant="body1" sx={{ color: 'white' }}>
                       Use the grade buttons below to explore value changes
                     </Typography>
                   </CardContent>
