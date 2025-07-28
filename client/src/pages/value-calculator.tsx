@@ -20,6 +20,8 @@ import {
   Chip,
   Button,
 } from '@mui/material';
+import MDBox from "@/components/MD/MDBox";
+import MDTypography from "@/components/MD/MDTypography";
 import { styled } from '@mui/material/styles';
 
 // Material Dashboard Styled Components (matching dashboard.tsx exactly)
@@ -34,7 +36,7 @@ const drawerWidth = 280;
 
 const MainContent = styled(Box)(({ theme }) => ({
   flexGrow: 1,
-  padding: '8px 16px 16px 8px',
+  padding: '16px',
   marginLeft: 0,
   minHeight: '100vh',
   width: `calc(100vw - ${drawerWidth}px)`,
@@ -205,7 +207,7 @@ export default function ValueCalculator() {
           },
         }}
       >
-        <Box sx={{ p: 2, textAlign: 'center' }}>
+        <MDBox sx={{ p: 2, textAlign: 'center' }}>
           <Box component="img"
             src="/assets/logos/apple-bites-logo-variant-3.png"
             alt="Apple Bites Business Assessment"
@@ -218,12 +220,12 @@ export default function ValueCalculator() {
               display: 'block',
             }}
           />
-          <Typography variant="h6" fontWeight="bold" color="white" gutterBottom>
+          <MDTypography variant="h6" fontWeight="bold" color="white" gutterBottom>
             {displayUser.firstName} {displayUser.lastName}
-          </Typography>
-          <Typography variant="body2" color="rgba(255,255,255,0.7)" gutterBottom>
+          </MDTypography>
+          <MDTypography variant="body2" color="white" sx={{ opacity: 0.7 }} gutterBottom>
             {displayUser.email}
-          </Typography>
+          </MDTypography>
           <Chip 
             label={tierInfo.name}
             size="small"
@@ -233,14 +235,14 @@ export default function ValueCalculator() {
               border: '1px solid rgba(255,255,255,0.3)'
             }}
           />
-        </Box>
+        </MDBox>
 
         <Divider sx={{ borderColor: 'rgba(255,255,255,0.12)' }} />
 
         <List sx={{ px: 2, py: 2 }}>
           <ListItem disablePadding>
             <ListItemButton 
-              onClick={() => setLocation('/')}
+              onClick={() => setLocation('/dashboard')}
               sx={{ 
                 borderRadius: '12px',
                 mb: 1,
@@ -324,7 +326,7 @@ export default function ValueCalculator() {
 
       {/* Main Content */}
       <MainContent>
-        <Container maxWidth="xl" sx={{ py: 0 }}>
+        <Container maxWidth="xl" sx={{ py: 2 }}>
           {/* Page Header */}
           <Box sx={{ 
             mb: 4, 
@@ -379,7 +381,8 @@ export default function ValueCalculator() {
             backgroundColor: 'white',
             borderRadius: '16px',
             boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-            overflow: 'hidden'
+            overflow: 'hidden',
+            p: 3
           }}>
             <InteractiveValuationSlider />
           </Box>
