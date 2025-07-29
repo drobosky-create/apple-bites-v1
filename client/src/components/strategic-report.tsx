@@ -33,52 +33,99 @@ export default function StrategicReport({ results }: StrategicReportProps) {
         <CardContent sx={{ p: 5 }}>
           <MDBox display="flex" alignItems="center" justifyContent="space-between" mb={4}>
             <MDBox>
-              <MDTypography variant="h4" fontWeight="bold" sx={{ color: 'white', mb: 2 }}>
+              <MDTypography variant="h4" fontWeight="300" sx={{ color: 'rgba(255,255,255,0.9)', mb: 2, letterSpacing: '0.5px' }}>
                 Strategic Business Valuation
               </MDTypography>
-              <MDTypography variant="body1" sx={{ color: 'rgba(255,255,255,.8)', fontWeight: 'medium' }}>
+              <MDTypography variant="body1" sx={{ color: 'rgba(255,255,255,0.6)', fontWeight: '300' }}>
                 Comprehensive industry-specific analysis for {results.company}
               </MDTypography>
             </MDBox>
             <Chip 
               label="STRATEGIC ANALYSIS" 
               sx={{ 
-                background: 'rgba(255,255,255,0.15)', 
-                color: '#cbd5e1', 
-                fontWeight: '600',
-                fontSize: '0.8rem',
-                border: '1px solid rgba(255,255,255,0.2)'
+                background: 'rgba(255,255,255,0.12)', 
+                color: 'rgba(255,255,255,0.8)', 
+                fontWeight: '400',
+                fontSize: '0.75rem',
+                border: '1px solid rgba(255,255,255,0.15)',
+                backdropFilter: 'blur(10px)',
+                letterSpacing: '0.5px'
               }} 
             />
           </MDBox>
 
           <Grid container spacing={4}>
             <Grid item xs={12} md={4}>
-              <MDBox textAlign="center" p={3} sx={{ backgroundColor: 'rgba(255,255,255,0.08)', borderRadius: 2, border: '1px solid rgba(255,255,255,0.12)' }}>
-                <MDTypography variant="h3" fontWeight="bold" sx={{ color: 'white', mb: 1 }}>
+              <MDBox 
+                textAlign="center" 
+                p={4} 
+                sx={{ 
+                  background: 'rgba(255,255,255,0.08)', 
+                  borderRadius: 3, 
+                  border: '1px solid rgba(255,255,255,0.15)',
+                  backdropFilter: 'blur(20px)',
+                  boxShadow: '0 8px 32px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.05) inset',
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    transform: 'translateY(-2px)',
+                    boxShadow: '0 12px 40px rgba(0,0,0,0.15), 0 0 0 1px rgba(255,255,255,0.1) inset'
+                  }
+                }}
+              >
+                <MDTypography variant="h3" fontWeight="200" sx={{ color: 'rgba(255,255,255,0.95)', mb: 1, letterSpacing: '1px' }}>
                   {formatCurrency(results.midEstimate)}
                 </MDTypography>
-                <MDTypography variant="body2" sx={{ color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase', letterSpacing: '0.5px', fontSize: '0.8rem' }}>
+                <MDTypography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '1px', fontSize: '0.75rem', fontWeight: '300' }}>
                   Business Valuation
                 </MDTypography>
               </MDBox>
             </Grid>
             <Grid item xs={12} md={4}>
-              <MDBox textAlign="center" p={3} sx={{ backgroundColor: 'rgba(255,255,255,0.08)', borderRadius: 2, border: '1px solid rgba(255,255,255,0.1)' }}>
-                <MDTypography variant="h3" fontWeight="bold" sx={{ color: 'white', mb: 1 }}>
+              <MDBox 
+                textAlign="center" 
+                p={4} 
+                sx={{ 
+                  background: 'rgba(255,255,255,0.08)', 
+                  borderRadius: 3, 
+                  border: '1px solid rgba(255,255,255,0.15)',
+                  backdropFilter: 'blur(20px)',
+                  boxShadow: '0 8px 32px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.05) inset',
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    transform: 'translateY(-2px)',
+                    boxShadow: '0 12px 40px rgba(0,0,0,0.15), 0 0 0 1px rgba(255,255,255,0.1) inset'
+                  }
+                }}
+              >
+                <MDTypography variant="h3" fontWeight="200" sx={{ color: 'rgba(255,255,255,0.95)', mb: 1, letterSpacing: '1px' }}>
                   {formatCurrency(results.adjustedEbitda)}
                 </MDTypography>
-                <MDTypography variant="body2" sx={{ color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase', letterSpacing: '0.5px', fontSize: '0.8rem' }}>
+                <MDTypography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '1px', fontSize: '0.75rem', fontWeight: '300' }}>
                   Adjusted EBITDA
                 </MDTypography>
               </MDBox>
             </Grid>
             <Grid item xs={12} md={4}>
-              <MDBox textAlign="center" p={3} sx={{ backgroundColor: 'rgba(255,255,255,0.08)', borderRadius: 2, border: '1px solid rgba(255,255,255,0.1)' }}>
-                <MDTypography variant="h3" fontWeight="bold" sx={{ color: 'white', mb: 1 }}>
+              <MDBox 
+                textAlign="center" 
+                p={4} 
+                sx={{ 
+                  background: 'rgba(255,255,255,0.08)', 
+                  borderRadius: 3, 
+                  border: '1px solid rgba(255,255,255,0.15)',
+                  backdropFilter: 'blur(20px)',
+                  boxShadow: '0 8px 32px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.05) inset',
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    transform: 'translateY(-2px)',
+                    boxShadow: '0 12px 40px rgba(0,0,0,0.15), 0 0 0 1px rgba(255,255,255,0.1) inset'
+                  }
+                }}
+              >
+                <MDTypography variant="h3" fontWeight="200" sx={{ color: 'rgba(255,255,255,0.95)', mb: 1, letterSpacing: '1px' }}>
                   {results.overallScore || 'B+'}
                 </MDTypography>
-                <MDTypography variant="body2" sx={{ color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase', letterSpacing: '0.5px', fontSize: '0.8rem' }}>
+                <MDTypography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '1px', fontSize: '0.75rem', fontWeight: '300' }}>
                   Overall Grade
                 </MDTypography>
               </MDBox>
