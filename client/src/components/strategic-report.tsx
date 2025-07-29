@@ -54,83 +54,80 @@ export default function StrategicReport({ results }: StrategicReportProps) {
             />
           </MDBox>
 
-          <Grid container spacing={4}>
-            <Grid item xs={12} md={4}>
-              <MDBox 
-                textAlign="center" 
-                p={4} 
-                sx={{ 
-                  background: 'rgba(255,255,255,0.08)', 
-                  borderRadius: 3, 
-                  border: '1px solid rgba(255,255,255,0.15)',
-                  backdropFilter: 'blur(20px)',
-                  boxShadow: '0 8px 32px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.05) inset',
-                  transition: 'all 0.3s ease',
-                  '&:hover': {
-                    transform: 'translateY(-2px)',
-                    boxShadow: '0 12px 40px rgba(0,0,0,0.15), 0 0 0 1px rgba(255,255,255,0.1) inset'
-                  }
-                }}
-              >
-                <MDTypography variant="h3" fontWeight="200" sx={{ color: 'rgba(255,255,255,0.95)', mb: 1, letterSpacing: '1px' }}>
-                  {formatCurrency(results.midEstimate)}
-                </MDTypography>
-                <MDTypography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '1px', fontSize: '0.75rem', fontWeight: '300' }}>
-                  Business Valuation
-                </MDTypography>
-              </MDBox>
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <MDBox 
-                textAlign="center" 
-                p={4} 
-                sx={{ 
-                  background: 'rgba(255,255,255,0.08)', 
-                  borderRadius: 3, 
-                  border: '1px solid rgba(255,255,255,0.15)',
-                  backdropFilter: 'blur(20px)',
-                  boxShadow: '0 8px 32px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.05) inset',
-                  transition: 'all 0.3s ease',
-                  '&:hover': {
-                    transform: 'translateY(-2px)',
-                    boxShadow: '0 12px 40px rgba(0,0,0,0.15), 0 0 0 1px rgba(255,255,255,0.1) inset'
-                  }
-                }}
-              >
-                <MDTypography variant="h3" fontWeight="200" sx={{ color: 'rgba(255,255,255,0.95)', mb: 1, letterSpacing: '1px' }}>
-                  {formatCurrency(results.adjustedEbitda)}
-                </MDTypography>
-                <MDTypography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '1px', fontSize: '0.75rem', fontWeight: '300' }}>
-                  Adjusted EBITDA
-                </MDTypography>
-              </MDBox>
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <MDBox 
-                textAlign="center" 
-                p={4} 
-                sx={{ 
-                  background: 'rgba(255,255,255,0.08)', 
-                  borderRadius: 3, 
-                  border: '1px solid rgba(255,255,255,0.15)',
-                  backdropFilter: 'blur(20px)',
-                  boxShadow: '0 8px 32px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.05) inset',
-                  transition: 'all 0.3s ease',
-                  '&:hover': {
-                    transform: 'translateY(-2px)',
-                    boxShadow: '0 12px 40px rgba(0,0,0,0.15), 0 0 0 1px rgba(255,255,255,0.1) inset'
-                  }
-                }}
-              >
-                <MDTypography variant="h3" fontWeight="200" sx={{ color: 'rgba(255,255,255,0.95)', mb: 1, letterSpacing: '1px' }}>
-                  {results.overallScore || 'B+'}
-                </MDTypography>
-                <MDTypography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '1px', fontSize: '0.75rem', fontWeight: '300' }}>
-                  Overall Grade
-                </MDTypography>
-              </MDBox>
-            </Grid>
-          </Grid>
+          <MDBox display="flex" gap={3}>
+            <MDBox 
+              flex={1}
+              textAlign="center" 
+              p={4} 
+              sx={{ 
+                background: 'rgba(255,255,255,0.08)', 
+                borderRadius: 3, 
+                border: '1px solid rgba(255,255,255,0.15)',
+                backdropFilter: 'blur(20px)',
+                boxShadow: '0 8px 32px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.05) inset',
+                transition: 'all 0.3s ease',
+                '&:hover': {
+                  transform: 'translateY(-2px)',
+                  boxShadow: '0 12px 40px rgba(0,0,0,0.15), 0 0 0 1px rgba(255,255,255,0.1) inset'
+                }
+              }}
+            >
+              <MDTypography variant="h3" fontWeight="200" sx={{ color: 'rgba(255,255,255,0.95)', mb: 1, letterSpacing: '1px' }}>
+                {formatCurrency(results.midEstimate)}
+              </MDTypography>
+              <MDTypography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '1px', fontSize: '0.75rem', fontWeight: '300' }}>
+                Business Valuation
+              </MDTypography>
+            </MDBox>
+            <MDBox 
+              flex={1}
+              textAlign="center" 
+              p={4} 
+              sx={{ 
+                background: 'rgba(255,255,255,0.08)', 
+                borderRadius: 3, 
+                border: '1px solid rgba(255,255,255,0.15)',
+                backdropFilter: 'blur(20px)',
+                boxShadow: '0 8px 32px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.05) inset',
+                transition: 'all 0.3s ease',
+                '&:hover': {
+                  transform: 'translateY(-2px)',
+                  boxShadow: '0 12px 40px rgba(0,0,0,0.15), 0 0 0 1px rgba(255,255,255,0.1) inset'
+                }
+              }}
+            >
+              <MDTypography variant="h3" fontWeight="200" sx={{ color: 'rgba(255,255,255,0.95)', mb: 1, letterSpacing: '1px' }}>
+                {formatCurrency(results.adjustedEbitda)}
+              </MDTypography>
+              <MDTypography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '1px', fontSize: '0.75rem', fontWeight: '300' }}>
+                Adjusted EBITDA
+              </MDTypography>
+            </MDBox>
+            <MDBox 
+              flex={1}
+              textAlign="center" 
+              p={4} 
+              sx={{ 
+                background: 'rgba(255,255,255,0.08)', 
+                borderRadius: 3, 
+                border: '1px solid rgba(255,255,255,0.15)',
+                backdropFilter: 'blur(20px)',
+                boxShadow: '0 8px 32px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.05) inset',
+                transition: 'all 0.3s ease',
+                '&:hover': {
+                  transform: 'translateY(-2px)',
+                  boxShadow: '0 12px 40px rgba(0,0,0,0.15), 0 0 0 1px rgba(255,255,255,0.1) inset'
+                }
+              }}
+            >
+              <MDTypography variant="h3" fontWeight="200" sx={{ color: 'rgba(255,255,255,0.95)', mb: 1, letterSpacing: '1px' }}>
+                {results.overallScore || 'B+'}
+              </MDTypography>
+              <MDTypography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '1px', fontSize: '0.75rem', fontWeight: '300' }}>
+                Overall Grade
+              </MDTypography>
+            </MDBox>
+          </MDBox>
         </CardContent>
       </Card>
 
