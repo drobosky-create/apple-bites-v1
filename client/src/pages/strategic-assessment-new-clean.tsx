@@ -8,6 +8,7 @@ import EbitdaForm from "@/components/ebitda-form";
 import AdjustmentsForm from "@/components/adjustments-form";
 import FollowUpForm from "@/components/followup-form";
 import ValuationResults from "@/components/valuation-results";
+import TierSelection from "@/components/tier-selection";
 import LoadingPopup from "@/components/LoadingPopup";
 import AssessmentStepper from "@/components/AssessmentStepper";
 import AssessmentHeader, { PREMIUM_FEATURES } from "@/components/AssessmentHeader";
