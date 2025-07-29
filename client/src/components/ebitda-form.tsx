@@ -75,7 +75,7 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
         {/* Update/Lock Button */}
         <MDButton
           variant={isLocked ? "gradient" : "outlined"}
-          color={isLocked ? "info" : "secondary"}
+          color={isLocked ? "success" : "secondary"}
           size="small"
           onClick={() => setIsLocked(!isLocked)}
           sx={{
