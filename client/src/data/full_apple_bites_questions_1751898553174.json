@@ -482,6 +482,126 @@
           0,
           5
         ]
+      },
+      {
+        "id": "bonus-financial-performance-3",
+        "question": "How audit-ready are your financial statements?",
+        "type": "single-choice",
+        "options": [
+          "Not tracked",
+          "Basic bookkeeping",
+          "Monthly close process",
+          "CPA-reviewed",
+          "Audit-ready"
+        ],
+        "weights": [
+          0,
+          1,
+          2,
+          3,
+          5
+        ],
+        "valueDriver": "Financial Performance",
+        "scoreRange": [
+          0,
+          5
+        ]
+      },
+      {
+        "id": "bonus-recurring-revenue-3",
+        "question": "What portion of recurring revenue is secured by contracts?",
+        "type": "single-choice",
+        "options": [
+          "None",
+          "Less than 25%",
+          "25–50%",
+          "51–75%",
+          "More than 75%"
+        ],
+        "weights": [
+          0,
+          1,
+          2,
+          3,
+          5
+        ],
+        "valueDriver": "Recurring Revenue",
+        "scoreRange": [
+          0,
+          5
+        ]
+      },
+      {
+        "id": "bonus-scalability-3",
+        "question": "Which systems are in place to scale your operations?",
+        "type": "single-choice",
+        "options": [
+          "None",
+          "CRM or Scheduling",
+          "CRM and Project Mgmt",
+          "CRM, Scheduling, and Billing",
+          "Fully integrated stack"
+        ],
+        "weights": [
+          0,
+          1,
+          2,
+          3,
+          5
+        ],
+        "valueDriver": "Scalability",
+        "scoreRange": [
+          0,
+          5
+        ]
+      },
+      {
+        "id": "bonus-differentiation-3",
+        "question": "How sensitive are your customers to price changes?",
+        "type": "single-choice",
+        "options": [
+          "Extremely sensitive",
+          "Very sensitive",
+          "Somewhat sensitive",
+          "Minimally sensitive",
+          "Not price sensitive"
+        ],
+        "weights": [
+          0,
+          1,
+          2,
+          3,
+          5
+        ],
+        "valueDriver": "Differentiation & Brand Strength",
+        "scoreRange": [
+          0,
+          5
+        ]
+      },
+      {
+        "id": "bonus-industry-tailwinds-1",
+        "question": "How favorable are growth trends in your industry?",
+        "type": "single-choice",
+        "options": [
+          "Declining",
+          "Flat",
+          "Moderate growth",
+          "Strong growth",
+          "Explosive growth"
+        ],
+        "weights": [
+          0,
+          1,
+          2,
+          3,
+          5
+        ],
+        "valueDriver": "Industry Outlook",
+        "scoreRange": [
+          0,
+          5
+        ]
       }
     ]
   }
