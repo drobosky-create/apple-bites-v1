@@ -184,17 +184,18 @@ function PastAssessmentsSection() {
                     <Typography variant="body2" color="textSecondary" fontSize="11px">Grade</Typography>
                     <MDBox
                       sx={{
-                        width: 24,
-                        height: 24,
+                        width: 48,
+                        height: 48,
                         borderRadius: '50%',
-                        backgroundColor: getGradeColor(assessment.overallScore || 'C'),
+                        background: `radial-gradient(circle at 30% 30%, ${getGradeColor(assessment.overallScore || 'C')}, #0A1F44)`,
                         color: '#ffffff',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        fontSize: '11px',
+                        fontSize: '24px',
                         fontWeight: 'bold',
-                        margin: '0 auto'
+                        margin: '0 auto',
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
                       }}
                     >
                       {assessment.overallScore}
