@@ -1,7 +1,4 @@
 import { useValuationForm } from "@/hooks/use-valuation-form";
-import { useEffect } from "react";
-import ProgressIndicator from "@/components/progress-indicator";
-import ContactForm from "@/components/contact-form";
 import EbitdaForm from "@/components/ebitda-form";
 import AdjustmentsForm from "@/components/adjustments-form";
 import ValueDriversForm from "@/components/value-drivers-form";
@@ -9,19 +6,15 @@ import FollowUpForm from "@/components/followup-form";
 import ValuationResults from "@/components/valuation-results";
 import LoadingPopup from "@/components/LoadingPopup";
 import AssessmentStepper from "@/components/AssessmentStepper";
-import IndustryForm from "@/components/industry-form";
 import { 
-  ArrowLeft, 
   Home, 
-  User, 
   FileText, 
   BarChart3, 
   CheckCircle, 
   Calculator,
   TrendingUp,
   MessageCircle,
-  DollarSign,
-  Building2
+  DollarSign
 } from "lucide-react";
 
 import {
@@ -29,15 +22,9 @@ import {
   Typography,
   Card,
   CardContent,
-  Chip,
   Button
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-const appleBitesLogo = '/assets/logos/apple-bites-logo-variant-4.png';
-import { useLocation } from "wouter";
-import { useQuery } from "@tanstack/react-query";
-import type { ValuationAssessment } from "@shared/schema";
-import { useAuth } from "@/hooks/useAuth";
 
 // Material Dashboard Styled Components
 const AssessmentBackground = styled(Box)(({ theme }) => ({
@@ -70,7 +57,6 @@ const FormCard = styled(Card)(({ theme }) => ({
 }));
 
 export default function GrowthExitAssessment() {
-  const [location] = useLocation();
   
   // Use the existing valuation form hook (same as free assessment)
   const {
@@ -80,15 +66,10 @@ export default function GrowthExitAssessment() {
     prevStep,
     updateFormData,
     submitAssessment,
-    resetForm,
-    contactForm,
-    ebitdaForm,
-    adjustmentsForm,
-    valueDriversForm,
-    followUpForm,
-    submitMutation,
     results,
-    isGeneratingReport
+    isSubmitting,
+    isGeneratingReport,
+    forms
   } = useValuationForm();
 
   // Define steps for paid assessment (without contact step, starts with ebitda)
@@ -128,17 +109,85 @@ export default function GrowthExitAssessment() {
   const renderStepComponent = () => {
     switch (currentStep) {
       case 'ebitda':
-        return <EbitdaForm />;
+        return (
+          <EbitdaForm
+            form={forms.ebitda}
+            onNext={nextStep}
+            onPrev={prevStep}
+            onDataChange={(data) => updateFormData("ebitda", data)}
+            calculateEbitda={() => {
+              const { netIncome, interest, taxes, depreciation, amortization } = formData.ebitda;
+              return (
+                parseFloat(netIncome || "0") +
+                parseFloat(interest || "0") +
+                parseFloat(taxes || "0") +
+                parseFloat(depreciation || "0") +
+                parseFloat(amortization || "0")
+              );
+            }}
+          />
+        );
       case 'adjustments':
-        return <AdjustmentsForm />;
+        return (
+          <AdjustmentsForm
+            form={forms.adjustments}
+            onNext={nextStep}
+            onPrev={prevStep}
+            onDataChange={(data) => updateFormData("adjustments", data)}
+            calculateAdjustedEbitda={() => {
+              const baseEbitda = parseFloat(formData.ebitda.netIncome || "0") +
+                parseFloat(formData.ebitda.interest || "0") +
+                parseFloat(formData.ebitda.taxes || "0") +
+                parseFloat(formData.ebitda.depreciation || "0") +
+                parseFloat(formData.ebitda.amortization || "0");
+              const { ownerSalary, personalExpenses, oneTimeExpenses, otherAdjustments } = formData.adjustments;
+              return baseEbitda +
+                parseFloat(ownerSalary || "0") +
+                parseFloat(personalExpenses || "0") +
+                parseFloat(oneTimeExpenses || "0") +
+                parseFloat(otherAdjustments || "0");
+            }}
+            baseEbitda={parseFloat(formData.ebitda.netIncome || "0") +
+              parseFloat(formData.ebitda.interest || "0") +
+              parseFloat(formData.ebitda.taxes || "0") +
+              parseFloat(formData.ebitda.depreciation || "0") +
+              parseFloat(formData.ebitda.amortization || "0")}
+          />
+        );
       case 'valueDrivers':
-        return <ValueDriversForm />;
+        return (
+          <ValueDriversForm
+            form={forms.valueDrivers}
+            onNext={nextStep}
+            onPrev={prevStep}
+            onDataChange={(data) => updateFormData("valueDrivers", data)}
+          />
+        );
       case 'followUp':
-        return <FollowUpForm />;
+        return (
+          <FollowUpForm
+            form={forms.followUp}
+            onSubmit={() => {
+              // Submit assessment with paid tier flag
+              submitAssessment();
+            }}
+            onPrev={prevStep}
+            onDataChange={(data) => updateFormData("followUp", data)}
+            isSubmitting={isSubmitting}
+          />
+        );
       case 'results':
-        return <ValuationResults isPaid={true} />;
+        return <ValuationResults results={results} />;
       default:
-        return <EbitdaForm />;
+        return (
+          <EbitdaForm
+            form={forms.ebitda}
+            onNext={nextStep}
+            onPrev={prevStep}
+            onDataChange={(data) => updateFormData("ebitda", data)}
+            calculateEbitda={() => 0}
+          />
+        );
     }
   };
 
