@@ -29,14 +29,14 @@ export default function StrategicReport({ results }: StrategicReportProps) {
   return (
     <MDBox>
       {/* Strategic Report Header */}
-      <Card sx={{ mb: 4, background: 'linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%)', color: 'white', borderRadius: 3 }}>
+      <Card sx={{ mb: 4, background: 'linear-gradient(135deg, #0b2147 0%, #1e293b 100%)', color: 'white', borderRadius: 1.5 }}>
         <CardContent sx={{ p: 5 }}>
           <MDBox display="flex" alignItems="center" justifyContent="space-between" mb={4}>
             <MDBox>
-              <MDTypography variant="h4" fontWeight="bold" sx={{ color: 'white', mb: 1 }}>
+              <MDTypography variant="h4" fontWeight="bold" sx={{ color: 'white', mb: 2 }}>
                 Strategic Business Valuation
               </MDTypography>
-              <MDTypography variant="body1" sx={{ color: 'rgba(255,255,255,0.8)', fontWeight: 'medium' }}>
+              <MDTypography variant="body1" sx={{ color: 'rgba(255,255,255,.8)', fontWeight: 'medium' }}>
                 Comprehensive industry-specific analysis for {results.company}
               </MDTypography>
             </MDBox>
@@ -44,7 +44,7 @@ export default function StrategicReport({ results }: StrategicReportProps) {
               label="STRATEGIC ANALYSIS" 
               sx={{ 
                 background: 'rgba(255,255,255,0.15)', 
-                color: 'white', 
+                color: '#cbd5e1', 
                 fontWeight: '600',
                 fontSize: '0.8rem',
                 border: '1px solid rgba(255,255,255,0.2)'
@@ -54,7 +54,7 @@ export default function StrategicReport({ results }: StrategicReportProps) {
 
           <Grid container spacing={4}>
             <Grid item xs={12} md={4}>
-              <MDBox textAlign="center" p={3} sx={{ backgroundColor: 'rgba(255,255,255,0.08)', borderRadius: 2, border: '1px solid rgba(255,255,255,0.1)' }}>
+              <MDBox textAlign="center" p={3} sx={{ backgroundColor: 'rgba(255,255,255,0.08)', borderRadius: 2, border: '1px solid rgba(255,255,255,0.12)' }}>
                 <MDTypography variant="h3" fontWeight="bold" sx={{ color: 'white', mb: 1 }}>
                   {formatCurrency(results.midEstimate)}
                 </MDTypography>
