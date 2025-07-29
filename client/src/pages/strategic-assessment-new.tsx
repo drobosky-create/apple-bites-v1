@@ -652,7 +652,7 @@ export default function GrowthExitAssessment() {
             <MDTypography variant="h4" fontWeight="bold" sx={{ color: 'white', mb: 0.5 }}>
               Growth & Exit Assessment
             </MDTypography>
-            <MDTypography variant="body1" sx={{ color: '#5EEAD4', opacity: 0.9 }}>
+            <MDTypography variant="body1" sx={{ color: '#005b8c', opacity: 0.9 }}>
               Industry-specific strategic valuation with AI insights
             </MDTypography>
           </MDBox>
