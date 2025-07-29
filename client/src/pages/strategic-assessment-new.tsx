@@ -205,14 +205,14 @@ export default function GrowthExitAssessment() {
     isGeneratingReport
   } = useValuationForm();
 
-  // Fetch NAICS sectors
+  // Fetch NAICS sectors (use comprehensive database with all sectors)
   const { data: sectors, isLoading: sectorsLoading } = useQuery<NAICSSector[]>({
-    queryKey: ['/api/naics/sectors-with-codes'],
+    queryKey: ['/api/naics/comprehensive/sectors'],
   });
 
-  // Fetch industries for selected sector
+  // Fetch industries for selected sector (use comprehensive database)
   const { data: sectorIndustries, isLoading: industriesLoading } = useQuery<NAICSIndustry[]>({
-    queryKey: [`/api/naics/by-sector/${formData.industry.sectorCode}`],
+    queryKey: [`/api/naics/comprehensive/by-sector/${formData.industry.sectorCode}`],
     enabled: !!formData.industry.sectorCode,
   });
 
