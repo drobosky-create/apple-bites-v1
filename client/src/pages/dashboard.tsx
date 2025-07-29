@@ -381,8 +381,7 @@ function DashboardSidebar({ user, onSignOut }: { user: DashboardUser; onSignOut:
               '&:hover': {
                 background: gradients.light,
                 transform: 'translateY(-2px)',
-                boxShadow: `0 8px 25px -8px ${colors.primary}`
-              },
+                            },
               transition: 'all 0.3s ease',
               width: '100%',
               py: 1.5

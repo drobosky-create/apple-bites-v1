@@ -61,7 +61,7 @@ function AdminSidebar({ user, onSignOut }: { user: any; onSignOut: () => void })
         top: '24px',
         left: '24px',
         width: 280,
-        height: 'calc(100vh - 24px)', // Increased height by removing bottom margin
+        height: 'calc(100vh - 48px)',
         background: gradients.dark,
         borderRadius: '20px',
         border: `1px solid rgba(255, 255, 255, 0.15)`,
