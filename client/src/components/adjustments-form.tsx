@@ -13,6 +13,7 @@ interface AdjustmentsFormProps {
   onDataChange: (data: AdjustmentsData) => void;
   calculateAdjustedEbitda: () => number;
   baseEbitda: number;
+  isLocked?: boolean;
 }
 
 export default function AdjustmentsForm({ 
@@ -21,7 +22,8 @@ export default function AdjustmentsForm({
   onPrev, 
   onDataChange, 
   calculateAdjustedEbitda,
-  baseEbitda 
+  baseEbitda,
+  isLocked = false
 }: AdjustmentsFormProps) {
   const watchedValues = form.watch();
   const adjustedEbitda = calculateAdjustedEbitda();
@@ -99,6 +101,7 @@ export default function AdjustmentsForm({
                   placeholder="0"
                   fullWidth
                   variant="outlined"
+                  disabled={isLocked}
                   {...form.register("ownerSalary")}
                   onChange={(e) => handleFieldChange("ownerSalary", e.target.value)}
                   helperText="Amount paid to owner above market rate for the position"
@@ -115,6 +118,7 @@ export default function AdjustmentsForm({
                   placeholder="0"
                   fullWidth
                   variant="outlined"
+                  disabled={isLocked}
                   {...form.register("personalExpenses")}
                   onChange={(e) => handleFieldChange("personalExpenses", e.target.value)}
                   helperText="Personal expenses run through business (travel, meals, etc.)"
@@ -131,6 +135,7 @@ export default function AdjustmentsForm({
                   placeholder="0"
                   fullWidth
                   variant="outlined"
+                  disabled={isLocked}
                   {...form.register("oneTimeExpenses")}
                   onChange={(e) => handleFieldChange("oneTimeExpenses", e.target.value)}
                   helperText="Non-recurring expenses (legal fees, moving costs, etc.)"
@@ -147,6 +152,7 @@ export default function AdjustmentsForm({
                   placeholder="0"
                   fullWidth
                   variant="outlined"
+                  disabled={isLocked}
                   {...form.register("otherAdjustments")}
                   onChange={(e) => handleFieldChange("otherAdjustments", e.target.value)}
                   helperText="Other legitimate business adjustments"
@@ -163,6 +169,7 @@ export default function AdjustmentsForm({
                   rows={3}
                   fullWidth
                   variant="outlined"
+                  disabled={isLocked}
                   {...form.register("adjustmentNotes")}
                   onChange={(e) => {
                     form.setValue("adjustmentNotes", e.target.value);

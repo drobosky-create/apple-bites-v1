@@ -376,6 +376,7 @@ export default function GrowthExitAssessment() {
               parseFloat(valuationFormData.ebitda.taxes || "0") +
               parseFloat(valuationFormData.ebitda.depreciation || "0") +
               parseFloat(valuationFormData.ebitda.amortization || "0")}
+            isLocked={isFieldsLocked}
           />
         );
       case 'valueDrivers':
