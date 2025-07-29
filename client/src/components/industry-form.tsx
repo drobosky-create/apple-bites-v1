@@ -1,317 +1,288 @@
-import { UseFormReturn } from "react-hook-form";
+import { useState, useEffect } from 'react';
+import {
+  Box,
+  Typography,
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Card,
+  CardContent,
+  Button,
+  Grid
+} from '@mui/material';
+import { Building2, TrendingUp } from 'lucide-react';
+import MDBox from '@/components/MD/MDBox';
+import MDTypography from '@/components/MD/MDTypography';
+import MDButton from '@/components/MD/MDButton';
+import { useQuery } from '@tanstack/react-query';
 
-
-
-
-
-
-import { Building2, Search, TrendingUp } from "lucide-react";
-import { useState, useEffect } from "react";
-
-interface IndustryFormProps {
-  form: UseFormReturn<any>;
-  onNext: () => void;
-  onPrev: () => void;
-  onDataChange: (data: any) => void;
-}
-
+// NAICS Industry data types
 interface NAICSIndustry {
   code: string;
   title: string;
-  sector: string;
-  multiplier: number;
-  description: string;
+  label: string;
+  multiplier: {
+    min: number;
+    avg: number;
+    max: number;
+  };
+  level: number;
+  sectorCode: string;
 }
 
-const sectors = [
-  "Agriculture",
-  "Mining", 
-  "Construction",
-  "Manufacturing",
-  "Wholesale Trade",
-  "Retail Trade",
-  "Transportation",
-  "Information",
-  "Finance and Insurance",
-  "Real Estate",
-  "Professional Services",
-  "Management",
-  "Administrative Services",
-  "Education",
-  "Healthcare",
-  "Entertainment",
-  "Hospitality",
-  "Services"
-];
+interface NAICSSector {
+  code: string;
+  title: string;
+}
 
-export default function IndustryForm({ form, onNext, onPrev, onDataChange }: IndustryFormProps) {
-  const [availableIndustries, setAvailableIndustries] = useState<NAICSIndustry[]>([]);
-  const [selectedSector, setSelectedSector] = useState<string>("");
-  const [searchTerm, setSearchTerm] = useState<string>("");
+export default function IndustryForm() {
+  const [formData, setFormData] = useState({
+    primarySector: '',
+    specificIndustry: '',
+    naicsCode: '',
+    sectorCode: '',
+    businessDescription: '',
+    yearsInBusiness: '',
+    numberOfEmployees: ''
+  });
 
-  // Simulate NAICS database lookup (in real app, this would be an API call)
-  const searchIndustries = async (sector: string, search: string = "") => {
-    // Mock industry data for demonstration
-    const mockIndustries: NAICSIndustry[] = [
-      { code: "311", title: "Food Manufacturing", sector: "Manufacturing", multiplier: 4.2, description: "Processing and packaging food products" },
-      { code: "541", title: "Professional Services", sector: "Professional Services", multiplier: 4.7, description: "Consulting, legal, accounting services" },
-      { code: "621", title: "Healthcare Services", sector: "Healthcare", multiplier: 4.4, description: "Medical and healthcare services" },
-      { code: "722", title: "Food Services", sector: "Hospitality", multiplier: 2.2, description: "Restaurants and food service establishments" },
-      { code: "236", title: "Construction", sector: "Construction", multiplier: 2.8, description: "Building construction services" }
-    ];
+  // Fetch NAICS sectors
+  const { data: sectors, isLoading: sectorsLoading } = useQuery<NAICSSector[]>({
+    queryKey: ['/api/naics/sectors'],
+  });
 
-    let filtered = mockIndustries;
-    if (sector) {
-      filtered = filtered.filter(ind => ind.sector === sector);
-    }
-    if (search) {
-      filtered = filtered.filter(ind => 
-        ind.title.toLowerCase().includes(search.toLowerCase()) ||
-        ind.description.toLowerCase().includes(search.toLowerCase())
-      );
-    }
-    setAvailableIndustries(filtered);
+  // Fetch industries for selected sector
+  const { data: sectorIndustries, isLoading: industriesLoading } = useQuery<NAICSIndustry[]>({
+    queryKey: ['/api/naics/industries', formData.sectorCode],
+    enabled: !!formData.sectorCode,
+  });
+
+  const handleSectorChange = (sectorCode: string) => {
+    const selectedSector = sectors?.find(s => s.code === sectorCode);
+    setFormData(prev => ({
+      ...prev,
+      sectorCode,
+      primarySector: selectedSector?.title || '',
+      specificIndustry: '',
+      naicsCode: ''
+    }));
   };
 
-  useEffect(() => {
-    if (selectedSector) {
-      searchIndustries(selectedSector, searchTerm);
-    }
-  }, [selectedSector, searchTerm]);
-
-  const handleSubmit = (data: any) => {
-    onDataChange(data);
-    onNext();
+  const handleIndustryChange = (naicsCode: string) => {
+    const selectedIndustry = sectorIndustries?.find(i => i.code === naicsCode);
+    setFormData(prev => ({
+      ...prev,
+      naicsCode,
+      specificIndustry: selectedIndustry?.title || ''
+    }));
   };
 
-  const watchedValues = form.watch();
-  useEffect(() => {
-    onDataChange(watchedValues);
-  }, [watchedValues, onDataChange]);
+  const handleInputChange = (field: string, value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
 
   return (
-    <Card >
-      <CardHeader >
-        <div >
-          <Building2  />
-        </div>
-        <CardTitle >Industry Classification</CardTitle>
-        <p >
-          Help us provide industry-specific analysis by identifying your business sector and NAICS code
-        </p>
-      </CardHeader>
-      
-      <CardContent>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} >
-            
-            {/* Business Sector Selection */}
-            <FormField
-              control={form.control}
-              name="businessSector"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel >Primary Business Sector</FormLabel>
-                  <Select 
-                    onValueChange={(value) => {
-                      field.onChange(value);
-                      setSelectedSector(value);
-                    }} 
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger >
-                        <SelectValue placeholder="Select your business sector" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {sectors.map((sector) => (
-                        <SelectItem key={sector} value={sector}>
-                          {sector}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+    <MDBox>
+      {/* Header */}
+      <MDBox display="flex" alignItems="center" mb={3}>
+        <MDBox
+          sx={{
+            width: 48,
+            height: 48,
+            borderRadius: '12px',
+            background: 'linear-gradient(135deg, #00718d 0%, #005b8c 100%)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            mr: 2
+          }}
+        >
+          <Building2 size={24} color="white" />
+        </MDBox>
+        <MDBox>
+          <MDTypography variant="h5" fontWeight="medium" sx={{ color: '#344767', mb: 0.5 }}>
+            Industry Classification
+          </MDTypography>
+          <MDTypography variant="body2" sx={{ color: '#67748e' }}>
+            Select your industry for accurate valuation benchmarks
+          </MDTypography>
+        </MDBox>
+      </MDBox>
 
-            {/* Industry Search */}
-            {selectedSector && (
-              <div >
-                <FormLabel >Find Your Specific Industry</FormLabel>
-                <div >
-                  <Search  />
-                  <Input
-                    placeholder="Search for your specific industry..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+      {/* Industry Selection */}
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={6}>
+          <FormControl fullWidth>
+            <InputLabel>Primary Industry Sector</InputLabel>
+            <Select
+              value={formData.sectorCode}
+              onChange={(e) => handleSectorChange(e.target.value)}
+              label="Primary Industry Sector"
+              disabled={sectorsLoading}
+            >
+              {sectors?.map((sector) => (
+                <MenuItem key={sector.code} value={sector.code}>
+                  {sector.title}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
+
+        <Grid item xs={12} md={6}>
+          <FormControl fullWidth>
+            <InputLabel>Specific Industry</InputLabel>
+            <Select
+              value={formData.naicsCode}
+              onChange={(e) => handleIndustryChange(e.target.value)}
+              label="Specific Industry"
+              disabled={!formData.sectorCode || industriesLoading}
+            >
+              {sectorIndustries?.map((industry) => (
+                <MenuItem key={industry.code} value={industry.code}>
+                  {industry.title}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
+      </Grid>
+
+      {/* Business Details */}
+      <MDBox mt={4}>
+        <MDTypography variant="h6" fontWeight="medium" sx={{ color: '#344767', mb: 2 }}>
+          Business Details
+        </MDTypography>
+        
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              label="Business Description"
+              multiline
+              rows={3}
+              value={formData.businessDescription}
+              onChange={(e) => handleInputChange('businessDescription', e.target.value)}
+              placeholder="Briefly describe your business operations..."
+            />
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <TextField
+              fullWidth
+              label="Years in Business"
+              type="number"
+              value={formData.yearsInBusiness}
+              onChange={(e) => handleInputChange('yearsInBusiness', e.target.value)}
+              placeholder="e.g., 5"
+            />
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <TextField
+              fullWidth
+              label="Number of Employees"
+              type="number"
+              value={formData.numberOfEmployees}
+              onChange={(e) => handleInputChange('numberOfEmployees', e.target.value)}
+              placeholder="e.g., 25"
+            />
+          </Grid>
+        </Grid>
+      </MDBox>
+
+      {/* Selected Industry Info */}
+      {formData.naicsCode && (
+        <MDBox mt={4}>
+          <Card sx={{ backgroundColor: '#f8f9fa', border: '1px solid #e9ecef' }}>
+            <CardContent>
+              <MDBox display="flex" alignItems="center" mb={2}>
+                <TrendingUp size={20} color="#00718d" />
+                <MDTypography variant="h6" fontWeight="medium" sx={{ color: '#344767', ml: 1 }}>
+                  Industry Valuation Benchmarks
+                </MDTypography>
+              </MDBox>
+              
+              <MDTypography variant="body2" sx={{ color: '#67748e', mb: 2 }}>
+                Selected: {formData.specificIndustry}
+              </MDTypography>
+              
+              <MDBox display="flex" gap={3}>
+                <MDBox textAlign="center">
+                  <MDTypography variant="caption" sx={{ color: '#67748e' }}>
+                    NAICS Code
+                  </MDTypography>
+                  <MDTypography variant="h6" fontWeight="medium" sx={{ color: '#344767' }}>
+                    {formData.naicsCode}
+                  </MDTypography>
+                </MDBox>
+                
+                {sectorIndustries?.find(i => i.code === formData.naicsCode) && (
+                  <>
+                    <MDBox textAlign="center">
+                      <MDTypography variant="caption" sx={{ color: '#67748e' }}>
+                        Avg Multiple
+                      </MDTypography>
+                      <MDTypography variant="h6" fontWeight="medium" sx={{ color: '#00718d' }}>
+                        {sectorIndustries.find(i => i.code === formData.naicsCode)?.multiplier.avg.toFixed(1)}x
+                      </MDTypography>
+                    </MDBox>
                     
-                  />
-                </div>
-
-                {/* NAICS Code Selection */}
-                <FormField
-                  control={form.control}
-                  name="naicsCode"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>NAICS Industry Code</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger >
-                            <SelectValue placeholder="Select your industry classification" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {availableIndustries.map((industry) => (
-                            <SelectItem key={industry.code} value={industry.code}>
-                              <div >
-                                <span >{industry.title}</span>
-                                <span >
-                                  Code: {industry.code} | Multiplier: {industry.multiplier}x
-                                </span>
-                              </div>
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            )}
-
-            {/* Business Description */}
-            <FormField
-              control={form.control}
-              name="businessDescription"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel >Detailed Business Description</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="Describe your business operations, products/services, target market, and key differentiators..."
-                      
-                      {...field}
-                    />
-                  </FormControl>
-                  <p >
-                    This helps us provide more accurate industry comparisons and insights
-                  </p>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* Years in Business */}
-            <div >
-              <FormField
-                control={form.control}
-                name="yearsInBusiness"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel >Years in Business</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        placeholder="e.g., 5"
-                        
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
+                    <MDBox textAlign="center">
+                      <MDTypography variant="caption" sx={{ color: '#67748e' }}>
+                        Range
+                      </MDTypography>
+                      <MDTypography variant="h6" fontWeight="medium" sx={{ color: '#344767' }}>
+                        {sectorIndustries.find(i => i.code === formData.naicsCode)?.multiplier.min.toFixed(1)}x - {sectorIndustries.find(i => i.code === formData.naicsCode)?.multiplier.max.toFixed(1)}x
+                      </MDTypography>
+                    </MDBox>
+                  </>
                 )}
-              />
+              </MDBox>
+            </CardContent>
+          </Card>
+        </MDBox>
+      )}
 
-              <FormField
-                control={form.control}
-                name="numberOfEmployees"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel >Number of Employees</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        placeholder="e.g., 25"
-                        
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+      {/* Navigation */}
+      <MDBox display="flex" justifyContent="space-between" alignItems="center" mt={4}>
+        <MDButton
+          variant="outlined"
+          sx={{
+            color: '#67748e',
+            borderColor: '#dee2e6',
+            '&:hover': {
+              backgroundColor: '#f8f9fa',
+              borderColor: '#adb5bd'
+            }
+          }}
+          onClick={() => window.history.back()}
+        >
+          Back to Dashboard
+        </MDButton>
 
-            {/* Market Position */}
-            <FormField
-              control={form.control}
-              name="marketPosition"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel >Market Position</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger >
-                        <SelectValue placeholder="How would you describe your market position?" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="market-leader">Market Leader</SelectItem>
-                      <SelectItem value="strong-competitor">Strong Competitor</SelectItem>
-                      <SelectItem value="established-player">Established Player</SelectItem>
-                      <SelectItem value="growing-business">Growing Business</SelectItem>
-                      <SelectItem value="new-entrant">New Market Entrant</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* Competitive Advantages */}
-            <FormField
-              control={form.control}
-              name="competitiveAdvantages"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel >Key Competitive Advantages</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="What sets your business apart from competitors? (e.g., proprietary technology, exclusive contracts, brand recognition, etc.)"
-                      
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* Navigation Buttons */}
-            <div >
-              <Button
-                type="button"
-                variant="outline"
-                onClick={onPrev}
-                
-              >
-                Previous
-              </Button>
-              <Button
-                type="submit"
-                
-              >
-                Continue to EBITDA Analysis
-              </Button>
-            </div>
-          </form>
-        </Form>
-      </CardContent>
-    </Card>
+        <MDButton
+          variant="contained"
+          sx={{
+            background: 'linear-gradient(135deg, #00718d 0%, #005b8c 100%)',
+            color: 'white',
+            px: 4,
+            '&:hover': {
+              background: 'linear-gradient(135deg, #005b8c 0%, #004a73 100%)',
+              transform: 'translateY(-2px)'
+            },
+            transition: 'all 0.3s ease'
+          }}
+          disabled={!formData.naicsCode || !formData.businessDescription}
+        >
+          Continue to Financials
+        </MDButton>
+      </MDBox>
+    </MDBox>
   );
 }

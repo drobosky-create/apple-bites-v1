@@ -6,7 +6,7 @@ import { AdminAuthProvider } from "@/hooks/use-admin-auth";
 import { TeamAuthProvider } from "@/hooks/use-team-auth";
 import { useAuth } from "@/hooks/useAuth";
 import FreeAssessment from "@/pages/free-assessment";
-import GrowthExitAssessment from "@/pages/strategic-assessment";
+import GrowthExitAssessment from "@/pages/strategic-assessment-new";
 import AnalyticsDashboard from "@/pages/analytics-dashboard";
 import ValueCalculator from "@/pages/value-calculator";
 import LeadsDashboard from "@/pages/leads-dashboard";
