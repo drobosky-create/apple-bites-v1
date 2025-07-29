@@ -401,7 +401,14 @@ export default function GrowthExitAssessment() {
           />
         );
       case 'results':
-        return results ? <ValuationResults results={results} /> : <div>Loading...</div>;
+        return results ? (
+          <TierSelection 
+            assessment={results} 
+            onTierSelect={(tier) => {
+              console.log(`Selected tier: ${tier}`);
+            }} 
+          />
+        ) : <div>Loading...</div>;
       default:
         return null;
     }
