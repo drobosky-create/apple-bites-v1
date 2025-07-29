@@ -27,7 +27,8 @@ import {
   Star,
   Zap,
   User,
-  Clock
+  Clock,
+  LogOut
 } from "lucide-react";
 
 
@@ -763,6 +764,27 @@ export default function GrowthExitAssessment() {
               Past Assessments
             </MDButton>
           </Link>
+
+          <MDButton
+            onClick={() => window.location.href = '/'}
+            className="text-[#dbdce1]"
+            sx={{
+              background: 'transparent',
+              border: `1px solid #EF4444`,
+              color: '#EF4444',
+              '&:hover': {
+                background: 'rgba(239, 68, 68, 0.1)',
+                borderColor: '#DC2626',
+                transform: 'translateY(-2px)'
+              },
+              transition: 'all 0.3s ease',
+              width: '100%',
+              py: 1.5
+            }}
+            startIcon={<LogOut size={18} />}
+          >
+            Sign Out
+          </MDButton>
         </MDBox>
 
         {/* Spacer */}
