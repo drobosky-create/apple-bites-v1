@@ -638,37 +638,37 @@ export default function GrowthExitAssessment() {
         {/* Growth & Exit Assessment Header */}
         <MDBox
           sx={{
-            background: 'linear-gradient(135deg, #00718d 0%, #0A1F44 100%)',
-            borderRadius: '20px',
+            background: 'linear-gradient(135deg, #F2F2F2 0%, #EAEAEA 100%)',
+            borderRadius: '12px',
             padding: 3,
             mb: 3,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            boxShadow: '0 8px 20px rgba(0,0,0,0.15)'
+            boxShadow: '0 4px 12px rgba(0,0,0,0.08)'
           }}
         >
           <MDBox>
-            <MDTypography variant="h4" fontWeight="bold" sx={{ color: 'white', mb: 0.5 }}>
+            <MDTypography variant="h4" fontWeight="bold" sx={{ color: '#333333', mb: 0.5 }}>
               Growth & Exit Assessment
             </MDTypography>
-            <MDTypography variant="body1" sx={{ color: '#005b8c', opacity: 0.9 }}>
+            <MDTypography variant="body1" sx={{ color: '#666666', opacity: 0.9 }}>
               Industry-specific strategic valuation with AI insights
             </MDTypography>
           </MDBox>
           
           <MDBox
             sx={{
-              background: 'linear-gradient(135deg, #3B82F6 0%, #1E40AF 100%)',
+              background: '#4682B4',
               color: 'white',
               px: 3,
               py: 1.5,
-              borderRadius: 3,
+              borderRadius: '8px',
               fontSize: '0.9rem',
               fontWeight: 700,
               textTransform: 'uppercase',
               letterSpacing: '1px',
-              boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)'
+              boxShadow: '0 2px 8px rgba(70, 130, 180, 0.3)'
             }}
           >
             $795 Premium Tier
