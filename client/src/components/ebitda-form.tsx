@@ -1,7 +1,8 @@
+import { useState } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { EbitdaData } from "@shared/schema";
 import { Typography, Card, CardContent, TextField, InputAdornment } from '@mui/material';
-import { ArrowLeft, ArrowRight, Calculator } from "lucide-react";
+import { ArrowLeft, ArrowRight, Calculator, Edit3, Lock } from "lucide-react";
 import MDBox from "@/components/MD/MDBox";
 import MDTypography from "@/components/MD/MDTypography";
 import MDButton from "@/components/MD/MDButton";
@@ -15,6 +16,7 @@ interface EbitdaFormProps {
 }
 
 export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calculateEbitda }: EbitdaFormProps) {
+  const [isLocked, setIsLocked] = useState(true);
   const watchedValues = form.watch();
   const ebitdaTotal = calculateEbitda();
 
@@ -61,7 +63,7 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
           </span>
         </MDBox>
 
-        <MDBox>
+        <MDBox sx={{ flex: 1 }}>
           <MDTypography variant="h4" fontWeight="bold" color="dark" mb={1}>
             Financial Information
           </MDTypography>
@@ -69,6 +71,31 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
             Please provide your company's financial information for the most recent fiscal year to calculate EBITDA.
           </MDTypography>
         </MDBox>
+        
+        {/* Update/Lock Button */}
+        <MDButton
+          variant={isLocked ? "gradient" : "outlined"}
+          color={isLocked ? "info" : "secondary"}
+          size="small"
+          onClick={() => setIsLocked(!isLocked)}
+          sx={{
+            ml: 2,
+            minWidth: '100px',
+            height: 'fit-content'
+          }}
+        >
+          {isLocked ? (
+            <>
+              <Edit3 size={16} style={{ marginRight: '6px' }} />
+              Update
+            </>
+          ) : (
+            <>
+              <Lock size={16} style={{ marginRight: '6px' }} />
+              Lock
+            </>
+          )}
+        </MDButton>
       </MDBox>
 
       {/* Form Container */}
@@ -88,6 +115,7 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
                   placeholder="0"
                   fullWidth
                   variant="outlined"
+                  disabled={isLocked}
                   {...form.register("netIncome")}
                   onChange={(e) => handleFieldChange("netIncome", e.target.value)}
                   helperText="Your company's net income for the most recent fiscal year"
@@ -104,6 +132,7 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
                   placeholder="0"
                   fullWidth
                   variant="outlined"
+                  disabled={isLocked}
                   {...form.register("interest")}
                   onChange={(e) => handleFieldChange("interest", e.target.value)}
                   helperText="Interest paid on loans and credit facilities"
@@ -120,6 +149,7 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
                   placeholder="0"
                   fullWidth
                   variant="outlined"
+                  disabled={isLocked}
                   {...form.register("taxes")}
                   onChange={(e) => handleFieldChange("taxes", e.target.value)}
                   helperText="Income tax expenses for the fiscal year"
@@ -136,6 +166,7 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
                   placeholder="0"
                   fullWidth
                   variant="outlined"
+                  disabled={isLocked}
                   {...form.register("depreciation")}
                   onChange={(e) => handleFieldChange("depreciation", e.target.value)}
                   helperText="Total depreciation and amortization expenses"
