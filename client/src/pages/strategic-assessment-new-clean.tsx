@@ -251,14 +251,14 @@ export default function GrowthExitAssessment() {
                     
                     <FormControl component="fieldset">
                       <RadioGroup
-                        value={valueDriverAnswers[question.id] || ''}
+                        value={valueDriverAnswers[question.id]?.toString() || ''}
                         onChange={(e) => handleValueDriverAnswer(question.id, parseInt(e.target.value))}
                         row
                       >
                         {question.options.map((option, index) => (
                           <FormControlLabel
                             key={index}
-                            value={index}
+                            value={index.toString()}
                             control={<Radio sx={{ color: '#005b8c' }} />}
                             label={option}
                             sx={{
