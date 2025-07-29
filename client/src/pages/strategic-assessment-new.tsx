@@ -207,12 +207,12 @@ export default function GrowthExitAssessment() {
 
   // Fetch NAICS sectors
   const { data: sectors, isLoading: sectorsLoading } = useQuery<NAICSSector[]>({
-    queryKey: ['/api/naics/sectors'],
+    queryKey: ['/api/naics/sectors-with-codes'],
   });
 
   // Fetch industries for selected sector
   const { data: sectorIndustries, isLoading: industriesLoading } = useQuery<NAICSIndustry[]>({
-    queryKey: ['/api/naics/industries', formData.industry.sectorCode],
+    queryKey: ['/api/naics/by-sector', formData.industry.sectorCode],
     enabled: !!formData.industry.sectorCode,
   });
 
@@ -305,7 +305,7 @@ export default function GrowthExitAssessment() {
           <FormControl fullWidth>
             <InputLabel sx={{ color: '#67748e' }}>Primary Industry Sector</InputLabel>
             <Select
-              value={formData.industry.sectorCode}
+              value={formData.industry.sectorCode || ''}
               onChange={(e) => handleSectorChange(e.target.value)}
               label="Primary Industry Sector"
               disabled={sectorsLoading}
@@ -337,7 +337,7 @@ export default function GrowthExitAssessment() {
           <FormControl fullWidth>
             <InputLabel sx={{ color: '#67748e' }}>Specific Industry</InputLabel>
             <Select
-              value={formData.industry.naicsCode}
+              value={formData.industry.naicsCode || ''}
               onChange={(e) => handleIndustryChange(e.target.value)}
               label="Specific Industry"
               disabled={!formData.industry.sectorCode || industriesLoading}
