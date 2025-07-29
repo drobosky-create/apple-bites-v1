@@ -648,29 +648,13 @@ export default function GrowthExitAssessment() {
             boxShadow: '0 8px 20px rgba(0,0,0,0.15)'
           }}
         >
-          <MDBox display="flex" alignItems="center">
-            <MDBox
-              sx={{
-                background: 'linear-gradient(135deg, #3B82F6 0%, #00718d 100%)',
-                width: 56,
-                height: 56,
-                borderRadius: '50%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                mr: 3
-              }}
-            >
-              <Building2 size={28} color="white" />
-            </MDBox>
-            <MDBox>
-              <MDTypography variant="h4" fontWeight="bold" sx={{ color: 'white', mb: 0.5 }}>
-                Growth & Exit Assessment
-              </MDTypography>
-              <MDTypography variant="body1" sx={{ color: '#5EEAD4', opacity: 0.9 }}>
-                Industry-specific strategic valuation with AI insights
-              </MDTypography>
-            </MDBox>
+          <MDBox>
+            <MDTypography variant="h4" fontWeight="bold" sx={{ color: 'white', mb: 0.5 }}>
+              Growth & Exit Assessment
+            </MDTypography>
+            <MDTypography variant="body1" sx={{ color: '#5EEAD4', opacity: 0.9 }}>
+              Industry-specific strategic valuation with AI insights
+            </MDTypography>
           </MDBox>
           
           <MDBox
