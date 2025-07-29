@@ -417,8 +417,8 @@ export default function GrowthExitAssessment() {
           features={PREMIUM_FEATURES}
         />
 
-        {/* Data Pre-population Alert - Only show on EBITDA step */}
-        {showUpdateButton && currentStep === 'ebitda' && (
+        {/* Data Pre-population Alert - Show on financial steps */}
+        {showUpdateButton && (currentStep === 'ebitda' || currentStep === 'adjustments') && (
           <MDBox sx={{ mb: 3, mx: 'auto', maxWidth: '95%' }}>
             <Alert 
               severity="success" 
