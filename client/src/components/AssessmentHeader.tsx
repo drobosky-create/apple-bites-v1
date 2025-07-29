@@ -89,7 +89,7 @@ export default function AssessmentHeader({ title, subtitle, tier, features }: As
               sx={{
                 backgroundColor: '#3b82f6',
                 color: 'white',
-                px: 4,
+                px: 6,
                 py: 2,
                 borderRadius: '12px',
                 fontSize: '14px',
@@ -97,7 +97,10 @@ export default function AssessmentHeader({ title, subtitle, tier, features }: As
                 textTransform: 'uppercase',
                 letterSpacing: '0.5px',
                 boxShadow: '0 4px 12px rgba(59, 130, 246, 0.25)',
-                border: '1px solid #2563eb'
+                border: '1px solid #2563eb',
+                minWidth: '160px',
+                textAlign: 'center',
+                whiteSpace: 'nowrap'
               }}
             >
               Free Assessment
