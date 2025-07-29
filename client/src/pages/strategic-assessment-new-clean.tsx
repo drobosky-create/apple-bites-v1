@@ -10,6 +10,7 @@ import FollowUpForm from "@/components/followup-form";
 import ValuationResults from "@/components/valuation-results";
 import LoadingPopup from "@/components/LoadingPopup";
 import AssessmentStepper from "@/components/AssessmentStepper";
+import AssessmentHeader, { PREMIUM_FEATURES } from "@/components/AssessmentHeader";
 import { useValuationForm } from "@/hooks/use-valuation-form";
 import { useQuery } from "@tanstack/react-query";
 import type { ValuationAssessment } from "@shared/schema";
@@ -575,31 +576,13 @@ export default function GrowthExitAssessment() {
       {isGeneratingReport && <LoadingPopup open={isGeneratingReport} />}
       
       <MainContent>
-        {/* Header */}
-        <MDBox sx={{ textAlign: 'center', mb: 4 }}>
-          <MDBox display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-            <MDTypography variant="h4" fontWeight="bold" sx={{ color: '#333333' }}>
-              Growth & Exit Assessment
-            </MDTypography>
-            <MDBox
-              sx={{
-                backgroundColor: '#4682B4',
-                color: 'white',
-                px: 3,
-                py: 1,
-                borderRadius: '20px',
-                fontSize: '14px',
-                fontWeight: 'bold'
-              }}
-            >
-              $795 PREMIUM TIER
-            </MDBox>
-          </MDBox>
-          
-          <MDTypography variant="body1" sx={{ color: '#666666' }}>
-            Industry-specific strategic valuation with AI insights
-          </MDTypography>
-        </MDBox>
+        {/* Professional Header */}
+        <AssessmentHeader
+          title="Growth & Exit Assessment"
+          subtitle="Industry-specific strategic valuation with AI insights"
+          tier="premium"
+          features={PREMIUM_FEATURES}
+        />
 
         {/* Data Pre-population Alert */}
         {showUpdateButton && (
