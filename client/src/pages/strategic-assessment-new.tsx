@@ -299,12 +299,26 @@ export default function GrowthExitAssessment() {
       <MDBox sx={{ display: 'flex', gap: 3, flexDirection: { xs: 'column', md: 'row' } }}>
         <MDBox sx={{ flex: 1 }}>
           <FormControl fullWidth>
-            <InputLabel>Primary Industry Sector</InputLabel>
+            <InputLabel sx={{ color: '#67748e' }}>Primary Industry Sector</InputLabel>
             <Select
               value={formData.industry.sectorCode}
               onChange={(e) => handleSectorChange(e.target.value)}
               label="Primary Industry Sector"
               disabled={sectorsLoading}
+              sx={{
+                '& .MuiSelect-select': {
+                  color: '#344767'
+                },
+                '& .MuiOutlinedInput-notchedOutline': {
+                  borderColor: '#d2d6da'
+                },
+                '&:hover .MuiOutlinedInput-notchedOutline': {
+                  borderColor: '#005b8c'
+                },
+                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                  borderColor: '#005b8c'
+                }
+              }}
             >
               {sectors?.map((sector) => (
                 <MenuItem key={sector.code} value={sector.code}>
@@ -317,12 +331,26 @@ export default function GrowthExitAssessment() {
 
         <MDBox sx={{ flex: 1 }}>
           <FormControl fullWidth>
-            <InputLabel>Specific Industry</InputLabel>
+            <InputLabel sx={{ color: '#67748e' }}>Specific Industry</InputLabel>
             <Select
               value={formData.industry.naicsCode}
               onChange={(e) => handleIndustryChange(e.target.value)}
               label="Specific Industry"
               disabled={!formData.industry.sectorCode || industriesLoading}
+              sx={{
+                '& .MuiSelect-select': {
+                  color: '#344767'
+                },
+                '& .MuiOutlinedInput-notchedOutline': {
+                  borderColor: '#d2d6da'
+                },
+                '&:hover .MuiOutlinedInput-notchedOutline': {
+                  borderColor: '#005b8c'
+                },
+                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                  borderColor: '#005b8c'
+                }
+              }}
             >
               {sectorIndustries?.map((industry) => (
                 <MenuItem key={industry.code} value={industry.code}>
@@ -349,6 +377,25 @@ export default function GrowthExitAssessment() {
             value={formData.industry.businessDescription}
             onChange={(e) => handleIndustryInputChange('businessDescription', e.target.value)}
             placeholder="Briefly describe your business operations..."
+            sx={{
+              '& .MuiInputBase-input': {
+                color: '#344767'
+              },
+              '& .MuiInputLabel-root': {
+                color: '#67748e'
+              },
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': {
+                  borderColor: '#d2d6da'
+                },
+                '&:hover fieldset': {
+                  borderColor: '#005b8c'
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: '#005b8c'
+                }
+              }
+            }}
           />
 
           <MDBox sx={{ display: 'flex', gap: 3, flexDirection: { xs: 'column', md: 'row' } }}>
@@ -359,6 +406,25 @@ export default function GrowthExitAssessment() {
               value={formData.industry.yearsInBusiness}
               onChange={(e) => handleIndustryInputChange('yearsInBusiness', e.target.value)}
               placeholder="e.g., 5"
+              sx={{
+                '& .MuiInputBase-input': {
+                  color: '#344767'
+                },
+                '& .MuiInputLabel-root': {
+                  color: '#67748e'
+                },
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': {
+                    borderColor: '#d2d6da'
+                  },
+                  '&:hover fieldset': {
+                    borderColor: '#005b8c'
+                  },
+                  '&.Mui-focused fieldset': {
+                    borderColor: '#005b8c'
+                  }
+                }
+              }}
             />
 
             <TextField
@@ -368,6 +434,25 @@ export default function GrowthExitAssessment() {
               value={formData.industry.numberOfEmployees}
               onChange={(e) => handleIndustryInputChange('numberOfEmployees', e.target.value)}
               placeholder="e.g., 25"
+              sx={{
+                '& .MuiInputBase-input': {
+                  color: '#344767'
+                },
+                '& .MuiInputLabel-root': {
+                  color: '#67748e'
+                },
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': {
+                    borderColor: '#d2d6da'
+                  },
+                  '&:hover fieldset': {
+                    borderColor: '#005b8c'
+                  },
+                  '&.Mui-focused fieldset': {
+                    borderColor: '#005b8c'
+                  }
+                }
+              }}
             />
           </MDBox>
         </MDBox>
@@ -544,7 +629,7 @@ export default function GrowthExitAssessment() {
       {/* Loading Popup */}
       {isGeneratingReport && <LoadingPopup open={true} onClose={() => {}} />}
       
-      {/* Left Sidebar */}
+      {/* Left Sidebar - Match Dashboard Exactly */}
       <Box
         sx={{
           width: drawerWidth,
@@ -559,37 +644,27 @@ export default function GrowthExitAssessment() {
           backgroundImage: `
             radial-gradient(circle at 1px 1px, rgba(255,255,255,0.15) 1px, transparent 0)
           `,
-          backgroundSize: '20px 20px'
+          backgroundSize: '20px 20px',
+          display: 'flex',
+          flexDirection: 'column'
         }}
       >
-        {/* Header Section */}
-        <Box sx={{ p: 3, borderBottom: '1px solid rgba(255, 255, 255, 0.1)' }}>
-          <Box display="flex" alignItems="center" mb={2}>
-            <Box
-              sx={{
-                width: 40,
-                height: 40,  
-                borderRadius: '50%',
-                background: 'linear-gradient(135deg, #00718d 0%, #005b8c 100%)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: 'white',
-                fontWeight: 'bold',
-                fontSize: '16px'
-              }}
-            >
-              GE
-            </Box>
-            <Box>
-              <Typography variant="h6" sx={{ color: 'white', fontSize: '14px', fontWeight: 600 }}>
-                Growth & Exit
-              </Typography>
-              <Typography variant="body2" sx={{ color: '#dbdce1', fontSize: '12px' }}>
-                Strategic Assessment
-              </Typography>
-            </Box>
-          </Box>
+        {/* Apple Bites Logo */}
+        <Box sx={{ p: 3, textAlign: 'center', borderBottom: '1px solid rgba(255, 255, 255, 0.1)' }}>
+          <img 
+            src="/apple-bites-logo.png" 
+            alt="Apple Bites" 
+            style={{
+              height: '48px',
+              marginBottom: '12px'
+            }}
+          />
+          <Typography variant="h6" sx={{ color: 'white', fontSize: '16px', fontWeight: 600, mb: 1 }}>
+            Apple Bites
+          </Typography>
+          <Typography variant="body2" sx={{ color: '#dbdce1', fontSize: '13px', opacity: 0.8 }}>
+            Business Valuation Platform
+          </Typography>
           
           <Box
             sx={{
@@ -606,76 +681,84 @@ export default function GrowthExitAssessment() {
           </Box>
         </Box>
 
-        {/* Navigation Buttons */}
-        <Box display="flex" flexDirection="column" gap={2} sx={{ p: 3, flex: 1 }}>
-          <Button
+        {/* Navigation */}
+        <Box sx={{ flex: 1, p: 2 }}>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              p: 2,
+              borderRadius: '12px',
+              backgroundColor: 'rgba(255, 255, 255, 0.1)',
+              mb: 2,
+              cursor: 'pointer',
+              '&:hover': {
+                backgroundColor: 'rgba(255, 255, 255, 0.15)'
+              }
+            }}
             onClick={() => window.location.href = '/dashboard'}
-            sx={{
-              background: 'transparent',
-              border: '1px solid rgba(255, 255, 255, 0.3)',
-              color: '#dbdce1',
-              '&:hover': {
-                background: 'rgba(255, 255, 255, 0.1)',
-                transform: 'translateY(-2px)'
-              },
-              transition: 'all 0.3s ease',
-              width: '100%',
-              py: 1.5,
-              justifyContent: 'flex-start'
-            }}
-            startIcon={<Home size={18} />}
           >
-            Dashboard
-          </Button>
-
-          <Button
-            onClick={() => window.location.href = '/value-calculator'}
+            <Home size={20} style={{ color: '#dbdce1', marginRight: '12px' }} />
+            <Typography variant="body2" sx={{ color: '#dbdce1', fontSize: '13px', fontWeight: 500 }}>
+              DASHBOARD
+            </Typography>
+          </Box>
+          
+          <Box
             sx={{
-              background: 'transparent',
-              border: '1px solid rgba(255, 255, 255, 0.3)',
-              color: '#dbdce1',
-              '&:hover': {
-                background: 'rgba(255, 255, 255, 0.1)',
-                transform: 'translateY(-2px)'
-              },
-              transition: 'all 0.3s ease',
-              width: '100%',
-              py: 1.5,
-              justifyContent: 'flex-start'
+              display: 'flex',
+              alignItems: 'center',
+              p: 2,
+              borderRadius: '12px',
+              backgroundColor: 'rgba(255, 255, 255, 0.05)',
+              mb: 2,
+              cursor: 'pointer'
             }}
-            startIcon={<BarChart3 size={18} />}
           >
-            Value Calculator
-          </Button>
+            <BarChart3 size={20} style={{ color: '#dbdce1', marginRight: '12px' }} />
+            <Typography variant="body2" sx={{ color: '#dbdce1', fontSize: '13px', fontWeight: 500 }}>
+              VALUE CALCULATOR
+            </Typography>
+          </Box>
 
-          <Button
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              p: 2,
+              borderRadius: '12px',
+              backgroundColor: 'rgba(255, 255, 255, 0.05)',
+              mb: 2,
+              cursor: 'pointer'
+            }}
             onClick={() => window.location.href = '/past-assessments'}
-            sx={{
-              background: 'transparent',
-              border: '1px solid rgba(255, 255, 255, 0.3)',
-              color: '#dbdce1',
-              '&:hover': {
-                background: 'rgba(255, 255, 255, 0.1)',
-                transform: 'translateY(-2px)'
-              },
-              transition: 'all 0.3s ease',
-              width: '100%',
-              py: 1.5,
-              justifyContent: 'flex-start'
-            }}
-            startIcon={<FileText size={18} />}
           >
-            Past Assessments
-          </Button>
+            <FileText size={20} style={{ color: '#dbdce1', marginRight: '12px' }} />
+            <Typography variant="body2" sx={{ color: '#dbdce1', fontSize: '13px', fontWeight: 500 }}>
+              PAST ASSESSMENTS
+            </Typography>
+          </Box>
         </Box>
 
-        {/* Apple Bites Branding Footer */}
-        <Box sx={{ p: 3, textAlign: 'center' }}>
-          <Box sx={{ mb: 2 }}>
-            <Typography variant="h6" sx={{ color: '#005b8c', fontSize: '12px', fontWeight: 600, letterSpacing: '1px' }}>
+        {/* Meritage Partners Footer */}
+        <Box
+          sx={{
+            p: 3,
+            borderTop: '1px solid rgba(255, 255, 255, 0.1)'
+          }}
+        >
+          <Box 
+            sx={{
+              backgroundColor: 'rgba(255, 255, 255, 0.1)',
+              borderRadius: '12px',
+              padding: '16px',
+              textAlign: 'center'
+            }}
+          >
+            <Typography variant="caption" sx={{ color: '#dbdce1', fontSize: '11px', fontWeight: 600, display: 'block', mb: 1 }}>
               MERITAGE
             </Typography>
-            <Typography variant="h6" sx={{ color: '#005b8c', fontSize: '12px', fontWeight: 600, letterSpacing: '1px' }}>
+            <Typography variant="caption" sx={{ color: '#dbdce1', fontSize: '11px', fontWeight: 600 }}>
               PARTNERS
             </Typography>
           </Box>
