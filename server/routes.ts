@@ -705,6 +705,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
         console.log(`Sending webhook data to ${assessment.tier || 'free'} tier:`, JSON.stringify(webhookData, null, 2));
         
+        // Send to GoHighLevel webhook
         if (webhookUrl) {
           const webhookResponse = await fetch(webhookUrl, {
             method: 'POST',
@@ -712,11 +713,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
             body: JSON.stringify(webhookData)
           });
           
-          console.log('Webhook response status:', webhookResponse.status);
-          console.log('Webhook response:', await webhookResponse.text());
-          console.log(`Lead data sent to CRM for ${assessment.email} (${assessment.tier || 'free'} tier)`);
+          console.log('GHL Webhook response status:', webhookResponse.status);
+          console.log('GHL Webhook response:', await webhookResponse.text());
+          console.log(`Lead data sent to GHL CRM for ${assessment.email} (${assessment.tier || 'free'} tier)`);
         } else {
-          console.error('No webhook URL configured for tier:', assessment.tier || 'free');
+          console.error('No GHL webhook URL configured for tier:', assessment.tier || 'free');
+        }
+
+        // Send to n8n webhook (same data as GHL_WEBHOOK_FREE_RESULTS)
+        try {
+          const n8nWebhookUrl = 'https://drobosky.app.n8n.cloud/webhook-test/replit-lead';
+          const n8nResponse = await fetch(n8nWebhookUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(webhookData)
+          });
+          
+          console.log('n8n Webhook response status:', n8nResponse.status);
+          console.log('n8n Webhook response:', await n8nResponse.text());
+          console.log(`Lead data sent to n8n webhook for ${assessment.email}`);
+        } catch (n8nError) {
+          console.error('n8n webhook failed:', n8nError);
+          // Continue even if n8n webhook fails
         }
       } catch (webhookError) {
         console.error('Failed to send lead data to CRM, but continuing:', webhookError);
@@ -1261,6 +1279,63 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error calculating metrics:", error);
       res.status(500).json({ message: "Failed to calculate metrics" });
+    }
+  });
+
+  // GET /api/test-n8n-webhook - Test n8n webhook specifically
+  app.get("/api/test-n8n-webhook", async (req, res) => {
+    try {
+      const testData = {
+        name: "n8n Test User",
+        email: "n8n-test@example.com",
+        phone: "555-0123",
+        company: "n8n Test Company",
+        jobTitle: "CEO",
+        tier: "free",
+        adjustedEBITDA: 100000,
+        valuationEstimate: 500000,
+        valuationLow: 400000,
+        valuationHigh: 600000,
+        overallScore: "B+",
+        financialPerformanceGrade: "A",
+        customerConcentrationGrade: "B", 
+        managementTeamGrade: "A",
+        competitivePositionGrade: "B",
+        growthProspectsGrade: "A",
+        systemsProcessesGrade: "C",
+        assetQualityGrade: "B",
+        industryOutlookGrade: "B",
+        riskFactorsGrade: "B",
+        ownerDependencyGrade: "C",
+        followUpIntent: "yes",
+        executiveSummary: "Test summary for n8n webhook integration",
+        submissionDate: new Date().toISOString(),
+        leadSource: "Business Valuation Calculator",
+        pdfLink: null
+      };
+
+      console.log('Testing n8n webhook with complete field data:', JSON.stringify(testData, null, 2));
+      
+      const n8nWebhookUrl = 'https://drobosky.app.n8n.cloud/webhook-test/replit-lead';
+      const n8nResponse = await fetch(n8nWebhookUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(testData)
+      });
+      
+      const responseText = await n8nResponse.text();
+      console.log('n8n webhook test response status:', n8nResponse.status);
+      console.log('n8n webhook test response:', responseText);
+      
+      res.json({
+        status: n8nResponse.status,
+        response: responseText,
+        success: n8nResponse.ok,
+        sentData: testData
+      });
+    } catch (error) {
+      console.error('n8n webhook test failed:', error);
+      res.status(500).json({ error: error instanceof Error ? error.message : 'Unknown error' });
     }
   });
 
