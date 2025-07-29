@@ -212,7 +212,7 @@ export default function GrowthExitAssessment() {
 
   // Fetch industries for selected sector
   const { data: sectorIndustries, isLoading: industriesLoading } = useQuery<NAICSIndustry[]>({
-    queryKey: ['/api/naics/by-sector', formData.industry.sectorCode],
+    queryKey: [`/api/naics/by-sector/${formData.industry.sectorCode}`],
     enabled: !!formData.industry.sectorCode,
   });
 
