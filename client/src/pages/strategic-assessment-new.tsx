@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, Grid, TextField, FormControl, InputLabel, Select, MenuItem, Box, Typography, Button } from '@mui/material';
 import { Link } from 'wouter';
 import { styled } from '@mui/material/styles';
@@ -7,12 +7,12 @@ import MDButton from "@/components/MD/MDButton";
 import MDTypography from "@/components/MD/MDTypography";
 import EbitdaForm from "@/components/ebitda-form";
 import AdjustmentsForm from "@/components/adjustments-form";
-import ValueDriversForm from "@/components/value-drivers-form";
 import FollowUpForm from "@/components/followup-form";
 import ValuationResults from "@/components/valuation-results";
 import LoadingPopup from "@/components/LoadingPopup";
 import { useValuationForm } from "@/hooks/use-valuation-form";
 import { useQuery } from "@tanstack/react-query";
+// Apple Bites Questions will be imported directly
 import { 
   Home, 
   FileText, 
@@ -63,50 +63,40 @@ const FormCard = styled(Card)(({ theme }) => ({
   transition: 'all 0.3s ease',
 }));
 
-// NAICS Industry data types
-interface NAICSIndustry {
-  code: string;
-  title: string;
-  label: string;
-  multiplier: {
-    min: number;
-    avg: number;
-    max: number;
-  };
-  level: number;
-  sectorCode: string;
+// Apple Bites Question Types
+interface AppleBitesQuestion {
+  id: string;
+  question: string;
+  type: string;
+  options: string[];
+  weights: number[];
+  valueDriver: string;
+  scoreRange: number[];
 }
 
-interface NAICSSector {
-  code: string;
+interface AppleBitesQuestionSet {
+  step: number;
   title: string;
+  questions: AppleBitesQuestion[];
 }
 
-// Paid Assessment Steps
-type PaidAssessmentStep = 'industry' | 'ebitda' | 'adjustments' | 'valueDrivers' | 'results';
+// Paid Assessment Steps - Updated for Apple Bites workflow
+type PaidAssessmentStep = 'ebitda' | 'adjustments' | 'valueDrivers' | 'followup' | 'results';
 
 interface PaidFormData {
-  industry: {
-    primarySector: string;
-    specificIndustry: string;
-    naicsCode: string;
-    sectorCode: string;
-    businessDescription: string;
-    yearsInBusiness: string;
-    numberOfEmployees: string;
-  };
   ebitda: any;
   adjustments: any;
   valueDrivers: any;
+  followup: any;
 }
 
-// Paid Assessment Stepper Component
+// Paid Assessment Stepper Component - Updated for Apple Bites workflow
 const PaidAssessmentStepper = ({ activeStep }: { activeStep: number }) => {
   const steps = [
-    { label: 'Industry', icon: Building2, color: '#0b2147' },
     { label: 'Financials', icon: DollarSign, color: '#0b2147' },
     { label: 'Adjustments', icon: Calculator, color: '#0b2147' },
     { label: 'Value Drivers', icon: Star, color: '#0b2147' },
+    { label: 'Follow-up', icon: MessageCircle, color: '#0b2147' },
     { label: 'Complete', icon: FileText, color: '#0b2147' }
   ];
 
@@ -178,20 +168,12 @@ const PaidAssessmentStepper = ({ activeStep }: { activeStep: number }) => {
 };
 
 export default function GrowthExitAssessment() {
-  const [currentStep, setCurrentStep] = useState<PaidAssessmentStep>('industry');
+  const [currentStep, setCurrentStep] = useState<PaidAssessmentStep>('ebitda');
   const [formData, setFormData] = useState<PaidFormData>({
-    industry: {
-      primarySector: '',
-      specificIndustry: '',
-      naicsCode: '',
-      sectorCode: '',
-      businessDescription: '',
-      yearsInBusiness: '',
-      numberOfEmployees: ''
-    },
     ebitda: {},
     adjustments: {},
-    valueDrivers: {}
+    valueDrivers: {},
+    followup: {}
   });
 
   // Get regular valuation form for EBITDA, adjustments, and value drivers steps
@@ -205,34 +187,52 @@ export default function GrowthExitAssessment() {
     isGeneratingReport
   } = useValuationForm();
 
-  // Fetch NAICS sectors (use comprehensive database with all sectors)
-  const { data: sectors, isLoading: sectorsLoading } = useQuery<NAICSSector[]>({
-    queryKey: ['/api/naics/comprehensive/sectors'],
-  });
-
-  // Fetch industries for selected sector (use comprehensive database)
-  const { data: sectorIndustries, isLoading: industriesLoading } = useQuery<NAICSIndustry[]>({
-    queryKey: [`/api/naics/comprehensive/by-sector/${formData.industry.sectorCode}`],
-    enabled: !!formData.industry.sectorCode,
-  });
+  // Apple Bites Questions Data
+  const appleBitesQuestions: AppleBitesQuestionSet[] = [
+    {
+      step: 5,
+      title: "Strategic Value Drivers",
+      questions: [
+        {
+          id: "driver-financial-performance-1",
+          question: "How profitable is your business compared to industry benchmarks?",
+          type: "single-choice",
+          options: ["Not profitable", "Below average", "Average", "Above average", "Top-tier"],
+          weights: [0, 1, 2, 3, 5],
+          valueDriver: "Financial Performance",
+          scoreRange: [0, 5]
+        },
+        {
+          id: "driver-financial-performance-2",
+          question: "What is your adjusted net profit margin?",
+          type: "single-choice",
+          options: ["< 5%", "5–10%", "11–15%", "16–20%", "> 20%"],
+          weights: [0, 1, 2, 3, 5],
+          valueDriver: "Financial Performance",
+          scoreRange: [0, 5]
+        }
+        // Additional questions would be loaded here
+      ]
+    }
+  ];
 
   const getStepIndex = (step: PaidAssessmentStep): number => {
-    const stepMap = { 'industry': 0, 'ebitda': 1, 'adjustments': 2, 'valueDrivers': 3, 'results': 4 };
+    const stepMap = { 'ebitda': 0, 'adjustments': 1, 'valueDrivers': 2, 'followup': 3, 'results': 4 };
     return stepMap[step] || 0;
   };
 
   const nextStep = () => {
-    if (currentStep === 'industry') setCurrentStep('ebitda');
-    else if (currentStep === 'ebitda') setCurrentStep('adjustments');
+    if (currentStep === 'ebitda') setCurrentStep('adjustments');
     else if (currentStep === 'adjustments') setCurrentStep('valueDrivers');
-    else if (currentStep === 'valueDrivers') setCurrentStep('results');
+    else if (currentStep === 'valueDrivers') setCurrentStep('followup');
+    else if (currentStep === 'followup') setCurrentStep('results');
   };
 
   const prevStep = () => {
-    if (currentStep === 'ebitda') setCurrentStep('industry');
-    else if (currentStep === 'adjustments') setCurrentStep('ebitda');
+    if (currentStep === 'adjustments') setCurrentStep('ebitda');
     else if (currentStep === 'valueDrivers') setCurrentStep('adjustments');
-    else if (currentStep === 'results') setCurrentStep('valueDrivers');
+    else if (currentStep === 'followup') setCurrentStep('valueDrivers');
+    else if (currentStep === 'results') setCurrentStep('followup');
   };
 
   const handleSectorChange = (sectorCode: string) => {
