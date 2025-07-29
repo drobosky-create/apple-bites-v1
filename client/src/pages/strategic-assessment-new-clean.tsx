@@ -385,7 +385,7 @@ export default function GrowthExitAssessment() {
         return (
           <FollowUpForm
             form={forms.followUp}
-            onNext={() => {
+            onSubmit={() => {
               // Submit assessment with value driver answers
               const combinedData = {
                 ...valuationFormData,
@@ -395,7 +395,9 @@ export default function GrowthExitAssessment() {
               submitAssessment();
               setCurrentStep('results');
             }}
+            onPrev={prevStep}
             onDataChange={(data) => updateValuationFormData("followUp", data)}
+            isSubmitting={isSubmitting}
           />
         );
       case 'results':
