@@ -633,182 +633,64 @@ export default function GrowthExitAssessment() {
       {/* Loading Popup */}
       {isGeneratingReport && <LoadingPopup open={true} onClose={() => {}} />}
       
-      {/* Dashboard Sidebar - Exact Copy */}
-      <MDBox
-        sx={{
-          position: 'fixed',
-          top: '24px',
-          left: '24px',
-          width: 280,
-          height: 'calc(100vh - 48px)',
-          background: 'linear-gradient(135deg, #0A1F44 0%, #1C2D5A 100%)',
-          borderRadius: '20px',
-          border: `1px solid rgba(255, 255, 255, 0.15)`,
-          boxShadow: '0 4px 12px rgba(0,0,0,0.15), 0 0 0 1px rgba(255, 255, 255, 0.1)',
-          backdropFilter: 'blur(8px)',
-          padding: 3,
-          display: 'flex',
-          flexDirection: 'column',
-          zIndex: 1000,
-          overflow: 'hidden'
-        }}
-      >
-        {/* User Info Section - Modified for Assessment */}
-        <MDBox mb={4}>
-          <MDBox display="flex" alignItems="center" mb={2}>
+      {/* Main Content - Full Width */}
+      <MainContent sx={{ marginLeft: '0px', width: '100%', maxWidth: 'none' }}>
+        {/* Growth & Exit Assessment Header */}
+        <MDBox
+          sx={{
+            background: 'linear-gradient(135deg, #00718d 0%, #0A1F44 100%)',
+            borderRadius: '20px',
+            padding: 3,
+            mb: 3,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            boxShadow: '0 8px 20px rgba(0,0,0,0.15)'
+          }}
+        >
+          <MDBox display="flex" alignItems="center">
             <MDBox
               sx={{
-                background: 'linear-gradient(135deg, #00718d 0%, #3B82F6 100%)',
-                width: 48,
-                height: 48,
-                mr: 2,
+                background: 'linear-gradient(135deg, #3B82F6 0%, #00718d 100%)',
+                width: 56,
+                height: 56,
                 borderRadius: '50%',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center'
+                justifyContent: 'center',
+                mr: 3
               }}
             >
-              <Building2 size={24} color="white" />
+              <Building2 size={28} color="white" />
             </MDBox>
             <MDBox>
-              <MDTypography variant="h6" fontWeight="medium" sx={{ color: 'white' }}>
-                Growth & Exit
+              <MDTypography variant="h4" fontWeight="bold" sx={{ color: 'white', mb: 0.5 }}>
+                Growth & Exit Assessment
               </MDTypography>
-              <MDTypography variant="caption" sx={{ color: '#005b8c' }}>
-                Strategic Assessment
+              <MDTypography variant="body1" sx={{ color: '#5EEAD4', opacity: 0.9 }}>
+                Industry-specific strategic valuation with AI insights
               </MDTypography>
             </MDBox>
           </MDBox>
           
-          <MDBox display="flex" alignItems="center">
-            <MDTypography variant="body2" mr={1} sx={{ color: 'white' }}>
-              Tier:
-            </MDTypography>
-            <MDBox
-              sx={{
-                background: 'linear-gradient(135deg, #00718d 0%, #0A1F44 100%)',
-                color: 'white',
-                px: 2,
-                py: 0.5,
-                borderRadius: 2,
-                fontSize: '0.75rem',
-                fontWeight: 600,
-                textTransform: 'uppercase',
-                letterSpacing: '0.5px'
-              }}
-            >
-              Growth
-            </MDBox>
-          </MDBox>
-        </MDBox>
-
-        {/* Navigation Buttons */}
-        <MDBox display="flex" flexDirection="column" gap={2}>
-          <Link href="/dashboard">
-            <MDButton
-              sx={{
-                background: 'linear-gradient(135deg, #00718d 0%, #3B82F6 100%)',
-                color: 'white',
-                '&:hover': {
-                  background: 'linear-gradient(135deg, #00718d 0%, #005b8c 100%)',
-                  transform: 'translateY(-2px)',
-                },
-                transition: 'all 0.3s ease',
-                width: '100%',
-                py: 1.5
-              }}
-              startIcon={<Home size={18} />}
-            >
-              Dashboard
-            </MDButton>
-          </Link>
-
-          <Link href="/profile">
-            <MDButton
-              className="text-[#dbdce1]"
-              sx={{
-                background: 'transparent',
-                border: `1px solid rgba(255, 255, 255, 0.3)`,
-                color: '#dbdce1',
-                '&:hover': {
-                  background: 'rgba(255, 255, 255, 0.1)',
-                  transform: 'translateY(-2px)'
-                },
-                transition: 'all 0.3s ease',
-                width: '100%',
-                py: 1.5
-              }}
-              startIcon={<User size={18} />}
-            >
-              My Profile
-            </MDButton>
-          </Link>
-
-          <Link href="/past-assessments">
-            <MDButton
-              className="text-[#dbdce1]"
-              sx={{
-                background: 'transparent',
-                border: `1px solid rgba(255, 255, 255, 0.3)`,
-                color: '#dbdce1',
-                '&:hover': {
-                  background: 'rgba(255, 255, 255, 0.1)',
-                  transform: 'translateY(-2px)'
-                },
-                transition: 'all 0.3s ease',
-                width: '100%',
-                py: 1.5
-              }}
-              startIcon={<Clock size={18} />}
-            >
-              Past Assessments
-            </MDButton>
-          </Link>
-
-          <MDButton
-            onClick={() => window.location.href = '/'}
-            className="text-[#dbdce1]"
+          <MDBox
             sx={{
-              background: 'transparent',
-              border: `1px solid #EF4444`,
-              color: '#EF4444',
-              '&:hover': {
-                background: 'rgba(239, 68, 68, 0.1)',
-                borderColor: '#DC2626',
-                transform: 'translateY(-2px)'
-              },
-              transition: 'all 0.3s ease',
-              width: '100%',
-              py: 1.5
+              background: 'linear-gradient(135deg, #3B82F6 0%, #1E40AF 100%)',
+              color: 'white',
+              px: 3,
+              py: 1.5,
+              borderRadius: 3,
+              fontSize: '0.9rem',
+              fontWeight: 700,
+              textTransform: 'uppercase',
+              letterSpacing: '1px',
+              boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)'
             }}
-            startIcon={<LogOut size={18} />}
           >
-            Sign Out
-          </MDButton>
-        </MDBox>
-
-        {/* Spacer */}
-        <MDBox flexGrow={1} />
-
-        {/* Footer */}
-        <MDBox mt={4} pt={2} borderTop={`1px solid rgba(255, 255, 255, 0.2)`}>
-          <MDBox display="flex" flexDirection="column" alignItems="center" gap={1}>
-            <img
-              src="/assets/logos/apple-bites-meritage-logo.png"
-              alt="Apple Bites by Meritage Partners"
-              width={250}
-              height={250}
-              style={{
-                objectFit: 'contain',
-                maxWidth: '100%'
-              }}
-            />
+            $795 Premium Tier
           </MDBox>
         </MDBox>
-      </MDBox>
 
-      {/* Main Content */}
-      <MainContent sx={{ marginLeft: '328px' }}>
         {/* Paid Assessment Stepper */}
         <PaidAssessmentStepper activeStep={getStepIndex(currentStep)} />
 
