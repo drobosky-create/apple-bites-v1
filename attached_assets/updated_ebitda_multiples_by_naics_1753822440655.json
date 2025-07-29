@@ -1,0 +1,83 @@
+{
+  "238160": {
+    "industry": "Roofing Contractors",
+    "base_range": {
+      "min": 5.9,
+      "max": 8.4
+    },
+    "premium_range": {
+      "min": 8.5,
+      "max": 11.0
+    },
+    "notes": "Updated mid-2025 based on observed deal activity. Premium range applies to high-margin, process-driven firms."
+  },
+  "238220": {
+    "industry": "Plumbing, Heating, and Air-Conditioning Contractors",
+    "base_range": {
+      "min": 6.0,
+      "max": 8.0
+    },
+    "premium_range": {
+      "min": 8.5,
+      "max": 11.0
+    },
+    "notes": "Includes HVAC firms with service agreements or recurring maintenance contracts."
+  },
+  "238210": {
+    "industry": "Electrical Contractors and Other Wiring Installation Contractors",
+    "base_range": {
+      "min": 6.1,
+      "max": 8.7
+    },
+    "premium_range": {
+      "min": 8.8,
+      "max": 11.5
+    },
+    "notes": "Premium range for firms with significant government or long-term contracts."
+  },
+  "238310": {
+    "industry": "Drywall and Insulation Contractors",
+    "base_range": {
+      "min": 5.5,
+      "max": 7.5
+    },
+    "premium_range": {
+      "min": 7.6,
+      "max": 9.8
+    },
+    "notes": "Higher range seen in bundled or multi-service firms."
+  },
+  "238320": {
+    "industry": "Painting and Wall Covering Contractors",
+    "base_range": {
+      "min": 5.0,
+      "max": 6.5
+    },
+    "premium_range": {
+      "min": 6.6,
+      "max": 8.5
+    },
+    "notes": "Premium applies to commercial-focused firms with regional scale."
+  },
+  "general_construction": {
+    "industry": "General Construction (Aggregated)",
+    "base_range": {
+      "min": 4.0,
+      "max": 6.5
+    },
+    "premium_range": {
+      "min": 7.0,
+      "max": 9.5
+    },
+    "notes": "Represents general construction services, excluding real estate."
+  },
+  "public_comps": {
+    "industry": "Public Comparables (Construction & Engineering)",
+    "base_range": {
+      "min": 11.5,
+      "max": 12.5
+    },
+    "premium_range": null,
+    "notes": "Equidam dataset for TRBC industry classification; not direct private market comps."
+  }
+}
