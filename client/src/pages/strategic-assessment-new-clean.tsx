@@ -160,10 +160,10 @@ export default function GrowthExitAssessment() {
   const handleValueDriverAnswer = (questionId: string, answerIndex: number) => {
     const question = appleBitesQuestions.find(q => q.id === questionId);
     if (question) {
-      const score = question.weights[answerIndex];
+      // Store the index (for UI display) rather than the weight
       setValueDriverAnswers(prev => ({
         ...prev,
-        [questionId]: score
+        [questionId]: answerIndex
       }));
     }
   };
