@@ -22,6 +22,12 @@ This directory contains various EBITDA multiplier datasets organized by their us
   - Contains: Comprehensive 6-digit NAICS code multipliers with min/avg/max ranges
   - Function: `calculateComprehensiveMultiplierFromGrade(multiplierData, grade)`
 
+### Construction-Specific Premium Multipliers
+- **`construction-specific-multipliers.ts`** (NEW)
+  - Used by: Paid tier construction businesses with premium qualifications
+  - Contains: Updated construction EBITDA multipliers with base/premium ranges
+  - Function: `calculateConstructionMultiplier(naicsCode, grade, isPremium)`
+
 ### Other Multiplier Files
 - **`naicsMultipliers.ts`** - Paid tier specific NAICS mappings
 - **`curated-naics-database.ts`** - Curated industry subset with ranges
@@ -45,9 +51,11 @@ This directory contains various EBITDA multiplier datasets organized by their us
 ## Recent Updates
 - Renamed files to clarify usage context (free vs paid assessment)
 - Updated imports in server/routes.ts
+- Added construction-specific premium multipliers with base/premium ranges
+- Updated 7 construction NAICS codes with latest market data (Roofing: 5.9-11.0x, Electrical: 6.1-11.5x, etc.)
 - Hardcoded multipliers in interactive-valuation-slider.tsx identified for future cleanup
 
 ## Future Improvements
 - Centralize hardcoded multipliers in interactive-valuation-slider.tsx
-- Add construction-specific premium multipliers from updated_ebitda_multiples_by_naics_1753822440655.json
+- Implement premium qualification logic based on value driver scores
 - Implement dynamic multiplier loading for consistent data across all components

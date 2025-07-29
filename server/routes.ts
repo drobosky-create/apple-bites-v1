@@ -16,6 +16,7 @@ import { naicsDatabase, getNAICSBySector, getNAICSByParentCode, getNAICSByLevel 
 import { completeNAICSDatabase, getAllSectors, getChildrenByParentCode as getCompleteChildrenByParentCode, getNAICSByCode as getCompleteNAICSByCode, getSectorByCode, getChildrenWithEnhancedTitles } from "./config/complete-naics-database";
 import { curatedNAICSDatabase, getCuratedNAICsBySector, getCuratedSectors, getCuratedNAICSByCode, calculateMultiplierFromGrade } from "./config/curated-naics-database";
 import { comprehensiveNAICSMultipliers, getComprehensiveNAICSByCode, getComprehensiveNAICsBySector, getComprehensiveSectors, calculateComprehensiveMultiplierFromGrade } from "./config/paid-assessment-naics-multipliers";
+import { constructionMultipliers, getConstructionMultiplierByNAICS, calculateConstructionMultiplier, qualifiesForPremium } from "./config/construction-specific-multipliers";
 import fs from 'fs/promises';
 import path from 'path';
 import bcrypt from 'bcryptjs';
