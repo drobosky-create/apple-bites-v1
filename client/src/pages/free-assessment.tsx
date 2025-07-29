@@ -9,6 +9,7 @@ import FollowUpForm from "@/components/followup-form";
 import ValuationResults from "@/components/valuation-results";
 import LoadingPopup from "@/components/LoadingPopup";
 import AssessmentStepper from "@/components/AssessmentStepper";
+import AssessmentHeader from "@/components/AssessmentHeader";
 import { 
   ArrowLeft, 
   Home, 
@@ -188,6 +189,21 @@ export default function FreeAssessment() {
     <AssessmentBackground>
       {/* Main Content Area */}
       <MainContent>
+        {/* Assessment Header - only show for form steps */}
+        {currentStep !== "results" && (
+          <AssessmentHeader
+            title="Free Business Valuation Assessment"
+            subtitle="Get your comprehensive business valuation with AI-powered insights and actionable recommendations"
+            tier="free"
+            features={[
+              { icon: Calculator, label: "EBITDA Analysis" },
+              { icon: TrendingUp, label: "Value Driver Assessment" },
+              { icon: FileText, label: "Professional Report" },
+              { icon: CheckCircle, label: "Instant Results" }
+            ]}
+          />
+        )}
+        
         {/* Assessment Stepper - only show for form steps */}
         {currentStep !== "results" && (
           <AssessmentStepper activeStep={getStepIndex(currentStep)} />
