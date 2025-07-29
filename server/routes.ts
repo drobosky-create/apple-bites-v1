@@ -11,11 +11,11 @@ import { getMultiplierByNAICS, calculateWeightedMultiplier } from "./config/naic
 import { resendEmailService } from "./resend-service";
 import { emailService } from "./email-service";
 import { goHighLevelService } from "./gohighlevel-service";
-import { getMultiplierForGrade, getLabelForGrade, scoreToGrade } from "./config/multiplierScale";
+import { getMultiplierForGrade, getLabelForGrade, scoreToGrade } from "./config/grade-based-multipliers";
 import { naicsDatabase, getNAICSBySector, getNAICSByParentCode, getNAICSByLevel } from "./config/naics-database";
 import { completeNAICSDatabase, getAllSectors, getChildrenByParentCode as getCompleteChildrenByParentCode, getNAICSByCode as getCompleteNAICSByCode, getSectorByCode, getChildrenWithEnhancedTitles } from "./config/complete-naics-database";
 import { curatedNAICSDatabase, getCuratedNAICsBySector, getCuratedSectors, getCuratedNAICSByCode, calculateMultiplierFromGrade } from "./config/curated-naics-database";
-import { comprehensiveNAICSMultipliers, getComprehensiveNAICSByCode, getComprehensiveNAICsBySector, getComprehensiveSectors, calculateComprehensiveMultiplierFromGrade } from "./config/comprehensive-naics-multipliers";
+import { comprehensiveNAICSMultipliers, getComprehensiveNAICSByCode, getComprehensiveNAICsBySector, getComprehensiveSectors, calculateComprehensiveMultiplierFromGrade } from "./config/paid-assessment-naics-multipliers";
 import fs from 'fs/promises';
 import path from 'path';
 import bcrypt from 'bcryptjs';
