@@ -1,11 +1,17 @@
-import { useValuationForm } from "@/hooks/use-valuation-form";
+import { useState } from "react";
+import { Card, CardContent, Grid, TextField, FormControl, InputLabel, Select, MenuItem, Box, Typography, Button } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import MDBox from "@/components/MD/MDBox";
+import MDButton from "@/components/MD/MDButton";
+import MDTypography from "@/components/MD/MDTypography";
 import EbitdaForm from "@/components/ebitda-form";
 import AdjustmentsForm from "@/components/adjustments-form";
 import ValueDriversForm from "@/components/value-drivers-form";
 import FollowUpForm from "@/components/followup-form";
 import ValuationResults from "@/components/valuation-results";
 import LoadingPopup from "@/components/LoadingPopup";
-import AssessmentStepper from "@/components/AssessmentStepper";
+import { useValuationForm } from "@/hooks/use-valuation-form";
+import { useQuery } from "@tanstack/react-query";
 import { 
   Home, 
   FileText, 
@@ -14,17 +20,14 @@ import {
   Calculator,
   TrendingUp,
   MessageCircle,
-  DollarSign
+  DollarSign,
+  Building2,
+  ArrowLeft,
+  Star,
+  Zap
 } from "lucide-react";
 
-import {
-  Box,
-  Typography,
-  Card,
-  CardContent,
-  Button
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
+
 
 // Material Dashboard Styled Components
 const AssessmentBackground = styled(Box)(({ theme }) => ({
@@ -56,67 +59,424 @@ const FormCard = styled(Card)(({ theme }) => ({
   transition: 'all 0.3s ease',
 }));
 
+// NAICS Industry data types
+interface NAICSIndustry {
+  code: string;
+  title: string;
+  label: string;
+  multiplier: {
+    min: number;
+    avg: number;
+    max: number;
+  };
+  level: number;
+  sectorCode: string;
+}
+
+interface NAICSSector {
+  code: string;
+  title: string;
+}
+
+// Paid Assessment Steps
+type PaidAssessmentStep = 'industry' | 'ebitda' | 'adjustments' | 'valueDrivers' | 'results';
+
+interface PaidFormData {
+  industry: {
+    primarySector: string;
+    specificIndustry: string;
+    naicsCode: string;
+    sectorCode: string;
+    businessDescription: string;
+    yearsInBusiness: string;
+    numberOfEmployees: string;
+  };
+  ebitda: any;
+  adjustments: any;
+  valueDrivers: any;
+}
+
+// Paid Assessment Stepper Component
+const PaidAssessmentStepper = ({ activeStep }: { activeStep: number }) => {
+  const steps = [
+    { label: 'Industry', icon: Building2, color: '#0b2147' },
+    { label: 'Financials', icon: DollarSign, color: '#0b2147' },
+    { label: 'Adjustments', icon: Calculator, color: '#0b2147' },
+    { label: 'Value Drivers', icon: Star, color: '#0b2147' },
+    { label: 'Complete', icon: FileText, color: '#0b2147' }
+  ];
+
+  return (
+    <Box 
+      sx={{ 
+        width: '95%',
+        margin: '0 auto',
+        mb: -2,
+        position: 'relative',
+        zIndex: 2
+      }}
+    >
+      <Box
+        sx={{
+          backgroundColor: '#0A1F44',
+          borderRadius: '25px',
+          padding: '16px 24px',
+          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+          border: '1px solid rgba(255, 255, 255, 0.1)'
+        }}
+      >
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+          {steps.map((step, index) => {
+            const Icon = step.icon;
+            const isActive = index === activeStep;
+            const isCompleted = index < activeStep;
+            
+            return (
+              <Box key={step.label} sx={{ 
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                flex: 1
+              }}>
+                <Box sx={{
+                  width: 32,
+                  height: 32,
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  backgroundColor: isActive || isCompleted ? '#ffffff' : '#fff',
+                  color: isActive || isCompleted ? '#0A1F44' : '#B0B7C3',
+                  border: '2px solid',
+                  borderColor: isCompleted ? '#ffffff' : '#E0E0E0',
+                  mb: 1,
+                  transition: 'all 0.3s ease'
+                }}>
+                  <Icon size={16} />
+                </Box>
+                <Typography 
+                  variant="caption" 
+                  sx={{ 
+                    color: isActive ? '#ffffff' : '#B0B7C3',
+                    fontWeight: isActive ? 600 : 400,
+                    fontSize: '11px'
+                  }}
+                >
+                  {step.label}
+                </Typography>
+              </Box>
+            );
+          })}
+        </Box>
+      </Box>
+    </Box>
+  );
+};
+
 export default function GrowthExitAssessment() {
-  
-  // Use the existing valuation form hook (same as free assessment)
+  const [currentStep, setCurrentStep] = useState<PaidAssessmentStep>('industry');
+  const [formData, setFormData] = useState<PaidFormData>({
+    industry: {
+      primarySector: '',
+      specificIndustry: '',
+      naicsCode: '',
+      sectorCode: '',
+      businessDescription: '',
+      yearsInBusiness: '',
+      numberOfEmployees: ''
+    },
+    ebitda: {},
+    adjustments: {},
+    valueDrivers: {}
+  });
+
+  // Get regular valuation form for EBITDA, adjustments, and value drivers steps
   const {
-    currentStep,
-    formData,
-    nextStep,
-    prevStep,
-    updateFormData,
+    formData: valuationFormData,
+    updateFormData: updateValuationFormData,
+    forms,
     submitAssessment,
     results,
     isSubmitting,
-    isGeneratingReport,
-    forms
+    isGeneratingReport
   } = useValuationForm();
 
-  // Define steps for paid assessment (without contact step, starts with ebitda)
-  const steps = [
-    { 
-      id: 'ebitda', 
-      title: 'Financials', 
-      component: 'ebitda',
-      icon: DollarSign 
-    },
-    { 
-      id: 'adjustments', 
-      title: 'Adjustments', 
-      component: 'adjustments',
-      icon: Calculator 
-    },
-    { 
-      id: 'valueDrivers', 
-      title: 'Value Drivers', 
-      component: 'value-drivers',
-      icon: TrendingUp 
-    },
-    { 
-      id: 'followUp', 
-      title: 'Follow-up', 
-      component: 'followup',
-      icon: MessageCircle 
-    },
-    { 
-      id: 'results', 
-      title: 'Complete', 
-      component: 'results',
-      icon: CheckCircle 
-    }
-  ];
+  // Fetch NAICS sectors
+  const { data: sectors, isLoading: sectorsLoading } = useQuery<NAICSSector[]>({
+    queryKey: ['/api/naics/sectors'],
+  });
+
+  // Fetch industries for selected sector
+  const { data: sectorIndustries, isLoading: industriesLoading } = useQuery<NAICSIndustry[]>({
+    queryKey: ['/api/naics/industries', formData.industry.sectorCode],
+    enabled: !!formData.industry.sectorCode,
+  });
+
+  const getStepIndex = (step: PaidAssessmentStep): number => {
+    const stepMap = { 'industry': 0, 'ebitda': 1, 'adjustments': 2, 'valueDrivers': 3, 'results': 4 };
+    return stepMap[step] || 0;
+  };
+
+  const nextStep = () => {
+    if (currentStep === 'industry') setCurrentStep('ebitda');
+    else if (currentStep === 'ebitda') setCurrentStep('adjustments');
+    else if (currentStep === 'adjustments') setCurrentStep('valueDrivers');
+    else if (currentStep === 'valueDrivers') setCurrentStep('results');
+  };
+
+  const prevStep = () => {
+    if (currentStep === 'ebitda') setCurrentStep('industry');
+    else if (currentStep === 'adjustments') setCurrentStep('ebitda');
+    else if (currentStep === 'valueDrivers') setCurrentStep('adjustments');
+    else if (currentStep === 'results') setCurrentStep('valueDrivers');
+  };
+
+  const handleSectorChange = (sectorCode: string) => {
+    const selectedSector = sectors?.find(s => s.code === sectorCode);
+    setFormData(prev => ({
+      ...prev,
+      industry: {
+        ...prev.industry,
+        sectorCode,
+        primarySector: selectedSector?.title || '',
+        specificIndustry: '',
+        naicsCode: ''
+      }
+    }));
+  };
+
+  const handleIndustryChange = (naicsCode: string) => {
+    const selectedIndustry = sectorIndustries?.find(i => i.code === naicsCode);
+    setFormData(prev => ({
+      ...prev,
+      industry: {
+        ...prev.industry,
+        naicsCode,
+        specificIndustry: selectedIndustry?.title || ''
+      }
+    }));
+  };
+
+  const handleIndustryInputChange = (field: string, value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      industry: {
+        ...prev.industry,
+        [field]: value
+      }
+    }));
+  };
+
+  const renderIndustryForm = () => (
+    <MDBox>
+      {/* Header */}
+      <MDBox display="flex" alignItems="center" mb={3}>
+        <MDBox
+          sx={{
+            width: 48,
+            height: 48,
+            borderRadius: '12px',
+            background: 'linear-gradient(135deg, #00718d 0%, #005b8c 100%)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            mr: 2
+          }}
+        >
+          <Building2 size={24} color="white" />
+        </MDBox>
+        <MDBox>
+          <MDTypography variant="h5" fontWeight="medium" sx={{ color: '#344767', mb: 0.5 }}>
+            Industry Classification
+          </MDTypography>
+          <MDTypography variant="body2" sx={{ color: '#67748e' }}>
+            Select your industry for accurate valuation benchmarks
+          </MDTypography>
+        </MDBox>
+      </MDBox>
+
+      {/* Industry Selection */}
+      <MDBox sx={{ display: 'flex', gap: 3, flexDirection: { xs: 'column', md: 'row' } }}>
+        <MDBox sx={{ flex: 1 }}>
+          <FormControl fullWidth>
+            <InputLabel>Primary Industry Sector</InputLabel>
+            <Select
+              value={formData.industry.sectorCode}
+              onChange={(e) => handleSectorChange(e.target.value)}
+              label="Primary Industry Sector"
+              disabled={sectorsLoading}
+            >
+              {sectors?.map((sector) => (
+                <MenuItem key={sector.code} value={sector.code}>
+                  {sector.title}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </MDBox>
+
+        <MDBox sx={{ flex: 1 }}>
+          <FormControl fullWidth>
+            <InputLabel>Specific Industry</InputLabel>
+            <Select
+              value={formData.industry.naicsCode}
+              onChange={(e) => handleIndustryChange(e.target.value)}
+              label="Specific Industry"
+              disabled={!formData.industry.sectorCode || industriesLoading}
+            >
+              {sectorIndustries?.map((industry) => (
+                <MenuItem key={industry.code} value={industry.code}>
+                  {industry.title}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </MDBox>
+      </MDBox>
+
+      {/* Business Details */}
+      <MDBox mt={4}>
+        <MDTypography variant="h6" fontWeight="medium" sx={{ color: '#344767', mb: 2 }}>
+          Business Details
+        </MDTypography>
+        
+        <MDBox sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+          <TextField
+            fullWidth
+            label="Business Description"
+            multiline
+            rows={3}
+            value={formData.industry.businessDescription}
+            onChange={(e) => handleIndustryInputChange('businessDescription', e.target.value)}
+            placeholder="Briefly describe your business operations..."
+          />
+
+          <MDBox sx={{ display: 'flex', gap: 3, flexDirection: { xs: 'column', md: 'row' } }}>
+            <TextField
+              fullWidth
+              label="Years in Business"
+              type="number"
+              value={formData.industry.yearsInBusiness}
+              onChange={(e) => handleIndustryInputChange('yearsInBusiness', e.target.value)}
+              placeholder="e.g., 5"
+            />
+
+            <TextField
+              fullWidth
+              label="Number of Employees"
+              type="number"
+              value={formData.industry.numberOfEmployees}
+              onChange={(e) => handleIndustryInputChange('numberOfEmployees', e.target.value)}
+              placeholder="e.g., 25"
+            />
+          </MDBox>
+        </MDBox>
+      </MDBox>
+
+      {/* Selected Industry Info */}
+      {formData.industry.naicsCode && (
+        <MDBox mt={4}>
+          <Card sx={{ backgroundColor: '#f8f9fa', border: '1px solid #e9ecef' }}>
+            <CardContent>
+              <MDBox display="flex" alignItems="center" mb={2}>
+                <TrendingUp size={20} color="#00718d" />
+                <MDTypography variant="h6" fontWeight="medium" sx={{ color: '#344767', ml: 1 }}>
+                  Industry Valuation Benchmarks
+                </MDTypography>
+              </MDBox>
+              
+              <MDTypography variant="body2" sx={{ color: '#67748e', mb: 2 }}>
+                Selected: {formData.industry.specificIndustry}
+              </MDTypography>
+              
+              <MDBox display="flex" gap={3}>
+                <MDBox textAlign="center">
+                  <MDTypography variant="caption" sx={{ color: '#67748e' }}>
+                    NAICS Code
+                  </MDTypography>
+                  <MDTypography variant="h6" fontWeight="medium" sx={{ color: '#344767' }}>
+                    {formData.industry.naicsCode}
+                  </MDTypography>
+                </MDBox>
+                
+                {sectorIndustries?.find(i => i.code === formData.industry.naicsCode) && (
+                  <>
+                    <MDBox textAlign="center">
+                      <MDTypography variant="caption" sx={{ color: '#67748e' }}>
+                        Avg Multiple
+                      </MDTypography>
+                      <MDTypography variant="h6" fontWeight="medium" sx={{ color: '#00718d' }}>
+                        {sectorIndustries.find(i => i.code === formData.industry.naicsCode)?.multiplier.avg.toFixed(1)}x
+                      </MDTypography>
+                    </MDBox>
+                    
+                    <MDBox textAlign="center">
+                      <MDTypography variant="caption" sx={{ color: '#67748e' }}>
+                        Range
+                      </MDTypography>
+                      <MDTypography variant="h6" fontWeight="medium" sx={{ color: '#344767' }}>
+                        {sectorIndustries.find(i => i.code === formData.industry.naicsCode)?.multiplier.min.toFixed(1)}x - {sectorIndustries.find(i => i.code === formData.industry.naicsCode)?.multiplier.max.toFixed(1)}x
+                      </MDTypography>
+                    </MDBox>
+                  </>
+                )}
+              </MDBox>
+            </CardContent>
+          </Card>
+        </MDBox>
+      )}
+
+      {/* Navigation */}
+      <MDBox display="flex" justifyContent="space-between" alignItems="center" mt={4}>
+        <MDButton
+          variant="outlined"
+          sx={{
+            color: '#67748e',
+            borderColor: '#dee2e6',
+            '&:hover': {
+              backgroundColor: '#f8f9fa',
+              borderColor: '#adb5bd'
+            }
+          }}
+          onClick={() => window.history.back()}
+        >
+          Back to Dashboard
+        </MDButton>
+
+        <MDButton
+          variant="contained"
+          sx={{
+            background: 'linear-gradient(135deg, #00718d 0%, #005b8c 100%)',
+            color: 'white',
+            px: 4,
+            '&:hover': {
+              background: 'linear-gradient(135deg, #005b8c 0%, #004a73 100%)',
+              transform: 'translateY(-2px)'
+            },
+            transition: 'all 0.3s ease'
+          }}
+          disabled={!formData.industry.naicsCode || !formData.industry.businessDescription}
+          onClick={nextStep}
+        >
+          Continue to Financials
+        </MDButton>
+      </MDBox>
+    </MDBox>
+  );
 
   const renderStepComponent = () => {
     switch (currentStep) {
+      case 'industry':
+        return renderIndustryForm();
       case 'ebitda':
         return (
           <EbitdaForm
             form={forms.ebitda}
             onNext={nextStep}
             onPrev={prevStep}
-            onDataChange={(data) => updateFormData("ebitda", data)}
+            onDataChange={(data) => updateValuationFormData("ebitda", data)}
             calculateEbitda={() => {
-              const { netIncome, interest, taxes, depreciation, amortization } = formData.ebitda;
+              const { netIncome, interest, taxes, depreciation, amortization } = valuationFormData.ebitda;
               return (
                 parseFloat(netIncome || "0") +
                 parseFloat(interest || "0") +
@@ -133,68 +493,56 @@ export default function GrowthExitAssessment() {
             form={forms.adjustments}
             onNext={nextStep}
             onPrev={prevStep}
-            onDataChange={(data) => updateFormData("adjustments", data)}
+            onDataChange={(data) => updateValuationFormData("adjustments", data)}
             calculateAdjustedEbitda={() => {
-              const baseEbitda = parseFloat(formData.ebitda.netIncome || "0") +
-                parseFloat(formData.ebitda.interest || "0") +
-                parseFloat(formData.ebitda.taxes || "0") +
-                parseFloat(formData.ebitda.depreciation || "0") +
-                parseFloat(formData.ebitda.amortization || "0");
-              const { ownerSalary, personalExpenses, oneTimeExpenses, otherAdjustments } = formData.adjustments;
+              const baseEbitda = parseFloat(valuationFormData.ebitda.netIncome || "0") +
+                parseFloat(valuationFormData.ebitda.interest || "0") +
+                parseFloat(valuationFormData.ebitda.taxes || "0") +
+                parseFloat(valuationFormData.ebitda.depreciation || "0") +
+                parseFloat(valuationFormData.ebitda.amortization || "0");
+              const { ownerSalary, personalExpenses, oneTimeExpenses, otherAdjustments } = valuationFormData.adjustments;
               return baseEbitda +
                 parseFloat(ownerSalary || "0") +
                 parseFloat(personalExpenses || "0") +
                 parseFloat(oneTimeExpenses || "0") +
                 parseFloat(otherAdjustments || "0");
             }}
-            baseEbitda={parseFloat(formData.ebitda.netIncome || "0") +
-              parseFloat(formData.ebitda.interest || "0") +
-              parseFloat(formData.ebitda.taxes || "0") +
-              parseFloat(formData.ebitda.depreciation || "0") +
-              parseFloat(formData.ebitda.amortization || "0")}
+            baseEbitda={parseFloat(valuationFormData.ebitda.netIncome || "0") +
+              parseFloat(valuationFormData.ebitda.interest || "0") +
+              parseFloat(valuationFormData.ebitda.taxes || "0") +
+              parseFloat(valuationFormData.ebitda.depreciation || "0") +
+              parseFloat(valuationFormData.ebitda.amortization || "0")}
           />
         );
       case 'valueDrivers':
         return (
           <ValueDriversForm
             form={forms.valueDrivers}
-            onNext={nextStep}
-            onPrev={prevStep}
-            onDataChange={(data) => updateFormData("valueDrivers", data)}
-          />
-        );
-      case 'followUp':
-        return (
-          <FollowUpForm
-            form={forms.followUp}
-            onSubmit={() => {
-              // Submit assessment with paid tier flag
+            onNext={() => {
+              // Submit assessment with industry data included
+              const combinedData = {
+                ...valuationFormData,
+                industry: formData.industry,
+                tier: 'paid'
+              };
               submitAssessment();
+              setCurrentStep('results');
             }}
             onPrev={prevStep}
-            onDataChange={(data) => updateFormData("followUp", data)}
-            isSubmitting={isSubmitting}
+            onDataChange={(data) => updateValuationFormData("valueDrivers", data)}
           />
         );
       case 'results':
         return <ValuationResults results={results} />;
       default:
-        return (
-          <EbitdaForm
-            form={forms.ebitda}
-            onNext={nextStep}
-            onPrev={prevStep}
-            onDataChange={(data) => updateFormData("ebitda", data)}
-            calculateEbitda={() => 0}
-          />
-        );
+        return renderIndustryForm();
     }
   };
 
   return (
     <AssessmentBackground>
       {/* Loading Popup */}
-      {isGeneratingReport && <LoadingPopup />}
+      {isGeneratingReport && <LoadingPopup open={true} onClose={() => {}} />}
       
       {/* Left Sidebar */}
       <Box
@@ -336,16 +684,12 @@ export default function GrowthExitAssessment() {
 
       {/* Main Content */}
       <MainContent sx={{ marginLeft: `${drawerWidth}px` }}>
-        {/* Assessment Stepper - using same component as free assessment */}
-        <AssessmentStepper
-          steps={steps}
-          currentStep={steps.findIndex(s => s.id === currentStep)}
-          sx={{ mb: 3 }}
-        />
+        {/* Paid Assessment Stepper */}
+        <PaidAssessmentStepper activeStep={getStepIndex(currentStep)} />
 
         {/* Form Content */}
         <FormCard>
-          <CardContent sx={{ p: 4 }}>
+          <CardContent sx={{ p: 4, minHeight: '500px' }}>
             {renderStepComponent()}
           </CardContent>
         </FormCard>
