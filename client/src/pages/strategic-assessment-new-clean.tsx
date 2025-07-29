@@ -484,8 +484,7 @@ export default function GrowthExitAssessment() {
           </MDBox>
         )}
 
-        {/* Progress Stepper - Same as Free Assessment */}
-        <AssessmentStepper activeStep={getStepIndex(currentStep)} />
+
 
         {/* Form Card */}
         <FormCard>
