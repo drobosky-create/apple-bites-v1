@@ -249,20 +249,7 @@ export default function StrategicReport({ results }: StrategicReportProps) {
                   Market Position Score
                 </MDTypography>
                 <MDBox display="flex" alignItems="center" mb={2}>
-                  <LinearProgress 
-                    variant="determinate" 
-                    value={75} 
-                    sx={{ 
-                      flexGrow: 1, 
-                      height: 10, 
-                      borderRadius: 5,
-                      backgroundColor: '#E0E0E0',
-                      '& .MuiLinearProgress-bar': {
-                        backgroundColor: '#4CAF50'
-                      }
-                    }} 
-                  />
-                  <MDTypography variant="body1" fontWeight="bold" color="success" ml={2}>
+                  <MDTypography variant="h3" fontWeight="bold" color="success">
                     75%
                   </MDTypography>
                 </MDBox>
@@ -277,20 +264,7 @@ export default function StrategicReport({ results }: StrategicReportProps) {
                   Growth Trajectory
                 </MDTypography>
                 <MDBox display="flex" alignItems="center" mb={2}>
-                  <LinearProgress 
-                    variant="determinate" 
-                    value={68} 
-                    sx={{ 
-                      flexGrow: 1, 
-                      height: 10, 
-                      borderRadius: 5,
-                      backgroundColor: '#E0E0E0',
-                      '& .MuiLinearProgress-bar': {
-                        backgroundColor: '#FF9800'
-                      }
-                    }} 
-                  />
-                  <MDTypography variant="body1" fontWeight="bold" color="warning" ml={2}>
+                  <MDTypography variant="h3" fontWeight="bold" color="warning">
                     68%
                   </MDTypography>
                 </MDBox>
