@@ -13,10 +13,10 @@ interface EbitdaFormProps {
   onPrev: () => void;
   onDataChange: (data: EbitdaData) => void;
   calculateEbitda: () => number;
+  isLocked?: boolean;
 }
 
-export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calculateEbitda }: EbitdaFormProps) {
-  const [isLocked, setIsLocked] = useState(true);
+export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calculateEbitda, isLocked = true }: EbitdaFormProps) {
   const watchedValues = form.watch();
   const ebitdaTotal = calculateEbitda();
 
@@ -63,7 +63,7 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
           </span>
         </MDBox>
 
-        <MDBox sx={{ flex: 1 }}>
+        <MDBox>
           <MDTypography variant="h4" fontWeight="bold" color="dark" mb={1}>
             Financial Information
           </MDTypography>
@@ -71,31 +71,6 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
             Please provide your company's financial information for the most recent fiscal year to calculate EBITDA.
           </MDTypography>
         </MDBox>
-        
-        {/* Update/Lock Button */}
-        <MDButton
-          variant={isLocked ? "gradient" : "outlined"}
-          color={isLocked ? "success" : "secondary"}
-          size="small"
-          onClick={() => setIsLocked(!isLocked)}
-          sx={{
-            ml: 2,
-            minWidth: '100px',
-            height: 'fit-content'
-          }}
-        >
-          {isLocked ? (
-            <>
-              <Edit3 size={16} style={{ marginRight: '6px' }} />
-              Update
-            </>
-          ) : (
-            <>
-              <Lock size={16} style={{ marginRight: '6px' }} />
-              Lock
-            </>
-          )}
-        </MDButton>
       </MDBox>
 
       {/* Form Container */}

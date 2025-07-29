@@ -23,7 +23,9 @@ import {
   DollarSign,
   Star,
   CheckCircle,
-  RefreshCw
+  RefreshCw,
+  Edit3,
+  Lock
 } from "lucide-react";
 
 // Material Dashboard Styled Components
@@ -83,6 +85,7 @@ export default function GrowthExitAssessment() {
   const [valueDriverAnswers, setValueDriverAnswers] = useState<{[key: string]: number}>({});
   const [dataPrePopulated, setDataPrePopulated] = useState(false);
   const [showUpdateButton, setShowUpdateButton] = useState(false);
+  const [isFieldsLocked, setIsFieldsLocked] = useState(true);
 
   // Fetch previous assessments to check for existing financial data
   const { data: previousAssessments, isLoading: assessmentsLoading } = useQuery<ValuationAssessment[]>({
@@ -163,6 +166,10 @@ export default function GrowthExitAssessment() {
         [questionId]: score
       }));
     }
+  };
+
+  const toggleFieldLock = () => {
+    setIsFieldsLocked(!isFieldsLocked);
   };
 
   const clearFinancialData = () => {
@@ -340,6 +347,7 @@ export default function GrowthExitAssessment() {
                   parseFloat(amortization || "0")
                 );
               }}
+              isLocked={isFieldsLocked}
             />
           </MDBox>
         );
@@ -440,10 +448,10 @@ export default function GrowthExitAssessment() {
                     },
                     transition: 'all 0.2s ease'
                   }}
-                  onClick={clearFinancialData}
-                  startIcon={<RefreshCw size={14} />}
+                  onClick={toggleFieldLock}
+                  startIcon={isFieldsLocked ? <Edit3 size={14} /> : <Lock size={14} />}
                 >
-                  Update Info
+                  {isFieldsLocked ? 'Update Info' : 'Lock Info'}
                 </MDButton>
               }
             >
@@ -451,7 +459,7 @@ export default function GrowthExitAssessment() {
                 Financial Data Loaded
               </AlertTitle>
               <MDTypography variant="body2" sx={{ color: '#166534', fontSize: '13px' }}>
-                We've pre-filled your financial information from your previous assessment. Click "Update Info" to modify.
+                We've pre-filled your financial information from your previous assessment. Click "{isFieldsLocked ? 'Update Info' : 'Lock Info'}" to {isFieldsLocked ? 'modify' : 'secure'} your data.
               </MDTypography>
             </Alert>
           </MDBox>
