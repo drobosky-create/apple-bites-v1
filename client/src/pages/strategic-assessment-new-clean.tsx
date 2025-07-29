@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Card, CardContent, Box, FormControlLabel, RadioGroup, Radio, FormControl } from '@mui/material';
+import { useState, useEffect } from "react";
+import { Card, CardContent, Box, FormControlLabel, RadioGroup, Radio, FormControl, Alert, AlertTitle } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import MDBox from "@/components/MD/MDBox";
 import MDButton from "@/components/MD/MDButton";
@@ -11,6 +11,8 @@ import ValuationResults from "@/components/valuation-results";
 import LoadingPopup from "@/components/LoadingPopup";
 import AssessmentStepper from "@/components/AssessmentStepper";
 import { useValuationForm } from "@/hooks/use-valuation-form";
+import { useQuery } from "@tanstack/react-query";
+import type { ValuationAssessment } from "@shared/schema";
 import { 
   FileText, 
   Calculator,
@@ -18,7 +20,8 @@ import {
   MessageCircle,
   DollarSign,
   Star,
-  CheckCircle
+  CheckCircle,
+  RefreshCw
 } from "lucide-react";
 
 // Material Dashboard Styled Components
@@ -252,6 +255,13 @@ const appleBitesQuestions: AppleBitesQuestion[] = [
 export default function GrowthExitAssessment() {
   const [currentStep, setCurrentStep] = useState<PaidAssessmentStep>('ebitda');
   const [valueDriverAnswers, setValueDriverAnswers] = useState<{[key: string]: number}>({});
+  const [dataPrePopulated, setDataPrePopulated] = useState(false);
+  const [showUpdateButton, setShowUpdateButton] = useState(false);
+
+  // Fetch previous assessments to check for existing financial data
+  const { data: previousAssessments, isLoading: assessmentsLoading } = useQuery<ValuationAssessment[]>({
+    queryKey: ['/api/assessments'],
+  });
 
   // Get valuation form for standard steps
   const {
@@ -263,6 +273,41 @@ export default function GrowthExitAssessment() {
     isSubmitting,
     isGeneratingReport
   } = useValuationForm();
+
+  // Pre-populate financial data from most recent free assessment
+  useEffect(() => {
+    if (previousAssessments && previousAssessments.length > 0 && !dataPrePopulated) {
+      const latestAssessment = previousAssessments[0];
+      
+      // Check if this assessment has financial data
+      if (latestAssessment.netIncome || latestAssessment.adjustedEbitda) {
+        // Pre-populate EBITDA form data
+        const ebitdaData = {
+          netIncome: latestAssessment.netIncome?.toString() || "0",
+          interest: latestAssessment.interest?.toString() || "0",
+          taxes: latestAssessment.taxes?.toString() || "0",
+          depreciation: latestAssessment.depreciation?.toString() || "0",
+          amortization: latestAssessment.amortization?.toString() || "0",
+          adjustmentNotes: ""
+        };
+        
+        // Pre-populate adjustments form data
+        const adjustmentsData = {
+          ownerSalary: latestAssessment.ownerSalary?.toString() || "0",
+          personalExpenses: latestAssessment.personalExpenses?.toString() || "0",
+          oneTimeExpenses: latestAssessment.oneTimeExpenses?.toString() || "0",
+          otherAdjustments: latestAssessment.otherAdjustments?.toString() || "0",
+          adjustmentNotes: latestAssessment.adjustmentNotes || ""
+        };
+
+        updateValuationFormData("ebitda", ebitdaData);
+        updateValuationFormData("adjustments", adjustmentsData);
+        
+        setDataPrePopulated(true);
+        setShowUpdateButton(true);
+      }
+    }
+  }, [previousAssessments, dataPrePopulated, updateValuationFormData]);
 
   const getStepIndex = (step: PaidAssessmentStep): number => {
     const stepMap = { 'ebitda': 0, 'adjustments': 1, 'valueDrivers': 2, 'followup': 3, 'results': 4 };
@@ -292,6 +337,30 @@ export default function GrowthExitAssessment() {
         [questionId]: score
       }));
     }
+  };
+
+  const clearFinancialData = () => {
+    // Clear EBITDA data
+    updateValuationFormData("ebitda", {
+      netIncome: "",
+      interest: "",
+      taxes: "",
+      depreciation: "",
+      amortization: "",
+      adjustmentNotes: ""
+    });
+    
+    // Clear adjustments data
+    updateValuationFormData("adjustments", {
+      ownerSalary: "",
+      personalExpenses: "",
+      oneTimeExpenses: "",
+      otherAdjustments: "",
+      adjustmentNotes: ""
+    });
+    
+    setDataPrePopulated(false);
+    setShowUpdateButton(false);
   };
 
   const renderValueDriversForm = () => {
@@ -420,22 +489,33 @@ export default function GrowthExitAssessment() {
     switch (currentStep) {
       case 'ebitda':
         return (
-          <EbitdaForm
-            form={forms.ebitda}
-            onNext={nextStep}
-            onPrev={() => window.history.back()}
-            onDataChange={(data) => updateValuationFormData("ebitda", data)}
-            calculateEbitda={() => {
-              const { netIncome, interest, taxes, depreciation, amortization } = valuationFormData.ebitda;
-              return (
-                parseFloat(netIncome || "0") +
-                parseFloat(interest || "0") +
-                parseFloat(taxes || "0") +
-                parseFloat(depreciation || "0") +
-                parseFloat(amortization || "0")
-              );
-            }}
-          />
+          <MDBox>
+            {/* Show loading while fetching previous data */}
+            {assessmentsLoading && (
+              <MDBox sx={{ textAlign: 'center', py: 2, mb: 3 }}>
+                <MDTypography variant="body2" sx={{ color: '#67748e' }}>
+                  Checking for previous financial data...
+                </MDTypography>
+              </MDBox>
+            )}
+            
+            <EbitdaForm
+              form={forms.ebitda}
+              onNext={nextStep}
+              onPrev={() => window.history.back()}
+              onDataChange={(data) => updateValuationFormData("ebitda", data)}
+              calculateEbitda={() => {
+                const { netIncome, interest, taxes, depreciation, amortization } = valuationFormData.ebitda;
+                return (
+                  parseFloat(netIncome || "0") +
+                  parseFloat(interest || "0") +
+                  parseFloat(taxes || "0") +
+                  parseFloat(depreciation || "0") +
+                  parseFloat(amortization || "0")
+                );
+              }}
+            />
+          </MDBox>
         );
       case 'adjustments':
         return (
@@ -520,6 +600,54 @@ export default function GrowthExitAssessment() {
             Industry-specific strategic valuation with AI insights
           </MDTypography>
         </MDBox>
+
+        {/* Data Pre-population Alert */}
+        {showUpdateButton && (
+          <MDBox sx={{ mb: 3, mx: 'auto', maxWidth: '95%' }}>
+            <Alert 
+              severity="success" 
+              sx={{ 
+                backgroundColor: '#f0f9f4',
+                border: '1px solid #22c55e',
+                borderRadius: '12px',
+                '& .MuiAlert-icon': {
+                  color: '#22c55e'
+                }
+              }}
+              action={
+                <MDButton
+                  size="small"
+                  sx={{
+                    backgroundColor: '#22c55e',
+                    color: 'white',
+                    fontSize: '12px',
+                    px: 2,
+                    py: 0.5,
+                    borderRadius: '8px',
+                    textTransform: 'none',
+                    fontWeight: 'medium',
+                    '&:hover': {
+                      backgroundColor: '#16a34a',
+                      transform: 'translateY(-1px)'
+                    },
+                    transition: 'all 0.2s ease'
+                  }}
+                  onClick={clearFinancialData}
+                  startIcon={<RefreshCw size={14} />}
+                >
+                  Update Info
+                </MDButton>
+              }
+            >
+              <AlertTitle sx={{ color: '#22c55e', fontWeight: 'bold', fontSize: '14px' }}>
+                Financial Data Loaded
+              </AlertTitle>
+              <MDTypography variant="body2" sx={{ color: '#166534', fontSize: '13px' }}>
+                We've pre-filled your financial information from your previous assessment. Click "Update Info" to modify.
+              </MDTypography>
+            </Alert>
+          </MDBox>
+        )}
 
         {/* Progress Stepper - Same as Free Assessment */}
         <AssessmentStepper activeStep={getStepIndex(currentStep)} />
