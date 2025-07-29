@@ -8,7 +8,7 @@ import EbitdaForm from "@/components/ebitda-form";
 import AdjustmentsForm from "@/components/adjustments-form";
 import FollowUpForm from "@/components/followup-form";
 import ValuationResults from "@/components/valuation-results";
-import TierSelection from "@/components/tier-selection";
+import StrategicReport from "@/components/strategic-report";
 import LoadingPopup from "@/components/LoadingPopup";
 import AssessmentStepper from "@/components/AssessmentStepper";
 import AssessmentHeader, { PREMIUM_FEATURES } from "@/components/AssessmentHeader";
@@ -403,12 +403,7 @@ export default function GrowthExitAssessment() {
         );
       case 'results':
         return results ? (
-          <TierSelection 
-            assessment={results} 
-            onTierSelect={(tier) => {
-              console.log(`Selected tier: ${tier}`);
-            }} 
-          />
+          <StrategicReport results={results} />
         ) : <div>Loading...</div>;
       default:
         return null;
