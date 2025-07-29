@@ -9,6 +9,7 @@ import AdjustmentsForm from "@/components/adjustments-form";
 import FollowUpForm from "@/components/followup-form";
 import ValuationResults from "@/components/valuation-results";
 import LoadingPopup from "@/components/LoadingPopup";
+import AssessmentStepper from "@/components/AssessmentStepper";
 import { useValuationForm } from "@/hooks/use-valuation-form";
 import { 
   FileText, 
@@ -62,89 +63,7 @@ interface AppleBitesQuestion {
 // Paid Assessment Steps - Updated for Apple Bites workflow
 type PaidAssessmentStep = 'ebitda' | 'adjustments' | 'valueDrivers' | 'followup' | 'results';
 
-// Paid Assessment Stepper Component
-const PaidAssessmentStepper = ({ activeStep }: { activeStep: number }) => {
-  const steps = [
-    { label: 'Financials', icon: DollarSign, color: '#0b2147' },
-    { label: 'Adjustments', icon: Calculator, color: '#0b2147' },
-    { label: 'Value Drivers', icon: Star, color: '#0b2147' },
-    { label: 'Follow-up', icon: MessageCircle, color: '#0b2147' },
-    { label: 'Complete', icon: FileText, color: '#0b2147' }
-  ];
-
-  return (
-    <Box 
-      sx={{ 
-        width: '95%',
-        mx: 'auto',
-        mb: 3,
-        backgroundColor: 'rgba(11, 33, 71, 0.95)',
-        borderRadius: '50px',
-        padding: '8px 16px',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        position: 'relative',
-        zIndex: 2,
-        marginTop: '-20px'
-      }}
-    >
-      {steps.map((step, index) => {
-        const Icon = step.icon;
-        const isActive = index === activeStep;
-        const isCompleted = index < activeStep;
-        
-        return (
-          <Box
-            key={index}
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              zIndex: 3,
-              backgroundColor: isActive ? '#ffffff' : 'transparent',
-              borderRadius: '20px',
-              padding: '8px 12px',
-              minWidth: '80px',
-              position: 'relative'
-            }}
-          >
-            <Box
-              sx={{
-                width: 32,
-                height: 32,
-                borderRadius: '50%',
-                backgroundColor: isCompleted ? '#28a745' : isActive ? step.color : 'rgba(255,255,255,0.3)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                mb: 0.5,
-                transition: 'all 0.3s ease'
-              }}
-            >
-              {isCompleted ? (
-                <CheckCircle size={16} color="white" />
-              ) : (
-                <Icon size={16} color={isActive ? 'white' : 'rgba(255,255,255,0.8)'} />
-              )}
-            </Box>
-            <MDTypography
-              variant="caption"
-              sx={{
-                color: isActive ? '#344767' : 'white',
-                fontWeight: isActive ? 'bold' : 'medium',
-                fontSize: '11px',
-                textAlign: 'center'
-              }}
-            >
-              {step.label}
-            </MDTypography>
-          </Box>
-        );
-      })}
-    </Box>
-  );
-};
+// Remove custom stepper - we'll use the same AssessmentStepper as Free Assessment
 
 // Apple Bites Value Drivers Questions Data
 const appleBitesQuestions: AppleBitesQuestion[] = [
@@ -602,8 +521,8 @@ export default function GrowthExitAssessment() {
           </MDTypography>
         </MDBox>
 
-        {/* Progress Stepper */}
-        <PaidAssessmentStepper activeStep={getStepIndex(currentStep)} />
+        {/* Progress Stepper - Same as Free Assessment */}
+        <AssessmentStepper activeStep={getStepIndex(currentStep)} />
 
         {/* Form Card */}
         <FormCard>
