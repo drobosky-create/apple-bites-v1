@@ -82,7 +82,7 @@ const appleBitesQuestionSet: AppleBitesQuestionSet = appleBitesQuestionsData[0] 
 const appleBitesQuestions: AppleBitesQuestion[] = appleBitesQuestionSet.questions;
 
 export default function GrowthExitAssessment() {
-  const [currentStep, setCurrentStep] = useState<PaidAssessmentStep>('ebitda');
+  const [currentStep, setCurrentStep] = useState<PaidAssessmentStep>('results');
   const [valueDriverAnswers, setValueDriverAnswers] = useState<{[key: string]: number}>({});
   const [dataPrePopulated, setDataPrePopulated] = useState(false);
   const [showUpdateButton, setShowUpdateButton] = useState(false);
@@ -104,40 +104,35 @@ export default function GrowthExitAssessment() {
     isGeneratingReport
   } = useValuationForm();
 
-  // Pre-populate financial data from most recent free assessment
+  // Pre-populate with mock data for demonstration
   useEffect(() => {
-    if (previousAssessments && previousAssessments.length > 0 && !dataPrePopulated) {
-      const latestAssessment = previousAssessments[0];
+    if (!dataPrePopulated) {
+      // Mock EBITDA data
+      const ebitdaData = {
+        netIncome: "2400000",
+        interest: "150000", 
+        taxes: "480000",
+        depreciation: "200000",
+        amortization: "50000",
+        adjustmentNotes: "Standard EBITDA calculation"
+      };
       
-      // Check if this assessment has financial data
-      if (latestAssessment.netIncome || latestAssessment.adjustedEbitda) {
-        // Pre-populate EBITDA form data
-        const ebitdaData = {
-          netIncome: latestAssessment.netIncome?.toString() || "0",
-          interest: latestAssessment.interest?.toString() || "0",
-          taxes: latestAssessment.taxes?.toString() || "0",
-          depreciation: latestAssessment.depreciation?.toString() || "0",
-          amortization: latestAssessment.amortization?.toString() || "0",
-          adjustmentNotes: ""
-        };
-        
-        // Pre-populate adjustments form data
-        const adjustmentsData = {
-          ownerSalary: latestAssessment.ownerSalary?.toString() || "0",
-          personalExpenses: latestAssessment.personalExpenses?.toString() || "0",
-          oneTimeExpenses: latestAssessment.oneTimeExpenses?.toString() || "0",
-          otherAdjustments: latestAssessment.otherAdjustments?.toString() || "0",
-          adjustmentNotes: latestAssessment.adjustmentNotes || ""
-        };
+      // Mock adjustments data
+      const adjustmentsData = {
+        ownerSalary: "180000",
+        personalExpenses: "25000",
+        oneTimeExpenses: "75000",
+        otherAdjustments: "40000",
+        adjustmentNotes: "Owner compensation and one-time expenses"
+      };
 
-        updateValuationFormData("ebitda", ebitdaData);
-        updateValuationFormData("adjustments", adjustmentsData);
-        
-        setDataPrePopulated(true);
-        setShowUpdateButton(true);
-      }
+      updateValuationFormData("ebitda", ebitdaData);
+      updateValuationFormData("adjustments", adjustmentsData);
+      
+      setDataPrePopulated(true);
+      setShowUpdateButton(true);
     }
-  }, [previousAssessments, dataPrePopulated, updateValuationFormData]);
+  }, [dataPrePopulated, updateValuationFormData]);
 
   const getStepIndex = (step: PaidAssessmentStep): number => {
     const stepMap = { 'ebitda': 0, 'adjustments': 1, 'valueDrivers': 2, 'followup': 3, 'results': 4 };
@@ -402,9 +397,27 @@ export default function GrowthExitAssessment() {
           />
         );
       case 'results':
-        return results ? (
-          <StrategicReport results={results} />
-        ) : <div>Loading...</div>;
+        // Create mock results for demonstration
+        const mockResults: ValuationAssessment = {
+          id: 999,
+          firstName: "Demo",
+          lastName: "Strategic User", 
+          company: "Strategic Manufacturing Corp",
+          email: "demo@strategicmfg.com",
+          adjustedEbitda: "3600000",
+          midEstimate: "18000000",
+          lowEstimate: "14400000", 
+          highEstimate: "21600000",
+          valuationMultiple: "5.0",
+          overallScore: "B+",
+          tier: "paid",
+          reportTier: "strategic",
+          createdAt: new Date().toISOString(),
+          isProcessed: true,
+          executiveSummary: "Strategic Manufacturing Corp demonstrates strong operational performance with an adjusted EBITDA of $3.6M and strategic valuation of $18M. The company shows excellent growth potential with above-average management capabilities and competitive market positioning. Key value drivers include strong recurring revenue base, scalable operations, and differentiated market position."
+        };
+        
+        return <StrategicReport results={mockResults} />;
       default:
         return null;
     }
