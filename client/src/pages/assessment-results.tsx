@@ -4,6 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 
 import { ArrowLeft, Home, FileText, TrendingUp, ExternalLink, LogOut, User, Plus, Crown, Clock, BarChart3 } from "lucide-react";
 import ValuationResults from "@/components/valuation-results";
+import StrategicReport from "@/components/strategic-report";
 import type { ValuationAssessment } from "@shared/schema";
 import { Link } from "wouter";
 import MDBox from "@/components/MD/MDBox";
@@ -205,7 +206,12 @@ export default function AssessmentResults() {
             </Button>
           </Box>
 
-          <ValuationResults results={assessment} />
+          {/* Show Strategic Report for paid tiers, basic ValuationResults for free tier */}
+          {(assessment.tier === 'growth' || assessment.tier === 'capital' || assessment.tier === 'paid') ? (
+            <StrategicReport results={assessment} />
+          ) : (
+            <ValuationResults results={assessment} />
+          )}
         </Container>
       </MainContent>
     </DashboardBackground>
