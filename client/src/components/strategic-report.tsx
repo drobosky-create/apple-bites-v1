@@ -29,61 +29,57 @@ export default function StrategicReport({ results }: StrategicReportProps) {
   return (
     <MDBox>
       {/* Strategic Report Header */}
-      <Card sx={{ mb: 4, background: 'linear-gradient(135deg, #0A1F44 0%, #1B2C4F 100%)', color: 'white' }}>
-        <CardContent sx={{ p: 4 }}>
-          <MDBox display="flex" alignItems="center" justifyContent="space-between" mb={3}>
-            <MDBox display="flex" alignItems="center">
-              <Crown size={32} color="#FFD700" style={{ marginRight: 16 }} />
-              <MDBox>
-                <MDTypography variant="h3" fontWeight="bold" sx={{ color: 'white' }}>
-                  Strategic Business Valuation Report
-                </MDTypography>
-                <MDTypography variant="h6" sx={{ color: '#ebfafb' }}>
-                  Comprehensive Industry-Specific Analysis with AI Insights
-                </MDTypography>
-              </MDBox>
+      <Card sx={{ mb: 4, background: 'linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%)', color: 'white', borderRadius: 3 }}>
+        <CardContent sx={{ p: 5 }}>
+          <MDBox display="flex" alignItems="center" justifyContent="space-between" mb={4}>
+            <MDBox>
+              <MDTypography variant="h4" fontWeight="bold" sx={{ color: 'white', mb: 1 }}>
+                Strategic Business Valuation
+              </MDTypography>
+              <MDTypography variant="body1" sx={{ color: 'rgba(255,255,255,0.8)', fontWeight: 'medium' }}>
+                Comprehensive industry-specific analysis for {results.company}
+              </MDTypography>
             </MDBox>
             <Chip 
-              label="PREMIUM ANALYSIS" 
+              label="STRATEGIC ANALYSIS" 
               sx={{ 
-                background: '#FFD700', 
-                color: '#0A1F44', 
-                fontWeight: 'bold',
-                px: 2,
-                py: 1,
-                fontSize: '0.9rem'
+                background: 'rgba(255,255,255,0.15)', 
+                color: 'white', 
+                fontWeight: '600',
+                fontSize: '0.8rem',
+                border: '1px solid rgba(255,255,255,0.2)'
               }} 
             />
           </MDBox>
 
-          <Grid container spacing={3}>
+          <Grid container spacing={4}>
             <Grid item xs={12} md={4}>
-              <MDBox textAlign="center" p={2} sx={{ backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: 2 }}>
-                <MDTypography variant="h4" fontWeight="bold" sx={{ color: '#FFD700' }}>
+              <MDBox textAlign="center" p={3} sx={{ backgroundColor: 'rgba(255,255,255,0.08)', borderRadius: 2, border: '1px solid rgba(255,255,255,0.1)' }}>
+                <MDTypography variant="h3" fontWeight="bold" sx={{ color: 'white', mb: 1 }}>
                   {formatCurrency(results.midEstimate)}
                 </MDTypography>
-                <MDTypography variant="body1" sx={{ color: '#ebfafb' }}>
-                  Strategic Valuation
+                <MDTypography variant="body2" sx={{ color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase', letterSpacing: '0.5px', fontSize: '0.8rem' }}>
+                  Business Valuation
                 </MDTypography>
               </MDBox>
             </Grid>
             <Grid item xs={12} md={4}>
-              <MDBox textAlign="center" p={2} sx={{ backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: 2 }}>
-                <MDTypography variant="h4" fontWeight="bold" sx={{ color: '#4CAF50' }}>
+              <MDBox textAlign="center" p={3} sx={{ backgroundColor: 'rgba(255,255,255,0.08)', borderRadius: 2, border: '1px solid rgba(255,255,255,0.1)' }}>
+                <MDTypography variant="h3" fontWeight="bold" sx={{ color: 'white', mb: 1 }}>
                   {formatCurrency(results.adjustedEbitda)}
                 </MDTypography>
-                <MDTypography variant="body1" sx={{ color: '#ebfafb' }}>
+                <MDTypography variant="body2" sx={{ color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase', letterSpacing: '0.5px', fontSize: '0.8rem' }}>
                   Adjusted EBITDA
                 </MDTypography>
               </MDBox>
             </Grid>
             <Grid item xs={12} md={4}>
-              <MDBox textAlign="center" p={2} sx={{ backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: 2 }}>
-                <MDTypography variant="h4" fontWeight="bold" sx={{ color: '#FF9800' }}>
-                  {results.overallScore || 'B'}
+              <MDBox textAlign="center" p={3} sx={{ backgroundColor: 'rgba(255,255,255,0.08)', borderRadius: 2, border: '1px solid rgba(255,255,255,0.1)' }}>
+                <MDTypography variant="h3" fontWeight="bold" sx={{ color: 'white', mb: 1 }}>
+                  {results.overallScore || 'B+'}
                 </MDTypography>
-                <MDTypography variant="body1" sx={{ color: '#ebfafb' }}>
-                  Strategic Grade
+                <MDTypography variant="body2" sx={{ color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase', letterSpacing: '0.5px', fontSize: '0.8rem' }}>
+                  Overall Grade
                 </MDTypography>
               </MDBox>
             </Grid>
