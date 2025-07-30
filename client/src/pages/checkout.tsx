@@ -281,36 +281,25 @@ export default function Checkout() {
             </Box>
           </MDBox>
 
-          {/* Official Stripe Checkout Form */}
-          <form action="/api/create-checkout-session" method="POST">
-            <input type="hidden" name="lookup_key" value={
-              productId === 'prod_Sddbk2RWzr8kyL' ? 'growth_exit_assessment' :
-              productId === 'prod_SdvnfSZARwzdtm' ? 'basic_assessment' :
-              productId === 'prod_Sdvq23217qaGhp' ? 'capital_market_plan' : 'growth_exit_assessment'
-            } />
-            {appliedCoupon && (
-              <input type="hidden" name="couponId" value={appliedCoupon} />
-            )}
-            
-            <MDBox sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
-              <MDButton
-                type="submit"
-                variant="gradient"
-                color="info"
-                size="large"
-                fullWidth
-                disabled={loading}
-                sx={{
-                  background: 'linear-gradient(45deg, #0A1F44 30%, #1B2C4F 90%)',
-                  py: 1.5,
-                  fontSize: '1.1rem',
-                  fontWeight: 600,
-                }}
-              >
-                {loading ? 'Processing...' : `Complete Purchase - $${(finalAmount / 100).toFixed(2)}`}
-              </MDButton>
-            </MDBox>
-          </form>
+          {/* Checkout Button */}
+          <MDBox sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
+            <MDButton
+              onClick={redirectToStripeCheckout}
+              variant="gradient"
+              color="info"
+              size="large"
+              fullWidth
+              disabled={loading}
+              sx={{
+                background: 'linear-gradient(45deg, #0A1F44 30%, #1B2C4F 90%)',
+                py: 1.5,
+                fontSize: '1.1rem',
+                fontWeight: 600,
+              }}
+            >
+              {loading ? 'Redirecting to Stripe...' : `Complete Purchase - $${(finalAmount / 100).toFixed(2)}`}
+            </MDButton>
+          </MDBox>
         </CardContent>
       </CheckoutCard>
     </CheckoutContainer>
