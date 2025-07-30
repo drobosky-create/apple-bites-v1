@@ -171,15 +171,20 @@ export default function HybridSignupPage() {
           >
             {/* Logo for mobile */}
             <Box textAlign="center" mb={4} sx={{ display: { md: 'none' } }}>
-              <img src={appleBitesLogo} alt="Apple Bites" style={{ height: 60 }} />
+              <img src={appleBitesLogo} alt="Apple Bites" style={{ height: 120 }} />
             </Box>
 
             {/* Header */}
             <Box mb={4}>
-              <Typography variant="h4" fontWeight="bold" sx={{ color: '#1A202C', mb: 1 }}>
+              <Typography variant="h4" fontWeight="bold" sx={{ 
+                color: { xs: '#1A202C', md: '#1A202C' }, 
+                mb: 1 
+              }}>
                 Create Your Account
               </Typography>
-              <Typography variant="body1" sx={{ color: '#718096' }}>
+              <Typography variant="body1" sx={{ 
+                color: { xs: '#718096', md: '#718096' }
+              }}>
                 Start your business valuation journey
               </Typography>
             </Box>
@@ -193,13 +198,13 @@ export default function HybridSignupPage() {
                 sx={{
                   mb: 2,
                   py: 1.5,
-                  borderColor: '#D1D5DB',
-                  color: '#374151',
+                  borderColor: { xs: '#E2E8F0', md: '#D1D5DB' },
+                  color: { xs: '#FFFFFF', md: '#374151' },
                   textTransform: 'none',
                   fontWeight: 'medium',
                   '&:hover': {
                     borderColor: '#00718d',
-                    backgroundColor: '#F9FAFB'
+                    backgroundColor: { xs: 'rgba(255,255,255,0.1)', md: '#F9FAFB' }
                   }
                 }}
               >
@@ -220,13 +225,13 @@ export default function HybridSignupPage() {
                 sx={{
                   mb: 2,
                   py: 1.5,
-                  borderColor: '#D1D5DB',
-                  color: '#374151',
+                  borderColor: { xs: '#E2E8F0', md: '#D1D5DB' },
+                  color: { xs: '#FFFFFF', md: '#374151' },
                   textTransform: 'none',
                   fontWeight: 'medium',
                   '&:hover': {
                     borderColor: '#00718d',
-                    backgroundColor: '#F9FAFB'
+                    backgroundColor: { xs: 'rgba(255,255,255,0.1)', md: '#F9FAFB' }
                   }
                 }}
               >
@@ -244,13 +249,13 @@ export default function HybridSignupPage() {
                 variant="outlined"
                 sx={{
                   py: 1.5,
-                  borderColor: '#D1D5DB',
-                  color: '#374151',
+                  borderColor: { xs: '#E2E8F0', md: '#D1D5DB' },
+                  color: { xs: '#FFFFFF', md: '#374151' },
                   textTransform: 'none',
                   fontWeight: 'medium',
                   '&:hover': {
                     borderColor: '#00718d',
-                    backgroundColor: '#F9FAFB'
+                    backgroundColor: { xs: 'rgba(255,255,255,0.1)', md: '#F9FAFB' }
                   }
                 }}
               >
@@ -265,11 +270,11 @@ export default function HybridSignupPage() {
 
             {/* Divider */}
             <Box display="flex" alignItems="center" mb={3}>
-              <Box flex={1} sx={{ height: '1px', backgroundColor: '#E5E7EB' }} />
-              <Typography variant="body2" sx={{ color: '#9CA3AF', px: 2 }}>
+              <Box flex={1} sx={{ height: '1px', backgroundColor: { xs: '#64748B', md: '#E5E7EB' } }} />
+              <Typography variant="body2" sx={{ color: { xs: '#CBD5E1', md: '#9CA3AF' }, px: 2 }}>
                 or sign up with email
               </Typography>
-              <Box flex={1} sx={{ height: '1px', backgroundColor: '#E5E7EB' }} />
+              <Box flex={1} sx={{ height: '1px', backgroundColor: { xs: '#64748B', md: '#E5E7EB' } }} />
             </Box>
 
             {/* Error Display */}
@@ -292,7 +297,10 @@ export default function HybridSignupPage() {
             {/* Form Fields - Single Column */}
             <Box sx={{ width: '100%' }}>
               <Box mb={2}>
-                <Typography variant="body2" fontWeight="medium" sx={{ color: '#374151', mb: 0.5 }}>
+                <Typography variant="body2" fontWeight="medium" sx={{ 
+                  color: { xs: '#E2E8F0', md: '#374151' }, 
+                  mb: 0.5 
+                }}>
                   First Name
                 </Typography>
                 <MDInput
@@ -313,7 +321,10 @@ export default function HybridSignupPage() {
               </Box>
               
               <Box mb={2}>
-                <Typography variant="body2" fontWeight="medium" sx={{ color: '#374151', mb: 0.5 }}>
+                <Typography variant="body2" fontWeight="medium" sx={{ 
+                  color: { xs: '#E2E8F0', md: '#374151' }, 
+                  mb: 0.5 
+                }}>
                   Last Name
                 </Typography>
                 <MDInput
@@ -334,7 +345,10 @@ export default function HybridSignupPage() {
               </Box>
               
               <Box mb={2}>
-                <Typography variant="body2" fontWeight="medium" sx={{ color: '#374151', mb: 0.5 }}>
+                <Typography variant="body2" fontWeight="medium" sx={{ 
+                  color: { xs: '#E2E8F0', md: '#374151' }, 
+                  mb: 0.5 
+                }}>
                   Email Address
                 </Typography>
                 <MDInput
@@ -356,7 +370,10 @@ export default function HybridSignupPage() {
               </Box>
               
               <Box mb={2}>
-                <Typography variant="body2" fontWeight="medium" sx={{ color: '#374151', mb: 0.5 }}>
+                <Typography variant="body2" fontWeight="medium" sx={{ 
+                  color: { xs: '#E2E8F0', md: '#374151' }, 
+                  mb: 0.5 
+                }}>
                   Phone Number
                 </Typography>
                 <MDInput
@@ -377,7 +394,10 @@ export default function HybridSignupPage() {
               </Box>
               
               <Box mb={2}>
-                <Typography variant="body2" fontWeight="medium" sx={{ color: '#374151', mb: 0.5 }}>
+                <Typography variant="body2" fontWeight="medium" sx={{ 
+                  color: { xs: '#E2E8F0', md: '#374151' }, 
+                  mb: 0.5 
+                }}>
                   Company
                 </Typography>
                 <MDInput
@@ -397,7 +417,10 @@ export default function HybridSignupPage() {
               </Box>
               
               <Box mb={2}>
-                <Typography variant="body2" fontWeight="medium" sx={{ color: '#374151', mb: 0.5 }}>
+                <Typography variant="body2" fontWeight="medium" sx={{ 
+                  color: { xs: '#E2E8F0', md: '#374151' }, 
+                  mb: 0.5 
+                }}>
                   Job Title
                 </Typography>
                 <MDInput
@@ -417,7 +440,10 @@ export default function HybridSignupPage() {
               </Box>
               
               <Box mb={2}>
-                <Typography variant="body2" fontWeight="medium" sx={{ color: '#374151', mb: 0.5 }}>
+                <Typography variant="body2" fontWeight="medium" sx={{ 
+                  color: { xs: '#E2E8F0', md: '#374151' }, 
+                  mb: 0.5 
+                }}>
                   Password
                 </Typography>
                 <MDInput
@@ -454,7 +480,10 @@ export default function HybridSignupPage() {
               </Box>
               
               <Box mb={2}>
-                <Typography variant="body2" fontWeight="medium" sx={{ color: '#374151', mb: 0.5 }}>
+                <Typography variant="body2" fontWeight="medium" sx={{ 
+                  color: { xs: '#E2E8F0', md: '#374151' }, 
+                  mb: 0.5 
+                }}>
                   Confirm Password
                 </Typography>
                 <MDInput
@@ -525,13 +554,18 @@ export default function HybridSignupPage() {
                 width: '100%',
                 py: 1.5,
                 fontWeight: 'bold',
-                background: 'linear-gradient(135deg, #00718d 0%, #0A1F44 100%)',
+                background: { 
+                  xs: '#00718d', // Solid color on mobile
+                  md: 'linear-gradient(135deg, #00718d 0%, #0A1F44 100%)' // Gradient on desktop
+                },
                 color: 'white',
                 borderRadius: 2,
                 textTransform: 'none',
                 '&:hover': {
-                  background: 'linear-gradient(135deg, #00718d 0%, #3B82F6 100%)',
-
+                  background: { 
+                    xs: '#005b8c', // Darker solid color on mobile hover
+                    md: 'linear-gradient(135deg, #00718d 0%, #3B82F6 100%)' // Gradient on desktop hover
+                  }
                 },
                 '&:disabled': {
                   background: '#E5E7EB',
@@ -544,13 +578,13 @@ export default function HybridSignupPage() {
 
             {/* Sign In Redirect */}
             <Box textAlign="center" mt={3}>
-              <Typography variant="body2" sx={{ color: '#6B7280' }}>
+              <Typography variant="body2" sx={{ color: { xs: '#CBD5E1', md: '#6B7280' } }}>
                 Already have an account?{' '}
                 <Link href="/login">
                   <Typography 
                     component="span" 
                     sx={{ 
-                      color: '#00718d', 
+                      color: { xs: '#E2E8F0', md: '#00718d' }, 
                       fontWeight: 'medium', 
                       cursor: 'pointer',
                       textDecoration: 'none',
