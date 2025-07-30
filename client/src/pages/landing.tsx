@@ -276,25 +276,26 @@ export default function LandingPage() {
                   </Box>
 
                   <Box>
-                    <Link href="/signup">
-                      <Button
-                        fullWidth
-                        variant="contained"
-                        size="large"
-                        sx={{ 
-                          py: 2,
-                          background: '#28a745',
-                          color: '#fff',
-                          fontSize: '1.1rem',
-                          fontWeight: 'bold',
-                          '&:hover': {
-                            background: '#218838'
-                          }
-                        }}
-                      >
-                        ACCESS NOW
-                      </Button>
-                    </Link>
+                    <Button
+                      component={Link}
+                      href="/signup"
+                      fullWidth
+                      variant="contained"
+                      size="large"
+                      sx={{ 
+                        py: 2,
+                        background: '#28a745',
+                        color: '#fff',
+                        fontSize: '1.1rem',
+                        fontWeight: 'bold',
+                        textDecoration: 'none',
+                        '&:hover': {
+                          background: '#218838'
+                        }
+                      }}
+                    >
+                      ACCESS NOW
+                    </Button>
 
                     <Box sx={{ mt: 3, textAlign: 'center' }}>
                       <img 
@@ -360,25 +361,26 @@ export default function LandingPage() {
                   </Box>
 
                   <Box>
-                    <Link href="/checkout?product=prod_Sddbk2RWzr8kyL">
-                      <Button
-                        fullWidth
-                        variant="contained"
-                        size="large"
-                        sx={{ 
-                          py: 2,
-                          background: '#007bff',
-                          color: '#fff',
-                          fontSize: '1.1rem',
-                          fontWeight: 'bold',
-                          '&:hover': {
-                            background: '#0056b3'
-                          }
-                        }}
-                      >
-                        ACCESS NOW
-                      </Button>
-                    </Link>
+                    <Button
+                      component={Link}
+                      href="/checkout?product=prod_Sddbk2RWzr8kyL"
+                      fullWidth
+                      variant="contained"
+                      size="large"
+                      sx={{ 
+                        py: 2,
+                        background: '#007bff',
+                        color: '#fff',
+                        fontSize: '1.1rem',
+                        fontWeight: 'bold',
+                        textDecoration: 'none',
+                        '&:hover': {
+                          background: '#0056b3'
+                        }
+                      }}
+                    >
+                      ACCESS NOW
+                    </Button>
 
                     <Box sx={{ mt: 3, textAlign: 'center' }}>
                       <img 

@@ -1,7 +1,7 @@
 import type { Express, Request } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { setupSimpleAuth, isSimpleAuthenticated } from "./simple-replit-auth";
+import { setupAuth, isAuthenticated } from "./simpleAuth";
 import { insertValuationAssessmentSchema, type ValuationAssessment, loginSchema, insertTeamMemberSchema, type LoginCredentials, type InsertTeamMember, type TeamMember, registerUserSchema, loginUserSchema, type RegisterUser, type LoginUser } from "@shared/schema";
 import { generateValuationNarrative, type ValuationAnalysisInput } from "./openai";
 import { generateFinancialCoachingTips, generateContextualInsights, type FinancialCoachingData } from "./services/aiCoaching";
@@ -46,17 +46,106 @@ declare global {
 
 export async function registerRoutes(app: Express): Promise<Server> {
   
-  // Setup authentication system
-  try {
-    const { setupAuth } = await import('./replitAuth');
-    await setupAuth(app);
-    console.log('Replit Auth configured successfully');
-  } catch (error) {
-    console.log('Replit Auth not available, setting up simple auth fallback:', error);
-    setupSimpleAuth(app);
-  }
+  // Setup simple email/password authentication
+  await setupAuth(app);
+  console.log('Simple authentication configured successfully');
 
-  // OAuth routes are handled by Replit Auth system in replitAuth.ts
+  // Simple email/password authentication routes
+  
+  // User registration
+  app.post('/api/signup', async (req, res) => {
+    try {
+      const validatedData = registerUserSchema.parse(req.body);
+      
+      // Check if user already exists
+      const existingUser = await storage.getUserByEmail(validatedData.email);
+      if (existingUser) {
+        return res.status(400).json({ message: "User already exists with this email" });
+      }
+
+      // Hash password
+      const saltRounds = 12;
+      const passwordHash = await bcrypt.hash(validatedData.password, saltRounds);
+
+      // Create user
+      const user = await storage.createUser({
+        firstName: validatedData.firstName || '',
+        lastName: validatedData.lastName || '',
+        email: validatedData.email,
+        passwordHash,
+        tier: 'free',
+        authProvider: 'email',
+        isActive: true
+      });
+
+      // Create session
+      req.session.userId = user.id;
+      req.session.userEmail = user.email;
+      req.session.userTier = user.tier;
+
+      res.json({
+        message: "Account created successfully",
+        user: {
+          id: user.id,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          tier: user.tier,
+        },
+      });
+    } catch (error: any) {
+      console.error("Registration error:", error);
+      res.status(400).json({ message: error.message || "Registration failed" });
+    }
+  });
+
+  // User login
+  app.post('/api/login', async (req, res) => {
+    try {
+      const validatedData = loginUserSchema.parse(req.body);
+      
+      const user = await storage.getUserByEmail(validatedData.email);
+      if (!user || !user.passwordHash) {
+        return res.status(401).json({ message: "Invalid email or password" });
+      }
+
+      const isValidPassword = await bcrypt.compare(validatedData.password, user.passwordHash);
+      if (!isValidPassword) {
+        return res.status(401).json({ message: "Invalid email or password" });
+      }
+
+      // Create session
+      req.session.userId = user.id;
+      req.session.userEmail = user.email;
+      req.session.userTier = user.tier;
+
+      res.json({
+        message: "Login successful",
+        user: {
+          id: user.id,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          tier: user.tier,
+        },
+      });
+    } catch (error: any) {
+      console.error("Login error:", error);
+      res.status(400).json({ message: error.message || "Login failed" });
+    }
+  });
+
+  // User logout
+  app.post('/api/logout', (req, res) => {
+    req.session.destroy((err) => {
+      if (err) {
+        console.error('Logout error:', err);
+        return res.status(500).json({ message: 'Logout failed' });
+      }
+      res.clearCookie('connect.sid');
+      res.json({ message: "Logged out successfully" });
+    });
+  });
 
   // Demo login for development testing
   app.post('/api/demo-login', async (req, res) => {
@@ -115,39 +204,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   };
 
-  // Combined authentication middleware that works with both auth types
-  const isAnyUserAuthenticated = async (req: any, res: any, next: any) => {
-    // First try Replit Auth
-    if (req.isAuthenticated && req.isAuthenticated() && req.user?.claims?.sub) {
-      try {
-        const userId = req.user.claims.sub;
-        const user = await storage.getUser(userId);
-        if (user) {
-          req.currentUser = user;
-          req.authType = 'replit';
-          return next();
-        }
-      } catch (error) {
-        // Continue to custom auth check
-      }
+  // Simple authentication middleware
+  const isUserAuthenticated = async (req: any, res: any, next: any) => {
+    const userId = req.session?.userId;
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized" });
     }
 
-    // Try custom auth
-    const sessionId = req.session?.customUserSessionId;
-    if (sessionId) {
-      try {
-        const user = await storage.getUser(sessionId);
-        if (user && user.isActive) {
-          req.currentUser = user;
-          req.authType = 'custom';
-          return next();
-        }
-      } catch (error) {
-        // Continue to error
+    try {
+      const user = await storage.getUser(userId);
+      if (!user || !user.isActive) {
+        return res.status(401).json({ message: "Unauthorized" });
       }
+      req.currentUser = user;
+      return next();
+    } catch (error) {
+      return res.status(401).json({ message: "Unauthorized" });
     }
-
-    return res.status(401).json({ message: "Unauthorized" });
   };
 
   // Custom user registration
@@ -229,57 +302,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json({ message: "Logged out successfully" });
   });
 
-  // Updated user route that works with custom authentication
+  // Get current user
   app.get('/api/auth/user', async (req: any, res) => {
-    // Check for custom authentication session
-    const customUserId = req.session?.customUserSessionId;
-    if (customUserId) {
-      try {
-        const user = await storage.getUser(customUserId);
-        if (user && user.isActive) {
-          return res.json({
-            id: user.id,
-            email: user.email,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            tier: user.tier || "free",
-            authProvider: user.authProvider || "custom"
-          });
-        }
-      } catch (error) {
-        console.error("Error fetching custom user:", error);
-      }
+    const userId = req.session?.userId;
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized" });
     }
 
-    // Legacy demo session support (fallback)
-    if ((req.session as any)?.isAuthenticated) {
-      const user = (req.session as any).user;
-      return res.json({
+    try {
+      const user = await storage.getUser(userId);
+      if (!user || !user.isActive) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+
+      res.json({
         id: user.id,
         email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,
-        phone: user.phone || "",
-        company: user.company || "",
-        jobTitle: user.jobTitle || "",
         tier: user.tier || "free",
-        authProvider: "demo"
+        authProvider: user.authProvider || "email"
       });
-    }
-
-    res.status(401).json({ message: "Unauthorized" });
-  });
-
-  // Legacy Replit Auth user route (for backward compatibility)
-  app.get('/api/auth/replit-user', isSimpleAuthenticated, async (req: any, res) => {
-    try {
-      const user = (req.session as any).user;
-      res.json(user);
     } catch (error) {
       console.error("Error fetching user:", error);
       res.status(500).json({ message: "Failed to fetch user" });
     }
   });
+
+
 
   // Admin authentication middleware - also allows team members
   const isAdminAuthenticated = async (req: any, res: any, next: any) => {
