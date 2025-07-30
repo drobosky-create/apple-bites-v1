@@ -116,9 +116,22 @@ export async function setupAuth(app: Express) {
   passport.serializeUser((user: Express.User, cb) => cb(null, user));
   passport.deserializeUser((user: Express.User, cb) => cb(null, user));
 
+  // Helper function to find the correct strategy name
+  const getStrategyName = (hostname: string) => {
+    // Check if hostname matches any configured domain
+    for (const domain of allDomains) {
+      if (hostname === domain || hostname.includes(domain.split(':')[0])) {
+        return `replitauth:${domain}`;
+      }
+    }
+    // Fallback to first configured domain
+    return `replitauth:${allDomains[0]}`;
+  };
+
   // Main login route that handles provider selection via Replit Auth
   app.get("/api/login", (req, res, next) => {
-    passport.authenticate(`replitauth:${req.hostname}`, {
+    const strategyName = getStrategyName(req.hostname);
+    passport.authenticate(strategyName, {
       prompt: "login consent",
       scope: ["openid", "email", "profile", "offline_access"],
     })(req, res, next);
@@ -126,28 +139,32 @@ export async function setupAuth(app: Express) {
 
   // Provider-specific login routes for direct access
   app.get("/api/auth/google", (req, res, next) => {
-    passport.authenticate(`replitauth:${req.hostname}`, {
+    const strategyName = getStrategyName(req.hostname);
+    passport.authenticate(strategyName, {
       prompt: "login consent",
       scope: ["openid", "email", "profile", "offline_access"],
     })(req, res, next);
   });
 
   app.get("/api/auth/github", (req, res, next) => {
-    passport.authenticate(`replitauth:${req.hostname}`, {
+    const strategyName = getStrategyName(req.hostname);
+    passport.authenticate(strategyName, {
       prompt: "login consent", 
       scope: ["openid", "email", "profile", "offline_access"],
     })(req, res, next);
   });
 
   app.get("/api/auth/apple", (req, res, next) => {
-    passport.authenticate(`replitauth:${req.hostname}`, {
+    const strategyName = getStrategyName(req.hostname);
+    passport.authenticate(strategyName, {
       prompt: "login consent",
       scope: ["openid", "email", "profile", "offline_access"],
     })(req, res, next);
   });
 
   app.get("/api/callback", (req, res, next) => {
-    passport.authenticate(`replitauth:${req.hostname}`, {
+    const strategyName = getStrategyName(req.hostname);
+    passport.authenticate(strategyName, {
       successReturnToOrRedirect: "/",
       failureRedirect: "/api/login",
     })(req, res, next);
