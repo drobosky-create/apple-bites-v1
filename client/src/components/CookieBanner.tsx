@@ -80,7 +80,7 @@ export default function CookieBanner() {
         <Box flex={1}>
           <Box display="flex" alignItems="center" sx={{ mb: 1 }}>
             <img 
-              src="/apple-bites-logo.png" 
+              src="/apple-bites-icon.png" 
               alt="Apple Bites" 
               style={{ 
                 width: 24, 
