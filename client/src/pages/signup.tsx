@@ -171,7 +171,7 @@ export default function HybridSignupPage() {
           >
             {/* Logo for mobile */}
             <Box textAlign="center" mb={4} sx={{ display: { md: 'none' } }}>
-              <img src={appleBitesLogo} alt="Apple Bites" style={{ height: 120 }} />
+              <img src={appleBitesLogo} alt="Apple Bites" style={{ height: 240 }} />
             </Box>
 
             {/* Header */}
@@ -200,6 +200,7 @@ export default function HybridSignupPage() {
                   py: 1.5,
                   borderColor: { xs: '#E2E8F0', md: '#D1D5DB' },
                   color: { xs: '#FFFFFF', md: '#374151' },
+                  textShadow: { xs: '0 1px 2px rgba(0,0,0,0.5)', md: 'none' },
                   textTransform: 'none',
                   fontWeight: 'medium',
                   '&:hover': {
@@ -227,6 +228,7 @@ export default function HybridSignupPage() {
                   py: 1.5,
                   borderColor: { xs: '#E2E8F0', md: '#D1D5DB' },
                   color: { xs: '#FFFFFF', md: '#374151' },
+                  textShadow: { xs: '0 1px 2px rgba(0,0,0,0.5)', md: 'none' },
                   textTransform: 'none',
                   fontWeight: 'medium',
                   '&:hover': {
@@ -251,6 +253,7 @@ export default function HybridSignupPage() {
                   py: 1.5,
                   borderColor: { xs: '#E2E8F0', md: '#D1D5DB' },
                   color: { xs: '#FFFFFF', md: '#374151' },
+                  textShadow: { xs: '0 1px 2px rgba(0,0,0,0.5)', md: 'none' },
                   textTransform: 'none',
                   fontWeight: 'medium',
                   '&:hover': {
