@@ -83,39 +83,9 @@ export default function Checkout() {
     setError('');
   };
 
-  // Function to redirect to Stripe Checkout
+  // Dummy function - we'll use a real HTML form instead
   const redirectToStripeCheckout = () => {
-    if (!productId) {
-      setError('No product specified');
-      return;
-    }
-    
     setLoading(true);
-    
-    // Create a form and submit it - browsers handle 303 redirects automatically
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = '/api/create-checkout-session';
-    form.style.display = 'none';
-    
-    // Add lookup_key
-    const lookupKeyInput = document.createElement('input');
-    lookupKeyInput.type = 'hidden';
-    lookupKeyInput.name = 'lookup_key';
-    lookupKeyInput.value = 'growth_exit_assessment';
-    form.appendChild(lookupKeyInput);
-    
-    // Add couponId if applied
-    if (appliedCoupon) {
-      const couponInput = document.createElement('input');
-      couponInput.type = 'hidden';
-      couponInput.name = 'couponId';
-      couponInput.value = appliedCoupon;
-      form.appendChild(couponInput);
-    }
-    
-    document.body.appendChild(form);
-    form.submit();
   };
 
   useEffect(() => {
@@ -274,24 +244,34 @@ export default function Checkout() {
             </Box>
           </MDBox>
 
-          {/* Checkout Button */}
+          {/* Checkout Form - Direct HTML form submission */}
           <MDBox sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
-            <MDButton
-              onClick={redirectToStripeCheckout}
-              variant="gradient"
-              color="info"
-              size="large"
-              fullWidth
-              disabled={loading}
-              sx={{
-                background: 'linear-gradient(45deg, #0A1F44 30%, #1B2C4F 90%)',
-                py: 1.5,
-                fontSize: '1.1rem',
-                fontWeight: 600,
-              }}
+            <form 
+              method="POST" 
+              action="/api/create-checkout-session"
+              style={{ width: '100%' }}
             >
-              {loading ? 'Redirecting to Stripe...' : `Complete Purchase - $${(finalAmount / 100).toFixed(2)}`}
-            </MDButton>
+              <input type="hidden" name="lookup_key" value="growth_exit_assessment" />
+              {appliedCoupon && (
+                <input type="hidden" name="couponId" value={appliedCoupon} />
+              )}
+              <MDButton
+                type="submit"
+                variant="gradient"
+                color="info"
+                size="large"
+                fullWidth
+                disabled={loading}
+                sx={{
+                  background: 'linear-gradient(45deg, #0A1F44 30%, #1B2C4F 90%)',
+                  py: 1.5,
+                  fontSize: '1.1rem',
+                  fontWeight: 600,
+                }}
+              >
+                {loading ? 'Redirecting to Stripe...' : `Complete Purchase - $${(finalAmount / 100).toFixed(2)}`}
+              </MDButton>
+            </form>
           </MDBox>
         </CardContent>
       </CheckoutCard>
