@@ -26,6 +26,60 @@ export default function StrategicReport({ results }: StrategicReportProps) {
     window.open('https://api.leadconnectorhq.com/widget/bookings/applebites', '_blank');
   };
 
+  // Dynamic deal structure analysis based on assessment results
+  const getDealStructureRecommendations = () => {
+    const valuation = results.adjustedEbitda ? parseFloat(results.adjustedEbitda) * 5 : 0; // Rough estimate
+    const overallGrade = results.overallScore || 'B';
+    const financialGrade = results.financialPerformance || 'B';
+    const managementGrade = results.managementTeam || 'B';
+    const growthGrade = results.growthProspects || 'B';
+    
+    const recommendations = [];
+    
+    // High valuation businesses (>$10M)
+    if (valuation > 10000000) {
+      if (overallGrade >= 'B') {
+        recommendations.push('Strategic Acquisition Target');
+        recommendations.push('Private Equity Platform');
+      }
+      if (managementGrade >= 'A') {
+        recommendations.push('Management Buyout (MBO)');
+      }
+    }
+    
+    // Mid-market businesses ($5M-$10M)
+    else if (valuation > 5000000) {
+      recommendations.push('Buy-Side M&A Transaction');
+      if (growthGrade >= 'B') {
+        recommendations.push('Growth Capital Candidate');
+      }
+      if (financialGrade >= 'B') {
+        recommendations.push('Add-On Acquisition');
+      }
+    }
+    
+    // Smaller businesses (<$5M)
+    else {
+      recommendations.push('Roll-Up Opportunity');
+      recommendations.push('Owner-Operator Acquisition');
+      if (growthGrade >= 'A') {
+        recommendations.push('Growth Capital Infusion');
+      }
+    }
+    
+    // Additional structure based on specific grades
+    if (results.recurringRevenue >= 'A') {
+      recommendations.push('SaaS/Recurring Revenue Play');
+    }
+    
+    if (results.customerConcentration <= 'C' && results.riskFactors >= 'B') {
+      recommendations.push('Turnaround Investment');
+    }
+    
+    // Return top 4 recommendations
+    return recommendations.slice(0, 4);
+  };
+
   return (
     <MDBox>
       {/* Strategic Report Header */}
@@ -218,10 +272,12 @@ export default function StrategicReport({ results }: StrategicReportProps) {
                   Deal Structure Fit
                 </MDTypography>
                 <MDTypography variant="body2" color="text" sx={{ lineHeight: 1.6 }}>
-                  • Buy-Side M&A Transaction<br />
-                  • Strategic Acquisition Target<br />
-                  • Private Equity Platform<br />
-                  • Growth Capital Candidate
+                  {getDealStructureRecommendations().map((recommendation, index) => (
+                    <span key={index}>
+                      • {recommendation}
+                      {index < getDealStructureRecommendations().length - 1 && <br />}
+                    </span>
+                  ))}
                 </MDTypography>
               </MDBox>
             </Grid>
