@@ -26,6 +26,145 @@ export default function StrategicReport({ results }: StrategicReportProps) {
     window.open('https://api.leadconnectorhq.com/widget/bookings/applebites', '_blank');
   };
 
+  // AI-powered Executive Summary Generation
+  const generateIntelligentSummary = () => {
+    const naicsCode = results.naicsCode || '';
+    const company = results.company || 'your business';
+    const valuation = results.midEstimate ? parseFloat(results.midEstimate) : 0;
+    const ebitda = results.adjustedEbitda ? parseFloat(results.adjustedEbitda) : 0;
+    const overallGrade = results.overallScore || 'B';
+    
+    // Industry context
+    const industryMap: { [key: string]: string } = {
+      '541': 'professional services sector',
+      '621': 'healthcare services industry',
+      '238': 'construction and trades market',
+      '512': 'technology and software industry',
+      '31': 'manufacturing sector',
+      '32': 'manufacturing sector',
+      '33': 'manufacturing sector',
+      '44': 'retail industry',
+      '45': 'retail industry',
+      '48': 'transportation sector',
+      '49': 'transportation sector'
+    };
+    
+    const industryContext = industryMap[naicsCode.substring(0, 3)] || 'your industry';
+    const multiple = ebitda > 0 ? (valuation / ebitda).toFixed(1) : '0';
+    
+    // Generate contextual insights
+    let summary = `${company} demonstrates `;
+    
+    if (overallGrade >= 'A') {
+      summary += `exceptional operational performance within the ${industryContext}. `;
+    } else if (overallGrade >= 'B') {
+      summary += `strong operational performance with competitive positioning in the ${industryContext}. `;
+    } else {
+      summary += `solid fundamentals with significant improvement opportunities in the ${industryContext}. `;
+    }
+    
+    // Financial performance context
+    if (ebitda > 5000000) {
+      summary += `With an adjusted EBITDA of ${formatCurrency(ebitda)}, the business operates at institutional scale, `;
+    } else if (ebitda > 1000000) {
+      summary += `The business generates ${formatCurrency(ebitda)} in adjusted EBITDA, positioning it in the mid-market segment `;
+    } else {
+      summary += `Current EBITDA of ${formatCurrency(ebitda)} indicates opportunities for operational optimization `;
+    }
+    
+    // Valuation multiple insight
+    if (parseFloat(multiple) > 6) {
+      summary += `commanding a premium ${multiple}x EBITDA multiple reflecting strong market positioning and growth prospects.`;
+    } else if (parseFloat(multiple) > 4) {
+      summary += `achieving a solid ${multiple}x EBITDA valuation multiple typical of well-positioned businesses.`;
+    } else {
+      summary += `with potential to improve valuation multiples through strategic value enhancement initiatives.`;
+    }
+    
+    return summary;
+  };
+
+  // Dynamic Strategic Strengths based on assessment
+  const generateStrategicStrengths = () => {
+    const strengths = [];
+    const gradeToScore = (grade: string | null | undefined): number => {
+      if (!grade) return 2.5;
+      const gradeMap: { [key: string]: number } = { 'A': 5, 'B': 4, 'C': 3, 'D': 2, 'F': 1 };
+      return gradeMap[grade.charAt(0)] || 2.5;
+    };
+
+    if (gradeToScore(results.financialPerformance) >= 4) {
+      strengths.push('Strong financial performance relative to industry benchmarks');
+    }
+    if (gradeToScore(results.recurringRevenue) >= 4) {
+      strengths.push('Robust recurring revenue base providing predictable cash flows');
+    }
+    if (gradeToScore(results.managementTeam) >= 4) {
+      strengths.push('Experienced management team with proven operational capabilities');
+    }
+    if (gradeToScore(results.competitivePosition) >= 4) {
+      strengths.push('Strong competitive differentiation in market position');
+    }
+    if (gradeToScore(results.systemsProcesses) >= 4) {
+      strengths.push('Well-developed operational systems supporting scalable growth');
+    }
+    if (gradeToScore(results.customerConcentration) >= 4) {
+      strengths.push('Diversified customer base reducing concentration risk');
+    }
+
+    // Fallback strengths if none qualify
+    if (strengths.length === 0) {
+      strengths.push(
+        'Established market presence with operational foundation',
+        'Industry knowledge and customer relationships',
+        'Potential for operational improvements and growth'
+      );
+    }
+
+    return strengths.slice(0, 4); // Return top 4 strengths
+  };
+
+  // Dynamic Value Enhancement Opportunities
+  const generateValueOpportunities = () => {
+    const opportunities = [];
+    const gradeToScore = (grade: string | null | undefined): number => {
+      if (!grade) return 2.5;
+      const gradeMap: { [key: string]: number } = { 'A': 5, 'B': 4, 'C': 3, 'D': 2, 'F': 1 };
+      return gradeMap[grade.charAt(0)] || 2.5;
+    };
+
+    if (gradeToScore(results.recurringRevenue) < 4) {
+      opportunities.push('Recurring revenue optimization and contract enhancement');
+    }
+    if (gradeToScore(results.customerConcentration) < 4) {
+      opportunities.push('Customer diversification and concentration risk mitigation');
+    }
+    if (gradeToScore(results.ownerDependency) < 4) {
+      opportunities.push('Owner dependency reduction and management development');
+    }
+    if (gradeToScore(results.systemsProcesses) < 4) {
+      opportunities.push('Operational systems enhancement and process automation');
+    }
+    if (gradeToScore(results.growthProspects) < 4) {
+      opportunities.push('Market expansion and growth acceleration initiatives');
+    }
+    if (gradeToScore(results.managementTeam) < 4) {
+      opportunities.push('Leadership team strengthening and succession planning');
+    }
+
+    // Fallback opportunities if business is performing well across all areas
+    if (opportunities.length === 0) {
+      opportunities.push(
+        'Digital transformation and technology adoption',
+        'Strategic acquisitions and market consolidation',
+        'Premium service offerings and margin expansion',
+        'Geographic expansion and new market penetration'
+      );
+    }
+
+    return opportunities.slice(0, 4); // Return top 4 opportunities
+  };
+
   // Advanced NAICS-aware deal structure analysis
   const getDealStructureRecommendations = () => {
     // Convert letter grades to numeric scores (A=5, B=4, C=3, D=2, F=1)
@@ -359,7 +498,7 @@ export default function StrategicReport({ results }: StrategicReportProps) {
           </MDBox>
           
           <MDTypography variant="body1" color="text" mb={3} sx={{ lineHeight: 1.8 }}>
-            {results.executiveSummary || "Your comprehensive strategic analysis reveals strong operational foundations with significant value enhancement opportunities. Based on our proprietary NAICS-specific multiplier methodology and AI-powered insights, your business demonstrates competitive positioning within the industry landscape."}
+            {results.executiveSummary || generateIntelligentSummary()}
           </MDTypography>
 
           <Grid container spacing={3}>
@@ -372,10 +511,12 @@ export default function StrategicReport({ results }: StrategicReportProps) {
                   </MDTypography>
                 </MDBox>
                 <MDTypography variant="body2" color="text">
-                  • Strong financial performance relative to industry benchmarks<br />
-                  • Operational systems supporting scalable growth<br />
-                  • Competitive differentiation in market position<br />
-                  • Management team capabilities driving value creation
+                  {generateStrategicStrengths().map((strength, index) => (
+                    <span key={index}>
+                      • {strength}
+                      {index < generateStrategicStrengths().length - 1 && <br />}
+                    </span>
+                  ))}
                 </MDTypography>
               </MDBox>
             </Grid>
@@ -388,10 +529,12 @@ export default function StrategicReport({ results }: StrategicReportProps) {
                   </MDTypography>
                 </MDBox>
                 <MDTypography variant="body2" color="text">
-                  • Recurring revenue optimization strategies<br />
-                  • Customer concentration risk mitigation<br />
-                  • Owner dependency reduction initiatives<br />
-                  • Market expansion and growth acceleration
+                  {generateValueOpportunities().map((opportunity, index) => (
+                    <span key={index}>
+                      • {opportunity}
+                      {index < generateValueOpportunities().length - 1 && <br />}
+                    </span>
+                  ))}
                 </MDTypography>
               </MDBox>
             </Grid>
