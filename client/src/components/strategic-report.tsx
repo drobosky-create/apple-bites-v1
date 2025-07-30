@@ -641,58 +641,168 @@ export default function StrategicReport({ results }: StrategicReportProps) {
             </MDTypography>
           </MDBox>
 
-          {/* Strategic Valuation Gauge */}
+          {/* Strategic Valuation Gauge - Exact Copy from Value Calculator */}
           <MDBox display="flex" gap={4} alignItems="center" mb={4}>
             {/* Gauge Container */}
-            <MDBox sx={{ flex: '0 0 400px', textAlign: 'center' }}>
-              <svg width="100%" height="320" viewBox="0 0 400 280">
-                {/* Gauge Background Arc */}
+            <MDBox sx={{ flex: '0 0 450px', textAlign: 'center' }}>
+              <svg width="100%" height="400" viewBox="0 0 600 360">
+                {/* Material Dashboard Gradient Definitions */}
                 <defs>
-                  <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#ef5350" />
-                    <stop offset="35%" stopColor="#ff9800" />
-                    <stop offset="50%" stopColor="#4caf50" />
-                    <stop offset="65%" stopColor="#2196f3" />
+                  {/* Low Range - Red Material Gradient */}
+                  <linearGradient id="redGradientVal" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#ff5722" />
+                    <stop offset="100%" stopColor="#d32f2f" />
+                  </linearGradient>
+                  {/* Conservative Range - Orange Material Gradient */}
+                  <linearGradient id="orangeGradientVal" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#ff9800" />
+                    <stop offset="100%" stopColor="#f57c00" />
+                  </linearGradient>
+                  {/* Strategic Range - Green Material Gradient */}
+                  <linearGradient id="greenGradientVal" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#4caf50" />
+                    <stop offset="100%" stopColor="#388e3c" />
+                  </linearGradient>
+                  {/* Growth Range - Blue Material Gradient */}
+                  <linearGradient id="blueGradientVal" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#2196f3" />
                     <stop offset="100%" stopColor="#1976d2" />
                   </linearGradient>
+                  {/* Optimized Range - Deep Blue Material Gradient */}
+                  <linearGradient id="darkBlueGradientVal" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#1976d2" />
+                    <stop offset="100%" stopColor="#0d47a1" />
+                  </linearGradient>
+                  {/* Background with subtle Material gradient */}
+                  <linearGradient id="backgroundGradientVal" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#ffffff" />
+                    <stop offset="100%" stopColor="#f5f5f5" />
+                  </linearGradient>
+                  {/* Needle gradient */}
+                  <linearGradient id="needleGradientVal" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#37474f" />
+                    <stop offset="50%" stopColor="#546e7a" />
+                    <stop offset="100%" stopColor="#263238" />
+                  </linearGradient>
                 </defs>
-                
-                {/* Background Arc */}
-                <path
-                  d="M 50 200 A 150 150 0 0 1 350 200"
-                  fill="none"
-                  stroke="url(#gaugeGradient)"
-                  strokeWidth="20"
-                  strokeLinecap="round"
-                />
-                
-                {/* Range Markers */}
-                {/* Low Estimate */}
-                <circle cx="110" cy="130" r="8" fill="#ef5350" stroke="#fff" strokeWidth="3" />
-                {/* Mid Estimate (Strategic) */}
-                <circle cx="200" cy="80" r="12" fill="#4caf50" stroke="#fff" strokeWidth="4" />
-                {/* High Estimate */}
-                <circle cx="290" cy="130" r="8" fill="#2196f3" stroke="#fff" strokeWidth="3" />
-                
-                {/* Needle pointing to mid estimate */}
-                <line x1="200" y1="200" x2="200" y2="95" stroke="#333" strokeWidth="3" strokeLinecap="round" />
-                <circle cx="200" cy="200" r="8" fill="#333" />
-                
-                {/* Range Labels */}
-                <text x="110" y="155" textAnchor="middle" fontSize="12" fill="#ef5350" fontWeight="bold">LOW</text>
-                <text x="200" y="65" textAnchor="middle" fontSize="12" fill="#4caf50" fontWeight="bold">STRATEGIC</text>
-                <text x="290" y="155" textAnchor="middle" fontSize="12" fill="#2196f3" fontWeight="bold">HIGH</text>
-                
-                {/* Center Title */}
-                <text x="200" y="235" textAnchor="middle" fontSize="14" fill="#666" fontWeight="medium">
-                  Valuation Range
-                </text>
+
+                {(() => {
+                  const centerX = 300;
+                  const centerY = 240;
+                  const radius = 160;
+                  
+                  // Define valuation segments (0 to 180 degrees for semi-circle)
+                  const segments = [
+                    { label: 'LOW', angle: 0, color: 'redGradientVal' },
+                    { label: 'CON', angle: 36, color: 'orangeGradientVal' },
+                    { label: 'STR', angle: 72, color: 'greenGradientVal' },
+                    { label: 'GRW', angle: 108, color: 'blueGradientVal' },
+                    { label: 'OPT', angle: 144, color: 'darkBlueGradientVal' },
+                  ];
+
+                  // Create arc path function
+                  const createArcPath = (startAngle: number, endAngle: number, radius: number) => {
+                    const startAngleRad = (startAngle + 180) * (Math.PI / 180);
+                    const endAngleRad = (endAngle + 180) * (Math.PI / 180);
+                    
+                    const x1 = centerX + radius * Math.cos(startAngleRad);
+                    const y1 = centerY + radius * Math.sin(startAngleRad);
+                    const x2 = centerX + radius * Math.cos(endAngleRad);
+                    const y2 = centerY + radius * Math.sin(endAngleRad);
+                    
+                    const largeArcFlag = endAngle - startAngle > 180 ? 1 : 0;
+                    
+                    return `M ${centerX} ${centerY} L ${x1} ${y1} A ${radius} ${radius} 0 ${largeArcFlag} 1 ${x2} ${y2} Z`;
+                  };
+
+                  // Strategic position points to middle segment (72° + 18° = 90°)
+                  const needleAngle = 90;
+                  const needleAngleRad = (needleAngle + 180) * (Math.PI / 180);
+                  const needleLength = 150;
+                  const needleX = centerX + needleLength * Math.cos(needleAngleRad);
+                  const needleY = centerY + needleLength * Math.sin(needleAngleRad);
+
+                  return (
+                    <>
+                      {/* Background arc */}
+                      <path
+                        d={createArcPath(0, 180, radius)}
+                        fill="url(#backgroundGradientVal)"
+                        stroke="rgb(226, 232, 240)"
+                        strokeWidth="2"
+                      />
+                      
+                      {/* Valuation segments */}
+                      {segments.map((segment, index) => {
+                        const startAngle = segment.angle;
+                        const endAngle = index < segments.length - 1 ? segments[index + 1].angle : 180;
+                        const isActive = segment.label === 'STR'; // Strategic is active
+                        
+                        return (
+                          <g key={segment.label}>
+                            <path
+                              d={createArcPath(startAngle, endAngle, radius)}
+                              fill={isActive ? `url(#${segment.color})` : 'rgb(248, 250, 252)'}
+                              stroke="white"
+                              strokeWidth="6"
+                              style={{
+                                filter: isActive ? 'drop-shadow(0 4px 8px rgba(0,0,0,0.15))' : 'none',
+                                opacity: isActive ? 1 : 0.3
+                              }}
+                            />
+                            
+                            {/* Segment labels */}
+                            <text
+                              x={centerX + 190 * Math.cos((segment.angle + 18 + 180) * (Math.PI / 180))}
+                              y={centerY + 190 * Math.sin((segment.angle + 18 + 180) * (Math.PI / 180))}
+                              textAnchor="middle"
+                              dominantBaseline="middle"
+                              style={{
+                                fontSize: '20px',
+                                fontWeight: '900',
+                                fill: isActive ? 'white' : '#6b7280',
+                                textShadow: isActive ? '1px 1px 2px rgba(0,0,0,0.3)' : 'none'
+                              }}
+                            >
+                              {segment.label}
+                            </text>
+                          </g>
+                        );
+                      })}
+                      
+                      {/* Needle */}
+                      <line
+                        x1={centerX}
+                        y1={centerY}
+                        x2={needleX}
+                        y2={needleY}
+                        stroke="url(#needleGradientVal)"
+                        strokeWidth="8"
+                        strokeLinecap="round"
+                        style={{
+                          filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))'
+                        }}
+                      />
+                      
+                      {/* Needle center dot */}
+                      <circle
+                        cx={centerX}
+                        cy={centerY}
+                        r="16"
+                        fill="url(#needleGradientVal)"
+                        style={{
+                          filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))'
+                        }}
+                      />
+                    </>
+                  );
+                })()}
               </svg>
             </MDBox>
 
             {/* Value Display */}
             <MDBox sx={{ flex: 1 }}>
-              <MDBox mb={3} p={2} sx={{ backgroundColor: '#E8F5E8', borderRadius: 2, textAlign: 'center' }}>
+              <MDBox mb={3} p={3} sx={{ backgroundColor: '#E8F5E8', borderRadius: 2, textAlign: 'center' }}>
                 <MDTypography variant="h4" fontWeight="bold" color="success" mb={1}>
                   {formatCurrency(results.midEstimate)}
                 </MDTypography>
