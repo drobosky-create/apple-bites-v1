@@ -30,8 +30,8 @@ export default function StrategicReport({ results }: StrategicReportProps) {
     <MDBox>
       {/* Strategic Report Header */}
       <Card sx={{ mb: 4, background: 'linear-gradient(135deg, #0b2147 0%, #1e293b 100%)', color: 'white', borderRadius: 1.5 }}>
-        <CardContent sx={{ p: 5 }}>
-          <MDBox display="flex" alignItems="center" justifyContent="space-between" mb={4}>
+        <CardContent sx={{ p: 2.5 }}>
+          <MDBox display="flex" alignItems="center" justifyContent="space-between" mb={2}>
             <MDBox>
               <MDTypography variant="h4" fontWeight="300" sx={{ color: 'rgba(255,255,255,0.9)', mb: 2, letterSpacing: '0.5px' }}>
                 Strategic Business Valuation
@@ -58,7 +58,7 @@ export default function StrategicReport({ results }: StrategicReportProps) {
             <MDBox 
               flex={1}
               textAlign="center" 
-              p={4} 
+              p={2} 
               sx={{ 
                 background: 'rgba(255,255,255,0.08)', 
                 borderRadius: 3, 
@@ -72,7 +72,7 @@ export default function StrategicReport({ results }: StrategicReportProps) {
                 }
               }}
             >
-              <MDTypography variant="h3" fontWeight="200" sx={{ color: 'rgba(255,255,255,0.95)', mb: 1, letterSpacing: '1px' }}>
+              <MDTypography variant="h4" fontWeight="200" sx={{ color: 'rgba(255,255,255,0.95)', mb: 0.5, letterSpacing: '1px' }}>
                 {formatCurrency(results.midEstimate)}
               </MDTypography>
               <MDTypography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '1px', fontSize: '0.75rem', fontWeight: '300' }}>
@@ -82,7 +82,7 @@ export default function StrategicReport({ results }: StrategicReportProps) {
             <MDBox 
               flex={1}
               textAlign="center" 
-              p={4} 
+              p={2} 
               sx={{ 
                 background: 'rgba(255,255,255,0.08)', 
                 borderRadius: 3, 
@@ -96,7 +96,7 @@ export default function StrategicReport({ results }: StrategicReportProps) {
                 }
               }}
             >
-              <MDTypography variant="h3" fontWeight="200" sx={{ color: 'rgba(255,255,255,0.95)', mb: 1, letterSpacing: '1px' }}>
+              <MDTypography variant="h4" fontWeight="200" sx={{ color: 'rgba(255,255,255,0.95)', mb: 0.5, letterSpacing: '1px' }}>
                 {formatCurrency(results.adjustedEbitda)}
               </MDTypography>
               <MDTypography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '1px', fontSize: '0.75rem', fontWeight: '300' }}>
@@ -106,7 +106,7 @@ export default function StrategicReport({ results }: StrategicReportProps) {
             <MDBox 
               flex={1}
               textAlign="center" 
-              p={4} 
+              p={2} 
               sx={{ 
                 background: 'rgba(255,255,255,0.08)', 
                 borderRadius: 3, 
@@ -120,7 +120,7 @@ export default function StrategicReport({ results }: StrategicReportProps) {
                 }
               }}
             >
-              <MDTypography variant="h3" fontWeight="200" sx={{ color: 'rgba(255,255,255,0.95)', mb: 1, letterSpacing: '1px' }}>
+              <MDTypography variant="h4" fontWeight="200" sx={{ color: 'rgba(255,255,255,0.95)', mb: 0.5, letterSpacing: '1px' }}>
                 {results.overallScore || 'B+'}
               </MDTypography>
               <MDTypography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '1px', fontSize: '0.75rem', fontWeight: '300' }}>
