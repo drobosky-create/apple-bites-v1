@@ -18,6 +18,9 @@ import Profile from "@/pages/profile";
 import PastAssessments from "@/pages/past-assessments";
 import SignupPage from "@/pages/signup";
 import LoginPage from "@/pages/login";
+import PrivacyPolicy from "@/pages/privacy-policy";
+import TermsOfUse from "@/pages/terms-of-use";
+import CookieBanner from "@/components/CookieBanner";
 
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -43,6 +46,10 @@ function Router() {
         {/* Authentication routes - always accessible */}
         <Route path="/signup" component={SignupPage} />
         <Route path="/login" component={LoginPage} />
+        
+        {/* Legal pages - always accessible */}
+        <Route path="/privacy-policy" component={PrivacyPolicy} />
+        <Route path="/terms-of-use" component={TermsOfUse} />
         
         {/* Protected routes - redirect to login if not authenticated */}
         <Route path="/">
@@ -91,6 +98,7 @@ function Router() {
           {isAuthenticated ? <Dashboard /> : <LoginPage />}
         </Route>
       </Switch>
+      <CookieBanner />
     </div>
   );
 }
