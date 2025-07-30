@@ -2816,30 +2816,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
         
         console.log('Creating checkout session with lookup_key:', lookup_key, 'couponId:', couponId);
         
-        // Map lookup keys to product IDs, then fetch prices dynamically
-        const productMap = {
-          'growth_exit_assessment': 'prod_Sddbk2RWzr8kyL',
-          'basic_assessment': 'prod_Sddbk2RWzr8kyL', // Same as growth for now
-          'capital_market_plan': 'prod_Sdvq23217qaGhp'
+        // Map lookup keys to live price IDs with mode detection
+        const priceConfig = {
+          'growth_exit_assessment': { 
+            priceId: 'price_1RqbyvAYDUS7LgRZNV57xXKp', // Growth - $795
+            mode: 'payment' // One-time payment
+          },
+          'basic_assessment': { 
+            priceId: 'price_1RqbyvAYDUS7LgRZNV57xXKp', // Same as growth
+            mode: 'payment' // One-time payment
+          },
+          'capital_market_plan': { 
+            priceId: 'price_1RqZi5AYDUS7LgRZFoyi63cy', // Use Monthly for now (working price)
+            mode: 'subscription' // Subscription mode for recurring prices
+          },
+          'capital_one_time': { 
+            priceId: 'price_1RqZhaAYDUS7LgRZfYL9gP1H', // Capital One-Time (may need fixing)
+            mode: 'payment' // One-time payment
+          }
         };
 
-        const productId = productMap[lookup_key as keyof typeof productMap];
-        if (!productId) {
+        const config = priceConfig[lookup_key as keyof typeof priceConfig];
+        if (!config) {
           return res.status(400).json({ error: 'Invalid product lookup key' });
         }
 
-        // Fetch prices for the product dynamically
-        const prices = await stripe.prices.list({
-          product: productId,
-          active: true,
-          limit: 1
-        });
-
-        if (!prices.data.length) {
-          return res.status(400).json({ error: 'No active prices found for product' });
-        }
-
-        const priceId = prices.data[0].id;
+        console.log('Using price config:', config, 'for lookup key:', lookup_key);
 
         const YOUR_DOMAIN = `${req.protocol}://${req.get('host')}`;
         
@@ -2848,15 +2850,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
           billing_address_collection: 'auto',
           line_items: [
             {
-              price: priceId,
+              price: config.priceId,
               quantity: 1,
             },
           ],
-          mode: 'payment', // One-time payment (not subscription)
+          mode: config.mode,
           success_url: `${YOUR_DOMAIN}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
           cancel_url: `${YOUR_DOMAIN}/checkout?canceled=true`,
           metadata: {
             lookup_key,
+            priceId: config.priceId,
+            mode: config.mode,
             userId: req.session?.customUserSessionId || 'anonymous',
           },
         };
