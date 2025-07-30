@@ -48,47 +48,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Setup Simple Auth
   setupSimpleAuth(app);
+  
+  // Setup Replit Auth for OAuth providers
+  try {
+    const { setupAuth } = await import('./replitAuth');
+    await setupAuth(app);
+    console.log('Replit Auth configured successfully');
+  } catch (error) {
+    console.log('Replit Auth not available, using simple auth only:', error);
+  }
 
-  // OAuth routes for multiple providers
-  const createOAuthRoute = (provider: string) => {
-    app.get(`/api/auth/${provider}`, (req, res) => {
-      const replitAuthUrl = `https://replit.com/auth/${provider}?redirect=${encodeURIComponent(`${req.protocol}://${req.get('host')}/api/auth/${provider}/callback`)}`;
-      res.redirect(replitAuthUrl);
-    });
-
-    app.get(`/api/auth/${provider}/callback`, async (req, res) => {
-      try {
-        const { token, user } = req.query;
-        
-        if (!token) {
-          return res.redirect('/login?error=oauth_failed');
-        }
-
-        // Create session for authenticated users
-        if (req.session) {
-          (req.session as any).isAuthenticated = true;
-          (req.session as any).user = {
-            id: `${provider}-${Date.now()}`,
-            email: user || `user@${provider}.com`,
-            firstName: "Business",
-            lastName: "Owner",
-            tier: "free",
-            authProvider: provider
-          };
-        }
-        
-        res.redirect('/dashboard');
-      } catch (error) {
-        console.error(`${provider} OAuth callback error:`, error);
-        res.redirect('/login?error=oauth_failed');
-      }
-    });
-  };
-
-  // Create OAuth routes for supported providers
-  createOAuthRoute('google');
-  createOAuthRoute('github');  
-  createOAuthRoute('apple');
+  // OAuth routes are handled by Replit Auth system in replitAuth.ts
 
   // Custom user authentication middleware
   const isCustomUserAuthenticated = async (req: any, res: any, next: any) => {

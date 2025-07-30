@@ -101,9 +101,7 @@ export default function HybridSignupPage() {
   };
 
   // Handle Google OAuth
-  const handleGoogleSignup = () => {
-    window.location.href = '/api/auth/google';
-  };
+
 
 
 
@@ -192,7 +190,7 @@ export default function HybridSignupPage() {
             {/* Social Login Options */}
             <Box mb={3}>
               <Button
-                onClick={handleGoogleSignup}
+                onClick={() => window.location.href = '/api/auth/google'}
                 fullWidth
                 variant="outlined"
                 sx={{
