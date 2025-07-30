@@ -26,60 +26,107 @@ export default function StrategicReport({ results }: StrategicReportProps) {
     window.open('https://api.leadconnectorhq.com/widget/bookings/applebites', '_blank');
   };
 
-  // AI-powered Executive Summary Generation
+  // Enhanced AI-powered Executive Summary Generation
   const generateIntelligentSummary = () => {
     const naicsCode = results.naicsCode || '';
     const company = results.company || 'your business';
     const valuation = results.midEstimate ? parseFloat(results.midEstimate) : 0;
     const ebitda = results.adjustedEbitda ? parseFloat(results.adjustedEbitda) : 0;
+    const revenue = results.revenue ? parseFloat(results.revenue) : 0;
     const overallGrade = results.overallScore || 'B';
     
-    // Industry context
-    const industryMap: { [key: string]: string } = {
-      '541': 'professional services sector',
-      '621': 'healthcare services industry',
-      '238': 'construction and trades market',
-      '512': 'technology and software industry',
-      '31': 'manufacturing sector',
-      '32': 'manufacturing sector',
-      '33': 'manufacturing sector',
-      '44': 'retail industry',
-      '45': 'retail industry',
-      '48': 'transportation sector',
-      '49': 'transportation sector'
+    // Advanced industry context mapping
+    const industryInsights: { [key: string]: { name: string; context: string; trends: string } } = {
+      '541': { 
+        name: 'professional services sector', 
+        context: 'characterized by knowledge-based service delivery and relationship-driven revenue models',
+        trends: 'experiencing digital transformation pressures and increasing demand for specialized expertise'
+      },
+      '621': { 
+        name: 'healthcare services industry', 
+        context: 'operating in a regulated environment with demographic tailwinds and consolidation activity',
+        trends: 'benefiting from aging population dynamics and value-based care transitions'
+      },
+      '238': { 
+        name: 'construction and trades market', 
+        context: 'featuring project-based revenue cycles and skilled labor dependencies',
+        trends: 'facing workforce challenges while benefiting from infrastructure investment trends'
+      },
+      '512': { 
+        name: 'technology and software industry', 
+        context: 'driven by recurring revenue models and scalable digital architectures',
+        trends: 'experiencing rapid growth in SaaS adoption and AI-powered solutions'
+      },
+      '331': { 
+        name: 'manufacturing sector', 
+        context: 'characterized by capital-intensive operations and supply chain complexities',
+        trends: 'undergoing automation transformation and nearshoring initiatives'
+      },
+      '31': { name: 'manufacturing sector', context: 'capital-intensive with supply chain focus', trends: 'automation and efficiency gains' },
+      '32': { name: 'manufacturing sector', context: 'industrial production environment', trends: 'technology integration trends' },
+      '33': { name: 'manufacturing sector', context: 'heavy industrial operations', trends: 'sustainability and efficiency focus' }
     };
     
-    const industryContext = industryMap[naicsCode.substring(0, 3)] || 'your industry';
+    const industryData = industryInsights[naicsCode.substring(0, 3)] || industryInsights[naicsCode.substring(0, 2)] || 
+      { name: 'your industry', context: 'with unique operational characteristics', trends: 'adapting to market evolution' };
+    
     const multiple = ebitda > 0 ? (valuation / ebitda).toFixed(1) : '0';
+    const marginProfile = ebitda > 0 && revenue > 0 ? ((ebitda / revenue) * 100).toFixed(1) : '0';
     
-    // Generate contextual insights
-    let summary = `${company} demonstrates `;
+    // Comprehensive AI-generated summary
+    let summary = `${company} operates within the ${industryData.name}, ${industryData.context}. `;
     
+    // Performance assessment with context
     if (overallGrade >= 'A') {
-      summary += `exceptional operational performance within the ${industryContext}. `;
+      summary += `Our comprehensive analysis reveals exceptional operational performance across all value drivers, positioning the business as a premium asset within its market segment. `;
     } else if (overallGrade >= 'B') {
-      summary += `strong operational performance with competitive positioning in the ${industryContext}. `;
+      summary += `The strategic assessment demonstrates strong operational fundamentals with competitive market positioning, indicating a well-managed enterprise with clear value creation opportunities. `;
     } else {
-      summary += `solid fundamentals with significant improvement opportunities in the ${industryContext}. `;
+      summary += `While the business maintains solid operational foundations, our analysis identifies significant value enhancement potential through targeted operational improvements and strategic initiatives. `;
     }
     
-    // Financial performance context
+    // Financial performance deep dive
+    if (revenue > 0) {
+      if (revenue > 50000000) {
+        summary += `With annual revenues of ${formatCurrency(revenue)}, the company operates at substantial scale within its sector. `;
+      } else if (revenue > 10000000) {
+        summary += `Annual revenues of ${formatCurrency(revenue)} position the business in the established mid-market segment. `;
+      } else {
+        summary += `Current revenue base of ${formatCurrency(revenue)} indicates growth-stage operations with expansion potential. `;
+      }
+    }
+    
+    // EBITDA and profitability analysis
     if (ebitda > 5000000) {
-      summary += `With an adjusted EBITDA of ${formatCurrency(ebitda)}, the business operates at institutional scale, `;
+      summary += `The business generates robust adjusted EBITDA of ${formatCurrency(ebitda)}, demonstrating institutional-quality cash flow generation `;
     } else if (ebitda > 1000000) {
-      summary += `The business generates ${formatCurrency(ebitda)} in adjusted EBITDA, positioning it in the mid-market segment `;
+      summary += `Adjusted EBITDA of ${formatCurrency(ebitda)} reflects solid operational efficiency `;
     } else {
-      summary += `Current EBITDA of ${formatCurrency(ebitda)} indicates opportunities for operational optimization `;
+      summary += `Current EBITDA performance of ${formatCurrency(ebitda)} suggests opportunities for margin optimization `;
     }
     
-    // Valuation multiple insight
-    if (parseFloat(multiple) > 6) {
-      summary += `commanding a premium ${multiple}x EBITDA multiple reflecting strong market positioning and growth prospects.`;
-    } else if (parseFloat(multiple) > 4) {
-      summary += `achieving a solid ${multiple}x EBITDA valuation multiple typical of well-positioned businesses.`;
-    } else {
-      summary += `with potential to improve valuation multiples through strategic value enhancement initiatives.`;
+    // Margin analysis
+    if (parseFloat(marginProfile) > 20) {
+      summary += `with exceptional ${marginProfile}% EBITDA margins significantly above industry benchmarks. `;
+    } else if (parseFloat(marginProfile) > 10) {
+      summary += `achieving healthy ${marginProfile}% EBITDA margins consistent with industry standards. `;
+    } else if (parseFloat(marginProfile) > 0) {
+      summary += `operating at ${marginProfile}% EBITDA margins with potential for improvement through operational optimization. `;
     }
+    
+    // Valuation multiple context with market positioning
+    if (parseFloat(multiple) > 7) {
+      summary += `The resulting ${multiple}x EBITDA valuation multiple reflects premium market positioning, indicating strong buyer interest and competitive advantages that justify above-market pricing. `;
+    } else if (parseFloat(multiple) > 5) {
+      summary += `At ${multiple}x EBITDA, the valuation multiple aligns with industry standards for well-positioned businesses, suggesting balanced risk-return characteristics attractive to strategic and financial buyers. `;
+    } else if (parseFloat(multiple) > 3) {
+      summary += `The ${multiple}x EBITDA multiple indicates moderate market positioning with opportunities to enhance valuation through strategic improvements and operational excellence initiatives. `;
+    } else {
+      summary += `Current valuation multiple of ${multiple}x EBITDA suggests significant upside potential through comprehensive value enhancement strategies. `;
+    }
+    
+    // Industry trends and market context
+    summary += `Within the broader market context, the ${industryData.name} is currently ${industryData.trends}, creating both opportunities and challenges for market participants.`;
     
     return summary;
   };
