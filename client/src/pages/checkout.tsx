@@ -135,8 +135,8 @@ export default function Checkout() {
         setCouponCode('');
         setError(''); // Clear any previous errors
         
-        // Recreate payment intent with coupon
-        await recreatePaymentIntentWithCoupon(couponCode.trim());
+        // Recreate payment intent with coupon - don't do this immediately, 
+        // let user see the discount first, then recreate on next page load
       } else {
         setError(data.message || 'Invalid coupon code');
       }
@@ -145,13 +145,11 @@ export default function Checkout() {
     }
   };
 
-  const removeCoupon = async () => {
+  const removeCoupon = () => {
     setDiscount(0);
     setAppliedCoupon('');
     setCouponApplied(false);
-    
-    // Recreate payment intent without coupon
-    await recreatePaymentIntentWithCoupon(null);
+    setError('');
   };
 
   // Function to recreate payment intent with or without coupon
@@ -181,12 +179,13 @@ export default function Checkout() {
     }
 
     // Create PaymentIntent with fixed amount for Growth & Exit Assessment
-    // This is a temporary solution until Stripe prices are properly configured
+    // Include coupon if one is applied
     
     apiRequest('POST', '/api/create-payment-intent-fixed', { 
       productId,
       tier,
       amount: finalAmount,
+      couponId: appliedCoupon || null,
     })
       .then((response) => response.json())
       .then((data) => {
@@ -203,7 +202,7 @@ export default function Checkout() {
       .finally(() => {
         setLoading(false);
       });
-  }, [productId, finalAmount]);
+  }, [productId, finalAmount, appliedCoupon]);
 
   if (!import.meta.env.VITE_STRIPE_PUBLIC_KEY) {
     return (
