@@ -598,11 +598,33 @@ export default function StrategicReport({ results }: StrategicReportProps) {
                 </MDTypography>
               </MDBox>
               <MDBox sx={{ lineHeight: 1.6 }}>
-                {getDealStructureRecommendations().slice(0, 4).map((dealType, index) => (
-                  <MDTypography key={index} variant="body2" color="text" sx={{ marginBottom: '8px', display: 'block' }}>
-                    • {dealType}
-                  </MDTypography>
-                ))}
+                {(() => {
+                  const recommendations = getDealStructureRecommendations().slice(0, 4);
+                  if (recommendations.length === 0) return null;
+                  
+                  return (
+                    <>
+                      {/* Primary Recommendation */}
+                      <MDTypography variant="h6" fontWeight="bold" sx={{ color: '#0b2147', marginBottom: '12px' }}>
+                        {recommendations[0]}
+                      </MDTypography>
+                      
+                      {/* Additional Options */}
+                      {recommendations.length > 1 && (
+                        <>
+                          <MDTypography variant="subtitle2" fontWeight="medium" sx={{ color: '#666', marginBottom: '8px', marginTop: '16px' }}>
+                            Additional Options
+                          </MDTypography>
+                          {recommendations.slice(1).map((dealType, index) => (
+                            <MDTypography key={index} variant="body2" color="text" sx={{ marginBottom: '10px', display: 'block' }}>
+                              • {dealType}
+                            </MDTypography>
+                          ))}
+                        </>
+                      )}
+                    </>
+                  );
+                })()}
               </MDBox>
             </MDBox>
           </Box>
