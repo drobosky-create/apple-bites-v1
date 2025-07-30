@@ -41,7 +41,6 @@ export function getSession() {
       secure: process.env.NODE_ENV === 'production',
       maxAge: sessionTtl,
       sameSite: 'lax',
-      domain: process.env.NODE_ENV === 'production' ? '.applebites.ai' : undefined,
     },
   });
 }
@@ -188,7 +187,7 @@ export async function setupAuth(app: Express) {
   app.get("/api/callback", (req, res, next) => {
     const strategyName = getStrategyName(req.hostname);
     passport.authenticate(strategyName, {
-      successRedirect: "/",
+      successRedirect: "/dashboard",
       failureRedirect: "/login?error=auth_failed",
     })(req, res, next);
   });
