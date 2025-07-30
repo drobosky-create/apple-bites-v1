@@ -98,6 +98,10 @@ export default function Checkout() {
   // Get product from URL params
   const urlParams = new URLSearchParams(window.location.search);
   const productId = urlParams.get('product') || '';
+  
+  // Define tier and amount outside useEffect so they're accessible in JSX
+  const tier = 'growth';
+  const amount = 79500; // $795.00 in cents
 
   useEffect(() => {
     if (!productId) {
@@ -108,8 +112,6 @@ export default function Checkout() {
 
     // Create PaymentIntent with fixed amount for Growth & Exit Assessment
     // This is a temporary solution until Stripe prices are properly configured
-    const tier = 'growth';
-    const amount = 79500; // $795.00 in cents
     
     apiRequest('POST', '/api/create-payment-intent-fixed', { 
       productId,
