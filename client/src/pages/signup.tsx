@@ -54,6 +54,18 @@ export default function SignupPage() {
       return;
     }
 
+    if (!/[A-Z]/.test(formData.password)) {
+      setError('Password must contain at least one uppercase letter');
+      setIsLoading(false);
+      return;
+    }
+
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(formData.password)) {
+      setError('Password must contain at least one special character');
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const response = await fetch('/api/signup', {
         method: 'POST',
@@ -70,7 +82,8 @@ export default function SignupPage() {
       const data = await response.json();
 
       if (response.ok) {
-        setLocation('/dashboard');
+        // Force reload to update authentication state
+        window.location.href = '/dashboard';
       } else {
         setError(data.message || 'Registration failed. Please try again.');
       }
@@ -266,6 +279,13 @@ export default function SignupPage() {
               mb: 1 
             }}>
               Password
+            </Typography>
+            <Typography variant="caption" sx={{ 
+              color: { xs: '#CBD5E1', md: '#9CA3AF' }, 
+              mb: 1,
+              display: 'block'
+            }}>
+              Must be 8+ characters with uppercase, lowercase, number, and special character
             </Typography>
             <MDInput
               type={showPassword ? 'text' : 'password'}

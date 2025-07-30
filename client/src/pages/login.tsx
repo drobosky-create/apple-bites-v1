@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'wouter';
-import { Grid, Box, Typography, Button, useTheme } from '@mui/material';
-import { Eye, EyeOff, Mail, LogIn } from 'lucide-react';
+import { Box, Typography, Button } from '@mui/material';
+import { Eye, EyeOff, Mail } from 'lucide-react';
 import MDInput from '@/components/MD/MDInput';
+
 const appleBitesLogo = '/apple-bites-logo.png';
 
 interface LoginFormData {
@@ -10,8 +11,7 @@ interface LoginFormData {
   password: string;
 }
 
-export default function HybridLoginPage() {
-  const theme = useTheme();
+export default function LoginPage() {
   const [, setLocation] = useLocation();
 
   const [formData, setFormData] = useState<LoginFormData>({
@@ -44,7 +44,8 @@ export default function HybridLoginPage() {
       const data = await response.json();
 
       if (response.ok) {
-        setLocation('/dashboard');
+        // Force reload to update authentication state
+        window.location.href = '/dashboard';
       } else {
         setError(data.message || 'Login failed. Please check your credentials.');
       }
@@ -55,11 +56,6 @@ export default function HybridLoginPage() {
       setIsLoading(false);
     }
   };
-
-  // Handle Google OAuth
-
-
-
 
   return (
     <Box sx={{ minHeight: '100vh', display: 'flex' }}>
@@ -111,192 +107,188 @@ export default function HybridLoginPage() {
           py: { xs: 4, md: 0 }
         }}
       >
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-            sx={{
-              width: '100%',
-              maxWidth: { xs: '100%', md: 600 },
-              backgroundColor: { xs: 'white', md: 'transparent' },
-              borderRadius: { xs: 3, md: 0 },
-              p: { xs: 4, md: 0 },
-              boxShadow: { xs: 4, md: 'none' }
-            }}
-          >
-            {/* Logo for mobile */}
-            <Box textAlign="center" mb={4} sx={{ display: { md: 'none' } }}>
-              <img src={appleBitesLogo} alt="Apple Bites" style={{ height: 240 }} />
-            </Box>
+        <Box
+          component="form"
+          onSubmit={handleSubmit}
+          sx={{
+            width: '100%',
+            maxWidth: { xs: '100%', md: 600 },
+            backgroundColor: { xs: 'white', md: 'transparent' },
+            borderRadius: { xs: 3, md: 0 },
+            p: { xs: 4, md: 0 },
+            boxShadow: { xs: 4, md: 'none' }
+          }}
+        >
+          {/* Logo for mobile */}
+          <Box textAlign="center" mb={4} sx={{ display: { md: 'none' } }}>
+            <img src={appleBitesLogo} alt="Apple Bites" style={{ height: 240 }} />
+          </Box>
 
-            {/* Header */}
-            <Box mb={4}>
-              <Typography variant="h4" fontWeight="bold" sx={{ 
-                color: { xs: '#FFFFFF', md: '#1A202C' }, 
-                mb: 1 
-              }}>
-                Sign In
-              </Typography>
-              <Typography variant="body1" sx={{ 
-                color: { xs: '#E2E8F0', md: '#718096' } 
-              }}>
-                Access your business valuation dashboard
-              </Typography>
-            </Box>
+          {/* Header */}
+          <Box mb={4}>
+            <Typography variant="h4" fontWeight="bold" sx={{ 
+              color: { xs: '#FFFFFF', md: '#1A202C' }, 
+              mb: 1 
+            }}>
+              Sign In
+            </Typography>
+            <Typography variant="body1" sx={{ 
+              color: { xs: '#E2E8F0', md: '#718096' } 
+            }}>
+              Access your business valuation dashboard
+            </Typography>
+          </Box>
 
-
-
-
-
-            {/* Error Display */}
-            {error && (
-              <Box
-                sx={{
-                  backgroundColor: '#FEF2F2',
-                  border: '1px solid #FECACA',
-                  borderRadius: 2,
-                  p: 2,
-                  mb: 3
-                }}
-              >
-                <Typography sx={{ color: '#DC2626', fontSize: 14 }}>
-                  {error}
-                </Typography>
-              </Box>
-            )}
-
-            {/* Email Field */}
-            <Box mb={3}>
-              <Typography variant="body2" fontWeight="medium" sx={{ 
-                color: { xs: '#E2E8F0', md: '#374151' }, 
-                mb: 1 
-              }}>
-                Email Address
-              </Typography>
-              <MDInput
-                type="email"
-                placeholder="Enter your email"
-                value={formData.email}
-                onChange={handleInputChange('email')}
-                required
-                fullWidth
-                startAdornment={<Mail size={18} color="#9CA3AF" />}
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                    '& fieldset': { borderColor: '#D1D5DB' },
-                    '&:hover fieldset': { borderColor: '#00718d' },
-                    '&.Mui-focused fieldset': { borderColor: '#00718d' }
-                  }
-                }}
-              />
-            </Box>
-
-            {/* Password Field */}
-            <Box mb={4}>
-              <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
-                <Typography variant="body2" fontWeight="medium" sx={{ 
-                  color: { xs: '#E2E8F0', md: '#374151' }
-                }}>
-                  Password
-                </Typography>
-                <Link href="/forgot-password">
-                  <Typography
-                    variant="caption"
-                    sx={{
-                      color: '#00718d',
-                      textDecoration: 'none',
-                      cursor: 'pointer',
-                      '&:hover': { textDecoration: 'underline' }
-                    }}
-                  >
-                    Forgot password?
-                  </Typography>
-                </Link>
-              </Box>
-              <MDInput
-                type={showPassword ? 'text' : 'password'}
-                placeholder="Enter your password"
-                value={formData.password}
-                onChange={handleInputChange('password')}
-                required
-                fullWidth
-                endAdornment={
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    style={{
-                      background: 'none',
-                      border: 'none',
-                      cursor: 'pointer',
-                      padding: 0,
-                      display: 'flex',
-                      alignItems: 'center'
-                    }}
-                  >
-                    {showPassword ? <EyeOff size={18} color="#9CA3AF" /> : <Eye size={18} color="#9CA3AF" />}
-                  </button>
-                }
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                    '& fieldset': { borderColor: '#D1D5DB' },
-                    '&:hover fieldset': { borderColor: '#00718d' },
-                    '&.Mui-focused fieldset': { borderColor: '#00718d' }
-                  }
-                }}
-              />
-            </Box>
-
-            {/* Submit Button */}
-            <Button
-              type="submit"
-              disabled={isLoading}
+          {/* Error Display */}
+          {error && (
+            <Box
               sx={{
-                width: '100%',
-                py: 1.5,
-                fontWeight: 'bold',
-                background: { 
-                  xs: '#00718d', // Solid color on mobile
-                  md: 'linear-gradient(135deg, #00718d 0%, #0A1F44 100%)' // Gradient on desktop
-                },
-                color: '#FFFFFF !important',
-                textShadow: '0 1px 3px rgba(0,0,0,0.6)',
+                backgroundColor: '#FEF2F2',
+                border: '1px solid #FECACA',
                 borderRadius: 2,
-                textTransform: 'none',
-                '&:hover': {
-                  background: { 
-                    xs: '#005b8c', // Darker solid color on mobile hover
-                    md: 'linear-gradient(135deg, #00718d 0%, #3B82F6 100%)' // Gradient on desktop hover
-                  }
-                },
-                '&:disabled': {
-                  background: '#E5E7EB',
-                  color: '#9CA3AF'
-                }
+                p: 2,
+                mb: 3
               }}
             >
-              {isLoading ? 'Signing In...' : 'Sign In'}
-            </Button>
-
-            {/* Sign Up Redirect */}
-            <Box textAlign="center" mt={3}>
-              <Typography variant="body2" sx={{ color: { xs: '#CBD5E1', md: '#6B7280' } }}>
-                Don't have an account?{' '}
-                <Link href="/signup">
-                  <Typography 
-                    component="span" 
-                    sx={{ 
-                      color: { xs: '#E2E8F0', md: '#00718d' }, 
-                      fontWeight: 'medium', 
-                      cursor: 'pointer',
-                      textDecoration: 'none',
-                      '&:hover': { textDecoration: 'underline' }
-                    }}
-                  >
-                    Create one here
-                  </Typography>
-                </Link>
+              <Typography sx={{ color: '#DC2626', fontSize: 14 }}>
+                {error}
               </Typography>
             </Box>
+          )}
+
+          {/* Email Field */}
+          <Box mb={3}>
+            <Typography variant="body2" fontWeight="medium" sx={{ 
+              color: { xs: '#E2E8F0', md: '#374151' }, 
+              mb: 1 
+            }}>
+              Email Address
+            </Typography>
+            <MDInput
+              type="email"
+              placeholder="Enter your email"
+              value={formData.email}
+              onChange={handleInputChange('email')}
+              required
+              fullWidth
+              startAdornment={<Mail size={18} color="#9CA3AF" />}
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': { borderColor: '#D1D5DB' },
+                  '&:hover fieldset': { borderColor: '#00718d' },
+                  '&.Mui-focused fieldset': { borderColor: '#00718d' }
+                }
+              }}
+            />
           </Box>
+
+          {/* Password Field */}
+          <Box mb={4}>
+            <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
+              <Typography variant="body2" fontWeight="medium" sx={{ 
+                color: { xs: '#E2E8F0', md: '#374151' }
+              }}>
+                Password
+              </Typography>
+              <Link href="/forgot-password">
+                <Typography
+                  variant="caption"
+                  sx={{
+                    color: '#00718d',
+                    textDecoration: 'none',
+                    cursor: 'pointer',
+                    '&:hover': { textDecoration: 'underline' }
+                  }}
+                >
+                  Forgot password?
+                </Typography>
+              </Link>
+            </Box>
+            <MDInput
+              type={showPassword ? 'text' : 'password'}
+              placeholder="Enter your password"
+              value={formData.password}
+              onChange={handleInputChange('password')}
+              required
+              fullWidth
+              endAdornment={
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    padding: 0,
+                    display: 'flex',
+                    alignItems: 'center'
+                  }}
+                >
+                  {showPassword ? <EyeOff size={18} color="#9CA3AF" /> : <Eye size={18} color="#9CA3AF" />}
+                </button>
+              }
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': { borderColor: '#D1D5DB' },
+                  '&:hover fieldset': { borderColor: '#00718d' },
+                  '&.Mui-focused fieldset': { borderColor: '#00718d' }
+                }
+              }}
+            />
+          </Box>
+
+          {/* Submit Button */}
+          <Button
+            type="submit"
+            disabled={isLoading}
+            sx={{
+              width: '100%',
+              py: 1.5,
+              fontWeight: 'bold',
+              background: { 
+                xs: '#00718d', // Solid color on mobile
+                md: 'linear-gradient(135deg, #00718d 0%, #0A1F44 100%)' // Gradient on desktop
+              },
+              color: '#FFFFFF !important',
+              textShadow: '0 1px 3px rgba(0,0,0,0.6)',
+              borderRadius: 2,
+              textTransform: 'none',
+              '&:hover': {
+                background: { 
+                  xs: '#005b8c', // Darker solid color on mobile hover
+                  md: 'linear-gradient(135deg, #00718d 0%, #3B82F6 100%)' // Gradient on desktop hover
+                }
+              },
+              '&:disabled': {
+                background: '#E5E7EB',
+                color: '#9CA3AF'
+              }
+            }}
+          >
+            {isLoading ? 'Signing In...' : 'Sign In'}
+          </Button>
+
+          {/* Sign Up Redirect */}
+          <Box textAlign="center" mt={3}>
+            <Typography variant="body2" sx={{ color: { xs: '#CBD5E1', md: '#6B7280' } }}>
+              Don't have an account?{' '}
+              <Link href="/signup">
+                <Typography 
+                  component="span" 
+                  sx={{ 
+                    color: { xs: '#E2E8F0', md: '#00718d' }, 
+                    fontWeight: 'medium', 
+                    cursor: 'pointer',
+                    textDecoration: 'none',
+                    '&:hover': { textDecoration: 'underline' }
+                  }}
+                >
+                  Create account here
+                </Typography>
+              </Link>
+            </Typography>
+          </Box>
+        </Box>
       </Box>
     </Box>
   );

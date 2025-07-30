@@ -50,26 +50,40 @@ export default function LandingPage() {
           gap: 3, 
           alignItems: 'center' 
         }}>
-          <Link href="/admin">
-            <Typography variant="body1" sx={{ 
+          <Button 
+            component={Link}
+            href="/admin"
+            sx={{ 
               color: 'white', 
-              cursor: 'pointer',
               opacity: 0.9,
-              '&:hover': { opacity: 1, color: '#17a2b8' }
-            }}>
-              Admin
-            </Typography>
-          </Link>
-          <Link href="/login">
-            <Typography variant="body1" sx={{ 
+              textTransform: 'none',
+              fontSize: '1rem',
+              '&:hover': { 
+                opacity: 1, 
+                color: '#17a2b8',
+                backgroundColor: 'transparent'
+              }
+            }}
+          >
+            Admin
+          </Button>
+          <Button 
+            component={Link}
+            href="/login"
+            sx={{ 
               color: 'white', 
-              cursor: 'pointer',
               opacity: 0.9,
-              '&:hover': { opacity: 1, color: '#17a2b8' }
-            }}>
-              Sign In/Up
-            </Typography>
-          </Link>
+              textTransform: 'none',
+              fontSize: '1rem',
+              '&:hover': { 
+                opacity: 1, 
+                color: '#17a2b8',
+                backgroundColor: 'transparent'
+              }
+            }}
+          >
+            Sign In/Up
+          </Button>
           {process.env.NODE_ENV === 'development' && (
             <Button 
               onClick={async () => {
@@ -99,26 +113,40 @@ export default function LandingPage() {
               Demo Login
             </Button>
           )}
-          <Link href="#pricing">
-            <Typography variant="body1" sx={{ 
+          <Button 
+            component="a"
+            href="#pricing"
+            sx={{ 
               color: 'white', 
-              cursor: 'pointer',
               opacity: 0.9,
-              '&:hover': { opacity: 1, color: '#17a2b8' }
-            }}>
-              Pricing
-            </Typography>
-          </Link>
-          <Link href="#about">
-            <Typography variant="body1" sx={{ 
+              textTransform: 'none',
+              fontSize: '1rem',
+              '&:hover': { 
+                opacity: 1, 
+                color: '#17a2b8',
+                backgroundColor: 'transparent'
+              }
+            }}
+          >
+            Pricing
+          </Button>
+          <Button 
+            component="a"
+            href="#about"
+            sx={{ 
               color: 'white', 
-              cursor: 'pointer',
               opacity: 0.9,
-              '&:hover': { opacity: 1, color: '#17a2b8' }
-            }}>
-              About
-            </Typography>
-          </Link>
+              textTransform: 'none',
+              fontSize: '1rem',
+              '&:hover': { 
+                opacity: 1, 
+                color: '#17a2b8',
+                backgroundColor: 'transparent'
+              }
+            }}
+          >
+            About
+          </Button>
           <Button 
             component="a"
             href="https://meritage-partners.com"
