@@ -25,6 +25,9 @@ interface MobileDashboardProps {
 }
 
 export default function MobileDashboard({ user, onSignOut }: MobileDashboardProps) {
+  // Debug logging to confirm mobile dashboard is being rendered
+  console.log('MobileDashboard component rendering for user:', user.name);
+  
   // Apple Bites Brand Colors
   const colors = {
     primary: "#00718d",

@@ -11,20 +11,13 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
   return (
     <Box
-      sx={({ breakpoints, transitions }) => ({
+      sx={{
         p: 3,
         position: "relative",
         minHeight: "100vh",
         backgroundColor: "#f8f9fa",
-
-        [breakpoints.up("xl")]: {
-          marginLeft: "280px", // Sidebar width
-          transition: transitions.create(["margin-left", "margin-right"], {
-            easing: transitions.easing.easeInOut,
-            duration: transitions.duration.standard,
-          }),
-        },
-      })}
+        // Remove sidebar margins completely to avoid conflicts
+      }}
     >
       {children}
     </Box>
