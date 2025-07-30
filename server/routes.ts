@@ -2705,6 +2705,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
               'EARLYBIRD': { percent_off: 15, name: '15% Off Early Bird' },
               'WELCOME25': { amount_off: 2500, currency: 'usd', name: '$25 Welcome Discount' },
               'LEGACY': { percent_off: 100, name: '100% Off Legacy Coupon' },
+              'RGR25XH2': { percent_off: 100, name: '100% Off Legacy Coupon' },
             };
             
             const demoCoupon = demoCoupons[couponCode.toUpperCase() as keyof typeof demoCoupons];
@@ -2804,7 +2805,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         // Add coupon if provided (only for real Stripe coupons)
         if (couponId) {
           // Check if this is a demo coupon (our fallback system)
-          const demoCoupons = ['SAVE10', 'SAVE50', 'EARLYBIRD', 'WELCOME25', 'LEGACY'];
+          const demoCoupons = ['SAVE10', 'SAVE50', 'EARLYBIRD', 'WELCOME25', 'LEGACY', 'RGR25XH2'];
           const isDemoCoupon = demoCoupons.includes(couponId.toUpperCase());
           
           if (!isDemoCoupon) {
