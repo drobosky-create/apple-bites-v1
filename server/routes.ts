@@ -2534,7 +2534,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.put("/api/profile", async (req, res) => {
     try {
       // Check if user is authenticated (works with both Replit Auth and custom auth)
-      const isReplitAuth = req.isAuthenticated && req.isAuthenticated() && req.user?.claims?.sub;
+      const isReplitAuth = req.isAuthenticated && req.isAuthenticated() && (req.user as any)?.claims?.sub;
       const isCustomAuth = req.session?.customUserSessionId;
       const isDemoAuth = (req.session as any)?.isAuthenticated && (req.session as any)?.user;
 
@@ -2623,6 +2623,100 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ error: 'Failed to setup demo session' });
     }
   });
+
+  // Stripe integration
+  if (!process.env.STRIPE_SECRET_KEY) {
+    console.warn('STRIPE_SECRET_KEY not provided - payment features disabled');
+  } else {
+    const Stripe = (await import('stripe')).default;
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+      apiVersion: '2025-06-30.basil',
+    });
+
+    // Create payment intent for one-time payments (Growth/Capital tiers)
+    app.post("/api/create-payment-intent", async (req, res) => {
+      try {
+        const { tier, amount } = req.body;
+        
+        // Validate tier and amount
+        const validTiers = { growth: 795, capital: 1995 };
+        if (!validTiers[tier as keyof typeof validTiers]) {
+          return res.status(400).json({ error: 'Invalid tier' });
+        }
+        
+        const expectedAmount = validTiers[tier as keyof typeof validTiers];
+        if (amount !== expectedAmount) {
+          return res.status(400).json({ error: 'Invalid amount' });
+        }
+
+        const paymentIntent = await stripe.paymentIntents.create({
+          amount: Math.round(amount * 100), // Convert to cents
+          currency: 'usd',
+          metadata: {
+            tier,
+            userId: req.session?.customUserSessionId || 'anonymous',
+          },
+        });
+
+        res.json({ clientSecret: paymentIntent.client_secret });
+      } catch (error: any) {
+        console.error('Payment intent creation error:', error);
+        res.status(500).json({ error: 'Failed to create payment intent' });
+      }
+    });
+
+    // Stripe webhook handler for payment confirmation
+    app.post("/api/webhooks/stripe", async (req, res) => {
+      try {
+        const sig = req.headers['stripe-signature'] as string;
+        
+        // Note: In production, you'll need to set STRIPE_WEBHOOK_SECRET
+        // const event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET!);
+        
+        // For now, process the event directly (not secure for production)
+        const event = req.body;
+
+        if (event.type === 'payment_intent.succeeded') {
+          const paymentIntent = event.data.object;
+          const { tier, userId } = paymentIntent.metadata;
+
+          // Update user tier in database
+          if (userId && userId !== 'anonymous') {
+            try {
+              await storage.updateUserTier(userId, tier);
+              console.log(`Updated user ${userId} to tier ${tier}`);
+
+              // Send webhook to N8N for GHL integration
+              const webhookData = {
+                type: 'tierUpgrade', 
+                userId,
+                tier,
+                amount: paymentIntent.amount / 100,
+                timestamp: new Date().toISOString(),
+                paymentIntentId: paymentIntent.id,
+              };
+
+              // Send to N8N webhook
+              const n8nWebhookUrl = 'https://drobosky.app.n8n.cloud/webhook-test/replit-lead';
+              await fetch(n8nWebhookUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(webhookData),
+              });
+
+            } catch (error) {
+              console.error('Error updating user tier:', error);
+            }
+          }
+        }
+
+        res.json({ received: true });
+      } catch (error: any) {
+        console.error('Stripe webhook error:', error);
+        res.status(400).send(`Webhook Error: ${error.message}`);
+      }
+    });
+  }
 
   const httpServer = createServer(app);
   return httpServer;

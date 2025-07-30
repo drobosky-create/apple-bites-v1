@@ -49,6 +49,7 @@ export interface IStorage {
   upsertUser(user: UpsertUser): Promise<User>;
   getUserByEmail(email: string): Promise<User | undefined>;
   updateUser(id: string, updates: Partial<User>): Promise<User>;
+  updateUserTier(id: string, tier: string): Promise<User>;
   deleteUser(id: string): Promise<void>;
   createCustomUser(userData: { firstName: string; lastName: string; email: string; passwordHash: string }): Promise<User>;
   validateUserCredentials(email: string, password: string): Promise<User | null>;
@@ -235,6 +236,20 @@ export class DatabaseStorage implements IStorage {
     const [user] = await db
       .update(users)
       .set({ ...updates, updatedAt: new Date() })
+      .where(eq(users.id, id))
+      .returning();
+    
+    if (!user) {
+      throw new Error(`User with id ${id} not found`);
+    }
+    
+    return user;
+  }
+
+  async updateUserTier(id: string, tier: string): Promise<User> {
+    const [user] = await db
+      .update(users)
+      .set({ tier, updatedAt: new Date() })
       .where(eq(users.id, id))
       .returning();
     

@@ -409,7 +409,7 @@ function DashboardSidebar({ user, onSignOut }: { user: DashboardUser; onSignOut:
               py: 1.5
             }}
             startIcon={<Crown size={18} />}
-            onClick={() => window.open('https://products.applebites.ai/', '_blank')}
+            onClick={() => window.location.href = '/pricing'}
           >
             Upgrade Plan
           </MDButton>

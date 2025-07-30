@@ -1,4 +1,5 @@
 import { Switch, Route } from "wouter";
+import { lazy } from "react";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import MaterialWrapper from "@/components/MaterialWrapper";
@@ -20,6 +21,7 @@ import SignupPage from "@/pages/signup";
 import LoginPage from "@/pages/login";
 import PrivacyPolicy from "@/pages/privacy-policy";
 import TermsOfUse from "@/pages/terms-of-use";
+import PricingPage from "@/pages/pricing";
 import CookieBanner from "@/components/CookieBanner";
 
 function Router() {
@@ -50,6 +52,8 @@ function Router() {
         {/* Legal pages - always accessible */}
         <Route path="/privacy-policy" component={PrivacyPolicy} />
         <Route path="/terms-of-use" component={TermsOfUse} />
+        <Route path="/pricing" component={PricingPage} />
+        <Route path="/checkout" component={lazy(() => import("./pages/checkout"))} />
         
         {/* Protected routes - redirect to login if not authenticated */}
         <Route path="/">
