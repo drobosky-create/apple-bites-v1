@@ -78,9 +78,21 @@ export default function CookieBanner() {
         gap={2}
       >
         <Box flex={1}>
-          <Typography variant="body1" sx={{ mb: 1, fontWeight: 500 }}>
-            🍎 We use cookies to enhance your experience
-          </Typography>
+          <Box display="flex" alignItems="center" sx={{ mb: 1 }}>
+            <img 
+              src="/apple-bites-logo.png" 
+              alt="Apple Bites" 
+              style={{ 
+                width: 24, 
+                height: 24, 
+                marginRight: 8,
+                filter: 'brightness(1.2)'
+              }} 
+            />
+            <Typography variant="body1" sx={{ fontWeight: 500 }}>
+              We use cookies to enhance your experience
+            </Typography>
+          </Box>
           <Typography variant="body2" sx={{ color: '#CBD5E0', lineHeight: 1.5 }}>
             Apple Bites uses essential cookies to provide secure authentication and save your assessment progress. 
             We also use analytics cookies to improve our business valuation tools. By continuing, you agree to our{' '}
