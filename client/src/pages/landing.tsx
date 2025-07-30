@@ -20,21 +20,33 @@ export default function LandingPage() {
     }}>
       {/* Header */}
       <Box sx={{ 
-        py: 3, 
-        px: 4, 
+        py: { xs: 2, md: 3 }, 
+        px: { xs: 2, md: 4 }, 
         display: 'flex', 
         justifyContent: 'space-between', 
         alignItems: 'center',
         background: 'linear-gradient(135deg, #0A1F44 0%, #1B2C4F 100%)',
-        boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
+        boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+        position: 'relative'
       }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-          <img src="/apple-bites-logo.png" alt="Apple Bites" style={{ height: 50 }} />
-          <Typography variant="h5" sx={{ color: 'white', fontWeight: 'bold' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1, md: 2 } }}>
+          <img src="/apple-bites-logo.png" alt="Apple Bites" style={{ height: 40 }} />
+          <Typography variant="h6" sx={{ 
+            color: 'white', 
+            fontWeight: 'bold',
+            fontSize: { xs: '1rem', md: '1.25rem' },
+            display: { xs: 'none', sm: 'block' }
+          }}>
             Apple Bites
           </Typography>
         </Box>
-        <Box sx={{ display: 'flex', gap: 3, alignItems: 'center' }}>
+        
+        {/* Desktop Navigation */}
+        <Box sx={{ 
+          display: { xs: 'none', md: 'flex' }, 
+          gap: 3, 
+          alignItems: 'center' 
+        }}>
           <Link href="#features">
             <Typography variant="body1" sx={{ 
               color: 'white', 
@@ -85,6 +97,44 @@ export default function LandingPage() {
               }
             }} size="small">
               Get Started
+            </Button>
+          </Link>
+        </Box>
+
+        {/* Mobile Navigation */}
+        <Box sx={{ 
+          display: { xs: 'flex', md: 'none' }, 
+          gap: 1, 
+          alignItems: 'center' 
+        }}>
+          <Link href="/login">
+            <Button variant="outlined" sx={{ 
+              color: 'white', 
+              borderColor: 'rgba(255,255,255,0.5)',
+              fontSize: '0.75rem',
+              px: 2,
+              py: 0.5,
+              minWidth: 'auto',
+              '&:hover': { 
+                borderColor: 'white',
+                background: 'rgba(255,255,255,0.1)'
+              }
+            }}>
+              Sign In
+            </Button>
+          </Link>
+          <Link href="/signup">
+            <Button variant="contained" sx={{ 
+              background: 'linear-gradient(45deg, #17a2b8, #007bff)',
+              fontSize: '0.75rem',
+              px: 2,
+              py: 0.5,
+              minWidth: 'auto',
+              '&:hover': {
+                background: 'linear-gradient(45deg, #138496, #0056b3)'
+              }
+            }}>
+              Start
             </Button>
           </Link>
         </Box>
@@ -144,7 +194,7 @@ export default function LandingPage() {
 
           <Grid container spacing={4} justifyContent="center">
             {/* Free Plan */}
-            <Grid item xs={12} md={4}>
+            <Grid size={{ xs: 12, md: 4 }}>
               <Card sx={{
                 p: 4,
                 height: '100%',
@@ -217,7 +267,7 @@ export default function LandingPage() {
             </Grid>
 
             {/* Growth & Exit */}
-            <Grid item xs={12} md={4}>
+            <Grid size={{ xs: 12, md: 4 }}>
               <Card sx={{
                 p: 4,
                 height: '100%',
@@ -296,7 +346,7 @@ export default function LandingPage() {
             </Grid>
 
             {/* Capital Market Plan */}
-            <Grid item xs={12} md={4}>
+            <Grid size={{ xs: 12, md: 4 }}>
               <Card sx={{
                 p: 4,
                 height: '100%',
@@ -394,7 +444,7 @@ export default function LandingPage() {
         </Typography>
 
         <Grid container spacing={6} sx={{ mt: 4 }}>
-          <Grid item xs={12} md={4}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <Box sx={{ textAlign: 'left' }}>
               <Typography variant="h5" sx={{ color: '#333', fontWeight: 'bold', mb: 2 }}>
                 Built for Founders, by M&A Experts
@@ -405,7 +455,7 @@ export default function LandingPage() {
             </Box>
           </Grid>
           
-          <Grid item xs={12} md={4}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <Box sx={{ textAlign: 'left' }}>
               <Typography variant="h5" sx={{ color: '#333', fontWeight: 'bold', mb: 2 }}>
                 Data-Driven & Easy to Use
@@ -416,7 +466,7 @@ export default function LandingPage() {
             </Box>
           </Grid>
           
-          <Grid item xs={12} md={4}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <Box sx={{ textAlign: 'left' }}>
               <Typography variant="h5" sx={{ color: '#333', fontWeight: 'bold', mb: 2 }}>
                 The First Bite Toward a Bigger Exit
@@ -460,7 +510,7 @@ export default function LandingPage() {
           </Typography>
           
           <Grid container spacing={4}>
-            <Grid item xs={12} md={4}>
+            <Grid size={{ xs: 12, md: 4 }}>
               <Box sx={{ textAlign: 'center', p: 3 }}>
                 <Box sx={{
                   width: 80,
@@ -486,7 +536,7 @@ export default function LandingPage() {
               </Box>
             </Grid>
             
-            <Grid item xs={12} md={4}>
+            <Grid size={{ xs: 12, md: 4 }}>
               <Box sx={{ textAlign: 'center', p: 3 }}>
                 <Box sx={{
                   width: 80,
@@ -512,7 +562,7 @@ export default function LandingPage() {
               </Box>
             </Grid>
             
-            <Grid item xs={12} md={4}>
+            <Grid size={{ xs: 12, md: 4 }}>
               <Box sx={{ textAlign: 'center', p: 3 }}>
                 <Box sx={{
                   width: 80,
@@ -545,7 +595,7 @@ export default function LandingPage() {
       <Box sx={{ py: 6, background: '#f8f9fa', borderTop: '1px solid #e0e0e0' }}>
         <Container maxWidth="lg">
           <Grid container spacing={4}>
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <Typography variant="h6" sx={{ color: '#333', fontWeight: 'bold', mb: 2 }}>
                 Links
               </Typography>
@@ -578,7 +628,7 @@ export default function LandingPage() {
               </Box>
             </Grid>
             
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <Typography variant="h6" sx={{ color: '#333', fontWeight: 'bold', mb: 2 }}>
                 Address:
               </Typography>
