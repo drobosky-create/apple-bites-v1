@@ -26,58 +26,151 @@ export default function StrategicReport({ results }: StrategicReportProps) {
     window.open('https://api.leadconnectorhq.com/widget/bookings/applebites', '_blank');
   };
 
-  // Dynamic deal structure analysis based on assessment results
+  // Advanced deal structure analysis based on comprehensive assessment results
   const getDealStructureRecommendations = () => {
-    const valuation = results.adjustedEbitda ? parseFloat(results.adjustedEbitda) * 5 : 0; // Rough estimate
-    const overallGrade = results.overallScore || 'B';
-    const financialGrade = results.financialPerformance || 'B';
-    const managementGrade = results.managementTeam || 'B';
-    const growthGrade = results.growthProspects || 'B';
-    
-    const recommendations = [];
-    
-    // High valuation businesses (>$10M)
-    if (valuation > 10000000) {
-      if (overallGrade >= 'B') {
-        recommendations.push('Strategic Acquisition Target');
-        recommendations.push('Private Equity Platform');
-      }
-      if (managementGrade >= 'A') {
-        recommendations.push('Management Buyout (MBO)');
-      }
+    // Convert letter grades to numeric scores (A=5, B=4, C=3, D=2, F=1)
+    const gradeToScore = (grade: string | null | undefined): number => {
+      if (!grade) return 2.5;
+      const gradeMap: { [key: string]: number } = { 'A': 5, 'B': 4, 'C': 3, 'D': 2, 'F': 1 };
+      return gradeMap[grade.charAt(0)] || 2.5;
+    };
+
+    // Calculate core metrics
+    const adjustedEbitda = results.adjustedEbitda ? parseFloat(results.adjustedEbitda) : 0;
+    const financialScore = gradeToScore(results.financialPerformance);
+    const recurringRevenueScore = gradeToScore(results.recurringRevenue);
+    const growthScore = gradeToScore(results.growthProspects);
+    const ownerDependencyScore = gradeToScore(results.ownerDependency);
+    const customerConcentrationScore = gradeToScore(results.customerConcentration);
+    const managementScore = gradeToScore(results.managementTeam);
+    const operationalScore = gradeToScore(results.systemsProcesses);
+    const scalabilityScore = (operationalScore + managementScore) / 2;
+    const differentiationScore = gradeToScore(results.competitivePosition);
+
+    interface DealStructure {
+      dealType: string;
+      rationale: string;
+      relevanceScore: number;
+      tags: string[];
     }
-    
-    // Mid-market businesses ($5M-$10M)
-    else if (valuation > 5000000) {
-      recommendations.push('Buy-Side M&A Transaction');
-      if (growthGrade >= 'B') {
-        recommendations.push('Growth Capital Candidate');
-      }
-      if (financialGrade >= 'B') {
-        recommendations.push('Add-On Acquisition');
-      }
+
+    const dealOptions: DealStructure[] = [];
+
+    // Strategic Acquisition - High differentiation + strong operations
+    if (differentiationScore >= 4 && operationalScore >= 4 && growthScore >= 4) {
+      dealOptions.push({
+        dealType: "Strategic Acquisition",
+        rationale: "Strong competitive differentiation and operational excellence make this an attractive strategic target for industry consolidation.",
+        relevanceScore: 0.90 + (differentiationScore + operationalScore) / 20,
+        tags: ["High Differentiation", "Strong Operations", "Strategic Value"]
+      });
     }
-    
-    // Smaller businesses (<$5M)
-    else {
-      recommendations.push('Roll-Up Opportunity');
-      recommendations.push('Owner-Operator Acquisition');
-      if (growthGrade >= 'A') {
-        recommendations.push('Growth Capital Infusion');
-      }
+
+    // Private Equity Platform - High EBITDA + strong financials + management
+    if (adjustedEbitda > 2000000 && financialScore >= 4 && managementScore >= 4) {
+      dealOptions.push({
+        dealType: "Private Equity Platform",
+        rationale: "Strong financial performance and management team position this as an ideal platform company for private equity expansion.",
+        relevanceScore: 0.85 + Math.min(adjustedEbitda / 10000000, 0.1),
+        tags: ["Strong Financials", "Proven Management", "Platform Potential"]
+      });
     }
-    
-    // Additional structure based on specific grades
-    if (results.recurringRevenue >= 'A') {
-      recommendations.push('SaaS/Recurring Revenue Play');
+
+    // SaaS Roll-Up - High recurring revenue
+    if (recurringRevenueScore >= 4) {
+      dealOptions.push({
+        dealType: "SaaS Roll-Up",
+        rationale: "High recurring revenue base makes this business attractive for SaaS consolidation and value creation strategies.",
+        relevanceScore: 0.88 + (recurringRevenueScore - 4) / 10,
+        tags: ["High Recurring Revenue", "Predictable Cash Flow", "Roll-Up Target"]
+      });
     }
-    
-    if (results.customerConcentration <= 'C' && results.riskFactors >= 'B') {
-      recommendations.push('Turnaround Investment');
+
+    // Add-On Acquisition - Good fit for existing platforms
+    if (operationalScore >= 3 && scalabilityScore >= 3.5 && adjustedEbitda < 5000000) {
+      dealOptions.push({
+        dealType: "Add-On Acquisition",
+        rationale: "Scalable operations and moderate size make this an excellent bolt-on acquisition for existing platforms.",
+        relevanceScore: 0.82 + scalabilityScore / 20,
+        tags: ["Scalable Operations", "Platform Add-On", "Growth Synergies"]
+      });
     }
-    
-    // Return top 4 recommendations
-    return recommendations.slice(0, 4);
+
+    // Growth Equity - High growth + emerging management
+    if (growthScore >= 4 && managementScore >= 3 && managementScore < 5) {
+      dealOptions.push({
+        dealType: "Growth Equity",
+        rationale: "Strong growth prospects with developing management team indicate readiness for minority growth capital investment.",
+        relevanceScore: 0.85 + (growthScore - 4) / 10,
+        tags: ["High Growth Potential", "Emerging Leadership", "Minority Investment"]
+      });
+    }
+
+    // Management Buyout - Strong management + low owner dependency
+    if (managementScore >= 4 && ownerDependencyScore >= 4) {
+      dealOptions.push({
+        dealType: "Management Buyout (MBO)",
+        rationale: "Strong management team with operational independence creates ideal conditions for management-led acquisition.",
+        relevanceScore: 0.80 + (managementScore + ownerDependencyScore) / 25,
+        tags: ["Strong Management", "Operational Independence", "Internal Transition"]
+      });
+    }
+
+    // Owner-Operator Acquisition - High owner dependency or smaller size
+    if (ownerDependencyScore < 3 || adjustedEbitda < 1000000) {
+      dealOptions.push({
+        dealType: "Owner-Operator Acquisition",
+        rationale: "Business characteristics align well with individual buyer seeking hands-on operational involvement.",
+        relevanceScore: 0.75 - (ownerDependencyScore - 2) / 20,
+        tags: ["Owner Involvement", "Hands-On Operations", "Individual Buyer"]
+      });
+    }
+
+    // Search Fund Acquisition - Mid-size with good fundamentals
+    if (adjustedEbitda >= 500000 && adjustedEbitda <= 3000000 && financialScore >= 3) {
+      dealOptions.push({
+        dealType: "Search Fund Acquisition",
+        rationale: "Size and financial profile match typical search fund acquisition criteria for entrepreneurial buyers.",
+        relevanceScore: 0.78 + financialScore / 25,
+        tags: ["Search Fund Size", "Financial Stability", "Entrepreneurial Buyer"]
+      });
+    }
+
+    // Roll-Up Opportunity - Fragmented industry with scale potential
+    if (scalabilityScore >= 3.5 && differentiationScore < 4) {
+      dealOptions.push({
+        dealType: "Roll-Up Opportunity",
+        rationale: "Scalable business model in fragmented market presents consolidation opportunity for roll-up strategy.",
+        relevanceScore: 0.76 + scalabilityScore / 25,
+        tags: ["Market Fragmentation", "Scalability", "Consolidation Play"]
+      });
+    }
+
+    // Turnaround Investment - Poor performance but good fundamentals
+    if (financialScore < 3 && (operationalScore >= 3 || differentiationScore >= 3)) {
+      dealOptions.push({
+        dealType: "Turnaround Investment",
+        rationale: "Underlying business strengths with financial challenges create turnaround investment opportunity.",
+        relevanceScore: 0.70 + (operationalScore + differentiationScore) / 40,
+        tags: ["Financial Distress", "Operational Potential", "Value Creation"]
+      });
+    }
+
+    // ESOP - Strong culture and employee base
+    if (managementScore >= 3 && ownerDependencyScore >= 3) {
+      dealOptions.push({
+        dealType: "ESOP (Employee Ownership)",
+        rationale: "Strong team culture and operational systems support employee stock ownership plan transition.",
+        relevanceScore: 0.72 + managementScore / 25,
+        tags: ["Employee Ownership", "Cultural Continuity", "Tax Benefits"]
+      });
+    }
+
+    // Sort by relevance score and return top 4
+    return dealOptions
+      .sort((a, b) => b.relevanceScore - a.relevanceScore)
+      .slice(0, 4)
+      .map(deal => deal.dealType);
   };
 
   return (
