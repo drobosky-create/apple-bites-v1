@@ -2695,7 +2695,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
             }
           });
         } catch (stripeError: any) {
-          console.log('Stripe coupon error:', stripeError.code, stripeError.message);
+          console.log('Stripe coupon error for code "' + couponCode + '":', stripeError.code, stripeError.message);
+          console.log('Full Stripe error:', JSON.stringify(stripeError, null, 2));
           // If coupon doesn't exist in Stripe, check demo coupons
           if (stripeError.code === 'resource_missing') {
             const demoCoupons = {
