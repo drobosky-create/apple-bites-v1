@@ -48,7 +48,11 @@ export default function Dashboard() {
   const { user, isAuthenticated } = useAuth();
   const queryClient = useQueryClient();
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const isMobile = useMediaQuery('(max-width:768px)');
+  
+  // Additional mobile detection fallback
+  const isMobileDevice = /iPhone|iPad|iPod|Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  const shouldUseMobile = isMobile || isMobileDevice || window.innerWidth <= 768;
   
   // Use actual user data or fallback to mock for testing
   const displayUser = (user as DashboardUser) || mockUser;
@@ -66,8 +70,8 @@ export default function Dashboard() {
     }
   };
 
-  // Return mobile version for small screens
-  if (isMobile) {
+  // Return mobile version for small screens or mobile devices
+  if (shouldUseMobile) {
     return <MobileDashboard user={displayUser} onSignOut={handleSignOut} />;
   }
 
