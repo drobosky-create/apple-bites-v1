@@ -33,7 +33,7 @@ export default function LandingPage() {
         position: 'relative'
       }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1, md: 2 } }}>
-          <img src="/assets/logos/apple-bites-logo-3.png" alt="Apple Bites" style={{ height: 90 }} />
+          <img src="/assets/logos/apple-bites-meritage-logo.png" alt="Apple Bites" style={{ height: 90 }} />
           <Typography variant="h6" sx={{ 
             color: 'white', 
             fontWeight: 'bold',
