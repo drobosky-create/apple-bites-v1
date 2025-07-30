@@ -92,19 +92,15 @@ function Router() {
           {isAuthenticated ? <PastAssessments /> : <LoginPage />}
         </Route>
         
-        {/* Admin/Team pages - protected */}
-        <Route path="/admin">
-          {isAuthenticated ? <AdminDashboard /> : <LoginPage />}
-        </Route>
+        {/* Admin/Team pages - self-authenticated */}
+        <Route path="/admin" component={AdminDashboard} />
         <Route path="/admin/analytics">
           {isAuthenticated ? <AnalyticsDashboard /> : <LoginPage />}
         </Route>
         <Route path="/admin/leads">
           {isAuthenticated ? <LeadsDashboard /> : <LoginPage />}
         </Route>
-        <Route path="/team">
-          {isAuthenticated ? <TeamDashboard /> : <LoginPage />}
-        </Route>
+        <Route path="/team" component={TeamDashboard} />
         
         {/* Fallback - redirect to login if not authenticated */}
         <Route>
