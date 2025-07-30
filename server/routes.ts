@@ -2776,6 +2776,39 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
     });
 
+    // Test endpoint to check Stripe products
+    app.get("/api/test-stripe-products", async (req, res) => {
+      try {
+        console.log('Testing Stripe products with live API key...');
+        
+        // Test Growth product
+        const growthPrices = await stripe.prices.list({
+          product: 'prod_Sddbk2RWzr8kyL',
+          active: true
+        });
+        
+        // Test Capital product  
+        const capitalPrices = await stripe.prices.list({
+          product: 'prod_Sdvq23217qaGhp',
+          active: true
+        });
+        
+        res.json({
+          growth: {
+            productId: 'prod_Sddbk2RWzr8kyL',
+            prices: growthPrices.data.map(p => ({ id: p.id, amount: p.unit_amount, currency: p.currency }))
+          },
+          capital: {
+            productId: 'prod_Sdvq23217qaGhp', 
+            prices: capitalPrices.data.map(p => ({ id: p.id, amount: p.unit_amount, currency: p.currency }))
+          }
+        });
+      } catch (error: any) {
+        console.error('Stripe product test error:', error);
+        res.status(500).json({ error: error.message });
+      }
+    });
+
     // Create Stripe Checkout Session (Official Prebuilt Implementation)
     app.post("/api/create-checkout-session", async (req, res) => {
       try {
@@ -2783,17 +2816,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
         
         console.log('Creating checkout session with lookup_key:', lookup_key, 'couponId:', couponId);
         
-        // Map lookup keys to actual price IDs (fallback approach)
-        const priceMap = {
-          'growth_exit_assessment': 'price_1RgqQ0AYDUS7LgRZqF6z4RzZ',
-          'basic_assessment': 'price_1RgtSbAYDUS7LgRZwm8Zg4gE', 
-          'capital_market_plan': 'price_1RgtT5AYDUS7LgRZcYpN8xEd'
+        // Map lookup keys to product IDs, then fetch prices dynamically
+        const productMap = {
+          'growth_exit_assessment': 'prod_Sddbk2RWzr8kyL',
+          'basic_assessment': 'prod_Sddbk2RWzr8kyL', // Same as growth for now
+          'capital_market_plan': 'prod_Sdvq23217qaGhp'
         };
 
-        const priceId = priceMap[lookup_key as keyof typeof priceMap];
-        if (!priceId) {
+        const productId = productMap[lookup_key as keyof typeof productMap];
+        if (!productId) {
           return res.status(400).json({ error: 'Invalid product lookup key' });
         }
+
+        // Fetch prices for the product dynamically
+        const prices = await stripe.prices.list({
+          product: productId,
+          active: true,
+          limit: 1
+        });
+
+        if (!prices.data.length) {
+          return res.status(400).json({ error: 'No active prices found for product' });
+        }
+
+        const priceId = prices.data[0].id;
 
         const YOUR_DOMAIN = `${req.protocol}://${req.get('host')}`;
         
