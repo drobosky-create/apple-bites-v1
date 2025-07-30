@@ -26,7 +26,7 @@ export default function StrategicReport({ results }: StrategicReportProps) {
     window.open('https://api.leadconnectorhq.com/widget/bookings/applebites', '_blank');
   };
 
-  // Advanced deal structure analysis based on comprehensive assessment results
+  // Advanced NAICS-aware deal structure analysis
   const getDealStructureRecommendations = () => {
     // Convert letter grades to numeric scores (A=5, B=4, C=3, D=2, F=1)
     const gradeToScore = (grade: string | null | undefined): number => {
@@ -47,6 +47,29 @@ export default function StrategicReport({ results }: StrategicReportProps) {
     const scalabilityScore = (operationalScore + managementScore) / 2;
     const differentiationScore = gradeToScore(results.competitivePosition);
 
+    // NAICS-based industry analysis
+    const naicsCode = results.naicsCode || '';
+    const naicsPrefix = naicsCode.substring(0, 3);
+    
+    // NAICS-to-deal mapping configuration
+    const naicsDealsMap: { [key: string]: string[] } = {
+      '541': ['SaaS Roll-Up', 'Add-On Acquisition', 'Growth Equity', 'Strategic Acquisition'], // Professional Services
+      '621': ['Private Equity Platform', 'Add-On Acquisition', 'Management Buyout'], // Healthcare Services
+      '238': ['Owner-Operator Acquisition', 'SBA-Backed Deal', 'Roll-Up Opportunity'], // Construction/Trades
+      '512': ['Strategic Acquisition', 'Growth Equity', 'Minority Recapitalization'], // Media/Software
+      '31': ['Leveraged Buyout', 'Strategic Acquisition', 'ESOP'], // Manufacturing
+      '32': ['Leveraged Buyout', 'Strategic Acquisition', 'ESOP'], // Manufacturing
+      '33': ['Leveraged Buyout', 'Strategic Acquisition', 'ESOP'], // Manufacturing
+      '44': ['Strategic Acquisition', 'Roll-Up Opportunity', 'Asset Sale'], // Retail
+      '45': ['Strategic Acquisition', 'Roll-Up Opportunity', 'Asset Sale'], // Retail
+      '48': ['Private Equity Platform', 'Management Buyout', 'ESOP'], // Transportation
+      '49': ['Private Equity Platform', 'Management Buyout', 'ESOP'], // Transportation
+      '812': ['SBA-Backed Deal', 'Seller-Financed Exit', 'Search Fund Acquisition'], // Personal Services
+      '561': ['Roll-Up Opportunity', 'Search Fund Acquisition', 'Owner-Operator Acquisition'], // Business Support
+      '52': ['Minority Recapitalization', 'Private Equity Platform', 'Strategic Acquisition'], // Finance
+      '53': ['Minority Recapitalization', 'Private Equity Platform', 'Strategic Acquisition'] // Real Estate
+    };
+
     interface DealStructure {
       dealType: string;
       rationale: string;
@@ -56,7 +79,80 @@ export default function StrategicReport({ results }: StrategicReportProps) {
 
     const dealOptions: DealStructure[] = [];
 
-    // Strategic Acquisition - High differentiation + strong operations
+    // NAICS-specific deal structure recommendations
+    const preferredDeals = naicsDealsMap[naicsPrefix] || [];
+    
+    // SaaS Roll-Up - Tech/Software industries with recurring revenue
+    if ((naicsPrefix === '541' || naicsPrefix === '512') && recurringRevenueScore >= 3.5) {
+      dealOptions.push({
+        dealType: "SaaS Roll-Up",
+        rationale: `Your NAICS code (${naicsCode}) places you in a software-driven industry. Combined with strong recurring revenue, this makes you ideal for a SaaS aggregator or roll-up.`,
+        relevanceScore: 0.95 + (recurringRevenueScore - 3.5) / 10,
+        tags: ["SaaS", "Recurring Revenue", `NAICS ${naicsPrefix}`]
+      });
+    }
+
+    // Healthcare PE Platform - Healthcare services with scale
+    if (naicsPrefix === '621' && adjustedEbitda > 2000000 && managementScore >= 4) {
+      dealOptions.push({
+        dealType: "Private Equity Platform",
+        rationale: `As a healthcare provider with scale and leadership, you're highly attractive to healthcare-focused PE firms building platforms in NAICS ${naicsPrefix}.`,
+        relevanceScore: 0.93 + Math.min(adjustedEbitda / 10000000, 0.05),
+        tags: ["Healthcare", "PE Interest", `NAICS ${naicsPrefix}`]
+      });
+    }
+
+    // Construction/Trades - Often owner-dependent
+    if (naicsPrefix === '238' || naicsPrefix === '236') {
+      if (ownerDependencyScore < 3) {
+        dealOptions.push({
+          dealType: "Owner-Operator Acquisition",
+          rationale: `Construction/trades businesses in NAICS ${naicsPrefix} typically require hands-on ownership, making this ideal for an owner-operator buyer.`,
+          relevanceScore: 0.85 - (ownerDependencyScore - 1) / 10,
+          tags: ["Construction", "Owner-Operator", `NAICS ${naicsPrefix}`]
+        });
+      }
+      if (adjustedEbitda < 3000000) {
+        dealOptions.push({
+          dealType: "SBA-Backed Deal",
+          rationale: `Your industry profile in NAICS ${naicsPrefix} aligns well with SBA lending programs for small business acquisitions.`,
+          relevanceScore: 0.82,
+          tags: ["SBA Eligible", "Small Business", `NAICS ${naicsPrefix}`]
+        });
+      }
+    }
+
+    // Manufacturing - Traditional LBO/ESOP candidates
+    if (['31', '32', '33'].includes(naicsPrefix.substring(0, 2))) {
+      if (adjustedEbitda > 3000000 && financialScore >= 3.5) {
+        dealOptions.push({
+          dealType: "Leveraged Buyout (LBO)",
+          rationale: `Manufacturing businesses in NAICS ${naicsPrefix} with stable cash flows are attractive LBO candidates for financial buyers.`,
+          relevanceScore: 0.88 + financialScore / 20,
+          tags: ["Manufacturing", "Stable Cash Flow", `NAICS ${naicsPrefix}`]
+        });
+      }
+      if (managementScore >= 3 && ownerDependencyScore >= 3) {
+        dealOptions.push({
+          dealType: "ESOP (Employee Ownership)",
+          rationale: `Legacy manufacturing companies in NAICS ${naicsPrefix} often transition successfully to employee ownership structures.`,
+          relevanceScore: 0.80 + managementScore / 25,
+          tags: ["Employee Ownership", "Manufacturing", `NAICS ${naicsPrefix}`]
+        });
+      }
+    }
+
+    // Professional Services - PE Roll-up activity
+    if (naicsPrefix === '541' && scalabilityScore >= 3.5) {
+      dealOptions.push({
+        dealType: "Add-On Acquisition",
+        rationale: `Professional services firms in NAICS ${naicsPrefix} are actively targeted by PE roll-up strategies seeking geographic or service expansion.`,
+        relevanceScore: 0.87 + scalabilityScore / 20,
+        tags: ["Professional Services", "PE Roll-up", `NAICS ${naicsPrefix}`]
+      });
+    }
+
+    // Strategic Acquisition - High differentiation + strong operations (universal)
     if (differentiationScore >= 4 && operationalScore >= 4 && growthScore >= 4) {
       dealOptions.push({
         dealType: "Strategic Acquisition",
@@ -66,36 +162,8 @@ export default function StrategicReport({ results }: StrategicReportProps) {
       });
     }
 
-    // Private Equity Platform - High EBITDA + strong financials + management
-    if (adjustedEbitda > 2000000 && financialScore >= 4 && managementScore >= 4) {
-      dealOptions.push({
-        dealType: "Private Equity Platform",
-        rationale: "Strong financial performance and management team position this as an ideal platform company for private equity expansion.",
-        relevanceScore: 0.85 + Math.min(adjustedEbitda / 10000000, 0.1),
-        tags: ["Strong Financials", "Proven Management", "Platform Potential"]
-      });
-    }
-
-    // SaaS Roll-Up - High recurring revenue
-    if (recurringRevenueScore >= 4) {
-      dealOptions.push({
-        dealType: "SaaS Roll-Up",
-        rationale: "High recurring revenue base makes this business attractive for SaaS consolidation and value creation strategies.",
-        relevanceScore: 0.88 + (recurringRevenueScore - 4) / 10,
-        tags: ["High Recurring Revenue", "Predictable Cash Flow", "Roll-Up Target"]
-      });
-    }
-
-    // Add-On Acquisition - Good fit for existing platforms
-    if (operationalScore >= 3 && scalabilityScore >= 3.5 && adjustedEbitda < 5000000) {
-      dealOptions.push({
-        dealType: "Add-On Acquisition",
-        rationale: "Scalable operations and moderate size make this an excellent bolt-on acquisition for existing platforms.",
-        relevanceScore: 0.82 + scalabilityScore / 20,
-        tags: ["Scalable Operations", "Platform Add-On", "Growth Synergies"]
-      });
-    }
-
+    // Generic deal structures for all industries (when NAICS-specific don't apply)
+    
     // Growth Equity - High growth + emerging management
     if (growthScore >= 4 && managementScore >= 3 && managementScore < 5) {
       dealOptions.push({
@@ -113,16 +181,6 @@ export default function StrategicReport({ results }: StrategicReportProps) {
         rationale: "Strong management team with operational independence creates ideal conditions for management-led acquisition.",
         relevanceScore: 0.80 + (managementScore + ownerDependencyScore) / 25,
         tags: ["Strong Management", "Operational Independence", "Internal Transition"]
-      });
-    }
-
-    // Owner-Operator Acquisition - High owner dependency or smaller size
-    if (ownerDependencyScore < 3 || adjustedEbitda < 1000000) {
-      dealOptions.push({
-        dealType: "Owner-Operator Acquisition",
-        rationale: "Business characteristics align well with individual buyer seeking hands-on operational involvement.",
-        relevanceScore: 0.75 - (ownerDependencyScore - 2) / 20,
-        tags: ["Owner Involvement", "Hands-On Operations", "Individual Buyer"]
       });
     }
 
@@ -156,13 +214,23 @@ export default function StrategicReport({ results }: StrategicReportProps) {
       });
     }
 
-    // ESOP - Strong culture and employee base
-    if (managementScore >= 3 && ownerDependencyScore >= 3) {
+    // Seller-Financed Exit - Lower valuation or challenging market conditions
+    if (adjustedEbitda < 2000000 || financialScore < 3.5) {
       dealOptions.push({
-        dealType: "ESOP (Employee Ownership)",
-        rationale: "Strong team culture and operational systems support employee stock ownership plan transition.",
-        relevanceScore: 0.72 + managementScore / 25,
-        tags: ["Employee Ownership", "Cultural Continuity", "Tax Benefits"]
+        dealType: "Seller-Financed Exit",
+        rationale: "Business profile suggests seller financing may be necessary to bridge valuation gaps and facilitate transaction.",
+        relevanceScore: 0.75 - Math.max(0, (financialScore - 2) / 10),
+        tags: ["Seller Financing", "Valuation Bridge", "Flexible Terms"]
+      });
+    }
+
+    // Fallback: Asset Sale if no better options
+    if (dealOptions.length === 0 || (financialScore < 2.5 && operationalScore < 2.5)) {
+      dealOptions.push({
+        dealType: "Asset Sale",
+        rationale: "Current business performance suggests asset-based transaction may provide better value realization than going concern sale.",
+        relevanceScore: 0.60,
+        tags: ["Asset Based", "Distressed", "Liquidation Value"]
       });
     }
 
