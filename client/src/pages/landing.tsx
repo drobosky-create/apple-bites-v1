@@ -248,7 +248,7 @@ export default function LandingPage() {
                     $0
                   </Typography>
                   
-                  <Box sx={{ mb: 4, textAlign: 'left' }}>
+                  <Box sx={{ mb: 4, textAlign: 'left', minHeight: '140px' }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                       <Typography variant="body1" sx={{ color: '#333', fontStyle: 'italic', fontWeight: 'bold' }}>
                         General EBITDA Multipliers
@@ -321,7 +321,7 @@ export default function LandingPage() {
                     $795
                   </Typography>
                   
-                  <Box sx={{ mb: 4, textAlign: 'left' }}>
+                  <Box sx={{ mb: 4, textAlign: 'left', minHeight: '140px' }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                       <Typography variant="body1" sx={{ color: '#333', fontStyle: 'italic', fontWeight: 'bold' }}>
                         Everything in Free
@@ -399,7 +399,7 @@ export default function LandingPage() {
                     $3495/yr
                   </Typography>
                   
-                  <Box sx={{ mb: 4, textAlign: 'left' }}>
+                  <Box sx={{ mb: 4, textAlign: 'left', minHeight: '140px' }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                       <Typography variant="body1" sx={{ color: '#333', fontStyle: 'italic', fontWeight: 'bold' }}>
                         Everything in Growth & Exit
