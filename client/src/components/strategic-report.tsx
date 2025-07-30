@@ -641,97 +641,62 @@ export default function StrategicReport({ results }: StrategicReportProps) {
             </MDTypography>
           </MDBox>
 
-          {/* Interactive Valuation Scale */}
-          <MDBox sx={{ position: 'relative', mb: 4 }}>
-            {/* Scale Background */}
-            <MDBox 
-              sx={{ 
-                height: '80px',
-                background: 'linear-gradient(90deg, #ef5350 0%, #ff9800 35%, #4caf50 50%, #2196f3 65%, #1976d2 100%)',
-                borderRadius: '40px',
-                position: 'relative',
-                mb: 3,
-                boxShadow: '0 4px 20px rgba(0,0,0,0.15)'
-              }}
-            >
-              {/* Scale Labels */}
-              <MDBox sx={{ position: 'absolute', top: '-30px', left: '0%', transform: 'translateX(-50%)' }}>
-                <MDTypography variant="caption" fontWeight="bold" color="error">CONSERVATIVE</MDTypography>
-              </MDBox>
-              <MDBox sx={{ position: 'absolute', top: '-30px', left: '50%', transform: 'translateX(-50%)' }}>
-                <MDTypography variant="caption" fontWeight="bold" color="success">STRATEGIC</MDTypography>
-              </MDBox>
-              <MDBox sx={{ position: 'absolute', top: '-30px', left: '100%', transform: 'translateX(-50%)' }}>
-                <MDTypography variant="caption" fontWeight="bold" color="primary">OPTIMIZED</MDTypography>
-              </MDBox>
-
-              {/* Value Markers */}
-              {/* Low Estimate Marker */}
-              <MDBox 
-                sx={{ 
-                  position: 'absolute',
-                  left: '15%',
-                  top: '50%',
-                  transform: 'translate(-50%, -50%)',
-                  width: '16px',
-                  height: '16px',
-                  backgroundColor: '#fff',
-                  borderRadius: '50%',
-                  border: '3px solid #ef5350',
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
-                }}
-              />
-              
-              {/* Mid Estimate Marker (Highlighted) */}
-              <MDBox 
-                sx={{ 
-                  position: 'absolute',
-                  left: '55%',
-                  top: '50%',
-                  transform: 'translate(-50%, -50%)',
-                  width: '24px',
-                  height: '24px',
-                  backgroundColor: '#4caf50',
-                  borderRadius: '50%',
-                  border: '4px solid #fff',
-                  boxShadow: '0 4px 16px rgba(76, 175, 80, 0.4)',
-                  zIndex: 2
-                }}
-              />
-              
-              {/* High Estimate Marker */}
-              <MDBox 
-                sx={{ 
-                  position: 'absolute',
-                  left: '85%',
-                  top: '50%',
-                  transform: 'translate(-50%, -50%)',
-                  width: '16px',
-                  height: '16px',
-                  backgroundColor: '#fff',
-                  borderRadius: '50%',
-                  border: '3px solid #2196f3',
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
-                }}
-              />
+          {/* Strategic Valuation Gauge */}
+          <MDBox display="flex" gap={4} alignItems="center" mb={4}>
+            {/* Gauge Container */}
+            <MDBox sx={{ flex: '0 0 400px', textAlign: 'center' }}>
+              <svg width="100%" height="320" viewBox="0 0 400 280">
+                {/* Gauge Background Arc */}
+                <defs>
+                  <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#ef5350" />
+                    <stop offset="35%" stopColor="#ff9800" />
+                    <stop offset="50%" stopColor="#4caf50" />
+                    <stop offset="65%" stopColor="#2196f3" />
+                    <stop offset="100%" stopColor="#1976d2" />
+                  </linearGradient>
+                </defs>
+                
+                {/* Background Arc */}
+                <path
+                  d="M 50 200 A 150 150 0 0 1 350 200"
+                  fill="none"
+                  stroke="url(#gaugeGradient)"
+                  strokeWidth="20"
+                  strokeLinecap="round"
+                />
+                
+                {/* Range Markers */}
+                {/* Low Estimate */}
+                <circle cx="110" cy="130" r="8" fill="#ef5350" stroke="#fff" strokeWidth="3" />
+                {/* Mid Estimate (Strategic) */}
+                <circle cx="200" cy="80" r="12" fill="#4caf50" stroke="#fff" strokeWidth="4" />
+                {/* High Estimate */}
+                <circle cx="290" cy="130" r="8" fill="#2196f3" stroke="#fff" strokeWidth="3" />
+                
+                {/* Needle pointing to mid estimate */}
+                <line x1="200" y1="200" x2="200" y2="95" stroke="#333" strokeWidth="3" strokeLinecap="round" />
+                <circle cx="200" cy="200" r="8" fill="#333" />
+                
+                {/* Range Labels */}
+                <text x="110" y="155" textAnchor="middle" fontSize="12" fill="#ef5350" fontWeight="bold">LOW</text>
+                <text x="200" y="65" textAnchor="middle" fontSize="12" fill="#4caf50" fontWeight="bold">STRATEGIC</text>
+                <text x="290" y="155" textAnchor="middle" fontSize="12" fill="#2196f3" fontWeight="bold">HIGH</text>
+                
+                {/* Center Title */}
+                <text x="200" y="235" textAnchor="middle" fontSize="14" fill="#666" fontWeight="medium">
+                  Valuation Range
+                </text>
+              </svg>
             </MDBox>
 
-            {/* Value Labels Below Scale */}
-            <MDBox display="flex" justifyContent="space-between" alignItems="center" px={2}>
-              <MDBox textAlign="center" sx={{ flex: '0 0 30%' }}>
-                <MDTypography variant="h5" fontWeight="bold" color="error" mb={1}>
-                  {formatCurrency(results.lowEstimate)}
-                </MDTypography>
-                <MDTypography variant="body2" color="textSecondary">
-                  Risk-adjusted baseline
-                </MDTypography>
-              </MDBox>
-              
-              <MDBox textAlign="center" sx={{ flex: '0 0 40%' }}>
+            {/* Value Display */}
+            <MDBox sx={{ flex: 1 }}>
+              <MDBox mb={3} p={2} sx={{ backgroundColor: '#E8F5E8', borderRadius: 2, textAlign: 'center' }}>
                 <MDTypography variant="h4" fontWeight="bold" color="success" mb={1}>
                   {formatCurrency(results.midEstimate)}
                 </MDTypography>
-                <MDTypography variant="body1" fontWeight="medium" color="success">
+                <MDTypography variant="h6" fontWeight="medium" color="success">
                   Strategic Baseline Value
                 </MDTypography>
                 <MDTypography variant="body2" color="textSecondary">
@@ -739,13 +704,24 @@ export default function StrategicReport({ results }: StrategicReportProps) {
                 </MDTypography>
               </MDBox>
               
-              <MDBox textAlign="center" sx={{ flex: '0 0 30%' }}>
-                <MDTypography variant="h5" fontWeight="bold" color="primary" mb={1}>
-                  {formatCurrency(results.highEstimate)}
-                </MDTypography>
-                <MDTypography variant="body2" color="textSecondary">
-                  Full optimization potential
-                </MDTypography>
+              <MDBox display="flex" gap={2}>
+                <MDBox flex={1} p={2} sx={{ backgroundColor: '#FFEBEE', borderRadius: 2, textAlign: 'center' }}>
+                  <MDTypography variant="h6" fontWeight="bold" color="error">
+                    {formatCurrency(results.lowEstimate)}
+                  </MDTypography>
+                  <MDTypography variant="caption" color="textSecondary">
+                    Conservative Base
+                  </MDTypography>
+                </MDBox>
+                
+                <MDBox flex={1} p={2} sx={{ backgroundColor: '#E3F2FD', borderRadius: 2, textAlign: 'center' }}>
+                  <MDTypography variant="h6" fontWeight="bold" color="primary">
+                    {formatCurrency(results.highEstimate)}
+                  </MDTypography>
+                  <MDTypography variant="caption" color="textSecondary">
+                    Optimization Peak
+                  </MDTypography>
+                </MDBox>
               </MDBox>
             </MDBox>
           </MDBox>
