@@ -631,66 +631,138 @@ export default function StrategicReport({ results }: StrategicReportProps) {
         </CardContent>
       </Card>
 
-      {/* Valuation Range Analysis */}
+      {/* Valuation Range Analysis - Interactive Scale */}
       <Card sx={{ mb: 4 }}>
         <CardContent sx={{ p: 4 }}>
-          <MDBox display="flex" alignItems="center" mb={3}>
+          <MDBox display="flex" alignItems="center" mb={4}>
             <Calculator size={24} color="#0A1F44" style={{ marginRight: 12 }} />
             <MDTypography variant="h5" fontWeight="bold" color="dark">
               Strategic Valuation Range Analysis
             </MDTypography>
           </MDBox>
 
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={4}>
-              <MDBox textAlign="center" p={3} sx={{ backgroundColor: '#FFEBEE', borderRadius: 2 }}>
-                <MDTypography variant="h5" fontWeight="bold" color="error">
+          {/* Interactive Valuation Scale */}
+          <MDBox sx={{ position: 'relative', mb: 4 }}>
+            {/* Scale Background */}
+            <MDBox 
+              sx={{ 
+                height: '80px',
+                background: 'linear-gradient(90deg, #ef5350 0%, #ff9800 35%, #4caf50 50%, #2196f3 65%, #1976d2 100%)',
+                borderRadius: '40px',
+                position: 'relative',
+                mb: 3,
+                boxShadow: '0 4px 20px rgba(0,0,0,0.15)'
+              }}
+            >
+              {/* Scale Labels */}
+              <MDBox sx={{ position: 'absolute', top: '-30px', left: '0%', transform: 'translateX(-50%)' }}>
+                <MDTypography variant="caption" fontWeight="bold" color="error">CONSERVATIVE</MDTypography>
+              </MDBox>
+              <MDBox sx={{ position: 'absolute', top: '-30px', left: '50%', transform: 'translateX(-50%)' }}>
+                <MDTypography variant="caption" fontWeight="bold" color="success">STRATEGIC</MDTypography>
+              </MDBox>
+              <MDBox sx={{ position: 'absolute', top: '-30px', left: '100%', transform: 'translateX(-50%)' }}>
+                <MDTypography variant="caption" fontWeight="bold" color="primary">OPTIMIZED</MDTypography>
+              </MDBox>
+
+              {/* Value Markers */}
+              {/* Low Estimate Marker */}
+              <MDBox 
+                sx={{ 
+                  position: 'absolute',
+                  left: '15%',
+                  top: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  width: '16px',
+                  height: '16px',
+                  backgroundColor: '#fff',
+                  borderRadius: '50%',
+                  border: '3px solid #ef5350',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
+                }}
+              />
+              
+              {/* Mid Estimate Marker (Highlighted) */}
+              <MDBox 
+                sx={{ 
+                  position: 'absolute',
+                  left: '55%',
+                  top: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  width: '24px',
+                  height: '24px',
+                  backgroundColor: '#4caf50',
+                  borderRadius: '50%',
+                  border: '4px solid #fff',
+                  boxShadow: '0 4px 16px rgba(76, 175, 80, 0.4)',
+                  zIndex: 2
+                }}
+              />
+              
+              {/* High Estimate Marker */}
+              <MDBox 
+                sx={{ 
+                  position: 'absolute',
+                  left: '85%',
+                  top: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  width: '16px',
+                  height: '16px',
+                  backgroundColor: '#fff',
+                  borderRadius: '50%',
+                  border: '3px solid #2196f3',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
+                }}
+              />
+            </MDBox>
+
+            {/* Value Labels Below Scale */}
+            <MDBox display="flex" justifyContent="space-between" alignItems="center" px={2}>
+              <MDBox textAlign="center" sx={{ flex: '0 0 30%' }}>
+                <MDTypography variant="h5" fontWeight="bold" color="error" mb={1}>
                   {formatCurrency(results.lowEstimate)}
                 </MDTypography>
-                <MDTypography variant="body1" color="text" fontWeight="medium">
-                  Conservative Scenario
-                </MDTypography>
                 <MDTypography variant="body2" color="textSecondary">
-                  Risk-adjusted valuation with current operational constraints
+                  Risk-adjusted baseline
                 </MDTypography>
               </MDBox>
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <MDBox textAlign="center" p={3} sx={{ backgroundColor: '#E8F5E8', borderRadius: 2, border: '2px solid #4CAF50' }}>
-                <MDTypography variant="h5" fontWeight="bold" color="success">
+              
+              <MDBox textAlign="center" sx={{ flex: '0 0 40%' }}>
+                <MDTypography variant="h4" fontWeight="bold" color="success" mb={1}>
                   {formatCurrency(results.midEstimate)}
                 </MDTypography>
-                <MDTypography variant="body1" color="text" fontWeight="medium">
-                  Strategic Baseline
+                <MDTypography variant="body1" fontWeight="medium" color="success">
+                  Strategic Baseline Value
                 </MDTypography>
                 <MDTypography variant="body2" color="textSecondary">
-                  Current market positioning with strategic improvements
+                  Current positioning + improvements
                 </MDTypography>
               </MDBox>
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <MDBox textAlign="center" p={3} sx={{ backgroundColor: '#E3F2FD', borderRadius: 2 }}>
-                <MDTypography variant="h5" fontWeight="bold" color="primary">
+              
+              <MDBox textAlign="center" sx={{ flex: '0 0 30%' }}>
+                <MDTypography variant="h5" fontWeight="bold" color="primary" mb={1}>
                   {formatCurrency(results.highEstimate)}
                 </MDTypography>
-                <MDTypography variant="body1" color="text" fontWeight="medium">
-                  Optimized Scenario
-                </MDTypography>
                 <MDTypography variant="body2" color="textSecondary">
-                  Full strategic optimization with market expansion
+                  Full optimization potential
                 </MDTypography>
               </MDBox>
-            </Grid>
-          </Grid>
+            </MDBox>
+          </MDBox>
 
-          <MDBox mt={3} p={3} sx={{ backgroundColor: '#F5F5F5', borderRadius: 2 }}>
-            <MDTypography variant="body1" color="text" mb={2}>
-              <strong>Strategic Multiplier Applied:</strong> {results.valuationMultiple || '4.2'}x EBITDA
-            </MDTypography>
-            <MDTypography variant="body2" color="textSecondary">
+          {/* Multiplier Information */}
+          <MDBox mt={4} p={3} sx={{ backgroundColor: '#F5F5F5', borderRadius: 2, textAlign: 'center' }}>
+            <MDBox display="flex" alignItems="center" justifyContent="center" mb={2}>
+              <MDTypography variant="h6" fontWeight="medium" color="dark" mr={1}>
+                Strategic Multiplier:
+              </MDTypography>
+              <MDTypography variant="h5" fontWeight="bold" color="primary">
+                {results.valuationMultiple || '4.2'}x EBITDA
+              </MDTypography>
+            </MDBox>
+            <MDTypography variant="body2" color="textSecondary" sx={{ maxWidth: '600px', mx: 'auto' }}>
               This industry-specific multiplier reflects your business's strategic positioning, operational efficiency, 
-              and growth potential within the current market environment. Our analysis incorporates NAICS-specific 
-              benchmarks and strategic value driver assessments.
+              and growth potential within the current market environment based on NAICS-specific benchmarks.
             </MDTypography>
           </MDBox>
         </CardContent>
