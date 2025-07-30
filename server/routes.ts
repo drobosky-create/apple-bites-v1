@@ -2659,46 +2659,45 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
     });
 
-    // Coupon validation endpoint
-    app.post('/api/apply-coupon', async (req, res) => {
+    // Stripe coupon validation endpoint
+    app.post('/api/validate-coupon', async (req, res) => {
       try {
-        const { couponCode, amount } = req.body;
+        const { couponCode } = req.body;
         
-        // Define available coupons
-        const validCoupons = {
-          'SAVE10': { discount: 0.10, type: 'percentage', description: '10% off' },
-          'SAVE50': { discount: 5000, type: 'fixed', description: '$50 off' }, // $50 in cents
-          'EARLYBIRD': { discount: 0.15, type: 'percentage', description: '15% off' },
-          'WELCOME25': { discount: 2500, type: 'fixed', description: '$25 off' }, // $25 in cents
-        };
+        // Retrieve coupon from Stripe
+        const coupon = await stripe.coupons.retrieve(couponCode);
         
-        const coupon = validCoupons[couponCode.toUpperCase() as keyof typeof validCoupons];
+        if (!coupon.valid) {
+          return res.status(400).json({ 
+            valid: false, 
+            message: 'Coupon is not valid or has expired' 
+          });
+        }
         
-        if (!coupon) {
+        // Return coupon details
+        res.json({
+          valid: true,
+          coupon: {
+            id: coupon.id,
+            name: coupon.name,
+            percent_off: coupon.percent_off,
+            amount_off: coupon.amount_off,
+            currency: coupon.currency,
+            duration: coupon.duration,
+            duration_in_months: coupon.duration_in_months,
+            max_redemptions: coupon.max_redemptions,
+            times_redeemed: coupon.times_redeemed,
+            valid: coupon.valid
+          }
+        });
+      } catch (error: any) {
+        console.error('Coupon validation error:', error);
+        if (error.code === 'resource_missing') {
           return res.status(400).json({ 
             valid: false, 
             message: 'Invalid coupon code' 
           });
         }
-        
-        let discountAmount = 0;
-        if (coupon.type === 'percentage') {
-          discountAmount = Math.round(amount * coupon.discount);
-        } else {
-          discountAmount = coupon.discount;
-        }
-        
-        // Ensure discount doesn't exceed the total amount
-        discountAmount = Math.min(discountAmount, amount);
-        
-        res.json({
-          valid: true,
-          discount: discountAmount,
-          description: coupon.description,
-          finalAmount: amount - discountAmount
-        });
-      } catch (error: any) {
-        console.error('Coupon validation error:', error);
         res.status(500).json({ 
           valid: false,
           message: 'Error validating coupon' 
@@ -2740,10 +2739,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
     });
 
-    // Create payment intent with fixed amount (temporary solution)
+    // Create payment intent with fixed amount and optional coupon
     app.post("/api/create-payment-intent-fixed", async (req, res) => {
       try {
-        const { productId, tier, amount } = req.body;
+        const { productId, tier, amount, couponId } = req.body;
         
         // Validate tier
         const validTiers = ['growth', 'capital'];
@@ -2756,7 +2755,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           return res.status(400).json({ error: 'Invalid amount' });
         }
 
-        const paymentIntent = await stripe.paymentIntents.create({
+        const paymentIntentData: any = {
           amount: amount,
           currency: 'usd',
           metadata: {
@@ -2764,7 +2763,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
             productId,
             userId: req.session?.customUserSessionId || 'anonymous',
           },
-        });
+        };
+
+        // Add coupon if provided
+        if (couponId) {
+          // Validate coupon exists in Stripe
+          try {
+            const coupon = await stripe.coupons.retrieve(couponId);
+            if (coupon.valid) {
+              paymentIntentData.discounts = [{ coupon: couponId }];
+              paymentIntentData.metadata.couponId = couponId;
+            }
+          } catch (couponError) {
+            console.warn('Invalid coupon provided:', couponId);
+          }
+        }
+
+        const paymentIntent = await stripe.paymentIntents.create(paymentIntentData);
 
         res.json({ clientSecret: paymentIntent.client_secret });
       } catch (error: any) {

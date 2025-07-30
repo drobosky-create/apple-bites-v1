@@ -108,22 +108,35 @@ export default function Checkout() {
   const baseAmount = 79500; // $795.00 in cents
   const finalAmount = baseAmount - discount;
 
-  // Function to apply coupon
+  // Function to apply coupon using Stripe
   const applyCoupon = async () => {
     if (!couponCode.trim()) return;
     
     try {
-      const response = await apiRequest('POST', '/api/apply-coupon', { 
-        couponCode: couponCode.trim(),
-        amount: baseAmount 
+      const response = await apiRequest('POST', '/api/validate-coupon', { 
+        couponCode: couponCode.trim()
       });
       const data = await response.json();
       
       if (response.ok && data.valid) {
-        setDiscount(data.discount);
+        const stripeCoupon = data.coupon;
+        let discountAmount = 0;
+        
+        // Calculate discount based on Stripe coupon type
+        if (stripeCoupon.percent_off) {
+          discountAmount = Math.round(baseAmount * (stripeCoupon.percent_off / 100));
+        } else if (stripeCoupon.amount_off) {
+          discountAmount = stripeCoupon.amount_off;
+        }
+        
+        setDiscount(discountAmount);
         setAppliedCoupon(couponCode.trim());
         setCouponApplied(true);
         setCouponCode('');
+        setError(''); // Clear any previous errors
+        
+        // Recreate payment intent with coupon
+        await recreatePaymentIntentWithCoupon(couponCode.trim());
       } else {
         setError(data.message || 'Invalid coupon code');
       }
@@ -132,10 +145,32 @@ export default function Checkout() {
     }
   };
 
-  const removeCoupon = () => {
+  const removeCoupon = async () => {
     setDiscount(0);
     setAppliedCoupon('');
     setCouponApplied(false);
+    
+    // Recreate payment intent without coupon
+    await recreatePaymentIntentWithCoupon(null);
+  };
+
+  // Function to recreate payment intent with or without coupon
+  const recreatePaymentIntentWithCoupon = async (couponId: string | null) => {
+    try {
+      const response = await apiRequest('POST', '/api/create-payment-intent-fixed', { 
+        productId,
+        tier,
+        amount: finalAmount,
+        couponId
+      });
+      const data = await response.json();
+      
+      if (data.clientSecret) {
+        setClientSecret(data.clientSecret);
+      }
+    } catch (err) {
+      console.error('Failed to recreate payment intent:', err);
+    }
   };
 
   useEffect(() => {
