@@ -372,14 +372,12 @@ export default function Checkout() {
             </Box>
           </MDBox>
 
-          {/* Stripe Checkout Form */}
+          {/* Official Stripe Checkout Form */}
           <form action="/api/create-checkout-session" method="POST">
-            <input type="hidden" name="productId" value={productId} />
-            <input type="hidden" name="tier" value={tier} />
-            <input type="hidden" name="priceId" value={
-              productId === 'prod_Sddbk2RWzr8kyL' ? 'price_1RgqQ0AYDUS7LgRZqF6z4RzZ' :
-              productId === 'prod_SdvnfSZARwzdtm' ? 'price_1RgtSbAYDUS7LgRZwm8Zg4gE' :
-              productId === 'prod_Sdvq23217qaGhp' ? 'price_1RgtT5AYDUS7LgRZcYpN8xEd' : ''
+            <input type="hidden" name="lookup_key" value={
+              productId === 'prod_Sddbk2RWzr8kyL' ? 'growth_exit_assessment' :
+              productId === 'prod_SdvnfSZARwzdtm' ? 'basic_assessment' :
+              productId === 'prod_Sdvq23217qaGhp' ? 'capital_market_plan' : 'growth_exit_assessment'
             } />
             {appliedCoupon && (
               <input type="hidden" name="couponId" value={appliedCoupon} />

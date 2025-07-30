@@ -2776,32 +2776,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
     });
 
-    // Create Stripe Checkout Session (Prebuilt checkout form)
+    // Create Stripe Checkout Session (Official Prebuilt Implementation)
     app.post("/api/create-checkout-session", async (req, res) => {
       try {
-        const { productId, tier, priceId, couponId } = req.body;
+        const { lookup_key, couponId } = req.body;
         
-        // Validate tier
-        const validTiers = ['growth', 'capital'];
-        if (!validTiers.includes(tier)) {
-          return res.status(400).json({ error: 'Invalid tier' });
+        console.log('Creating checkout session with lookup_key:', lookup_key, 'couponId:', couponId);
+        
+        // Map lookup keys to actual price IDs (fallback approach)
+        const priceMap = {
+          'growth_exit_assessment': 'price_1RgqQ0AYDUS7LgRZqF6z4RzZ',
+          'basic_assessment': 'price_1RgtSbAYDUS7LgRZwm8Zg4gE', 
+          'capital_market_plan': 'price_1RgtT5AYDUS7LgRZcYpN8xEd'
+        };
+
+        const priceId = priceMap[lookup_key as keyof typeof priceMap];
+        if (!priceId) {
+          return res.status(400).json({ error: 'Invalid product lookup key' });
         }
 
+        const YOUR_DOMAIN = `${req.protocol}://${req.get('host')}`;
+        
         // Build checkout session data
         const sessionData: any = {
-          payment_method_types: ['card'],
+          billing_address_collection: 'auto',
           line_items: [
             {
-              price: priceId, // Use the actual Stripe price ID
+              price: priceId,
               quantity: 1,
             },
           ],
-          mode: 'payment',
-          success_url: `${req.protocol}://${req.get('host')}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-          cancel_url: `${req.protocol}://${req.get('host')}/checkout?product=${productId}`,
+          mode: 'payment', // One-time payment (not subscription)
+          success_url: `${YOUR_DOMAIN}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+          cancel_url: `${YOUR_DOMAIN}/checkout?canceled=true`,
           metadata: {
-            tier,
-            productId,
+            lookup_key,
             userId: req.session?.customUserSessionId || 'anonymous',
           },
         };
@@ -2824,7 +2833,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
               console.warn('Invalid Stripe coupon provided:', couponId);
             }
           } else {
-            // For demo coupons, we'll need to create them in Stripe or use a different approach
+            // For demo coupons, store in metadata
             console.log('Demo coupon requested:', couponId);
             sessionData.metadata.demoCouponId = couponId;
           }
@@ -2832,10 +2841,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
         const session = await stripe.checkout.sessions.create(sessionData);
 
-        res.json({ 
-          sessionId: session.id,
-          url: session.url 
-        });
+        console.log('Checkout session created successfully:', session.id);
+        console.log('Redirecting to:', session.url);
+
+        // Redirect to Stripe Checkout (like the official example)
+        res.redirect(303, session.url);
       } catch (error: any) {
         console.error('Checkout session creation error:', error);
         res.status(500).json({ error: 'Failed to create checkout session' });
