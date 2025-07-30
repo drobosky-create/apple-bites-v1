@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useStripe, Elements, PaymentElement, useElements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-import { Box, Typography, Card, CardContent, Alert, CircularProgress } from '@mui/material';
+import { Box, Typography, Card, CardContent, Alert, CircularProgress, TextField, Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { apiRequest } from "@/lib/queryClient";
 import { MDBox, MDTypography, MDButton } from "@/components/MD";
@@ -94,6 +94,10 @@ export default function Checkout() {
   const [clientSecret, setClientSecret] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [couponCode, setCouponCode] = useState('');
+  const [couponApplied, setCouponApplied] = useState(false);
+  const [discount, setDiscount] = useState(0);
+  const [appliedCoupon, setAppliedCoupon] = useState('');
 
   // Get product from URL params
   const urlParams = new URLSearchParams(window.location.search);
@@ -101,7 +105,38 @@ export default function Checkout() {
   
   // Define tier and amount outside useEffect so they're accessible in JSX
   const tier = 'growth';
-  const amount = 79500; // $795.00 in cents
+  const baseAmount = 79500; // $795.00 in cents
+  const finalAmount = baseAmount - discount;
+
+  // Function to apply coupon
+  const applyCoupon = async () => {
+    if (!couponCode.trim()) return;
+    
+    try {
+      const response = await apiRequest('POST', '/api/apply-coupon', { 
+        couponCode: couponCode.trim(),
+        amount: baseAmount 
+      });
+      const data = await response.json();
+      
+      if (response.ok && data.valid) {
+        setDiscount(data.discount);
+        setAppliedCoupon(couponCode.trim());
+        setCouponApplied(true);
+        setCouponCode('');
+      } else {
+        setError(data.message || 'Invalid coupon code');
+      }
+    } catch (err) {
+      setError('Failed to apply coupon');
+    }
+  };
+
+  const removeCoupon = () => {
+    setDiscount(0);
+    setAppliedCoupon('');
+    setCouponApplied(false);
+  };
 
   useEffect(() => {
     if (!productId) {
@@ -116,7 +151,7 @@ export default function Checkout() {
     apiRequest('POST', '/api/create-payment-intent-fixed', { 
       productId,
       tier,
-      amount,
+      amount: finalAmount,
     })
       .then((response) => response.json())
       .then((data) => {
@@ -133,7 +168,7 @@ export default function Checkout() {
       .finally(() => {
         setLoading(false);
       });
-  }, [productId]);
+  }, [productId, finalAmount]);
 
   if (!import.meta.env.VITE_STRIPE_PUBLIC_KEY) {
     return (
@@ -195,6 +230,76 @@ export default function Checkout() {
               Secure checkout powered by Stripe
             </MDTypography>
           </MDBox>
+
+          {/* Pricing Section */}
+          <MDBox mb={4}>
+            <MDTypography variant="h6" gutterBottom>
+              Order Summary:
+            </MDTypography>
+            <Box sx={{ p: 2, bgcolor: '#F9FAFB', borderRadius: 1, mb: 2 }}>
+              <Box display="flex" justifyContent="space-between" mb={1}>
+                <MDTypography variant="body2">
+                  Growth & Exit Assessment
+                </MDTypography>
+                <MDTypography variant="body2">
+                  ${(baseAmount / 100).toFixed(2)}
+                </MDTypography>
+              </Box>
+              {couponApplied && (
+                <Box display="flex" justifyContent="space-between" mb={1}>
+                  <MDTypography variant="body2" color="success">
+                    Coupon ({appliedCoupon})
+                    <Button 
+                      size="small" 
+                      onClick={removeCoupon}
+                      sx={{ ml: 1, minWidth: 'auto', p: 0.5 }}
+                    >
+                      ×
+                    </Button>
+                  </MDTypography>
+                  <MDTypography variant="body2" color="success">
+                    -${(discount / 100).toFixed(2)}
+                  </MDTypography>
+                </Box>
+              )}
+              <Box sx={{ borderTop: '1px solid #E5E7EB', pt: 1 }}>
+                <Box display="flex" justifyContent="space-between">
+                  <MDTypography variant="h6">
+                    Total
+                  </MDTypography>
+                  <MDTypography variant="h6">
+                    ${(finalAmount / 100).toFixed(2)}
+                  </MDTypography>
+                </Box>
+              </Box>
+            </Box>
+          </MDBox>
+
+          {/* Coupon Field */}
+          {!couponApplied && (
+            <MDBox mb={4}>
+              <MDTypography variant="body2" gutterBottom>
+                Have a coupon code?
+              </MDTypography>
+              <Box display="flex" gap={1}>
+                <TextField
+                  fullWidth
+                  size="small"
+                  placeholder="Enter coupon code"
+                  value={couponCode}
+                  onChange={(e) => setCouponCode(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && applyCoupon()}
+                />
+                <Button 
+                  variant="outlined"
+                  onClick={applyCoupon}
+                  disabled={!couponCode.trim()}
+                >
+                  Apply
+                </Button>
+              </Box>
+            </MDBox>
+          )}
 
           {/* Features */}
           <MDBox mb={4}>

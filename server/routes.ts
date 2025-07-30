@@ -2659,6 +2659,53 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
     });
 
+    // Coupon validation endpoint
+    app.post('/api/apply-coupon', async (req, res) => {
+      try {
+        const { couponCode, amount } = req.body;
+        
+        // Define available coupons
+        const validCoupons = {
+          'SAVE10': { discount: 0.10, type: 'percentage', description: '10% off' },
+          'SAVE50': { discount: 5000, type: 'fixed', description: '$50 off' }, // $50 in cents
+          'EARLYBIRD': { discount: 0.15, type: 'percentage', description: '15% off' },
+          'WELCOME25': { discount: 2500, type: 'fixed', description: '$25 off' }, // $25 in cents
+        };
+        
+        const coupon = validCoupons[couponCode.toUpperCase() as keyof typeof validCoupons];
+        
+        if (!coupon) {
+          return res.status(400).json({ 
+            valid: false, 
+            message: 'Invalid coupon code' 
+          });
+        }
+        
+        let discountAmount = 0;
+        if (coupon.type === 'percentage') {
+          discountAmount = Math.round(amount * coupon.discount);
+        } else {
+          discountAmount = coupon.discount;
+        }
+        
+        // Ensure discount doesn't exceed the total amount
+        discountAmount = Math.min(discountAmount, amount);
+        
+        res.json({
+          valid: true,
+          discount: discountAmount,
+          description: coupon.description,
+          finalAmount: amount - discountAmount
+        });
+      } catch (error: any) {
+        console.error('Coupon validation error:', error);
+        res.status(500).json({ 
+          valid: false,
+          message: 'Error validating coupon' 
+        });
+      }
+    });
+
     // Create payment intent for one-time payments (Growth/Capital tiers)
     app.post("/api/create-payment-intent", async (req, res) => {
       try {
