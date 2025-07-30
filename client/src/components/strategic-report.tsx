@@ -642,10 +642,10 @@ export default function StrategicReport({ results }: StrategicReportProps) {
           </MDBox>
 
           {/* Strategic Valuation Gauge - Exact Copy from Value Calculator */}
-          <MDBox display="flex" gap={4} alignItems="center" mb={1}>
+          <MDBox display="flex" gap={4} alignItems="flex-end" mb={1}>
             {/* Gauge Container */}
             <MDBox sx={{ flex: '0 0 600px', textAlign: 'center', transform: 'scale(1.15)' }}>
-              <svg width="100%" height="420" viewBox="0 0 800 400">
+              <svg width="100%" height="380" viewBox="0 0 800 360">
                 {/* Material Dashboard Gradient Definitions */}
                 <defs>
                   {/* Low Range - Red Material Gradient */}
@@ -854,8 +854,8 @@ export default function StrategicReport({ results }: StrategicReportProps) {
 
             {/* Value Display */}
             <MDBox sx={{ flex: 1 }}>
-              <MDBox mb={2} p={2} sx={{ backgroundColor: '#E8F5E8', borderRadius: 2, textAlign: 'center' }}>
-                <MDTypography variant="h4" fontWeight="bold" color="success" mb={1}>
+              <MDBox mb={1} p={1.5} sx={{ backgroundColor: '#E8F5E8', borderRadius: 2, textAlign: 'center' }}>
+                <MDTypography variant="h4" fontWeight="bold" color="success" mb={0.5}>
                   {formatCurrency(results.midEstimate)}
                 </MDTypography>
                 <MDTypography variant="h6" fontWeight="medium" color="success">
@@ -867,7 +867,7 @@ export default function StrategicReport({ results }: StrategicReportProps) {
               </MDBox>
               
               <MDBox display="flex" gap={2}>
-                <MDBox flex={1} p={1.5} sx={{ backgroundColor: '#FFEBEE', borderRadius: 2, textAlign: 'center' }}>
+                <MDBox flex={1} p={1} sx={{ backgroundColor: '#FFEBEE', borderRadius: 2, textAlign: 'center' }}>
                   <MDTypography variant="h6" fontWeight="bold" color="error">
                     {formatCurrency(results.lowEstimate)}
                   </MDTypography>
@@ -876,7 +876,7 @@ export default function StrategicReport({ results }: StrategicReportProps) {
                   </MDTypography>
                 </MDBox>
                 
-                <MDBox flex={1} p={1.5} sx={{ backgroundColor: '#E3F2FD', borderRadius: 2, textAlign: 'center' }}>
+                <MDBox flex={1} p={1} sx={{ backgroundColor: '#E3F2FD', borderRadius: 2, textAlign: 'center' }}>
                   <MDTypography variant="h6" fontWeight="bold" color="primary">
                     {formatCurrency(results.highEstimate)}
                   </MDTypography>
