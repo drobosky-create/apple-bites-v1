@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'wouter';
 import { 
   Box, 
@@ -7,11 +7,14 @@ import {
   Grid, 
   Card, 
   Container,
-  CardContent
+  CardContent,
+  Modal
 } from '@mui/material';
 import { CheckCircle } from 'lucide-react';
 
 export default function LandingPage() {
+  const [isComingSoonOpen, setIsComingSoonOpen] = useState(false);
+
   return (
     <Box sx={{ 
       minHeight: '100vh',
@@ -318,7 +321,7 @@ export default function LandingPage() {
                     </Box>
                   </Box>
 
-                  <Link href="/pricing">
+                  <Link href="/checkout?product=prod_Sddbk2RWzr8kyL">
                     <Button
                       fullWidth
                       variant="contained"
@@ -400,13 +403,16 @@ export default function LandingPage() {
                     fullWidth
                     variant="contained"
                     size="large"
-                    disabled
+                    onClick={() => setIsComingSoonOpen(true)}
                     sx={{ 
                       py: 2,
                       background: '#6c757d',
                       color: '#fff',
                       fontSize: '1.1rem',
-                      fontWeight: 'bold'
+                      fontWeight: 'bold',
+                      '&:hover': {
+                        background: '#5a6268'
+                      }
                     }}
                   >
                     Access Now
@@ -652,6 +658,56 @@ export default function LandingPage() {
           </Grid>
         </Container>
       </Box>
+
+      {/* Coming Soon Modal */}
+      <Modal
+        open={isComingSoonOpen}
+        onClose={() => setIsComingSoonOpen(false)}
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}
+      >
+        <Box sx={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: 400,
+          bgcolor: 'white',
+          borderRadius: 2,
+          boxShadow: 24,
+          p: 4,
+          textAlign: 'center'
+        }}>
+          <Typography variant="h4" sx={{ color: '#333', fontWeight: 'bold', mb: 2 }}>
+            Coming Soon!
+          </Typography>
+          <Typography variant="body1" sx={{ color: '#666', mb: 3 }}>
+            The Capital Market Plan is currently in development. 
+            We're working hard to bring you this premium tier with exclusive features.
+          </Typography>
+          <Typography variant="body2" sx={{ color: '#666', mb: 3 }}>
+            Want to be notified when it launches? Contact us at{' '}
+            <a href="mailto:info@applebites.ai" style={{ color: '#007bff' }}>
+              info@applebites.ai
+            </a>
+          </Typography>
+          <Button
+            variant="contained"
+            onClick={() => setIsComingSoonOpen(false)}
+            sx={{
+              background: 'linear-gradient(45deg, #17a2b8, #007bff)',
+              '&:hover': {
+                background: 'linear-gradient(45deg, #138496, #0056b3)'
+              }
+            }}
+          >
+            Got It
+          </Button>
+        </Box>
+      </Modal>
     </Box>
   );
 }
