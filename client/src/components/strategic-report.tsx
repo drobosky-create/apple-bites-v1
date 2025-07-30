@@ -691,6 +691,41 @@ export default function StrategicReport({ results }: StrategicReportProps) {
                   const centerY = 300;
                   const radius = 200;
                   
+                  // Calculate dynamic position based on business performance
+                  const calculateGaugePosition = () => {
+                    // Demo scenarios to show dynamic positioning
+                    // In real implementation, this would come from actual assessment data
+                    
+                    // Example scenarios:
+                    const scenarios = [
+                      // Struggling Business - Conservative
+                      { grade: 'D', score: 35, multiple: 3.5, position: 'CONSERVATIVE' },
+                      // Average Business - Baseline 
+                      { grade: 'C', score: 50, multiple: 4.8, position: 'BASELINE' },
+                      // Good Business - Strategic (current example)
+                      { grade: 'B+', score: 75, multiple: 5.8, position: 'STRATEGIC' },
+                      // Strong Business - Growth
+                      { grade: 'A-', score: 85, multiple: 7.2, position: 'GROWTH' },
+                      // Excellent Business - Optimized
+                      { grade: 'A', score: 95, multiple: 9.1, position: 'OPTIMIZED' }
+                    ];
+                    
+                    // Use Growth scenario for current demo (index 3) - change to test different positions
+                    const currentScenario = scenarios[3];
+                    
+                    // Industry range for Manufacturing (NAICS 331110)
+                    const industryRange = { low: 3.2, high: 10.4 };
+                    
+                    // Calculate percentage within industry range
+                    const rangePosition = (currentScenario.multiple - industryRange.low) / (industryRange.high - industryRange.low);
+                    const positionPercent = Math.max(0, Math.min(100, rangePosition * 100));
+                    
+                    // Return calculated position
+                    return currentScenario.position;
+                  };
+                  
+                  const activeSegment = calculateGaugePosition();
+                  
                   // Define valuation segments (0 to 180 degrees for semi-circle)
                   const segments = [
                     { label: 'CONSERVATIVE', angle: 0, color: 'redGradientVal' },
@@ -715,8 +750,15 @@ export default function StrategicReport({ results }: StrategicReportProps) {
                     return `M ${centerX} ${centerY} L ${x1} ${y1} A ${radius} ${radius} 0 ${largeArcFlag} 1 ${x2} ${y2} Z`;
                   };
 
-                  // Strategic position points to middle segment (72° + 18° = 90°)
-                  const needleAngle = 90;
+                  // Calculate needle position based on active segment
+                  const getSegmentCenterAngle = (segmentLabel: string) => {
+                    const segment = segments.find(s => s.label === segmentLabel);
+                    if (!segment) return 90; // Default to middle
+                    const segmentIndex = segments.indexOf(segment);
+                    return segment.angle + 18; // Center of segment (each segment is 36° wide)
+                  };
+                  
+                  const needleAngle = getSegmentCenterAngle(activeSegment);
                   const needleAngleRad = (needleAngle + 180) * (Math.PI / 180);
                   const needleLength = 190;
                   const needleX = centerX + needleLength * Math.cos(needleAngleRad);
@@ -736,7 +778,7 @@ export default function StrategicReport({ results }: StrategicReportProps) {
                       {segments.map((segment, index) => {
                         const startAngle = segment.angle;
                         const endAngle = index < segments.length - 1 ? segments[index + 1].angle : 180;
-                        const isActive = segment.label === 'STRATEGIC'; // Strategic is active
+                        const isActive = segment.label === activeSegment;
                         
                         return (
                           <g key={segment.label}>
