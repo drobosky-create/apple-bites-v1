@@ -59,16 +59,27 @@ function updateUserSession(
 async function upsertUser(
   claims: any,
 ) {
-  await storage.upsertUser({
-    id: claims["sub"],
-    email: claims["email"] || "",
-    firstName: claims["first_name"],
-    lastName: claims["last_name"],
-    profileImageUrl: claims["profile_image_url"],
-    authProvider: "replit",
-    replitUserId: claims["sub"],
-    emailVerified: true,
-  });
+  try {
+    const userData = {
+      id: claims["sub"],
+      email: claims["email"] || "",
+      firstName: claims["first_name"] || "",
+      lastName: claims["last_name"] || "",
+      profileImageUrl: claims["profile_image_url"],
+      authProvider: "replit",
+      replitUserId: claims["sub"],
+      emailVerified: true,
+      tier: "free", // Default tier for new users
+      isActive: true
+    };
+    
+    const user = await storage.upsertUser(userData);
+    console.log('User upserted successfully:', user.id);
+    return user;
+  } catch (error) {
+    console.error('Error upserting user:', error);
+    throw error;
+  }
 }
 
 export async function setupAuth(app: Express) {
@@ -84,10 +95,16 @@ export async function setupAuth(app: Express) {
     tokens: client.TokenEndpointResponse & client.TokenEndpointResponseHelpers,
     verified: passport.AuthenticateCallback
   ) => {
-    const user = {};
-    updateUserSession(user, tokens);
-    await upsertUser(tokens.claims());
-    verified(null, user);
+    try {
+      const user = {};
+      updateUserSession(user, tokens);
+      const dbUser = await upsertUser(tokens.claims());
+      console.log('OAuth verification successful for user:', dbUser.id);
+      verified(null, user);
+    } catch (error) {
+      console.error('OAuth verification failed:', error);
+      verified(error);
+    }
   };
 
   // Configure strategies for both production and development domains
@@ -171,8 +188,8 @@ export async function setupAuth(app: Express) {
   app.get("/api/callback", (req, res, next) => {
     const strategyName = getStrategyName(req.hostname);
     passport.authenticate(strategyName, {
-      successReturnToOrRedirect: "/",
-      failureRedirect: "/api/login",
+      successRedirect: "/",
+      failureRedirect: "/login?error=auth_failed",
     })(req, res, next);
   });
 
