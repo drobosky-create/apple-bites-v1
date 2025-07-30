@@ -713,15 +713,25 @@ export default function StrategicReport({ results }: StrategicReportProps) {
                     // Use Growth scenario for current demo (index 3) - change to test different positions
                     const currentScenario = scenarios[3];
                     
-                    // Industry range for Manufacturing (NAICS 331110)
-                    const industryRange = { low: 3.2, high: 10.4 };
+                    // Example: Industry range 3x to 9x EBITDA  
+                    const industryRange = { low: 3.0, high: 9.0 };
+                    
+                    // Example: Company with 4x multiple
+                    const companyMultiple = 4.0;
                     
                     // Calculate percentage within industry range
-                    const rangePosition = (currentScenario.multiple - industryRange.low) / (industryRange.high - industryRange.low);
+                    const rangePosition = (companyMultiple - industryRange.low) / (industryRange.high - industryRange.low);
                     const positionPercent = Math.max(0, Math.min(100, rangePosition * 100));
                     
-                    // Return calculated position
-                    return currentScenario.position;
+                    // 4x in a 3x-9x range = (4-3)/(9-3) = 1/6 = 16.7%
+                    // 16.7% falls in CONSERVATIVE range (0-20%)
+                    
+                    // Based on your example: 4x multiple in 3x-9x range = 16.7% = CONSERVATIVE
+                    if (positionPercent <= 20) return 'CONSERVATIVE';
+                    if (positionPercent <= 40) return 'BASELINE';
+                    if (positionPercent <= 60) return 'STRATEGIC';
+                    if (positionPercent <= 80) return 'GROWTH';
+                    return 'OPTIMIZED';
                   };
                   
                   const activeSegment = calculateGaugePosition();
