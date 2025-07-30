@@ -82,6 +82,7 @@ export default function FreeAssessment() {
 
   const {
     currentStep,
+    setCurrentStep,
     formData,
     updateFormData,
     nextStep,
@@ -220,6 +221,7 @@ export default function FreeAssessment() {
                   onPrev={prevStep}
                   onDataChange={(data) => updateFormData("ebitda", data)}
                   calculateEbitda={calculateEbitda}
+                  onEditInfo={() => setCurrentStep('contact')} // Allow going back to contact step
                 />
               )}
 
@@ -231,6 +233,7 @@ export default function FreeAssessment() {
                   onDataChange={(data) => updateFormData("adjustments", data)}
                   calculateAdjustedEbitda={calculateAdjustedEbitda}
                   baseEbitda={calculateEbitda()}
+                  onEditInfo={() => setCurrentStep('contact')} // Allow going back to contact step
                 />
               )}
 
@@ -240,6 +243,7 @@ export default function FreeAssessment() {
                   onNext={nextStep}
                   onPrev={prevStep}
                   onDataChange={(data) => updateFormData("valueDrivers", data)}
+                  onEditInfo={() => setCurrentStep('contact')} // Allow going back to contact step
                 />
               )}
 

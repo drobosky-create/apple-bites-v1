@@ -1,16 +1,18 @@
 import { UseFormReturn } from "react-hook-form";
 import { ValueDriversData } from "@shared/schema";
 import { Typography, Card, CardContent, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from '@mui/material';
-import { ArrowLeft, ArrowRight, TrendingUp } from "lucide-react";
+import { ArrowLeft, ArrowRight, TrendingUp, User } from "lucide-react";
 import MDBox from "@/components/MD/MDBox";
 import MDTypography from "@/components/MD/MDTypography";
 import MDButton from "@/components/MD/MDButton";
+import { useAuth } from "@/hooks/useAuth";
 
 interface ValueDriversFormProps {
   form: UseFormReturn<ValueDriversData>;
   onNext: () => void;
   onPrev: () => void;
   onDataChange: (data: ValueDriversData) => void;
+  onEditInfo?: () => void; // Function to go back to contact step
 }
 
 type Grade = "A" | "B" | "C" | "D" | "F";
@@ -120,7 +122,14 @@ function GradeRadioGroup({ name, value, onChange }: GradeRadioGroupProps) {
   );
 }
 
-export default function ValueDriversForm({ form, onNext, onPrev, onDataChange }: ValueDriversFormProps) {
+export default function ValueDriversForm({ form, onNext, onPrev, onDataChange, onEditInfo }: ValueDriversFormProps) {
+  const { user, isAuthenticated } = useAuth();
+
+  // Check if user has complete profile (contact info was auto-filled)
+  const hasCompleteProfile = isAuthenticated && user && 
+    (user as any).firstName && 
+    (user as any).lastName && 
+    (user as any).email;
   const watchedValues = form.watch();
 
   const onSubmit = (data: ValueDriversData) => {
@@ -154,31 +163,58 @@ export default function ValueDriversForm({ form, onNext, onPrev, onDataChange }:
   return (
     <MDBox>
       {/* Executive Header Section */}
-      <MDBox mb={2} display="flex" alignItems="center">
-        <MDBox
-          sx={{
-            backgroundColor: '#1B2C4F',
-            borderRadius: '8px',
-            width: 56,
-            height: 56,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            mr: 2,
-            boxShadow: '0 2px 6px rgba(0, 0, 0, 0.12)',
-          }}
-        >
-          <TrendingUp style={{ color: '#ffffff', fontSize: 28 }} />
+      <MDBox mb={2} display="flex" alignItems="center" justifyContent="space-between">
+        <MDBox display="flex" alignItems="center">
+          <MDBox
+            sx={{
+              backgroundColor: '#1B2C4F',
+              borderRadius: '8px',
+              width: 56,
+              height: 56,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              mr: 2,
+              boxShadow: '0 2px 6px rgba(0, 0, 0, 0.12)',
+            }}
+          >
+            <TrendingUp style={{ color: '#ffffff', fontSize: 28 }} />
+          </MDBox>
+
+          <MDBox>
+            <MDTypography variant="h4" fontWeight="bold" color="dark" mb={1}>
+              Value Drivers Assessment
+            </MDTypography>
+            <MDTypography variant="body1" color="text">
+              Rate each factor that impacts your business value from A (excellent) to F (poor).
+            </MDTypography>
+          </MDBox>
         </MDBox>
 
-        <MDBox>
-          <MDTypography variant="h4" fontWeight="bold" color="dark" mb={1}>
-            Value Drivers Assessment
-          </MDTypography>
-          <MDTypography variant="body1" color="text">
-            Rate each factor that impacts your business value from A (excellent) to F (poor).
-          </MDTypography>
-        </MDBox>
+        {/* Edit Info Button - only show if user has auto-filled profile */}
+        {hasCompleteProfile && onEditInfo && (
+          <MDButton
+            onClick={onEditInfo}
+            variant="outlined"
+            color="info"
+            size="small"
+            sx={{
+              minWidth: 'auto',
+              px: 2,
+              py: 1,
+              display: 'flex',
+              alignItems: 'center',
+              gap: 1,
+              fontSize: '0.875rem',
+              '&:hover': {
+                backgroundColor: 'rgba(0, 113, 141, 0.1)'
+              }
+            }}
+          >
+            <User size={16} />
+            Edit Info
+          </MDButton>
+        )}
       </MDBox>
 
       {/* Form Container */}
