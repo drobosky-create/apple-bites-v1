@@ -70,6 +70,35 @@ export default function LandingPage() {
               Sign In/Up
             </Typography>
           </Link>
+          {process.env.NODE_ENV === 'development' && (
+            <Button 
+              onClick={async () => {
+                try {
+                  const response = await fetch('/api/demo-login', { method: 'POST' });
+                  if (response.ok) {
+                    window.location.reload();
+                  }
+                } catch (error) {
+                  console.error('Demo login failed:', error);
+                }
+              }}
+              variant="outlined" 
+              sx={{ 
+                color: '#ff6b6b', 
+                borderColor: '#ff6b6b',
+                fontSize: '0.75rem',
+                px: 1.5,
+                py: 0.5,
+                '&:hover': { 
+                  backgroundColor: 'rgba(255, 107, 107, 0.1)',
+                  borderColor: '#ff6b6b'
+                }
+              }} 
+              size="small"
+            >
+              Demo Login
+            </Button>
+          )}
           <Link href="#pricing">
             <Typography variant="body1" sx={{ 
               color: 'white', 

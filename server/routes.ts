@@ -37,7 +37,7 @@ declare module 'express-session' {
 declare global {
   namespace Express {
     interface Request {
-      user?: TeamMember;
+      user?: any;
       currentUser?: any;
       authType?: string;
     }
@@ -57,6 +57,44 @@ export async function registerRoutes(app: Express): Promise<Server> {
   }
 
   // OAuth routes are handled by Replit Auth system in replitAuth.ts
+
+  // Demo login for development testing
+  app.post('/api/demo-login', async (req, res) => {
+    if (process.env.NODE_ENV !== 'development') {
+      return res.status(403).json({ error: 'Demo login only available in development' });
+    }
+    
+    try {
+      // Create or get demo user
+      let demoUser = await storage.getUserByEmail('demo@applebites.ai');
+      if (!demoUser) {
+        demoUser = await storage.createUser({
+          email: 'demo@applebites.ai',
+          firstName: 'Demo',
+          lastName: 'User',
+          tier: 'free',
+          authProvider: 'demo'
+        });
+      }
+      
+      // Set session to mimic Replit Auth
+      (req as any).session.passport = {
+        user: {
+          claims: {
+            sub: demoUser.id,
+            email: demoUser.email,
+            first_name: demoUser.firstName,
+            last_name: demoUser.lastName
+          }
+        }
+      };
+      
+      res.json({ success: true, user: demoUser });
+    } catch (error) {
+      console.error('Demo login error:', error);
+      res.status(500).json({ error: 'Failed to create demo session' });
+    }
+  });
 
   // Custom user authentication middleware
   const isCustomUserAuthenticated = async (req: any, res: any, next: any) => {
