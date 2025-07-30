@@ -779,7 +779,7 @@ export default function StrategicReport({ results }: StrategicReportProps) {
           </MDBox>
           
           {/* Compact Value Drivers Layout */}
-          <MDBox display="flex" gap={3} mb={3}>
+          <MDBox display="flex" gap={3} mb={3} alignItems="center">
             {/* Overall Grade - Left Side */}
             <MDBox sx={{ flex: '0 0 200px', backgroundColor: '#f8f9fa', borderRadius: 2 }} textAlign="center" p={2}>
               <MDTypography variant="h3" fontWeight="bold" color="success" mb={1}>
@@ -792,7 +792,7 @@ export default function StrategicReport({ results }: StrategicReportProps) {
 
             {/* Key Metrics - Right Side */}
             <MDBox flex={1} display="flex" gap={2}>
-              <MDBox flex={1} p={2} sx={{ backgroundColor: '#e8f5e8', borderRadius: 2, textAlign: 'center' }}>
+              <MDBox flex={1} p={2} sx={{ backgroundColor: '#e8f5e8', borderRadius: 2, textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                 <MDTypography variant="h5" fontWeight="bold" color="success">
                   {results.valuationMultiple || '4.2'}x
                 </MDTypography>
@@ -800,7 +800,7 @@ export default function StrategicReport({ results }: StrategicReportProps) {
                   EBITDA Multiple
                 </MDTypography>
               </MDBox>
-              <MDBox flex={1} p={2} sx={{ backgroundColor: '#e3f2fd', borderRadius: 2, textAlign: 'center' }}>
+              <MDBox flex={1} p={2} sx={{ backgroundColor: '#e3f2fd', borderRadius: 2, textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                 <MDTypography variant="h5" fontWeight="bold" color="primary">
                   4
                 </MDTypography>
@@ -808,7 +808,7 @@ export default function StrategicReport({ results }: StrategicReportProps) {
                   Key Strengths
                 </MDTypography>
               </MDBox>
-              <MDBox flex={1} p={2} sx={{ backgroundColor: '#fff3e0', borderRadius: 2, textAlign: 'center' }}>
+              <MDBox flex={1} p={2} sx={{ backgroundColor: '#fff3e0', borderRadius: 2, textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                 <MDTypography variant="h5" fontWeight="bold" color="warning">
                   4
                 </MDTypography>
