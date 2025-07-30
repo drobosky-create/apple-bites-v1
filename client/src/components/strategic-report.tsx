@@ -548,59 +548,55 @@ export default function StrategicReport({ results }: StrategicReportProps) {
             {results.executiveSummary || generateIntelligentSummary()}
           </MDTypography>
 
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={4}>
-              <MDBox p={3} sx={{ backgroundColor: '#F8F9FA', borderRadius: 2, border: '1px solid #E3F2FD', minHeight: '200px' }}>
-                <MDBox display="flex" alignItems="center" mb={2}>
-                  <TrendingUp size={20} color="#1976D2" style={{ marginRight: 8 }} />
-                  <MDTypography variant="h6" fontWeight="medium" color="primary">
-                    Strategic Strengths
-                  </MDTypography>
-                </MDBox>
-                <MDBox sx={{ lineHeight: 1.6 }}>
-                  {generateStrategicStrengths().map((strength, index) => (
-                    <MDTypography key={index} variant="body2" color="text" sx={{ marginBottom: '8px', display: 'block' }}>
-                      • {strength}
-                    </MDTypography>
-                  ))}
-                </MDBox>
+          <Box display="flex" gap={3} sx={{ '& > *': { flex: 1 } }}>
+            <MDBox p={3} sx={{ backgroundColor: '#F8F9FA', borderRadius: 2, border: '1px solid #E3F2FD', minHeight: '200px' }}>
+              <MDBox display="flex" alignItems="center" mb={2}>
+                <TrendingUp size={20} color="#1976D2" style={{ marginRight: 8 }} />
+                <MDTypography variant="h6" fontWeight="medium" color="primary">
+                  Strategic Strengths
+                </MDTypography>
               </MDBox>
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <MDBox p={3} sx={{ backgroundColor: '#FFF8E1', borderRadius: 2, border: '1px solid #FFE0B2', minHeight: '200px' }}>
-                <MDBox display="flex" alignItems="center" mb={2}>
-                  <Target size={20} color="#F57C00" style={{ marginRight: 8 }} />
-                  <MDTypography variant="h6" fontWeight="medium" color="warning">
-                    Value Enhancement Opportunities
+              <MDBox sx={{ lineHeight: 1.6 }}>
+                {generateStrategicStrengths().map((strength, index) => (
+                  <MDTypography key={index} variant="body2" color="text" sx={{ marginBottom: '8px', display: 'block' }}>
+                    • {strength}
                   </MDTypography>
-                </MDBox>
-                <MDBox sx={{ lineHeight: 1.6 }}>
-                  {generateValueOpportunities().map((opportunity, index) => (
-                    <MDTypography key={index} variant="body2" color="text" sx={{ marginBottom: '8px', display: 'block' }}>
-                      • {opportunity}
-                    </MDTypography>
-                  ))}
-                </MDBox>
+                ))}
               </MDBox>
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <MDBox p={3} sx={{ backgroundColor: '#E3F2FD', borderRadius: 2, border: '1px solid #BBDEFB', minHeight: '200px' }}>
-                <MDBox display="flex" alignItems="center" mb={2}>
-                  <Building2 size={20} color="#2196F3" style={{ marginRight: 8 }} />
-                  <MDTypography variant="h6" fontWeight="medium" color="primary">
-                    Deal Structure Fit
+            </MDBox>
+            
+            <MDBox p={3} sx={{ backgroundColor: '#FFF8E1', borderRadius: 2, border: '1px solid #FFE0B2', minHeight: '200px' }}>
+              <MDBox display="flex" alignItems="center" mb={2}>
+                <Target size={20} color="#F57C00" style={{ marginRight: 8 }} />
+                <MDTypography variant="h6" fontWeight="medium" color="warning">
+                  Value Enhancement Opportunities
+                </MDTypography>
+              </MDBox>
+              <MDBox sx={{ lineHeight: 1.6 }}>
+                {generateValueOpportunities().map((opportunity, index) => (
+                  <MDTypography key={index} variant="body2" color="text" sx={{ marginBottom: '8px', display: 'block' }}>
+                    • {opportunity}
                   </MDTypography>
-                </MDBox>
-                <MDBox sx={{ lineHeight: 1.6 }}>
-                  {getDealStructureRecommendations().slice(0, 4).map((recommendation, index) => (
-                    <MDTypography key={index} variant="body2" color="text" sx={{ marginBottom: '8px', display: 'block' }}>
-                      • {recommendation.dealType}
-                    </MDTypography>
-                  ))}
-                </MDBox>
+                ))}
               </MDBox>
-            </Grid>
-          </Grid>
+            </MDBox>
+            
+            <MDBox p={3} sx={{ backgroundColor: '#E3F2FD', borderRadius: 2, border: '1px solid #BBDEFB', minHeight: '200px' }}>
+              <MDBox display="flex" alignItems="center" mb={2}>
+                <Building2 size={20} color="#2196F3" style={{ marginRight: 8 }} />
+                <MDTypography variant="h6" fontWeight="medium" color="primary">
+                  Deal Structure Fit
+                </MDTypography>
+              </MDBox>
+              <MDBox sx={{ lineHeight: 1.6 }}>
+                {getDealStructureRecommendations().slice(0, 4).map((recommendation, index) => (
+                  <MDTypography key={index} variant="body2" color="text" sx={{ marginBottom: '8px', display: 'block' }}>
+                    • {recommendation.dealType}
+                  </MDTypography>
+                ))}
+              </MDBox>
+            </MDBox>
+          </Box>
         </CardContent>
       </Card>
 
