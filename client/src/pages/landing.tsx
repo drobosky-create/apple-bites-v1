@@ -238,65 +238,71 @@ export default function LandingPage() {
                 border: '1px solid #e0e0e0',
                 borderRadius: 2,
                 textAlign: 'center',
-                position: 'relative'
+                position: 'relative',
+                display: 'flex',
+                flexDirection: 'column'
               }}>
-                <CardContent>
-                  <Typography variant="h4" sx={{ color: '#333', fontWeight: 'bold', mb: 2 }}>
-                    Free Plan
-                  </Typography>
-                  <Typography variant="h2" sx={{ color: '#333', fontWeight: 'bold', mb: 3 }}>
-                    $0
-                  </Typography>
-                  
-                  <Box sx={{ mb: 4, textAlign: 'left', minHeight: '140px' }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                      <Typography variant="body1" sx={{ color: '#333', fontStyle: 'italic', fontWeight: 'bold' }}>
-                        General EBITDA Multipliers
-                      </Typography>
-                    </Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                      <Typography variant="body1" sx={{ color: '#333', fontStyle: 'italic', fontWeight: 'bold' }}>
-                        Value Driver Assessment
-                      </Typography>
-                    </Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                      <Typography variant="body1" sx={{ color: '#333', fontStyle: 'italic', fontWeight: 'bold' }}>
-                        Basic PDF Report
-                      </Typography>
-                    </Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                      <Typography variant="body1" sx={{ color: '#333', fontStyle: 'italic', fontWeight: 'bold' }}>
-                        Email Delivery
-                      </Typography>
+                <CardContent sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, justifyContent: 'space-between' }}>
+                  <Box>
+                    <Typography variant="h4" sx={{ color: '#333', fontWeight: 'bold', mb: 2 }}>
+                      Free Plan
+                    </Typography>
+                    <Typography variant="h2" sx={{ color: '#333', fontWeight: 'bold', mb: 3 }}>
+                      $0
+                    </Typography>
+                    
+                    <Box sx={{ mb: 4, textAlign: 'left', minHeight: '140px' }}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                        <Typography variant="body1" sx={{ color: '#333', fontStyle: 'italic', fontWeight: 'bold' }}>
+                          General EBITDA Multipliers
+                        </Typography>
+                      </Box>
+                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                        <Typography variant="body1" sx={{ color: '#333', fontStyle: 'italic', fontWeight: 'bold' }}>
+                          Value Driver Assessment
+                        </Typography>
+                      </Box>
+                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                        <Typography variant="body1" sx={{ color: '#333', fontStyle: 'italic', fontWeight: 'bold' }}>
+                          Basic PDF Report
+                        </Typography>
+                      </Box>
+                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                        <Typography variant="body1" sx={{ color: '#333', fontStyle: 'italic', fontWeight: 'bold' }}>
+                          Email Delivery
+                        </Typography>
+                      </Box>
                     </Box>
                   </Box>
 
-                  <Link href="/signup">
-                    <Button
-                      fullWidth
-                      variant="contained"
-                      size="large"
-                      sx={{ 
-                        py: 2,
-                        background: '#28a745',
-                        color: '#fff',
-                        fontSize: '1.1rem',
-                        fontWeight: 'bold',
-                        '&:hover': {
-                          background: '#218838'
-                        }
-                      }}
-                    >
-                      ACCESS NOW
-                    </Button>
-                  </Link>
+                  <Box>
+                    <Link href="/signup">
+                      <Button
+                        fullWidth
+                        variant="contained"
+                        size="large"
+                        sx={{ 
+                          py: 2,
+                          background: '#28a745',
+                          color: '#fff',
+                          fontSize: '1.1rem',
+                          fontWeight: 'bold',
+                          '&:hover': {
+                            background: '#218838'
+                          }
+                        }}
+                      >
+                        ACCESS NOW
+                      </Button>
+                    </Link>
 
-                  <Box sx={{ mt: 3, textAlign: 'center' }}>
-                    <img 
-                      src="https://assets.cdn.filesafe.space/75x6oVRlEkU7gyLcePUE/media/05907988-b0bc-4b02-b3b0-19648154fd2d.png" 
-                      alt="Badge" 
-                      style={{ height: 40 }}
-                    />
+                    <Box sx={{ mt: 3, textAlign: 'center' }}>
+                      <img 
+                        src="https://assets.cdn.filesafe.space/75x6oVRlEkU7gyLcePUE/media/05907988-b0bc-4b02-b3b0-19648154fd2d.png" 
+                        alt="Badge" 
+                        style={{ height: 40 }}
+                      />
+                    </Box>
                   </Box>
                 </CardContent>
               </Card>
@@ -311,70 +317,76 @@ export default function LandingPage() {
                 border: '2px solid #007bff',
                 borderRadius: 2,
                 textAlign: 'center',
-                position: 'relative'
+                position: 'relative',
+                display: 'flex',
+                flexDirection: 'column'
               }}>
-                <CardContent>
-                  <Typography variant="h4" sx={{ color: '#333', fontWeight: 'bold', mb: 2 }}>
-                    Growth & Exit
-                  </Typography>
-                  <Typography variant="h2" sx={{ color: '#333', fontWeight: 'bold', mb: 3 }}>
-                    $795
-                  </Typography>
-                  
-                  <Box sx={{ mb: 4, textAlign: 'left', minHeight: '140px' }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                      <Typography variant="body1" sx={{ color: '#333', fontStyle: 'italic', fontWeight: 'bold' }}>
-                        Everything in Free
-                      </Typography>
-                    </Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                      <Typography variant="body1" sx={{ color: '#333', fontStyle: 'italic', fontWeight: 'bold' }}>
-                        60-Min Deep Dive Call
-                      </Typography>
-                    </Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                      <Typography variant="body1" sx={{ color: '#333', fontStyle: 'italic', fontWeight: 'bold' }}>
-                        Private Equity Scorecard
-                      </Typography>
-                    </Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                      <Typography variant="body1" sx={{ color: '#333', fontStyle: 'italic', fontWeight: 'bold' }}>
-                        Opinion of Valuation
-                      </Typography>
-                    </Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                      <Typography variant="body1" sx={{ color: '#333', fontStyle: 'italic', fontWeight: 'bold' }}>
-                        Enterprise Value Simulator
-                      </Typography>
+                <CardContent sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, justifyContent: 'space-between' }}>
+                  <Box>
+                    <Typography variant="h4" sx={{ color: '#333', fontWeight: 'bold', mb: 2 }}>
+                      Growth & Exit
+                    </Typography>
+                    <Typography variant="h2" sx={{ color: '#333', fontWeight: 'bold', mb: 3 }}>
+                      $795
+                    </Typography>
+                    
+                    <Box sx={{ mb: 4, textAlign: 'left', minHeight: '140px' }}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                        <Typography variant="body1" sx={{ color: '#333', fontStyle: 'italic', fontWeight: 'bold' }}>
+                          Everything in Free
+                        </Typography>
+                      </Box>
+                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                        <Typography variant="body1" sx={{ color: '#333', fontStyle: 'italic', fontWeight: 'bold' }}>
+                          60-Min Deep Dive Call
+                        </Typography>
+                      </Box>
+                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                        <Typography variant="body1" sx={{ color: '#333', fontStyle: 'italic', fontWeight: 'bold' }}>
+                          Private Equity Scorecard
+                        </Typography>
+                      </Box>
+                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                        <Typography variant="body1" sx={{ color: '#333', fontStyle: 'italic', fontWeight: 'bold' }}>
+                          Opinion of Valuation
+                        </Typography>
+                      </Box>
+                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                        <Typography variant="body1" sx={{ color: '#333', fontStyle: 'italic', fontWeight: 'bold' }}>
+                          Enterprise Value Simulator
+                        </Typography>
+                      </Box>
                     </Box>
                   </Box>
 
-                  <Link href="/checkout?product=prod_Sddbk2RWzr8kyL">
-                    <Button
-                      fullWidth
-                      variant="contained"
-                      size="large"
-                      sx={{ 
-                        py: 2,
-                        background: '#007bff',
-                        color: '#fff',
-                        fontSize: '1.1rem',
-                        fontWeight: 'bold',
-                        '&:hover': {
-                          background: '#0056b3'
-                        }
-                      }}
-                    >
-                      ACCESS NOW
-                    </Button>
-                  </Link>
+                  <Box>
+                    <Link href="/checkout?product=prod_Sddbk2RWzr8kyL">
+                      <Button
+                        fullWidth
+                        variant="contained"
+                        size="large"
+                        sx={{ 
+                          py: 2,
+                          background: '#007bff',
+                          color: '#fff',
+                          fontSize: '1.1rem',
+                          fontWeight: 'bold',
+                          '&:hover': {
+                            background: '#0056b3'
+                          }
+                        }}
+                      >
+                        ACCESS NOW
+                      </Button>
+                    </Link>
 
-                  <Box sx={{ mt: 3, textAlign: 'center' }}>
-                    <img 
-                      src="https://assets.cdn.filesafe.space/75x6oVRlEkU7gyLcePUE/media/05907988-b0bc-4b02-b3b0-19648154fd2d.png" 
-                      alt="Badge" 
-                      style={{ height: 40 }}
-                    />
+                    <Box sx={{ mt: 3, textAlign: 'center' }}>
+                      <img 
+                        src="https://assets.cdn.filesafe.space/75x6oVRlEkU7gyLcePUE/media/05907988-b0bc-4b02-b3b0-19648154fd2d.png" 
+                        alt="Badge" 
+                        style={{ height: 40 }}
+                      />
+                    </Box>
                   </Box>
                 </CardContent>
               </Card>
@@ -389,69 +401,75 @@ export default function LandingPage() {
                 border: '1px solid #e0e0e0',
                 borderRadius: 2,
                 textAlign: 'center',
-                position: 'relative'
+                position: 'relative',
+                display: 'flex',
+                flexDirection: 'column'
               }}>
-                <CardContent>
-                  <Typography variant="h4" sx={{ color: '#333', fontWeight: 'bold', mb: 2 }}>
-                    Capital Market Plan
-                  </Typography>
-                  <Typography variant="h2" sx={{ color: '#333', fontWeight: 'bold', mb: 3 }}>
-                    $3495/yr
-                  </Typography>
-                  
-                  <Box sx={{ mb: 4, textAlign: 'left', minHeight: '140px' }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                      <Typography variant="body1" sx={{ color: '#333', fontStyle: 'italic', fontWeight: 'bold' }}>
-                        Everything in Growth & Exit
-                      </Typography>
-                    </Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                      <Typography variant="body1" sx={{ color: '#333', fontStyle: 'italic', fontWeight: 'bold' }}>
-                        Custom Valuation Stock Ticker
-                      </Typography>
-                    </Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                      <Typography variant="body1" sx={{ color: '#333', fontStyle: 'italic', fontWeight: 'bold' }}>
-                        Access to Capital Providers
-                      </Typography>
-                    </Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                      <Typography variant="body1" sx={{ color: '#333', fontStyle: 'italic', fontWeight: 'bold' }}>
-                        Exclusive Virtual Workshops
-                      </Typography>
-                    </Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                      <Typography variant="body1" sx={{ color: '#333', fontStyle: 'italic', fontWeight: 'bold' }}>
-                        Members-Only Live Events
-                      </Typography>
+                <CardContent sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, justifyContent: 'space-between' }}>
+                  <Box>
+                    <Typography variant="h4" sx={{ color: '#333', fontWeight: 'bold', mb: 2 }}>
+                      Capital Market Plan
+                    </Typography>
+                    <Typography variant="h2" sx={{ color: '#333', fontWeight: 'bold', mb: 3 }}>
+                      $3495/yr
+                    </Typography>
+                    
+                    <Box sx={{ mb: 4, textAlign: 'left', minHeight: '140px' }}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                        <Typography variant="body1" sx={{ color: '#333', fontStyle: 'italic', fontWeight: 'bold' }}>
+                          Everything in Growth & Exit
+                        </Typography>
+                      </Box>
+                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                        <Typography variant="body1" sx={{ color: '#333', fontStyle: 'italic', fontWeight: 'bold' }}>
+                          Custom Valuation Stock Ticker
+                        </Typography>
+                      </Box>
+                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                        <Typography variant="body1" sx={{ color: '#333', fontStyle: 'italic', fontWeight: 'bold' }}>
+                          Access to Capital Providers
+                        </Typography>
+                      </Box>
+                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                        <Typography variant="body1" sx={{ color: '#333', fontStyle: 'italic', fontWeight: 'bold' }}>
+                          Exclusive Virtual Workshops
+                        </Typography>
+                      </Box>
+                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                        <Typography variant="body1" sx={{ color: '#333', fontStyle: 'italic', fontWeight: 'bold' }}>
+                          Members-Only Live Events
+                        </Typography>
+                      </Box>
                     </Box>
                   </Box>
 
-                  <Button
-                    fullWidth
-                    variant="contained"
-                    size="large"
-                    onClick={() => setIsComingSoonOpen(true)}
-                    sx={{ 
-                      py: 2,
-                      background: '#6c757d',
-                      color: '#fff',
-                      fontSize: '1.1rem',
-                      fontWeight: 'bold',
-                      '&:hover': {
-                        background: '#5a6268'
-                      }
-                    }}
-                  >
-                    ACCESS NOW
-                  </Button>
+                  <Box>
+                    <Button
+                      fullWidth
+                      variant="contained"
+                      size="large"
+                      onClick={() => setIsComingSoonOpen(true)}
+                      sx={{ 
+                        py: 2,
+                        background: '#6c757d',
+                        color: '#fff',
+                        fontSize: '1.1rem',
+                        fontWeight: 'bold',
+                        '&:hover': {
+                          background: '#5a6268'
+                        }
+                      }}
+                    >
+                      ACCESS NOW
+                    </Button>
 
-                  <Box sx={{ mt: 3, textAlign: 'center' }}>
-                    <img 
-                      src="https://assets.cdn.filesafe.space/75x6oVRlEkU7gyLcePUE/media/05907988-b0bc-4b02-b3b0-19648154fd2d.png" 
-                      alt="Badge" 
-                      style={{ height: 40 }}
-                    />
+                    <Box sx={{ mt: 3, textAlign: 'center' }}>
+                      <img 
+                        src="https://assets.cdn.filesafe.space/75x6oVRlEkU7gyLcePUE/media/05907988-b0bc-4b02-b3b0-19648154fd2d.png" 
+                        alt="Badge" 
+                        style={{ height: 40 }}
+                      />
+                    </Box>
                   </Box>
                 </CardContent>
               </Card>
