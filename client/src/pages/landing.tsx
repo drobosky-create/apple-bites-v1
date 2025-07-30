@@ -77,17 +77,15 @@ export default function LandingPage() {
               About
             </Typography>
           </Link>
-          <Link href="/login">
-            <Button variant="outlined" sx={{ 
+          <Link href="/team">
+            <Typography variant="body1" sx={{ 
               color: 'white', 
-              borderColor: 'rgba(255,255,255,0.5)',
-              '&:hover': { 
-                borderColor: 'white',
-                background: 'rgba(255,255,255,0.1)'
-              }
-            }} size="small">
-              Sign In
-            </Button>
+              cursor: 'pointer',
+              opacity: 0.9,
+              '&:hover': { opacity: 1, color: '#17a2b8' }
+            }}>
+              Team Login
+            </Typography>
           </Link>
           <Link href="/signup">
             <Button variant="contained" sx={{ 
@@ -96,7 +94,7 @@ export default function LandingPage() {
                 background: 'linear-gradient(45deg, #138496, #0056b3)'
               }
             }} size="small">
-              Get Started
+              Start Free Assessment
             </Button>
           </Link>
         </Box>
@@ -107,7 +105,7 @@ export default function LandingPage() {
           gap: 1, 
           alignItems: 'center' 
         }}>
-          <Link href="/login">
+          <Link href="/team">
             <Button variant="outlined" sx={{ 
               color: 'white', 
               borderColor: 'rgba(255,255,255,0.5)',
@@ -120,7 +118,7 @@ export default function LandingPage() {
                 background: 'rgba(255,255,255,0.1)'
               }
             }}>
-              Sign In
+              Team
             </Button>
           </Link>
           <Link href="/signup">
@@ -134,7 +132,7 @@ export default function LandingPage() {
                 background: 'linear-gradient(45deg, #138496, #0056b3)'
               }
             }}>
-              Start
+              Free Assessment
             </Button>
           </Link>
         </Box>
