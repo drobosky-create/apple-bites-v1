@@ -979,47 +979,61 @@ export default function StrategicReport({ results }: StrategicReportProps) {
             </MDTypography>
           </MDBox>
 
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={4}>
-              <MDBox p={3} sx={{ backgroundColor: '#E3F2FD', borderRadius: 2, height: '100%' }}>
-                <MDTypography variant="h6" fontWeight="bold" color="primary" mb={2}>
-                  Phase 1: Foundation (0-3 months)
-                </MDTypography>
-                <MDTypography variant="body2" color="text">
-                  • Financial systems optimization<br />
-                  • Management team development<br />
-                  • Process documentation<br />
-                  • Performance metrics implementation
+          <Box display="flex" gap={3} sx={{ '& > *': { flex: 1 } }}>
+            <MDBox p={3} sx={{ backgroundColor: '#E3F2FD', borderRadius: 2, border: '1px solid #BBDEFB', minHeight: '200px', display: 'flex', flexDirection: 'column' }}>
+              <MDBox display="flex" alignItems="center" mb={2}>
+                <Clock size={20} color="#2196F3" style={{ marginRight: 8 }} />
+                <MDTypography variant="h6" fontWeight="bold" color="primary">
+                  Phase 1: Foundation
                 </MDTypography>
               </MDBox>
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <MDBox p={3} sx={{ backgroundColor: '#FFF8E1', borderRadius: 2, height: '100%' }}>
-                <MDTypography variant="h6" fontWeight="bold" color="warning" mb={2}>
-                  Phase 2: Growth (3-9 months)
-                </MDTypography>
-                <MDTypography variant="body2" color="text">
-                  • Market expansion strategies<br />
-                  • Recurring revenue initiatives<br />
-                  • Customer concentration reduction<br />
-                  • Technology infrastructure scaling
-                </MDTypography>
-              </MDBox>
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <MDBox p={3} sx={{ backgroundColor: '#E8F5E8', borderRadius: 2, height: '100%' }}>
-                <MDTypography variant="h6" fontWeight="bold" color="success" mb={2}>
-                  Phase 3: Optimization (9-18 months)
-                </MDTypography>
-                <MDTypography variant="body2" color="text">
-                  • Strategic partnerships<br />
-                  • Exit preparation strategies<br />
-                  • Valuation maximization<br />
-                  • Market positioning refinement
+              <MDTypography variant="body2" color="primary" fontWeight="medium" mb={2}>
+                0-3 months
+              </MDTypography>
+              <MDTypography variant="body2" color="text" sx={{ flex: 1 }}>
+                • Financial systems optimization<br />
+                • Management team development<br />
+                • Process documentation<br />
+                • Performance metrics implementation
+              </MDTypography>
+            </MDBox>
+            
+            <MDBox p={3} sx={{ backgroundColor: '#FFF8E1', borderRadius: 2, border: '1px solid #FFE0B2', minHeight: '200px', display: 'flex', flexDirection: 'column' }}>
+              <MDBox display="flex" alignItems="center" mb={2}>
+                <TrendingUp size={20} color="#F57C00" style={{ marginRight: 8 }} />
+                <MDTypography variant="h6" fontWeight="bold" color="warning">
+                  Phase 2: Growth
                 </MDTypography>
               </MDBox>
-            </Grid>
-          </Grid>
+              <MDTypography variant="body2" color="warning" fontWeight="medium" mb={2}>
+                3-9 months
+              </MDTypography>
+              <MDTypography variant="body2" color="text" sx={{ flex: 1 }}>
+                • Market expansion strategies<br />
+                • Recurring revenue initiatives<br />
+                • Customer concentration reduction<br />
+                • Technology infrastructure scaling
+              </MDTypography>
+            </MDBox>
+            
+            <MDBox p={3} sx={{ backgroundColor: '#E8F5E8', borderRadius: 2, border: '1px solid #C8E6C9', minHeight: '200px', display: 'flex', flexDirection: 'column' }}>
+              <MDBox display="flex" alignItems="center" mb={2}>
+                <Target size={20} color="#4CAF50" style={{ marginRight: 8 }} />
+                <MDTypography variant="h6" fontWeight="bold" color="success">
+                  Phase 3: Optimization
+                </MDTypography>
+              </MDBox>
+              <MDTypography variant="body2" color="success" fontWeight="medium" mb={2}>
+                9-18 months
+              </MDTypography>
+              <MDTypography variant="body2" color="text" sx={{ flex: 1 }}>
+                • Strategic partnerships<br />
+                • Exit preparation strategies<br />
+                • Valuation maximization<br />
+                • Market positioning refinement
+              </MDTypography>
+            </MDBox>
+          </Box>
         </CardContent>
       </Card>
 
