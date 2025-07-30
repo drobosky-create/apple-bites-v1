@@ -131,6 +131,76 @@ export default function StrategicReport({ results }: StrategicReportProps) {
         </CardContent>
       </Card>
 
+      {/* Strategic Insights Box */}
+      <Card sx={{ mb: 4, background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)', borderRadius: 1.5 }}>
+        <CardContent sx={{ p: 3 }}>
+          <MDBox display="flex" alignItems="center" justifyContent="center" mb={3}>
+            <Building2 size={24} color="#0A1F44" style={{ marginRight: 12 }} />
+            <MDTypography variant="h5" fontWeight="600" color="dark" textAlign="center">
+              Strategic Business Insights
+            </MDTypography>
+          </MDBox>
+          
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={6}>
+              <MDBox 
+                p={3} 
+                sx={{ 
+                  background: 'linear-gradient(135deg, #e8f5e8 0%, #f1f8f1 100%)', 
+                  borderRadius: 2, 
+                  border: '2px solid #4CAF50',
+                  textAlign: 'center',
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    transform: 'translateY(-2px)',
+                    boxShadow: '0 8px 25px rgba(76, 175, 80, 0.15)'
+                  }
+                }}
+              >
+                <TrendingUp size={32} color="#4CAF50" style={{ marginBottom: 12 }} />
+                <MDTypography variant="h6" fontWeight="600" color="success" mb={2}>
+                  Strategic Strengths
+                </MDTypography>
+                <MDTypography variant="body2" color="text" sx={{ lineHeight: 1.6 }}>
+                  • Strong financial performance vs industry<br />
+                  • Scalable operational systems<br />
+                  • Competitive market positioning<br />
+                  • Experienced management team
+                </MDTypography>
+              </MDBox>
+            </Grid>
+            
+            <Grid item xs={12} md={6}>
+              <MDBox 
+                p={3} 
+                sx={{ 
+                  background: 'linear-gradient(135deg, #fff3e0 0%, #fef7ed 100%)', 
+                  borderRadius: 2, 
+                  border: '2px solid #F59E0B',
+                  textAlign: 'center',
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    transform: 'translateY(-2px)',
+                    boxShadow: '0 8px 25px rgba(245, 158, 11, 0.15)'
+                  }
+                }}
+              >
+                <Target size={32} color="#F59E0B" style={{ marginBottom: 12 }} />
+                <MDTypography variant="h6" fontWeight="600" color="warning" mb={2}>
+                  Value Enhancement
+                </MDTypography>
+                <MDTypography variant="body2" color="text" sx={{ lineHeight: 1.6 }}>
+                  • Recurring revenue optimization<br />
+                  • Customer concentration reduction<br />
+                  • Owner dependency mitigation<br />
+                  • Market expansion opportunities
+                </MDTypography>
+              </MDBox>
+            </Grid>
+          </Grid>
+        </CardContent>
+      </Card>
+
       {/* Executive Summary */}
       <Card sx={{ mb: 4 }}>
         <CardContent sx={{ p: 4 }}>
