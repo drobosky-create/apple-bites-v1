@@ -176,24 +176,25 @@ export default function ValueCalculator() {
 
   return (
     <DashboardBackground>
-      {/* Correct Single MDBox Sidebar */}
+      {/* Responsive Sidebar */}
       <MDBox
         sx={{
-          position: 'fixed',
-          top: '24px',
-          left: '24px',
-          width: 280,
-          height: 'calc(100vh - 48px)',
+          position: { xs: 'relative', md: 'fixed' },
+          top: { xs: 0, md: '24px' },
+          left: { xs: 0, md: '24px' },
+          width: { xs: '100%', md: 280 },
+          height: { xs: 'auto', md: 'calc(100vh - 48px)' },
           background: 'linear-gradient(135deg, #0A1F44 0%, #1C2D5A 100%)',
-          borderRadius: '20px',
-          border: '1px solid rgba(255, 255, 255, 0.15)',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.15), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+          borderRadius: { xs: '0', md: '20px' },
+          border: { xs: 'none', md: '1px solid rgba(255, 255, 255, 0.15)' },
+          boxShadow: { xs: 'none', md: '0 4px 12px rgba(0,0,0,0.15), 0 0 0 1px rgba(255, 255, 255, 0.1)' },
           backdropFilter: 'blur(8px)',
-          padding: 3,
+          padding: { xs: 2, md: 3 },
           display: 'flex',
           flexDirection: 'column',
           zIndex: 1000,
-          overflow: 'hidden'
+          overflow: 'hidden',
+          mb: { xs: 2, md: 0 },
         }}
       >
         {/* User Info Section */}
@@ -375,7 +376,13 @@ export default function ValueCalculator() {
       </MDBox>
 
       {/* Main Content - Ultra Compact Layout */}
-      <MainContent>
+      <MainContent sx={{
+        marginLeft: { xs: 0, md: '320px' }, // No margin on mobile, fixed margin on desktop
+        padding: { xs: 2, md: 4 },
+        minHeight: '100vh',
+        backgroundColor: 'rgba(248, 249, 250, 0.7)',
+        width: { xs: '100%', md: 'calc(100% - 320px)' }, // Full width on mobile
+      }}>
         <Container maxWidth="xl" sx={{ py: 1, px: 2 }}>
           {/* Page Header - Ultra Compact */}
           <MDBox 

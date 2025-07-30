@@ -57,21 +57,23 @@ function AdminSidebar({ user, onSignOut }: { user: any; onSignOut: () => void })
   return (
     <MDBox
       sx={{
-        position: 'fixed',
-        top: '24px',
-        left: '24px',
-        width: 280,
-        height: 'calc(100vh - 48px)',
+        // Desktop: Fixed sidebar
+        position: { xs: 'relative', md: 'fixed' },
+        top: { xs: 0, md: '24px' },
+        left: { xs: 0, md: '24px' },
+        width: { xs: '100%', md: 280 },
+        height: { xs: 'auto', md: 'calc(100vh - 48px)' },
         background: gradients.dark,
-        borderRadius: '20px',
-        border: `1px solid rgba(255, 255, 255, 0.15)`,
-        boxShadow: '0 4px 12px rgba(0,0,0,0.15), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+        borderRadius: { xs: '0', md: '20px' },
+        border: { xs: 'none', md: `1px solid rgba(255, 255, 255, 0.15)` },
+        boxShadow: { xs: 'none', md: '0 4px 12px rgba(0,0,0,0.15), 0 0 0 1px rgba(255, 255, 255, 0.1)' },
         backdropFilter: 'blur(8px)',
-        padding: 3,
+        padding: { xs: 2, md: 3 },
         display: 'flex',
         flexDirection: 'column',
         zIndex: 1000,
-        overflow: 'hidden' // Prevent internal scrolling
+        overflow: 'hidden', // Prevent internal scrolling
+        mb: { xs: 2, md: 0 }, // Add margin bottom on mobile
       }}
     >
       {/* User Info Section */}
@@ -410,16 +412,21 @@ export default function AdminDashboard() {
   };
 
   return (
-    <MDBox sx={{ display: 'flex', minHeight: '100vh', backgroundColor: '#f8f9fa' }}>
+    <MDBox sx={{ 
+      display: { xs: 'block', md: 'flex' }, 
+      minHeight: '100vh', 
+      backgroundColor: '#f8f9fa' 
+    }}>
       <AdminSidebar user={user} onSignOut={handleSignOut} />
       
       {/* Main Content */}
       <MDBox
         sx={{
           flex: 1,
-          marginLeft: '328px', // Account for pillbox sidebar width + margins
-          p: 4,
-          minHeight: '100vh'
+          marginLeft: { xs: 0, md: '328px' }, // No margin on mobile, fixed margin on desktop
+          p: { xs: 2, md: 4 },
+          minHeight: '100vh',
+          width: { xs: '100%', md: 'calc(100% - 328px)' }, // Full width on mobile
         }}
       >
         <Container maxWidth="xl">
