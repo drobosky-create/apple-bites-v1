@@ -38,8 +38,10 @@ export function getSession() {
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      secure: false, // Set to false for development
+      secure: process.env.NODE_ENV === 'production',
       maxAge: sessionTtl,
+      sameSite: 'lax',
+      domain: process.env.NODE_ENV === 'production' ? '.applebites.ai' : undefined,
     },
   });
 }
@@ -72,6 +74,7 @@ async function upsertUser(
 export async function setupAuth(app: Express) {
   app.set("trust proxy", 1);
   app.use(getSession());
+  app.set('session-configured', true); // Mark session as configured
   app.use(passport.initialize());
   app.use(passport.session());
 

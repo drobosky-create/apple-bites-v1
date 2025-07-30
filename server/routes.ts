@@ -46,16 +46,14 @@ declare global {
 
 export async function registerRoutes(app: Express): Promise<Server> {
   
-  // Setup Simple Auth
-  setupSimpleAuth(app);
-  
-  // Setup Replit Auth for OAuth providers
+  // Setup authentication system
   try {
     const { setupAuth } = await import('./replitAuth');
     await setupAuth(app);
     console.log('Replit Auth configured successfully');
   } catch (error) {
-    console.log('Replit Auth not available, using simple auth only:', error);
+    console.log('Replit Auth not available, setting up simple auth fallback:', error);
+    setupSimpleAuth(app);
   }
 
   // OAuth routes are handled by Replit Auth system in replitAuth.ts
