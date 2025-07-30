@@ -171,38 +171,55 @@ export default function Checkout() {
     }
   };
 
-  useEffect(() => {
+  // Function to redirect to Stripe Checkout
+  const redirectToStripeCheckout = async () => {
     if (!productId) {
       setError('No product specified');
-      setLoading(false);
       return;
     }
 
-    // Create PaymentIntent with fixed amount for Growth & Exit Assessment
-    // Include coupon if one is applied
-    
-    apiRequest('POST', '/api/create-payment-intent-fixed', { 
-      productId,
-      tier,
-      amount: finalAmount,
-      couponId: appliedCoupon || null,
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.clientSecret) {
-          setClientSecret(data.clientSecret);
-        } else {
-          setError('Failed to initialize payment');
-        }
-      })
-      .catch((err) => {
-        setError('Failed to initialize payment');
-        console.error('Payment initialization error:', err);
-      })
-      .finally(() => {
-        setLoading(false);
+    // Get the price ID based on product
+    const priceIds = {
+      'prod_Sddbk2RWzr8kyL': 'price_1RgqQ0AYDUS7LgRZqF6z4RzZ', // Growth & Exit Assessment
+      'prod_SdvnfSZARwzdtm': 'price_1RgtSbAYDUS7LgRZwm8Zg4gE', // Basic Assessment  
+      'prod_Sdvq23217qaGhp': 'price_1RgtT5AYDUS7LgRZcYpN8xEd', // Capital Market Plan
+    };
+
+    const priceId = priceIds[productId as keyof typeof priceIds];
+    if (!priceId) {
+      setError('Invalid product selection');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const response = await apiRequest('POST', '/api/create-checkout-session', { 
+        productId,
+        tier,
+        priceId,
+        couponId: appliedCoupon || null,
       });
-  }, [productId, finalAmount, appliedCoupon]);
+      
+      const data = await response.json();
+      
+      if (data.url) {
+        // Redirect to Stripe Checkout
+        window.location.href = data.url;
+      } else {
+        setError('Failed to create checkout session');
+      }
+    } catch (err) {
+      console.error('Checkout session error:', err);
+      setError('Failed to create checkout session');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    // No need to create payment intent upfront with prebuilt checkout
+    setLoading(false);
+  }, []);
 
   if (!import.meta.env.VITE_STRIPE_PUBLIC_KEY) {
     return (
@@ -355,12 +372,25 @@ export default function Checkout() {
             </Box>
           </MDBox>
 
-          {/* Payment Form */}
-          {clientSecret && stripePromise && (
-            <Elements stripe={stripePromise} options={{ clientSecret }}>
-              <PaymentForm />
-            </Elements>
-          )}
+          {/* Checkout Button */}
+          <MDBox sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
+            <MDButton
+              variant="gradient"
+              color="info"
+              size="large"
+              fullWidth
+              onClick={redirectToStripeCheckout}
+              disabled={loading}
+              sx={{
+                background: 'linear-gradient(45deg, #0A1F44 30%, #1B2C4F 90%)',
+                py: 1.5,
+                fontSize: '1.1rem',
+                fontWeight: 600,
+              }}
+            >
+              {loading ? 'Processing...' : `Complete Purchase - $${finalAmount.toFixed(2)}`}
+            </MDButton>
+          </MDBox>
         </CardContent>
       </CheckoutCard>
     </CheckoutContainer>

@@ -23,6 +23,7 @@ import PrivacyPolicy from "@/pages/privacy-policy";
 import TermsOfUse from "@/pages/terms-of-use";
 import PricingPage from "@/pages/pricing";
 import LandingPage from "@/pages/landing";
+import CheckoutSuccess from "@/pages/checkout-success";
 import CookieBanner from "@/components/CookieBanner";
 
 function Router() {
@@ -63,6 +64,7 @@ function Router() {
             {React.createElement(lazy(() => import("./pages/checkout")))}
           </Suspense>
         </Route>
+        <Route path="/checkout/success" component={CheckoutSuccess} />
         
         {/* Landing page for non-authenticated users, dashboard for authenticated */}
         <Route path="/">

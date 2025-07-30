@@ -2776,10 +2776,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
     });
 
-    // Create payment intent with fixed amount and optional coupon
-    app.post("/api/create-payment-intent-fixed", async (req, res) => {
+    // Create Stripe Checkout Session (Prebuilt checkout form)
+    app.post("/api/create-checkout-session", async (req, res) => {
       try {
-        const { productId, tier, amount, couponId } = req.body;
+        const { productId, tier, priceId, couponId } = req.body;
         
         // Validate tier
         const validTiers = ['growth', 'capital'];
@@ -2787,14 +2787,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
           return res.status(400).json({ error: 'Invalid tier' });
         }
 
-        // Validate amount is positive
-        if (!amount || amount <= 0) {
-          return res.status(400).json({ error: 'Invalid amount' });
-        }
-
-        const paymentIntentData: any = {
-          amount: amount,
-          currency: 'usd',
+        // Build checkout session data
+        const sessionData: any = {
+          payment_method_types: ['card'],
+          line_items: [
+            {
+              price: priceId, // Use the actual Stripe price ID
+              quantity: 1,
+            },
+          ],
+          mode: 'payment',
+          success_url: `${req.protocol}://${req.get('host')}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+          cancel_url: `${req.protocol}://${req.get('host')}/checkout?product=${productId}`,
           metadata: {
             tier,
             productId,
@@ -2802,36 +2806,73 @@ export async function registerRoutes(app: Express): Promise<Server> {
           },
         };
 
-        // Add coupon if provided (only for real Stripe coupons)
+        // Add coupon/discount if provided
         if (couponId) {
-          // Check if this is a demo coupon (our fallback system)
+          // Check if this is a demo coupon first
           const demoCoupons = ['SAVE10', 'SAVE50', 'EARLYBIRD', 'WELCOME25', 'LEGACY', 'RGR25XH2'];
           const isDemoCoupon = demoCoupons.includes(couponId.toUpperCase());
           
           if (!isDemoCoupon) {
-            // Try to validate real Stripe coupon
+            // Try to use real Stripe coupon
             try {
               const coupon = await stripe.coupons.retrieve(couponId);
               if (coupon.valid) {
-                paymentIntentData.discounts = [{ coupon: couponId }];
-                paymentIntentData.metadata.couponId = couponId;
+                sessionData.discounts = [{ coupon: couponId }];
+                sessionData.metadata.couponId = couponId;
               }
             } catch (couponError) {
               console.warn('Invalid Stripe coupon provided:', couponId);
             }
           } else {
-            // For demo coupons, just store in metadata (discount already applied on frontend)
-            paymentIntentData.metadata.couponId = couponId;
-            paymentIntentData.metadata.isDemoCoupon = 'true';
+            // For demo coupons, we'll need to create them in Stripe or use a different approach
+            console.log('Demo coupon requested:', couponId);
+            sessionData.metadata.demoCouponId = couponId;
           }
         }
 
-        const paymentIntent = await stripe.paymentIntents.create(paymentIntentData);
+        const session = await stripe.checkout.sessions.create(sessionData);
 
-        res.json({ clientSecret: paymentIntent.client_secret });
+        res.json({ 
+          sessionId: session.id,
+          url: session.url 
+        });
       } catch (error: any) {
-        console.error('Payment intent creation error:', error);
-        res.status(500).json({ error: 'Failed to create payment intent' });
+        console.error('Checkout session creation error:', error);
+        res.status(500).json({ error: 'Failed to create checkout session' });
+      }
+    });
+
+    // Verify Stripe Checkout Session
+    app.post("/api/verify-checkout-session", async (req, res) => {
+      try {
+        const { sessionId } = req.body;
+        
+        if (!sessionId) {
+          return res.status(400).json({ error: 'Session ID required' });
+        }
+
+        // Retrieve the session from Stripe
+        const session = await stripe.checkout.sessions.retrieve(sessionId);
+        
+        if (session.payment_status === 'paid') {
+          // Payment was successful
+          res.json({
+            success: true,
+            sessionId: session.id,
+            amount: session.amount_total,
+            productName: session.metadata?.productId || 'Growth & Exit Assessment',
+            tier: session.metadata?.tier,
+            customerEmail: session.customer_details?.email,
+          });
+        } else {
+          res.status(400).json({ 
+            success: false, 
+            error: 'Payment not completed' 
+          });
+        }
+      } catch (error: any) {
+        console.error('Session verification error:', error);
+        res.status(500).json({ error: 'Failed to verify session' });
       }
     });
 
