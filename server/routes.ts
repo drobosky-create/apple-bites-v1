@@ -2827,12 +2827,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
             mode: 'payment' // One-time payment
           },
           'capital_market_plan': { 
-            priceId: 'price_1RqZi5AYDUS7LgRZFoyi63cy', // Use Monthly for now (working price)
-            mode: 'subscription' // Subscription mode for recurring prices
-          },
-          'capital_one_time': { 
-            priceId: 'price_1RqZhaAYDUS7LgRZfYL9gP1H', // Capital One-Time (may need fixing)
+            priceId: 'price_1RqZhaAYDUS7LgRZfYL9gP1H', // Capital One-Time - $3,495
             mode: 'payment' // One-time payment
+          },
+          'capital_monthly': { 
+            priceId: 'price_1RqZi5AYDUS7LgRZFoyi63cy', // Capital Monthly - recurring
+            mode: 'subscription' // Subscription mode for recurring prices
           }
         };
 
