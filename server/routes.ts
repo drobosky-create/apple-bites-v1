@@ -2696,38 +2696,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
           });
         } catch (stripeError: any) {
           console.log('Stripe coupon error for code "' + couponCode + '":', stripeError.code, stripeError.message);
-          console.log('Full Stripe error:', JSON.stringify(stripeError, null, 2));
-          // If coupon doesn't exist in Stripe, check demo coupons
-          if (stripeError.code === 'resource_missing') {
-            const demoCoupons = {
-              'SAVE10': { percent_off: 10, name: '10% Off' },
-              'SAVE50': { amount_off: 5000, currency: 'usd', name: '$50 Off' },
-              'EARLYBIRD': { percent_off: 15, name: '15% Off Early Bird' },
-              'WELCOME25': { amount_off: 2500, currency: 'usd', name: '$25 Welcome Discount' },
-              'LEGACY': { percent_off: 100, name: '100% Off Legacy Coupon' },
-              'RGR25XH2': { percent_off: 100, name: '100% Off Legacy Coupon' },
-            };
-            
-            const demoCoupon = demoCoupons[couponCode.toUpperCase() as keyof typeof demoCoupons];
-            
-            if (demoCoupon) {
-              console.log('Using demo coupon:', couponCode.toUpperCase());
-              return res.json({
-                valid: true,
-                source: 'demo',
-                coupon: {
-                  id: couponCode.toUpperCase(),
-                  name: demoCoupon.name,
-                  percent_off: demoCoupon.percent_off || null,
-                  amount_off: demoCoupon.amount_off || null,
-                  currency: demoCoupon.currency || 'usd',
-                  valid: true
-                }
-              });
-            }
-          }
           
-          // If not found in either, return invalid
+          // Return invalid for any Stripe error
           return res.status(400).json({ 
             valid: false, 
             message: 'Invalid coupon code' 
@@ -2867,25 +2837,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
         // Add coupon/discount if provided
         if (couponId) {
-          // Check if this is a demo coupon first
-          const demoCoupons = ['SAVE10', 'SAVE50', 'EARLYBIRD', 'WELCOME25', 'LEGACY', 'RGR25XH2'];
-          const isDemoCoupon = demoCoupons.includes(couponId.toUpperCase());
-          
-          if (!isDemoCoupon) {
-            // Try to use real Stripe coupon
-            try {
-              const coupon = await stripe.coupons.retrieve(couponId);
-              if (coupon.valid) {
-                sessionData.discounts = [{ coupon: couponId }];
-                sessionData.metadata.couponId = couponId;
-              }
-            } catch (couponError) {
-              console.warn('Invalid Stripe coupon provided:', couponId);
+          try {
+            const coupon = await stripe.coupons.retrieve(couponId);
+            if (coupon.valid) {
+              sessionData.discounts = [{ coupon: couponId }];
+              sessionData.metadata.couponId = couponId;
+              console.log('Applied valid Stripe coupon:', couponId);
             }
-          } else {
-            // For demo coupons, store in metadata
-            console.log('Demo coupon requested:', couponId);
-            sessionData.metadata.demoCouponId = couponId;
+          } catch (couponError) {
+            console.warn('Invalid Stripe coupon provided:', couponId);
+            // Continue without coupon if invalid
           }
         }
 
