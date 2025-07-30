@@ -914,38 +914,58 @@ export default function StrategicReport({ results }: StrategicReportProps) {
             </MDTypography>
           </MDBox>
 
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={6}>
-              <MDBox p={3} sx={{ backgroundColor: '#F8F9FA', borderRadius: 2 }}>
-                <MDTypography variant="h6" fontWeight="medium" color="dark" mb={2}>
+          <Box display="flex" gap={3} sx={{ '& > *': { flex: 1 } }}>
+            <MDBox p={3} sx={{ backgroundColor: '#F8F9FA', borderRadius: 2, border: '1px solid #E3F2FD', minHeight: '160px' }}>
+              <MDBox display="flex" alignItems="center" mb={2}>
+                <TrendingUp size={20} color="#4CAF50" style={{ marginRight: 8 }} />
+                <MDTypography variant="h6" fontWeight="medium" color="success">
                   Market Position Score
                 </MDTypography>
-                <MDBox display="flex" alignItems="center" mb={2}>
-                  <MDTypography variant="h3" fontWeight="bold" color="success">
-                    75%
-                  </MDTypography>
-                </MDBox>
-                <MDTypography variant="body2" color="textSecondary">
-                  Above industry average positioning with strong competitive advantages
+              </MDBox>
+              <MDBox textAlign="center" mb={2}>
+                <MDTypography variant="h3" fontWeight="bold" color="success">
+                  75%
                 </MDTypography>
               </MDBox>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <MDBox p={3} sx={{ backgroundColor: '#FFF8E1', borderRadius: 2 }}>
-                <MDTypography variant="h6" fontWeight="medium" color="dark" mb={2}>
+              <MDTypography variant="body2" color="textSecondary" textAlign="center">
+                Above industry average positioning with strong competitive advantages
+              </MDTypography>
+            </MDBox>
+            
+            <MDBox p={3} sx={{ backgroundColor: '#FFF8E1', borderRadius: 2, border: '1px solid #FFE0B2', minHeight: '160px' }}>
+              <MDBox display="flex" alignItems="center" mb={2}>
+                <BarChart3 size={20} color="#F57C00" style={{ marginRight: 8 }} />
+                <MDTypography variant="h6" fontWeight="medium" color="warning">
                   Growth Trajectory
                 </MDTypography>
-                <MDBox display="flex" alignItems="center" mb={2}>
-                  <MDTypography variant="h3" fontWeight="bold" color="warning">
-                    68%
-                  </MDTypography>
-                </MDBox>
-                <MDTypography variant="body2" color="textSecondary">
-                  Strong growth potential with strategic optimization opportunities
+              </MDBox>
+              <MDBox textAlign="center" mb={2}>
+                <MDTypography variant="h3" fontWeight="bold" color="warning">
+                  68%
                 </MDTypography>
               </MDBox>
-            </Grid>
-          </Grid>
+              <MDTypography variant="body2" color="textSecondary" textAlign="center">
+                Strong growth potential with strategic optimization opportunities
+              </MDTypography>
+            </MDBox>
+            
+            <MDBox p={3} sx={{ backgroundColor: '#E3F2FD', borderRadius: 2, border: '1px solid #BBDEFB', minHeight: '160px' }}>
+              <MDBox display="flex" alignItems="center" mb={2}>
+                <Building2 size={20} color="#2196F3" style={{ marginRight: 8 }} />
+                <MDTypography variant="h6" fontWeight="medium" color="primary">
+                  Industry Benchmark
+                </MDTypography>
+              </MDBox>
+              <MDBox textAlign="center" mb={2}>
+                <MDTypography variant="h3" fontWeight="bold" color="primary">
+                  {results.valuationMultiple || '4.2'}x
+                </MDTypography>
+              </MDBox>
+              <MDTypography variant="body2" color="textSecondary" textAlign="center">
+                NAICS {results.naicsCode || '331110'} sector multiple reflects manufacturing industry standards
+              </MDTypography>
+            </MDBox>
+          </Box>
         </CardContent>
       </Card>
 
