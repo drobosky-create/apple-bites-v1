@@ -634,7 +634,7 @@ export default function StrategicReport({ results }: StrategicReportProps) {
       {/* Valuation Range Analysis - Interactive Scale */}
       <Card sx={{ mb: 4 }}>
         <CardContent sx={{ p: 4 }}>
-          <MDBox display="flex" alignItems="center" mb={4}>
+          <MDBox display="flex" alignItems="center" mb={2}>
             <Calculator size={24} color="#0A1F44" style={{ marginRight: 12 }} />
             <MDTypography variant="h5" fontWeight="bold" color="dark">
               Strategic Valuation Range Analysis
@@ -642,7 +642,7 @@ export default function StrategicReport({ results }: StrategicReportProps) {
           </MDBox>
 
           {/* Strategic Valuation Gauge - Exact Copy from Value Calculator */}
-          <MDBox display="flex" gap={4} alignItems="center" mb={2}>
+          <MDBox display="flex" gap={4} alignItems="center" mb={1}>
             {/* Gauge Container */}
             <MDBox sx={{ flex: '0 0 600px', textAlign: 'center', transform: 'scale(1.15)' }}>
               <svg width="100%" height="420" viewBox="0 0 800 400">
@@ -812,8 +812,8 @@ export default function StrategicReport({ results }: StrategicReportProps) {
                               style={{
                                 fontSize: '16px',
                                 fontWeight: '900',
-                                fill: isActive ? 'white' : '#6b7280',
-                                textShadow: isActive ? '1px 1px 2px rgba(0,0,0,0.3)' : 'none'
+                                fill: isActive ? '#1A202C' : '#6b7280',
+                                textShadow: isActive ? '1px 1px 2px rgba(255,255,255,0.8)' : 'none'
                               }}
                             >
                               {segment.label}
@@ -889,7 +889,7 @@ export default function StrategicReport({ results }: StrategicReportProps) {
           </MDBox>
 
           {/* Multiplier Information */}
-          <MDBox mt={2} p={2} sx={{ backgroundColor: '#F5F5F5', borderRadius: 2, textAlign: 'center' }}>
+          <MDBox mt={0} p={1} sx={{ backgroundColor: '#F5F5F5', borderRadius: 2, textAlign: 'center' }}>
             <MDBox display="flex" alignItems="center" justifyContent="center" mb={1}>
               <MDTypography variant="h6" fontWeight="medium" color="dark" mr={1}>
                 Strategic Multiplier:
