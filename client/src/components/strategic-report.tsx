@@ -642,10 +642,10 @@ export default function StrategicReport({ results }: StrategicReportProps) {
           </MDBox>
 
           {/* Strategic Valuation Gauge - Exact Copy from Value Calculator */}
-          <MDBox display="flex" gap={4} alignItems="center" mb={4}>
+          <MDBox display="flex" gap={4} alignItems="center" mb={2}>
             {/* Gauge Container */}
-            <MDBox sx={{ flex: '0 0 600px', textAlign: 'center' }}>
-              <svg width="100%" height="500" viewBox="0 0 800 450">
+            <MDBox sx={{ flex: '0 0 600px', textAlign: 'center', transform: 'scale(1.15)' }}>
+              <svg width="100%" height="420" viewBox="0 0 800 400">
                 {/* Material Dashboard Gradient Definitions */}
                 <defs>
                   {/* Low Range - Red Material Gradient */}
@@ -854,33 +854,33 @@ export default function StrategicReport({ results }: StrategicReportProps) {
 
             {/* Value Display */}
             <MDBox sx={{ flex: 1 }}>
-              <MDBox mb={3} p={3} sx={{ backgroundColor: '#E8F5E8', borderRadius: 2, textAlign: 'center' }}>
+              <MDBox mb={2} p={2} sx={{ backgroundColor: '#E8F5E8', borderRadius: 2, textAlign: 'center' }}>
                 <MDTypography variant="h4" fontWeight="bold" color="success" mb={1}>
                   {formatCurrency(results.midEstimate)}
                 </MDTypography>
                 <MDTypography variant="h6" fontWeight="medium" color="success">
                   Strategic Baseline Value
                 </MDTypography>
-                <MDTypography variant="body2" color="textSecondary">
+                <MDTypography variant="body2" sx={{ color: '#2D3748', fontWeight: 600 }}>
                   Current positioning + improvements
                 </MDTypography>
               </MDBox>
               
               <MDBox display="flex" gap={2}>
-                <MDBox flex={1} p={2} sx={{ backgroundColor: '#FFEBEE', borderRadius: 2, textAlign: 'center' }}>
+                <MDBox flex={1} p={1.5} sx={{ backgroundColor: '#FFEBEE', borderRadius: 2, textAlign: 'center' }}>
                   <MDTypography variant="h6" fontWeight="bold" color="error">
                     {formatCurrency(results.lowEstimate)}
                   </MDTypography>
-                  <MDTypography variant="caption" color="textSecondary">
+                  <MDTypography variant="caption" sx={{ color: '#2D3748', fontWeight: 600 }}>
                     Conservative Base
                   </MDTypography>
                 </MDBox>
                 
-                <MDBox flex={1} p={2} sx={{ backgroundColor: '#E3F2FD', borderRadius: 2, textAlign: 'center' }}>
+                <MDBox flex={1} p={1.5} sx={{ backgroundColor: '#E3F2FD', borderRadius: 2, textAlign: 'center' }}>
                   <MDTypography variant="h6" fontWeight="bold" color="primary">
                     {formatCurrency(results.highEstimate)}
                   </MDTypography>
-                  <MDTypography variant="caption" color="textSecondary">
+                  <MDTypography variant="caption" sx={{ color: '#2D3748', fontWeight: 600 }}>
                     Optimization Peak
                   </MDTypography>
                 </MDBox>
@@ -889,8 +889,8 @@ export default function StrategicReport({ results }: StrategicReportProps) {
           </MDBox>
 
           {/* Multiplier Information */}
-          <MDBox mt={4} p={3} sx={{ backgroundColor: '#F5F5F5', borderRadius: 2, textAlign: 'center' }}>
-            <MDBox display="flex" alignItems="center" justifyContent="center" mb={2}>
+          <MDBox mt={2} p={2} sx={{ backgroundColor: '#F5F5F5', borderRadius: 2, textAlign: 'center' }}>
+            <MDBox display="flex" alignItems="center" justifyContent="center" mb={1}>
               <MDTypography variant="h6" fontWeight="medium" color="dark" mr={1}>
                 Strategic Multiplier:
               </MDTypography>
@@ -898,7 +898,7 @@ export default function StrategicReport({ results }: StrategicReportProps) {
                 {results.valuationMultiple || '4.2'}x EBITDA
               </MDTypography>
             </MDBox>
-            <MDTypography variant="body2" color="textSecondary" sx={{ maxWidth: '600px', mx: 'auto' }}>
+            <MDTypography variant="body2" sx={{ color: '#2D3748', maxWidth: '600px', mx: 'auto' }}>
               This industry-specific multiplier reflects your business's strategic positioning, operational efficiency, 
               and growth potential within the current market environment based on NAICS-specific benchmarks.
             </MDTypography>
