@@ -1,5 +1,5 @@
 import { Card, CardContent, Grid, Typography, Box, Chip, LinearProgress } from '@mui/material';
-import { TrendingUp, Target, BarChart3, PieChart, Calculator, Star, Crown, Zap, Award, Building2 } from "lucide-react";
+import { TrendingUp, Target, BarChart3, PieChart, Calculator, Star, Crown, Zap, Award, Building2, Clock } from "lucide-react";
 import MDBox from "@/components/MD/MDBox";
 import MDTypography from "@/components/MD/MDTypography";
 import MDButton from "@/components/MD/MDButton";
