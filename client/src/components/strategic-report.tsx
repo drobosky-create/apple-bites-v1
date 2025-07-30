@@ -605,13 +605,13 @@ export default function StrategicReport({ results }: StrategicReportProps) {
                   return (
                     <>
                       {/* Primary Recommendation */}
-                      <MDTypography variant="h6" fontWeight="bold" sx={{ color: '#0b2147', marginBottom: '12px' }}>
+                      <MDTypography variant="h4" fontWeight="bold" sx={{ color: '#0b2147', marginBottom: '12px', textAlign: 'center' }}>
                         {recommendations[0]}
                       </MDTypography>
                       
                       {/* Additional Options */}
                       {recommendations.length > 1 && (
-                        <>
+                        <MDBox sx={{ textAlign: 'center' }}>
                           <MDTypography variant="subtitle2" fontWeight="medium" sx={{ color: '#666', marginBottom: '8px', marginTop: '16px' }}>
                             Additional Options
                           </MDTypography>
@@ -620,7 +620,7 @@ export default function StrategicReport({ results }: StrategicReportProps) {
                               • {dealType}
                             </MDTypography>
                           ))}
-                        </>
+                        </MDBox>
                       )}
                     </>
                   );
