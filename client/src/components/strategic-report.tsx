@@ -644,8 +644,8 @@ export default function StrategicReport({ results }: StrategicReportProps) {
           {/* Strategic Valuation Gauge - Exact Copy from Value Calculator */}
           <MDBox display="flex" gap={4} alignItems="center" mb={4}>
             {/* Gauge Container */}
-            <MDBox sx={{ flex: '0 0 450px', textAlign: 'center' }}>
-              <svg width="100%" height="400" viewBox="0 0 600 360">
+            <MDBox sx={{ flex: '0 0 600px', textAlign: 'center' }}>
+              <svg width="100%" height="500" viewBox="0 0 800 450">
                 {/* Material Dashboard Gradient Definitions */}
                 <defs>
                   {/* Low Range - Red Material Gradient */}
@@ -687,17 +687,17 @@ export default function StrategicReport({ results }: StrategicReportProps) {
                 </defs>
 
                 {(() => {
-                  const centerX = 300;
-                  const centerY = 240;
-                  const radius = 160;
+                  const centerX = 400;
+                  const centerY = 300;
+                  const radius = 200;
                   
                   // Define valuation segments (0 to 180 degrees for semi-circle)
                   const segments = [
-                    { label: 'LOW', angle: 0, color: 'redGradientVal' },
-                    { label: 'CON', angle: 36, color: 'orangeGradientVal' },
-                    { label: 'STR', angle: 72, color: 'greenGradientVal' },
-                    { label: 'GRW', angle: 108, color: 'blueGradientVal' },
-                    { label: 'OPT', angle: 144, color: 'darkBlueGradientVal' },
+                    { label: 'CONSERVATIVE', angle: 0, color: 'redGradientVal' },
+                    { label: 'BASELINE', angle: 36, color: 'orangeGradientVal' },
+                    { label: 'STRATEGIC', angle: 72, color: 'greenGradientVal' },
+                    { label: 'GROWTH', angle: 108, color: 'blueGradientVal' },
+                    { label: 'OPTIMIZED', angle: 144, color: 'darkBlueGradientVal' },
                   ];
 
                   // Create arc path function
@@ -718,7 +718,7 @@ export default function StrategicReport({ results }: StrategicReportProps) {
                   // Strategic position points to middle segment (72° + 18° = 90°)
                   const needleAngle = 90;
                   const needleAngleRad = (needleAngle + 180) * (Math.PI / 180);
-                  const needleLength = 150;
+                  const needleLength = 190;
                   const needleX = centerX + needleLength * Math.cos(needleAngleRad);
                   const needleY = centerY + needleLength * Math.sin(needleAngleRad);
 
@@ -736,7 +736,7 @@ export default function StrategicReport({ results }: StrategicReportProps) {
                       {segments.map((segment, index) => {
                         const startAngle = segment.angle;
                         const endAngle = index < segments.length - 1 ? segments[index + 1].angle : 180;
-                        const isActive = segment.label === 'STR'; // Strategic is active
+                        const isActive = segment.label === 'STRATEGIC'; // Strategic is active
                         
                         return (
                           <g key={segment.label}>
@@ -753,12 +753,12 @@ export default function StrategicReport({ results }: StrategicReportProps) {
                             
                             {/* Segment labels */}
                             <text
-                              x={centerX + 190 * Math.cos((segment.angle + 18 + 180) * (Math.PI / 180))}
-                              y={centerY + 190 * Math.sin((segment.angle + 18 + 180) * (Math.PI / 180))}
+                              x={centerX + 240 * Math.cos((segment.angle + 18 + 180) * (Math.PI / 180))}
+                              y={centerY + 240 * Math.sin((segment.angle + 18 + 180) * (Math.PI / 180))}
                               textAnchor="middle"
                               dominantBaseline="middle"
                               style={{
-                                fontSize: '20px',
+                                fontSize: '16px',
                                 fontWeight: '900',
                                 fill: isActive ? 'white' : '#6b7280',
                                 textShadow: isActive ? '1px 1px 2px rgba(0,0,0,0.3)' : 'none'
@@ -788,7 +788,7 @@ export default function StrategicReport({ results }: StrategicReportProps) {
                       <circle
                         cx={centerX}
                         cy={centerY}
-                        r="16"
+                        r="20"
                         fill="url(#needleGradientVal)"
                         style={{
                           filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))'
