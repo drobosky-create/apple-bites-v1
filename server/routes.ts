@@ -2666,7 +2666,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         
         // First try to retrieve coupon from Stripe
         try {
+          console.log('Validating Stripe coupon:', couponCode);
           const coupon = await stripe.coupons.retrieve(couponCode);
+          console.log('Stripe coupon retrieved:', coupon.id, coupon.valid);
           
           if (!coupon.valid) {
             return res.status(400).json({ 
@@ -2678,6 +2680,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           // Return Stripe coupon details
           return res.json({
             valid: true,
+            source: 'stripe',
             coupon: {
               id: coupon.id,
               name: coupon.name,
@@ -2692,6 +2695,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             }
           });
         } catch (stripeError: any) {
+          console.log('Stripe coupon error:', stripeError.code, stripeError.message);
           // If coupon doesn't exist in Stripe, check demo coupons
           if (stripeError.code === 'resource_missing') {
             const demoCoupons = {
@@ -2704,8 +2708,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
             const demoCoupon = demoCoupons[couponCode.toUpperCase() as keyof typeof demoCoupons];
             
             if (demoCoupon) {
+              console.log('Using demo coupon:', couponCode.toUpperCase());
               return res.json({
                 valid: true,
+                source: 'demo',
                 coupon: {
                   id: couponCode.toUpperCase(),
                   name: demoCoupon.name,
@@ -2793,17 +2799,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
           },
         };
 
-        // Add coupon if provided
+        // Add coupon if provided (only for real Stripe coupons)
         if (couponId) {
-          // Validate coupon exists in Stripe
-          try {
-            const coupon = await stripe.coupons.retrieve(couponId);
-            if (coupon.valid) {
-              paymentIntentData.discounts = [{ coupon: couponId }];
-              paymentIntentData.metadata.couponId = couponId;
+          // Check if this is a demo coupon (our fallback system)
+          const demoCoupons = ['SAVE10', 'SAVE50', 'EARLYBIRD', 'WELCOME25'];
+          const isDemoCoupon = demoCoupons.includes(couponId.toUpperCase());
+          
+          if (!isDemoCoupon) {
+            // Try to validate real Stripe coupon
+            try {
+              const coupon = await stripe.coupons.retrieve(couponId);
+              if (coupon.valid) {
+                paymentIntentData.discounts = [{ coupon: couponId }];
+                paymentIntentData.metadata.couponId = couponId;
+              }
+            } catch (couponError) {
+              console.warn('Invalid Stripe coupon provided:', couponId);
             }
-          } catch (couponError) {
-            console.warn('Invalid coupon provided:', couponId);
+          } else {
+            // For demo coupons, just store in metadata (discount already applied on frontend)
+            paymentIntentData.metadata.couponId = couponId;
+            paymentIntentData.metadata.isDemoCoupon = 'true';
           }
         }
 
