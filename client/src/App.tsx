@@ -22,33 +22,74 @@ import LoginPage from "@/pages/login";
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();
   
+  // Show loading while checking authentication
+  if (isLoading) {
+    return (
+      <div style={{ 
+        minHeight: '100vh', 
+        backgroundColor: 'white',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}>
+        <div>Loading...</div>
+      </div>
+    );
+  }
+  
   return (
     <div style={{ minHeight: '100vh', backgroundColor: 'white' }}>
       <Switch>
-        {/* Authentication routes */}
+        {/* Authentication routes - always accessible */}
         <Route path="/signup" component={SignupPage} />
         <Route path="/login" component={LoginPage} />
         
-        {/* Core routes only */}
-        <Route path="/" component={Dashboard} />
-        <Route path="/dashboard" component={Dashboard} />
+        {/* Protected routes - redirect to login if not authenticated */}
+        <Route path="/">
+          {isAuthenticated ? <Dashboard /> : <LoginPage />}
+        </Route>
+        <Route path="/dashboard">
+          {isAuthenticated ? <Dashboard /> : <LoginPage />}
+        </Route>
         
-        {/* Assessment pages */}
-        <Route path="/assessment/free" component={FreeAssessment} />
-        <Route path="/assessment/paid" component={GrowthExitAssessment} />
-        <Route path="/assessment-results/:id" component={AssessmentResults} />
-        <Route path="/value-calculator" component={ValueCalculator} />
-        <Route path="/profile" component={Profile} />
-        <Route path="/past-assessments" component={PastAssessments} />
+        {/* Assessment pages - protected */}
+        <Route path="/assessment/free">
+          {isAuthenticated ? <FreeAssessment /> : <LoginPage />}
+        </Route>
+        <Route path="/assessment/paid">
+          {isAuthenticated ? <GrowthExitAssessment /> : <LoginPage />}
+        </Route>
+        <Route path="/assessment-results/:id">
+          {isAuthenticated ? <AssessmentResults /> : <LoginPage />}
+        </Route>
+        <Route path="/value-calculator">
+          {isAuthenticated ? <ValueCalculator /> : <LoginPage />}
+        </Route>
+        <Route path="/profile">
+          {isAuthenticated ? <Profile /> : <LoginPage />}
+        </Route>
+        <Route path="/past-assessments">
+          {isAuthenticated ? <PastAssessments /> : <LoginPage />}
+        </Route>
         
-        {/* Admin/Team pages */}
-        <Route path="/admin" component={AdminDashboard} />
-        <Route path="/admin/analytics" component={AnalyticsDashboard} />
-        <Route path="/admin/leads" component={LeadsDashboard} />
-        <Route path="/team" component={TeamDashboard} />
+        {/* Admin/Team pages - protected */}
+        <Route path="/admin">
+          {isAuthenticated ? <AdminDashboard /> : <LoginPage />}
+        </Route>
+        <Route path="/admin/analytics">
+          {isAuthenticated ? <AnalyticsDashboard /> : <LoginPage />}
+        </Route>
+        <Route path="/admin/leads">
+          {isAuthenticated ? <LeadsDashboard /> : <LoginPage />}
+        </Route>
+        <Route path="/team">
+          {isAuthenticated ? <TeamDashboard /> : <LoginPage />}
+        </Route>
         
-        {/* Fallback */}
-        <Route component={Dashboard} />
+        {/* Fallback - redirect to login if not authenticated */}
+        <Route>
+          {isAuthenticated ? <Dashboard /> : <LoginPage />}
+        </Route>
       </Switch>
     </div>
   );
