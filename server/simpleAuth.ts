@@ -16,6 +16,7 @@ export function getSession() {
     store: sessionStore,
     resave: false,
     saveUninitialized: false,
+    name: 'applebites.session',
     cookie: {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
