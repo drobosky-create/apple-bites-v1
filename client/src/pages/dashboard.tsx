@@ -328,44 +328,54 @@ function DashboardSidebar({ user, onSignOut }: { user: DashboardUser; onSignOut:
         mb: { xs: 2, md: 0 },
       }}
     >
-      {/* User Info Section */}
-      <MDBox mb={4}>
-        <MDBox display="flex" alignItems="center" mb={2}>
+      {/* User Info Section - Responsive */}
+      <MDBox mb={{ xs: 2, md: 4 }}>
+        <MDBox display="flex" alignItems="center" mb={{ xs: 1, md: 2 }}>
           <MDAvatar
             sx={{
               background: gradients.glow,
-              width: 48,
-              height: 48,
+              width: { xs: 40, md: 48 },
+              height: { xs: 40, md: 48 },
               mr: 2
             }}
           >
-            <User size={24} color="white" />
+            <User size={20} color="white" />
           </MDAvatar>
           <MDBox>
-            <MDTypography variant="h6" fontWeight="medium" sx={{ color: 'white' }}>
+            <MDTypography 
+              variant="h6" 
+              fontWeight="medium" 
+              sx={{ 
+                color: 'white',
+                fontSize: { xs: '1rem', md: '1.25rem' }
+              }}
+            >
               {user.name}
             </MDTypography>
-            <MDTypography variant="caption" sx={{ color: colors.accent }}>
+            <MDTypography 
+              variant="caption" 
+              sx={{ 
+                color: colors.accent,
+                display: { xs: 'none', md: 'block' } // Hide email on mobile
+              }}
+            >
               {user.email}
             </MDTypography>
           </MDBox>
-        </MDBox>
-        
-        <MDBox display="flex" alignItems="center">
-          <MDTypography variant="body2" mr={1} sx={{ color: 'white' }}>
-            Tier:
-          </MDTypography>
+          
+          {/* Tier badge - moved next to name on mobile */}
           <MDBox
             sx={{
               background: getTierGradient(user.tier),
               color: 'white',
-              px: 2,
+              px: { xs: 1.5, md: 2 },
               py: 0.5,
               borderRadius: 2,
-              fontSize: '0.75rem',
+              fontSize: { xs: '0.6rem', md: '0.75rem' },
               fontWeight: 600,
               textTransform: 'uppercase',
-              letterSpacing: '0.5px'
+              letterSpacing: '0.5px',
+              ml: 'auto' // Push to right on mobile
             }}
           >
             {getTierLabel(user.tier)}
@@ -373,8 +383,8 @@ function DashboardSidebar({ user, onSignOut }: { user: DashboardUser; onSignOut:
         </MDBox>
       </MDBox>
 
-      {/* Navigation Buttons */}
-      <MDBox display="flex" flexDirection="column" gap={2}>
+      {/* Navigation Buttons - Horizontal on mobile */}
+      <MDBox display="flex" flexDirection={{ xs: 'row', md: 'column' }} gap={2} flexWrap="wrap">
         <Link href="/assessment/free">
           <MDButton
             sx={{
@@ -383,14 +393,18 @@ function DashboardSidebar({ user, onSignOut }: { user: DashboardUser; onSignOut:
               '&:hover': {
                 background: gradients.light,
                 transform: 'translateY(-2px)',
-                            },
+              },
               transition: 'all 0.3s ease',
-              width: '100%',
-              py: 1.5
+              width: { xs: 'auto', md: '100%' },
+              py: { xs: 1, md: 1.5 },
+              px: { xs: 2, md: 2 },
+              fontSize: { xs: '0.8rem', md: '0.875rem' },
+              flex: { xs: '1', md: 'none' },
+              minWidth: { xs: '120px', md: 'auto' }
             }}
-            startIcon={<Plus size={18} />}
+            startIcon={<Plus size={16} />}
           >
-            New Assessment
+            <MDBox sx={{ display: { xs: 'none', sm: 'inline' } }}>New </MDBox>Assessment
           </MDButton>
         </Link>
 
@@ -406,19 +420,22 @@ function DashboardSidebar({ user, onSignOut }: { user: DashboardUser; onSignOut:
                 transform: 'translateY(-2px)'
               },
               transition: 'all 0.3s ease',
-              width: '100%',
-              py: 1.5
+              width: { xs: 'auto', md: '100%' },
+              py: { xs: 1, md: 1.5 },
+              px: { xs: 2, md: 2 },
+              fontSize: { xs: '0.8rem', md: '0.875rem' },
+              flex: { xs: '1', md: 'none' },
+              minWidth: { xs: '100px', md: 'auto' }
             }}
-            startIcon={<Crown size={18} />}
+            startIcon={<Crown size={16} />}
             onClick={() => window.location.href = '/pricing'}
           >
-            Upgrade Plan
+            <MDBox sx={{ display: { xs: 'none', sm: 'inline' } }}>Upgrade </MDBox>Plan
           </MDButton>
         )}
 
         <Link href="/profile">
           <MDButton
-            className="text-[#dbdce1]"
             sx={{
               background: 'transparent',
               border: `1px solid rgba(255, 255, 255, 0.3)`,
@@ -428,18 +445,22 @@ function DashboardSidebar({ user, onSignOut }: { user: DashboardUser; onSignOut:
                 transform: 'translateY(-2px)'
               },
               transition: 'all 0.3s ease',
-              width: '100%',
-              py: 1.5
+              width: { xs: 'auto', md: '100%' },
+              py: { xs: 1, md: 1.5 },
+              px: { xs: 1.5, md: 2 },
+              fontSize: { xs: '0.75rem', md: '0.875rem' },
+              flex: { xs: '1', md: 'none' },
+              minWidth: { xs: '80px', md: 'auto' },
+              display: { xs: 'none', sm: 'flex', md: 'flex' } // Hide on very small screens
             }}
-            startIcon={<User size={18} />}
+            startIcon={<User size={16} />}
           >
-            My Profile
+            Profile
           </MDButton>
         </Link>
 
         <Link href="/past-assessments">
           <MDButton
-            className="text-[#dbdce1]"
             sx={{
               background: 'transparent',
               border: `1px solid rgba(255, 255, 255, 0.3)`,
@@ -449,18 +470,22 @@ function DashboardSidebar({ user, onSignOut }: { user: DashboardUser; onSignOut:
                 transform: 'translateY(-2px)'
               },
               transition: 'all 0.3s ease',
-              width: '100%',
-              py: 1.5
+              width: { xs: 'auto', md: '100%' },
+              py: { xs: 1, md: 1.5 },
+              px: { xs: 1.5, md: 2 },
+              fontSize: { xs: '0.75rem', md: '0.875rem' },
+              flex: { xs: '1', md: 'none' },
+              minWidth: { xs: '80px', md: 'auto' },
+              display: { xs: 'none', sm: 'flex', md: 'flex' } // Hide on very small screens
             }}
-            startIcon={<Clock size={18} />}
+            startIcon={<Clock size={16} />}
           >
-            Past Assessments
+            History
           </MDButton>
         </Link>
 
         <MDButton
           onClick={onSignOut}
-          className="text-[#dbdce1]"
           sx={{
             background: 'transparent',
             border: `1px solid #EF4444`,
@@ -471,12 +496,16 @@ function DashboardSidebar({ user, onSignOut }: { user: DashboardUser; onSignOut:
               transform: 'translateY(-2px)'
             },
             transition: 'all 0.3s ease',
-            width: '100%',
-            py: 1.5
+            width: { xs: 'auto', md: '100%' },
+            py: { xs: 1, md: 1.5 },
+            px: { xs: 1.5, md: 2 },
+            fontSize: { xs: '0.75rem', md: '0.875rem' },
+            flex: { xs: '1', md: 'none' },
+            minWidth: { xs: '80px', md: 'auto' }
           }}
-          startIcon={<LogOut size={18} />}
+          startIcon={<LogOut size={16} />}
         >
-          Sign Out
+          <MDBox sx={{ display: { xs: 'none', sm: 'inline' } }}>Sign </MDBox>Out
         </MDButton>
       </MDBox>
 
