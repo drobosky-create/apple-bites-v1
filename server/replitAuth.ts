@@ -124,6 +124,12 @@ export async function setupAuth(app: Express) {
         return `replitauth:${domain}`;
       }
     }
+    
+    // For development, try to match replit.dev domains or use localhost
+    if (hostname.includes('replit.dev') || hostname.includes('replit-dev') || hostname.includes('kirk.replit.dev')) {
+      return `replitauth:${allDomains[0]}`;
+    }
+    
     // Fallback to first configured domain
     return `replitauth:${allDomains[0]}`;
   };
