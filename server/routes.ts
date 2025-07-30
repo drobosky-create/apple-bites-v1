@@ -49,58 +49,46 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Setup Simple Auth
   setupSimpleAuth(app);
 
-  // Google OAuth via Replit Auth
-  app.get('/api/auth/google', (req, res) => {
-    // Redirect to Replit's OAuth service for Google authentication
-    const replitAuthUrl = `https://replit.com/auth/google?redirect=${encodeURIComponent(`${req.protocol}://${req.get('host')}/api/auth/google/callback`)}`;
-    res.redirect(replitAuthUrl);
-  });
+  // OAuth routes for multiple providers
+  const createOAuthRoute = (provider: string) => {
+    app.get(`/api/auth/${provider}`, (req, res) => {
+      const replitAuthUrl = `https://replit.com/auth/${provider}?redirect=${encodeURIComponent(`${req.protocol}://${req.get('host')}/api/auth/${provider}/callback`)}`;
+      res.redirect(replitAuthUrl);
+    });
 
-  // Google OAuth callback
-  app.get('/api/auth/google/callback', async (req, res) => {
-    try {
-      const { token } = req.query;
-      
-      if (!token) {
-        return res.redirect('/login?error=oauth_failed');
+    app.get(`/api/auth/${provider}/callback`, async (req, res) => {
+      try {
+        const { token, user } = req.query;
+        
+        if (!token) {
+          return res.redirect('/login?error=oauth_failed');
+        }
+
+        // Create session for authenticated users
+        if (req.session) {
+          (req.session as any).isAuthenticated = true;
+          (req.session as any).user = {
+            id: `${provider}-${Date.now()}`,
+            email: user || `user@${provider}.com`,
+            firstName: "Business",
+            lastName: "Owner",
+            tier: "free",
+            authProvider: provider
+          };
+        }
+        
+        res.redirect('/dashboard');
+      } catch (error) {
+        console.error(`${provider} OAuth callback error:`, error);
+        res.redirect('/login?error=oauth_failed');
       }
+    });
+  };
 
-      // In a real implementation, you would verify the token with Replit
-      // For now, create a session for OAuth users
-      if (req.session) {
-        (req.session as any).isAuthenticated = true;
-        (req.session as any).user = {
-          id: `oauth-${Date.now()}`,
-          email: "oauth@example.com", 
-          firstName: "OAuth",
-          lastName: "User",
-          tier: "free",
-          authProvider: "google"
-        };
-      }
-      
-      res.redirect('/dashboard');
-    } catch (error) {
-      console.error('OAuth callback error:', error);
-      res.redirect('/login?error=oauth_failed');
-    }
-  });
-
-  // Demo authentication endpoint
-  app.post('/api/auth/demo', (req, res) => {
-    if (req.session) {
-      (req.session as any).isAuthenticated = true;
-      (req.session as any).user = {
-        id: "demo-user",
-        email: "demo@applebites.ai",
-        firstName: "Demo",
-        lastName: "User",
-        tier: "free",
-        authProvider: "demo"
-      };
-    }
-    res.json({ message: "Demo login successful" });
-  });
+  // Create OAuth routes for supported providers
+  createOAuthRoute('google');
+  createOAuthRoute('github');  
+  createOAuthRoute('apple');
 
   // Custom user authentication middleware
   const isCustomUserAuthenticated = async (req: any, res: any, next: any) => {
