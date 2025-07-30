@@ -634,7 +634,7 @@ export default function StrategicReport({ results }: StrategicReportProps) {
       {/* Valuation Range Analysis - Interactive Scale */}
       <Card sx={{ mb: 4 }}>
         <CardContent sx={{ p: 4 }}>
-          <MDBox display="flex" alignItems="center" mb={1}>
+          <MDBox display="flex" alignItems="center" mb={-2}>
             <Calculator size={24} color="#0A1F44" style={{ marginRight: 12 }} />
             <MDTypography variant="h5" fontWeight="bold" color="dark">
               Strategic Valuation Range Analysis
@@ -645,7 +645,7 @@ export default function StrategicReport({ results }: StrategicReportProps) {
           <MDBox display="flex" gap={4} alignItems="flex-end" mb={1}>
             {/* Gauge Container */}
             <MDBox sx={{ flex: '0 0 600px', textAlign: 'center', transform: 'scale(1.15)' }}>
-              <svg width="100%" height="320" viewBox="0 0 800 300">
+              <svg width="100%" height="300" viewBox="0 0 800 150">
                 {/* Material Dashboard Gradient Definitions */}
                 <defs>
                   {/* Low Range - Red Material Gradient */}

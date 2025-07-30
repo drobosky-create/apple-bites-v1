@@ -31,6 +31,7 @@ export class GoHighLevelService {
     growthPurchase: string;
     growthResults: string;
     capitalPurchase: string;
+    n8nLead: string;
   };
   private baseUrl = 'https://services.leadconnectorhq.com';
 
@@ -48,7 +49,8 @@ export class GoHighLevelService {
       freeResults: process.env.GHL_WEBHOOK_FREE_RESULTS || 'https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhldFd0Z/webhook-trigger/dc1a8a7f-47ee-4c9a-b474-e1aeb21af3e3',
       growthPurchase: 'https://applebites.ai/api/webhook/growth-purchase', // Incoming webhook endpoint
       growthResults: process.env.GHL_WEBHOOK_GROWTH_RESULTS || 'https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhldFd0Z/webhook-trigger/016d7395-74cf-4bd0-9c13-263f55efe657',
-      capitalPurchase: process.env.GHL_WEBHOOK_CAPITAL_PURCHASE || 'https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhldFd0Z/webhook-trigger/3c15954e-9d4b-4fde-b064-8b47193d1fcb'
+      capitalPurchase: process.env.GHL_WEBHOOK_CAPITAL_PURCHASE || 'https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhldFd0Z/webhook-trigger/3c15954e-9d4b-4fde-b064-8b47193d1fcb',
+      n8nLead: 'https://drobosky.app.n8n.cloud/webhook-test/replit-lead'
     };
   }
 
@@ -185,7 +187,7 @@ export class GoHighLevelService {
     }
   }
 
-  async sendWebhook(data: any, webhookType: 'freeResults' | 'growthPurchase' | 'growthResults' | 'capitalPurchase' = 'freeResults'): Promise<boolean> {
+  async sendWebhook(data: any, webhookType: 'freeResults' | 'growthPurchase' | 'growthResults' | 'capitalPurchase' | 'n8nLead' = 'freeResults'): Promise<boolean> {
     try {
       const webhookUrl = this.webhookUrls[webhookType];
       const response = await fetch(webhookUrl, {
@@ -199,7 +201,7 @@ export class GoHighLevelService {
       console.log(`Webhook sent to ${webhookType} (${webhookUrl}):`, response.status);
       return response.ok;
     } catch (error) {
-      console.error(`Error sending webhook to GoHighLevel (${webhookType}):`, error);
+      console.error(`Error sending webhook to ${webhookType}:`, error);
       return false;
     }
   }
@@ -275,6 +277,44 @@ export class GoHighLevelService {
       return {
         contactCreated: false,
         webhookSent: false
+      };
+    }
+  }
+
+  // Send lead data to both GoHighLevel and n8n for comprehensive lead management
+  async sendLeadToAllSystems(leadData: any): Promise<{
+    ghlWebhookSent: boolean;
+    n8nWebhookSent: boolean;
+  }> {
+    try {
+      // Send to appropriate GoHighLevel webhook based on tier
+      let ghlWebhookType: 'freeResults' | 'growthResults' | 'capitalPurchase' = 'freeResults';
+      if (leadData.tier === 'growth' || leadData.tier === 'paid') {
+        ghlWebhookType = 'growthResults';
+      } else if (leadData.tier === 'capital') {
+        ghlWebhookType = 'capitalPurchase';
+      }
+      
+      // Send to both systems simultaneously
+      const [ghlResult, n8nResult] = await Promise.allSettled([
+        this.sendWebhook(leadData, ghlWebhookType),
+        this.sendWebhook(leadData, 'n8nLead')
+      ]);
+      
+      const ghlWebhookSent = ghlResult.status === 'fulfilled' && ghlResult.value;
+      const n8nWebhookSent = n8nResult.status === 'fulfilled' && n8nResult.value;
+      
+      console.log(`Lead sent - GHL: ${ghlWebhookSent}, n8n: ${n8nWebhookSent}`);
+      
+      return {
+        ghlWebhookSent,
+        n8nWebhookSent
+      };
+    } catch (error) {
+      console.error('Error sending lead to all systems:', error);
+      return {
+        ghlWebhookSent: false,
+        n8nWebhookSent: false
       };
     }
   }
@@ -394,12 +434,13 @@ export class GoHighLevelService {
         }
       };
 
-      const webhookSent = await this.sendWebhook(webhookData, webhookType);
+      // Send to both GoHighLevel and n8n for comprehensive lead management
+      const webhookResults = await this.sendLeadToAllSystems(webhookData);
 
       return {
         contactCreated: true,
         emailSent,
-        webhookSent
+        webhookSent: webhookResults.ghlWebhookSent || webhookResults.n8nWebhookSent // Consider success if either webhook succeeds
       };
 
     } catch (error) {
