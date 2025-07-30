@@ -66,14 +66,17 @@ app.use((req, res, next) => {
     throw err;
   });
 
+  // Serve static files from public directory in both environments
+  app.use(express.static('public'));
+  
   // importantly only setup vite in development and after
   // setting up all the other routes so the catch-all route
   // doesn't interfere with the other routes
   if (app.get("env") === "development") {
-    // Serve static files from public directory in development
-    app.use(express.static('public'));
     await setupVite(app, server);
   } else {
+    // Also serve the built static files in production
+    app.use(express.static('dist/public'));
     serveStatic(app);
   }
 
