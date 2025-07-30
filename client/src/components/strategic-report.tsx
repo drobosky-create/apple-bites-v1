@@ -768,7 +768,7 @@ export default function StrategicReport({ results }: StrategicReportProps) {
         </CardContent>
       </Card>
 
-      {/* Strategic Value Drivers Analysis - Circular Dashboard Layout */}
+      {/* Strategic Value Drivers Analysis - Professional Bar Chart Layout */}
       <Card sx={{ mb: 4 }}>
         <CardContent sx={{ p: 4 }}>
           <MDBox display="flex" alignItems="center" mb={4}>
@@ -778,141 +778,133 @@ export default function StrategicReport({ results }: StrategicReportProps) {
             </MDTypography>
           </MDBox>
           
-          {/* Circular Value Drivers Layout */}
-          <MDBox sx={{ position: 'relative', display: 'flex', justifyContent: 'center', mb: 4 }}>
-            {/* Central Score Circle */}
-            <MDBox
-              sx={{
-                position: 'relative',
-                width: '200px',
-                height: '200px',
-                borderRadius: '50%',
-                background: 'linear-gradient(135deg, #4caf50 0%, #81c784 100%)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexDirection: 'column',
-                boxShadow: '0 8px 32px rgba(76, 175, 80, 0.3)',
-                zIndex: 2
-              }}
-            >
-              <MDTypography variant="h3" fontWeight="bold" color="white" mb={1}>
-                {results.overallGrade || 'B+'}
-              </MDTypography>
-              <MDTypography variant="h6" color="white" textAlign="center">
-                Overall Grade
-              </MDTypography>
-              <MDTypography variant="body2" color="white" sx={{ opacity: 0.8 }} textAlign="center">
-                Strategic Position
-              </MDTypography>
-            </MDBox>
+          {/* Overall Grade Display */}
+          <MDBox textAlign="center" mb={4} p={3} sx={{ backgroundColor: '#f8f9fa', borderRadius: 2 }}>
+            <MDTypography variant="h2" fontWeight="bold" color="success" mb={1}>
+              {results.overallGrade || 'B+'}
+            </MDTypography>
+            <MDTypography variant="h6" color="dark" mb={1}>
+              Overall Strategic Grade
+            </MDTypography>
+            <MDTypography variant="body2" color="textSecondary">
+              Based on comprehensive analysis of 11 key value drivers
+            </MDTypography>
+          </MDBox>
 
-            {/* Orbiting Value Driver Cards */}
+          {/* Value Drivers Progress Bar Layout */}
+          <MDBox>
             {(() => {
               const drivers = [
-                { name: 'Financial Performance', grade: results.financialPerformance || 'B', color: '#2196f3', angle: 0 },
-                { name: 'Recurring Revenue', grade: results.recurringRevenue || 'A', color: '#4caf50', angle: 45 },
-                { name: 'Growth Prospects', grade: results.growthProspects || 'B', color: '#ff9800', angle: 90 },
-                { name: 'Management Team', grade: results.managementTeam || 'A', color: '#9c27b0', angle: 135 },
-                { name: 'Competitive Position', grade: results.competitivePosition || 'B', color: '#f44336', angle: 180 },
-                { name: 'Customer Base', grade: results.customerConcentration || 'C', color: '#607d8b', angle: 225 },
-                { name: 'Systems/Processes', grade: results.systemsProcesses || 'B', color: '#795548', angle: 270 },
-                { name: 'Owner Dependency', grade: results.ownerDependency || 'C', color: '#e91e63', angle: 315 }
+                { name: 'Financial Performance', grade: results.financialPerformance || 'B', score: 80 },
+                { name: 'Recurring Revenue', grade: results.recurringRevenue || 'A', score: 90 },
+                { name: 'Management Team', grade: results.managementTeam || 'A', score: 85 },
+                { name: 'Growth Prospects', grade: results.growthProspects || 'B', score: 75 },
+                { name: 'Competitive Position', grade: results.competitivePosition || 'B', score: 78 },
+                { name: 'Systems & Processes', grade: results.systemsProcesses || 'B', score: 72 },
+                { name: 'Customer Concentration', grade: results.customerConcentration || 'C', score: 65 },
+                { name: 'Owner Dependency', grade: results.ownerDependency || 'C', score: 60 }
               ];
 
-              const radius = 180;
-              
-              return drivers.map((driver, index) => {
-                const angleRad = (driver.angle * Math.PI) / 180;
-                const x = Math.cos(angleRad) * radius;
-                const y = Math.sin(angleRad) * radius;
-                
-                return (
-                  <MDBox
-                    key={index}
-                    sx={{
-                      position: 'absolute',
-                      left: '50%',
-                      top: '50%',
-                      transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`,
-                      width: '90px',
-                      height: '90px',
-                      borderRadius: '50%',
-                      backgroundColor: 'white',
-                      border: `3px solid ${driver.color}`,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      flexDirection: 'column',
-                      boxShadow: '0 4px 16px rgba(0,0,0,0.15)',
-                      cursor: 'pointer',
-                      transition: 'all 0.3s ease',
-                      '&:hover': {
-                        transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) scale(1.1)`,
-                        boxShadow: `0 6px 24px ${driver.color}40`
-                      }
-                    }}
-                  >
-                    <MDTypography variant="h5" fontWeight="bold" sx={{ color: driver.color }}>
-                      {driver.grade}
-                    </MDTypography>
-                    <MDTypography variant="caption" textAlign="center" sx={{ fontSize: '0.65rem', lineHeight: 1, mt: 0.5 }}>
+              const getGradeColor = (grade: string) => {
+                switch (grade) {
+                  case 'A': return '#4caf50';
+                  case 'B': return '#2196f3';
+                  case 'C': return '#ff9800';
+                  case 'D': return '#f44336';
+                  case 'F': return '#9e9e9e';
+                  default: return '#2196f3';
+                }
+              };
+
+              return drivers.map((driver, index) => (
+                <MDBox key={index} mb={3}>
+                  <MDBox display="flex" justifyContent="space-between" alignItems="center" mb={1}>
+                    <MDTypography variant="body1" fontWeight="medium" color="dark">
                       {driver.name}
                     </MDTypography>
+                    <MDBox display="flex" alignItems="center" gap={2}>
+                      <MDTypography variant="body2" color="textSecondary">
+                        {driver.score}%
+                      </MDTypography>
+                      <MDBox
+                        sx={{
+                          width: '40px',
+                          height: '32px',
+                          borderRadius: '6px',
+                          backgroundColor: getGradeColor(driver.grade),
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center'
+                        }}
+                      >
+                        <MDTypography variant="body2" fontWeight="bold" color="white">
+                          {driver.grade}
+                        </MDTypography>
+                      </MDBox>
+                    </MDBox>
                   </MDBox>
-                );
-              });
+                  <MDBox
+                    sx={{
+                      width: '100%',
+                      height: '12px',
+                      backgroundColor: '#e0e0e0',
+                      borderRadius: '6px',
+                      overflow: 'hidden'
+                    }}
+                  >
+                    <MDBox
+                      sx={{
+                        width: `${driver.score}%`,
+                        height: '100%',
+                        backgroundColor: getGradeColor(driver.grade),
+                        borderRadius: '6px',
+                        transition: 'width 0.6s ease-in-out'
+                      }}
+                    />
+                  </MDBox>
+                </MDBox>
+              ));
             })()}
           </MDBox>
 
-          {/* Performance Summary Cards */}
-          <MDBox display="flex" gap={2} mt={6} mb={4}>
-            <MDBox flex={1} p={3} sx={{ backgroundColor: '#e3f2fd', borderRadius: 2, textAlign: 'center' }}>
-              <MDTypography variant="h6" fontWeight="bold" color="primary" mb={1}>
-                Strengths: 4
+          {/* Key Metrics Summary */}
+          <MDBox display="flex" gap={3} mt={4} mb={4}>
+            <MDBox flex={1} p={3} sx={{ backgroundColor: '#e8f5e8', borderRadius: 2, textAlign: 'center' }}>
+              <MDTypography variant="h5" fontWeight="bold" color="success" mb={1}>
+                {results.valuationMultiple || '4.2'}x
               </MDTypography>
               <MDTypography variant="body2" color="textSecondary">
-                Key competitive advantages identified
+                EBITDA Multiple
+              </MDTypography>
+            </MDBox>
+            <MDBox flex={1} p={3} sx={{ backgroundColor: '#e3f2fd', borderRadius: 2, textAlign: 'center' }}>
+              <MDTypography variant="h5" fontWeight="bold" color="primary" mb={1}>
+                4
+              </MDTypography>
+              <MDTypography variant="body2" color="textSecondary">
+                Key Strengths
               </MDTypography>
             </MDBox>
             <MDBox flex={1} p={3} sx={{ backgroundColor: '#fff3e0', borderRadius: 2, textAlign: 'center' }}>
-              <MDTypography variant="h6" fontWeight="bold" color="warning" mb={1}>
-                Opportunities: 4
+              <MDTypography variant="h5" fontWeight="bold" color="warning" mb={1}>
+                4
               </MDTypography>
               <MDTypography variant="body2" color="textSecondary">
-                Areas for strategic improvement
-              </MDTypography>
-            </MDBox>
-            <MDBox flex={1} p={3} sx={{ backgroundColor: '#e8f5e8', borderRadius: 2, textAlign: 'center' }}>
-              <MDTypography variant="h6" fontWeight="bold" color="success" mb={1}>
-                Value Multiple: {results.valuationMultiple || '4.2'}x
-              </MDTypography>
-              <MDTypography variant="body2" color="textSecondary">
-                Industry-adjusted EBITDA multiple
+                Improvement Areas
               </MDTypography>
             </MDBox>
           </MDBox>
 
-          {/* Strategic Insights */}
-          <MDBox p={4} sx={{ 
-            background: 'linear-gradient(135deg, #0b2147 0%, #1e293b 100%)', 
-            borderRadius: 3, 
-            color: 'white',
-            textAlign: 'center'
-          }}>
-            <MDTypography variant="h6" fontWeight="bold" mb={2} sx={{ color: 'rgba(255,255,255,0.9)' }}>
+          {/* Strategic Summary */}
+          <MDBox p={3} sx={{ backgroundColor: '#f5f5f5', borderRadius: 2 }}>
+            <MDTypography variant="h6" fontWeight="bold" color="dark" mb={2}>
               Strategic Assessment Summary
             </MDTypography>
-            <MDTypography variant="body1" sx={{ color: 'rgba(255,255,255,0.8)', lineHeight: 1.6, maxWidth: '800px', mx: 'auto' }}>
-              Your business demonstrates strong foundational elements with a B+ overall grade. Key strengths include 
-              recurring revenue streams and experienced management, while opportunities exist in reducing owner dependency 
-              and enhancing operational systems. This profile positions your business for strategic growth and value optimization.
+            <MDTypography variant="body2" color="text" sx={{ lineHeight: 1.6 }}>
+              Your business demonstrates solid fundamentals with particularly strong performance in recurring revenue and 
+              management capabilities. Primary opportunities for value enhancement focus on reducing owner dependency 
+              and strengthening customer diversification strategies.
             </MDTypography>
-            <MDBox mt={3}>
-              <MDTypography variant="body2" sx={{ color: 'rgba(255,255,255,0.6)' }}>
-                Assessment based on 25-question strategic evaluation across 11 key value drivers
-              </MDTypography>
-            </MDBox>
           </MDBox>
         </CardContent>
       </Card>
