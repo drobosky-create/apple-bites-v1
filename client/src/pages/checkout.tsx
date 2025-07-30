@@ -95,16 +95,16 @@ export default function Checkout() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  // Get tier from URL params
+  // Get tier and priceId from URL params
   const urlParams = new URLSearchParams(window.location.search);
   const tier = urlParams.get('tier') || 'growth';
-  const amount = tier === 'growth' ? 79500 : 199500; // In cents
+  const priceId = urlParams.get('priceId') || '';
 
   useEffect(() => {
     // Create PaymentIntent when component loads
     apiRequest('POST', '/api/create-payment-intent', { 
       tier,
-      amount: amount / 100, // Convert back to dollars for API
+      priceId,
     })
       .then((response) => response.json())
       .then((data) => {
@@ -121,7 +121,7 @@ export default function Checkout() {
       .finally(() => {
         setLoading(false);
       });
-  }, [tier, amount]);
+  }, [tier, priceId]);
 
   if (!import.meta.env.VITE_STRIPE_PUBLIC_KEY) {
     return (
@@ -176,10 +176,11 @@ export default function Checkout() {
               style={{ height: 60, marginBottom: 16 }}
             />
             <MDTypography variant="h4" fontWeight="bold" gutterBottom>
-              {tier === 'growth' ? 'Growth & Exit Assessment' : 'Capital Readiness Assessment'}
+              {tier === 'growth' ? 'Growth & Exit Assessment' : 
+               tier === 'capital' ? 'Capital Market Positioning Plan' : 'Assessment'}
             </MDTypography>
-            <MDTypography variant="h5" color="info">
-              ${(amount / 100).toLocaleString()}
+            <MDTypography variant="h6" color="text" sx={{ opacity: 0.7 }}>
+              Secure checkout powered by Stripe
             </MDTypography>
           </MDBox>
 

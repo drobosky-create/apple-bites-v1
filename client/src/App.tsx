@@ -1,5 +1,5 @@
+import React, { lazy, Suspense } from "react";
 import { Switch, Route } from "wouter";
-import { lazy } from "react";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import MaterialWrapper from "@/components/MaterialWrapper";
@@ -52,8 +52,16 @@ function Router() {
         {/* Legal pages - always accessible */}
         <Route path="/privacy-policy" component={PrivacyPolicy} />
         <Route path="/terms-of-use" component={TermsOfUse} />
-        <Route path="/pricing" component={PricingPage} />
-        <Route path="/checkout" component={lazy(() => import("./pages/checkout"))} />
+        <Route path="/pricing">
+          <Suspense fallback={<div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', background: 'linear-gradient(135deg, #0A1F44 0%, #1B2C4F 100%)' }}>Loading...</div>}>
+            {React.createElement(lazy(() => import("./pages/dynamic-pricing")))}
+          </Suspense>
+        </Route>
+        <Route path="/checkout">
+          <Suspense fallback={<div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', background: 'linear-gradient(135deg, #0A1F44 0%, #1B2C4F 100%)' }}>Loading...</div>}>
+            {React.createElement(lazy(() => import("./pages/checkout")))}
+          </Suspense>
+        </Route>
         
         {/* Protected routes - redirect to login if not authenticated */}
         <Route path="/">

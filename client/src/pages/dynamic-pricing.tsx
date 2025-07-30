@@ -92,16 +92,20 @@ export default function DynamicPricingPage() {
 
   const products: StripeProduct[] = productsData?.products || [];
 
-  // Map products to tiers
+  // Map products to tiers using your specific product names
   const getProductByTier = (tierName: string) => {
-    return products.find(p => 
-      p.name.toLowerCase().includes(tierName.toLowerCase()) ||
-      p.description?.toLowerCase().includes(tierName.toLowerCase())
-    );
+    if (tierName === 'growth') {
+      return products.find(p => p.name.includes('Growth & Exit'));
+    }
+    if (tierName === 'capital') {
+      return products.find(p => p.name.includes('Capital Market Positioning'));
+    }
+    return null;
   };
 
   const growthProduct = getProductByTier('growth');
   const capitalProduct = getProductByTier('capital');
+  const basicProduct = products.find(p => p.name.includes('Basic Assessment'));
 
   const plans = [
     {
@@ -139,9 +143,9 @@ export default function DynamicPricingPage() {
       popular: true,
     },
     {
-      name: 'Capital Readiness Assessment',
+      name: 'Capital Market Positioning Plan',
       price: capitalProduct?.price ? `$${(capitalProduct.price.amount / 100).toLocaleString()}` : '$1,995',
-      description: 'Premium solution for investment readiness and capital raising',
+      description: 'Premium solution for capital market positioning and investment readiness',
       features: [
         'Everything in Growth & Exit Assessment',
         'Investment readiness scoring',
