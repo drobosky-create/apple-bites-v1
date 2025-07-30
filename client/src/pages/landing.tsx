@@ -25,41 +25,67 @@ export default function LandingPage() {
         display: 'flex', 
         justifyContent: 'space-between', 
         alignItems: 'center',
-        borderBottom: '1px solid #e0e0e0'
+        background: 'linear-gradient(135deg, #0A1F44 0%, #1B2C4F 100%)',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
       }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
           <img src="/apple-bites-logo.png" alt="Apple Bites" style={{ height: 50 }} />
-          <Typography variant="h5" sx={{ color: '#333', fontWeight: 'bold' }}>
-            APPLE BITES BUSINESS VALUATION MARKETPLACE
+          <Typography variant="h5" sx={{ color: 'white', fontWeight: 'bold' }}>
+            Apple Bites
           </Typography>
         </Box>
-        <Box sx={{ display: 'flex', gap: 3 }}>
+        <Box sx={{ display: 'flex', gap: 3, alignItems: 'center' }}>
+          <Link href="#features">
+            <Typography variant="body1" sx={{ 
+              color: 'white', 
+              cursor: 'pointer',
+              opacity: 0.9,
+              '&:hover': { opacity: 1, color: '#17a2b8' }
+            }}>
+              Features
+            </Typography>
+          </Link>
+          <Link href="#pricing">
+            <Typography variant="body1" sx={{ 
+              color: 'white', 
+              cursor: 'pointer',
+              opacity: 0.9,
+              '&:hover': { opacity: 1, color: '#17a2b8' }
+            }}>
+              Pricing
+            </Typography>
+          </Link>
+          <Link href="#about">
+            <Typography variant="body1" sx={{ 
+              color: 'white', 
+              cursor: 'pointer',
+              opacity: 0.9,
+              '&:hover': { opacity: 1, color: '#17a2b8' }
+            }}>
+              About
+            </Typography>
+          </Link>
           <Link href="/login">
-            <Typography variant="body1" sx={{ 
-              color: '#333', 
-              cursor: 'pointer',
-              '&:hover': { color: '#007bff' }
-            }}>
-              Valuation Form
-            </Typography>
+            <Button variant="outlined" sx={{ 
+              color: 'white', 
+              borderColor: 'rgba(255,255,255,0.5)',
+              '&:hover': { 
+                borderColor: 'white',
+                background: 'rgba(255,255,255,0.1)'
+              }
+            }} size="small">
+              Sign In
+            </Button>
           </Link>
-          <Link href="/team">
-            <Typography variant="body1" sx={{ 
-              color: '#333', 
-              cursor: 'pointer',
-              '&:hover': { color: '#007bff' }
-            }}>
-              Admin Login
-            </Typography>
-          </Link>
-          <Link href="/pricing">
-            <Typography variant="body1" sx={{ 
-              color: '#333', 
-              cursor: 'pointer',
-              '&:hover': { color: '#007bff' }
-            }}>
-              Shop
-            </Typography>
+          <Link href="/signup">
+            <Button variant="contained" sx={{ 
+              background: 'linear-gradient(45deg, #17a2b8, #007bff)',
+              '&:hover': {
+                background: 'linear-gradient(45deg, #138496, #0056b3)'
+              }
+            }} size="small">
+              Get Started
+            </Button>
           </Link>
         </Box>
       </Box>
@@ -95,7 +121,7 @@ export default function LandingPage() {
       </Container>
 
       {/* Pricing Section */}
-      <Box sx={{ py: 8, background: '#f8f9fa' }}>
+      <Box id="pricing" sx={{ py: 8, background: '#f8f9fa' }}>
         <Container maxWidth="lg">
           <Typography variant="h2" sx={{ 
             color: '#333', 
@@ -347,7 +373,7 @@ export default function LandingPage() {
       </Box>
 
       {/* What is Apple Bites Section */}
-      <Container maxWidth="lg" sx={{ py: 8 }}>
+      <Container id="about" maxWidth="lg" sx={{ py: 8 }}>
         <Typography variant="h2" sx={{ 
           color: '#333', 
           textAlign: 'center', 
@@ -419,6 +445,101 @@ export default function LandingPage() {
           </Typography>
         </Box>
       </Container>
+
+      {/* Features Section */}
+      <Box id="features" sx={{ py: 8, background: '#f8f9fa' }}>
+        <Container maxWidth="lg">
+          <Typography variant="h2" sx={{ 
+            color: '#333', 
+            textAlign: 'center', 
+            fontWeight: 'bold', 
+            mb: 6,
+            fontSize: '2.5rem'
+          }}>
+            Platform Features
+          </Typography>
+          
+          <Grid container spacing={4}>
+            <Grid item xs={12} md={4}>
+              <Box sx={{ textAlign: 'center', p: 3 }}>
+                <Box sx={{
+                  width: 80,
+                  height: 80,
+                  borderRadius: '50%',
+                  background: 'linear-gradient(45deg, #17a2b8, #007bff)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  mx: 'auto',
+                  mb: 3
+                }}>
+                  <Typography variant="h4" sx={{ color: 'white', fontWeight: 'bold' }}>
+                    AI
+                  </Typography>
+                </Box>
+                <Typography variant="h5" sx={{ color: '#333', fontWeight: 'bold', mb: 2 }}>
+                  AI-Powered Analysis
+                </Typography>
+                <Typography variant="body1" sx={{ color: '#666', lineHeight: 1.6 }}>
+                  Advanced artificial intelligence analyzes your business data and provides accurate valuation insights based on industry-specific factors.
+                </Typography>
+              </Box>
+            </Grid>
+            
+            <Grid item xs={12} md={4}>
+              <Box sx={{ textAlign: 'center', p: 3 }}>
+                <Box sx={{
+                  width: 80,
+                  height: 80,
+                  borderRadius: '50%',
+                  background: 'linear-gradient(45deg, #28a745, #20c997)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  mx: 'auto',
+                  mb: 3
+                }}>
+                  <Typography variant="h4" sx={{ color: 'white', fontWeight: 'bold' }}>
+                    10
+                  </Typography>
+                </Box>
+                <Typography variant="h5" sx={{ color: '#333', fontWeight: 'bold', mb: 2 }}>
+                  Value Drivers
+                </Typography>
+                <Typography variant="body1" sx={{ color: '#666', lineHeight: 1.6 }}>
+                  Comprehensive assessment of 10 key business value drivers that directly impact your company's market valuation.
+                </Typography>
+              </Box>
+            </Grid>
+            
+            <Grid item xs={12} md={4}>
+              <Box sx={{ textAlign: 'center', p: 3 }}>
+                <Box sx={{
+                  width: 80,
+                  height: 80,
+                  borderRadius: '50%',
+                  background: 'linear-gradient(45deg, #ffc107, #fd7e14)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  mx: 'auto',
+                  mb: 3
+                }}>
+                  <Typography variant="h4" sx={{ color: 'white', fontWeight: 'bold' }}>
+                    5min
+                  </Typography>
+                </Box>
+                <Typography variant="h5" sx={{ color: '#333', fontWeight: 'bold', mb: 2 }}>
+                  Quick Assessment
+                </Typography>
+                <Typography variant="body1" sx={{ color: '#666', lineHeight: 1.6 }}>
+                  Get professional business valuation results in just 5 minutes with our streamlined assessment process.
+                </Typography>
+              </Box>
+            </Grid>
+          </Grid>
+        </Container>
+      </Box>
 
       {/* Footer */}
       <Box sx={{ py: 6, background: '#f8f9fa', borderTop: '1px solid #e0e0e0' }}>
