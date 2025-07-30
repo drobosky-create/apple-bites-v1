@@ -237,10 +237,10 @@ function DashboardSidebar({ user }: { user: { name: string; email: string; tier:
 
   const getTierGradient = (tier: string) => {
     switch (tier) {
-      case 'free': return 'linear-gradient(135deg, #CBD5E1 0%, #94A3B8 100%)';
-      case 'growth': return gradients.primary;
-      case 'capital': return gradients.glow;
-      default: return 'linear-gradient(135deg, #CBD5E1 0%, #94A3B8 100%)';
+      case 'free': return '#94A3B8';
+      case 'growth': return '#00718d';
+      case 'capital': return '#3B82F6';
+      default: return '#94A3B8';
     }
   };
 
