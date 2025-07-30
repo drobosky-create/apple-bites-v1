@@ -5,6 +5,7 @@ import MDBox from '@/components/MD/MDBox';
 import MDTypography from '@/components/MD/MDTypography';
 import MDButton from '@/components/MD/MDButton';
 import MDAvatar from '@/components/MD/MDAvatar';
+import MobileDashboard from '@/components/MobileDashboard';
 import { 
   User, 
   FileText, 
@@ -23,6 +24,7 @@ import {
 } from 'lucide-react';
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, Typography, Chip } from '@mui/material';
+import { useTheme, useMediaQuery } from '@mui/material';
 
 interface DashboardUser {
   name: string;
@@ -41,10 +43,12 @@ const mockUser: DashboardUser = {
   lastName: 'User'
 };
 
-// Simple Mobile-First Dashboard
+// Responsive Dashboard with Mobile/Desktop Views
 export default function Dashboard() {
   const { user, isAuthenticated } = useAuth();
   const queryClient = useQueryClient();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   
   // Use actual user data or fallback to mock for testing
   const displayUser = (user as DashboardUser) || mockUser;
@@ -62,7 +66,12 @@ export default function Dashboard() {
     }
   };
 
-  // Apple Bites Brand Colors
+  // Return mobile version for small screens
+  if (isMobile) {
+    return <MobileDashboard user={displayUser} onSignOut={handleSignOut} />;
+  }
+
+  // Desktop version with clean layout (no problematic sidebar)
   const colors = {
     primary: "#00718d",
     secondary: "#0A1F44", 
@@ -72,7 +81,6 @@ export default function Dashboard() {
 
   const gradients = {
     primary: "linear-gradient(135deg, #00718d 0%, #0A1F44 100%)",
-    light: "linear-gradient(135deg, #00718d 0%, #005b8c 100%)",
     glow: "linear-gradient(135deg, #00718d 0%, #3B82F6 100%)"
   };
 
@@ -94,77 +102,108 @@ export default function Dashboard() {
     }
   };
 
+  // Desktop Layout
   return (
     <MDBox sx={{ 
       minHeight: '100vh',
       backgroundColor: '#f8f9fa',
-      padding: { xs: 1, md: 4 }
+      padding: 4
     }}>
-      {/* Mobile-First Header */}
+      {/* Desktop Header */}
       <MDBox
         sx={{
           background: 'linear-gradient(135deg, #0A1F44 0%, #1C2D5A 100%)',
-          borderRadius: { xs: 2, md: 3 },
-          padding: { xs: 2, md: 3 },
-          mb: 3,
+          borderRadius: 3,
+          padding: 3,
+          mb: 4,
           color: 'white'
         }}
       >
-        <MDBox display="flex" alignItems="center" justifyContent="space-between" mb={2}>
+        <MDBox display="flex" alignItems="center" justifyContent="space-between" mb={3}>
           <MDBox display="flex" alignItems="center">
             <MDAvatar
               sx={{
                 background: gradients.glow,
-                width: { xs: 40, md: 48 },
-                height: { xs: 40, md: 48 },
-                mr: 2
+                width: 56,
+                height: 56,
+                mr: 3
               }}
             >
-              <User size={20} color="white" />
+              <User size={24} color="white" />
             </MDAvatar>
             <MDBox>
-              <MDTypography variant="h6" fontWeight="medium" sx={{ color: 'white', fontSize: { xs: '1rem', md: '1.25rem' } }}>
-                {displayUser.name}
+              <MDTypography variant="h4" fontWeight="medium" sx={{ color: 'white' }}>
+                Welcome back, {displayUser.name.split(' ')[0]}
               </MDTypography>
-              <MDTypography variant="caption" sx={{ color: '#81e5d8', display: { xs: 'none', md: 'block' } }}>
+              <MDTypography variant="body1" sx={{ color: '#81e5d8' }}>
                 {displayUser.email}
               </MDTypography>
             </MDBox>
           </MDBox>
           
-          <MDBox
-            sx={{
-              background: getTierGradient(displayUser.tier),
-              color: 'white',
-              px: 2,
-              py: 0.5,
-              borderRadius: 2,
-              fontSize: { xs: '0.65rem', md: '0.75rem' },
-              fontWeight: 600,
-              textTransform: 'uppercase',
-              letterSpacing: '0.5px'
-            }}
-          >
-            {getTierLabel(displayUser.tier)}
+          <MDBox display="flex" alignItems="center" gap={2}>
+            <MDBox
+              sx={{
+                background: getTierGradient(displayUser.tier),
+                color: 'white',
+                px: 3,
+                py: 1,
+                borderRadius: 3,
+                fontSize: '0.875rem',
+                fontWeight: 600,
+                textTransform: 'uppercase',
+                letterSpacing: '0.5px'
+              }}
+            >
+              {getTierLabel(displayUser.tier)} Plan
+            </MDBox>
+            
+            <MDButton
+              onClick={handleSignOut}
+              sx={{
+                background: 'transparent',
+                border: `1px solid #EF4444`,
+                color: '#EF4444',
+                py: 1,
+                px: 2
+              }}
+              startIcon={<LogOut size={18} />}
+            >
+              Sign Out
+            </MDButton>
           </MDBox>
         </MDBox>
 
-        {/* Navigation Buttons */}
-        <MDBox display="flex" gap={1} flexWrap="wrap">
+        {/* Desktop Navigation */}
+        <MDBox display="flex" gap={2}>
           <Link href="/assessment/free">
             <MDButton
               sx={{
                 background: gradients.glow,
                 color: 'white',
-                py: { xs: 1, md: 1.5 },
-                px: { xs: 1.5, md: 2 },
-                fontSize: { xs: '0.75rem', md: '0.875rem' },
-                flex: { xs: '1', md: 'none' },
-                minWidth: { xs: '100px', md: 'auto' }
+                py: 1.5,
+                px: 3,
+                fontSize: '1rem'
               }}
-              startIcon={<Plus size={16} />}
+              startIcon={<Plus size={18} />}
             >
               New Assessment
+            </MDButton>
+          </Link>
+
+          <Link href="/past-assessments">
+            <MDButton
+              sx={{
+                background: 'transparent',
+                border: `1px solid rgba(255, 255, 255, 0.3)`,
+                color: '#dbdce1',
+                py: 1.5,
+                px: 3,
+                fontSize: '1rem'
+              }}
+              startIcon={<Clock size={18} />}
+            >
+              Assessment History
             </MDButton>
           </Link>
 
@@ -174,99 +213,90 @@ export default function Dashboard() {
                 background: 'transparent',
                 border: `1px solid ${colors.accent}`,
                 color: colors.accent,
-                py: { xs: 1, md: 1.5 },
-                px: { xs: 1.5, md: 2 },
-                fontSize: { xs: '0.75rem', md: '0.875rem' },
-                flex: { xs: '1', md: 'none' },
-                minWidth: { xs: '100px', md: 'auto' }
+                py: 1.5,
+                px: 3,
+                fontSize: '1rem'
               }}
-              startIcon={<Crown size={16} />}
+              startIcon={<Crown size={18} />}
               onClick={() => window.location.href = '/pricing'}
             >
-              Upgrade
+              Upgrade Plan
             </MDButton>
           )}
 
-          <Link href="/past-assessments">
-            <MDButton
-              sx={{
-                background: 'transparent',
-                border: `1px solid rgba(255, 255, 255, 0.3)`,
-                color: '#dbdce1',
-                py: { xs: 1, md: 1.5 },
-                px: { xs: 1.5, md: 2 },
-                fontSize: { xs: '0.75rem', md: '0.875rem' },
-                flex: { xs: '1', md: 'none' },
-                minWidth: { xs: '80px', md: 'auto' },
-                display: { xs: 'none', sm: 'flex' }
-              }}
-              startIcon={<Clock size={16} />}
-            >
-              History
-            </MDButton>
-          </Link>
-
-          <MDButton
-            onClick={handleSignOut}
-            sx={{
-              background: 'transparent',
-              border: `1px solid #EF4444`,
-              color: '#EF4444',
-              py: { xs: 1, md: 1.5 },
-              px: { xs: 1.5, md: 2 },
-              fontSize: { xs: '0.75rem', md: '0.875rem' },
-              minWidth: { xs: '60px', md: 'auto' }
-            }}
-            startIcon={<LogOut size={16} />}
-          >
-            <MDBox sx={{ display: { xs: 'none', sm: 'inline' } }}>Sign </MDBox>Out
-          </MDButton>
+          {displayUser.tier !== 'free' && (
+            <Link href="/value-calculator">
+              <MDButton
+                sx={{
+                  background: 'transparent',
+                  border: `1px solid #4caf50`,
+                  color: '#4caf50',
+                  py: 1.5,
+                  px: 3,
+                  fontSize: '1rem'
+                }}
+                startIcon={<TrendingUp size={18} />}
+              >
+                Value Calculator
+              </MDButton>
+            </Link>
+          )}
         </MDBox>
       </MDBox>
 
-      {/* Main Content */}
-      <MDBox display="grid" gridTemplateColumns={{ xs: '1fr', md: 'repeat(2, 1fr)' }} gap={3}>
+      {/* Main Desktop Content Grid */}
+      <MDBox display="grid" gridTemplateColumns="repeat(3, 1fr)" gap={4}>
         {/* New Assessment Card */}
         <MDBox
           sx={{
             backgroundColor: 'white',
-            borderRadius: 2,
-            padding: 3,
-            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+            borderRadius: 3,
+            padding: 4,
+            boxShadow: '0 8px 16px rgba(0, 0, 0, 0.1)',
             display: 'flex',
             flexDirection: 'column',
-            minHeight: 200
+            minHeight: 280,
+            border: '1px solid #e3e6ea'
           }}
         >
-          <MDBox display="flex" alignItems="center" mb={2}>
+          <MDBox display="flex" alignItems="center" mb={3}>
             <MDBox
               sx={{
                 backgroundColor: '#e3f2fd',
                 borderRadius: '50%',
-                width: 48,
-                height: 48,
+                width: 64,
+                height: 64,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                mr: 2
+                mr: 3
               }}
             >
-              <FileText size={24} color={colors.primary} />
+              <FileText size={32} color={colors.primary} />
             </MDBox>
-            <MDTypography variant="h6" fontWeight="medium">
-              New Assessment
-            </MDTypography>
+            <MDBox>
+              <MDTypography variant="h5" fontWeight="medium" mb={1}>
+                New Assessment
+              </MDTypography>
+              <MDTypography variant="body2" color="text">
+                Start fresh valuation
+              </MDTypography>
+            </MDBox>
           </MDBox>
+          
           <MDBox flexGrow={1}>
-            <MDTypography variant="body2" color="text" mb={3}>
-              Create a new business valuation assessment to get insights into your company's worth.
+            <MDTypography variant="body1" color="text" mb={4}>
+              Create a comprehensive business valuation assessment to understand your company's current worth and growth potential.
             </MDTypography>
           </MDBox>
+          
           <Link href="/assessment/free">
             <MDButton 
               sx={{
                 background: gradients.primary,
                 color: 'white',
+                py: 1.5,
+                fontSize: '1rem',
                 '&:hover': {
                   background: gradients.glow,
                   transform: 'translateY(-2px)'
@@ -280,81 +310,138 @@ export default function Dashboard() {
           </Link>
         </MDBox>
 
-        {/* Upgrade/Premium Features Card */}
+        {/* Premium Features/Upgrade Card */}
         <MDBox
           sx={{
             backgroundColor: 'white',
-            borderRadius: 2,
-            padding: 3,
-            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+            borderRadius: 3,
+            padding: 4,
+            boxShadow: '0 8px 16px rgba(0, 0, 0, 0.1)',
             display: 'flex',
             flexDirection: 'column',
-            minHeight: 200
+            minHeight: 280,
+            border: '1px solid #e3e6ea'
           }}
         >
-          <MDBox display="flex" alignItems="center" mb={2}>
+          <MDBox display="flex" alignItems="center" mb={3}>
             <MDBox
               sx={{
                 backgroundColor: displayUser.tier === 'free' ? '#fff3e0' : '#e8f5e8',
                 borderRadius: '50%',
-                width: 48,
-                height: 48,
+                width: 64,
+                height: 64,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                mr: 2
+                mr: 3
               }}
             >
               {displayUser.tier === 'free' ? 
-                <Crown size={24} color="#ff9800" /> : 
-                <BarChart3 size={24} color="#4caf50" />
+                <Crown size={32} color="#ff9800" /> : 
+                <BarChart3 size={32} color="#4caf50" />
               }
             </MDBox>
-            <MDTypography variant="h6" fontWeight="medium">
-              {displayUser.tier === 'free' ? 'Upgrade Plan' : 'Premium Features'}
-            </MDTypography>
+            <MDBox>
+              <MDTypography variant="h5" fontWeight="medium" mb={1}>
+                {displayUser.tier === 'free' ? 'Upgrade Plan' : 'Premium Tools'}
+              </MDTypography>
+              <MDTypography variant="body2" color="text">
+                {displayUser.tier === 'free' ? 'Unlock advanced features' : 'Access premium analytics'}
+              </MDTypography>
+            </MDBox>
           </MDBox>
+          
           <MDBox flexGrow={1}>
-            <MDTypography variant="body2" color="text" mb={3}>
+            <MDTypography variant="body1" color="text" mb={4}>
               {displayUser.tier === 'free' ? 
-                'Unlock premium features including detailed industry analysis and AI-powered insights.' :
-                'Access your premium features and detailed analytics.'
+                'Unlock premium features including detailed industry analysis, AI-powered insights, and comprehensive reports.' :
+                'Access your premium features including value calculators, detailed analytics, and professional reporting tools.'
               }
             </MDTypography>
           </MDBox>
+          
           {displayUser.tier === 'free' ? (
             <MDButton 
-              variant="gradient" 
-              color="warning" 
-              fullWidth
+              sx={{
+                background: 'linear-gradient(135deg, #ff9800 0%, #f57c00 100%)',
+                color: 'white',
+                py: 1.5,
+                fontSize: '1rem',
+                width: '100%'
+              }}
               onClick={() => window.open('https://products.applebites.ai/', '_blank')}
-              endIcon={<ExternalLink size={16} />}
+              endIcon={<ExternalLink size={18} />}
             >
               Upgrade Now
             </MDButton>
           ) : (
             <Link href="/value-calculator">
-              <MDButton variant="outlined" color="success" fullWidth>
+              <MDButton 
+                sx={{
+                  background: 'linear-gradient(135deg, #4caf50 0%, #388e3c 100%)',
+                  color: 'white',
+                  py: 1.5,
+                  fontSize: '1rem',
+                  width: '100%'
+                }}
+              >
                 View Premium Tools
               </MDButton>
             </Link>
           )}
         </MDBox>
-      </MDBox>
 
-      {/* Quick Stats for larger screens */}
-      <MDBox sx={{ display: { xs: 'none', md: 'block' }, mt: 4 }}>
-        <MDTypography variant="h5" fontWeight="medium" mb={3}>
-          Quick Stats
-        </MDTypography>
-        <MDBox display="grid" gridTemplateColumns="repeat(auto-fit, minmax(200px, 1fr))" gap={2}>
-          <MDBox sx={{ backgroundColor: 'white', p: 2, borderRadius: 2, textAlign: 'center' }}>
-            <MDTypography variant="h4" color="primary" fontWeight="bold">0</MDTypography>
-            <MDTypography variant="body2" color="text">Assessments Completed</MDTypography>
+        {/* Quick Stats Card */}
+        <MDBox
+          sx={{
+            backgroundColor: 'white',
+            borderRadius: 3,
+            padding: 4,
+            boxShadow: '0 8px 16px rgba(0, 0, 0, 0.1)',
+            display: 'flex',
+            flexDirection: 'column',
+            minHeight: 280,
+            border: '1px solid #e3e6ea'
+          }}
+        >
+          <MDBox display="flex" alignItems="center" mb={3}>
+            <MDBox
+              sx={{
+                backgroundColor: '#f3e5f5',
+                borderRadius: '50%',
+                width: 64,
+                height: 64,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                mr: 3
+              }}
+            >
+              <BarChart3 size={32} color="#9c27b0" />
+            </MDBox>
+            <MDBox>
+              <MDTypography variant="h5" fontWeight="medium" mb={1}>
+                Your Stats
+              </MDTypography>
+              <MDTypography variant="body2" color="text">
+                Account overview
+              </MDTypography>
+            </MDBox>
           </MDBox>
-          <MDBox sx={{ backgroundColor: 'white', p: 2, borderRadius: 2, textAlign: 'center' }}>
-            <MDTypography variant="h4" color="success" fontWeight="bold">{getTierLabel(displayUser.tier)}</MDTypography>
-            <MDTypography variant="body2" color="text">Current Plan</MDTypography>
+          
+          <MDBox flexGrow={1}>
+            <MDBox display="flex" flexDirection="column" gap={3}>
+              <MDBox>
+                <MDTypography variant="h3" color="primary" fontWeight="bold">0</MDTypography>
+                <MDTypography variant="body2" color="text">Assessments Completed</MDTypography>
+              </MDBox>
+              <MDBox>
+                <MDTypography variant="h4" sx={{ color: colors.accent }} fontWeight="bold">
+                  {getTierLabel(displayUser.tier)}
+                </MDTypography>
+                <MDTypography variant="body2" color="text">Current Plan</MDTypography>
+              </MDBox>
+            </MDBox>
           </MDBox>
         </MDBox>
       </MDBox>
