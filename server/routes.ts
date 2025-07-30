@@ -2894,7 +2894,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         console.log('Redirecting to:', session.url);
 
         // Redirect to Stripe Checkout (like the official example)
-        res.redirect(303, session.url);
+        if (session.url) {
+          res.redirect(303, session.url);
+        } else {
+          res.status(500).json({ error: 'Failed to create checkout session URL' });
+        }
       } catch (error: any) {
         console.error('Checkout session creation error:', error);
         res.status(500).json({ error: 'Failed to create checkout session' });
