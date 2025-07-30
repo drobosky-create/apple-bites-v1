@@ -287,7 +287,7 @@ export default function LandingPage() {
                         }
                       }}
                     >
-                      Access Now
+                      ACCESS NOW
                     </Button>
                   </Link>
 
@@ -311,8 +311,7 @@ export default function LandingPage() {
                 border: '2px solid #007bff',
                 borderRadius: 2,
                 textAlign: 'center',
-                position: 'relative',
-                transform: 'scale(1.05)'
+                position: 'relative'
               }}>
                 <CardContent>
                   <Typography variant="h4" sx={{ color: '#333', fontWeight: 'bold', mb: 2 }}>
@@ -366,7 +365,7 @@ export default function LandingPage() {
                         }
                       }}
                     >
-                      Access Now
+                      ACCESS NOW
                     </Button>
                   </Link>
 
@@ -444,7 +443,7 @@ export default function LandingPage() {
                       }
                     }}
                   >
-                    Access Now
+                    ACCESS NOW
                   </Button>
 
                   <Box sx={{ mt: 3, textAlign: 'center' }}>
