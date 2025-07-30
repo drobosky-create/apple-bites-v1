@@ -278,105 +278,7 @@ export default function StrategicReport({ results }: StrategicReportProps) {
         </CardContent>
       </Card>
 
-      {/* Strategic Insights Box */}
-      <Card sx={{ mb: 4, background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)', borderRadius: 1.5 }}>
-        <CardContent sx={{ p: 3 }}>
-          <MDBox display="flex" alignItems="center" justifyContent="center" mb={3}>
-            <Building2 size={24} color="#0A1F44" style={{ marginRight: 12 }} />
-            <MDTypography variant="h5" fontWeight="600" color="dark" textAlign="center">
-              Strategic Business Insights
-            </MDTypography>
-          </MDBox>
-          
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={4}>
-              <MDBox 
-                p={3} 
-                sx={{ 
-                  background: 'linear-gradient(135deg, #e8f5e8 0%, #f1f8f1 100%)', 
-                  borderRadius: 2, 
-                  border: '2px solid #4CAF50',
-                  textAlign: 'center',
-                  transition: 'all 0.3s ease',
-                  '&:hover': {
-                    transform: 'translateY(-2px)',
-                    boxShadow: '0 8px 25px rgba(76, 175, 80, 0.15)'
-                  }
-                }}
-              >
-                <TrendingUp size={32} color="#4CAF50" style={{ marginBottom: 12 }} />
-                <MDTypography variant="h6" fontWeight="600" color="success" mb={2}>
-                  Strategic Strengths
-                </MDTypography>
-                <MDTypography variant="body2" color="text" sx={{ lineHeight: 1.6 }}>
-                  • Strong financial performance vs industry<br />
-                  • Scalable operational systems<br />
-                  • Competitive market positioning<br />
-                  • Experienced management team
-                </MDTypography>
-              </MDBox>
-            </Grid>
-            
-            <Grid item xs={12} md={4}>
-              <MDBox 
-                p={3} 
-                sx={{ 
-                  background: 'linear-gradient(135deg, #fff3e0 0%, #fef7ed 100%)', 
-                  borderRadius: 2, 
-                  border: '2px solid #F59E0B',
-                  textAlign: 'center',
-                  transition: 'all 0.3s ease',
-                  '&:hover': {
-                    transform: 'translateY(-2px)',
-                    boxShadow: '0 8px 25px rgba(245, 158, 11, 0.15)'
-                  }
-                }}
-              >
-                <Target size={32} color="#F59E0B" style={{ marginBottom: 12 }} />
-                <MDTypography variant="h6" fontWeight="600" color="warning" mb={2}>
-                  Value Enhancement
-                </MDTypography>
-                <MDTypography variant="body2" color="text" sx={{ lineHeight: 1.6 }}>
-                  • Recurring revenue optimization<br />
-                  • Customer concentration reduction<br />
-                  • Owner dependency mitigation<br />
-                  • Market expansion opportunities
-                </MDTypography>
-              </MDBox>
-            </Grid>
 
-            <Grid item xs={12} md={4}>
-              <MDBox 
-                p={3} 
-                sx={{ 
-                  background: 'linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%)', 
-                  borderRadius: 2, 
-                  border: '2px solid #2196F3',
-                  textAlign: 'center',
-                  transition: 'all 0.3s ease',
-                  '&:hover': {
-                    transform: 'translateY(-2px)',
-                    boxShadow: '0 8px 25px rgba(33, 150, 243, 0.15)'
-                  }
-                }}
-              >
-                <Building2 size={32} color="#2196F3" style={{ marginBottom: 12 }} />
-                <MDTypography variant="h6" fontWeight="600" color="primary" mb={2}>
-                  Deal Structure Fit
-                </MDTypography>
-                <MDTypography variant="body2" color="text" sx={{ lineHeight: 1.6 }}>
-                  {getDealStructureRecommendations().map((recommendation, index) => (
-                    <span key={index}>
-                      • {recommendation}
-                      {index < getDealStructureRecommendations().length - 1 && <br />}
-                    </span>
-                  ))}
-                </MDTypography>
-              </MDBox>
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
 
       {/* Executive Summary */}
       <Card sx={{ mb: 4 }}>
@@ -393,7 +295,7 @@ export default function StrategicReport({ results }: StrategicReportProps) {
           </MDTypography>
 
           <Grid container spacing={3}>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={4}>
               <MDBox p={3} sx={{ backgroundColor: '#F8F9FA', borderRadius: 2, border: '1px solid #E3F2FD' }}>
                 <MDBox display="flex" alignItems="center" mb={2}>
                   <TrendingUp size={20} color="#1976D2" style={{ marginRight: 8 }} />
@@ -409,7 +311,7 @@ export default function StrategicReport({ results }: StrategicReportProps) {
                 </MDTypography>
               </MDBox>
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={4}>
               <MDBox p={3} sx={{ backgroundColor: '#FFF8E1', borderRadius: 2, border: '1px solid #FFE0B2' }}>
                 <MDBox display="flex" alignItems="center" mb={2}>
                   <Target size={20} color="#F57C00" style={{ marginRight: 8 }} />
@@ -422,6 +324,24 @@ export default function StrategicReport({ results }: StrategicReportProps) {
                   • Customer concentration risk mitigation<br />
                   • Owner dependency reduction initiatives<br />
                   • Market expansion and growth acceleration
+                </MDTypography>
+              </MDBox>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <MDBox p={3} sx={{ backgroundColor: '#E3F2FD', borderRadius: 2, border: '1px solid #BBDEFB' }}>
+                <MDBox display="flex" alignItems="center" mb={2}>
+                  <Building2 size={20} color="#2196F3" style={{ marginRight: 8 }} />
+                  <MDTypography variant="h6" fontWeight="medium" color="primary">
+                    Deal Structure Fit
+                  </MDTypography>
+                </MDBox>
+                <MDTypography variant="body2" color="text">
+                  {getDealStructureRecommendations().map((recommendation, index) => (
+                    <span key={index}>
+                      • {recommendation}
+                      {index < getDealStructureRecommendations().length - 1 && <br />}
+                    </span>
+                  ))}
                 </MDTypography>
               </MDBox>
             </Grid>
