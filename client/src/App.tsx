@@ -22,6 +22,7 @@ import LoginPage from "@/pages/login";
 import PrivacyPolicy from "@/pages/privacy-policy";
 import TermsOfUse from "@/pages/terms-of-use";
 import PricingPage from "@/pages/pricing";
+import LandingPage from "@/pages/landing";
 import CookieBanner from "@/components/CookieBanner";
 
 function Router() {
@@ -63,9 +64,9 @@ function Router() {
           </Suspense>
         </Route>
         
-        {/* Protected routes - redirect to login if not authenticated */}
+        {/* Landing page for non-authenticated users, dashboard for authenticated */}
         <Route path="/">
-          {isAuthenticated ? <Dashboard /> : <LoginPage />}
+          {isAuthenticated ? <Dashboard /> : <LandingPage />}
         </Route>
         <Route path="/dashboard">
           {isAuthenticated ? <Dashboard /> : <LoginPage />}
