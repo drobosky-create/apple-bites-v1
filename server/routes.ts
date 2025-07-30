@@ -86,6 +86,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Demo authentication endpoint
+  app.post('/api/auth/demo', (req, res) => {
+    if (req.session) {
+      (req.session as any).isAuthenticated = true;
+      (req.session as any).user = {
+        id: "demo-user",
+        email: "demo@applebites.ai",
+        firstName: "Demo",
+        lastName: "User",
+        tier: "free",
+        authProvider: "demo"
+      };
+    }
+    res.json({ message: "Demo login successful" });
+  });
+
   // Custom user authentication middleware
   const isCustomUserAuthenticated = async (req: any, res: any, next: any) => {
     const sessionId = req.session?.customUserSessionId;

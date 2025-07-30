@@ -62,8 +62,25 @@ export default function HybridLoginPage() {
   };
 
   // Handle Demo Account
-  const handleDemoLogin = () => {
-    setLocation('/dashboard');
+  const handleDemoLogin = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch('/api/auth/demo', {
+        method: 'POST',
+        credentials: 'include'
+      });
+
+      if (response.ok) {
+        setLocation('/dashboard');
+      } else {
+        setError('Demo login failed. Please try again.');
+      }
+    } catch (err) {
+      console.error('Demo login error:', err);
+      setError('Network error. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
