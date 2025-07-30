@@ -310,21 +310,22 @@ function DashboardSidebar({ user, onSignOut }: { user: DashboardUser; onSignOut:
   return (
     <MDBox
       sx={{
-        position: 'fixed',
-        top: '24px',
-        left: '24px',
-        width: 280,
-        height: 'calc(100vh - 48px)',
+        position: { xs: 'relative', md: 'fixed' },
+        top: { xs: 0, md: '24px' },
+        left: { xs: 0, md: '24px' },
+        width: { xs: '100%', md: 280 },
+        height: { xs: 'auto', md: 'calc(100vh - 48px)' },
         background: gradients.dark,
-        borderRadius: '20px',
-        border: `1px solid rgba(255, 255, 255, 0.15)`,
-        boxShadow: '0 4px 12px rgba(0,0,0,0.15), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+        borderRadius: { xs: '0', md: '20px' },
+        border: { xs: 'none', md: `1px solid rgba(255, 255, 255, 0.15)` },
+        boxShadow: { xs: 'none', md: '0 4px 12px rgba(0,0,0,0.15), 0 0 0 1px rgba(255, 255, 255, 0.1)' },
         backdropFilter: 'blur(8px)',
-        padding: 3,
+        padding: { xs: 2, md: 3 },
         display: 'flex',
         flexDirection: 'column',
         zIndex: 1000,
-        overflow: 'hidden' // Prevent internal scrolling
+        overflow: 'hidden', // Prevent internal scrolling
+        mb: { xs: 2, md: 0 },
       }}
     >
       {/* User Info Section */}
@@ -957,9 +958,22 @@ export default function DashboardClean() {
   };
 
   return (
-    <MDBox display="flex" minHeight="100vh">
+    <MDBox sx={{ 
+      display: { xs: 'block', md: 'flex' }, 
+      minHeight: '100vh',
+      backgroundColor: '#f8f9fa'
+    }}>
       <DashboardSidebar user={displayUser} onSignOut={handleSignOut} />
-      <DashboardMainContent user={displayUser} setupDemoSession={setupDemoSession} />
+      <MDBox
+        sx={{
+          marginLeft: { xs: 0, md: '328px' }, // No margin on mobile, fixed margin on desktop
+          padding: { xs: 2, md: 4 },
+          minHeight: '100vh',
+          width: { xs: '100%', md: 'calc(100% - 328px)' }, // Full width on mobile
+        }}
+      >
+        <DashboardMainContent user={displayUser} setupDemoSession={setupDemoSession} />
+      </MDBox>
     </MDBox>
   );
 }
