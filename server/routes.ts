@@ -2633,27 +2633,55 @@ export async function registerRoutes(app: Express): Promise<Server> {
       apiVersion: '2025-06-30.basil',
     });
 
+    // Get Stripe products and pricing
+    app.get("/api/stripe/products", async (req, res) => {
+      try {
+        const products = await stripe.products.list({
+          active: true,
+          expand: ['data.default_price']
+        });
+
+        const formattedProducts = products.data.map(product => ({
+          id: product.id,
+          name: product.name,
+          description: product.description,
+          price: product.default_price ? {
+            id: (product.default_price as any).id,
+            amount: (product.default_price as any).unit_amount,
+            currency: (product.default_price as any).currency
+          } : null
+        }));
+
+        res.json({ products: formattedProducts });
+      } catch (error: any) {
+        console.error('Error fetching Stripe products:', error);
+        res.status(500).json({ error: 'Failed to fetch products' });
+      }
+    });
+
     // Create payment intent for one-time payments (Growth/Capital tiers)
     app.post("/api/create-payment-intent", async (req, res) => {
       try {
-        const { tier, amount } = req.body;
+        const { tier, priceId } = req.body;
         
-        // Validate tier and amount
-        const validTiers = { growth: 795, capital: 1995 };
-        if (!validTiers[tier as keyof typeof validTiers]) {
+        // Validate tier
+        const validTiers = ['growth', 'capital'];
+        if (!validTiers.includes(tier)) {
           return res.status(400).json({ error: 'Invalid tier' });
         }
-        
-        const expectedAmount = validTiers[tier as keyof typeof validTiers];
-        if (amount !== expectedAmount) {
-          return res.status(400).json({ error: 'Invalid amount' });
+
+        // Get the price from Stripe to ensure it's valid
+        const price = await stripe.prices.retrieve(priceId);
+        if (!price.active) {
+          return res.status(400).json({ error: 'Price not active' });
         }
 
         const paymentIntent = await stripe.paymentIntents.create({
-          amount: Math.round(amount * 100), // Convert to cents
-          currency: 'usd',
+          amount: price.unit_amount!,
+          currency: price.currency,
           metadata: {
             tier,
+            priceId,
             userId: req.session?.customUserSessionId || 'anonymous',
           },
         });
