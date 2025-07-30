@@ -84,7 +84,7 @@ export default function Checkout() {
   };
 
   // Function to redirect to Stripe Checkout
-  const redirectToStripeCheckout = async () => {
+  const redirectToStripeCheckout = () => {
     if (!productId) {
       setError('No product specified');
       return;
@@ -92,37 +92,30 @@ export default function Checkout() {
     
     setLoading(true);
     
-    try {
-      const body = new URLSearchParams({
-        lookup_key: 'growth_exit_assessment', // Map productId to lookup key
-        ...(appliedCoupon && { couponId: appliedCoupon })
-      });
-      
-      const response = await fetch('/api/create-checkout-session', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: body.toString(),
-      });
-      
-      if (response.status === 303) {
-        // Redirect to the Stripe Checkout URL
-        const redirectUrl = response.headers.get('Location');
-        if (redirectUrl) {
-          window.location.href = redirectUrl;
-          return;
-        }
-      }
-      
-      // If we get here, something went wrong
-      const errorData = await response.text();
-      setError('Failed to create checkout session: ' + errorData);
-    } catch (err) {
-      setError('An error occurred while setting up checkout');
-    } finally {
-      setLoading(false);
+    // Create a form and submit it - browsers handle 303 redirects automatically
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = '/api/create-checkout-session';
+    form.style.display = 'none';
+    
+    // Add lookup_key
+    const lookupKeyInput = document.createElement('input');
+    lookupKeyInput.type = 'hidden';
+    lookupKeyInput.name = 'lookup_key';
+    lookupKeyInput.value = 'growth_exit_assessment';
+    form.appendChild(lookupKeyInput);
+    
+    // Add couponId if applied
+    if (appliedCoupon) {
+      const couponInput = document.createElement('input');
+      couponInput.type = 'hidden';
+      couponInput.name = 'couponId';
+      couponInput.value = appliedCoupon;
+      form.appendChild(couponInput);
     }
+    
+    document.body.appendChild(form);
+    form.submit();
   };
 
   useEffect(() => {
