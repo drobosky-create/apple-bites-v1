@@ -561,7 +561,8 @@ export default function HybridSignupPage() {
                   xs: '#00718d', // Solid color on mobile
                   md: 'linear-gradient(135deg, #00718d 0%, #0A1F44 100%)' // Gradient on desktop
                 },
-                color: 'white',
+                color: '#FFFFFF !important',
+                textShadow: '0 1px 3px rgba(0,0,0,0.6)',
                 borderRadius: 2,
                 textTransform: 'none',
                 '&:hover': {
