@@ -95,16 +95,26 @@ export default function Checkout() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  // Get tier and priceId from URL params
+  // Get product from URL params
   const urlParams = new URLSearchParams(window.location.search);
-  const tier = urlParams.get('tier') || 'growth';
-  const priceId = urlParams.get('priceId') || '';
+  const productId = urlParams.get('product') || '';
 
   useEffect(() => {
-    // Create PaymentIntent when component loads
-    apiRequest('POST', '/api/create-payment-intent', { 
+    if (!productId) {
+      setError('No product specified');
+      setLoading(false);
+      return;
+    }
+
+    // Create PaymentIntent with fixed amount for Growth & Exit Assessment
+    // This is a temporary solution until Stripe prices are properly configured
+    const tier = 'growth';
+    const amount = 79500; // $795.00 in cents
+    
+    apiRequest('POST', '/api/create-payment-intent-fixed', { 
+      productId,
       tier,
-      priceId,
+      amount,
     })
       .then((response) => response.json())
       .then((data) => {
@@ -121,7 +131,7 @@ export default function Checkout() {
       .finally(() => {
         setLoading(false);
       });
-  }, [tier, priceId]);
+  }, [productId]);
 
   if (!import.meta.env.VITE_STRIPE_PUBLIC_KEY) {
     return (

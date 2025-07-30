@@ -2693,6 +2693,39 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
     });
 
+    // Create payment intent with fixed amount (temporary solution)
+    app.post("/api/create-payment-intent-fixed", async (req, res) => {
+      try {
+        const { productId, tier, amount } = req.body;
+        
+        // Validate tier
+        const validTiers = ['growth', 'capital'];
+        if (!validTiers.includes(tier)) {
+          return res.status(400).json({ error: 'Invalid tier' });
+        }
+
+        // Validate amount is positive
+        if (!amount || amount <= 0) {
+          return res.status(400).json({ error: 'Invalid amount' });
+        }
+
+        const paymentIntent = await stripe.paymentIntents.create({
+          amount: amount,
+          currency: 'usd',
+          metadata: {
+            tier,
+            productId,
+            userId: req.session?.customUserSessionId || 'anonymous',
+          },
+        });
+
+        res.json({ clientSecret: paymentIntent.client_secret });
+      } catch (error: any) {
+        console.error('Payment intent creation error:', error);
+        res.status(500).json({ error: 'Failed to create payment intent' });
+      }
+    });
+
     // Stripe webhook handler for payment confirmation
     app.post("/api/webhooks/stripe", async (req, res) => {
       try {
