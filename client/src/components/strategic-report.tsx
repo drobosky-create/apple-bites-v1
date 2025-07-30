@@ -199,17 +199,26 @@ export default function StrategicReport({ results }: StrategicReportProps) {
       opportunities.push('Leadership team strengthening and succession planning');
     }
 
-    // Fallback opportunities if business is performing well across all areas
-    if (opportunities.length === 0) {
-      opportunities.push(
+    // Ensure minimum 4 opportunities by adding common improvement areas
+    if (opportunities.length < 4) {
+      const additionalOpportunities = [
         'Digital transformation and technology adoption',
-        'Strategic acquisitions and market consolidation',
+        'Strategic acquisitions and market consolidation', 
         'Premium service offerings and margin expansion',
-        'Geographic expansion and new market penetration'
-      );
+        'Geographic expansion and new market penetration',
+        'Operational efficiency and cost optimization',
+        'Strategic partnerships and alliance development'
+      ];
+      
+      for (const additional of additionalOpportunities) {
+        if (opportunities.length >= 4) break;
+        if (!opportunities.includes(additional)) {
+          opportunities.push(additional);
+        }
+      }
     }
 
-    return opportunities.slice(0, 4); // Return top 4 opportunities
+    return opportunities.slice(0, 4); // Return exactly 4 opportunities
   };
 
   // Advanced NAICS-aware deal structure analysis
@@ -589,9 +598,9 @@ export default function StrategicReport({ results }: StrategicReportProps) {
                 </MDTypography>
               </MDBox>
               <MDBox sx={{ lineHeight: 1.6 }}>
-                {getDealStructureRecommendations().slice(0, 4).map((recommendation, index) => (
+                {getDealStructureRecommendations().slice(0, 4).map((dealType, index) => (
                   <MDTypography key={index} variant="body2" color="text" sx={{ marginBottom: '8px', display: 'block' }}>
-                    • {recommendation.dealType}
+                    • {dealType}
                   </MDTypography>
                 ))}
               </MDBox>
