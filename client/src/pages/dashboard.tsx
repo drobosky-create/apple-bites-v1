@@ -73,8 +73,11 @@ export default function Dashboard() {
 
   // Return mobile version for small screens
   if (isMobile) {
+    console.log('Rendering MobileDashboard component');
     return <MobileDashboard user={displayUser} onSignOut={handleSignOut} />;
   }
+  
+  console.log('Rendering Desktop dashboard');
 
   // Desktop version with clean layout (no problematic sidebar)
   const colors = {
