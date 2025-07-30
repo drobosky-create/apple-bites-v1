@@ -142,7 +142,7 @@ export default function StrategicReport({ results }: StrategicReportProps) {
           </MDBox>
           
           <Grid container spacing={3}>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={4}>
               <MDBox 
                 p={3} 
                 sx={{ 
@@ -170,7 +170,7 @@ export default function StrategicReport({ results }: StrategicReportProps) {
               </MDBox>
             </Grid>
             
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={4}>
               <MDBox 
                 p={3} 
                 sx={{ 
@@ -194,6 +194,34 @@ export default function StrategicReport({ results }: StrategicReportProps) {
                   • Customer concentration reduction<br />
                   • Owner dependency mitigation<br />
                   • Market expansion opportunities
+                </MDTypography>
+              </MDBox>
+            </Grid>
+
+            <Grid item xs={12} md={4}>
+              <MDBox 
+                p={3} 
+                sx={{ 
+                  background: 'linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%)', 
+                  borderRadius: 2, 
+                  border: '2px solid #2196F3',
+                  textAlign: 'center',
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    transform: 'translateY(-2px)',
+                    boxShadow: '0 8px 25px rgba(33, 150, 243, 0.15)'
+                  }
+                }}
+              >
+                <Building2 size={32} color="#2196F3" style={{ marginBottom: 12 }} />
+                <MDTypography variant="h6" fontWeight="600" color="primary" mb={2}>
+                  Deal Structure Fit
+                </MDTypography>
+                <MDTypography variant="body2" color="text" sx={{ lineHeight: 1.6 }}>
+                  • Buy-Side M&A Transaction<br />
+                  • Strategic Acquisition Target<br />
+                  • Private Equity Platform<br />
+                  • Growth Capital Candidate
                 </MDTypography>
               </MDBox>
             </Grid>
