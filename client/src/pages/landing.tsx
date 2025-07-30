@@ -47,14 +47,24 @@ export default function LandingPage() {
           gap: 3, 
           alignItems: 'center' 
         }}>
-          <Link href="#features">
+          <Link href="/admin">
             <Typography variant="body1" sx={{ 
               color: 'white', 
               cursor: 'pointer',
               opacity: 0.9,
               '&:hover': { opacity: 1, color: '#17a2b8' }
             }}>
-              Features
+              Admin
+            </Typography>
+          </Link>
+          <Link href="/login">
+            <Typography variant="body1" sx={{ 
+              color: 'white', 
+              cursor: 'pointer',
+              opacity: 0.9,
+              '&:hover': { opacity: 1, color: '#17a2b8' }
+            }}>
+              Sign In/Up
             </Typography>
           </Link>
           <Link href="#pricing">
@@ -77,26 +87,22 @@ export default function LandingPage() {
               About
             </Typography>
           </Link>
-          <Link href="/team">
-            <Typography variant="body1" sx={{ 
-              color: 'white', 
-              cursor: 'pointer',
-              opacity: 0.9,
-              '&:hover': { opacity: 1, color: '#17a2b8' }
-            }}>
-              Team Login
-            </Typography>
-          </Link>
-          <Link href="/signup">
-            <Button variant="contained" sx={{ 
+          <Button 
+            component="a"
+            href="https://meritage-partners.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            variant="contained" 
+            sx={{ 
               background: 'linear-gradient(45deg, #17a2b8, #007bff)',
               '&:hover': {
                 background: 'linear-gradient(45deg, #138496, #0056b3)'
               }
-            }} size="small">
-              Start Free Assessment
-            </Button>
-          </Link>
+            }} 
+            size="small"
+          >
+            Meritage Partners
+          </Button>
         </Box>
 
         {/* Mobile Navigation */}
@@ -105,7 +111,7 @@ export default function LandingPage() {
           gap: 1, 
           alignItems: 'center' 
         }}>
-          <Link href="/team">
+          <Link href="/admin">
             <Button variant="outlined" sx={{ 
               color: 'white', 
               borderColor: 'rgba(255,255,255,0.5)',
@@ -118,10 +124,10 @@ export default function LandingPage() {
                 background: 'rgba(255,255,255,0.1)'
               }
             }}>
-              Team
+              Admin
             </Button>
           </Link>
-          <Link href="/signup">
+          <Link href="/login">
             <Button variant="contained" sx={{ 
               background: 'linear-gradient(45deg, #17a2b8, #007bff)',
               fontSize: '0.75rem',
@@ -132,7 +138,7 @@ export default function LandingPage() {
                 background: 'linear-gradient(45deg, #138496, #0056b3)'
               }
             }}>
-              Free Assessment
+              Sign In
             </Button>
           </Link>
         </Box>
