@@ -2745,7 +2745,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
         // Known price mappings from our checkout configuration
         const priceMapping = {
-          'prod_Sddbk2RWzr8kyL': 'price_1RqbyvAYDUS7LgRZNV57xXKp', // Growth & Exit - $795
+          'prod_Sddbk2RWzr8kyL': 'price_1RqzLKAYDUS7LgRZj5ujxTbw', // Growth & Exit - $795 (updated)
           'prod_Sdvq23217qaGhp': 'price_1RqZhaAYDUS7LgRZfYL9gP1H', // Capital Market - $3495
         };
 
@@ -2920,11 +2920,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         // Map lookup keys to live price IDs with mode detection
         const priceConfig = {
           'growth_exit_assessment': { 
-            priceId: 'price_1RqbyvAYDUS7LgRZNV57xXKp', // Growth - $795
+            priceId: 'price_1RqzLKAYDUS7LgRZj5ujxTbw', // Growth - $795 (updated)
             mode: 'payment' // One-time payment
           },
           'basic_assessment': { 
-            priceId: 'price_1RqbyvAYDUS7LgRZNV57xXKp', // Same as growth
+            priceId: 'price_1RqzLKAYDUS7LgRZj5ujxTbw', // Same as growth (updated)
             mode: 'payment' // One-time payment
           },
           'capital_market_plan': { 
