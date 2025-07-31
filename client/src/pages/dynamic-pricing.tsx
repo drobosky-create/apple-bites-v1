@@ -12,14 +12,16 @@ const PricingContainer = styled(Box)(({ theme }) => ({
 }));
 
 const PricingCard = styled(Card)(({ theme }) => ({
-  height: '100%',
-  minHeight: '600px', // Fixed height for uniformity
+  height: '650px', // Fixed height for uniformity
+  width: '100%',
+  maxWidth: '360px',
   display: 'flex',
   flexDirection: 'column',
   borderRadius: theme.spacing(2),
   boxShadow: '0 20px 40px rgba(0,0,0,0.3)',
   transition: 'transform 0.3s ease, box-shadow 0.3s ease',
   backgroundColor: 'white',
+  margin: '0 auto',
   '&:hover': {
     transform: 'translateY(-8px)',
     boxShadow: '0 32px 64px rgba(0,0,0,0.4)',
@@ -27,10 +29,10 @@ const PricingCard = styled(Card)(({ theme }) => ({
 }));
 
 const FeatureList = ({ features }: { features: string[] }) => (
-  <Box sx={{ mt: 3, flexGrow: 1, minHeight: '200px' }}>
+  <Box sx={{ mt: 3, flexGrow: 1, minHeight: '250px' }}>
     {features.map((feature, index) => (
-      <Box key={index} display="flex" alignItems="center" sx={{ mb: 2 }}>
-        <CheckCircle sx={{ color: '#4B91C2', mr: 2, fontSize: 20 }} />
+      <Box key={index} display="flex" alignItems="flex-start" sx={{ mb: 2 }}>
+        <CheckCircle sx={{ color: '#4B91C2', mr: 2, fontSize: 20, mt: 0.25, flexShrink: 0 }} />
         <Typography variant="body2" sx={{ color: '#374151', lineHeight: 1.6 }}>
           {feature}
         </Typography>
@@ -182,9 +184,9 @@ export default function DynamicPricingPage() {
           </Typography>
         </Box>
 
-        <Grid container spacing={4} justifyContent="center">
+        <Grid container spacing={4} justifyContent="center" sx={{ maxWidth: '1200px', mx: 'auto' }}>
           {plans.map((plan, index) => (
-            <Grid item xs={12} md={4} key={index}>
+            <Grid item xs={12} sm={6} md={4} key={index}>
               <PricingCard>
                 <CardContent sx={{ 
                   p: 4, 
