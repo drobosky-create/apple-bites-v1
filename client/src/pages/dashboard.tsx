@@ -401,8 +401,9 @@ export default function Dashboard() {
               </MDButton>
             </Link>
             
-            <Link href="/assessment/paid">
+            {displayUser.tier === 'free' ? (
               <MDButton
+                onClick={() => window.open('https://products.applebites.ai/', '_blank')}
                 sx={{
                   background: 'transparent',
                   border: '1px solid rgba(255,255,255,0.3)',
@@ -418,7 +419,26 @@ export default function Dashboard() {
               >
                 Growth Assessment
               </MDButton>
-            </Link>
+            ) : (
+              <Link href="/assessment/paid">
+                <MDButton
+                  sx={{
+                    background: 'transparent',
+                    border: '1px solid rgba(255,255,255,0.3)',
+                    color: '#dbdce1',
+                    width: '100%',
+                    py: 1.5,
+                    justifyContent: 'flex-start',
+                    '&:hover': {
+                      background: 'rgba(255,255,255,0.1)'
+                    }
+                  }}
+                  startIcon={<Crown size={18} />}
+                >
+                  Growth Assessment
+                </MDButton>
+              </Link>
+            )}
             
             <MDButton
               sx={{
@@ -554,8 +574,9 @@ export default function Dashboard() {
                   Start Free Assessment
                 </MDButton>
               </Link>
-              <Link href="/assessment/paid">
+              {displayUser.tier === 'free' ? (
                 <MDButton
+                  onClick={() => window.open('https://products.applebites.ai/', '_blank')}
                   sx={{
                     background: 'transparent',
                     border: `1px solid ${colors.primary}`,
@@ -567,7 +588,22 @@ export default function Dashboard() {
                 >
                   Upgrade to Growth
                 </MDButton>
-              </Link>
+              ) : (
+                <Link href="/assessment/paid">
+                  <MDButton
+                    sx={{
+                      background: 'transparent',
+                      border: `1px solid ${colors.primary}`,
+                      color: colors.primary,
+                      py: 1.5,
+                      px: 3
+                    }}
+                    startIcon={<Crown size={18} />}
+                  >
+                    Start Growth Assessment
+                  </MDButton>
+                </Link>
+              )}
             </MDBox>
           </Card>
           
