@@ -341,12 +341,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Get current user
   app.get('/api/auth/user', async (req: any, res) => {
     console.log('Auth check - Session ID:', req.sessionID);
-    console.log('Auth check - Session data:', req.session);
+    console.log('Auth check - Session data:', JSON.stringify(req.session, null, 2));
     console.log('Auth check - Custom User ID from session:', req.session?.customUserSessionId);
+    console.log('Auth check - User ID from session:', req.session?.userId);
     
-    const userId = req.session?.customUserSessionId;
+    // Check both session formats for compatibility
+    const userId = req.session?.customUserSessionId || req.session?.userId;
     if (!userId) {
-      console.log('No customUserSessionId in session, returning unauthorized');
+      console.log('No userId found in session, returning unauthorized');
       return res.status(401).json({ message: "Unauthorized" });
     }
 

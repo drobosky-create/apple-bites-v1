@@ -7,19 +7,7 @@ import summaryRoute from './routes/summary';
 const app = express();
 app.use(express.json());
 
-// Session configuration for admin authentication
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'admin-session-secret-key',
-  resave: true,
-  saveUninitialized: false,
-  rolling: true,
-  cookie: {
-    secure: false, // Set to false for development, true in production with HTTPS
-    httpOnly: true,
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days to match team session
-    sameSite: 'lax'
-  }
-}));
+// Session configuration will be handled by setupAuth in routes
 app.use(express.urlencoded({ extended: false }));
 
 app.use((req, res, next) => {

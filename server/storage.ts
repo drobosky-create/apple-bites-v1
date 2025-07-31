@@ -350,7 +350,12 @@ export class DatabaseStorage implements IStorage {
   async validateUserCredentials(email: string, password: string): Promise<User | null> {
     const user = await this.getUserByEmail(email);
     
-    if (!user || !user.passwordHash || user.authProvider !== 'custom') {
+    if (!user || !user.passwordHash) {
+      return null;
+    }
+
+    // Allow login for users with password-based auth providers
+    if (!['email', 'custom'].includes(user.authProvider || '')) {
       return null;
     }
 
