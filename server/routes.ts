@@ -3011,14 +3011,36 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const session = await stripe.checkout.sessions.retrieve(sessionId);
         
         if (session.payment_status === 'paid') {
+          // Update user tier immediately upon payment verification
+          const userId = session.metadata?.userId;
+          let newTier = 'growth'; // Default to growth for paid purchases
+          
+          // Determine tier based on the purchased product
+          const lookupKey = session.metadata?.lookup_key;
+          if (lookupKey === 'capital_market_plan' || lookupKey === 'capital_monthly') {
+            newTier = 'capital';
+          } else if (lookupKey === 'growth_exit_assessment' || lookupKey === 'basic_assessment') {
+            newTier = 'growth';
+          }
+          
+          if (userId && userId !== 'anonymous') {
+            try {
+              await storage.updateUserTier(userId, newTier);
+              console.log(`Updated user ${userId} to tier ${newTier} after payment verification`);
+            } catch (error) {
+              console.error('Error updating user tier during verification:', error);
+            }
+          }
+
           // Payment was successful
           res.json({
             success: true,
             sessionId: session.id,
             amount: session.amount_total,
             productName: session.metadata?.productId || 'Growth & Exit Assessment',
-            tier: session.metadata?.tier,
+            tier: newTier,
             customerEmail: session.customer_details?.email,
+            updatedTier: true, // Flag to indicate tier was updated
           });
         } else {
           res.status(400).json({ 

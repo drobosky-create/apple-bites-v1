@@ -82,7 +82,7 @@ const appleBitesQuestionSet: AppleBitesQuestionSet = appleBitesQuestionsData[0] 
 const appleBitesQuestions: AppleBitesQuestion[] = appleBitesQuestionSet.questions;
 
 export default function GrowthExitAssessment() {
-  const [currentStep, setCurrentStep] = useState<PaidAssessmentStep>('results');
+  const [currentStep, setCurrentStep] = useState<PaidAssessmentStep>('ebitda');
   const [valueDriverAnswers, setValueDriverAnswers] = useState<{[key: string]: number}>({});
   const [dataPrePopulated, setDataPrePopulated] = useState(false);
   const [showUpdateButton, setShowUpdateButton] = useState(false);

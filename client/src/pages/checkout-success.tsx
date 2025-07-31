@@ -5,7 +5,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import MDBox from '@/components/MD/MDBox';
 import MDTypography from '@/components/MD/MDTypography';
 import MDButton from '@/components/MD/MDButton';
-import { apiRequest } from '@/lib/queryClient';
+import { apiRequest, queryClient } from '@/lib/queryClient';
 
 export default function CheckoutSuccess() {
   const [location, setLocation] = useLocation();
@@ -25,6 +25,11 @@ export default function CheckoutSuccess() {
         .then(data => {
           if (data.success) {
             setSessionData(data);
+            // If tier was updated, refresh user auth data
+            if (data.updatedTier) {
+              queryClient.invalidateQueries({ queryKey: ['/api/auth/user'] });
+              console.log('Tier updated, refreshing user data');
+            }
           } else {
             setError('Payment verification failed');
           }
