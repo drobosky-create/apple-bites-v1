@@ -441,24 +441,30 @@ export default function Dashboard() {
               </Link>
             )}
             
-            <MDButton
-              sx={{
-                background: 'transparent',
-                border: '1px solid rgba(255,255,255,0.3)',
-                color: '#dbdce1',
-                width: '100%',
-                py: 1.5,
-                justifyContent: 'flex-start',
-                '&:hover': {
-                  background: 'rgba(255,255,255,0.1)'
-                }
-              }}
-              startIcon={<BarChart3 size={18} />}
-            >
-              Past Assessments
-            </MDButton>
+            <Link href="/past-assessments">
+              <MDButton
+                sx={{
+                  background: 'transparent',
+                  border: '1px solid rgba(255,255,255,0.3)',
+                  color: '#dbdce1',
+                  width: '100%',
+                  py: 1.5,
+                  justifyContent: 'flex-start',
+                  '&:hover': {
+                    background: 'rgba(255,255,255,0.1)'
+                  }
+                }}
+                startIcon={<BarChart3 size={18} />}
+              >
+                Past Assessments
+              </MDButton>
+            </Link>
             
             <MDButton
+              component="a"
+              href="https://api.leadconnectorhq.com/widget/bookings/applebites"
+              target="_blank"
+              rel="noopener noreferrer"
               sx={{
                 background: 'transparent',
                 border: '1px solid rgba(255,255,255,0.3)',
