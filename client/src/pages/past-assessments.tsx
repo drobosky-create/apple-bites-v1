@@ -86,6 +86,7 @@ export default function PastAssessments() {
   };
 
   const viewAssessment = (assessment: Assessment) => {
+    console.log('viewAssessment called with:', assessment);
     // Navigate to Value Calculator with assessment data in URL params
     const params = new URLSearchParams({
       assessmentId: assessment.id.toString(),
@@ -96,6 +97,7 @@ export default function PastAssessments() {
       highEstimate: assessment.highEstimate || '0',
       overallScore: assessment.overallScore || 'C'
     });
+    console.log('Navigating to:', `/value-calculator?${params.toString()}`);
     setLocation(`/value-calculator?${params.toString()}`);
   };
 
@@ -316,7 +318,7 @@ export default function PastAssessments() {
         {assessments && assessments.length > 0 ? (
         <MDBox display="grid" gridTemplateColumns={{ xs: '1fr', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' }} gap={3}>
           {assessments.map((assessment) => (
-            <Card key={assessment.id} sx={{ height: 'fit-content', cursor: 'pointer' }} onClick={() => viewAssessment(assessment)}>
+            <Card key={assessment.id} sx={{ height: 'fit-content' }}>
               <CardContent sx={{ p: 3 }}>
                 {/* Header with Company and Date */}
                 <MDBox display="flex" justifyContent="space-between" alignItems="start" mb={2}>
@@ -411,7 +413,9 @@ export default function PastAssessments() {
                   fullWidth
                   startIcon={<Eye size={16} color="white" />}
                   onClick={(e) => {
+                    console.log('Eye button clicked for assessment:', assessment.id);
                     e.stopPropagation();
+                    e.preventDefault();
                     viewAssessment(assessment);
                   }}
                   sx={{
