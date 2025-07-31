@@ -46,12 +46,14 @@ export default function LoginPage() {
       const data = await response.json();
 
       if (response.ok) {
-        // Invalidate auth queries to refresh user state
+        // Clear and refetch auth queries to get the new user state
         queryClient.removeQueries({ queryKey: ['/api/auth/user'] });
-        // Small delay to ensure query cache is clear, then redirect
+        queryClient.invalidateQueries({ queryKey: ['/api/auth/user'] });
+        
+        // Wait a bit longer to ensure session is properly established
         setTimeout(() => {
           setLocation('/dashboard');
-        }, 50);
+        }, 200);
       } else {
         setError(data.message || 'Login failed. Please check your credentials.');
       }
