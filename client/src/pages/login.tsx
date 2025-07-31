@@ -52,10 +52,9 @@ export default function LoginPage() {
       if (response.ok) {
         // Invalidate auth queries to refresh user state
         queryClient.removeQueries({ queryKey: ['/api/auth/user'] });
-        // Small delay to ensure query cache is clear, then redirect
-        setTimeout(() => {
-          setLocation('/dashboard');
-        }, 50);
+        queryClient.invalidateQueries({ queryKey: ['/api/auth/user'] });
+        // Force window redirect for reliable navigation
+        window.location.href = '/dashboard';
       } else {
         setError(data.message || 'Login failed. Please check your credentials.');
       }
@@ -120,6 +119,7 @@ export default function LoginPage() {
         <Box
           component="form"
           onSubmit={handleSubmit}
+          className="text-[#e7f0fe]"
           sx={{
             width: '100%',
             maxWidth: { xs: '100%', md: 600 },
