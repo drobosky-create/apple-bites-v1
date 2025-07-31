@@ -27,11 +27,13 @@ import { Card, CardContent, Typography, Chip } from '@mui/material';
 import { useTheme, useMediaQuery } from '@mui/material';
 
 interface DashboardUser {
-  name: string;
+  id?: string;
   email: string;
   tier: 'free' | 'growth' | 'capital';
   firstName?: string;
   lastName?: string;
+  name?: string; // For backwards compatibility with mock data
+  authProvider?: string;
 }
 
 // Mock user data - replace with actual auth data
@@ -169,7 +171,7 @@ export default function Dashboard() {
             </MDAvatar>
             <MDBox>
               <MDTypography variant="h4" fontWeight="medium" sx={{ color: 'white' }}>
-                Welcome back, {displayUser.name.split(' ')[0]}
+                Welcome back, {displayUser.firstName || displayUser.name?.split(' ')[0] || 'User'}
               </MDTypography>
               <MDTypography variant="body1" sx={{ color: '#81e5d8' }}>
                 {displayUser.email}
