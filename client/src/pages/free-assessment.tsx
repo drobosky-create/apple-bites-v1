@@ -191,6 +191,14 @@ export default function FreeAssessment() {
           <CardContent sx={{ p: 3, minHeight: '500px' }}>
             {/* Form Content */}
             <Box>
+              {currentStep === "contact" && (
+                <ContactForm
+                  form={forms.contact}
+                  onNext={nextStep}
+                  onDataChange={(data) => updateFormData("contact", data)}
+                />
+              )}
+
               {currentStep === "ebitda" && (
                 <EbitdaForm
                   form={forms.ebitda}
