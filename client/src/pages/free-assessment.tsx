@@ -1,7 +1,7 @@
 import { useValuationForm, type FormStep } from "@/hooks/use-valuation-form";
 import { useEffect } from "react";
 import ProgressIndicator from "@/components/progress-indicator";
-import ContactForm from "@/components/contact-form";
+
 import EbitdaForm from "@/components/ebitda-form";
 import AdjustmentsForm from "@/components/adjustments-form";
 import ValueDriversForm from "@/components/value-drivers-form";
@@ -103,12 +103,11 @@ export default function FreeAssessment() {
   // Helper function to convert step name to index
   const getStepIndex = (step: FormStep): number => {
     const stepMap: Record<FormStep, number> = {
-      contact: 0,
-      ebitda: 1, 
-      adjustments: 2,
-      valueDrivers: 3,
-      followUp: 4,
-      results: 4
+      ebitda: 0, 
+      adjustments: 1,
+      valueDrivers: 2,
+      followUp: 3,
+      results: 3
     };
     return stepMap[step] || 0;
   };
@@ -191,14 +190,6 @@ export default function FreeAssessment() {
           <CardContent sx={{ p: 3, minHeight: '500px' }}>
             {/* Form Content */}
             <Box>
-              {currentStep === "contact" && (
-                <ContactForm
-                  form={forms.contact}
-                  onNext={nextStep}
-                  onDataChange={(data) => updateFormData("contact", data)}
-                />
-              )}
-
               {currentStep === "ebitda" && (
                 <EbitdaForm
                   form={forms.ebitda}
@@ -206,6 +197,7 @@ export default function FreeAssessment() {
                   onPrev={prevStep}
                   onDataChange={(data) => updateFormData("ebitda", data)}
                   calculateEbitda={calculateEbitda}
+                  isLocked={false}
                 />
               )}
 

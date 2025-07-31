@@ -17,7 +17,7 @@ interface EbitdaFormProps {
   isLocked?: boolean;
 }
 
-export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calculateEbitda, isLocked = true }: EbitdaFormProps) {
+export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calculateEbitda, isLocked = false }: EbitdaFormProps) {
   const watchedValues = form.watch();
   const ebitdaTotal = calculateEbitda();
 
