@@ -205,7 +205,7 @@ export default function LandingPage() {
       </Box>
 
       {/* Hero Section */}
-      <Container maxWidth="lg" sx={{ textAlign: 'center', py: 8 }}>
+      <Container maxWidth="lg" sx={{ textAlign: 'center', py: 6 }}>
         <Typography variant="h1" sx={{ 
           color: '#333', 
           fontWeight: 'bold', 
@@ -216,7 +216,7 @@ export default function LandingPage() {
         </Typography>
         <Typography variant="h5" sx={{ 
           color: '#666', 
-          mb: 4, 
+          mb: 3, 
           fontWeight: 400,
           maxWidth: 800,
           mx: 'auto'
@@ -225,7 +225,7 @@ export default function LandingPage() {
         </Typography>
         <Typography variant="body1" sx={{ 
           color: '#666', 
-          mb: 6, 
+          mb: 4, 
           fontSize: '1.1rem',
           maxWidth: 600,
           mx: 'auto'
@@ -235,7 +235,7 @@ export default function LandingPage() {
       </Container>
 
       {/* Pricing Section */}
-      <Box id="pricing" sx={{ py: 8, background: '#f8f9fa' }}>
+      <Box id="pricing" sx={{ py: 6, background: '#f8f9fa' }}>
         <Container maxWidth="lg">
           <Typography variant="h2" sx={{ 
             color: '#333', 

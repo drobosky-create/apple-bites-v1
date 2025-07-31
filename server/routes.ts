@@ -241,6 +241,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   };
 
+  // Authentication endpoint for useAuth hook
+  app.get('/api/auth/user', isUserAuthenticated, async (req, res) => {
+    try {
+      const user = req.currentUser;
+      res.json({
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        tier: user.tier,
+        authProvider: user.authProvider
+      });
+    } catch (error) {
+      console.error('Get user error:', error);
+      res.status(500).json({ message: 'Failed to get user information' });
+    }
+  });
+
   // Custom user registration
   app.post('/api/users/register', async (req, res) => {
     try {

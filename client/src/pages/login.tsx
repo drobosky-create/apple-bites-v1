@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'wouter';
 import { Box, Typography, Button } from '@mui/material';
 import { Eye, EyeOff, Mail } from 'lucide-react';
+import { useQueryClient } from '@tanstack/react-query';
 import MDInput from '@/components/MD/MDInput';
 
 const appleBitesLogo = '/apple-bites-logo.png';
@@ -13,6 +14,7 @@ interface LoginFormData {
 
 export default function LoginPage() {
   const [, setLocation] = useLocation();
+  const queryClient = useQueryClient();
 
   const [formData, setFormData] = useState<LoginFormData>({
     email: '',
@@ -44,8 +46,12 @@ export default function LoginPage() {
       const data = await response.json();
 
       if (response.ok) {
-        // Force reload to update authentication state
-        window.location.href = '/dashboard';
+        // Invalidate auth queries to refresh user state
+        queryClient.invalidateQueries({ queryKey: ['/api/auth/user'] });
+        // Small delay to ensure query invalidation completes, then redirect
+        setTimeout(() => {
+          window.location.href = '/dashboard';
+        }, 100);
       } else {
         setError(data.message || 'Login failed. Please check your credentials.');
       }
