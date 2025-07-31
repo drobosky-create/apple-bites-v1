@@ -32,10 +32,12 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('Login form submitted with data:', formData);
     setIsLoading(true);
     setError('');
 
     try {
+      console.log('Making login request to /api/users/login');
       const response = await fetch('/api/users/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -43,17 +45,17 @@ export default function LoginPage() {
         body: JSON.stringify(formData)
       });
 
+      console.log('Login response status:', response.status);
       const data = await response.json();
+      console.log('Login response data:', data);
 
       if (response.ok) {
-        // Clear and refetch auth queries to get the new user state
+        // Invalidate auth queries to refresh user state
         queryClient.removeQueries({ queryKey: ['/api/auth/user'] });
-        queryClient.invalidateQueries({ queryKey: ['/api/auth/user'] });
-        
-        // Wait a bit longer to ensure session is properly established
+        // Small delay to ensure query cache is clear, then redirect
         setTimeout(() => {
           setLocation('/dashboard');
-        }, 200);
+        }, 50);
       } else {
         setError(data.message || 'Login failed. Please check your credentials.');
       }

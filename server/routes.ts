@@ -282,30 +282,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
         passwordHash,
       });
 
-      // Set session and save it explicitly
+      // Create session
       req.session.customUserSessionId = user.id;
-      req.session.userId = user.id; // Also set userId for compatibility
-      
-      // Save session explicitly and wait for it to complete
-      req.session.save((err) => {
-        if (err) {
-          console.error('Session save error during registration:', err);
-          return res.status(500).json({ message: "Session error" });
-        }
-        
-        console.log('Registration session created for user:', user.id);
 
-        res.json({
-          message: "Account created successfully",
-          user: {
-            id: user.id,
-            email: user.email,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            tier: user.tier,
-            authProvider: user.authProvider,
-          },
-        });
+      res.json({
+        message: "Account created successfully",
+        user: {
+          id: user.id,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          tier: user.tier,
+          authProvider: user.authProvider,
+        },
       });
     } catch (error: any) {
       console.error("Registration error:", error);
@@ -323,30 +312,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ message: "Invalid email or password" });
       }
 
-      // Set session and save it explicitly
+      // Create session
       req.session.customUserSessionId = user.id;
-      req.session.userId = user.id; // Also set userId for compatibility
-      
-      // Save session explicitly and wait for it to complete
-      req.session.save((err) => {
-        if (err) {
-          console.error('Session save error:', err);
-          return res.status(500).json({ message: "Session error" });
-        }
-        
-        console.log('Login session created for user:', user.id);
 
-        res.json({
-          message: "Login successful",
-          user: {
-            id: user.id,
-            email: user.email,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            tier: user.tier,
-            authProvider: user.authProvider,
-          },
-        });
+      res.json({
+        message: "Login successful",
+        user: {
+          id: user.id,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          tier: user.tier,
+          authProvider: user.authProvider,
+        },
       });
     } catch (error: any) {
       console.error("Login error:", error);
@@ -356,27 +334,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Custom user logout
   app.post('/api/users/logout', (req, res) => {
-    req.session.destroy((err) => {
-      if (err) {
-        console.error('Session destroy error:', err);
-        return res.status(500).json({ message: "Logout error" });
-      }
-      res.clearCookie('applebites.session');
-      res.json({ message: "Logged out successfully" });
-    });
+    req.session.customUserSessionId = undefined;
+    res.json({ message: "Logged out successfully" });
   });
 
   // Get current user
   app.get('/api/auth/user', async (req: any, res) => {
+    console.log('Auth check - Session ID:', req.sessionID);
+    console.log('Auth check - Session data:', JSON.stringify(req.session, null, 2));
+    console.log('Auth check - Custom User ID from session:', req.session?.customUserSessionId);
+    console.log('Auth check - User ID from session:', req.session?.userId);
+    
     // Check both session formats for compatibility
     const userId = req.session?.customUserSessionId || req.session?.userId;
     if (!userId) {
+      console.log('No userId found in session, returning unauthorized');
       return res.status(401).json({ message: "Unauthorized" });
     }
 
     try {
       const user = await storage.getUser(userId);
-      if (!user) {
+      if (!user || !user.isActive) {
+        console.log('User not found or inactive:', userId);
         return res.status(401).json({ message: "Unauthorized" });
       }
 
