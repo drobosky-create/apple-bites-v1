@@ -153,14 +153,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // User logout
+  // User logout - unified endpoint
   app.post('/api/logout', (req, res) => {
+    // Clear all session data
+    req.session.userId = null;
+    req.session.userEmail = null;
+    req.session.userTier = null;
+    req.session.customUserSessionId = null;
+    req.session.teamSessionId = null;
+    req.session.adminAuthenticated = null;
+    
     req.session.destroy((err) => {
       if (err) {
         console.error('Logout error:', err);
         return res.status(500).json({ message: 'Logout failed' });
       }
+      
+      // Clear all possible cookie names
       res.clearCookie('applebites.session');
+      res.clearCookie('connect.sid');
+      res.clearCookie('session');
+      
       res.json({ message: "Logged out successfully" });
     });
   });
@@ -336,10 +349,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Custom user logout
+  // Custom user logout - redirect to main logout
   app.post('/api/users/logout', (req, res) => {
-    req.session.customUserSessionId = undefined;
-    res.json({ message: "Logged out successfully" });
+    // Clear all session data
+    req.session.userId = null;
+    req.session.userEmail = null;
+    req.session.userTier = null;
+    req.session.customUserSessionId = null;
+    req.session.teamSessionId = null;
+    req.session.adminAuthenticated = null;
+    
+    req.session.destroy((err) => {
+      if (err) {
+        console.error('Logout error:', err);
+        return res.status(500).json({ message: 'Logout failed' });
+      }
+      
+      // Clear all possible cookie names
+      res.clearCookie('applebites.session');
+      res.clearCookie('connect.sid');
+      res.clearCookie('session');
+      
+      res.json({ message: "Logged out successfully" });
+    });
   });
 
 

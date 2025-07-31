@@ -235,7 +235,7 @@ function PastAssessmentsSection() {
 
 // Responsive Dashboard with Mobile/Desktop Views
 export default function Dashboard() {
-  const { user, isAuthenticated, isLoading } = useAuth();
+  const { user, isAuthenticated, isLoading, logout } = useAuth();
   const queryClient = useQueryClient();
   // Temporarily disable mobile detection to test dashboard
   const isMobile = false;
@@ -276,17 +276,8 @@ export default function Dashboard() {
   // Use actual user data or fallback to mock for testing
   const displayUser = (user as DashboardUser) || mockUser;
 
-  const handleSignOut = async () => {
-    try {
-      await fetch('/api/logout', { credentials: 'include' });
-      await fetch('/api/users/logout', { method: 'POST', credentials: 'include' });
-      queryClient.clear();
-      window.location.href = '/';
-    } catch (error) {
-      console.error('Logout error:', error);
-      queryClient.clear();
-      window.location.href = '/';
-    }
+  const handleSignOut = () => {
+    logout(); // Use the logout function from useAuth
   };
 
   // Return mobile version for small screens
