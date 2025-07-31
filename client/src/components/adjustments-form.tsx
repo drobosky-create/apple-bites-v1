@@ -35,6 +35,14 @@ export default function AdjustmentsForm({
     (user as any).firstName && 
     (user as any).lastName && 
     (user as any).email;
+  
+  // Debug logging for Edit Info button visibility
+  console.log('AdjustmentsForm Edit Info Debug:', {
+    isAuthenticated,
+    user: user,
+    hasCompleteProfile,
+    onEditInfo: !!onEditInfo
+  });
   const watchedValues = form.watch();
   const adjustedEbitda = calculateAdjustedEbitda();
   

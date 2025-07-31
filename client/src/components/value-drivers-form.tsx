@@ -130,6 +130,14 @@ export default function ValueDriversForm({ form, onNext, onPrev, onDataChange, o
     (user as any).firstName && 
     (user as any).lastName && 
     (user as any).email;
+  
+  // Debug logging for Edit Info button visibility
+  console.log('ValueDriversForm Edit Info Debug:', {
+    isAuthenticated,
+    user: user,
+    hasCompleteProfile,
+    onEditInfo: !!onEditInfo
+  });
   const watchedValues = form.watch();
 
   const onSubmit = (data: ValueDriversData) => {

@@ -28,6 +28,14 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
     (user as any).firstName && 
     (user as any).lastName && 
     (user as any).email;
+  
+  // Debug logging for Edit Info button visibility
+  console.log('EbitdaForm Edit Info Debug:', {
+    isAuthenticated,
+    user: user,
+    hasCompleteProfile,
+    onEditInfo: !!onEditInfo
+  });
 
   const onSubmit = (data: EbitdaData) => {
     console.log("EBITDA form submitted with data:", data);
