@@ -86,7 +86,17 @@ export default function PastAssessments() {
   };
 
   const viewAssessment = (assessment: Assessment) => {
-    setLocation(`/assessment-results/${assessment.id}`);
+    // Navigate to Value Calculator with assessment data in URL params
+    const params = new URLSearchParams({
+      assessmentId: assessment.id.toString(),
+      company: assessment.company || '',
+      adjustedEbitda: assessment.adjustedEbitda || '0',
+      midEstimate: assessment.midEstimate || '0',
+      lowEstimate: assessment.lowEstimate || '0',
+      highEstimate: assessment.highEstimate || '0',
+      overallScore: assessment.overallScore || 'C'
+    });
+    setLocation(`/value-calculator?${params.toString()}`);
   };
 
   if (isLoading) {
@@ -398,10 +408,22 @@ export default function PastAssessments() {
                 {/* Action Button */}
                 <MDButton 
                   variant="outlined"
-                  color="info"
                   fullWidth
-                  startIcon={<Eye size={16} />}
-                  onClick={() => viewAssessment(assessment)}
+                  startIcon={<Eye size={16} color="white" />}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    viewAssessment(assessment);
+                  }}
+                  sx={{
+                    borderColor: '#005b8c',
+                    color: 'white',
+                    backgroundColor: '#005b8c',
+                    '&:hover': {
+                      borderColor: '#00718d',
+                      backgroundColor: '#00718d',
+                      color: 'white'
+                    }
+                  }}
                 >
                   View Full Report
                 </MDButton>
