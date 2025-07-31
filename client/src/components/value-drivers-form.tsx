@@ -228,40 +228,7 @@ export default function ValueDriversForm({ form, onNext, onPrev, onDataChange }:
               ))}
             </MDBox>
 
-            {/* Overall Grade Summary Card */}
-            <MDBox mb={3}>
-              <Card
-                sx={{
-                  background: '#1B2C4F',
-                  color: 'white',
-                  borderRadius: 2,
-                  p: 2
-                }}
-              >
-                <MDBox display="flex" justifyContent="space-between" alignItems="center">
-                  <MDTypography variant="h6" fontWeight="medium" sx={{ color: '#ebfafb' }}>
-                    Overall Grade: 
-                  </MDTypography>
-                  <MDBox
-                    sx={{
-                      width: 40,
-                      height: 40,
-                      borderRadius: '6px',
-                      backgroundColor: getGradeColor(getOverallGrade()),
-                      color: '#ffffff',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: '20px',
-                      fontWeight: 'bold',
-                      border: '2px solid rgba(255,255,255,0.3)',
-                    }}
-                  >
-                    {getOverallGrade()}
-                  </MDBox>
-                </MDBox>
-              </Card>
-            </MDBox>
+
 
             {/* Navigation Buttons */}
             <MDBox display="flex" justifyContent="space-between" alignItems="center">
