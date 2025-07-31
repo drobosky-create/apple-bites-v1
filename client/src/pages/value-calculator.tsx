@@ -58,7 +58,7 @@ export default function ValueCalculator() {
   
   // Check if user has completed at least one assessment
   const { data: assessments, isLoading } = useQuery<ValuationAssessment[]>({
-    queryKey: ['/api/analytics/assessments'],
+    queryKey: ['/api/assessments'],
   });
 
   const hasCompletedAssessment = assessments && assessments.length > 0;
