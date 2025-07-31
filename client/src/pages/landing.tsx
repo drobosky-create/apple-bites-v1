@@ -88,7 +88,7 @@ export default function LandingPage() {
               }
             }}
           >
-            Sign In/Up
+            Sign In
           </Button>
           {process.env.NODE_ENV === 'development' && (
             <Button 
