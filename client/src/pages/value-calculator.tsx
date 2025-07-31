@@ -56,21 +56,6 @@ export default function ValueCalculator() {
   const [, setLocation] = useLocation();
   const { user: authUser, isLoading: authLoading } = useAuth();
   
-  // Check for URL parameters from Past Assessments navigation
-  const urlParams = new URLSearchParams(window.location.search);
-  const assessmentId = urlParams.get('assessmentId');
-  const hasUrlParams = assessmentId !== null;
-  
-  // Debug logging for navigation
-  if (hasUrlParams) {
-    console.log('Value Calculator loaded with URL params:', {
-      assessmentId,
-      company: urlParams.get('company'),
-      adjustedEbitda: urlParams.get('adjustedEbitda'),
-      overallScore: urlParams.get('overallScore')
-    });
-  }
-  
   // Check if user has completed at least one assessment
   const { data: assessments, isLoading } = useQuery<ValuationAssessment[]>({
     queryKey: ['/api/analytics/assessments'],
@@ -79,12 +64,11 @@ export default function ValueCalculator() {
   const hasCompletedAssessment = assessments && assessments.length > 0;
 
   useEffect(() => {
-    // Only redirect if no assessments, not loading, AND no URL params (from Past Assessments)
-    if (!isLoading && !hasCompletedAssessment && !hasUrlParams) {
-      console.log('No assessments found and no URL params, redirecting to assessment form');
+    // If no assessments and not loading, redirect to assessment form
+    if (!isLoading && !hasCompletedAssessment) {
       setLocation('/assessment/free');
     }
-  }, [isLoading, hasCompletedAssessment, hasUrlParams, setLocation]);
+  }, [isLoading, hasCompletedAssessment, setLocation]);
 
   const { data: user } = useQuery({
     queryKey: ['/api/auth/user'],
@@ -112,8 +96,8 @@ export default function ValueCalculator() {
     );
   }
 
-  // Show access denied if no assessments found AND no URL params
-  if (!hasCompletedAssessment && !hasUrlParams) {
+  // Show access denied if no assessments found
+  if (!hasCompletedAssessment) {
     return (
       <DashboardBackground>
         <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh" p={3}>

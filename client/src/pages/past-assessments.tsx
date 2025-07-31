@@ -87,18 +87,8 @@ export default function PastAssessments() {
 
   const viewAssessment = (assessment: Assessment) => {
     console.log('viewAssessment called with:', assessment);
-    // Navigate to Value Calculator with assessment data in URL params
-    const params = new URLSearchParams({
-      assessmentId: assessment.id.toString(),
-      company: assessment.company || '',
-      adjustedEbitda: assessment.adjustedEbitda || '0',
-      midEstimate: assessment.midEstimate || '0',
-      lowEstimate: assessment.lowEstimate || '0',
-      highEstimate: assessment.highEstimate || '0',
-      overallScore: assessment.overallScore || 'C'
-    });
-    console.log('Navigating to:', `/value-calculator?${params.toString()}`);
-    setLocation(`/value-calculator?${params.toString()}`);
+    // Navigate to assessment results page to view the specific assessment
+    setLocation(`/assessment-results/${assessment.id}`);
   };
 
   if (isLoading) {
