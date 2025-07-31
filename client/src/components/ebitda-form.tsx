@@ -2,11 +2,11 @@ import { useState } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { EbitdaData } from "@shared/schema";
 import { Typography, Card, CardContent, TextField, InputAdornment } from '@mui/material';
-import { ArrowLeft, ArrowRight, Calculator, Edit3, Lock, User } from "lucide-react";
+import { ArrowLeft, ArrowRight, Calculator, Edit3, Lock } from "lucide-react";
 import MDBox from "@/components/MD/MDBox";
 import MDTypography from "@/components/MD/MDTypography";
 import MDButton from "@/components/MD/MDButton";
-import { useAuth } from "@/hooks/useAuth";
+
 
 interface EbitdaFormProps {
   form: UseFormReturn<EbitdaData>;
@@ -15,27 +15,14 @@ interface EbitdaFormProps {
   onDataChange: (data: EbitdaData) => void;
   calculateEbitda: () => number;
   isLocked?: boolean;
-  onEditInfo?: () => void; // Function to go back to contact step
 }
 
-export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calculateEbitda, isLocked = true, onEditInfo }: EbitdaFormProps) {
+export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calculateEbitda, isLocked = true }: EbitdaFormProps) {
   const watchedValues = form.watch();
   const ebitdaTotal = calculateEbitda();
-  const { user, isAuthenticated } = useAuth();
 
-  // Check if user has complete profile (contact info was auto-filled)
-  const hasCompleteProfile = isAuthenticated && user && 
-    (user as any).firstName && 
-    (user as any).lastName && 
-    (user as any).email;
-  
-  // Debug logging for Edit Info button visibility
-  console.log('EbitdaForm Edit Info Debug:', {
-    isAuthenticated,
-    user: user,
-    hasCompleteProfile,
-    onEditInfo: !!onEditInfo
-  });
+
+
 
   const onSubmit = (data: EbitdaData) => {
     console.log("EBITDA form submitted with data:", data);
@@ -91,30 +78,7 @@ export default function EbitdaForm({ form, onNext, onPrev, onDataChange, calcula
           </MDBox>
         </MDBox>
 
-        {/* Edit Info Button - only show if user has auto-filled profile */}
-        {hasCompleteProfile && onEditInfo && (
-          <MDButton
-            onClick={onEditInfo}
-            variant="outlined"
-            color="info"
-            size="small"
-            sx={{
-              minWidth: 'auto',
-              px: 2,
-              py: 1,
-              display: 'flex',
-              alignItems: 'center',
-              gap: 1,
-              fontSize: '0.875rem',
-              '&:hover': {
-                backgroundColor: 'rgba(0, 113, 141, 0.1)'
-              }
-            }}
-          >
-            <User size={16} />
-            Edit Info
-          </MDButton>
-        )}
+
       </MDBox>
 
       {/* Form Container */}

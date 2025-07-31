@@ -1,18 +1,18 @@
 import { UseFormReturn } from "react-hook-form";
 import { ValueDriversData } from "@shared/schema";
 import { Typography, Card, CardContent, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from '@mui/material';
-import { ArrowLeft, ArrowRight, TrendingUp, User } from "lucide-react";
+import { ArrowLeft, ArrowRight, TrendingUp } from "lucide-react";
 import MDBox from "@/components/MD/MDBox";
 import MDTypography from "@/components/MD/MDTypography";
 import MDButton from "@/components/MD/MDButton";
-import { useAuth } from "@/hooks/useAuth";
+
 
 interface ValueDriversFormProps {
   form: UseFormReturn<ValueDriversData>;
   onNext: () => void;
   onPrev: () => void;
   onDataChange: (data: ValueDriversData) => void;
-  onEditInfo?: () => void; // Function to go back to contact step
+
 }
 
 type Grade = "A" | "B" | "C" | "D" | "F";
@@ -122,22 +122,10 @@ function GradeRadioGroup({ name, value, onChange }: GradeRadioGroupProps) {
   );
 }
 
-export default function ValueDriversForm({ form, onNext, onPrev, onDataChange, onEditInfo }: ValueDriversFormProps) {
-  const { user, isAuthenticated } = useAuth();
+export default function ValueDriversForm({ form, onNext, onPrev, onDataChange }: ValueDriversFormProps) {
 
-  // Check if user has complete profile (contact info was auto-filled)
-  const hasCompleteProfile = isAuthenticated && user && 
-    (user as any).firstName && 
-    (user as any).lastName && 
-    (user as any).email;
-  
-  // Debug logging for Edit Info button visibility
-  console.log('ValueDriversForm Edit Info Debug:', {
-    isAuthenticated,
-    user: user,
-    hasCompleteProfile,
-    onEditInfo: !!onEditInfo
-  });
+
+
   const watchedValues = form.watch();
 
   const onSubmit = (data: ValueDriversData) => {
@@ -199,30 +187,7 @@ export default function ValueDriversForm({ form, onNext, onPrev, onDataChange, o
           </MDBox>
         </MDBox>
 
-        {/* Edit Info Button - only show if user has auto-filled profile */}
-        {hasCompleteProfile && onEditInfo && (
-          <MDButton
-            onClick={onEditInfo}
-            variant="outlined"
-            color="info"
-            size="small"
-            sx={{
-              minWidth: 'auto',
-              px: 2,
-              py: 1,
-              display: 'flex',
-              alignItems: 'center',
-              gap: 1,
-              fontSize: '0.875rem',
-              '&:hover': {
-                backgroundColor: 'rgba(0, 113, 141, 0.1)'
-              }
-            }}
-          >
-            <User size={16} />
-            Edit Info
-          </MDButton>
-        )}
+
       </MDBox>
 
       {/* Form Container */}

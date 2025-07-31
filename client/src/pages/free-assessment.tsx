@@ -98,30 +98,7 @@ export default function FreeAssessment() {
   
   const { user, isAuthenticated } = useAuth();
 
-  // Check if authenticated user has complete profile information
-  const hasCompleteProfile = isAuthenticated && user && 
-    (user as any).firstName && 
-    (user as any).lastName && 
-    (user as any).email;
 
-  // Auto-populate contact form and skip to EBITDA if user has complete profile
-  useEffect(() => {
-    if (hasCompleteProfile && currentStep === 'contact') {
-      // Auto-populate contact form with user data
-      const contactData = {
-        firstName: (user as any).firstName,
-        lastName: (user as any).lastName,
-        email: (user as any).email,
-        phone: (user as any).phone || '',
-        company: (user as any).company || '',
-        jobTitle: (user as any).jobTitle || ''
-      };
-      
-      // Update form data and skip to next step
-      updateFormData('contact', contactData);
-      setTimeout(() => nextStep(), 100); // Small delay to ensure form data is set
-    }
-  }, [hasCompleteProfile, currentStep, user, updateFormData, nextStep]);
 
   // Helper function to convert step name to index
   const getStepIndex = (step: FormStep): number => {
@@ -221,7 +198,6 @@ export default function FreeAssessment() {
                   onPrev={prevStep}
                   onDataChange={(data) => updateFormData("ebitda", data)}
                   calculateEbitda={calculateEbitda}
-                  onEditInfo={() => setCurrentStep('contact')} // Allow going back to contact step
                 />
               )}
 
@@ -233,7 +209,6 @@ export default function FreeAssessment() {
                   onDataChange={(data) => updateFormData("adjustments", data)}
                   calculateAdjustedEbitda={calculateAdjustedEbitda}
                   baseEbitda={calculateEbitda()}
-                  onEditInfo={() => setCurrentStep('contact')} // Allow going back to contact step
                 />
               )}
 
@@ -243,7 +218,6 @@ export default function FreeAssessment() {
                   onNext={nextStep}
                   onPrev={prevStep}
                   onDataChange={(data) => updateFormData("valueDrivers", data)}
-                  onEditInfo={() => setCurrentStep('contact')} // Allow going back to contact step
                 />
               )}
 

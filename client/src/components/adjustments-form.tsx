@@ -1,11 +1,11 @@
 import { UseFormReturn } from "react-hook-form";
 import { AdjustmentsData } from "@shared/schema";
 import { Typography, Card, CardContent, TextField, InputAdornment, TextareaAutosize } from '@mui/material';
-import { ArrowLeft, ArrowRight, Settings, User } from "lucide-react";
+import { ArrowLeft, ArrowRight, Settings } from "lucide-react";
 import MDBox from "@/components/MD/MDBox";
 import MDTypography from "@/components/MD/MDTypography";
 import MDButton from "@/components/MD/MDButton";
-import { useAuth } from "@/hooks/useAuth";
+
 
 interface AdjustmentsFormProps {
   form: UseFormReturn<AdjustmentsData>;
@@ -15,7 +15,7 @@ interface AdjustmentsFormProps {
   calculateAdjustedEbitda: () => number;
   baseEbitda: number;
   isLocked?: boolean;
-  onEditInfo?: () => void; // Function to go back to contact step
+
 }
 
 export default function AdjustmentsForm({ 
@@ -26,23 +26,10 @@ export default function AdjustmentsForm({
   calculateAdjustedEbitda,
   baseEbitda,
   isLocked = false,
-  onEditInfo
 }: AdjustmentsFormProps) {
-  const { user, isAuthenticated } = useAuth();
 
-  // Check if user has complete profile (contact info was auto-filled)
-  const hasCompleteProfile = isAuthenticated && user && 
-    (user as any).firstName && 
-    (user as any).lastName && 
-    (user as any).email;
-  
-  // Debug logging for Edit Info button visibility
-  console.log('AdjustmentsForm Edit Info Debug:', {
-    isAuthenticated,
-    user: user,
-    hasCompleteProfile,
-    onEditInfo: !!onEditInfo
-  });
+
+
   const watchedValues = form.watch();
   const adjustedEbitda = calculateAdjustedEbitda();
   
@@ -103,30 +90,7 @@ export default function AdjustmentsForm({
           </MDBox>
         </MDBox>
 
-        {/* Edit Info Button - only show if user has auto-filled profile */}
-        {hasCompleteProfile && onEditInfo && (
-          <MDButton
-            onClick={onEditInfo}
-            variant="outlined"
-            color="info"
-            size="small"
-            sx={{
-              minWidth: 'auto',
-              px: 2,
-              py: 1,
-              display: 'flex',
-              alignItems: 'center',
-              gap: 1,
-              fontSize: '0.875rem',
-              '&:hover': {
-                backgroundColor: 'rgba(0, 113, 141, 0.1)'
-              }
-            }}
-          >
-            <User size={16} />
-            Edit Info
-          </MDButton>
-        )}
+
       </MDBox>
 
       {/* Form Container */}
