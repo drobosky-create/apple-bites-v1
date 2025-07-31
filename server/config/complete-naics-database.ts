@@ -80,7 +80,25 @@ const SUBSECTOR_ADJUSTMENTS: { [key: string]: number } = {
 
 // Load and parse the official NAICS CSV data
 function loadOfficialNAICSData(): CompleteNAICS[] {
-  const csvPath = path.join(__dirname, 'official-naics-2022.csv');
+  // Try multiple possible paths for the CSV file
+  const possiblePaths = [
+    path.join(__dirname, 'official-naics-2022.csv'), // Development path
+    path.join(process.cwd(), 'server/config/official-naics-2022.csv'), // Production path
+    path.join(process.cwd(), 'official-naics-2022.csv'), // Alternative path
+  ];
+  
+  let csvPath: string | null = null;
+  for (const testPath of possiblePaths) {
+    if (fs.existsSync(testPath)) {
+      csvPath = testPath;
+      break;
+    }
+  }
+  
+  if (!csvPath) {
+    console.error('NAICS CSV file not found in any of the expected locations:', possiblePaths);
+    return [];
+  }
   
   try {
     const csvContent = fs.readFileSync(csvPath, 'utf-8');
