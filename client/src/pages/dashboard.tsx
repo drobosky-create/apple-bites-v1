@@ -191,16 +191,18 @@ function PastAssessmentsSection() {
                   fontSize: '0.75rem'
                 }} 
               />
-              <MDButton
-                sx={{
-                  minWidth: 'auto',
-                  p: 1,
-                  color: '#6B7280',
-                  '&:hover': { color: '#00718d' }
-                }}
-              >
-                <Eye size={16} />
-              </MDButton>
+              <Link href={`/assessment-results/${assessment.id}`}>
+                <MDButton
+                  sx={{
+                    minWidth: 'auto',
+                    p: 1,
+                    color: '#6B7280',
+                    '&:hover': { color: '#00718d' }
+                  }}
+                >
+                  <Eye size={16} />
+                </MDButton>
+              </Link>
             </MDBox>
           </MDBox>
         </Card>
