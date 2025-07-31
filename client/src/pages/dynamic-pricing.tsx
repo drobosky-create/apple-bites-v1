@@ -12,7 +12,7 @@ const PricingContainer = styled(Box)(({ theme }) => ({
 }));
 
 const PricingCard = styled(Card)(({ theme }) => ({
-  height: '650px', // Fixed height for uniformity
+  height: '720px', // Increased height to accommodate buttons
   width: '100%',
   maxWidth: '360px',
   display: 'flex',
@@ -190,7 +190,7 @@ export default function DynamicPricingPage() {
               <PricingCard>
                 <CardContent sx={{ 
                   p: 4, 
-                  flexGrow: 1, 
+                  height: '100%',
                   display: 'flex', 
                   flexDirection: 'column',
                   position: 'relative'
@@ -229,7 +229,7 @@ export default function DynamicPricingPage() {
                   
                   <FeatureList features={plan.features} />
                   
-                  <Box sx={{ mt: 'auto', pt: 3, minHeight: '80px', display: 'flex', alignItems: 'end' }}>
+                  <Box sx={{ mt: 'auto', pt: 2 }}>
                     <Button
                       variant="contained"
                       color={plan.buttonColor}
