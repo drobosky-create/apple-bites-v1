@@ -74,12 +74,8 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
                   placeholder="Enter your first name"
                   error={!!errors.firstName}
                   helperText={errors.firstName?.message}
-                  sx={{
-                    '& .MuiOutlinedInput-root': {
-                      borderRadius: '8px',
-                      height: '48px'
-                    }
-                  }}
+                  variant="outlined"
+                  size="medium"
                 />
               </MDBox>
             </Grid>
@@ -95,12 +91,8 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
                   placeholder="Enter your last name"
                   error={!!errors.lastName}
                   helperText={errors.lastName?.message}
-                  sx={{
-                    '& .MuiOutlinedInput-root': {
-                      borderRadius: '8px',
-                      height: '48px'
-                    }
-                  }}
+                  variant="outlined"
+                  size="medium"
                 />
               </MDBox>
             </Grid>
@@ -126,12 +118,8 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
                   placeholder="Enter your email address"
                   error={!!errors.email}
                   helperText={errors.email?.message}
-                  sx={{
-                    '& .MuiOutlinedInput-root': {
-                      borderRadius: '8px',
-                      height: '48px'
-                    }
-                  }}
+                  variant="outlined"
+                  size="medium"
                 />
               </MDBox>
             </Grid>
@@ -147,12 +135,8 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
                   placeholder="Enter your phone number"
                   error={!!errors.phone}
                   helperText={errors.phone?.message}
-                  sx={{
-                    '& .MuiOutlinedInput-root': {
-                      borderRadius: '8px',
-                      height: '48px'
-                    }
-                  }}
+                  variant="outlined"
+                  size="medium"
                 />
               </MDBox>
             </Grid>
@@ -177,12 +161,8 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
                   placeholder="Enter your company name"
                   error={!!errors.company}
                   helperText={errors.company?.message}
-                  sx={{
-                    '& .MuiOutlinedInput-root': {
-                      borderRadius: '8px',
-                      height: '48px'
-                    }
-                  }}
+                  variant="outlined"
+                  size="medium"
                 />
               </MDBox>
             </Grid>
@@ -198,12 +178,8 @@ export default function ContactForm({ form, onNext, onDataChange }: ContactFormP
                   placeholder="Enter your job title"
                   error={!!errors.jobTitle}
                   helperText={errors.jobTitle?.message}
-                  sx={{
-                    '& .MuiOutlinedInput-root': {
-                      borderRadius: '8px',
-                      height: '48px'
-                    }
-                  }}
+                  variant="outlined"
+                  size="medium"
                 />
               </MDBox>
             </Grid>
