@@ -32,10 +32,12 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('Login form submitted with data:', formData);
     setIsLoading(true);
     setError('');
 
     try {
+      console.log('Making login request to /api/users/login');
       const response = await fetch('/api/users/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -43,7 +45,9 @@ export default function LoginPage() {
         body: JSON.stringify(formData)
       });
 
+      console.log('Login response status:', response.status);
       const data = await response.json();
+      console.log('Login response data:', data);
 
       if (response.ok) {
         // Invalidate auth queries to refresh user state
