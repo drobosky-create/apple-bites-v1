@@ -340,26 +340,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Get current user
   app.get('/api/auth/user', async (req: any, res) => {
-    console.log('Auth check - Session ID:', req.sessionID);
-    console.log('Auth check - Session data:', JSON.stringify(req.session, null, 2));
-    console.log('Auth check - Custom User ID from session:', req.session?.customUserSessionId);
-    console.log('Auth check - User ID from session:', req.session?.userId);
+    console.log('\n=== AUTH CHECK START ===');
+    console.log('Session ID:', req.sessionID);
+    console.log('Session exists:', !!req.session);
+    console.log('Session data:', JSON.stringify(req.session, null, 2));
+    console.log('Custom User ID from session:', req.session?.customUserSessionId);
+    console.log('User ID from session:', req.session?.userId);
     
     // Check both session formats for compatibility
     const userId = req.session?.customUserSessionId || req.session?.userId;
+    console.log('Resolved userId:', userId);
+    
     if (!userId) {
-      console.log('No userId found in session, returning unauthorized');
+      console.log('❌ No userId found in session, returning unauthorized');
       return res.status(401).json({ message: "Unauthorized" });
     }
 
     try {
+      console.log('Attempting to fetch user with ID:', userId);
       const user = await storage.getUser(userId);
+      console.log('User fetched from storage:', user ? 'Found' : 'Not found');
+      console.log('User details:', JSON.stringify(user, null, 2));
+      
       if (!user || !user.isActive) {
-        console.log('User not found or inactive:', userId);
+        console.log('❌ User not found or inactive:', userId, 'isActive:', user?.isActive);
         return res.status(401).json({ message: "Unauthorized" });
       }
 
-      console.log('User authenticated successfully:', user.id);
+      console.log('✅ User authenticated successfully:', user.id);
       res.json({
         id: user.id,
         email: user.email,
