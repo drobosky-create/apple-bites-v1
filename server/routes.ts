@@ -224,16 +224,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Simple authentication middleware
   const isUserAuthenticated = async (req: any, res: any, next: any) => {
-    const userId = req.session?.userId;
+    // Check both session formats for compatibility
+    const userId = req.session?.customUserSessionId || req.session?.userId;
+    
     if (!userId) {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
     try {
       const user = await storage.getUser(userId);
+      
       if (!user || !user.isActive) {
         return res.status(401).json({ message: "Unauthorized" });
       }
+      
       req.currentUser = user;
       return next();
     } catch (error) {
@@ -241,7 +245,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   };
 
-  // Authentication endpoint for useAuth hook
+  // Authentication endpoint for useAuth hook  
   app.get('/api/auth/user', isUserAuthenticated, async (req, res) => {
     try {
       const user = req.currentUser;
@@ -338,49 +342,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json({ message: "Logged out successfully" });
   });
 
-  // Get current user
-  app.get('/api/auth/user', async (req: any, res) => {
-    console.log('\n=== AUTH CHECK START ===');
-    console.log('Session ID:', req.sessionID);
-    console.log('Session exists:', !!req.session);
-    console.log('Session data:', JSON.stringify(req.session, null, 2));
-    console.log('Custom User ID from session:', req.session?.customUserSessionId);
-    console.log('User ID from session:', req.session?.userId);
-    
-    // Check both session formats for compatibility
-    const userId = req.session?.customUserSessionId || req.session?.userId;
-    console.log('Resolved userId:', userId);
-    
-    if (!userId) {
-      console.log('❌ No userId found in session, returning unauthorized');
-      return res.status(401).json({ message: "Unauthorized" });
-    }
 
-    try {
-      console.log('Attempting to fetch user with ID:', userId);
-      const user = await storage.getUser(userId);
-      console.log('User fetched from storage:', user ? 'Found' : 'Not found');
-      console.log('User details:', JSON.stringify(user, null, 2));
-      
-      if (!user || !user.isActive) {
-        console.log('❌ User not found or inactive:', userId, 'isActive:', user?.isActive);
-        return res.status(401).json({ message: "Unauthorized" });
-      }
-
-      console.log('✅ User authenticated successfully:', user.id);
-      res.json({
-        id: user.id,
-        email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        tier: user.tier || "free",
-        authProvider: user.authProvider || "email"
-      });
-    } catch (error) {
-      console.error("Error fetching user:", error);
-      res.status(500).json({ message: "Failed to fetch user" });
-    }
-  });
 
 
 
@@ -1765,8 +1727,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         awaitingPasswordCreation: false
       });
 
-      // Create session
-      req.session.userId = user.id;
+      // Create session using customUserSessionId for consistency
+      req.session.customUserSessionId = user.id;
       req.session.userEmail = user.email;
       req.session.userTier = user.tier;
 
