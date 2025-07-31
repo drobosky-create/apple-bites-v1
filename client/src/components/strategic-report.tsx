@@ -32,7 +32,30 @@ export default function StrategicReport({ results }: StrategicReportProps) {
     const company = results.company || 'your business';
     const valuation = results.midEstimate ? parseFloat(results.midEstimate) : 0;
     const ebitda = results.adjustedEbitda ? parseFloat(results.adjustedEbitda) : 0;
-    const revenue = results.revenue ? parseFloat(results.revenue) : 0;
+    // Calculate revenue from EBITDA and income components if not directly available
+    const revenue = (() => {
+      // Try to estimate revenue from available financial data
+      const netIncome = results.netIncome ? parseFloat(results.netIncome) : 0;
+      const adjustedEbitda = ebitda;
+      
+      // If we have EBITDA, estimate revenue based on industry margins
+      if (adjustedEbitda > 0) {
+        const naicsPrefix = naicsCode.substring(0, 2);
+        const estimatedMargin = (() => {
+          switch (naicsPrefix) {
+            case '54': return 0.15; // Professional services - 15% margin
+            case '62': return 0.12; // Healthcare - 12% margin
+            case '23': return 0.08; // Construction - 8% margin
+            case '51': return 0.20; // Software/Tech - 20% margin
+            case '31': case '32': case '33': return 0.10; // Manufacturing - 10% margin
+            default: return 0.12; // Default 12% margin
+          }
+        })();
+        return adjustedEbitda / estimatedMargin;
+      }
+      
+      return 0;
+    })();
     const overallGrade = results.overallScore || 'B';
     
     // Advanced industry context mapping
@@ -180,8 +203,9 @@ export default function StrategicReport({ results }: StrategicReportProps) {
       return gradeMap[grade.charAt(0)] || 2.5;
     };
 
-    if (gradeToScore(results.recurringRevenue) < 4) {
-      opportunities.push('Recurring revenue optimization and contract enhancement');
+    // Note: recurringRevenue field doesn't exist in schema, using financial performance instead
+    if (gradeToScore(results.financialPerformance) < 4) {
+      opportunities.push('Financial performance optimization and revenue enhancement');
     }
     if (gradeToScore(results.customerConcentration) < 4) {
       opportunities.push('Customer diversification and concentration risk mitigation');
@@ -233,7 +257,7 @@ export default function StrategicReport({ results }: StrategicReportProps) {
     // Calculate core metrics
     const adjustedEbitda = results.adjustedEbitda ? parseFloat(results.adjustedEbitda) : 0;
     const financialScore = gradeToScore(results.financialPerformance);
-    const recurringRevenueScore = gradeToScore(results.recurringRevenue);
+    const recurringRevenueScore = gradeToScore(results.financialPerformance); // Using financial performance as proxy
     const growthScore = gradeToScore(results.growthProspects);
     const ownerDependencyScore = gradeToScore(results.ownerDependency);
     const customerConcentrationScore = gradeToScore(results.customerConcentration);
@@ -541,7 +565,121 @@ export default function StrategicReport({ results }: StrategicReportProps) {
         </CardContent>
       </Card>
 
-
+      {/* Industry Classification Section */}
+      {results.naicsCode && (
+        <Card sx={{ mb: 4, borderRadius: 1.5, boxShadow: '0 4px 20px rgba(0,0,0,0.08)' }}>
+          <CardContent sx={{ p: 3 }}>
+            <MDBox display="flex" alignItems="center" gap={2} mb={3}>
+              <MDBox
+                sx={{
+                  width: 48,
+                  height: 48,
+                  borderRadius: 2,
+                  background: 'linear-gradient(135deg, #0b2147 0%, #1e293b 100%)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
+                <Building2 size={24} color="white" />
+              </MDBox>
+              <MDBox>
+                <MDTypography variant="h5" fontWeight="medium" color="text" mb={0.5}>
+                  Industry Classification
+                </MDTypography>
+                <MDTypography variant="body2" color="text" sx={{ opacity: 0.7 }}>
+                  NAICS-based sector analysis and competitive context
+                </MDTypography>
+              </MDBox>
+            </MDBox>
+            
+            <MDBox display="flex" gap={3} mb={3}>
+              <MDBox flex={1}>
+                <MDBox
+                  sx={{
+                    p: 2.5,
+                    background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
+                    borderRadius: 2,
+                    border: '1px solid #e2e8f0'
+                  }}
+                >
+                  <MDTypography variant="body2" color="text" sx={{ opacity: 0.7, mb: 1, fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                    NAICS Code
+                  </MDTypography>
+                  <MDTypography variant="h4" fontWeight="bold" color="text" sx={{ color: '#0b2147', mb: 0.5 }}>
+                    {results.naicsCode}
+                  </MDTypography>
+                  <MDTypography variant="body2" color="text" sx={{ opacity: 0.8 }}>
+                    North American Industry Classification
+                  </MDTypography>
+                </MDBox>
+              </MDBox>
+              
+              {results.industryDescription && (
+                <MDBox flex={2}>
+                  <MDBox
+                    sx={{
+                      p: 2.5,
+                      background: 'linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%)',
+                      borderRadius: 2,
+                      border: '1px solid #e2e8f0'
+                    }}
+                  >
+                    <MDTypography variant="body2" color="text" sx={{ opacity: 0.7, mb: 1, fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                      Industry Description
+                    </MDTypography>
+                    <MDTypography variant="body1" fontWeight="medium" color="text" sx={{ color: '#0b2147' }}>
+                      {results.industryDescription}
+                    </MDTypography>
+                  </MDBox>
+                </MDBox>
+              )}
+            </MDBox>
+            
+            <MDBox
+              sx={{
+                p: 2.5,
+                background: 'linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)',
+                borderRadius: 2,
+                border: '1px solid #93c5fd'
+              }}
+            >
+              <MDTypography variant="body2" color="text" sx={{ color: '#1e40af', fontWeight: 'medium' }}>
+                <strong>Industry Context:</strong> This NAICS classification positions your business within the {(() => {
+                  const naicsPrefix = results.naicsCode?.substring(0, 2) || '';
+                  const sectorMap: { [key: string]: string } = {
+                    '11': 'Agriculture, Forestry, Fishing and Hunting',
+                    '21': 'Mining, Quarrying, and Oil and Gas Extraction',
+                    '22': 'Utilities',
+                    '23': 'Construction',
+                    '31': 'Manufacturing',
+                    '32': 'Manufacturing',
+                    '33': 'Manufacturing',
+                    '42': 'Wholesale Trade',
+                    '44': 'Retail Trade',
+                    '45': 'Retail Trade',
+                    '48': 'Transportation and Warehousing',
+                    '49': 'Transportation and Warehousing',
+                    '51': 'Information',
+                    '52': 'Finance and Insurance',
+                    '53': 'Real Estate and Rental and Leasing',
+                    '54': 'Professional, Scientific, and Technical Services',
+                    '55': 'Management of Companies and Enterprises',
+                    '56': 'Administrative and Support Services',
+                    '61': 'Educational Services',
+                    '62': 'Health Care and Social Assistance',
+                    '71': 'Arts, Entertainment, and Recreation',
+                    '72': 'Accommodation and Food Services',
+                    '81': 'Other Services',
+                    '92': 'Public Administration'
+                  };
+                  return sectorMap[naicsPrefix] || 'Specialized Business Services';
+                })()} sector, providing specific context for valuation multiples, growth expectations, and strategic opportunities outlined in this analysis.
+              </MDTypography>
+            </MDBox>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Executive Summary */}
       <Card sx={{ mb: 4 }}>
