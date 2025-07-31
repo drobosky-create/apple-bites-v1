@@ -50,11 +50,14 @@ export default function LoginPage() {
       console.log('Login response data:', data);
 
       if (response.ok) {
-        // Invalidate auth queries to refresh user state
-        queryClient.removeQueries({ queryKey: ['/api/auth/user'] });
-        queryClient.invalidateQueries({ queryKey: ['/api/auth/user'] });
-        // Force window redirect for reliable navigation
-        window.location.href = '/dashboard';
+        console.log('Login successful, refreshing authentication state...');
+        // Clear and invalidate auth queries to refresh user state
+        await queryClient.invalidateQueries({ queryKey: ['/api/auth/user'] });
+        
+        // Give a small delay to allow session to propagate
+        setTimeout(() => {
+          window.location.href = '/dashboard';
+        }, 100);
       } else {
         setError(data.message || 'Login failed. Please check your credentials.');
       }
