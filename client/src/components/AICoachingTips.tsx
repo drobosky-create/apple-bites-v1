@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-
-
-
+import { Card, CardContent, CardHeader, Button, Typography, Chip } from '@mui/material';
 import { Lightbulb, TrendingUp, DollarSign, Clock, Target, Loader2, Brain } from 'lucide-react';
 import { apiRequest } from '@/lib/queryClient';
+import { MDBox, MDTypography } from './MD';
 
 interface CoachingTip {
   category: string;
@@ -80,118 +79,119 @@ const AICoachingTips: React.FC<AICoachingTipsProps> = ({ financialData }) => {
   };
 
   return (
-    <div >
+    <div>
       {/* Header */}
-      <Card >
-        <CardHeader>
-          <CardTitle >
-            <Brain  />
-            AI-Powered Financial Coaching
-          </CardTitle>
-          <p >
-            Get personalized recommendations to improve your business valuation based on your financial data and industry benchmarks.
-          </p>
-        </CardHeader>
+      <Card sx={{ mb: 2 }}>
+        <CardHeader title={
+          <MDBox display="flex" alignItems="center" gap={1}>
+            <Brain size={20} />
+            <MDTypography variant="h6" fontWeight="bold">
+              AI-Powered Financial Coaching
+            </MDTypography>
+          </MDBox>
+        } 
+        subheader="Get personalized recommendations to improve your business valuation based on your financial data and industry benchmarks."
+        />
         <CardContent>
           <Button 
             onClick={fetchCoachingData}
             disabled={loading}
-            
+            variant="contained"
+            color="primary"
+            startIcon={loading ? <Loader2 size={16} /> : <Brain size={16} />}
+            sx={{ textTransform: 'none' }}
           >
-            {loading ? (
-              <>
-                <Loader2  />
-                Analyzing Your Business...
-              </>
-            ) : (
-              <>
-                <Brain  />
-                Get AI Coaching Recommendations
-              </>
-            )}
+            {loading ? 'Analyzing Your Business...' : 'Get AI Coaching Recommendations'}
           </Button>
         </CardContent>
       </Card>
 
       {/* Error State */}
       {error && (
-        <Card >
-          <CardContent >
-            <p >{error}</p>
+        <Card sx={{ mb: 2, backgroundColor: '#fee2e2' }}>
+          <CardContent>
+            <MDTypography variant="body2" color="error">{error}</MDTypography>
           </CardContent>
         </Card>
       )}
 
       {/* Contextual Insights */}
       {insights && (
-        <Card>
-          <CardHeader>
-            <CardTitle >
-              <Lightbulb  />
-              Business Analysis Insights
-            </CardTitle>
-          </CardHeader>
+        <Card sx={{ mb: 2 }}>
+          <CardHeader title={
+            <MDBox display="flex" alignItems="center" gap={1}>
+              <Lightbulb size={20} />
+              <MDTypography variant="h6" fontWeight="bold">
+                Business Analysis Insights
+              </MDTypography>
+            </MDBox>
+          } />
           <CardContent>
-            <p >{insights}</p>
+            <MDTypography variant="body2">{insights}</MDTypography>
           </CardContent>
         </Card>
       )}
 
       {/* Coaching Tips */}
       {tips.length > 0 && (
-        <div >
-          <h3 >Personalized Recommendations</h3>
-          <div >
+        <MDBox>
+          <MDTypography variant="h5" fontWeight="bold" sx={{ mb: 2 }}>
+            Personalized Recommendations
+          </MDTypography>
+          <MDBox>
             {tips.map((tip, index) => (
-              <Card key={index} >
-                <CardHeader >
-                  <div >
-                    <div >
-                      {getCategoryIcon(tip.category)}
-                      <CardTitle >{tip.title}</CardTitle>
-                    </div>
-                    <Badge className={getPriorityColor(tip.priority)}>
-                      {tip.priority.toUpperCase()}
-                    </Badge>
-                  </div>
-                  <p >{tip.category}</p>
-                </CardHeader>
-                <CardContent >
-                  <p  style={{ textDecoration: 'none' }}>{tip.description}</p>
+              <Card key={index} sx={{ mb: 2 }}>
+                <CardHeader 
+                  title={
+                    <MDBox display="flex" alignItems="center" justifyContent="space-between">
+                      <MDBox display="flex" alignItems="center" gap={1}>
+                        {getCategoryIcon(tip.category)}
+                        <MDTypography variant="h6" fontWeight="bold">{tip.title}</MDTypography>
+                      </MDBox>
+                      <Chip 
+                        label={tip.priority.toUpperCase()}
+                        color={tip.priority === 'high' ? 'error' : tip.priority === 'medium' ? 'warning' : 'success'}
+                        size="small"
+                      />
+                    </MDBox>
+                  }
+                  subheader={tip.category}
+                />
+                <CardContent>
+                  <MDTypography variant="body2" sx={{ mb: 2 }}>{tip.description}</MDTypography>
                   
-                  <div>
-                    <h4 >Action Items:</h4>
-                    <ul >
+                  <MDBox sx={{ mb: 2 }}>
+                    <MDTypography variant="subtitle2" fontWeight="bold" sx={{ mb: 1 }}>Action Items:</MDTypography>
+                    <MDBox component="ul" sx={{ pl: 2, m: 0 }}>
                       {tip.actionItems.map((action, actionIndex) => (
-                        <li key={actionIndex} >
-                          <span ></span>
-                          {action}
-                        </li>
+                        <MDBox component="li" key={actionIndex} sx={{ mb: 0.5 }}>
+                          <MDTypography variant="body2">{action}</MDTypography>
+                        </MDBox>
                       ))}
-                    </ul>
-                  </div>
+                    </MDBox>
+                  </MDBox>
 
-                  <div >
-                    <div>
-                      <div >
-                        <Target  />
-                        Potential Impact
-                      </div>
-                      <p >{tip.potentialImpact}</p>
-                    </div>
-                    <div>
-                      <div >
-                        <Clock  />
-                        Timeline
-                      </div>
-                      <p >{tip.timeline}</p>
-                    </div>
-                  </div>
+                  <MDBox display="flex" gap={3}>
+                    <MDBox>
+                      <MDBox display="flex" alignItems="center" gap={1} sx={{ mb: 1 }}>
+                        <Target size={16} />
+                        <MDTypography variant="subtitle2" fontWeight="bold">Potential Impact</MDTypography>
+                      </MDBox>
+                      <MDTypography variant="body2">{tip.potentialImpact}</MDTypography>
+                    </MDBox>
+                    <MDBox>
+                      <MDBox display="flex" alignItems="center" gap={1} sx={{ mb: 1 }}>
+                        <Clock size={16} />
+                        <MDTypography variant="subtitle2" fontWeight="bold">Timeline</MDTypography>
+                      </MDBox>
+                      <MDTypography variant="body2">{tip.timeline}</MDTypography>
+                    </MDBox>
+                  </MDBox>
                 </CardContent>
               </Card>
             ))}
-          </div>
-        </div>
+          </MDBox>
+        </MDBox>
       )}
     </div>
   );
