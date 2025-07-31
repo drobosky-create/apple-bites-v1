@@ -1189,23 +1189,45 @@ export default function StrategicReport({ results }: StrategicReportProps) {
             strategic roadmap and value enhancement opportunities.
           </MDTypography>
 
-          <MDButton 
-            onClick={handleScheduleConsultation}
-            variant="contained"
-            size="large"
-            sx={{ 
-              background: '#FFD700', 
-              color: '#0A1F44',
-              fontWeight: 'bold',
-              px: 4, 
-              py: 1.5,
-              '&:hover': {
-                background: '#FFC107'
-              }
-            }}
-          >
-            Schedule Strategic Consultation
-          </MDButton>
+          <MDBox display="flex" gap={2} justifyContent="center" flexWrap="wrap">
+            <MDButton 
+              onClick={handleScheduleConsultation}
+              variant="contained"
+              size="large"
+              sx={{ 
+                background: '#FFD700', 
+                color: '#0A1F44',
+                fontWeight: 'bold',
+                px: 4, 
+                py: 1.5,
+                '&:hover': {
+                  background: '#FFC107'
+                }
+              }}
+            >
+              Schedule Strategic Consultation
+            </MDButton>
+            
+            <MDButton 
+              onClick={() => window.location.href = '/dashboard'}
+              variant="outlined"
+              size="large"
+              sx={{ 
+                borderColor: '#FFD700', 
+                color: '#FFD700',
+                fontWeight: 'bold',
+                px: 4, 
+                py: 1.5,
+                '&:hover': {
+                  borderColor: '#FFC107',
+                  color: '#FFC107',
+                  backgroundColor: 'rgba(255, 215, 0, 0.1)'
+                }
+              }}
+            >
+              Return to Dashboard
+            </MDButton>
+          </MDBox>
           
           <MDTypography variant="body2" sx={{ color: '#ebfafb', mt: 2 }}>
             Comprehensive strategic review • Value optimization planning • Exit preparation guidance

@@ -1,4 +1,5 @@
 import InteractiveValuationSlider from "@/components/interactive-valuation-slider";
+import AICoachingTips from "@/components/AICoachingTips";
 import { useQuery } from "@tanstack/react-query";
 import { useLocation } from "wouter";
 import { useEffect } from "react";
@@ -441,7 +442,8 @@ export default function ValueCalculator() {
             borderRadius: '8px',
             boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
             overflow: 'hidden',
-            p: 1.5
+            p: 1.5,
+            mb: 3
           }}>
             <MDBox sx={{ 
               transform: 'scale(0.7)', 
@@ -452,6 +454,45 @@ export default function ValueCalculator() {
               <InteractiveValuationSlider />
             </MDBox>
           </MDBox>
+
+          {/* AI Coaching Tips Section */}
+          {hasCompletedAssessment && assessments && assessments.length > 0 && (
+            <MDBox sx={{
+              backgroundColor: 'white',
+              borderRadius: '8px',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+              overflow: 'hidden',
+              p: 2
+            }}>
+              <AICoachingTips 
+                financialData={{
+                  revenue: parseFloat(assessments[0].revenue || '0') || 0,
+                  ebitda: parseFloat(assessments[0].ebitda || '0') || 0,
+                  adjustedEbitda: parseFloat(assessments[0].adjustedEbitda || '0') || 0,
+                  naicsCode: assessments[0].naicsCode || '',
+                  industryTitle: assessments[0].industryTitle || 'Business Services',
+                  valueDriverScores: {
+                    'Financial Performance': parseFloat(assessments[0].financialPerformanceGrade || '3') || 3,
+                    'Customer Concentration': parseFloat(assessments[0].customerConcentrationGrade || '3') || 3,
+                    'Management Team': parseFloat(assessments[0].managementTeamGrade || '3') || 3,
+                    'Competitive Position': parseFloat(assessments[0].competitivePositionGrade || '3') || 3,
+                    'Growth Prospects': parseFloat(assessments[0].growthProspectsGrade || '3') || 3,
+                    'Systems & Processes': parseFloat(assessments[0].systemsProcessesGrade || '3') || 3,
+                    'Asset Quality': parseFloat(assessments[0].assetQualityGrade || '3') || 3,
+                    'Industry Outlook': parseFloat(assessments[0].industryOutlookGrade || '3') || 3,
+                    'Risk Factors': parseFloat(assessments[0].riskFactorsGrade || '3') || 3,
+                    'Owner Dependency': parseFloat(assessments[0].ownerDependencyGrade || '3') || 3,
+                  },
+                  userMultiple: parseFloat(assessments[0].valuationMultiple || '4.2') || 4.2,
+                  industryAverage: 4.5,
+                  companySize: parseFloat(assessments[0].adjustedEbitda || '0') > 2000000 ? 'large' : 
+                              parseFloat(assessments[0].adjustedEbitda || '0') > 500000 ? 'medium' : 'small',
+                  businessAge: assessments[0].businessAge,
+                  employeeCount: parseFloat(assessments[0].employeeCount || '0') || undefined
+                }}
+              />
+            </MDBox>
+          )}
         </Container>
       </MainContent>
     </DashboardBackground>
