@@ -36,6 +36,26 @@ interface DashboardUser {
   authProvider?: string;
 }
 
+interface Assessment {
+  id: number;
+  firstName: string;
+  lastName: string;
+  company: string;
+  email: string;
+  adjustedEbitda: string;
+  midEstimate: string;
+  lowEstimate: string;
+  highEstimate: string;
+  valuationMultiple: string;
+  overallScore: string;
+  tier: string;
+  reportTier: string;
+  createdAt: string;
+  pdfUrl?: string;
+  isProcessed: boolean;
+  executiveSummary?: string;
+}
+
 // Mock user data - replace with actual auth data
 const mockUser: DashboardUser = {
   name: 'Demo User',
@@ -44,6 +64,172 @@ const mockUser: DashboardUser = {
   firstName: 'Demo',
   lastName: 'User'
 };
+
+// Past Assessments Component
+function PastAssessmentsSection() {
+  const { data: assessments, isLoading } = useQuery<Assessment[]>({
+    queryKey: ['/api/assessments'],
+  });
+
+  const formatCurrency = (value: string | null) => {
+    if (!value) return "$0";
+    const numValue = parseFloat(value);
+    
+    if (numValue >= 1000000) {
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 1,
+        maximumFractionDigits: 1,
+        notation: 'compact',
+        compactDisplay: 'short'
+      }).format(numValue);
+    } else {
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }).format(numValue);
+    }
+  };
+
+  const formatDate = (dateString: string | Date) => {
+    const date = typeof dateString === 'string' ? new Date(dateString) : dateString;
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    });
+  };
+
+  const getGradeColor = (grade: string) => {
+    switch (grade) {
+      case "A": return "#4CAF50";
+      case "B": return "#8BC34A";
+      case "C": return "#FF9800";
+      case "D": return "#FF5722";
+      case "F": return "#F44336";
+      default: return "#9E9E9E";
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <Card sx={{ p: 4, textAlign: 'center' }}>
+        <MDTypography variant="body2" color="text">
+          Loading recent assessments...
+        </MDTypography>
+      </Card>
+    );
+  }
+
+  if (!assessments || assessments.length === 0) {
+    return (
+      <Card sx={{ p: 4, textAlign: 'center' }}>
+        <FileText size={48} color="#9CA3AF" style={{ marginBottom: 16 }} />
+        <MDTypography variant="h6" fontWeight="medium" color="text" mb={1}>
+          No Assessments Yet
+        </MDTypography>
+        <MDTypography variant="body2" color="text" mb={3}>
+          Complete your first business valuation to see results here
+        </MDTypography>
+        <Link href="/assessment/free">
+          <MDButton
+            sx={{
+              background: 'linear-gradient(135deg, #00718d 0%, #0A1F44 100%)',
+              color: 'white',
+              py: 1.5,
+              px: 3
+            }}
+            startIcon={<Plus size={18} />}
+          >
+            Start First Assessment
+          </MDButton>
+        </Link>
+      </Card>
+    );
+  }
+
+  return (
+    <MDBox display="flex" flexDirection="column" gap={2}>
+      {assessments.slice(0, 3).map((assessment) => (
+        <Card key={assessment.id} sx={{ p: 3, border: '1px solid #E5E7EB' }}>
+          <MDBox display="flex" justifyContent="space-between" alignItems="center">
+            <MDBox display="flex" alignItems="center" gap={2}>
+              <MDBox
+                sx={{
+                  width: 48,
+                  height: 48,
+                  borderRadius: 2,
+                  background: `linear-gradient(135deg, ${getGradeColor(assessment.overallScore)} 20%, ${getGradeColor(assessment.overallScore)}40 100%)`,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
+                <MDTypography variant="h5" fontWeight="bold" sx={{ color: 'white' }}>
+                  {assessment.overallScore}
+                </MDTypography>
+              </MDBox>
+              <MDBox>
+                <MDTypography variant="h6" fontWeight="medium" color="text">
+                  {assessment.company || `${assessment.firstName} ${assessment.lastName}`}
+                </MDTypography>
+                <MDTypography variant="body2" color="text" sx={{ opacity: 0.7 }}>
+                  {formatDate(assessment.createdAt)} • {formatCurrency(assessment.midEstimate)} valuation
+                </MDTypography>
+              </MDBox>
+            </MDBox>
+            <MDBox display="flex" alignItems="center" gap={1}>
+              <Chip 
+                label={assessment.tier.toUpperCase()} 
+                size="small" 
+                sx={{ 
+                  backgroundColor: assessment.tier === 'free' ? '#E5E7EB' : '#00718d',
+                  color: assessment.tier === 'free' ? '#6B7280' : 'white',
+                  fontSize: '0.75rem'
+                }} 
+              />
+              <MDButton
+                sx={{
+                  minWidth: 'auto',
+                  p: 1,
+                  color: '#6B7280',
+                  '&:hover': { color: '#00718d' }
+                }}
+              >
+                <Eye size={16} />
+              </MDButton>
+            </MDBox>
+          </MDBox>
+        </Card>
+      ))}
+      
+      {assessments.length > 3 && (
+        <Link href="/past-assessments">
+          <MDButton
+            sx={{
+              background: 'transparent',
+              border: '1px solid #D1D5DB',
+              color: '#6B7280',
+              py: 1.5,
+              width: '100%',
+              '&:hover': {
+                background: '#F9FAFB',
+                borderColor: '#00718d',
+                color: '#00718d'
+              }
+            }}
+            startIcon={<BarChart3 size={18} />}
+          >
+            View All Assessments ({assessments.length})
+          </MDButton>
+        </Link>
+      )}
+    </MDBox>
+  );
+}
 
 // Responsive Dashboard with Mobile/Desktop Views
 export default function Dashboard() {
@@ -345,7 +531,7 @@ export default function Dashboard() {
           </Card>
         </MDBox>
 
-        {/* Action Cards */}
+        {/* Action Cards and Past Assessments */}
         <MDBox display="flex" gap={3}>
           <Card sx={{ flex: 2, p: 4 }}>
             <MDTypography variant="h5" fontWeight="medium" color="text" mb={2}>
@@ -397,6 +583,36 @@ export default function Dashboard() {
               Perfect for getting started
             </MDTypography>
           </Card>
+        </MDBox>
+
+        {/* Past Assessments Section */}
+        <MDBox mt={4}>
+          <MDBox display="flex" alignItems="center" justifyContent="space-between" mb={3}>
+            <MDBox display="flex" alignItems="center" gap={2}>
+              <BarChart3 size={24} color={colors.primary} />
+              <MDTypography variant="h5" fontWeight="medium" color="text">
+                Recent Assessments
+              </MDTypography>
+            </MDBox>
+            <Link href="/past-assessments">
+              <MDButton
+                sx={{
+                  background: 'transparent',
+                  color: colors.primary,
+                  py: 1,
+                  px: 2,
+                  fontSize: '0.875rem',
+                  '&:hover': {
+                    background: 'rgba(0, 113, 141, 0.1)'
+                  }
+                }}
+                startIcon={<Eye size={16} />}
+              >
+                View All
+              </MDButton>
+            </Link>
+          </MDBox>
+          <PastAssessmentsSection />
         </MDBox>
       </MDBox>
     </MDBox>
