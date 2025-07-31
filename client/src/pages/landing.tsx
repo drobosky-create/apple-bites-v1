@@ -51,34 +51,40 @@ export default function LandingPage() {
           alignItems: 'center' 
         }}>
           <Button 
+            variant="outlined"
             component={Link}
             href="/admin"
             sx={{ 
               color: 'white', 
+              borderColor: 'rgba(255,255,255,0.5)',
               opacity: 0.9,
               textTransform: 'none',
               fontSize: '1rem',
               '&:hover': { 
                 opacity: 1, 
+                borderColor: 'white',
                 color: '#17a2b8',
-                backgroundColor: 'transparent'
+                backgroundColor: 'rgba(255,255,255,0.1)'
               }
             }}
           >
             Admin
           </Button>
           <Button 
+            variant="outlined"
             component={Link}
             href="/login"
             sx={{ 
               color: 'white', 
+              borderColor: 'rgba(255,255,255,0.5)',
               opacity: 0.9,
               textTransform: 'none',
               fontSize: '1rem',
               '&:hover': { 
                 opacity: 1, 
+                borderColor: 'white',
                 color: '#17a2b8',
-                backgroundColor: 'transparent'
+                backgroundColor: 'rgba(255,255,255,0.1)'
               }
             }}
           >
@@ -114,34 +120,40 @@ export default function LandingPage() {
             </Button>
           )}
           <Button 
+            variant="outlined"
             component="a"
             href="#pricing"
             sx={{ 
               color: 'white', 
+              borderColor: 'rgba(255,255,255,0.5)',
               opacity: 0.9,
               textTransform: 'none',
               fontSize: '1rem',
               '&:hover': { 
                 opacity: 1, 
+                borderColor: 'white',
                 color: '#17a2b8',
-                backgroundColor: 'transparent'
+                backgroundColor: 'rgba(255,255,255,0.1)'
               }
             }}
           >
             Pricing
           </Button>
           <Button 
+            variant="outlined"
             component="a"
             href="#about"
             sx={{ 
               color: 'white', 
+              borderColor: 'rgba(255,255,255,0.5)',
               opacity: 0.9,
               textTransform: 'none',
               fontSize: '1rem',
               '&:hover': { 
                 opacity: 1, 
+                borderColor: 'white',
                 color: '#17a2b8',
-                backgroundColor: 'transparent'
+                backgroundColor: 'rgba(255,255,255,0.1)'
               }
             }}
           >
