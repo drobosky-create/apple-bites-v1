@@ -279,7 +279,7 @@ export default function LoginPage() {
           </Button>
 
           {/* Sign Up Redirect */}
-          <Box textAlign="center" mt={3}>
+          <Box textAlign="center" mt={3} className="MuiBox-root css-1cic6ka text-[#e7f0fe]">
             <Typography variant="body2" sx={{ color: { xs: '#CBD5E1', md: '#6B7280' } }}>
               Don't have an account?{' '}
               <Link href="/signup">
