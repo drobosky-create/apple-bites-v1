@@ -255,23 +255,25 @@ export default function PastAssessments() {
             </MDButton>
           </Link>
 
-          <MDButton
-            sx={{
-              background: 'linear-gradient(135deg, #00718d 0%, #005b8c 100%)',
-              color: 'white',
-              '&:hover': {
+          <Link href="/past-assessments">
+            <MDButton
+              sx={{
                 background: 'linear-gradient(135deg, #00718d 0%, #005b8c 100%)',
-                transform: 'translateY(-2px)',
+                color: 'white',
+                '&:hover': {
+                  background: 'linear-gradient(135deg, #00718d 0%, #005b8c 100%)',
+                  transform: 'translateY(-2px)',
 
-              },
-              transition: 'all 0.3s ease',
-              width: '100%',
-              py: 1.5
-            }}
-            startIcon={<Clock size={18} />}
-          >
-            Past Assessments
-          </MDButton>
+                },
+                transition: 'all 0.3s ease',
+                width: '100%',
+                py: 1.5
+              }}
+              startIcon={<Clock size={18} />}
+            >
+              Past Assessments
+            </MDButton>
+          </Link>
         </MDBox>
 
         {/* Apple Bites Branding Footer */}

@@ -56,6 +56,21 @@ export default function ValueCalculator() {
   const [, setLocation] = useLocation();
   const { user: authUser, isLoading: authLoading } = useAuth();
   
+  // Check for URL parameters from Past Assessments navigation
+  const urlParams = new URLSearchParams(window.location.search);
+  const assessmentId = urlParams.get('assessmentId');
+  const hasUrlParams = assessmentId !== null;
+  
+  // Debug logging for navigation
+  if (hasUrlParams) {
+    console.log('Value Calculator loaded with URL params:', {
+      assessmentId,
+      company: urlParams.get('company'),
+      adjustedEbitda: urlParams.get('adjustedEbitda'),
+      overallScore: urlParams.get('overallScore')
+    });
+  }
+  
   // Check if user has completed at least one assessment
   const { data: assessments, isLoading } = useQuery<ValuationAssessment[]>({
     queryKey: ['/api/analytics/assessments'],
@@ -64,11 +79,12 @@ export default function ValueCalculator() {
   const hasCompletedAssessment = assessments && assessments.length > 0;
 
   useEffect(() => {
-    // If no assessments and not loading, redirect to valuation form
-    if (!isLoading && !hasCompletedAssessment) {
-      setLocation('/valuation-form');
+    // Only redirect if no assessments, not loading, AND no URL params (from Past Assessments)
+    if (!isLoading && !hasCompletedAssessment && !hasUrlParams) {
+      console.log('No assessments found and no URL params, redirecting to assessment form');
+      setLocation('/assessment/free');
     }
-  }, [isLoading, hasCompletedAssessment, setLocation]);
+  }, [isLoading, hasCompletedAssessment, hasUrlParams, setLocation]);
 
   const { data: user } = useQuery({
     queryKey: ['/api/auth/user'],
@@ -96,8 +112,8 @@ export default function ValueCalculator() {
     );
   }
 
-  // Show access denied if no assessments found
-  if (!hasCompletedAssessment) {
+  // Show access denied if no assessments found AND no URL params
+  if (!hasCompletedAssessment && !hasUrlParams) {
     return (
       <DashboardBackground>
         <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh" p={3}>
