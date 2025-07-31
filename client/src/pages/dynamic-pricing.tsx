@@ -13,11 +13,13 @@ const PricingContainer = styled(Box)(({ theme }) => ({
 
 const PricingCard = styled(Card)(({ theme }) => ({
   height: '100%',
+  minHeight: '600px', // Fixed height for uniformity
   display: 'flex',
   flexDirection: 'column',
   borderRadius: theme.spacing(2),
   boxShadow: '0 20px 40px rgba(0,0,0,0.3)',
   transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+  backgroundColor: 'white',
   '&:hover': {
     transform: 'translateY(-8px)',
     boxShadow: '0 32px 64px rgba(0,0,0,0.4)',
@@ -25,11 +27,11 @@ const PricingCard = styled(Card)(({ theme }) => ({
 }));
 
 const FeatureList = ({ features }: { features: string[] }) => (
-  <Box sx={{ mt: 3 }}>
+  <Box sx={{ mt: 3, flexGrow: 1, minHeight: '200px' }}>
     {features.map((feature, index) => (
       <Box key={index} display="flex" alignItems="center" sx={{ mb: 2 }}>
         <CheckCircle sx={{ color: '#4B91C2', mr: 2, fontSize: 20 }} />
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="body2" sx={{ color: '#374151', lineHeight: 1.6 }}>
           {feature}
         </Typography>
       </Box>
@@ -211,21 +213,21 @@ export default function DynamicPricingPage() {
                     </Box>
                   )}
                   
-                  <Typography variant="h5" component="h3" gutterBottom fontWeight="bold">
+                  <Typography variant="h5" component="h3" gutterBottom fontWeight="bold" sx={{ color: '#111827', minHeight: '60px' }}>
                     {plan.name}
                   </Typography>
                   
-                  <Typography variant="h3" component="div" gutterBottom fontWeight="bold" color="primary">
+                  <Typography variant="h3" component="div" gutterBottom fontWeight="bold" sx={{ color: '#4B91C2', minHeight: '50px', display: 'flex', alignItems: 'center' }}>
                     {plan.price}
                   </Typography>
                   
-                  <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+                  <Typography variant="body1" sx={{ color: '#6B7280', mb: 3, minHeight: '48px' }}>
                     {plan.description}
                   </Typography>
                   
                   <FeatureList features={plan.features} />
                   
-                  <Box sx={{ mt: 'auto', pt: 3 }}>
+                  <Box sx={{ mt: 'auto', pt: 3, minHeight: '80px', display: 'flex', alignItems: 'end' }}>
                     <Button
                       variant="contained"
                       color={plan.buttonColor}
@@ -237,10 +239,19 @@ export default function DynamicPricingPage() {
                         py: 1.5,
                         fontSize: '1.1rem',
                         fontWeight: 'bold',
+                        height: '50px',
                         ...(plan.buttonColor === 'primary' && {
                           background: 'linear-gradient(45deg, #4B91C2 30%, #005b8c 90%)',
                           '&:hover': {
                             background: 'linear-gradient(45deg, #005b8c 30%, #4B91C2 90%)',
+                          },
+                        }),
+                        ...(plan.disabled && {
+                          backgroundColor: '#9CA3AF',
+                          color: 'white',
+                          '&.Mui-disabled': {
+                            backgroundColor: '#9CA3AF',
+                            color: 'white',
                           },
                         }),
                       }}
