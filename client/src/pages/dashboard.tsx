@@ -47,11 +47,12 @@ const mockUser: DashboardUser = {
 export default function Dashboard() {
   const { user, isAuthenticated, isLoading } = useAuth();
   const queryClient = useQueryClient();
-  // Force mobile for screens smaller than 768px - more aggressive detection
-  const isMobile = useMediaQuery('(max-width:768px)') || 
-                   (typeof window !== 'undefined' && window.innerWidth <= 768) ||
-                   (typeof navigator !== 'undefined' && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent));
+  // Temporarily disable mobile detection to test dashboard
+  const isMobile = false;
   
+  // Debug logging
+  console.log('Dashboard - isLoading:', isLoading, 'isAuthenticated:', isAuthenticated, 'user:', user);
+
   // Show loading state while authentication is being checked
   if (isLoading) {
     return (
@@ -69,8 +70,17 @@ export default function Dashboard() {
 
   // Redirect to login if not authenticated
   if (!isAuthenticated) {
-    window.location.href = '/login';
-    return null;
+    return (
+      <div style={{ 
+        minHeight: '100vh', 
+        backgroundColor: 'white',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}>
+        <div>Please log in to access dashboard</div>
+      </div>
+    );
   }
   
   // Use actual user data or fallback to mock for testing
