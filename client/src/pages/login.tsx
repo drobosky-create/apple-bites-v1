@@ -47,11 +47,11 @@ export default function LoginPage() {
 
       if (response.ok) {
         // Invalidate auth queries to refresh user state
-        queryClient.invalidateQueries({ queryKey: ['/api/auth/user'] });
-        // Small delay to ensure query invalidation completes, then redirect
-        setTimeout(() => {
-          window.location.href = '/dashboard';
-        }, 100);
+        await queryClient.invalidateQueries({ queryKey: ['/api/auth/user'] });
+        // Force refetch auth data to ensure immediate state update
+        await queryClient.refetchQueries({ queryKey: ['/api/auth/user'] });
+        // Redirect to dashboard
+        window.location.href = '/dashboard';
       } else {
         setError(data.message || 'Login failed. Please check your credentials.');
       }
