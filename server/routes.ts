@@ -2740,19 +2740,47 @@ export async function registerRoutes(app: Express): Promise<Server> {
     app.get("/api/stripe/products", async (req, res) => {
       try {
         const products = await stripe.products.list({
-          active: true,
-          expand: ['data.default_price']
+          active: true
         });
 
-        const formattedProducts = products.data.map(product => ({
-          id: product.id,
-          name: product.name,
-          description: product.description,
-          price: product.default_price ? {
-            id: (product.default_price as any).id,
-            amount: (product.default_price as any).unit_amount,
-            currency: (product.default_price as any).currency
-          } : null
+        // Known price mappings from our checkout configuration
+        const priceMapping = {
+          'prod_Sddbk2RWzr8kyL': 'price_1RqbyvAYDUS7LgRZNV57xXKp', // Growth & Exit - $795
+          'prod_Sdvq23217qaGhp': 'price_1RqZhaAYDUS7LgRZfYL9gP1H', // Capital Market - $3495
+        };
+
+        const formattedProducts = await Promise.all(products.data.map(async (product) => {
+          let price = null;
+          
+          // Get the specific price for this product if we have it mapped
+          const priceId = priceMapping[product.id as keyof typeof priceMapping];
+          console.log(`Processing product ${product.name} (${product.id}) with price ID: ${priceId}`);
+          
+          if (priceId) {
+            try {
+              const priceObj = await stripe.prices.retrieve(priceId);
+              console.log(`Retrieved price for ${product.name}:`, {
+                id: priceObj.id,
+                amount: priceObj.unit_amount,
+                currency: priceObj.currency
+              });
+              
+              price = {
+                id: priceObj.id,
+                amount: priceObj.unit_amount,
+                currency: priceObj.currency
+              };
+            } catch (priceError: any) {
+              console.error(`Failed to fetch price ${priceId} for product ${product.id}:`, priceError.message);
+            }
+          }
+
+          return {
+            id: product.id,
+            name: product.name,
+            description: product.description,
+            price
+          };
         }));
 
         res.json({ products: formattedProducts });
