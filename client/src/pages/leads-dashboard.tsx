@@ -13,6 +13,7 @@ import type { Lead } from '@shared/schema';
 import AdminLogin from '@/components/admin-login';
 import { useAdminAuth } from '@/hooks/use-admin-auth';
 import { useLocation } from 'wouter';
+import { useToast } from '@/hooks/use-toast';
 
 export default function LeadsDashboard() {
   const [searchQuery, setSearchQuery] = useState('');

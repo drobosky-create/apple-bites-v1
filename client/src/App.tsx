@@ -97,12 +97,8 @@ function Router() {
         </Route>
         
         {/* Admin/Team pages - self-authenticated */}
-        <Route path="/admin/analytics">
-          {isAuthenticated ? <AnalyticsDashboard /> : <LoginPage />}
-        </Route>
-        <Route path="/admin/leads">
-          {isAuthenticated ? <LeadsDashboard /> : <LoginPage />}
-        </Route>
+        <Route path="/admin/analytics" component={AnalyticsDashboard} />
+        <Route path="/admin/leads" component={LeadsDashboard} />
         <Route path="/team" component={TeamDashboard} />
         
         {/* Fallback - redirect to login if not authenticated */}
