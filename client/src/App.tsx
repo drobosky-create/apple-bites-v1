@@ -24,6 +24,7 @@ import TermsOfUse from "@/pages/terms-of-use";
 import PricingPage from "@/pages/pricing";
 import LandingPage from "@/pages/landing";
 import CheckoutSuccess from "@/pages/checkout-success";
+import AdminLoginPage from "@/pages/admin-login";
 import CookieBanner from "@/components/CookieBanner";
 
 function Router() {
@@ -50,6 +51,7 @@ function Router() {
         {/* Authentication routes - always accessible */}
         <Route path="/signup" component={SignupPage} />
         <Route path="/login" component={LoginPage} />
+        <Route path="/admin" component={AdminLoginPage} />
         
         {/* Legal pages - always accessible */}
         <Route path="/privacy-policy" component={PrivacyPolicy} />
@@ -95,7 +97,6 @@ function Router() {
         </Route>
         
         {/* Admin/Team pages - self-authenticated */}
-        <Route path="/admin" component={AdminDashboard} />
         <Route path="/admin/analytics">
           {isAuthenticated ? <AnalyticsDashboard /> : <LoginPage />}
         </Route>
