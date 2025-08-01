@@ -974,11 +974,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { username, password } = req.body;
       
-      // Simple admin credentials check (in production, use proper password hashing)
-      const adminUsername = process.env.ADMIN_USERNAME || 'admin';
-      const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+      // Check multiple admin credentials
+      const adminCredentials = [
+        // Primary admin (Meritage email) 
+        { username: 'robosky@meritagecompanies.com', password: 'Cooper12!!' },
+        // Fallback admin credentials
+        { username: process.env.ADMIN_USERNAME || 'admin', password: process.env.ADMIN_PASSWORD || 'admin123' }
+      ];
       
-      if (username === adminUsername && password === adminPassword) {
+      const isValidAdmin = adminCredentials.some(cred => 
+        username === cred.username && password === cred.password
+      );
+      
+      if (isValidAdmin) {
         (req.session as any).adminAuthenticated = true;
         res.json({ success: true, message: 'Authentication successful' });
       } else {
