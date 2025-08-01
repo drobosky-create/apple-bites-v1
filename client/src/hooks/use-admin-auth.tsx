@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 interface AdminAuthContextType {
   isAuthenticated: boolean;
@@ -12,6 +12,7 @@ const AdminAuthContext = createContext<AdminAuthContextType | undefined>(undefin
 
 export function AdminAuthProvider({ children }: { children: ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const queryClient = useQueryClient();
 
   // Check if admin is authenticated on app load
   const { data: authStatus, isLoading } = useQuery({
@@ -29,11 +30,15 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (authStatus?.authenticated) {
       setIsAuthenticated(true);
+    } else {
+      setIsAuthenticated(false);
     }
   }, [authStatus]);
 
   const login = () => {
     setIsAuthenticated(true);
+    // Invalidate and refetch the admin status
+    queryClient.invalidateQueries({ queryKey: ['/api/admin/status'] });
   };
 
   const logout = async () => {

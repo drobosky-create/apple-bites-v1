@@ -378,28 +378,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
 
 
-  // Admin authentication middleware - also allows team members
+  // Admin authentication middleware - requires explicit admin login
   const isAdminAuthenticated = async (req: any, res: any, next: any) => {
-    // Check if admin is authenticated via admin login
+    // Check if admin is authenticated via admin login ONLY
     if ((req.session as any)?.adminAuthenticated) {
       return next();
-    }
-
-    // Check if team member is authenticated (team members have admin access)
-    const sessionId = (req.session as any)?.teamSessionId;
-    if (sessionId) {
-      try {
-        const session = await storage.getTeamSession(sessionId);
-        if (session && session.expiresAt > new Date()) {
-          const teamMember = await storage.getTeamMemberById(session.teamMemberId!);
-          if (teamMember && teamMember.isActive) {
-            req.user = teamMember;
-            return next();
-          }
-        }
-      } catch (error) {
-        // Continue to admin auth check
-      }
     }
 
     return res.status(401).json({ error: 'Admin authentication required' });
@@ -998,27 +981,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   app.get("/api/admin/status", async (req, res) => {
-    // Check if admin is authenticated via admin login
+    // Check if admin is authenticated via admin login ONLY
     if ((req.session as any)?.adminAuthenticated) {
       return res.json({ authenticated: true });
     }
 
-    // Check if team member is authenticated (team members have admin access)
-    const sessionId = (req.session as any)?.teamSessionId;
-    if (sessionId) {
-      try {
-        const session = await storage.getTeamSession(sessionId);
-        if (session && session.expiresAt > new Date()) {
-          const teamMember = await storage.getTeamMemberById(session.teamMemberId!);
-          if (teamMember && teamMember.isActive) {
-            return res.json({ authenticated: true });
-          }
-        }
-      } catch (error) {
-        // Continue to return false
-      }
-    }
-
+    // No fallback - admin access requires explicit admin login
     res.json({ authenticated: false });
   });
 
