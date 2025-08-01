@@ -171,20 +171,7 @@ export default function TeamDashboard() {
             </div>
           </div>
           <div >
-            <Link href="/admin/leads" >
-              <Button 
-                
-              >
-                Leads
-              </Button>
-            </Link>
-            <Link href="/admin/analytics" >
-              <Button 
-                
-              >
-                Analytics
-              </Button>
-            </Link>
+            {/* Admin access removed - use proper admin login at /admin */}
           </div>
         </div>
 
