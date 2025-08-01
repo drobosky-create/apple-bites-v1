@@ -977,7 +977,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Check multiple admin credentials
       const adminCredentials = [
         // Primary admin (Meritage email) 
-        { username: 'robosky@meritagecompanies.com', password: 'Cooper12!!' },
+        { username: 'drobosky@meritage-partners.com', password: 'Cooper12!!' },
         // Fallback admin credentials
         { username: process.env.ADMIN_USERNAME || 'admin', password: process.env.ADMIN_PASSWORD || 'admin123' }
       ];
