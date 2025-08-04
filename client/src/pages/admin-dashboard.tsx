@@ -5,8 +5,7 @@ import { Users, Plus, Edit, Trash2, Shield, LogOut, UserPlus, Settings, Home, Ba
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { insertTeamMemberSchema, type InsertTeamMember, type TeamMember } from '@shared/schema';
-import TeamLogin from '@/components/team-login';
-import { useTeamAuth } from '@/hooks/use-team-auth';
+// Admin dashboard - authentication handled by AdminLoginPage
 import { useToast } from '@/hooks/use-toast';
 
 // Material Dashboard Components
@@ -304,15 +303,38 @@ function StatsCard({ title, value, subtitle, icon: Icon, color }: {
 }
 
 export default function AdminDashboard() {
-  const { user, isAuthenticated, isLoading, hasRole, logout } = useTeamAuth();
+  // Admin dashboard doesn't use team authentication
+  const [isLoading, setIsLoading] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [editingMember, setEditingMember] = useState<TeamMember | null>(null);
   const queryClient = useQueryClient();
   const { toast } = useToast();
 
+  // Admin user object for display
+  const adminUser = {
+    firstName: 'Daniel',
+    lastName: 'Robosky',
+    email: 'drobosky@meritage-partners.com',
+    role: 'admin'
+  };
+
+  // Admin logout function
+  const handleAdminLogout = async () => {
+    try {
+      await fetch('/api/admin/logout', {
+        method: 'POST',
+        credentials: 'include',
+      });
+      window.location.href = '/admin';
+    } catch (error) {
+      console.error('Logout error:', error);
+      window.location.href = '/admin';
+    }
+  };
+
   const { data: teamMembers, isLoading: membersLoading } = useQuery<TeamMember[]>({
     queryKey: ['/api/team/members'],
-    enabled: isAuthenticated && hasRole('admin'),
+    enabled: true, // Admin dashboard assumes proper authentication
   });
 
   const form = useForm<InsertTeamMember>({
@@ -386,12 +408,8 @@ export default function AdminDashboard() {
   }
 
   // Show login screen if not authenticated
-  if (!isAuthenticated) {
-    return <TeamLogin onLoginSuccess={(userData) => {
-      queryClient.invalidateQueries({ queryKey: ['/api/team/me'] });
-      queryClient.invalidateQueries({ queryKey: ['/api/admin/status'] });
-    }} />;
-  }
+  // Admin dashboard assumes authentication is handled by AdminLoginPage
+  // No fallback login form needed here
 
   const getRoleColor = (role: string) => {
     const colors = {
@@ -406,10 +424,7 @@ export default function AdminDashboard() {
     createMemberMutation.mutate(data);
   };
 
-  const handleSignOut = () => {
-    // Admin logout logic here
-    window.location.href = '/admin/login';
-  };
+
 
   return (
     <MDBox sx={{ 
@@ -417,7 +432,7 @@ export default function AdminDashboard() {
       minHeight: '100vh', 
       backgroundColor: '#f8f9fa' 
     }}>
-      <AdminSidebar user={user} onSignOut={handleSignOut} />
+      <AdminSidebar user={adminUser} onSignOut={handleAdminLogout} />
       
       {/* Main Content */}
       <MDBox
@@ -444,7 +459,7 @@ export default function AdminDashboard() {
               <MDButton
                 variant="outlined"
                 color="info"
-                onClick={logout}
+                onClick={handleAdminLogout}
                 startIcon={<LogOut size={18} />}
               >
                 Logout
