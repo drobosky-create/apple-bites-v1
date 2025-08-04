@@ -22,12 +22,20 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { insertTeamMemberSchema, type InsertTeamMember, type TeamMember } from '@shared/schema';
 import TeamLogin from '@/components/team-login';
 import { useTeamAuth } from '@/hooks/use-team-auth';
+import { useAdminAuth } from '@/hooks/use-admin-auth';
 import PasswordChangeForm from '@/components/password-change-form';
 import PasswordChangeModal from '@/components/password-change-modal';
 import appleBitesLogoImage from '@assets/Apple Bites_1752266454888.png';
 
 export default function TeamDashboard() {
   const { user, isAuthenticated, isLoading, hasRole, logout, login } = useTeamAuth();
+  const adminAuth = useAdminAuth();
+  
+  // Check if we're in admin context (URL contains /admin/)
+  const isAdminContext = window.location.pathname.includes('/admin/');
+  
+  // Use admin auth if in admin context, otherwise use team auth
+  const currentAuth = isAdminContext ? adminAuth : { user, isAuthenticated, isLoading, hasRole, logout, login };
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [showPasswordChangeModal, setShowPasswordChangeModal] = useState(false);
   const queryClient = useQueryClient();
@@ -42,7 +50,7 @@ export default function TeamDashboard() {
 
   const { data: teamMembers, isLoading: membersLoading } = useQuery<TeamMember[]>({
     queryKey: ['/api/team/members'],
-    enabled: isAuthenticated && hasRole('admin'),
+    enabled: currentAuth.isAuthenticated && (isAdminContext || hasRole('admin')),
   });
 
   const form = useForm<InsertTeamMember>({
@@ -127,7 +135,7 @@ export default function TeamDashboard() {
   });
 
   // Show authentication loading state
-  if (isLoading) {
+  if (currentAuth.isLoading) {
     return (
       <div >
         <div >
@@ -139,7 +147,7 @@ export default function TeamDashboard() {
   }
 
   // Show login screen if not authenticated
-  if (!isAuthenticated) {
+  if (!currentAuth.isAuthenticated) {
     return <TeamLogin onLoginSuccess={(userData) => {
       // Update auth state properly
       login(userData);

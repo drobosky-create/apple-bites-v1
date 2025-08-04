@@ -423,6 +423,47 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   };
 
+  // Combined authentication middleware - accepts both admin and team auth
+  const isAdminOrTeamAuthenticated = async (req: any, res: any, next: any) => {
+    // First try admin authentication
+    if ((req.session as any)?.adminAuthenticated) {
+      req.user = { role: 'admin' }; // Set admin user context
+      return next();
+    }
+
+    // If not admin, try team authentication
+    const sessionId = (req.session as any)?.teamSessionId;
+    if (!sessionId) {
+      return res.status(401).json({ error: 'Authentication required' });
+    }
+
+    try {
+      const session = await storage.getTeamSession(sessionId);
+      if (!session || session.expiresAt < new Date()) {
+        if (session) {
+          await storage.deleteTeamSession(sessionId);
+        }
+        (req.session as any).teamSessionId = null;
+        return res.status(401).json({ error: 'Session expired' });
+      }
+
+      const teamMember = await storage.getTeamMemberById(session.teamMemberId!);
+      if (!teamMember || !teamMember.isActive) {
+        return res.status(401).json({ error: 'Account inactive' });
+      }
+
+      // Extend session on each request
+      const newExpiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+      await storage.updateTeamSession(sessionId, newExpiresAt);
+
+      req.user = teamMember;
+      return next();
+    } catch (error) {
+      console.error('Authentication middleware error:', error);
+      return res.status(401).json({ error: 'Authentication failed' });
+    }
+  };
+
   // Role-based access control middleware
   const requireRole = (roles: string[]) => {
     return (req: any, res: any, next: any) => {
@@ -1068,7 +1109,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Team management routes (admin only)
-  app.get("/api/team/members", isTeamAuthenticated, requireRole(['admin']), async (req, res) => {
+  app.get("/api/team/members", isAdminOrTeamAuthenticated, requireRole(['admin']), async (req, res) => {
     try {
       const members = await storage.getAllTeamMembers();
       const membersWithoutPasswords = members.map(({ hashedPassword, ...member }) => member);
@@ -1078,7 +1119,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/team/members", isTeamAuthenticated, requireRole(['admin']), async (req, res) => {
+  app.post("/api/team/members", isAdminOrTeamAuthenticated, requireRole(['admin']), async (req, res) => {
     try {
       const validatedData = insertTeamMemberSchema.parse(req.body);
       const { password, ...memberData } = validatedData;
