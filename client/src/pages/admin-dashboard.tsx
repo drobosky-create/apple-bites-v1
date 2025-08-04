@@ -452,7 +452,7 @@ export default function AdminDashboard() {
                 Team Management
               </MDTypography>
               <MDTypography variant="body1" sx={{ color: '#67748e' }}>
-                Welcome back, {user?.firstName} {user?.lastName} - Manage your team and organization
+                Welcome back, {adminUser?.firstName} {adminUser?.lastName} - Manage your team and organization
               </MDTypography>
             </MDBox>
             <MDBox display="flex" gap={2}>
