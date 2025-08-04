@@ -3119,45 +3119,75 @@ export async function registerRoutes(app: Express): Promise<Server> {
     app.post("/api/webhooks/stripe", async (req, res) => {
       try {
         const sig = req.headers['stripe-signature'] as string;
+        let event;
         
-        // Note: In production, you'll need to set STRIPE_WEBHOOK_SECRET
-        // const event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET!);
-        
-        // For now, process the event directly (not secure for production)
-        const event = req.body;
-
-        if (event.type === 'payment_intent.succeeded') {
-          const paymentIntent = event.data.object;
-          const { tier, userId } = paymentIntent.metadata;
-
-          // Update user tier in database
-          if (userId && userId !== 'anonymous') {
-            try {
-              await storage.updateUserTier(userId, tier);
-              console.log(`Updated user ${userId} to tier ${tier}`);
-
-              // Send webhook to N8N for GHL integration
-              const webhookData = {
-                type: 'tierUpgrade', 
-                userId,
-                tier,
-                amount: paymentIntent.amount / 100,
-                timestamp: new Date().toISOString(),
-                paymentIntentId: paymentIntent.id,
-              };
-
-              // Send to N8N webhook
-              const n8nWebhookUrl = 'https://drobosky.app.n8n.cloud/webhook-test/replit-lead';
-              await fetch(n8nWebhookUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(webhookData),
-              });
-
-            } catch (error) {
-              console.error('Error updating user tier:', error);
-            }
+        // If webhook secret is configured, verify the signature
+        if (process.env.STRIPE_WEBHOOK_SECRET) {
+          try {
+            event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
+            console.log('Webhook signature verified successfully');
+          } catch (err: any) {
+            console.error('Webhook signature verification failed:', err.message);
+            return res.status(400).send(`Webhook Error: ${err.message}`);
           }
+        } else {
+          // For development - log warning but process anyway
+          console.warn('STRIPE_WEBHOOK_SECRET not set - processing webhook without verification (INSECURE)');
+          event = req.body;
+        }
+
+        console.log('Processing Stripe webhook event:', event.type);
+
+        // Handle different event types
+        switch (event.type) {
+          case 'payment_intent.succeeded':
+            const paymentIntent = event.data.object;
+            console.log('Payment succeeded:', paymentIntent.id, paymentIntent.amount);
+            
+            const { tier, userId } = paymentIntent.metadata;
+            if (userId && userId !== 'anonymous') {
+              try {
+                await storage.updateUserTier(userId, tier);
+                console.log(`Updated user ${userId} to tier ${tier}`);
+
+                // Send webhook to N8N for GHL integration
+                const webhookData = {
+                  type: 'tierUpgrade', 
+                  userId,
+                  tier,
+                  amount: paymentIntent.amount / 100,
+                  timestamp: new Date().toISOString(),
+                  paymentIntentId: paymentIntent.id,
+                };
+
+                const n8nWebhookUrl = 'https://drobosky.app.n8n.cloud/webhook-test/replit-lead';
+                const response = await fetch(n8nWebhookUrl, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify(webhookData),
+                });
+                console.log('N8N webhook response:', response.status);
+
+              } catch (error) {
+                console.error('Error updating user tier:', error);
+              }
+            }
+            break;
+
+          case 'checkout.session.completed':
+            const session = event.data.object;
+            console.log('Checkout session completed:', session.id);
+            // Handle checkout completion if needed
+            break;
+
+          case 'invoice.payment_succeeded':
+            const invoice = event.data.object;
+            console.log('Invoice payment succeeded:', invoice.id);
+            // Handle subscription payments
+            break;
+
+          default:
+            console.log('Unhandled event type:', event.type);
         }
 
         res.json({ received: true });
