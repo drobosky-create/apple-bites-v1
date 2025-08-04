@@ -957,6 +957,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { username, password } = req.body;
       
+      // Trim whitespace from inputs
+      const trimmedUsername = username?.trim();
+      const trimmedPassword = password?.trim();
+      
+      console.log('Admin login attempt:', { 
+        username: trimmedUsername, 
+        passwordLength: trimmedPassword?.length 
+      });
+      
       // Check multiple admin credentials
       const adminCredentials = [
         // Primary admin (Meritage email) 
@@ -966,16 +975,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
       ];
       
       const isValidAdmin = adminCredentials.some(cred => 
-        username === cred.username && password === cred.password
+        trimmedUsername === cred.username && trimmedPassword === cred.password
       );
       
       if (isValidAdmin) {
         (req.session as any).adminAuthenticated = true;
+        console.log('Admin authentication successful');
         res.json({ success: true, message: 'Authentication successful' });
       } else {
+        console.log('Admin authentication failed - invalid credentials');
         res.status(401).json({ error: 'Invalid credentials' });
       }
     } catch (error) {
+      console.error('Admin login error:', error);
       res.status(500).json({ error: 'Authentication failed' });
     }
   });
