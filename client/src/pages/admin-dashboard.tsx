@@ -300,7 +300,7 @@ export default function AdminDashboard() {
   const [isLoading, setIsLoading] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [editingMember, setEditingMember] = useState<TeamMember | null>(null);
-  const [activeTab, setActiveTab] = useState('team'); // Internal navigation state
+  const [activeTab, setActiveTab] = useState('overview'); // Internal navigation state
   const queryClient = useQueryClient();
   const { toast } = useToast();
 
@@ -670,19 +670,272 @@ export default function AdminDashboard() {
           </>
           )}
 
-          {/* Other tabs can be added here */}
-          {activeTab === 'leads' && (
-            <MDTypography>Leads dashboard coming soon...</MDTypography>
-          )}
-          {activeTab === 'analytics' && (
-            <MDTypography>Analytics dashboard coming soon...</MDTypography>
-          )}
+          {/* Overview Dashboard Tab */}
           {activeTab === 'overview' && (
-            <MDTypography>Overview dashboard coming soon...</MDTypography>
+            <OverviewDashboard teamMembers={teamMembers} />
+          )}
+
+          {/* Leads Dashboard Tab */}
+          {activeTab === 'leads' && (
+            <LeadsManagement />
+          )}
+
+          {/* Analytics Dashboard Tab */}
+          {activeTab === 'analytics' && (
+            <AnalyticsDashboard />
           )}
 
         </Container>
       </MDBox>
     </MDBox>
+  );
+}
+
+// Overview Dashboard Component
+function OverviewDashboard({ teamMembers }: { teamMembers?: TeamMember[] }) {
+  const { data: leads } = useQuery<any[]>({
+    queryKey: ['/api/leads'],
+    enabled: true,
+  });
+
+  return (
+    <>
+      {/* System Overview Stats */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px', marginBottom: '24px' }}>
+        <StatsCard
+          title="Total Team Members"
+          value={teamMembers?.length || 0}
+          subtitle="registered users"
+          icon={Users}
+          color="primary"
+        />
+        <StatsCard
+          title="Total Leads"
+          value={leads?.length || 0}
+          subtitle="in system"
+          icon={TrendingUp}
+          color="success"
+        />
+        <StatsCard
+          title="Active Members"
+          value={teamMembers?.filter(m => m.isActive).length || 0}
+          subtitle="currently active"
+          icon={Shield}
+          color="info"
+        />
+        <StatsCard
+          title="System Health"
+          value="Online"
+          subtitle="all systems operational"
+          icon={Settings}
+          color="warning"
+        />
+      </div>
+
+      {/* Recent Activity */}
+      <Card sx={{ boxShadow: '0 2px 8px -4px rgba(0,0,0,0.1)', mb: 3 }}>
+        <MDBox p={2.5}>
+          <MDTypography variant="h6" fontWeight="bold" sx={{ color: '#344767', mb: 2 }}>
+            System Overview
+          </MDTypography>
+          <MDTypography variant="body2" sx={{ color: '#67748e' }}>
+            Welcome to the Apple Bites admin dashboard. From here you can manage your team, track leads, and view system analytics.
+          </MDTypography>
+        </MDBox>
+      </Card>
+    </>
+  );
+}
+
+// Leads Management Component
+function LeadsManagement() {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
+
+  const { data: leads, isLoading: leadsLoading } = useQuery<any[]>({
+    queryKey: ['/api/leads', statusFilter === 'all' ? '' : statusFilter, searchQuery],
+    queryFn: async () => {
+      const params = new URLSearchParams();
+      if (statusFilter !== 'all') params.append('status', statusFilter);
+      if (searchQuery) params.append('search', searchQuery);
+      
+      const response = await fetch(`/api/leads?${params}`);
+      if (!response.ok) throw new Error('Failed to fetch leads');
+      return response.json();
+    },
+    enabled: true,
+  });
+
+  return (
+    <>
+      {/* Search and Filter */}
+      <Card sx={{ boxShadow: '0 2px 8px -4px rgba(0,0,0,0.1)', mb: 3 }}>
+        <MDBox p={2.5}>
+          <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+            <TextField
+              label="Search leads..."
+              variant="outlined"
+              size="small"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              sx={{ minWidth: '300px' }}
+            />
+            <TextField
+              select
+              label="Status"
+              size="small"
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              SelectProps={{ native: true }}
+              sx={{ minWidth: '150px' }}
+            >
+              <option value="all">All Status</option>
+              <option value="new">New</option>
+              <option value="contacted">Contacted</option>
+              <option value="qualified">Qualified</option>
+              <option value="proposal">Proposal</option>
+              <option value="closed">Closed</option>
+            </TextField>
+          </div>
+        </MDBox>
+      </Card>
+
+      {/* Leads Table */}
+      <Card sx={{ boxShadow: '0 2px 8px -4px rgba(0,0,0,0.1)' }}>
+        <MDBox p={2.5} display="flex" justifyContent="space-between" alignItems="center">
+          <MDTypography variant="h6" fontWeight="bold" sx={{ color: '#344767' }}>
+            Leads ({leads?.length || 0})
+          </MDTypography>
+        </MDBox>
+        
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow sx={{ backgroundColor: '#f8f9fa' }}>
+                <TableCell><Typography fontWeight="bold">Name</Typography></TableCell>
+                <TableCell><Typography fontWeight="bold">Email</Typography></TableCell>
+                <TableCell><Typography fontWeight="bold">Phone</Typography></TableCell>
+                <TableCell><Typography fontWeight="bold">Company</Typography></TableCell>
+                <TableCell><Typography fontWeight="bold">Status</Typography></TableCell>
+                <TableCell><Typography fontWeight="bold">Date</Typography></TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {leads?.map((lead, index) => (
+                <TableRow key={lead.id || index}>
+                  <TableCell>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <User size={16} />
+                      {`${lead.firstName || ''} ${lead.lastName || ''}`.trim() || 'N/A'}
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <Mail size={16} />
+                      {lead.email || 'N/A'}
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <Phone size={16} />
+                      {lead.phone || 'N/A'}
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <Building size={16} />
+                      {lead.company || 'N/A'}
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <Chip 
+                      label={lead.status || 'new'} 
+                      size="small"
+                      color={lead.status === 'qualified' ? 'success' : lead.status === 'closed' ? 'error' : 'default'}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <Calendar size={16} />
+                      {lead.createdAt ? new Date(lead.createdAt).toLocaleDateString() : 'N/A'}
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+              {(!leads || leads.length === 0) && (
+                <TableRow>
+                  <TableCell colSpan={6} style={{ textAlign: 'center', padding: '40px' }}>
+                    <MDTypography variant="body2" sx={{ color: '#67748e' }}>
+                      No leads found
+                    </MDTypography>
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Card>
+    </>
+  );
+}
+
+// Analytics Dashboard Component  
+function AnalyticsDashboard() {
+  const { data: analytics } = useQuery<any>({
+    queryKey: ['/api/analytics'],
+    queryFn: async () => {
+      const response = await fetch('/api/analytics');
+      if (!response.ok) throw new Error('Failed to fetch analytics');
+      return response.json();
+    },
+    enabled: true,
+  });
+
+  return (
+    <>
+      {/* Analytics Stats */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px', marginBottom: '24px' }}>
+        <StatsCard
+          title="Total Assessments"
+          value={analytics?.totalAssessments || 0}
+          subtitle="completed"
+          icon={FileText}
+          color="primary"
+        />
+        <StatsCard
+          title="Active Users"
+          value={analytics?.activeUsers || 0}
+          subtitle="this month"
+          icon={Users}
+          color="success"
+        />
+        <StatsCard
+          title="Conversion Rate"
+          value={`${analytics?.conversionRate || 0}%`}
+          subtitle="lead to customer"
+          icon={TrendingUp}
+          color="info"
+        />
+        <StatsCard
+          title="Revenue"
+          value={`$${analytics?.revenue || 0}`}
+          subtitle="this month"
+          icon={BarChart3}
+          color="warning"
+        />
+      </div>
+
+      {/* Analytics Content */}
+      <Card sx={{ boxShadow: '0 2px 8px -4px rgba(0,0,0,0.1)' }}>
+        <MDBox p={2.5}>
+          <MDTypography variant="h6" fontWeight="bold" sx={{ color: '#344767', mb: 2 }}>
+            System Analytics
+          </MDTypography>
+          <MDTypography variant="body2" sx={{ color: '#67748e' }}>
+            Detailed analytics dashboard coming soon. This will include charts, metrics, and reporting functionality.
+          </MDTypography>
+        </MDBox>
+      </Card>
+    </>
   );
 }
