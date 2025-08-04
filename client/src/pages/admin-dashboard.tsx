@@ -468,44 +468,36 @@ export default function AdminDashboard() {
           </MDBox>
 
           {/* Stats Cards */}
-          <Grid container spacing={2} mb={3}>
-            <Grid item xs={12} sm={6} md={3}>
-              <StatsCard
-                title="Total Members"
-                value={teamMembers?.length || 0}
-                subtitle="registered accounts"
-                icon={Users}
-                color="primary"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
-              <StatsCard
-                title="Active Members"
-                value={teamMembers?.filter(m => m.isActive).length || 0}
-                subtitle="currently active"
-                icon={Shield}
-                color="success"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
-              <StatsCard
-                title="Admins"
-                value={teamMembers?.filter(m => m.role === 'admin').length || 0}
-                subtitle="with admin access"
-                icon={Settings}
-                color="info"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
-              <StatsCard
-                title="Managers"
-                value={teamMembers?.filter(m => m.role === 'manager').length || 0}
-                subtitle="team managers"
-                icon={UserPlus}
-                color="warning"
-              />
-            </Grid>
-          </Grid>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px', marginBottom: '24px' }}>
+            <StatsCard
+              title="Total Members"
+              value={teamMembers?.length || 0}
+              subtitle="registered accounts"
+              icon={Users}
+              color="primary"
+            />
+            <StatsCard
+              title="Active Members"
+              value={teamMembers?.filter(m => m.isActive).length || 0}
+              subtitle="currently active"
+              icon={Shield}
+              color="success"
+            />
+            <StatsCard
+              title="Admins"
+              value={teamMembers?.filter(m => m.role === 'admin').length || 0}
+              subtitle="with admin access"
+              icon={Settings}
+              color="info"
+            />
+            <StatsCard
+              title="Managers"
+              value={teamMembers?.filter(m => m.role === 'manager').length || 0}
+              subtitle="team managers"
+              icon={UserPlus}
+              color="warning"
+            />
+          </div>
 
           {/* Team Members Table */}
           <Card sx={{ boxShadow: '0 2px 8px -4px rgba(0,0,0,0.1)' }}>
@@ -607,8 +599,8 @@ export default function AdminDashboard() {
               </MDTypography>
               
               <Box component="form" onSubmit={form.handleSubmit(onSubmit)}>
-                <Grid container spacing={2}>
-                  <Grid item xs={6}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                  <div style={{ display: 'flex', gap: '16px' }}>
                     <TextField
                       fullWidth
                       label="First Name"
@@ -616,8 +608,6 @@ export default function AdminDashboard() {
                       error={!!form.formState.errors.firstName}
                       helperText={form.formState.errors.firstName?.message}
                     />
-                  </Grid>
-                  <Grid item xs={6}>
                     <TextField
                       fullWidth
                       label="Last Name"
@@ -625,41 +615,35 @@ export default function AdminDashboard() {
                       error={!!form.formState.errors.lastName}
                       helperText={form.formState.errors.lastName?.message}
                     />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      fullWidth
-                      label="Email"
-                      type="email"
-                      {...form.register('email')}
-                      error={!!form.formState.errors.email}
-                      helperText={form.formState.errors.email?.message}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      fullWidth
-                      label="Password"
-                      type="password"
-                      {...form.register('password')}
-                      error={!!form.formState.errors.password}
-                      helperText={form.formState.errors.password?.message}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      fullWidth
-                      select
-                      label="Role"
-                      {...form.register('role')}
-                      SelectProps={{ native: true }}
-                    >
-                      <option value="member">Member</option>
-                      <option value="manager">Manager</option>
-                      <option value="admin">Admin</option>
-                    </TextField>
-                  </Grid>
-                </Grid>
+                  </div>
+                  <TextField
+                    fullWidth
+                    label="Email"
+                    type="email"
+                    {...form.register('email')}
+                    error={!!form.formState.errors.email}
+                    helperText={form.formState.errors.email?.message}
+                  />
+                  <TextField
+                    fullWidth
+                    label="Password"
+                    type="password"
+                    {...form.register('password')}
+                    error={!!form.formState.errors.password}
+                    helperText={form.formState.errors.password?.message}
+                  />
+                  <TextField
+                    fullWidth
+                    select
+                    label="Role"
+                    {...form.register('role')}
+                    SelectProps={{ native: true }}
+                  >
+                    <option value="member">Member</option>
+                    <option value="manager">Manager</option>
+                    <option value="admin">Admin</option>
+                  </TextField>
+                </div>
                 
                 <MDBox mt={3} display="flex" justifyContent="flex-end" gap={2}>
                   <MDButton 
