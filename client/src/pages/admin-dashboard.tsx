@@ -179,24 +179,7 @@ function AdminSidebar({ user, onSignOut, activeTab, setActiveTab }: { user: any;
           Leads
         </MDButton>
 
-        <MDButton
-          onClick={() => setActiveTab('valuations')}
-          sx={{
-            background: activeTab === 'valuations' ? gradients.glow : 'transparent',
-            border: activeTab === 'valuations' ? 'none' : `1px solid rgba(255, 255, 255, 0.3)`,
-            color: activeTab === 'valuations' ? 'white' : '#dbdce1',
-            '&:hover': {
-              background: activeTab === 'valuations' ? gradients.light : 'rgba(255, 255, 255, 0.1)',
-              transform: 'translateY(-2px)'
-            },
-            transition: 'all 0.3s ease',
-            width: '100%',
-            py: 1.2
-          }}
-          startIcon={<TrendingUp size={18} />}
-        >
-          Valuations
-        </MDButton>
+
 
         <MDButton
           onClick={() => setActiveTab('analytics')}
@@ -699,11 +682,6 @@ export default function AdminDashboard() {
             <LeadsManagement />
           )}
 
-          {/* Valuations Tab */}
-          {activeTab === 'valuations' && (
-            <ValuationsManagement />
-          )}
-
           {/* Analytics Dashboard Tab */}
           {activeTab === 'analytics' && (
             <AnalyticsDashboard />
@@ -775,6 +753,7 @@ function OverviewDashboard({ teamMembers }: { teamMembers?: TeamMember[] }) {
 function LeadsManagement() {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [viewMode, setViewMode] = useState('leads'); // 'leads' or 'assessments'
 
   const { data: leads, isLoading: leadsLoading } = useQuery<any[]>({
     queryKey: ['/api/leads', statusFilter === 'all' ? '' : statusFilter, searchQuery],
@@ -790,124 +769,6 @@ function LeadsManagement() {
     enabled: true,
   });
 
-  return (
-    <>
-      {/* Search and Filter */}
-      <Card sx={{ boxShadow: '0 2px 8px -4px rgba(0,0,0,0.1)', mb: 3 }}>
-        <MDBox p={2.5}>
-          <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-            <TextField
-              label="Search leads..."
-              variant="outlined"
-              size="small"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              sx={{ minWidth: '300px' }}
-            />
-            <TextField
-              select
-              label="Status"
-              size="small"
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              SelectProps={{ native: true }}
-              sx={{ minWidth: '150px' }}
-            >
-              <option value="all">All Status</option>
-              <option value="new">New</option>
-              <option value="contacted">Contacted</option>
-              <option value="qualified">Qualified</option>
-              <option value="proposal">Proposal</option>
-              <option value="closed">Closed</option>
-            </TextField>
-          </div>
-        </MDBox>
-      </Card>
-
-      {/* Leads Table */}
-      <Card sx={{ boxShadow: '0 2px 8px -4px rgba(0,0,0,0.1)' }}>
-        <MDBox p={2.5} display="flex" justifyContent="space-between" alignItems="center">
-          <MDTypography variant="h6" fontWeight="bold" sx={{ color: '#344767' }}>
-            Leads ({leads?.length || 0})
-          </MDTypography>
-        </MDBox>
-        
-        <TableContainer>
-          <Table>
-            <TableHead>
-              <TableRow sx={{ backgroundColor: '#f8f9fa' }}>
-                <TableCell><Typography fontWeight="bold">Name</Typography></TableCell>
-                <TableCell><Typography fontWeight="bold">Email</Typography></TableCell>
-                <TableCell><Typography fontWeight="bold">Phone</Typography></TableCell>
-                <TableCell><Typography fontWeight="bold">Company</Typography></TableCell>
-                <TableCell><Typography fontWeight="bold">Status</Typography></TableCell>
-                <TableCell><Typography fontWeight="bold">Date</Typography></TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {leads?.map((lead, index) => (
-                <TableRow key={lead.id || index}>
-                  <TableCell>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <User size={16} />
-                      {`${lead.firstName || ''} ${lead.lastName || ''}`.trim() || 'N/A'}
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <Mail size={16} />
-                      {lead.email || 'N/A'}
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <Phone size={16} />
-                      {lead.phone || 'N/A'}
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <Building size={16} />
-                      {lead.company || 'N/A'}
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <Chip 
-                      label={lead.status || 'new'} 
-                      size="small"
-                      color={lead.status === 'qualified' ? 'success' : lead.status === 'closed' ? 'error' : 'default'}
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <Calendar size={16} />
-                      {lead.createdAt ? new Date(lead.createdAt).toLocaleDateString() : 'N/A'}
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-              {(!leads || leads.length === 0) && (
-                <TableRow>
-                  <TableCell colSpan={6} style={{ textAlign: 'center', padding: '40px' }}>
-                    <MDTypography variant="body2" sx={{ color: '#67748e' }}>
-                      No leads found
-                    </MDTypography>
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Card>
-    </>
-  );
-}
-
-// Valuations Management Component
-function ValuationsManagement() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [tierFilter, setTierFilter] = useState('all');
-
   const { data: assessments, isLoading: assessmentsLoading } = useQuery<any[]>({
     queryKey: ['/api/assessments'],
     queryFn: async () => {
@@ -916,17 +777,6 @@ function ValuationsManagement() {
       return response.json();
     },
     enabled: true,
-  });
-
-  const filteredAssessments = assessments?.filter(assessment => {
-    const matchesSearch = searchQuery === '' || 
-      `${assessment.firstName} ${assessment.lastName}`.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      assessment.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      assessment.email.toLowerCase().includes(searchQuery.toLowerCase());
-    
-    const matchesTier = tierFilter === 'all' || assessment.tier === tierFilter;
-    
-    return matchesSearch && matchesTier;
   });
 
   const formatCurrency = (value: number | string) => {
@@ -938,15 +788,6 @@ function ValuationsManagement() {
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(num);
-  };
-
-  const formatDate = (dateString: string) => {
-    if (!dateString) return 'N/A';
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    });
   };
 
   const getTierColor = (tier: string) => {
@@ -977,69 +818,61 @@ function ValuationsManagement() {
       <Card sx={{ boxShadow: '0 2px 8px -4px rgba(0,0,0,0.1)', mb: 3 }}>
         <MDBox p={2.5}>
           <div style={{ display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <MDButton
+                variant={viewMode === 'leads' ? 'contained' : 'outlined'}
+                color="info"
+                size="small"
+                onClick={() => setViewMode('leads')}
+                startIcon={<Users size={16} />}
+              >
+                Leads
+              </MDButton>
+              <MDButton
+                variant={viewMode === 'assessments' ? 'contained' : 'outlined'}
+                color="info"
+                size="small"
+                onClick={() => setViewMode('assessments')}
+                startIcon={<TrendingUp size={16} />}
+              >
+                Assessments
+              </MDButton>
+            </div>
             <TextField
-              label="Search assessments..."
+              label={viewMode === 'leads' ? 'Search leads...' : 'Search assessments...'}
               variant="outlined"
               size="small"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               sx={{ minWidth: '300px' }}
             />
-            <TextField
-              select
-              label="Tier"
-              size="small"
-              value={tierFilter}
-              onChange={(e) => setTierFilter(e.target.value)}
-              SelectProps={{ native: true }}
-              sx={{ minWidth: '150px' }}
-            >
-              <option value="all">All Tiers</option>
-              <option value="free">Free</option>
-              <option value="growth">Growth</option>
-              <option value="capital">Capital</option>
-            </TextField>
+            {viewMode === 'leads' && (
+              <TextField
+                select
+                label="Status"
+                size="small"
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                SelectProps={{ native: true }}
+                sx={{ minWidth: '150px' }}
+              >
+                <option value="all">All Status</option>
+                <option value="new">New</option>
+                <option value="contacted">Contacted</option>
+                <option value="qualified">Qualified</option>
+                <option value="proposal">Proposal</option>
+                <option value="closed">Closed</option>
+              </TextField>
+            )}
           </div>
         </MDBox>
       </Card>
 
-      {/* Valuations Overview Stats */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px', marginBottom: '24px' }}>
-        <StatsCard
-          title="Total Assessments"
-          value={assessments?.length || 0}
-          subtitle="completed valuations"
-          icon={TrendingUp}
-          color="primary"
-        />
-        <StatsCard
-          title="Free Tier"
-          value={assessments?.filter(a => a.tier === 'free').length || 0}
-          subtitle="basic reports"
-          icon={FileText}
-          color="info"
-        />
-        <StatsCard
-          title="Growth Tier"
-          value={assessments?.filter(a => a.tier === 'growth').length || 0}
-          subtitle="enhanced reports"
-          icon={Crown}
-          color="warning"
-        />
-        <StatsCard
-          title="Capital Tier"
-          value={assessments?.filter(a => a.tier === 'capital').length || 0}
-          subtitle="strategic reports"
-          icon={Building}
-          color="success"
-        />
-      </div>
-
-      {/* Assessments Table */}
+      {/* Dynamic Table Based on View Mode */}
       <Card sx={{ boxShadow: '0 2px 8px -4px rgba(0,0,0,0.1)' }}>
         <MDBox p={2.5} display="flex" justifyContent="space-between" alignItems="center">
           <MDTypography variant="h6" fontWeight="bold" sx={{ color: '#344767' }}>
-            Valuation Assessments ({filteredAssessments?.length || 0})
+            {viewMode === 'leads' ? `Leads (${leads?.length || 0})` : `Assessments (${assessments?.length || 0})`}
           </MDTypography>
         </MDBox>
         
@@ -1047,104 +880,187 @@ function ValuationsManagement() {
           <Table>
             <TableHead>
               <TableRow sx={{ backgroundColor: '#f8f9fa' }}>
-                <TableCell><Typography fontWeight="bold">Business</Typography></TableCell>
-                <TableCell><Typography fontWeight="bold">Contact</Typography></TableCell>
-                <TableCell><Typography fontWeight="bold">Valuation</Typography></TableCell>
-                <TableCell><Typography fontWeight="bold">Score</Typography></TableCell>
-                <TableCell><Typography fontWeight="bold">Tier</Typography></TableCell>
-                <TableCell><Typography fontWeight="bold">Date</Typography></TableCell>
-                <TableCell><Typography fontWeight="bold">Actions</Typography></TableCell>
+                {viewMode === 'leads' ? (
+                  <>
+                    <TableCell><Typography fontWeight="bold">Name</Typography></TableCell>
+                    <TableCell><Typography fontWeight="bold">Email</Typography></TableCell>
+                    <TableCell><Typography fontWeight="bold">Phone</Typography></TableCell>
+                    <TableCell><Typography fontWeight="bold">Company</Typography></TableCell>
+                    <TableCell><Typography fontWeight="bold">Status</Typography></TableCell>
+                    <TableCell><Typography fontWeight="bold">Date</Typography></TableCell>
+                  </>
+                ) : (
+                  <>
+                    <TableCell><Typography fontWeight="bold">Business</Typography></TableCell>
+                    <TableCell><Typography fontWeight="bold">Contact</Typography></TableCell>
+                    <TableCell><Typography fontWeight="bold">Valuation</Typography></TableCell>
+                    <TableCell><Typography fontWeight="bold">Score</Typography></TableCell>
+                    <TableCell><Typography fontWeight="bold">Tier</Typography></TableCell>
+                    <TableCell><Typography fontWeight="bold">Date</Typography></TableCell>
+                    <TableCell><Typography fontWeight="bold">Actions</Typography></TableCell>
+                  </>
+                )}
               </TableRow>
             </TableHead>
             <TableBody>
-              {assessmentsLoading ? (
-                <TableRow>
-                  <TableCell colSpan={7} sx={{ textAlign: 'center', py: 4 }}>
-                    <Typography>Loading assessments...</Typography>
-                  </TableCell>
-                </TableRow>
-              ) : filteredAssessments?.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={7} sx={{ textAlign: 'center', py: 4 }}>
-                    <Typography color="textSecondary">No assessments found</Typography>
-                  </TableCell>
-                </TableRow>
+              {viewMode === 'leads' ? (
+                // Leads View
+                <>
+                  {leads?.map((lead, index) => (
+                    <TableRow key={lead.id || index}>
+                      <TableCell>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <User size={16} />
+                          {`${lead.firstName || ''} ${lead.lastName || ''}`.trim() || 'N/A'}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <Mail size={16} />
+                          {lead.email || 'N/A'}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <Phone size={16} />
+                          {lead.phone || 'N/A'}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <Building size={16} />
+                          {lead.company || 'N/A'}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <Chip 
+                          label={lead.status || 'new'} 
+                          size="small"
+                          color={lead.status === 'qualified' ? 'success' : lead.status === 'closed' ? 'error' : 'default'}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <Calendar size={16} />
+                          {lead.createdAt ? new Date(lead.createdAt).toLocaleDateString() : 'N/A'}
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                  {(!leads || leads.length === 0) && (
+                    <TableRow>
+                      <TableCell colSpan={6} style={{ textAlign: 'center', padding: '40px' }}>
+                        <MDTypography variant="body2" sx={{ color: '#67748e' }}>
+                          No leads found
+                        </MDTypography>
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </>
               ) : (
-                filteredAssessments?.map((assessment, index) => (
-                  <TableRow key={assessment.id || index}>
-                    <TableCell>
-                      <MDBox>
-                        <Typography variant="body2" fontWeight="medium">
-                          {assessment.company}
-                        </Typography>
-                        <Typography variant="caption" sx={{ color: '#67748e' }}>
-                          {assessment.industryDescription || 'Business Assessment'}
-                        </Typography>
-                      </MDBox>
-                    </TableCell>
-                    <TableCell>
-                      <MDBox>
-                        <Typography variant="body2" fontWeight="medium">
-                          {assessment.firstName} {assessment.lastName}
-                        </Typography>
-                        <Typography variant="caption" sx={{ color: '#67748e' }}>
-                          {assessment.email}
-                        </Typography>
-                      </MDBox>
-                    </TableCell>
-                    <TableCell>
-                      <MDBox>
-                        <Typography variant="body2" fontWeight="medium" sx={{ color: '#2E7D3A' }}>
-                          {formatCurrency(assessment.midEstimate || 0)}
-                        </Typography>
-                        <Typography variant="caption" sx={{ color: '#67748e' }}>
-                          {formatCurrency(assessment.lowEstimate || 0)} - {formatCurrency(assessment.highEstimate || 0)}
-                        </Typography>
-                      </MDBox>
-                    </TableCell>
-                    <TableCell>
-                      <Chip 
-                        label={assessment.overallScore || 'N/A'} 
-                        color={getScoreColor(assessment.overallScore || '') as any}
-                        size="small"
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <Chip 
-                        label={assessment.tier?.toUpperCase() || 'FREE'} 
-                        color={getTierColor(assessment.tier || 'free') as any}
-                        size="small"
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <Typography variant="body2" sx={{ color: '#67748e' }}>
-                        {formatDate(assessment.createdAt)}
-                      </Typography>
-                    </TableCell>
-                    <TableCell>
-                      <MDBox display="flex" alignItems="center" gap={1}>
-                        {assessment.pdfUrl && (
-                          <IconButton 
-                            size="small" 
-                            onClick={() => window.open(assessment.pdfUrl, '_blank')}
-                            sx={{ color: '#2E7D3A' }}
-                            title="View PDF Report"
-                          >
-                            <Eye size={16} />
-                          </IconButton>
-                        )}
-                        <IconButton 
-                          size="small" 
-                          onClick={() => window.open(`/assessment/${assessment.id}`, '_blank')}
-                          sx={{ color: '#1976d2' }}
-                          title="View Full Assessment"
-                        >
-                          <ExternalLink size={16} />
-                        </IconButton>
-                      </MDBox>
-                    </TableCell>
-                  </TableRow>
-                ))
+                // Assessments View
+                <>
+                  {assessmentsLoading ? (
+                    <TableRow>
+                      <TableCell colSpan={7} sx={{ textAlign: 'center', py: 4 }}>
+                        <Typography>Loading assessments...</Typography>
+                      </TableCell>
+                    </TableRow>
+                  ) : assessments?.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={7} sx={{ textAlign: 'center', py: 4 }}>
+                        <Typography color="textSecondary">No assessments found</Typography>
+                      </TableCell>
+                    </TableRow>
+                  ) : (
+                    assessments
+                      ?.filter(assessment => {
+                        if (!searchQuery) return true;
+                        return `${assessment.firstName} ${assessment.lastName}`.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                               assessment.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                               assessment.email.toLowerCase().includes(searchQuery.toLowerCase());
+                      })
+                      ?.map((assessment, index) => (
+                        <TableRow key={assessment.id || index}>
+                          <TableCell>
+                            <MDBox>
+                              <Typography variant="body2" fontWeight="medium">
+                                {assessment.company}
+                              </Typography>
+                              <Typography variant="caption" sx={{ color: '#67748e' }}>
+                                {assessment.industryDescription || 'Business Assessment'}
+                              </Typography>
+                            </MDBox>
+                          </TableCell>
+                          <TableCell>
+                            <MDBox>
+                              <Typography variant="body2" fontWeight="medium">
+                                {assessment.firstName} {assessment.lastName}
+                              </Typography>
+                              <Typography variant="caption" sx={{ color: '#67748e' }}>
+                                {assessment.email}
+                              </Typography>
+                            </MDBox>
+                          </TableCell>
+                          <TableCell>
+                            <MDBox>
+                              <Typography variant="body2" fontWeight="medium" sx={{ color: '#2E7D3A' }}>
+                                {formatCurrency(assessment.midEstimate || 0)}
+                              </Typography>
+                              <Typography variant="caption" sx={{ color: '#67748e' }}>
+                                {formatCurrency(assessment.lowEstimate || 0)} - {formatCurrency(assessment.highEstimate || 0)}
+                              </Typography>
+                            </MDBox>
+                          </TableCell>
+                          <TableCell>
+                            <Chip 
+                              label={assessment.overallScore || 'N/A'} 
+                              color={getScoreColor(assessment.overallScore || '') as any}
+                              size="small"
+                            />
+                          </TableCell>
+                          <TableCell>
+                            <Chip 
+                              label={assessment.tier?.toUpperCase() || 'FREE'} 
+                              color={getTierColor(assessment.tier || 'free') as any}
+                              size="small"
+                            />
+                          </TableCell>
+                          <TableCell>
+                            <Typography variant="body2" sx={{ color: '#67748e' }}>
+                              {assessment.createdAt ? new Date(assessment.createdAt).toLocaleDateString('en-US', {
+                                year: 'numeric',
+                                month: 'short',
+                                day: 'numeric'
+                              }) : 'N/A'}
+                            </Typography>
+                          </TableCell>
+                          <TableCell>
+                            <MDBox display="flex" alignItems="center" gap={1}>
+                              {assessment.pdfUrl && (
+                                <IconButton 
+                                  size="small" 
+                                  onClick={() => window.open(assessment.pdfUrl, '_blank')}
+                                  sx={{ color: '#2E7D3A' }}
+                                  title="View PDF Report"
+                                >
+                                  <Eye size={16} />
+                                </IconButton>
+                              )}
+                              <IconButton 
+                                size="small" 
+                                onClick={() => window.open(`/assessment/${assessment.id}`, '_blank')}
+                                sx={{ color: '#1976d2' }}
+                                title="View Full Assessment"
+                              >
+                                <ExternalLink size={16} />
+                              </IconButton>
+                            </MDBox>
+                          </TableCell>
+                        </TableRow>
+                      ))
+                  )}
+                </>
               )}
             </TableBody>
           </Table>
