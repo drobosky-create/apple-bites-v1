@@ -20,7 +20,7 @@ import { Grid } from '@mui/system';
 const appleBitesLogoPath = '/assets/logos/apple-bites-meritage-logo.png';
 
 // Admin Sidebar Component - Exact copy from user dashboard structure
-function AdminSidebar({ user, onSignOut }: { user: any; onSignOut: () => void }) {
+function AdminSidebar({ user, onSignOut, activeTab, setActiveTab }: { user: any; onSignOut: () => void; activeTab: string; setActiveTab: (tab: string) => void }) {
   // Apple Bites Brand Colors - Exact copy from user dashboard
   const colors = {
     primary: "#00718d",
@@ -122,88 +122,81 @@ function AdminSidebar({ user, onSignOut }: { user: any; onSignOut: () => void })
 
       {/* Navigation Buttons - Exact structure from user dashboard */}
       <MDBox display="flex" flexDirection="column" gap={1.5}>
-        <Link href="/admin">
-          <MDButton
-            sx={{
-              background: gradients.glow,
-              color: 'white',
-              '&:hover': {
-                background: gradients.light,
-                transform: 'translateY(-2px)',
+        <MDButton
+          onClick={() => setActiveTab('overview')}
+          sx={{
+            background: activeTab === 'overview' ? gradients.glow : 'transparent',
+            border: activeTab === 'overview' ? 'none' : `1px solid rgba(255, 255, 255, 0.3)`,
+            color: activeTab === 'overview' ? 'white' : '#dbdce1',
+            '&:hover': {
+              background: activeTab === 'overview' ? gradients.light : 'rgba(255, 255, 255, 0.1)',
+              transform: 'translateY(-2px)'
+            },
+            transition: 'all 0.3s ease',
+            width: '100%',
+            py: 1.2
+          }}
+          startIcon={<Home size={18} />}
+        >
+          Dashboard Overview
+        </MDButton>
 
-              },
-              transition: 'all 0.3s ease',
-              width: '100%',
-              py: 1.2
-            }}
-            startIcon={<Home size={18} />}
-          >
-            Admin Dashboard
-          </MDButton>
-        </Link>
+        <MDButton
+          onClick={() => setActiveTab('team')}
+          sx={{
+            background: activeTab === 'team' ? gradients.glow : 'transparent',
+            border: activeTab === 'team' ? 'none' : `1px solid rgba(255, 255, 255, 0.3)`,
+            color: activeTab === 'team' ? 'white' : '#dbdce1',
+            '&:hover': {
+              background: activeTab === 'team' ? gradients.light : 'rgba(255, 255, 255, 0.1)',
+              transform: 'translateY(-2px)'
+            },
+            transition: 'all 0.3s ease',
+            width: '100%',
+            py: 1.2
+          }}
+          startIcon={<Users size={18} />}
+        >
+          Team Members
+        </MDButton>
 
-        <Link href="/admin/team">
-          <MDButton
-            className="text-[#dbdce1]"
-            sx={{
-              background: 'transparent',
-              border: `1px solid rgba(255, 255, 255, 0.3)`,
-              color: '#dbdce1',
-              '&:hover': {
-                background: 'rgba(255, 255, 255, 0.1)',
-                transform: 'translateY(-2px)'
-              },
-              transition: 'all 0.3s ease',
-              width: '100%',
-              py: 1.2
-            }}
-            startIcon={<Users size={18} />}
-          >
-            Team Members
-          </MDButton>
-        </Link>
+        <MDButton
+          onClick={() => setActiveTab('leads')}
+          sx={{
+            background: activeTab === 'leads' ? gradients.glow : 'transparent',
+            border: activeTab === 'leads' ? 'none' : `1px solid rgba(255, 255, 255, 0.3)`,
+            color: activeTab === 'leads' ? 'white' : '#dbdce1',
+            '&:hover': {
+              background: activeTab === 'leads' ? gradients.light : 'rgba(255, 255, 255, 0.1)',
+              transform: 'translateY(-2px)'
+            },
+            transition: 'all 0.3s ease',
+            width: '100%',
+            py: 1.2
+          }}
+          startIcon={<FileText size={18} />}
+        >
+          Leads
+        </MDButton>
 
-        <Link href="/admin/leads">
-          <MDButton
-            className="text-[#dbdce1]"
-            sx={{
-              background: 'transparent',
-              border: `1px solid rgba(255, 255, 255, 0.3)`,
-              color: '#dbdce1',
-              '&:hover': {
-                background: 'rgba(255, 255, 255, 0.1)',
-                transform: 'translateY(-2px)'
-              },
-              transition: 'all 0.3s ease',
-              width: '100%',
-              py: 1.2
-            }}
-            startIcon={<FileText size={18} />}
-          >
-            Leads
-          </MDButton>
-        </Link>
-
-        <Link href="/admin/analytics">
-          <MDButton
-            className="text-[#dbdce1]"
-            sx={{
-              background: 'transparent',
-              border: `1px solid rgba(255, 255, 255, 0.3)`,
-              color: '#dbdce1',
-              '&:hover': {
-                background: 'rgba(255, 255, 255, 0.1)',
-                transform: 'translateY(-2px)'
-              },
-              transition: 'all 0.3s ease',
-              width: '100%',
-              py: 1.2
-            }}
-            startIcon={<BarChart3 size={18} />}
-          >
-            Analytics
-          </MDButton>
-        </Link>
+        <MDButton
+          onClick={() => setActiveTab('analytics')}
+          sx={{
+            background: activeTab === 'analytics' ? gradients.glow : 'transparent',
+            border: activeTab === 'analytics' ? 'none' : `1px solid rgba(255, 255, 255, 0.3)`,
+            color: activeTab === 'analytics' ? 'white' : '#dbdce1',
+            '&:hover': {
+              background: activeTab === 'analytics' ? gradients.light : 'rgba(255, 255, 255, 0.1)',
+              transform: 'translateY(-2px)'
+            },
+            transition: 'all 0.3s ease',
+            width: '100%',
+            py: 1.2
+          }}
+          startIcon={<BarChart3 size={18} />}
+        >
+          Analytics
+        </MDButton>
 
         <MDButton
           onClick={onSignOut}
@@ -307,6 +300,7 @@ export default function AdminDashboard() {
   const [isLoading, setIsLoading] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [editingMember, setEditingMember] = useState<TeamMember | null>(null);
+  const [activeTab, setActiveTab] = useState('team'); // Internal navigation state
   const queryClient = useQueryClient();
   const { toast } = useToast();
 
@@ -432,7 +426,7 @@ export default function AdminDashboard() {
       minHeight: '100vh', 
       backgroundColor: '#f8f9fa' 
     }}>
-      <AdminSidebar user={adminUser} onSignOut={handleAdminLogout} />
+      <AdminSidebar user={adminUser} onSignOut={handleAdminLogout} activeTab={activeTab} setActiveTab={setActiveTab} />
       
       {/* Main Content */}
       <MDBox
@@ -449,10 +443,16 @@ export default function AdminDashboard() {
           <MDBox mb={3} display="flex" justifyContent="space-between" alignItems="center">
             <MDBox>
               <MDTypography variant="h4" fontWeight="bold" sx={{ color: '#344767', mb: 1 }}>
-                Team Management
+                {activeTab === 'team' && 'Team Management'}
+                {activeTab === 'leads' && 'Lead Management'}
+                {activeTab === 'analytics' && 'Analytics Dashboard'}
+                {activeTab === 'overview' && 'Admin Dashboard'}
               </MDTypography>
               <MDTypography variant="body1" sx={{ color: '#67748e' }}>
-                Welcome back, {adminUser?.firstName} {adminUser?.lastName} - Manage your team and organization
+                Welcome back, {adminUser?.firstName} {adminUser?.lastName} - {activeTab === 'team' && 'Manage your team and organization'}
+                {activeTab === 'leads' && 'Track and manage leads'}
+                {activeTab === 'analytics' && 'View system analytics'}
+                {activeTab === 'overview' && 'Overview of all system metrics'}
               </MDTypography>
             </MDBox>
             <MDBox display="flex" gap={2}>
@@ -467,39 +467,42 @@ export default function AdminDashboard() {
             </MDBox>
           </MDBox>
 
-          {/* Stats Cards */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px', marginBottom: '24px' }}>
-            <StatsCard
-              title="Total Members"
-              value={teamMembers?.length || 0}
-              subtitle="registered accounts"
-              icon={Users}
-              color="primary"
-            />
-            <StatsCard
-              title="Active Members"
-              value={teamMembers?.filter(m => m.isActive).length || 0}
-              subtitle="currently active"
-              icon={Shield}
-              color="success"
-            />
-            <StatsCard
-              title="Admins"
-              value={teamMembers?.filter(m => m.role === 'admin').length || 0}
-              subtitle="with admin access"
-              icon={Settings}
-              color="info"
-            />
-            <StatsCard
-              title="Managers"
-              value={teamMembers?.filter(m => m.role === 'manager').length || 0}
-              subtitle="team managers"
-              icon={UserPlus}
-              color="warning"
-            />
-          </div>
+          {/* Conditional Content Based on Active Tab */}
+          {activeTab === 'team' && (
+            <>
+              {/* Stats Cards */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px', marginBottom: '24px' }}>
+                <StatsCard
+                  title="Total Members"
+                  value={teamMembers?.length || 0}
+                  subtitle="registered accounts"
+                  icon={Users}
+                  color="primary"
+                />
+                <StatsCard
+                  title="Active Members"
+                  value={teamMembers?.filter(m => m.isActive).length || 0}
+                  subtitle="currently active"
+                  icon={Shield}
+                  color="success"
+                />
+                <StatsCard
+                  title="Admins"
+                  value={teamMembers?.filter(m => m.role === 'admin').length || 0}
+                  subtitle="with admin access"
+                  icon={Settings}
+                  color="info"
+                />
+                <StatsCard
+                  title="Managers"
+                  value={teamMembers?.filter(m => m.role === 'manager').length || 0}
+                  subtitle="team managers"
+                  icon={UserPlus}
+                  color="warning"
+                />
+              </div>
 
-          {/* Team Members Table */}
+              {/* Team Members Table */}
           <Card sx={{ boxShadow: '0 2px 8px -4px rgba(0,0,0,0.1)' }}>
             <MDBox p={2.5} display="flex" justifyContent="space-between" alignItems="center">
               <MDTypography variant="h6" fontWeight="bold" sx={{ color: '#344767' }}>
@@ -664,6 +667,20 @@ export default function AdminDashboard() {
               </Box>
             </MDBox>
           </Modal>
+          </>
+          )}
+
+          {/* Other tabs can be added here */}
+          {activeTab === 'leads' && (
+            <MDTypography>Leads dashboard coming soon...</MDTypography>
+          )}
+          {activeTab === 'analytics' && (
+            <MDTypography>Analytics dashboard coming soon...</MDTypography>
+          )}
+          {activeTab === 'overview' && (
+            <MDTypography>Overview dashboard coming soon...</MDTypography>
+          )}
+
         </Container>
       </MDBox>
     </MDBox>
