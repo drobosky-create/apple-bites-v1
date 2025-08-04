@@ -38,6 +38,7 @@ export default function TeamDashboard() {
   const currentAuth = isAdminContext ? adminAuth : { user, isAuthenticated, isLoading, hasRole, logout, login };
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [showPasswordChangeModal, setShowPasswordChangeModal] = useState(false);
+  const [isPasswordDialogOpen, setIsPasswordDialogOpen] = useState(false);
   const queryClient = useQueryClient();
   const { toast } = useToast();
 
@@ -206,23 +207,27 @@ export default function TeamDashboard() {
             </div>
           </div>
           <div >
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button variant="outline" >
-                  <Settings  />
-                  <span >Change Password</span>
-                  <span >Password</span>
-                </Button>
-              </DialogTrigger>
-              <DialogContent >
-                <DialogHeader>
-                  <DialogTitle>Change Password</DialogTitle>
-                  <DialogDescription>
-                    Update your account password for security.
-                  </DialogDescription>
-                </DialogHeader>
+            <Button 
+              variant="outlined" 
+              onClick={() => setIsPasswordDialogOpen(true)}
+              startIcon={<Settings />}
+            >
+              Change Password
+            </Button>
+            <Dialog 
+              open={isPasswordDialogOpen} 
+              onClose={() => setIsPasswordDialogOpen(false)}
+            >
+              <DialogTitle>Change Password</DialogTitle>
+              <DialogContent>
+                Update your account password for security.
                 <PasswordChangeForm userId={user?.id} />
               </DialogContent>
+              <DialogActions>
+                <Button onClick={() => setIsPasswordDialogOpen(false)}>
+                  Cancel
+                </Button>
+              </DialogActions>
             </Dialog>
             <Button variant="outline" onClick={logout} >
               <LogOut  />
@@ -236,64 +241,63 @@ export default function TeamDashboard() {
           <>
             {/* Admin Dashboard */}
             <div >
-              <Card >
-                <CardHeader >
-                  <CardTitle >Total Members</CardTitle>
-                  <div >
-                    <Users  />
-                  </div>
-                </CardHeader>
+              <Card>
                 <CardContent>
-                  <div >{teamMembers?.length || 0}</div>
-                  <p >registered accounts</p>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+                    <h3>Total Members</h3>
+                    <Users />
+                  </div>
+                  <div>{teamMembers?.length || 0}</div>
+                  <p>registered accounts</p>
                 </CardContent>
               </Card>
 
-              <Card >
-                <CardHeader >
-                  <CardTitle >Active Members</CardTitle>
-                  <div >
-                    <Shield  />
-                  </div>
-                </CardHeader>
+              <Card>
                 <CardContent>
-                  <div >
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+                    <h3>Active Members</h3>
+                    <Shield />
+                  </div>
+                  <div>
                     {teamMembers?.filter(m => m.isActive).length || 0}
                   </div>
-                  <p >currently active</p>
+                  <p>currently active</p>
                 </CardContent>
               </Card>
 
-              <Card >
-                <CardHeader >
-                  <CardTitle >Admins</CardTitle>
-                  <div >
-                    <Settings  />
-                  </div>
-                </CardHeader>
+              <Card>
                 <CardContent>
-                  <div >
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+                    <h3>Admins</h3>
+                    <Settings />
+                  </div>
+                  <div>
                     {teamMembers?.filter(m => m.role === 'admin').length || 0}
                   </div>
-                  <p >with admin access</p>
+                  <p>with admin access</p>
                 </CardContent>
               </Card>
             </div>
 
             {/* Team Members Management */}
-            <Card >
-              <CardHeader >
-                <div>
-                  <CardTitle >Team Members</CardTitle>
-                  <p >Manage access and permissions</p>
+            <Card>
+              <CardContent>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+                  <div>
+                    <h3>Team Members</h3>
+                    <p>Manage access and permissions</p>
+                  </div>
+                  <Button 
+                    onClick={() => setIsAddDialogOpen(true)}
+                    startIcon={<UserPlus />}
+                  >
+                    Add Member
+                  </Button>
                 </div>
-                <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-                  <DialogTrigger asChild>
-                    <Button >
-                      <UserPlus  />
-                      Add Member
-                    </Button>
-                  </DialogTrigger>
+                <Dialog 
+                  open={isAddDialogOpen} 
+                  onClose={() => setIsAddDialogOpen(false)}
+                >
                   <DialogContent >
                     <DialogHeader>
                       <DialogTitle>Add Team Member</DialogTitle>
@@ -396,15 +400,13 @@ export default function TeamDashboard() {
                     </Form>
                   </DialogContent>
                 </Dialog>
-              </CardHeader>
-              <CardContent >
+                
                 {membersLoading ? (
-                  <div >
-                    <div ></div>
+                  <div>
                     <p>Loading team members...</p>
                   </div>
                 ) : (
-                  <div >
+                  <div>
                     <Table>
                       <thead>
                         <TableRow>
