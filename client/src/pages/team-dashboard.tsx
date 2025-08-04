@@ -5,7 +5,7 @@ import MDButton from '@/components/MD/MDButton';
 import MDInput from '@/components/MD/MDInput';
 import MDBox from '@/components/MD/MDBox';
 import MDTypography from '@/components/MD/MDTypography';
-import { Card, CardContent, Button, TextField, Select, MenuItem, FormControl, InputLabel, Chip, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
+import { Card, CardContent, Button, TextField, Select, MenuItem, FormControl, InputLabel, Chip, Dialog, DialogTitle, DialogContent, DialogActions, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import { useToast } from '@/hooks/use-toast';
 
 
@@ -196,9 +196,12 @@ export default function TeamDashboard() {
               <div >Welcome, {user?.firstName} {user?.lastName}</div>
               <div >
                 <Shield  />
-                <Badge className={`${getRoleBadgeColor(user?.role || '')} text-xs lg:text-sm`}>
-                  {user?.role?.toUpperCase()}
-                </Badge>
+                <Chip 
+                  label={user?.role?.toUpperCase() || 'USER'} 
+                  size="small"
+                  color="primary"
+                  variant="filled"
+                />
               </div>
             </div>
           </div>
@@ -403,16 +406,16 @@ export default function TeamDashboard() {
                 ) : (
                   <div >
                     <Table>
-                      <TableHeader>
-                        <TableRow >
-                          <TableHead >Name</TableHead>
-                          <TableHead >Email</TableHead>
-                          <TableHead >Role</TableHead>
-                          <TableHead >Status</TableHead>
-                          <TableHead >Last Login</TableHead>
-                          <TableHead >Actions</TableHead>
-                      </TableRow>
-                    </TableHeader>
+                      <thead>
+                        <TableRow>
+                          <TableCell component="th">Name</TableCell>
+                          <TableCell component="th">Email</TableCell>
+                          <TableCell component="th">Role</TableCell>
+                          <TableCell component="th">Status</TableCell>
+                          <TableCell component="th">Last Login</TableCell>
+                          <TableCell component="th">Actions</TableCell>
+                        </TableRow>
+                      </thead>
                     <TableBody>
                       {membersLoading ? (
                         <TableRow>
@@ -436,14 +439,20 @@ export default function TeamDashboard() {
                             </TableCell>
                             <TableCell>{member.email}</TableCell>
                             <TableCell>
-                              <Badge className={getRoleBadgeColor(member.role)}>
-                                {member.role}
-                              </Badge>
+                              <Chip 
+                                label={member.role}
+                                size="small"
+                                color="primary"
+                                variant="filled"
+                              />
                             </TableCell>
                             <TableCell>
-                              <Badge variant={member.isActive ? 'default' : 'secondary'}>
-                                {member.isActive ? 'Active' : 'Inactive'}
-                              </Badge>
+                              <Chip 
+                                label={member.isActive ? 'Active' : 'Inactive'}
+                                size="small"
+                                color={member.isActive ? 'success' : 'default'}
+                                variant="filled"
+                              />
                             </TableCell>
                             <TableCell>
                               {member.lastLoginAt
