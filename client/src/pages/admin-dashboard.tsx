@@ -180,6 +180,25 @@ function AdminSidebar({ user, onSignOut, activeTab, setActiveTab }: { user: any;
         </MDButton>
 
         <MDButton
+          onClick={() => setActiveTab('valuations')}
+          sx={{
+            background: activeTab === 'valuations' ? gradients.glow : 'transparent',
+            border: activeTab === 'valuations' ? 'none' : `1px solid rgba(255, 255, 255, 0.3)`,
+            color: activeTab === 'valuations' ? 'white' : '#dbdce1',
+            '&:hover': {
+              background: activeTab === 'valuations' ? gradients.light : 'rgba(255, 255, 255, 0.1)',
+              transform: 'translateY(-2px)'
+            },
+            transition: 'all 0.3s ease',
+            width: '100%',
+            py: 1.2
+          }}
+          startIcon={<TrendingUp size={18} />}
+        >
+          Valuations
+        </MDButton>
+
+        <MDButton
           onClick={() => setActiveTab('analytics')}
           sx={{
             background: activeTab === 'analytics' ? gradients.glow : 'transparent',
@@ -680,6 +699,11 @@ export default function AdminDashboard() {
             <LeadsManagement />
           )}
 
+          {/* Valuations Tab */}
+          {activeTab === 'valuations' && (
+            <ValuationsManagement />
+          )}
+
           {/* Analytics Dashboard Tab */}
           {activeTab === 'analytics' && (
             <AnalyticsDashboard />
@@ -870,6 +894,257 @@ function LeadsManagement() {
                     </MDTypography>
                   </TableCell>
                 </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Card>
+    </>
+  );
+}
+
+// Valuations Management Component
+function ValuationsManagement() {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [tierFilter, setTierFilter] = useState('all');
+
+  const { data: assessments, isLoading: assessmentsLoading } = useQuery<any[]>({
+    queryKey: ['/api/assessments'],
+    queryFn: async () => {
+      const response = await fetch('/api/assessments');
+      if (!response.ok) throw new Error('Failed to fetch assessments');
+      return response.json();
+    },
+    enabled: true,
+  });
+
+  const filteredAssessments = assessments?.filter(assessment => {
+    const matchesSearch = searchQuery === '' || 
+      `${assessment.firstName} ${assessment.lastName}`.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      assessment.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      assessment.email.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    const matchesTier = tierFilter === 'all' || assessment.tier === tierFilter;
+    
+    return matchesSearch && matchesTier;
+  });
+
+  const formatCurrency = (value: number | string) => {
+    const num = typeof value === 'string' ? parseFloat(value) : value;
+    if (isNaN(num)) return '$0';
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(num);
+  };
+
+  const formatDate = (dateString: string) => {
+    if (!dateString) return 'N/A';
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+  };
+
+  const getTierColor = (tier: string) => {
+    switch (tier) {
+      case 'capital': return 'error';
+      case 'growth': return 'warning';
+      case 'free': return 'info';
+      default: return 'default';
+    }
+  };
+
+  const getScoreColor = (score: string) => {
+    if (!score) return 'default';
+    const grade = score.charAt(0);
+    switch (grade) {
+      case 'A': return 'success';
+      case 'B': return 'info';
+      case 'C': return 'warning';
+      case 'D':
+      case 'F': return 'error';
+      default: return 'default';
+    }
+  };
+
+  return (
+    <>
+      {/* Search and Filter */}
+      <Card sx={{ boxShadow: '0 2px 8px -4px rgba(0,0,0,0.1)', mb: 3 }}>
+        <MDBox p={2.5}>
+          <div style={{ display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap' }}>
+            <TextField
+              label="Search assessments..."
+              variant="outlined"
+              size="small"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              sx={{ minWidth: '300px' }}
+            />
+            <TextField
+              select
+              label="Tier"
+              size="small"
+              value={tierFilter}
+              onChange={(e) => setTierFilter(e.target.value)}
+              SelectProps={{ native: true }}
+              sx={{ minWidth: '150px' }}
+            >
+              <option value="all">All Tiers</option>
+              <option value="free">Free</option>
+              <option value="growth">Growth</option>
+              <option value="capital">Capital</option>
+            </TextField>
+          </div>
+        </MDBox>
+      </Card>
+
+      {/* Valuations Overview Stats */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px', marginBottom: '24px' }}>
+        <StatsCard
+          title="Total Assessments"
+          value={assessments?.length || 0}
+          subtitle="completed valuations"
+          icon={TrendingUp}
+          color="primary"
+        />
+        <StatsCard
+          title="Free Tier"
+          value={assessments?.filter(a => a.tier === 'free').length || 0}
+          subtitle="basic reports"
+          icon={FileText}
+          color="info"
+        />
+        <StatsCard
+          title="Growth Tier"
+          value={assessments?.filter(a => a.tier === 'growth').length || 0}
+          subtitle="enhanced reports"
+          icon={Crown}
+          color="warning"
+        />
+        <StatsCard
+          title="Capital Tier"
+          value={assessments?.filter(a => a.tier === 'capital').length || 0}
+          subtitle="strategic reports"
+          icon={Building}
+          color="success"
+        />
+      </div>
+
+      {/* Assessments Table */}
+      <Card sx={{ boxShadow: '0 2px 8px -4px rgba(0,0,0,0.1)' }}>
+        <MDBox p={2.5} display="flex" justifyContent="space-between" alignItems="center">
+          <MDTypography variant="h6" fontWeight="bold" sx={{ color: '#344767' }}>
+            Valuation Assessments ({filteredAssessments?.length || 0})
+          </MDTypography>
+        </MDBox>
+        
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow sx={{ backgroundColor: '#f8f9fa' }}>
+                <TableCell><Typography fontWeight="bold">Business</Typography></TableCell>
+                <TableCell><Typography fontWeight="bold">Contact</Typography></TableCell>
+                <TableCell><Typography fontWeight="bold">Valuation</Typography></TableCell>
+                <TableCell><Typography fontWeight="bold">Score</Typography></TableCell>
+                <TableCell><Typography fontWeight="bold">Tier</Typography></TableCell>
+                <TableCell><Typography fontWeight="bold">Date</Typography></TableCell>
+                <TableCell><Typography fontWeight="bold">Actions</Typography></TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {assessmentsLoading ? (
+                <TableRow>
+                  <TableCell colSpan={7} sx={{ textAlign: 'center', py: 4 }}>
+                    <Typography>Loading assessments...</Typography>
+                  </TableCell>
+                </TableRow>
+              ) : filteredAssessments?.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={7} sx={{ textAlign: 'center', py: 4 }}>
+                    <Typography color="textSecondary">No assessments found</Typography>
+                  </TableCell>
+                </TableRow>
+              ) : (
+                filteredAssessments?.map((assessment, index) => (
+                  <TableRow key={assessment.id || index}>
+                    <TableCell>
+                      <MDBox>
+                        <Typography variant="body2" fontWeight="medium">
+                          {assessment.company}
+                        </Typography>
+                        <Typography variant="caption" sx={{ color: '#67748e' }}>
+                          {assessment.industryDescription || 'Business Assessment'}
+                        </Typography>
+                      </MDBox>
+                    </TableCell>
+                    <TableCell>
+                      <MDBox>
+                        <Typography variant="body2" fontWeight="medium">
+                          {assessment.firstName} {assessment.lastName}
+                        </Typography>
+                        <Typography variant="caption" sx={{ color: '#67748e' }}>
+                          {assessment.email}
+                        </Typography>
+                      </MDBox>
+                    </TableCell>
+                    <TableCell>
+                      <MDBox>
+                        <Typography variant="body2" fontWeight="medium" sx={{ color: '#2E7D3A' }}>
+                          {formatCurrency(assessment.midEstimate || 0)}
+                        </Typography>
+                        <Typography variant="caption" sx={{ color: '#67748e' }}>
+                          {formatCurrency(assessment.lowEstimate || 0)} - {formatCurrency(assessment.highEstimate || 0)}
+                        </Typography>
+                      </MDBox>
+                    </TableCell>
+                    <TableCell>
+                      <Chip 
+                        label={assessment.overallScore || 'N/A'} 
+                        color={getScoreColor(assessment.overallScore || '') as any}
+                        size="small"
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Chip 
+                        label={assessment.tier?.toUpperCase() || 'FREE'} 
+                        color={getTierColor(assessment.tier || 'free') as any}
+                        size="small"
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="body2" sx={{ color: '#67748e' }}>
+                        {formatDate(assessment.createdAt)}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <MDBox display="flex" alignItems="center" gap={1}>
+                        {assessment.pdfUrl && (
+                          <IconButton 
+                            size="small" 
+                            onClick={() => window.open(assessment.pdfUrl, '_blank')}
+                            sx={{ color: '#2E7D3A' }}
+                            title="View PDF Report"
+                          >
+                            <Eye size={16} />
+                          </IconButton>
+                        )}
+                        <IconButton 
+                          size="small" 
+                          onClick={() => window.open(`/assessment/${assessment.id}`, '_blank')}
+                          sx={{ color: '#1976d2' }}
+                          title="View Full Assessment"
+                        >
+                          <ExternalLink size={16} />
+                        </IconButton>
+                      </MDBox>
+                    </TableCell>
+                  </TableRow>
+                ))
               )}
             </TableBody>
           </Table>
