@@ -25,7 +25,7 @@ import { useTeamAuth } from '@/hooks/use-team-auth';
 import { useAdminAuth } from '@/hooks/use-admin-auth';
 import PasswordChangeForm from '@/components/password-change-form';
 import PasswordChangeModal from '@/components/password-change-modal';
-import appleBitesLogoImage from '@assets/Apple Bites_1752266454888.png';
+import appleBitesLogoImage from '@assets/apple-bites-logo.png';
 
 export default function TeamDashboard() {
   const { user, isAuthenticated, isLoading, hasRole, logout, login } = useTeamAuth();
@@ -176,9 +176,9 @@ export default function TeamDashboard() {
         <div >
           <div >
             <img 
-              src={_2} 
+              src={appleBitesLogoImage} 
               alt="Apple Bites Business Assessment" 
-              
+              className="h-12 w-auto"
             />
             <div >
               <h1 >Team Dashboard</h1>
