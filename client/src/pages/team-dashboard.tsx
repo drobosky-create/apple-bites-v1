@@ -298,107 +298,66 @@ export default function TeamDashboard() {
                   open={isAddDialogOpen} 
                   onClose={() => setIsAddDialogOpen(false)}
                 >
-                  <DialogContent >
-                    <DialogHeader>
-                      <DialogTitle>Add Team Member</DialogTitle>
-                      <DialogDescription>
-                        Create a new team member account with appropriate role permissions.
-                      </DialogDescription>
-                    </DialogHeader>
-                    <Form {...form}>
-                      <form onSubmit={form.handleSubmit(onSubmit)} >
-                        <div >
-                          <FormField
-                            control={form.control}
-                            name="firstName"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>First Name</FormLabel>
-                                <FormControl>
-                                  <Input {...field}  />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-                          <FormField
-                            control={form.control}
-                            name="lastName"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Last Name</FormLabel>
-                                <FormControl>
-                                  <Input {...field}  />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-                        </div>
-                        <FormField
-                          control={form.control}
-                          name="email"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Email</FormLabel>
-                              <FormControl>
-                                <Input {...field} type="email"  />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
+                  <DialogTitle>Add Team Member</DialogTitle>
+                  <DialogContent>
+                    <p>Create a new team member account with appropriate role permissions.</p>
+                    <form onSubmit={form.handleSubmit(onSubmit)} style={{ marginTop: '16px' }}>
+                      <div style={{ display: 'flex', gap: '16px', marginBottom: '16px' }}>
+                        <TextField
+                          {...form.register('firstName')}
+                          label="First Name"
+                          fullWidth
+                          error={!!form.formState.errors.firstName}
+                          helperText={form.formState.errors.firstName?.message}
                         />
-                        <FormField
-                          control={form.control}
-                          name="role"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Role</FormLabel>
-                              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                <FormControl>
-                                  <SelectTrigger>
-                                    <SelectValue placeholder="Select a role" />
-                                  </SelectTrigger>
-                                </FormControl>
-                                <SelectContent >
-                                  <SelectItem value="member" >Member</SelectItem>
-                                  <SelectItem value="manager" >Manager</SelectItem>
-                                  <SelectItem value="admin" >Admin</SelectItem>
-                                </SelectContent>
-                              </Select>
-                              <FormMessage />
-                            </FormItem>
-                          )}
+                        <TextField
+                          {...form.register('lastName')}
+                          label="Last Name"
+                          fullWidth
+                          error={!!form.formState.errors.lastName}
+                          helperText={form.formState.errors.lastName?.message}
                         />
-                        <FormField
-                          control={form.control}
-                          name="password"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Password</FormLabel>
-                              <FormControl>
-                                <Input {...field} type="password"  />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <div >
-                          <Button
-                            type="button"
-                            variant="outline"
-                            onClick={() => setIsAddDialogOpen(false)}
-                            
-                          >
-                            Cancel
-                          </Button>
-                          <Button type="submit" disabled={createMemberMutation.isPending} >
-                            {createMemberMutation.isPending ? 'Creating...' : 'Create Member'}
-                          </Button>
-                        </div>
-                      </form>
-                    </Form>
+                      </div>
+                      <TextField
+                        {...form.register('email')}
+                        label="Email"
+                        type="email"
+                        fullWidth
+                        style={{ marginBottom: '16px' }}
+                        error={!!form.formState.errors.email}
+                        helperText={form.formState.errors.email?.message}
+                      />
+                      <FormControl fullWidth style={{ marginBottom: '16px' }}>
+                        <InputLabel>Role</InputLabel>
+                        <Select
+                          {...form.register('role')}
+                          defaultValue="member"
+                          label="Role"
+                        >
+                          <MenuItem value="member">Member</MenuItem>
+                          <MenuItem value="manager">Manager</MenuItem>
+                          <MenuItem value="admin">Admin</MenuItem>
+                        </Select>
+                      </FormControl>
+                      <TextField
+                        {...form.register('password')}
+                        label="Password"
+                        type="password"
+                        fullWidth
+                        style={{ marginBottom: '16px' }}
+                        error={!!form.formState.errors.password}
+                        helperText={form.formState.errors.password?.message}
+                      />
+                    </form>
                   </DialogContent>
+                  <DialogActions>
+                    <Button onClick={() => setIsAddDialogOpen(false)}>
+                      Cancel
+                    </Button>
+                    <Button onClick={form.handleSubmit(onSubmit)} disabled={createMemberMutation.isPending}>
+                      {createMemberMutation.isPending ? 'Creating...' : 'Create Member'}
+                    </Button>
+                  </DialogActions>
                 </Dialog>
                 
                 {membersLoading ? (
@@ -477,35 +436,19 @@ export default function TeamDashboard() {
                                   {member.isActive ? 'Deactivate' : 'Activate'}
                                 </Button>
                                 {member.id !== user?.id && (
-                                  <AlertDialog>
-                                    <AlertDialogTrigger asChild>
-                                      <Button
-                                        size="sm"
-                                        variant="outline"
-                                        
-                                      >
-                                        <Trash2  />
-                                        <span >Delete</span>
-                                      </Button>
-                                    </AlertDialogTrigger>
-                                    <AlertDialogContent>
-                                      <AlertDialogHeader>
-                                        <AlertDialogTitle>Are you sure you want to delete this user?</AlertDialogTitle>
-                                        <AlertDialogDescription>
-                                          This action cannot be undone. This will permanently delete {member.firstName} {member.lastName}'s account and remove all of their data from our servers.
-                                        </AlertDialogDescription>
-                                      </AlertDialogHeader>
-                                      <AlertDialogFooter>
-                                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                        <AlertDialogAction
-                                          onClick={() => deleteMemberMutation.mutate(member.id)}
-                                          
-                                        >
-                                          Delete User
-                                        </AlertDialogAction>
-                                      </AlertDialogFooter>
-                                    </AlertDialogContent>
-                                  </AlertDialog>
+                                  <Button
+                                    size="small"
+                                    variant="outlined"
+                                    color="error"
+                                    onClick={() => {
+                                      if (confirm(`Are you sure you want to delete ${member.firstName} ${member.lastName}? This action cannot be undone.`)) {
+                                        deleteMemberMutation.mutate(member.id);
+                                      }
+                                    }}
+                                    startIcon={<Trash2 />}
+                                  >
+                                    Delete
+                                  </Button>
                                 )}
                               </div>
                             </TableCell>
@@ -523,10 +466,8 @@ export default function TeamDashboard() {
           <>
             {/* Manager/Member Dashboard */}
             <Card>
-              <CardHeader>
-                <CardTitle>Welcome to the Team Dashboard</CardTitle>
-              </CardHeader>
               <CardContent>
+                <h3>Welcome to the Team Dashboard</h3>
                 <p >
                   You are logged in as a {user?.role}. Your permissions allow you to:
                 </p>
