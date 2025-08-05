@@ -14,7 +14,7 @@ import MDTypography from '@/components/MD/MDTypography';
 import MDButton from '@/components/MD/MDButton';
 import { Avatar } from '@mui/material';
 import MDInput from '@/components/MD/MDInput';
-import { Card, CardContent, Container, Box, Button, Typography, Modal, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Chip } from '@mui/material';
+import { Card, CardContent, Container, Box, Button, Typography, Modal, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Chip, Checkbox } from '@mui/material';
 import { Grid } from '@mui/system';
 
 const appleBitesLogoPath = '/assets/logos/apple-bites-meritage-logo.png';
@@ -1111,6 +1111,10 @@ function LeadsManagement() {
 
 // Users Management Component
 function UsersManagement() {
+  const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+
   const { data: users, isLoading: usersLoading } = useQuery<any[]>({
     queryKey: ['/api/users'],
     queryFn: async () => {
@@ -1120,6 +1124,122 @@ function UsersManagement() {
     },
     enabled: true,
   });
+
+  // Delete single user mutation
+  const deleteSingleUserMutation = useMutation({
+    mutationFn: async (userId: string) => {
+      const response = await fetch(`/api/users/${userId}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) throw new Error('Failed to delete user');
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/users'] });
+      toast({
+        title: "Success",
+        description: "User deleted successfully",
+        variant: "default",
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to delete user",
+        variant: "destructive",
+      });
+    },
+  });
+
+  // Delete all users mutation
+  const deleteAllUsersMutation = useMutation({
+    mutationFn: async () => {
+      const response = await fetch('/api/users', {
+        method: 'DELETE',
+      });
+      if (!response.ok) throw new Error('Failed to delete all users');
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/users'] });
+      toast({
+        title: "Success",
+        description: "All users deleted successfully",
+        variant: "default",
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to delete all users",
+        variant: "destructive",
+      });
+    },
+  });
+
+  // Delete multiple users mutation
+  const deleteMultipleUsersMutation = useMutation({
+    mutationFn: async (userIds: string[]) => {
+      const response = await fetch('/api/users/delete-multiple', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userIds }),
+      });
+      if (!response.ok) throw new Error('Failed to delete selected users');
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/users'] });
+      setSelectedUsers([]);
+      toast({
+        title: "Success",
+        description: "Selected users deleted successfully",
+        variant: "default",
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to delete selected users",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const handleDeleteUser = (userId: string) => {
+    if (window.confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
+      deleteSingleUserMutation.mutate(userId);
+    }
+  };
+
+  const handleDeleteAllUsers = () => {
+    if (window.confirm('Are you sure you want to delete ALL users? This action cannot be undone and will remove all consumer accounts.')) {
+      deleteAllUsersMutation.mutate();
+    }
+  };
+
+  const handleDeleteSelectedUsers = () => {
+    if (selectedUsers.length === 0) return;
+    if (window.confirm(`Are you sure you want to delete ${selectedUsers.length} selected users? This action cannot be undone.`)) {
+      deleteMultipleUsersMutation.mutate(selectedUsers);
+    }
+  };
+
+  const handleSelectUser = (userId: string) => {
+    setSelectedUsers(prev => 
+      prev.includes(userId) 
+        ? prev.filter(id => id !== userId)
+        : [...prev, userId]
+    );
+  };
+
+  const handleSelectAll = () => {
+    if (selectedUsers.length === users?.length) {
+      setSelectedUsers([]);
+    } else {
+      setSelectedUsers(users?.map(u => u.id) || []);
+    }
+  };
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -1186,36 +1306,72 @@ function UsersManagement() {
           <MDTypography variant="h6" fontWeight="bold" sx={{ color: '#344767' }}>
             All Users ({users?.length || 0})
           </MDTypography>
+          <MDBox display="flex" gap={2}>
+            {selectedUsers.length > 0 && (
+              <MDButton
+                variant="contained"
+                color="warning"
+                onClick={handleDeleteSelectedUsers}
+                disabled={deleteMultipleUsersMutation.isPending}
+                startIcon={<Trash2 size={18} />}
+              >
+                Delete Selected ({selectedUsers.length})
+              </MDButton>
+            )}
+            <MDButton
+              variant="contained"
+              color="error"
+              onClick={handleDeleteAllUsers}
+              disabled={deleteAllUsersMutation.isPending}
+              startIcon={<Trash2 size={18} />}
+            >
+              Delete All Users
+            </MDButton>
+          </MDBox>
         </MDBox>
         
         <TableContainer>
           <Table>
             <TableHead>
               <TableRow sx={{ backgroundColor: '#f8f9fa' }}>
+                <TableCell>
+                  <Checkbox
+                    checked={users && users.length > 0 && selectedUsers.length === users.length}
+                    indeterminate={selectedUsers.length > 0 && selectedUsers.length < (users?.length || 0)}
+                    onChange={handleSelectAll}
+                  />
+                </TableCell>
                 <TableCell><Typography fontWeight="bold">Name</Typography></TableCell>
                 <TableCell><Typography fontWeight="bold">Email</Typography></TableCell>
                 <TableCell><Typography fontWeight="bold">Tier</Typography></TableCell>
                 <TableCell><Typography fontWeight="bold">Auth Provider</Typography></TableCell>
                 <TableCell><Typography fontWeight="bold">Status</Typography></TableCell>
                 <TableCell><Typography fontWeight="bold">Created</Typography></TableCell>
+                <TableCell><Typography fontWeight="bold">Actions</Typography></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {usersLoading ? (
                 <TableRow>
-                  <TableCell colSpan={6} align="center">
+                  <TableCell colSpan={8} align="center">
                     <Typography variant="body2">Loading users...</Typography>
                   </TableCell>
                 </TableRow>
               ) : users && users.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={6} align="center">
+                  <TableCell colSpan={8} align="center">
                     <Typography variant="body2">No users found</Typography>
                   </TableCell>
                 </TableRow>
               ) : (
                 users?.map((user) => (
                   <TableRow key={user.id}>
+                    <TableCell>
+                      <Checkbox
+                        checked={selectedUsers.includes(user.id)}
+                        onChange={() => handleSelectUser(user.id)}
+                      />
+                    </TableCell>
                     <TableCell>
                       <Typography variant="body2" fontWeight="medium">
                         {user.firstName && user.lastName 
@@ -1254,6 +1410,17 @@ function UsersManagement() {
                       <Typography variant="body2" sx={{ color: '#67748e' }}>
                         {user.createdAt ? formatDate(user.createdAt) : 'Unknown'}
                       </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <IconButton 
+                        size="small" 
+                        onClick={() => handleDeleteUser(user.id)}
+                        sx={{ color: '#d32f2f' }}
+                        title="Delete User"
+                        disabled={deleteSingleUserMutation.isPending}
+                      >
+                        <Trash2 size={16} />
+                      </IconButton>
                     </TableCell>
                   </TableRow>
                 ))

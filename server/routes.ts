@@ -1301,6 +1301,44 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Delete single user
+  app.delete("/api/users/:id", isAdminAuthenticated, async (req, res) => {
+    try {
+      const userId = req.params.id;
+      await storage.deleteUser(userId);
+      res.json({ success: true, message: "User deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      res.status(500).json({ error: "Failed to delete user" });
+    }
+  });
+
+  // Delete all users (bulk cleanup)
+  app.delete("/api/users", isAdminAuthenticated, async (req, res) => {
+    try {
+      await storage.deleteAllUsers();
+      res.json({ success: true, message: "All users deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting all users:", error);
+      res.status(500).json({ error: "Failed to delete all users" });
+    }
+  });
+
+  // Delete multiple users
+  app.post("/api/users/delete-multiple", isAdminAuthenticated, async (req, res) => {
+    try {
+      const { userIds } = req.body;
+      if (!Array.isArray(userIds) || userIds.length === 0) {
+        return res.status(400).json({ error: "userIds array is required and must not be empty" });
+      }
+      await storage.deleteMultipleUsers(userIds);
+      res.json({ success: true, message: `${userIds.length} users deleted successfully` });
+    } catch (error) {
+      console.error("Error deleting multiple users:", error);
+      res.status(500).json({ error: "Failed to delete multiple users" });
+    }
+  });
+
   app.get("/api/leads/:id", isAdminAuthenticated, async (req, res) => {
     try {
       const leadId = parseInt(req.params.id);

@@ -19,7 +19,7 @@ import {
   type UpsertUser
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, desc, and } from "drizzle-orm";
+import { eq, desc, and, inArray } from "drizzle-orm";
 
 export interface IStorage {
   // Valuation Assessment methods
@@ -51,6 +51,8 @@ export interface IStorage {
   updateUser(id: string, updates: Partial<User>): Promise<User>;
   updateUserTier(id: string, tier: string): Promise<User>;
   deleteUser(id: string): Promise<void>;
+  deleteAllUsers(): Promise<void>;
+  deleteMultipleUsers(userIds: string[]): Promise<void>;
   createCustomUser(userData: { firstName: string; lastName: string; email: string; passwordHash: string }): Promise<User>;
   validateUserCredentials(email: string, password: string): Promise<User | null>;
 
@@ -263,6 +265,15 @@ export class DatabaseStorage implements IStorage {
 
   async deleteUser(id: string): Promise<void> {
     await db.delete(users).where(eq(users.id, id));
+  }
+
+  async deleteAllUsers(): Promise<void> {
+    await db.delete(users);
+  }
+
+  async deleteMultipleUsers(userIds: string[]): Promise<void> {
+    if (userIds.length === 0) return;
+    await db.delete(users).where(inArray(users.id, userIds));
   }
 
   // Team management methods
