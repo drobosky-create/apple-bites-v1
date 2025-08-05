@@ -585,6 +585,10 @@ export default function AdminDashboard() {
           <Modal
             open={isAddModalOpen}
             onClose={() => setIsAddModalOpen(false)}
+            aria-labelledby="add-member-title"
+            BackdropProps={{
+              style: { backgroundColor: 'rgba(0, 0, 0, 0.5)' }
+            }}
           >
             <MDBox
               sx={{
