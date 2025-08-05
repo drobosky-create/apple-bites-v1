@@ -1288,6 +1288,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // GET /api/users - Get all users (consumers)
+  app.get("/api/users", isAdminAuthenticated, async (req, res) => {
+    try {
+      const users = await storage.getAllUsers();
+      // Remove sensitive information like password hashes
+      const safeUsers = users.map(({ passwordHash, ...user }) => user);
+      res.json(safeUsers);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      res.status(500).json({ error: "Failed to fetch users" });
+    }
+  });
+
   app.get("/api/leads/:id", isAdminAuthenticated, async (req, res) => {
     try {
       const leadId = parseInt(req.params.id);

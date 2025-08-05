@@ -182,6 +182,25 @@ function AdminSidebar({ user, onSignOut, activeTab, setActiveTab }: { user: any;
 
 
         <MDButton
+          onClick={() => setActiveTab('users')}
+          sx={{
+            background: activeTab === 'users' ? gradients.glow : 'transparent',
+            border: activeTab === 'users' ? 'none' : `1px solid rgba(255, 255, 255, 0.3)`,
+            color: activeTab === 'users' ? 'white' : '#dbdce1',
+            '&:hover': {
+              background: activeTab === 'users' ? gradients.light : 'rgba(255, 255, 255, 0.1)',
+              transform: 'translateY(-2px)'
+            },
+            transition: 'all 0.3s ease',
+            width: '100%',
+            py: 1.2
+          }}
+          startIcon={<User size={18} />}
+        >
+          Users
+        </MDButton>
+
+        <MDButton
           onClick={() => setActiveTab('analytics')}
           sx={{
             background: activeTab === 'analytics' ? gradients.glow : 'transparent',
@@ -447,12 +466,14 @@ export default function AdminDashboard() {
               <MDTypography variant="h4" fontWeight="bold" sx={{ color: '#344767', mb: 1 }}>
                 {activeTab === 'team' && 'Team Management'}
                 {activeTab === 'leads' && 'Lead Management'}
+                {activeTab === 'users' && 'User Directory'}
                 {activeTab === 'analytics' && 'Analytics Dashboard'}
                 {activeTab === 'overview' && 'Admin Dashboard'}
               </MDTypography>
               <MDTypography variant="body1" sx={{ color: '#67748e' }}>
                 Welcome back, {adminUser?.firstName} {adminUser?.lastName} - {activeTab === 'team' && 'Manage your team and organization'}
                 {activeTab === 'leads' && 'Track and manage leads'}
+                {activeTab === 'users' && 'View all registered consumers'}
                 {activeTab === 'analytics' && 'View system analytics'}
                 {activeTab === 'overview' && 'Overview of all system metrics'}
               </MDTypography>
@@ -693,6 +714,11 @@ export default function AdminDashboard() {
           {/* Leads Dashboard Tab */}
           {activeTab === 'leads' && (
             <LeadsManagement />
+          )}
+
+          {/* Users Dashboard Tab */}
+          {activeTab === 'users' && (
+            <UsersManagement />
           )}
 
           {/* Analytics Dashboard Tab */}
@@ -1074,6 +1100,163 @@ function LeadsManagement() {
                       ))
                   )}
                 </>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Card>
+    </>
+  );
+}
+
+// Users Management Component
+function UsersManagement() {
+  const { data: users, isLoading: usersLoading } = useQuery<any[]>({
+    queryKey: ['/api/users'],
+    queryFn: async () => {
+      const response = await fetch('/api/users');
+      if (!response.ok) throw new Error('Failed to fetch users');
+      return response.json();
+    },
+    enabled: true,
+  });
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+  };
+
+  const getTierColor = (tier: string) => {
+    switch (tier) {
+      case 'capital': return 'error';
+      case 'growth': return 'warning';
+      case 'free': return 'info';
+      default: return 'default';
+    }
+  };
+
+  const getProviderColor = (provider: string) => {
+    switch (provider) {
+      case 'replit': return 'primary';
+      case 'custom': return 'secondary';
+      default: return 'default';
+    }
+  };
+
+  return (
+    <>
+      {/* Stats Cards */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px', marginBottom: '24px' }}>
+        <StatsCard
+          title="Total Users"
+          value={users?.length || 0}
+          subtitle="registered consumers"
+          icon={Users}
+          color="primary"
+        />
+        <StatsCard
+          title="Active Users"
+          value={users?.filter(u => u.isActive).length || 0}
+          subtitle="currently active"
+          icon={Shield}
+          color="success"
+        />
+        <StatsCard
+          title="Free Tier"
+          value={users?.filter(u => u.tier === 'free').length || 0}
+          subtitle="free accounts"
+          icon={User}
+          color="info"
+        />
+        <StatsCard
+          title="Paid Tier"
+          value={users?.filter(u => u.tier !== 'free').length || 0}
+          subtitle="growth & capital"
+          icon={Crown}
+          color="warning"
+        />
+      </div>
+
+      {/* Users Table */}
+      <Card sx={{ boxShadow: '0 2px 8px -4px rgba(0,0,0,0.1)' }}>
+        <MDBox p={2.5} display="flex" justifyContent="space-between" alignItems="center">
+          <MDTypography variant="h6" fontWeight="bold" sx={{ color: '#344767' }}>
+            All Users ({users?.length || 0})
+          </MDTypography>
+        </MDBox>
+        
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow sx={{ backgroundColor: '#f8f9fa' }}>
+                <TableCell><Typography fontWeight="bold">Name</Typography></TableCell>
+                <TableCell><Typography fontWeight="bold">Email</Typography></TableCell>
+                <TableCell><Typography fontWeight="bold">Tier</Typography></TableCell>
+                <TableCell><Typography fontWeight="bold">Auth Provider</Typography></TableCell>
+                <TableCell><Typography fontWeight="bold">Status</Typography></TableCell>
+                <TableCell><Typography fontWeight="bold">Created</Typography></TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {usersLoading ? (
+                <TableRow>
+                  <TableCell colSpan={6} align="center">
+                    <Typography variant="body2">Loading users...</Typography>
+                  </TableCell>
+                </TableRow>
+              ) : users && users.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={6} align="center">
+                    <Typography variant="body2">No users found</Typography>
+                  </TableCell>
+                </TableRow>
+              ) : (
+                users?.map((user) => (
+                  <TableRow key={user.id}>
+                    <TableCell>
+                      <Typography variant="body2" fontWeight="medium">
+                        {user.firstName && user.lastName 
+                          ? `${user.firstName} ${user.lastName}`
+                          : user.fullName || 'Unknown User'
+                        }
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="body2">{user.email}</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Chip 
+                        label={user.tier?.toUpperCase() || 'FREE'}
+                        size="small"
+                        color={getTierColor(user.tier || 'free')}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Chip 
+                        label={user.authProvider === 'replit' ? 'Replit' : 'Email'}
+                        size="small"
+                        color={getProviderColor(user.authProvider)}
+                        variant="outlined"
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Chip 
+                        label={user.isActive ? 'Active' : 'Inactive'}
+                        size="small"
+                        color={user.isActive ? 'success' : 'default'}
+                        variant="outlined"
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="body2" sx={{ color: '#67748e' }}>
+                        {user.createdAt ? formatDate(user.createdAt) : 'Unknown'}
+                      </Typography>
+                    </TableCell>
+                  </TableRow>
+                ))
               )}
             </TableBody>
           </Table>
