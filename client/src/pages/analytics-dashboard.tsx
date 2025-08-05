@@ -1,14 +1,26 @@
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import MDButton from "@/components/MD/MDButton";
 import MDBox from "@/components/MD/MDBox";
 import MDTypography from "@/components/MD/MDTypography";
-import { Card, CardContent, Button, Chip } from "@mui/material";
-
-
-
-
-
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } from "recharts";
+import { 
+  Card, 
+  CardContent, 
+  Button, 
+  Table, 
+  TableBody, 
+  TableCell, 
+  TableContainer, 
+  TableHead, 
+  TableRow,
+  Paper,
+  Tabs,
+  Tab,
+  Grid,
+  Box,
+  Chip
+} from "@mui/material";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } from "recharts";
 import { TrendingUp, Users, DollarSign, FileText, Download, Eye, LogOut, ArrowLeft } from "lucide-react";
 import { ValuationAssessment } from "@shared/schema";
 import AdminLogin from "@/components/admin-login";
@@ -18,21 +30,39 @@ import { useLocation } from "wouter";
 export default function AnalyticsDashboard() {
   const { isAuthenticated, isLoading: authLoading, login, logout } = useAdminAuth();
   const [, navigate] = useLocation();
+  const [activeTab, setActiveTab] = useState(0);
 
-  const { data: assessments, isLoading } = useQuery<ValuationAssessment[]>({
+  const { data: assessments = [], isLoading } = useQuery<ValuationAssessment[]>({
     queryKey: ['/api/analytics/assessments'],
-    enabled: isAuthenticated // Only fetch when authenticated
+    enabled: isAuthenticated
   });
 
   // Show authentication loading state
   if (authLoading) {
     return (
-      <div >
-        <div >
-          <div ></div>
-          <p >Checking authentication...</p>
-        </div>
-      </div>
+      <MDBox display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
+        <MDBox textAlign="center">
+          <MDBox 
+            width={40} 
+            height={40} 
+            mx="auto" 
+            mb={2}
+            sx={{ 
+              border: '4px solid #f3f3f3',
+              borderTop: '4px solid #3498db',
+              borderRadius: '50%',
+              animation: 'spin 1s linear infinite',
+              '@keyframes spin': {
+                '0%': { transform: 'rotate(0deg)' },
+                '100%': { transform: 'rotate(360deg)' }
+              }
+            }}
+          />
+          <MDTypography variant="body2" color="text">
+            Checking authentication...
+          </MDTypography>
+        </MDBox>
+      </MDBox>
     );
   }
 
@@ -43,433 +73,366 @@ export default function AnalyticsDashboard() {
 
   if (isLoading) {
     return (
-      <div >
-        <div >
-          <div ></div>
-          <div >
-            {[...Array(4)].map((_, i) => (
-              <div key={i} ></div>
-            ))}
-          </div>
-        </div>
-      </div>
+      <MDBox p={3}>
+        <MDBox display="flex" justifyContent="center" alignItems="center" minHeight="50vh">
+          <MDBox textAlign="center">
+            <MDBox 
+              width={40} 
+              height={40} 
+              mx="auto" 
+              mb={2}
+              sx={{ 
+                border: '4px solid #f3f3f3',
+                borderTop: '4px solid #3498db',
+                borderRadius: '50%',
+                animation: 'spin 1s linear infinite',
+                '@keyframes spin': {
+                  '0%': { transform: 'rotate(0deg)' },
+                  '100%': { transform: 'rotate(360deg)' }
+                }
+              }}
+            />
+            <MDTypography variant="body2" color="text">
+              Loading analytics data...
+            </MDTypography>
+          </MDBox>
+        </MDBox>
+      </MDBox>
     );
   }
 
-  const totalAssessments = assessments?.length || 0;
+  // Calculate metrics
+  const totalAssessments = assessments.length;
   const avgValuation = totalAssessments > 0 ? 
-    (assessments?.reduce((sum, a) => sum + parseFloat(a.midEstimate || "0"), 0) || 0) / totalAssessments : 0;
-  const totalEBITDA = assessments?.reduce((sum, a) => sum + parseFloat(a.adjustedEbitda || "0"), 0) || 0;
-  const completedAssessments = assessments?.filter(a => a.isProcessed).length || 0;
+    assessments.reduce((sum, a) => sum + parseFloat(a.midEstimate || "0"), 0) / totalAssessments : 0;
+  const totalEBITDA = assessments.reduce((sum, a) => sum + parseFloat(a.adjustedEbitda || "0"), 0);
+  const completedAssessments = assessments.filter(a => a.isProcessed).length;
 
-  const followUpData = assessments?.reduce((acc, a) => {
-    const intent = a.followUpIntent;
+  const followUpData = assessments.reduce((acc, a) => {
+    const intent = a.followUpIntent || 'unknown';
     acc[intent] = (acc[intent] || 0) + 1;
     return acc;
-  }, {} as Record<string, number>) || {};
+  }, {} as Record<string, number>);
 
-  const scoreDistribution = assessments?.reduce((acc, a) => {
+  const scoreDistribution = assessments.reduce((acc, a) => {
     const score = a.overallScore?.charAt(0) || 'C';
     acc[score] = (acc[score] || 0) + 1;
     return acc;
-  }, {} as Record<string, number>) || {};
+  }, {} as Record<string, number>);
 
-  const valuationByMonth = assessments?.reduce((acc, a) => {
+  const valuationByMonth = assessments.reduce((acc, a) => {
     const month = new Date(a.createdAt || '').toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
     acc[month] = (acc[month] || 0) + 1;
     return acc;
-  }, {} as Record<string, number>) || {};
+  }, {} as Record<string, number>);
 
   const pieColors = ['#8B5CF6', '#06B6D4', '#10B981', '#F59E0B', '#EF4444'];
 
   return (
-    <div >
-      <div >
-        <div >
+    <MDBox p={3}>
+      {/* Header */}
+      <MDBox display="flex" justifyContent="space-between" alignItems="center" mb={3}>
+        <MDBox display="flex" alignItems="center" gap={2}>
           <Button 
-            variant="outline" 
-            onClick={() => navigate('/team')}
-            
+            variant="outlined" 
+            onClick={() => navigate('/admin')}
+            startIcon={<ArrowLeft size={16} />}
           >
-            <ArrowLeft  />
-            <span >Back to Dashboard</span>
-            <span >Back</span>
+            Back to Dashboard
           </Button>
-          <div >
-            <h1 >Analytics Dashboard</h1>
-            <p >Comprehensive insights into business valuations and lead performance</p>
-          </div>
-        </div>
-        <Button variant="outline" onClick={logout} >
-          <LogOut  />
+          <MDBox>
+            <MDTypography variant="h4" fontWeight="bold" color="dark">
+              Analytics Dashboard
+            </MDTypography>
+            <MDTypography variant="body2" color="text">
+              Comprehensive insights into business valuations and lead performance
+            </MDTypography>
+          </MDBox>
+        </MDBox>
+        <Button variant="outlined" onClick={logout} startIcon={<LogOut size={16} />}>
           Logout
         </Button>
-      </div>
+      </MDBox>
 
-      <div >
-        <Card>
-          <CardHeader >
-            <CardTitle >Total Assessments</CardTitle>
-            <Users  />
-          </CardHeader>
-          <CardContent>
-            <div >{totalAssessments}</div>
-            <p >
-              {completedAssessments} completed
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader >
-            <CardTitle >Avg Valuation</CardTitle>
-            <TrendingUp  />
-          </CardHeader>
-          <CardContent>
-            <div >
-              ${Math.round(avgValuation).toLocaleString()}
-            </div>
-            <p >
-              Mid-point estimate
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader >
-            <CardTitle >Total EBITDA</CardTitle>
-            <DollarSign  />
-          </CardHeader>
-          <CardContent>
-            <div >
-              ${Math.round(totalEBITDA).toLocaleString()}
-            </div>
-            <p >
-              Combined adjusted EBITDA
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader >
-            <CardTitle >Completion Rate</CardTitle>
-            <FileText  />
-          </CardHeader>
-          <CardContent>
-            <div >
-              {totalAssessments > 0 ? Math.round((completedAssessments / totalAssessments) * 100) : 0}%
-            </div>
-            <p >
-              Successfully processed
-            </p>
-          </CardContent>
-        </Card>
-      </div>
-
-      <Tabs defaultValue="overview" >
-        <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="assessments">All Assessments</TabsTrigger>
-          <TabsTrigger value="trends">Trends</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="overview" >
-          <div >
-            <Card >
-              <CardHeader>
-                <CardTitle >Follow-up Intent</CardTitle>
-                <CardDescription >Distribution of client interest levels</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={350}>
-                  <PieChart>
-                    <defs>
-                      <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#8B5CF6" />
-                        <stop offset="100%" stopColor="#A855F7" />
-                      </linearGradient>
-                      <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#06B6D4" />
-                        <stop offset="100%" stopColor="#0891B2" />
-                      </linearGradient>
-                      <linearGradient id="gradient3" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#10B981" />
-                        <stop offset="100%" stopColor="#059669" />
-                      </linearGradient>
-                      <linearGradient id="gradient4" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#F59E0B" />
-                        <stop offset="100%" stopColor="#D97706" />
-                      </linearGradient>
-                      <linearGradient id="gradient5" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#EF4444" />
-                        <stop offset="100%" stopColor="#DC2626" />
-                      </linearGradient>
-                    </defs>
-                    <Pie
-                      data={Object.entries(followUpData).map(([key, value]) => ({ name: key, value }))}
-                      cx="50%"
-                      cy="50%"
-                      labelLine={false}
-                      label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                      outerRadius={110}
-                      innerRadius={45}
-                      fill="#8884d8"
-                      dataKey="value"
-                      stroke="#ffffff"
-                      strokeWidth={3}
-                    >
-                      {Object.entries(followUpData).map((_, index) => (
-                        <Cell 
-                          key={`cell-${index}`} 
-                          fill={`url(#gradient${index + 1})`}
-                        />
-                      ))}
-                    </Pie>
-                    <Tooltip 
-                      contentStyle={{
-                        backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                        border: 'none',
-                        borderRadius: '12px',
-                        boxShadow: '0 10px 25px rgba(0, 0, 0, 0.15)',
-                        padding: '12px 16px',
-                        fontSize: '14px',
-                        fontWeight: '500'
-                      }}
-                    />
-                  </PieChart>
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>
-
-            <Card >
-              <CardHeader>
-                <CardTitle >Overall Score Distribution</CardTitle>
-                <CardDescription >Business performance grades</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={380}>
-                  <BarChart 
-                    data={Object.entries(scoreDistribution).map(([key, value]) => ({ grade: key, count: value }))}
-                    margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-                  >
-                    <defs>
-                      <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#6366F1" />
-                        <stop offset="50%" stopColor="#8B5CF6" />
-                        <stop offset="100%" stopColor="#A855F7" />
-                      </linearGradient>
-                      <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
-                        <feDropShadow dx="0" dy="4" stdDeviation="3" floodColor="rgba(0,0,0,0.1)" />
-                      </filter>
-                    </defs>
-                    <CartesianGrid 
-                      strokeDasharray="2 2" 
-                      stroke="#E5E7EB" 
-                      opacity={0.6}
-                      horizontal={true}
-                      vertical={false}
-                    />
-                    <XAxis 
-                      dataKey="grade" 
-                      stroke="#6B7280" 
-                      fontSize={13}
-                      fontWeight="600"
-                      tickLine={false}
-                      axisLine={false}
-                      tick={{ fill: '#374151' }}
-                    />
-                    <YAxis 
-                      stroke="#6B7280" 
-                      fontSize={12}
-                      tickLine={false}
-                      axisLine={false}
-                      tick={{ fill: '#6B7280' }}
-                    />
-                    <Tooltip 
-                      contentStyle={{
-                        backgroundColor: 'rgba(255, 255, 255, 0.98)',
-                        border: 'none',
-                        borderRadius: '12px',
-                        boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-                        padding: '16px',
-                        fontSize: '14px',
-                        fontWeight: '500'
-                      }}
-                    />
-                    <Bar 
-                      dataKey="count" 
-                      fill="url(#barGradient)"
-                      radius={[8, 8, 0, 0]}
-                      filter="url(#shadow)"
-                    />
-                  </BarChart>
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>
-          </div>
-        </TabsContent>
-
-        <TabsContent value="assessments">
-          <Card >
-            <CardHeader>
-              <CardTitle >All Valuations</CardTitle>
-              <CardDescription >Complete list of business assessments</CardDescription>
-            </CardHeader>
+      {/* Metrics Cards */}
+      <Grid container spacing={3} mb={4}>
+        <Grid item xs={12} sm={6} md={3}>
+          <Card>
             <CardContent>
+              <MDBox display="flex" justifyContent="space-between" alignItems="center">
+                <MDBox>
+                  <MDTypography variant="h6" color="text">
+                    Total Assessments
+                  </MDTypography>
+                  <MDTypography variant="h3" fontWeight="bold" color="dark">
+                    {totalAssessments}
+                  </MDTypography>
+                  <MDTypography variant="caption" color="text">
+                    {completedAssessments} completed
+                  </MDTypography>
+                </MDBox>
+                <Users size={24} color="#1976d2" />
+              </MDBox>
+            </CardContent>
+          </Card>
+        </Grid>
+
+        <Grid item xs={12} sm={6} md={3}>
+          <Card>
+            <CardContent>
+              <MDBox display="flex" justifyContent="space-between" alignItems="center">
+                <MDBox>
+                  <MDTypography variant="h6" color="text">
+                    Avg Valuation
+                  </MDTypography>
+                  <MDTypography variant="h3" fontWeight="bold" color="dark">
+                    ${Math.round(avgValuation).toLocaleString()}
+                  </MDTypography>
+                  <MDTypography variant="caption" color="text">
+                    Mid-point estimate
+                  </MDTypography>
+                </MDBox>
+                <TrendingUp size={24} color="#2e7d32" />
+              </MDBox>
+            </CardContent>
+          </Card>
+        </Grid>
+
+        <Grid item xs={12} sm={6} md={3}>
+          <Card>
+            <CardContent>
+              <MDBox display="flex" justifyContent="space-between" alignItems="center">
+                <MDBox>
+                  <MDTypography variant="h6" color="text">
+                    Total EBITDA
+                  </MDTypography>
+                  <MDTypography variant="h3" fontWeight="bold" color="dark">
+                    ${Math.round(totalEBITDA).toLocaleString()}
+                  </MDTypography>
+                  <MDTypography variant="caption" color="text">
+                    Combined adjusted EBITDA
+                  </MDTypography>
+                </MDBox>
+                <DollarSign size={24} color="#ed6c02" />
+              </MDBox>
+            </CardContent>
+          </Card>
+        </Grid>
+
+        <Grid item xs={12} sm={6} md={3}>
+          <Card>
+            <CardContent>
+              <MDBox display="flex" justifyContent="space-between" alignItems="center">
+                <MDBox>
+                  <MDTypography variant="h6" color="text">
+                    Completion Rate
+                  </MDTypography>
+                  <MDTypography variant="h3" fontWeight="bold" color="dark">
+                    {totalAssessments > 0 ? Math.round((completedAssessments / totalAssessments) * 100) : 0}%
+                  </MDTypography>
+                  <MDTypography variant="caption" color="text">
+                    Successfully processed
+                  </MDTypography>
+                </MDBox>
+                <FileText size={24} color="#9c27b0" />
+              </MDBox>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
+
+      {/* Tabs */}
+      <Card>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <Tabs value={activeTab} onChange={(_, newValue) => setActiveTab(newValue)}>
+            <Tab label="Overview" />
+            <Tab label="All Assessments" />
+            <Tab label="Trends" />
+          </Tabs>
+        </Box>
+
+        {/* Overview Tab */}
+        {activeTab === 0 && (
+          <CardContent>
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={6}>
+                <MDBox mb={3}>
+                  <MDTypography variant="h6" fontWeight="bold" color="dark" mb={2}>
+                    Follow-up Intent Distribution
+                  </MDTypography>
+                  <ResponsiveContainer width="100%" height={350}>
+                    <PieChart>
+                      <Pie
+                        data={Object.entries(followUpData).map(([key, value]) => ({ 
+                          name: key.charAt(0).toUpperCase() + key.slice(1), 
+                          value 
+                        }))}
+                        cx="50%"
+                        cy="50%"
+                        labelLine={false}
+                        label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                        outerRadius={110}
+                        innerRadius={45}
+                        fill="#8884d8"
+                        dataKey="value"
+                        stroke="#ffffff"
+                        strokeWidth={3}
+                      >
+                        {Object.entries(followUpData).map((_, index) => (
+                          <Cell 
+                            key={`cell-${index}`} 
+                            fill={pieColors[index % pieColors.length]}
+                          />
+                        ))}
+                      </Pie>
+                      <Tooltip />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </MDBox>
+              </Grid>
+
+              <Grid item xs={12} md={6}>
+                <MDBox mb={3}>
+                  <MDTypography variant="h6" fontWeight="bold" color="dark" mb={2}>
+                    Overall Score Distribution
+                  </MDTypography>
+                  <ResponsiveContainer width="100%" height={350}>
+                    <BarChart 
+                      data={Object.entries(scoreDistribution).map(([key, value]) => ({ 
+                        grade: key, 
+                        count: value 
+                      }))}
+                      margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="grade" />
+                      <YAxis />
+                      <Tooltip />
+                      <Bar dataKey="count" fill="#8B5CF6" radius={[4, 4, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </MDBox>
+              </Grid>
+            </Grid>
+          </CardContent>
+        )}
+
+        {/* All Assessments Tab */}
+        {activeTab === 1 && (
+          <CardContent>
+            <MDBox mb={3}>
+              <MDTypography variant="h6" fontWeight="bold" color="dark" mb={2}>
+                All Valuations ({totalAssessments} total)
+              </MDTypography>
+            </MDBox>
+            <TableContainer component={Paper} elevation={0}>
               <Table>
-                <TableHeader>
+                <TableHead>
                   <TableRow>
-                    <TableHead>Company</TableHead>
-                    <TableHead>Contact</TableHead>
-                    <TableHead>Valuation</TableHead>
-                    <TableHead>EBITDA</TableHead>
-                    <TableHead>Score</TableHead>
-                    <TableHead>Follow-up</TableHead>
-                    <TableHead>Date</TableHead>
-                    <TableHead>Actions</TableHead>
+                    <TableCell><strong>Company</strong></TableCell>
+                    <TableCell><strong>Contact</strong></TableCell>
+                    <TableCell><strong>Valuation</strong></TableCell>
+                    <TableCell><strong>EBITDA</strong></TableCell>
+                    <TableCell><strong>Score</strong></TableCell>
+                    <TableCell><strong>Follow-up</strong></TableCell>
+                    <TableCell><strong>Date</strong></TableCell>
+                    <TableCell><strong>Actions</strong></TableCell>
                   </TableRow>
-                </TableHeader>
+                </TableHead>
                 <TableBody>
-                  {assessments?.map((assessment) => (
-                    <TableRow key={assessment.id} >
-                      <TableCell >{assessment.company}</TableCell>
+                  {assessments.map((assessment) => (
+                    <TableRow key={assessment.id}>
+                      <TableCell>{assessment.company || 'N/A'}</TableCell>
                       <TableCell>
-                        <div>
-                          <div>{assessment.firstName} {assessment.lastName}</div>
-                          <div >{assessment.email}</div>
-                        </div>
+                        <MDBox>
+                          <MDTypography variant="body2" fontWeight="medium">
+                            {assessment.firstName} {assessment.lastName}
+                          </MDTypography>
+                          <MDTypography variant="caption" color="text">
+                            {assessment.email}
+                          </MDTypography>
+                        </MDBox>
                       </TableCell>
                       <TableCell>
-                        ${Math.round(parseFloat(assessment.midEstimate || "0")).toLocaleString()}
+                        <MDTypography variant="body2" fontWeight="medium">
+                          ${Math.round(parseFloat(assessment.midEstimate || "0")).toLocaleString()}
+                        </MDTypography>
                       </TableCell>
                       <TableCell>
-                        ${Math.round(parseFloat(assessment.adjustedEbitda || "0")).toLocaleString()}
+                        <MDTypography variant="body2">
+                          ${Math.round(parseFloat(assessment.adjustedEbitda || "0")).toLocaleString()}
+                        </MDTypography>
                       </TableCell>
                       <TableCell>
-                        <div >
-                          {assessment.overallScore}
-                        </div>
+                        <Chip 
+                          label={assessment.overallScore || 'N/A'} 
+                          size="small"
+                          color={assessment.overallScore?.includes('A') ? 'success' : 
+                                assessment.overallScore?.includes('B') ? 'info' :
+                                assessment.overallScore?.includes('C') ? 'warning' : 'default'}
+                        />
                       </TableCell>
                       <TableCell>
-                        <Badge variant={assessment.followUpIntent === 'yes' ? 'default' : 'outline'}>
-                          {assessment.followUpIntent}
-                        </Badge>
+                        <Chip 
+                          label={assessment.followUpIntent || 'unknown'} 
+                          size="small"
+                          variant={assessment.followUpIntent === 'yes' ? 'filled' : 'outlined'}
+                        />
                       </TableCell>
                       <TableCell>
-                        {new Date(assessment.createdAt || '').toLocaleDateString()}
+                        <MDTypography variant="body2">
+                          {new Date(assessment.createdAt || '').toLocaleDateString()}
+                        </MDTypography>
                       </TableCell>
                       <TableCell>
-                        <div >
-                          <Button size="sm" variant="outline">
-                            <Eye  />
+                        <MDBox display="flex" gap={1}>
+                          <Button size="small" variant="outlined">
+                            <Eye size={16} />
                           </Button>
                           {assessment.pdfUrl && (
-                            <Button size="sm" variant="outline">
-                              <Download  />
+                            <Button size="small" variant="outlined">
+                              <Download size={16} />
                             </Button>
                           )}
-                        </div>
+                        </MDBox>
                       </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
               </Table>
-            </CardContent>
-          </Card>
-        </TabsContent>
+            </TableContainer>
+          </CardContent>
+        )}
 
-        <TabsContent value="trends">
-          <Card >
-            <CardHeader>
-              <CardTitle >Assessment Trends</CardTitle>
-              <CardDescription >Valuations over time</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ResponsiveContainer width="100%" height={420}>
-                <LineChart 
-                  data={Object.entries(valuationByMonth).map(([month, count]) => ({ month, count }))}
-                  margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-                >
-                  <defs>
-                    <linearGradient id="lineGradient" x1="0" y1="0" x2="1" y2="0">
-                      <stop offset="0%" stopColor="#06B6D4" />
-                      <stop offset="30%" stopColor="#3B82F6" />
-                      <stop offset="70%" stopColor="#8B5CF6" />
-                      <stop offset="100%" stopColor="#EC4899" />
-                    </linearGradient>
-                    <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="rgba(59, 130, 246, 0.3)" />
-                      <stop offset="100%" stopColor="rgba(59, 130, 246, 0.05)" />
-                    </linearGradient>
-                    <filter id="glow">
-                      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-                      <feMerge> 
-                        <feMergeNode in="coloredBlur"/>
-                        <feMergeNode in="SourceGraphic"/>
-                      </feMerge>
-                    </filter>
-                  </defs>
-                  <CartesianGrid 
-                    strokeDasharray="1 3" 
-                    stroke="#E5E7EB" 
-                    opacity={0.4}
-                    horizontal={true}
-                    vertical={false}
-                  />
-                  <XAxis 
-                    dataKey="month" 
-                    stroke="#6B7280" 
-                    fontSize={12}
-                    fontWeight="500"
-                    tickLine={false}
-                    axisLine={false}
-                    tick={{ fill: '#374151' }}
-                  />
-                  <YAxis 
-                    stroke="#6B7280" 
-                    fontSize={12}
-                    tickLine={false}
-                    axisLine={false}
-                    tick={{ fill: '#6B7280' }}
-                  />
-                  <Tooltip 
-                    contentStyle={{
-                      backgroundColor: 'rgba(255, 255, 255, 0.98)',
-                      border: 'none',
-                      borderRadius: '12px',
-                      boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-                      padding: '16px',
-                      fontSize: '14px',
-                      fontWeight: '500'
-                    }}
-                  />
-                  <Legend />
-                  <Line 
-                    type="monotone" 
-                    dataKey="count" 
-                    stroke="url(#lineGradient)" 
-                    strokeWidth={4}
-                    dot={{ 
-                      fill: '#3B82F6', 
-                      strokeWidth: 3, 
-                      r: 7,
-                      stroke: '#ffffff'
-                    }}
-                    activeDot={{ 
-                      r: 10, 
-                      stroke: '#3B82F6', 
-                      strokeWidth: 3, 
-                      fill: '#ffffff',
-                      filter: 'url(#glow)'
-                    }}
-                    filter="url(#glow)"
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
-    </div>
+        {/* Trends Tab */}
+        {activeTab === 2 && (
+          <CardContent>
+            <MDBox mb={3}>
+              <MDTypography variant="h6" fontWeight="bold" color="dark" mb={2}>
+                Assessment Trends Over Time
+              </MDTypography>
+            </MDBox>
+            <ResponsiveContainer width="100%" height={400}>
+              <LineChart 
+                data={Object.entries(valuationByMonth).map(([month, count]) => ({ month, count }))}
+                margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="month" />
+                <YAxis />
+                <Tooltip />
+                <Line 
+                  type="monotone" 
+                  dataKey="count" 
+                  stroke="#8B5CF6" 
+                  strokeWidth={3}
+                  dot={{ fill: '#8B5CF6', strokeWidth: 2, r: 6 }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </CardContent>
+        )}
+      </Card>
+    </MDBox>
   );
 }
