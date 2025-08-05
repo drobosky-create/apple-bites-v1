@@ -587,20 +587,27 @@ export default function AdminDashboard() {
             onClose={() => setIsAddModalOpen(false)}
             aria-labelledby="add-member-title"
             BackdropProps={{
-              style: { backgroundColor: 'rgba(0, 0, 0, 0.5)' }
+              style: { 
+                backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                backdropFilter: 'blur(4px)'
+              }
             }}
           >
-            <MDBox
+            <Box
               sx={{
                 position: 'absolute',
                 top: '50%',
                 left: '50%',
                 transform: 'translate(-50%, -50%)',
                 width: 600,
-                bgcolor: 'white',
+                backgroundColor: '#ffffff',
                 borderRadius: 2,
-                boxShadow: 24,
+                boxShadow: '0 24px 38px 3px rgba(0,0,0,0.14), 0 9px 46px 8px rgba(0,0,0,0.12), 0 11px 15px -7px rgba(0,0,0,0.20)',
                 p: 4,
+                border: '1px solid #e0e0e0',
+                outline: 'none',
+                opacity: 1,
+                zIndex: 1300,
               }}
             >
               <MDTypography variant="h5" fontWeight="bold" mb={3} sx={{ color: '#344767' }}>
@@ -673,7 +680,7 @@ export default function AdminDashboard() {
                   </MDButton>
                 </MDBox>
               </Box>
-            </MDBox>
+            </Box>
           </Modal>
           </>
           )}
