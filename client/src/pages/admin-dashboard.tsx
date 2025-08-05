@@ -592,7 +592,7 @@ export default function AdminDashboard() {
                 top: '50%',
                 left: '50%',
                 transform: 'translate(-50%, -50%)',
-                width: 500,
+                width: 600,
                 bgcolor: 'white',
                 borderRadius: 2,
                 boxShadow: 24,
@@ -603,24 +603,26 @@ export default function AdminDashboard() {
                 Add Team Member
               </MDTypography>
               
-              <Box component="form" onSubmit={form.handleSubmit(onSubmit)}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+              <Box component="form" onSubmit={form.handleSubmit(onSubmit)} sx={{ mt: 2 }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                  <Box sx={{ display: 'flex', gap: 2 }}>
                     <TextField
+                      fullWidth
                       label="First Name"
+                      variant="outlined"
                       {...form.register('firstName')}
                       error={!!form.formState.errors.firstName}
                       helperText={form.formState.errors.firstName?.message}
-                      sx={{ width: '100%' }}
                     />
                     <TextField
+                      fullWidth
                       label="Last Name"
+                      variant="outlined"
                       {...form.register('lastName')}
                       error={!!form.formState.errors.lastName}
                       helperText={form.formState.errors.lastName?.message}
-                      sx={{ width: '100%' }}
                     />
-                  </div>
+                  </Box>
                   <TextField
                     fullWidth
                     label="Email"
@@ -648,7 +650,7 @@ export default function AdminDashboard() {
                     <option value="manager">Manager</option>
                     <option value="admin">Admin</option>
                   </TextField>
-                </div>
+                </Box>
                 
                 <MDBox mt={3} display="flex" justifyContent="flex-end" gap={2}>
                   <MDButton 
