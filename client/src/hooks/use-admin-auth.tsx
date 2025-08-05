@@ -14,27 +14,15 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const queryClient = useQueryClient();
 
-  // Force clear admin session on mount
-  useEffect(() => {
-    const clearAdminSession = async () => {
-      try {
-        await fetch('/api/admin/logout', {
-          method: 'POST',
-          credentials: 'include',
-        });
-      } catch (error) {
-        // Ignore errors during cleanup
-      }
-    };
-    clearAdminSession();
-  }, []);
+  // Only clear admin session on mount if explicitly logging out
+  // Removed auto-logout on mount to preserve admin sessions
 
   // Check if admin is authenticated on app load
   const { data: authStatus, isLoading, refetch } = useQuery({
     queryKey: ['/api/admin/status'],
     retry: false,
-    staleTime: 0, // Always fetch fresh data
-    cacheTime: 0, // Don't cache the result
+    staleTime: 30000, // Cache for 30 seconds
+    gcTime: 0, // Don't cache the result long term
     queryFn: async () => {
       const response = await fetch('/api/admin/status', {
         credentials: 'include',
