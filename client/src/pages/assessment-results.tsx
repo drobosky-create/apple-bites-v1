@@ -55,6 +55,12 @@ export default function AssessmentResults() {
   
   const assessmentId = params?.id;
 
+  // Check if admin is authenticated
+  const { data: adminStatus } = useQuery({
+    queryKey: ['/api/admin/status'],
+    retry: false,
+  });
+
   // Fetch all assessments to find the specific one
   const { data: assessments, isLoading: assessmentsLoading } = useQuery<ValuationAssessment[]>({
     queryKey: ['/api/analytics/assessments'],
@@ -68,6 +74,9 @@ export default function AssessmentResults() {
     queryKey: ['/api/auth/user'],
     enabled: !!authUser,
   });
+
+  // Allow access if user is authenticated OR admin is authenticated
+  const hasAccess = authUser || (adminStatus?.authenticated === true);
 
   if (authLoading || assessmentsLoading) {
     return (
@@ -88,6 +97,12 @@ export default function AssessmentResults() {
         </Box>
       </DashboardBackground>
     );
+  }
+
+  // Redirect to login if no access
+  if (!hasAccess && !authLoading) {
+    setLocation('/admin-login');
+    return null;
   }
 
   if (!assessment) {
@@ -198,11 +213,11 @@ export default function AssessmentResults() {
               </Typography>
             </Box>
             <Button
-              onClick={() => setLocation('/dashboard')}
+              onClick={() => setLocation(adminStatus?.authenticated ? '/admin-dashboard' : '/dashboard')}
               variant="outlined"
               startIcon={<ArrowLeft size={18} />}
             >
-              Back to Dashboard
+              Back to {adminStatus?.authenticated ? 'Admin Dashboard' : 'Dashboard'}
             </Button>
           </Box>
 

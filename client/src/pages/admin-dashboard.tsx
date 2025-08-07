@@ -1095,7 +1095,7 @@ function LeadsManagement() {
                                 )}
                                 <IconButton 
                                   size="small" 
-                                  onClick={() => window.open(`/assessment/${assessment.id}`, '_blank')}
+                                  onClick={() => window.open(`/assessment-results/${assessment.id}`, '_blank')}
                                   sx={{ color: '#1976d2' }}
                                   title="View Full Assessment"
                                 >
