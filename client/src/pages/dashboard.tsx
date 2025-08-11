@@ -280,11 +280,9 @@ export default function Dashboard() {
     logout(); // Use the logout function from useAuth
   };
 
-  // Return mobile version for small screens
-  if (isMobile) {
-    console.log('Rendering MobileDashboard component');
-    return <MobileDashboard user={displayUser} onSignOut={handleSignOut} />;
-  }
+  // Mobile uses the unified mobile navigation wrapper, so we continue with the desktop layout
+  // The MobileNavigation component handles showing/hiding content on mobile
+  // No need for separate mobile dashboard component
   
   console.log('Rendering Desktop dashboard');
 
@@ -322,13 +320,13 @@ export default function Dashboard() {
   // Desktop Layout with Sidebar
   return (
     <MDBox sx={{ display: 'flex', minHeight: '100vh', backgroundColor: '#f8f9fa' }}>
-      {/* Sidebar */}
+      {/* Sidebar - Hidden on mobile */}
       <MDBox
         sx={{
           width: 280,
           background: 'linear-gradient(135deg, #0A1F44 0%, #1C2D5A 100%)',
           color: 'white',
-          display: 'flex',
+          display: { xs: 'none', md: 'flex' }, // Hide on mobile, show on desktop
           flexDirection: 'column',
           position: 'fixed',
           height: '100vh',
@@ -495,7 +493,11 @@ export default function Dashboard() {
       </MDBox>
 
       {/* Main Content */}
-      <MDBox sx={{ flexGrow: 1, marginLeft: '280px', p: 3 }}>
+      <MDBox sx={{ 
+        flexGrow: 1, 
+        marginLeft: { xs: 0, md: '280px' }, // No margin on mobile, 280px margin on desktop
+        p: 3 
+      }}>
         {/* Welcome Header */}
         <MDBox mb={4}>
           <MDTypography variant="h3" fontWeight="medium" color="text" mb={1}>

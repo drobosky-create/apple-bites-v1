@@ -7,7 +7,9 @@ import {
   ListItemText, 
   Box, 
   Typography,
-  Divider
+  Divider,
+  useTheme,
+  useMediaQuery
 } from "@mui/material";
 import {
   Dashboard as DashboardIcon,
@@ -30,6 +32,13 @@ const menuItems = [
 
 export default function Sidebar() {
   const [location] = useLocation();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
+  // Hide sidebar on mobile devices
+  if (isMobile) {
+    return null;
+  }
 
   return (
     <Drawer
@@ -37,6 +46,7 @@ export default function Sidebar() {
       sx={{
         width: drawerWidth,
         flexShrink: 0,
+        display: { xs: 'none', md: 'block' }, // Hide on mobile, show on desktop
         '& .MuiDrawer-paper': {
           width: drawerWidth,
           boxSizing: 'border-box',
