@@ -6,6 +6,8 @@ A comprehensive web application designed for Meritage Partners to provide profes
 
 This full-stack application guides users through a sophisticated business valuation process, generates professional PDF reports, and provides comprehensive administrative tools for lead and team management. The platform leverages AI-powered analysis and integrates with key external services to deliver accurate, professional valuations for businesses of all sizes.
 
+Apple Bites functions as the front-end qualification and valuation engine for Meritage Partners, designed to assess and segment opportunities before they move into the M&A CRM and deal execution workflows.
+
 ## ✨ Key Features
 
 ### 📊 Business Valuation Assessment
@@ -14,6 +16,7 @@ This full-stack application guides users through a sophisticated business valuat
 - **Industry-Specific Valuations**: NAICS multipliers applied based on actual business performance metrics
 - **Real-time Calculations**: Dynamic EBITDA calculations with instant feedback and validation
 - **Professional Scoring**: A-F grade system for value drivers with detailed performance analysis
+- **Integrated qualification** scoring that will trigger CRM pipeline placement in future phases.
 
 ### 👥 Administrative Dashboard
 - **Unified Interface**: Complete admin panel with internal tab navigation for seamless management
@@ -21,6 +24,7 @@ This full-stack application guides users through a sophisticated business valuat
 - **Integrated Leads Management**: Combined leads and assessment viewing with expandable inline reports
 - **Real-time Analytics**: Live dashboard showing system metrics, completion rates, and performance trends
 - **Assessment Results Access**: Direct admin access to user assessment results without authentication barriers
+- **Future release**: Will include deal and team KPI tracking modules, enabling opportunity performance measurement from the point of assessment.
 
 ### 📈 Analytics & Reporting
 - **Real-time Metrics**: Live data from actual platform usage including completion rates and average valuations
@@ -38,6 +42,13 @@ This full-stack application guides users through a sophisticated business valuat
 - **Stripe Integration**: Professional payment processing for tiered access plans
 - **Dynamic Pricing**: Two-tier system (Free, Growth & Exit) with automatic activation
 - **Subscription Management**: Automated billing and user tier management
+
+###  Planned Features
+- **CRM integration** for automated lead funnel placement.
+- **KPI tracking dashboards** for both opportunities and team member performance.
+- **DocuSign integration** for e-signature workflows tied to assessments.
+- **AI Agent assistance** for guided onboarding and valuation improvement suggestions.
+- **Dynamic NAICS crawler** for live multiplier updates.
 
 ## 🛠 Technical Architecture
 
