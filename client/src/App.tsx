@@ -3,6 +3,7 @@ import { Switch, Route } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import MaterialWrapper from "@/components/MaterialWrapper";
+import MobileNavigation from "@/components/MobileNavigation";
 import { AdminAuthProvider } from "@/hooks/use-admin-auth";
 import { TeamAuthProvider } from "@/hooks/use-team-auth";
 import { useAuth } from "@/hooks/useAuth";
@@ -47,66 +48,68 @@ function Router() {
   
   return (
     <div style={{ minHeight: '100vh', backgroundColor: 'white' }}>
-      <Switch>
-        {/* Authentication routes - always accessible */}
-        <Route path="/signup" component={SignupPage} />
-        <Route path="/login" component={LoginPage} />
-        <Route path="/admin" component={AdminLoginPage} />
-        
-        {/* Legal pages - always accessible */}
-        <Route path="/privacy-policy" component={PrivacyPolicy} />
-        <Route path="/terms-of-use" component={TermsOfUse} />
-        <Route path="/pricing">
-          <Suspense fallback={<div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', background: 'linear-gradient(135deg, #0A1F44 0%, #1B2C4F 100%)' }}>Loading...</div>}>
-            {React.createElement(lazy(() => import("./pages/dynamic-pricing")))}
-          </Suspense>
-        </Route>
-        <Route path="/checkout">
-          <Suspense fallback={<div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', background: 'linear-gradient(135deg, #0A1F44 0%, #1B2C4F 100%)' }}>Loading...</div>}>
-            {React.createElement(lazy(() => import("./pages/checkout")))}
-          </Suspense>
-        </Route>
-        <Route path="/checkout/success" component={CheckoutSuccess} />
-        
-        {/* Landing page for non-authenticated users, dashboard for authenticated */}
-        <Route path="/">
-          {isAuthenticated ? <Dashboard /> : <LandingPage />}
-        </Route>
-        <Route path="/dashboard">
-          {isAuthenticated ? <Dashboard /> : <LoginPage />}
-        </Route>
-        
-        {/* Assessment pages - protected */}
-        <Route path="/assessment/free">
-          {isAuthenticated ? <FreeAssessment /> : <LoginPage />}
-        </Route>
-        <Route path="/assessment/paid">
-          {isAuthenticated ? <GrowthExitAssessment /> : <LoginPage />}
-        </Route>
-        <Route path="/assessment-results/:id">
-          {isAuthenticated ? <AssessmentResults /> : <LoginPage />}
-        </Route>
-        <Route path="/value-calculator">
-          {isAuthenticated ? <ValueCalculator /> : <LoginPage />}
-        </Route>
-        <Route path="/profile">
-          {isAuthenticated ? <Profile /> : <LoginPage />}
-        </Route>
-        <Route path="/past-assessments">
-          {isAuthenticated ? <PastAssessments /> : <LoginPage />}
-        </Route>
-        
-        {/* Admin/Team pages - self-authenticated */}
-        <Route path="/admin/analytics" component={AnalyticsDashboard} />
-        <Route path="/admin/leads" component={LeadsDashboard} />
-        <Route path="/admin/team" component={AdminLoginPage} />
-        <Route path="/team" component={TeamDashboard} />
-        
-        {/* Fallback - redirect to login if not authenticated */}
-        <Route>
-          {isAuthenticated ? <Dashboard /> : <LoginPage />}
-        </Route>
-      </Switch>
+      <MobileNavigation>
+        <Switch>
+          {/* Authentication routes - always accessible */}
+          <Route path="/signup" component={SignupPage} />
+          <Route path="/login" component={LoginPage} />
+          <Route path="/admin" component={AdminLoginPage} />
+          
+          {/* Legal pages - always accessible */}
+          <Route path="/privacy-policy" component={PrivacyPolicy} />
+          <Route path="/terms-of-use" component={TermsOfUse} />
+          <Route path="/pricing">
+            <Suspense fallback={<div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', background: 'linear-gradient(135deg, #0A1F44 0%, #1B2C4F 100%)' }}>Loading...</div>}>
+              {React.createElement(lazy(() => import("./pages/dynamic-pricing")))}
+            </Suspense>
+          </Route>
+          <Route path="/checkout">
+            <Suspense fallback={<div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', background: 'linear-gradient(135deg, #0A1F44 0%, #1B2C4F 100%)' }}>Loading...</div>}>
+              {React.createElement(lazy(() => import("./pages/checkout")))}
+            </Suspense>
+          </Route>
+          <Route path="/checkout/success" component={CheckoutSuccess} />
+          
+          {/* Landing page for non-authenticated users, dashboard for authenticated */}
+          <Route path="/">
+            {isAuthenticated ? <Dashboard /> : <LandingPage />}
+          </Route>
+          <Route path="/dashboard">
+            {isAuthenticated ? <Dashboard /> : <LoginPage />}
+          </Route>
+          
+          {/* Assessment pages - protected */}
+          <Route path="/assessment/free">
+            {isAuthenticated ? <FreeAssessment /> : <LoginPage />}
+          </Route>
+          <Route path="/assessment/paid">
+            {isAuthenticated ? <GrowthExitAssessment /> : <LoginPage />}
+          </Route>
+          <Route path="/assessment-results/:id">
+            {isAuthenticated ? <AssessmentResults /> : <LoginPage />}
+          </Route>
+          <Route path="/value-calculator">
+            {isAuthenticated ? <ValueCalculator /> : <LoginPage />}
+          </Route>
+          <Route path="/profile">
+            {isAuthenticated ? <Profile /> : <LoginPage />}
+          </Route>
+          <Route path="/past-assessments">
+            {isAuthenticated ? <PastAssessments /> : <LoginPage />}
+          </Route>
+          
+          {/* Admin/Team pages - self-authenticated */}
+          <Route path="/admin/analytics" component={AnalyticsDashboard} />
+          <Route path="/admin/leads" component={LeadsDashboard} />
+          <Route path="/admin/team" component={AdminLoginPage} />
+          <Route path="/team" component={TeamDashboard} />
+          
+          {/* Fallback - redirect to login if not authenticated */}
+          <Route>
+            {isAuthenticated ? <Dashboard /> : <LoginPage />}
+          </Route>
+        </Switch>
+      </MobileNavigation>
       <CookieBanner />
     </div>
   );
