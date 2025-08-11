@@ -49,7 +49,7 @@ export default function MobileNavigation({ children }: MobileNavigationProps) {
   const [location] = useLocation();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, logout } = useAuth();
 
   // Type guard for user object
   const typedUser = user as { firstName?: string; email?: string; tier?: string } | null;
@@ -65,26 +65,11 @@ export default function MobileNavigation({ children }: MobileNavigationProps) {
     setMobileDrawerOpen(false);
   };
 
-  const handleLogout = async () => {
-    try {
-      const response = await fetch('/api/auth/logout', {
-        method: 'GET',
-        credentials: 'include',
-      });
-      
-      if (response.ok) {
-        // Clear authentication state and redirect
-        window.location.href = '/';
-      } else {
-        console.error('Logout failed');
-        // Force redirect anyway
-        window.location.href = '/';
-      }
-    } catch (error) {
-      console.error('Logout error:', error);
-      // Force redirect anyway
-      window.location.href = '/';
-    }
+  const handleLogout = () => {
+    // Close the drawer first
+    handleDrawerClose();
+    // Use the proper logout function from useAuth hook which handles session cleanup and cache invalidation
+    logout();
   };
 
   const getTierColor = (tier: string) => {
