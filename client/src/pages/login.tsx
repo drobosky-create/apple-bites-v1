@@ -70,7 +70,12 @@ export default function LoginPage() {
   };
 
   return (
-    <Box sx={{ minHeight: '100vh', display: 'flex' }}>
+    <Box sx={{ 
+      minHeight: '100vh', 
+      display: 'flex',
+      width: '100%',
+      overflow: 'hidden' // Prevent horizontal scroll
+    }}>
       {/* Left Visual Panel */}
       <Box
         sx={{
@@ -189,7 +194,10 @@ export default function LoginPage() {
                 '& .MuiOutlinedInput-root': {
                   '& fieldset': { borderColor: '#D1D5DB' },
                   '&:hover fieldset': { borderColor: '#00718d' },
-                  '&.Mui-focused fieldset': { borderColor: '#00718d' }
+                  '&.Mui-focused fieldset': { borderColor: '#00718d' },
+                  '& input': {
+                    color: { xs: '#FFFFFF', md: '#374151' } // White text on mobile, dark on desktop
+                  }
                 }
               }}
             />
@@ -244,7 +252,10 @@ export default function LoginPage() {
                 '& .MuiOutlinedInput-root': {
                   '& fieldset': { borderColor: '#D1D5DB' },
                   '&:hover fieldset': { borderColor: '#00718d' },
-                  '&.Mui-focused fieldset': { borderColor: '#00718d' }
+                  '&.Mui-focused fieldset': { borderColor: '#00718d' },
+                  '& input': {
+                    color: { xs: '#FFFFFF', md: '#374151' } // White text on mobile, dark on desktop
+                  }
                 }
               }}
             />

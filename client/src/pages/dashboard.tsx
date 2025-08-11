@@ -496,7 +496,10 @@ export default function Dashboard() {
       <MDBox sx={{ 
         flexGrow: 1, 
         marginLeft: { xs: 0, md: '280px' }, // No margin on mobile, 280px margin on desktop
-        p: 3 
+        p: { xs: 2, md: 3 }, // Less padding on mobile
+        width: '100%',
+        maxWidth: '100%',
+        overflow: 'hidden' // Prevent horizontal scroll
       }}>
         {/* Welcome Header */}
         <MDBox mb={4}>
@@ -509,7 +512,15 @@ export default function Dashboard() {
         </MDBox>
 
         {/* Quick Stats Cards */}
-        <MDBox display="flex" gap={3} mb={4}>
+        <MDBox 
+          display="flex" 
+          gap={3} 
+          mb={4}
+          sx={{
+            flexDirection: { xs: 'column', md: 'row' }, // Stack on mobile, row on desktop
+            width: '100%'
+          }}
+        >
           <Card sx={{ flex: 1, p: 3, background: gradients.glow, color: 'white' }}>
             <MDBox display="flex" alignItems="center" justifyContent="space-between">
               <MDBox>
@@ -554,7 +565,14 @@ export default function Dashboard() {
         </MDBox>
 
         {/* Action Cards and Past Assessments */}
-        <MDBox display="flex" gap={3}>
+        <MDBox 
+          display="flex" 
+          gap={3}
+          sx={{
+            flexDirection: { xs: 'column', lg: 'row' }, // Stack on mobile/tablet, row on large screens
+            width: '100%'
+          }}
+        >
           <Card sx={{ flex: 2, p: 4 }}>
             <MDTypography variant="h5" fontWeight="medium" color="text" mb={2}>
               Get Started with Your Valuation

@@ -235,6 +235,7 @@ export default function MobileNavigation({ children }: MobileNavigationProps) {
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
+            sx={{ color: 'white' }}
           >
             <MenuIcon />
           </IconButton>
