@@ -65,8 +65,26 @@ export default function MobileNavigation({ children }: MobileNavigationProps) {
     setMobileDrawerOpen(false);
   };
 
-  const handleLogout = () => {
-    window.location.href = '/api/auth/logout';
+  const handleLogout = async () => {
+    try {
+      const response = await fetch('/api/auth/logout', {
+        method: 'GET',
+        credentials: 'include',
+      });
+      
+      if (response.ok) {
+        // Clear authentication state and redirect
+        window.location.href = '/';
+      } else {
+        console.error('Logout failed');
+        // Force redirect anyway
+        window.location.href = '/';
+      }
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Force redirect anyway
+      window.location.href = '/';
+    }
   };
 
   const getTierColor = (tier: string) => {
