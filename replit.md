@@ -33,7 +33,8 @@ This is a full-stack web application for Meritage Partners, designed as a busine
 - Fixed login form input text color to white on mobile devices
 - Prevented horizontal scrolling with proper container constraints
 - Made dashboard cards stack vertically on mobile for better fit
-- Enhanced logout functionality in mobile drawer with proper API calls
+- Fixed logout functionality to use useAuth hook for proper session cleanup and cache invalidation
+- Mobile logout now works correctly with proper authentication state management
 
 **✅ COMPLETED: Add Team Member Modal UI Fix (August 5, 2025)**
 - Fixed Last Name field display issue in Add Team Member popup form
