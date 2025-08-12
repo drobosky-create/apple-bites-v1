@@ -450,7 +450,7 @@ export default function ValueCalculator() {
                 transformOrigin: 'top left',
                 width: '142.86%', // Compensate for scale to fill container
                 height: 'auto',
-                mb: 0
+                mb: -25
               }}>
                 <InteractiveValuationSlider />
               </MDBox>
@@ -460,29 +460,29 @@ export default function ValueCalculator() {
                 <MDBox sx={{ mt: 2, p: 2 }}>
                   <AICoachingTips 
                     financialData={{
-                      revenue: 0,
-                      ebitda: 0,
-                      adjustedEbitda: parseFloat(assessments[0].adjustedEbitda || '0') || 0,
-                      naicsCode: assessments[0].naicsCode || '',
-                      industryTitle: 'Business Services',
+                      revenue: parseFloat(assessments[0].grossRevenue || '0') || 1000000,
+                      ebitda: parseFloat(assessments[0].ebitda || '0') || 200000,
+                      adjustedEbitda: parseFloat(assessments[0].adjustedEbitda || '0') || 200000,
+                      naicsCode: assessments[0].naicsCode || '541511',
+                      industryTitle: assessments[0].industryTitle || 'Business Services',
                       valueDriverScores: {
-                        'Financial Performance': 3,
-                        'Customer Concentration': 3,
-                        'Management Team': 3,
-                        'Competitive Position': 3,
-                        'Growth Prospects': 3,
-                        'Systems & Processes': 3,
-                        'Asset Quality': 3,
-                        'Industry Outlook': 3,
-                        'Risk Factors': 3,
-                        'Owner Dependency': 3,
+                        'Financial Performance': assessments[0].financialPerformance ? ['A', 'B', 'C', 'D', 'F'].indexOf(assessments[0].financialPerformance) !== -1 ? 5 - ['A', 'B', 'C', 'D', 'F'].indexOf(assessments[0].financialPerformance) : 3 : 3,
+                        'Customer Concentration': assessments[0].customerConcentration ? ['A', 'B', 'C', 'D', 'F'].indexOf(assessments[0].customerConcentration) !== -1 ? 5 - ['A', 'B', 'C', 'D', 'F'].indexOf(assessments[0].customerConcentration) : 3 : 3,
+                        'Management Team': assessments[0].managementTeam ? ['A', 'B', 'C', 'D', 'F'].indexOf(assessments[0].managementTeam) !== -1 ? 5 - ['A', 'B', 'C', 'D', 'F'].indexOf(assessments[0].managementTeam) : 3 : 3,
+                        'Competitive Position': assessments[0].competitivePosition ? ['A', 'B', 'C', 'D', 'F'].indexOf(assessments[0].competitivePosition) !== -1 ? 5 - ['A', 'B', 'C', 'D', 'F'].indexOf(assessments[0].competitivePosition) : 3 : 3,
+                        'Growth Prospects': assessments[0].growthProspects ? ['A', 'B', 'C', 'D', 'F'].indexOf(assessments[0].growthProspects) !== -1 ? 5 - ['A', 'B', 'C', 'D', 'F'].indexOf(assessments[0].growthProspects) : 3 : 3,
+                        'Systems & Processes': assessments[0].systemsProcesses ? ['A', 'B', 'C', 'D', 'F'].indexOf(assessments[0].systemsProcesses) !== -1 ? 5 - ['A', 'B', 'C', 'D', 'F'].indexOf(assessments[0].systemsProcesses) : 3 : 3,
+                        'Asset Quality': assessments[0].assetQuality ? ['A', 'B', 'C', 'D', 'F'].indexOf(assessments[0].assetQuality) !== -1 ? 5 - ['A', 'B', 'C', 'D', 'F'].indexOf(assessments[0].assetQuality) : 3 : 3,
+                        'Industry Outlook': assessments[0].industryOutlook ? ['A', 'B', 'C', 'D', 'F'].indexOf(assessments[0].industryOutlook) !== -1 ? 5 - ['A', 'B', 'C', 'D', 'F'].indexOf(assessments[0].industryOutlook) : 3 : 3,
+                        'Risk Factors': assessments[0].riskFactors ? ['A', 'B', 'C', 'D', 'F'].indexOf(assessments[0].riskFactors) !== -1 ? 5 - ['A', 'B', 'C', 'D', 'F'].indexOf(assessments[0].riskFactors) : 3 : 3,
+                        'Owner Dependency': assessments[0].ownerDependency ? ['A', 'B', 'C', 'D', 'F'].indexOf(assessments[0].ownerDependency) !== -1 ? 5 - ['A', 'B', 'C', 'D', 'F'].indexOf(assessments[0].ownerDependency) : 3 : 3,
                       },
                       userMultiple: parseFloat(assessments[0].valuationMultiple || '4.2') || 4.2,
                       industryAverage: 4.5,
                       companySize: parseFloat(assessments[0].adjustedEbitda || '0') > 2000000 ? 'large' : 
                                   parseFloat(assessments[0].adjustedEbitda || '0') > 500000 ? 'medium' : 'small',
-                      businessAge: 5,
-                      employeeCount: undefined
+                      businessAge: assessments[0].businessAge || '5',
+                      employeeCount: parseInt(assessments[0].employeeCount || '0') || undefined
                     }}
                   />
                 </MDBox>
