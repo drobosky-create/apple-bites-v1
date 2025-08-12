@@ -179,7 +179,7 @@ export default function AssessmentResults() {
 
   return (
     <DashboardBackground>
-      {/* Apple Bites Unified Sidebar */}
+      {/* Apple Bites Unified Sidebar - Hide on mobile */}
       <DashboardSidebar user={{
         name: `${assessment.firstName} ${assessment.lastName}`,
         email: assessment.email || 'user@applebites.ai',
@@ -189,7 +189,10 @@ export default function AssessmentResults() {
       }} />
 
       {/* Main Content */}
-      <MainContent sx={{ marginLeft: '328px', width: 'calc(100vw - 328px)' }}>
+      <MainContent sx={{ 
+        marginLeft: { xs: 0, md: '328px' }, 
+        width: { xs: '100%', md: 'calc(100vw - 328px)' } 
+      }}>
         <Container maxWidth="xl" sx={{ py: 0 }}>
           {/* Page Header */}
           <Box sx={{ mb: 4, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -282,7 +285,7 @@ function DashboardSidebar({ user }: { user: { name: string; email: string; tier:
         boxShadow: '0 4px 12px rgba(0,0,0,0.15), 0 0 0 1px rgba(255, 255, 255, 0.1)',
         backdropFilter: 'blur(8px)',
         padding: 3,
-        display: 'flex',
+        display: { xs: 'none', md: 'flex' }, // Hide on mobile, show on desktop
         flexDirection: 'column',
         zIndex: 1000,
         overflow: 'hidden' // Prevent internal scrolling
