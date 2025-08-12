@@ -100,7 +100,10 @@ export default function AssessmentHeader({ title, subtitle, tier, features }: As
                 border: '1px solid #2563eb',
                 minWidth: '160px',
                 textAlign: 'center',
-                whiteSpace: 'nowrap'
+                whiteSpace: 'nowrap',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
               }}
             >
               Free Assessment
