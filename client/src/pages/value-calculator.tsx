@@ -37,7 +37,7 @@ const MainContent = styled(MDBox)(({ theme }) => ({
   overflow: 'auto',
   [theme.breakpoints.down('md')]: {
     marginLeft: 0,
-    width: '100vw',
+    width: '100%',
     padding: '16px',
   },
 }));
@@ -177,25 +177,24 @@ export default function ValueCalculator() {
 
   return (
     <DashboardBackground>
-      {/* Responsive Sidebar */}
+      {/* Responsive Sidebar - Hide on mobile */}
       <MDBox
         sx={{
-          position: { xs: 'relative', md: 'fixed' },
-          top: { xs: 0, md: '24px' },
-          left: { xs: 0, md: '24px' },
-          width: { xs: '100%', md: 280 },
-          height: { xs: 'auto', md: 'calc(100vh - 48px)' },
-          background: 'linear-gradient(135deg, #0A1F44 0%, #1C2D5A 100%)',
-          borderRadius: { xs: '0', md: '20px' },
-          border: { xs: 'none', md: '1px solid rgba(255, 255, 255, 0.15)' },
-          boxShadow: { xs: 'none', md: '0 4px 12px rgba(0,0,0,0.15), 0 0 0 1px rgba(255, 255, 255, 0.1)' },
-          backdropFilter: 'blur(8px)',
-          padding: { xs: 2, md: 3 },
-          display: 'flex',
+          position: 'fixed',
+          top: '24px',
+          left: '24px',
+          width: 280,
+          height: 'calc(100vh - 48px)',
+          display: { xs: 'none', md: 'flex' }, // Hide on mobile, show on desktop
           flexDirection: 'column',
+          background: 'linear-gradient(135deg, #0A1F44 0%, #1C2D5A 100%)',
+          borderRadius: '20px',
+          border: '1px solid rgba(255, 255, 255, 0.15)',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.15), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+          backdropFilter: 'blur(8px)',
+          padding: 3,
           zIndex: 1000,
           overflow: 'hidden',
-          mb: { xs: 2, md: 0 },
         }}
       >
         {/* User Info Section */}
