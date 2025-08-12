@@ -152,15 +152,40 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
             >
               <MDButton 
                 onClick={handleExploreImprovements}
-                variant="outlined"
+                variant="contained"
                 sx={{ 
-                  color: '#005b8c', 
-                  borderColor: '#005b8c',
-                  '&:hover': { backgroundColor: 'rgba(94, 234, 212, 0.1)' }
+                  background: 'linear-gradient(135deg, #00D4AA 0%, #005b8c 100%)',
+                  color: 'white',
+                  fontSize: { xs: '14px', sm: '16px' },
+                  fontWeight: 'bold',
+                  px: { xs: 3, sm: 4 },
+                  py: 1.5,
+                  borderRadius: '12px',
+                  textTransform: 'none',
+                  boxShadow: '0 4px 15px rgba(0, 212, 170, 0.4)',
+                  animation: 'glow 2s ease-in-out infinite alternate',
+                  '@keyframes glow': {
+                    '0%': { 
+                      boxShadow: '0 4px 15px rgba(0, 212, 170, 0.4), 0 0 10px rgba(0, 212, 170, 0.3)',
+                      transform: 'translateY(0px)'
+                    },
+                    '100%': { 
+                      boxShadow: '0 6px 20px rgba(0, 212, 170, 0.6), 0 0 20px rgba(0, 212, 170, 0.5)',
+                      transform: 'translateY(-2px)'
+                    }
+                  },
+                  '&:hover': { 
+                    background: 'linear-gradient(135deg, #00F5C4 0%, #007BA7 100%)',
+                    transform: 'translateY(-3px)',
+                    boxShadow: '0 8px 25px rgba(0, 212, 170, 0.7)'
+                  },
+                  '&:active': {
+                    transform: 'translateY(-1px)'
+                  }
                 }}
-                startIcon={<Calculator size={16} />}
+                startIcon={<Calculator size={18} />}
               >
-                Explore Improvements
+                🚀 Explore Improvements
               </MDButton>
 
               <MDButton 
