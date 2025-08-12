@@ -5,7 +5,7 @@ import MDBox from "@/components/MD/MDBox";
 import MDButton from "@/components/MD/MDButton";
 import MDTypography from "@/components/MD/MDTypography";
 import { ArrowLeft, Shield, Star, Building2, TrendingUp, DollarSign, FileText, Calculator, Zap, BarChart3 } from "lucide-react";
-import { useLocation } from "wouter";
+import { useLocation, Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import calculateValuation from "@/utils/valuationEngine";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
@@ -1113,27 +1113,61 @@ function GrowthExitAssessment() {
                 
                 return (
                   <>
-                    <div >
-                      <h3 >Assessment Summary</h3>
-                      <div >
-                        <div>
-                          <span >Adjusted EBITDA:</span>
-                          <div >${valuationResults.ebitda?.toLocaleString() || "0"}</div>
-                        </div>
-                        <div>
-                          <span >Your Multiple:</span>
-                          <div >{userMultiple.toFixed(1)}x</div>
-                        </div>
-                        <div>
-                          <span >Estimated Value:</span>
-                          <div >${valuationResults.valuation?.mean?.toLocaleString() || "0"}</div>
-                        </div>
-                        <div>
-                          <span >Value Range:</span>
-                          <div >${valuationResults.valuation?.low?.toLocaleString() || "0"} - ${valuationResults.valuation?.high?.toLocaleString() || "0"}</div>
-                        </div>
-                      </div>
-                    </div>
+                    <Box sx={{ mb: 3 }}>
+                      <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold', color: '#1e293b' }}>
+                        Assessment Summary
+                      </Typography>
+                      <Box sx={{ 
+                        display: 'grid', 
+                        gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, 
+                        gap: 2 
+                      }}>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                          <Box>
+                            <Typography variant="body2" sx={{ color: '#64748b', fontWeight: 'medium' }}>
+                              Adjusted EBITDA:
+                            </Typography>
+                            <Typography variant="h6" sx={{ color: '#1e293b', fontWeight: 'bold' }}>
+                              ${valuationResults.ebitda?.toLocaleString() || "0"}
+                            </Typography>
+                          </Box>
+                          <Box>
+                            <Typography variant="body2" sx={{ color: '#64748b', fontWeight: 'medium' }}>
+                              Your Multiple:
+                            </Typography>
+                            <Typography variant="h6" sx={{ color: '#1e293b', fontWeight: 'bold' }}>
+                              {userMultiple.toFixed(1)}x
+                            </Typography>
+                          </Box>
+                        </Box>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                          <Box>
+                            <Typography variant="body2" sx={{ color: '#64748b', fontWeight: 'medium' }}>
+                              Estimated Value:
+                            </Typography>
+                            <Typography variant="h6" sx={{ color: '#1e293b', fontWeight: 'bold' }}>
+                              ${valuationResults.valuation?.mean?.toLocaleString() || "0"}
+                            </Typography>
+                          </Box>
+                          <Box>
+                            <Typography variant="body2" sx={{ color: '#64748b', fontWeight: 'medium' }}>
+                              Value Range:
+                            </Typography>
+                            <Typography 
+                              variant="body1" 
+                              sx={{ 
+                                color: '#1e293b', 
+                                fontWeight: 'bold',
+                                fontSize: { xs: '0.9rem', sm: '1rem' },
+                                wordBreak: 'break-word'
+                              }}
+                            >
+                              ${valuationResults.valuation?.low?.toLocaleString() || "0"} - ${valuationResults.valuation?.high?.toLocaleString() || "0"}
+                            </Typography>
+                          </Box>
+                        </Box>
+                      </Box>
+                    </Box>
                     {/* Industry Comparison Chart */}
                     <div >
                       <div >
@@ -1264,7 +1298,7 @@ function GrowthExitAssessment() {
                         <ul >
                           <li>• Enhance your recurring revenue through contracts or subscriptions</li>
                           <li>• Clarify what makes your offering unique or defensible</li>
-                          <li>• Explore new geographies or client segments to drive growth</li>
+                          <li>• <Link href="/dashboard" style={{ color: '#3b82f6', textDecoration: 'none' }}>Explore</Link> new geographies or client segments to drive growth</li>
                         </ul>
                       </div>
                     </div>

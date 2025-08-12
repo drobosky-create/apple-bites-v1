@@ -169,7 +169,7 @@ export default function FreeAssessment() {
         {/* Assessment Header - only show for form steps */}
         {currentStep !== "results" && (
           <AssessmentHeader
-            title="Free Business Valuation Assessment"
+            title="Free Assessment"
             subtitle="Get your comprehensive business valuation with AI-powered insights and actionable recommendations"
             tier="free"
             features={[
