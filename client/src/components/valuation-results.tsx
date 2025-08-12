@@ -77,9 +77,26 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
               Estimated Business Value
             </MDTypography>
             
-            <MDBox display="flex" justifyContent="space-around" mb={3}>
+            <MDBox 
+              sx={{ 
+                display: 'flex', 
+                justifyContent: 'space-around', 
+                mb: 3,
+                flexDirection: { xs: 'column', sm: 'row' },
+                gap: { xs: 2, sm: 0 }
+              }}
+            >
               <MDBox textAlign="center">
-                <MDTypography variant="h5" fontWeight="bold" sx={{ color: '#ffffff', mb: 1 }}>
+                <MDTypography 
+                  variant="h5" 
+                  fontWeight="bold" 
+                  sx={{ 
+                    color: '#ffffff', 
+                    mb: 1,
+                    fontSize: { xs: '1.2rem', sm: '1.5rem' },
+                    wordBreak: 'break-word'
+                  }}
+                >
                   {formatCurrency(results.lowEstimate)}
                 </MDTypography>
                 <MDTypography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)' }}>
@@ -88,7 +105,16 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
               </MDBox>
               
               <MDBox textAlign="center">
-                <MDTypography variant="h3" fontWeight="bold" sx={{ color: '#005b8c', mb: 1 }}>
+                <MDTypography 
+                  variant="h3" 
+                  fontWeight="bold" 
+                  sx={{ 
+                    color: '#005b8c', 
+                    mb: 1,
+                    fontSize: { xs: '1.8rem', sm: '2.5rem' },
+                    wordBreak: 'break-word'
+                  }}
+                >
                   {formatCurrency(results.midEstimate)}
                 </MDTypography>
                 <MDTypography variant="body1" sx={{ color: '#ffffff', fontWeight: 'medium' }}>
@@ -97,7 +123,16 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
               </MDBox>
               
               <MDBox textAlign="center">
-                <MDTypography variant="h5" fontWeight="bold" sx={{ color: '#ffffff', mb: 1 }}>
+                <MDTypography 
+                  variant="h5" 
+                  fontWeight="bold" 
+                  sx={{ 
+                    color: '#ffffff', 
+                    mb: 1,
+                    fontSize: { xs: '1.2rem', sm: '1.5rem' },
+                    wordBreak: 'break-word'
+                  }}
+                >
                   {formatCurrency(results.highEstimate)}
                 </MDTypography>
                 <MDTypography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)' }}>
@@ -106,7 +141,15 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
               </MDBox>
             </MDBox>
 
-            <MDBox display="flex" justifyContent="center" gap={2}>
+            <MDBox 
+              sx={{ 
+                display: 'flex', 
+                justifyContent: 'center', 
+                gap: 2,
+                flexDirection: { xs: 'column', sm: 'row' },
+                alignItems: 'center'
+              }}
+            >
               <MDButton 
                 onClick={handleExploreImprovements}
                 variant="outlined"
