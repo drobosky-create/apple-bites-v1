@@ -285,80 +285,26 @@ export default function InteractiveValuationSlider() {
         </Grid>
       </Grid>
 
-      {/* Gauge and Potential Gain Section with reduced spacing */}
-      <Card sx={{ mb: 3, background: 'linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%)' }}>
-        <CardContent sx={{ p: 3 }}>
-          <Grid container spacing={2} alignItems="stretch">
-            {/* Gauge Section */}
-            <Grid size={{ xs: 12, md: 7 }}>
-              <Box
-                sx={{
-                  transform: { xs: 'scale(1.0)', sm: 'scale(1.2)', md: 'scale(1.5)' },
-                  transformOrigin: 'top left',
-                  display: 'flex',
-                  justifyContent: { xs: 'center', md: 'flex-start' },
-                  alignItems: 'flex-start',
-                  height: '100%',
-                  ml: { xs: 0, md: -2 },
-                  mt: { xs: 0, md: -4 }
-                }}
-              >
-                <OperationalGradeGauge 
-                  grade={sliderGrade}
-                  title="Operational Grade Impact Analysis"
-                  animated={true}
-                  onGradeClick={setSliderGrade}
-                />
-              </Box>
-            </Grid>
-            
-            {/* Potential Gain Display */}
-            <Grid size={{ xs: 12, md: 5 }} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
-              <Box sx={{ width: '100%' }}>
-                {sliderGrade !== baseGrade ? (
-                <Card sx={{ 
-                  background: potentialIncrease > 0 
-                    ? 'linear-gradient(135deg, #10B981 0%, #059669 100%)' 
-                    : 'linear-gradient(135deg, #EF4444 0%, #DC2626 100%)',
-                  color: 'white',
-                  textAlign: 'center'
-                }}>
-                  <CardContent sx={{ p: 2 }}>
-                    <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 1.5 }}>
-                      {potentialIncrease > 0 ? '💰 POTENTIAL GAIN' : '⚠️ POTENTIAL LOSS'}
-                    </Typography>
-                    <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1 }}>
-                      {potentialIncrease > 0 ? '+' : '-'}${Math.abs(potentialIncrease).toLocaleString()}
-                    </Typography>
-                    <Typography variant="h6">
-                      {potentialIncrease > 0 ? '+' : '-'}{Math.abs(percentageIncrease).toFixed(1)}% {potentialIncrease > 0 ? 'increase' : 'decrease'}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              ) : (
-                <Card sx={{ 
-                  background: 'linear-gradient(135deg, #0A1F44 0%, #1B2C4F 100%)',
-                  color: 'white !important',
-                  textAlign: 'center',
-                  '& *': {
-                    color: 'white !important'
-                  }
-                }}>
-                  <CardContent sx={{ p: 2 }}>
-                    <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 1.5, color: 'white !important' }}>
-                      Select a different grade to see potential impact
-                    </Typography>
-                    <Typography variant="body1" sx={{ color: 'white !important' }}>
-                      Use the grade buttons below to explore value changes
-                    </Typography>
-                  </CardContent>
-                </Card>
-                )}
-              </Box>
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
+      {/* Compact Potential Gain Summary - Only show when different grade selected */}
+      {sliderGrade !== baseGrade && (
+        <Card sx={{ 
+          mb: 2,
+          background: potentialIncrease > 0 
+            ? 'linear-gradient(135deg, #10B981 0%, #059669 100%)' 
+            : 'linear-gradient(135deg, #EF4444 0%, #DC2626 100%)',
+          color: 'white'
+        }}>
+          <CardContent sx={{ p: 2, textAlign: 'center' }}>
+            <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 1 }}>
+              {potentialIncrease > 0 ? '💰 POTENTIAL GAIN' : '⚠️ POTENTIAL LOSS'}
+            </Typography>
+            <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
+              {potentialIncrease > 0 ? '+' : '-'}${Math.abs(potentialIncrease).toLocaleString()} 
+              ({potentialIncrease > 0 ? '+' : '-'}{Math.abs(percentageIncrease).toFixed(1)}%)
+            </Typography>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Grade Selection Section with reduced spacing */}
       <Card sx={{ mb: 2 }}>

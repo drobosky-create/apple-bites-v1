@@ -185,7 +185,7 @@ export default function ValuationResults({ results }: ValuationResultsProps) {
                 }}
                 startIcon={<Calculator size={18} />}
               >
-                🚀 Explore Improvements
+                Explore Improvements
               </MDButton>
 
               <MDButton 
