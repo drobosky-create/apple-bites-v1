@@ -435,63 +435,66 @@ export default function ValueCalculator() {
             </Button>
           </MDBox>
 
-          {/* Main Calculator Container - Ultra Scaled Down */}
-          <MDBox sx={{
-            backgroundColor: 'white',
-            borderRadius: '8px',
-            boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
-            overflow: 'hidden',
-            p: 1.5,
-            mb: 1.5
-          }}>
-            <MDBox sx={{ 
-              transform: 'scale(0.7)', 
-              transformOrigin: 'top left',
-              width: '142.86%', // Compensate for scale to fill container
-              height: 'auto'
-            }}>
-              <InteractiveValuationSlider />
-            </MDBox>
-          </MDBox>
-
-          {/* AI Coaching Tips Section */}
-          {hasCompletedAssessment && assessments && assessments.length > 0 && (
+          {/* Main Content Container - Flex layout to eliminate phantom space */}
+          <MDBox sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+            {/* Main Calculator Container - Ultra Scaled Down */}
             <MDBox sx={{
               backgroundColor: 'white',
               borderRadius: '8px',
               boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
               overflow: 'hidden',
-              p: 2
+              p: 1.5
             }}>
-              <AICoachingTips 
-                financialData={{
-                  revenue: 0,
-                  ebitda: 0,
-                  adjustedEbitda: parseFloat(assessments[0].adjustedEbitda || '0') || 0,
-                  naicsCode: assessments[0].naicsCode || '',
-                  industryTitle: 'Business Services',
-                  valueDriverScores: {
-                    'Financial Performance': 3,
-                    'Customer Concentration': 3,
-                    'Management Team': 3,
-                    'Competitive Position': 3,
-                    'Growth Prospects': 3,
-                    'Systems & Processes': 3,
-                    'Asset Quality': 3,
-                    'Industry Outlook': 3,
-                    'Risk Factors': 3,
-                    'Owner Dependency': 3,
-                  },
-                  userMultiple: parseFloat(assessments[0].valuationMultiple || '4.2') || 4.2,
-                  industryAverage: 4.5,
-                  companySize: parseFloat(assessments[0].adjustedEbitda || '0') > 2000000 ? 'large' : 
-                              parseFloat(assessments[0].adjustedEbitda || '0') > 500000 ? 'medium' : 'small',
-                  businessAge: 5,
-                  employeeCount: undefined
-                }}
-              />
+              <MDBox sx={{ 
+                transform: 'scale(0.7)', 
+                transformOrigin: 'top left',
+                width: '142.86%', // Compensate for scale to fill container
+                height: 'auto',
+                mb: 0
+              }}>
+                <InteractiveValuationSlider />
+              </MDBox>
             </MDBox>
-          )}
+
+            {/* AI Coaching Tips Section */}
+            {hasCompletedAssessment && assessments && assessments.length > 0 && (
+              <MDBox sx={{
+                backgroundColor: 'white',
+                borderRadius: '8px',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+                overflow: 'hidden',
+                p: 2
+              }}>
+                <AICoachingTips 
+                  financialData={{
+                    revenue: 0,
+                    ebitda: 0,
+                    adjustedEbitda: parseFloat(assessments[0].adjustedEbitda || '0') || 0,
+                    naicsCode: assessments[0].naicsCode || '',
+                    industryTitle: 'Business Services',
+                    valueDriverScores: {
+                      'Financial Performance': 3,
+                      'Customer Concentration': 3,
+                      'Management Team': 3,
+                      'Competitive Position': 3,
+                      'Growth Prospects': 3,
+                      'Systems & Processes': 3,
+                      'Asset Quality': 3,
+                      'Industry Outlook': 3,
+                      'Risk Factors': 3,
+                      'Owner Dependency': 3,
+                    },
+                    userMultiple: parseFloat(assessments[0].valuationMultiple || '4.2') || 4.2,
+                    industryAverage: 4.5,
+                    companySize: parseFloat(assessments[0].adjustedEbitda || '0') > 2000000 ? 'large' : 
+                                parseFloat(assessments[0].adjustedEbitda || '0') > 500000 ? 'medium' : 'small',
+                    businessAge: 5,
+                    employeeCount: undefined
+                  }}
+                />
+              </MDBox>
+            )}
+          </MDBox>
         </Container>
       </MainContent>
     </DashboardBackground>
