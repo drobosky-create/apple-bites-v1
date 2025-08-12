@@ -242,7 +242,7 @@ export default function MobileNavigation({ children }: MobileNavigationProps) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, ml: 1 }}>
+          <Typography variant="h6" noWrap component="div" className="text-[#e9ecf2]" sx={{ flexGrow: 1, ml: 1 }}>
             Apple Bites
           </Typography>
         </Toolbar>
