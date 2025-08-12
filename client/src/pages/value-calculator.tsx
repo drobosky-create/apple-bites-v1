@@ -383,11 +383,11 @@ export default function ValueCalculator() {
         backgroundColor: 'rgba(248, 249, 250, 0.7)',
         width: { xs: '100%', md: 'calc(100% - 320px)' }, // Full width on mobile
       }}>
-        <Container maxWidth="xl" sx={{ py: 1, px: 2 }}>
+        <Container maxWidth="xl" sx={{ py: 0.5, px: 2 }}>
           {/* Page Header - Ultra Compact */}
           <MDBox 
             sx={{ 
-              mb: 1.5,
+              mb: 1,
               p: 1.5,
               backgroundColor: 'white',
               borderRadius: '8px',
@@ -442,7 +442,7 @@ export default function ValueCalculator() {
             boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
             overflow: 'hidden',
             p: 1.5,
-            mb: 3
+            mb: 1.5
           }}>
             <MDBox sx={{ 
               transform: 'scale(0.7)', 
