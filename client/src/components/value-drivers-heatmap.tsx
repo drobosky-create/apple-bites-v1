@@ -170,11 +170,22 @@ export default function ValueDriversHeatmap({ assessment }: ValueDriversHeatmapP
           px: 4,
           py: 2,
           mb: 4,
-          minWidth: '400px'
+          minWidth: { xs: '300px', sm: '400px' },
+          maxWidth: '100%',
+          boxSizing: 'border-box'
         }}>
           <Box sx={{ 
-            width: 12, 
-            height: 12, 
+            fontSize: '18px',
+            lineHeight: 1,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}>
+            💡
+          </Box>
+          <Box sx={{ 
+            width: 8, 
+            height: 8, 
             borderRadius: '50%', 
             backgroundColor: '#0EA5E9',
             animation: 'pulse 2s infinite',
@@ -183,8 +194,15 @@ export default function ValueDriversHeatmap({ assessment }: ValueDriversHeatmapP
               '50%': { opacity: 0.5 }
             }
           }} />
-          <Typography variant="h6" sx={{ color: '#0C4A6E', fontWeight: 'bold', fontSize: '16px' }}>
-            💡 Click on any grade card below to see detailed insights
+          <Typography variant="h6" sx={{ 
+            color: '#0C4A6E', 
+            fontWeight: 'bold', 
+            fontSize: { xs: '14px', sm: '16px' },
+            lineHeight: 1.2,
+            textAlign: 'center',
+            flex: 1
+          }}>
+            Click on any grade card below to see detailed insights
           </Typography>
         </Box>
       </Box>
