@@ -4,6 +4,13 @@
 This is a full-stack web application for Meritage Partners, designed as a business valuation calculator. It guides users through a multi-step valuation process, generates professional PDF reports, and provides administrative dashboards for lead and team management. The platform aims to offer comprehensive business valuation services, leveraging AI for narrative generation and integrating with key external services for CRM and email automation. The project's vision is to provide a streamlined, accurate, and professional valuation tool with market potential for various business sizes.
 
 ## Recent Changes (August 2025)
+**✅ COMPLETED: UI Consistency Fixes (August 12, 2025)**
+- Fixed "Free Assessment" identifier consistency by updating header title to match button text
+- Resolved valuation results overflow on mobile with responsive grid layout that stacks properly
+- Fixed "Explore" button navigation to properly link to dashboard instead of showing sidebar
+- Updated mobile navigation "Apple Bites" text color to proper shade (#e9ecf2)
+- Enhanced Free Assessment badge with flexbox centering to ensure text displays within styled container
+
 **✅ COMPLETED: Full Admin Dashboard Rebuild**
 - Migrated from shadcn/ui to Material Dashboard React components
 - Implemented unified admin interface with internal tab navigation
