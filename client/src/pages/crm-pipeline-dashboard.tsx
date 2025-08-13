@@ -76,22 +76,15 @@ import DealFormModal from '@/components/crm/DealFormModal';
 import FirmFormModal from '@/components/crm/FirmFormModal';
 import EmailCampaignModal from '@/components/crm/EmailCampaignModal';
 
-// Deal stages configuration
+// Deal stages configuration (your M&A deal process)
 const DEAL_STAGES = [
-  { id: 'prospect', name: 'Prospect Identified', color: '#e3f2fd', textColor: '#0d47a1', probability: 10 },
-  { id: 'initial', name: 'Initial Contact', color: '#f3e5f5', textColor: '#4a148c', probability: 20 },
-  { id: 'qualification', name: 'Qualification', color: '#e8f5e8', textColor: '#1b5e20', probability: 30 },
-  { id: 'needs', name: 'Needs Analysis', color: '#fff3e0', textColor: '#e65100', probability: 40 },
-  { id: 'proposal_prep', name: 'Proposal Preparation', color: '#fce4ec', textColor: '#880e4f', probability: 50 },
-  { id: 'proposal_presented', name: 'Proposal Presented', color: '#e0f2f1', textColor: '#004d40', probability: 60 },
-  { id: 'negotiation', name: 'Negotiation', color: '#f1f8e9', textColor: '#33691e', probability: 70 },
-  { id: 'contract', name: 'Contract Review', color: '#fff8e1', textColor: '#ff6f00', probability: 80 },
+  { id: 'onboarding', name: 'Onboarding', color: '#e3f2fd', textColor: '#0d47a1', probability: 15 },
+  { id: 'go_to_market_prep', name: 'Go To Market Prep', color: '#f3e5f5', textColor: '#4a148c', probability: 30 },
+  { id: 'go_to_market', name: 'Go To Market', color: '#e8f5e8', textColor: '#1b5e20', probability: 50 },
+  { id: 'negotiations', name: 'Negotiations', color: '#fff3e0', textColor: '#e65100', probability: 70 },
   { id: 'due_diligence', name: 'Due Diligence', color: '#e8eaf6', textColor: '#283593', probability: 85 },
-  { id: 'closing', name: 'Closing Preparation', color: '#f9fbe7', textColor: '#827717', probability: 90 },
-  { id: 'closed_won', name: 'Closed Won', color: '#e8f5e8', textColor: '#2e7d32', probability: 100 },
-  { id: 'closed_lost', name: 'Closed Lost', color: '#ffebee', textColor: '#c62828', probability: 0 },
-  { id: 'closed_hold', name: 'Closed Hold', color: '#f5f5f5', textColor: '#616161', probability: 0 },
-  { id: 'follow_up', name: 'Follow Up', color: '#e1f5fe', textColor: '#0277bd', probability: 15 }
+  { id: 'definitive_agreement_close', name: 'Definitive Agreement/Close', color: '#f9fbe7', textColor: '#827717', probability: 95 },
+  { id: 'post_close', name: 'Post Close', color: '#e8f5e8', textColor: '#2e7d32', probability: 100 }
 ];
 
 // View mode type
@@ -106,16 +99,16 @@ const PRIORITY_LEVELS = [
   { value: 'urgent', label: 'Urgent', color: '#9c27b0' }
 ];
 
-// Opportunity stages (different from deal stages)
+// Opportunity stages (from your M&A workflow)
 const OPPORTUNITY_STAGES = [
-  { id: 'identified', name: 'Identified', color: '#e3f2fd', textColor: '#0d47a1', probability: 10 },
-  { id: 'contacted', name: 'Initial Contact', color: '#f3e5f5', textColor: '#4a148c', probability: 20 },
-  { id: 'qualified', name: 'Qualified', color: '#e8f5e8', textColor: '#1b5e20', probability: 30 },
-  { id: 'proposal', name: 'Proposal Stage', color: '#fff3e0', textColor: '#e65100', probability: 50 },
+  { id: 'prospect_identified', name: 'Prospect Identified', color: '#e3f2fd', textColor: '#0d47a1', probability: 10 },
+  { id: 'initial_contact', name: 'Initial Contact', color: '#f3e5f5', textColor: '#4a148c', probability: 20 },
+  { id: 'qualification', name: 'Qualification', color: '#e8f5e8', textColor: '#1b5e20', probability: 30 },
+  { id: 'pitch', name: 'Pitch', color: '#fff3e0', textColor: '#e65100', probability: 50 },
   { id: 'negotiation', name: 'Negotiation', color: '#f1f8e9', textColor: '#33691e', probability: 70 },
-  { id: 'closed_won', name: 'Closed Won', color: '#e8f5e8', textColor: '#2e7d32', probability: 100 },
-  { id: 'closed_lost', name: 'Closed Lost', color: '#ffebee', textColor: '#c62828', probability: 0 },
-  { id: 'on_hold', name: 'On Hold', color: '#f5f5f5', textColor: '#616161', probability: 0 }
+  { id: 'engagement_won', name: 'Engagement Won', color: '#e8f5e8', textColor: '#2e7d32', probability: 100 },
+  { id: 'engagement_lost', name: 'Engagement Lost', color: '#ffebee', textColor: '#c62828', probability: 0 },
+  { id: 'declined', name: 'Declined', color: '#f5f5f5', textColor: '#616161', probability: 0 }
 ];
 
 // Deal card component for Kanban view

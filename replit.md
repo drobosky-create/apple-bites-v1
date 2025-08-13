@@ -4,14 +4,16 @@
 This is a full-stack web application for Meritage Partners, designed as a business valuation calculator. It guides users through a multi-step valuation process, generates professional PDF reports, and provides administrative dashboards for lead and team management. The platform aims to offer comprehensive business valuation services, leveraging AI for narrative generation and integrating with key external services for CRM and email automation. The project's vision is to provide a streamlined, accurate, and professional valuation tool with market potential for various business sizes.
 
 ## Recent Changes (August 2025)
-**✅ COMPLETED: Opportunities and Deals Separation (August 13, 2025)**
+**✅ COMPLETED: Opportunities and Deals Separation with Custom M&A Stages (August 13, 2025)**
 - Properly separated Opportunities and Deals as distinct entities in CRM Pipeline Dashboard
 - Implemented dual entity toggle: users can now switch between viewing Opportunities and Deals
-- Added separate pipeline stages for Opportunities (8 stages) vs Deals (14 stages)
+- Configured authentic M&A pipeline stages:
+  * **Opportunity Stages (8)**: Prospect Identified → Initial Contact → Qualification → Pitch → Negotiation → Engagement Won/Lost/Declined
+  * **Deal Stages (7)**: Onboarding → Go To Market Prep → Go To Market → Negotiations → Due Diligence → Definitive Agreement/Close → Post Close
 - Updated search, filtering, and drag-and-drop functionality to work with both entity types
 - Maintained proper Contact→Firm→Opportunity→Deal hierarchy as defined in database schema
-- Enhanced UI with clear entity type indicators and appropriate stage configurations
-- Both Kanban and table views now support switching between Opportunities and Deals
+- Enhanced UI with clear entity type indicators and M&A-specific stage configurations
+- Both Kanban and table views now support switching between Opportunities and Deals with appropriate probability tracking
 
 **✅ COMPLETED: CRM Profile Navigation Fix (August 13, 2025)**
 - Fixed Profile button in CRM sidebar to properly navigate to user profile page instead of CRM overview
