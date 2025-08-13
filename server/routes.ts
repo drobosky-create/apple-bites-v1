@@ -1423,6 +1423,76 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // CRM Deal management routes (protected)
+  app.get("/api/deals", isAdminAuthenticated, async (req, res) => {
+    try {
+      const { stage, assignedTo } = req.query;
+      
+      let deals;
+      if (stage) {
+        deals = await storage.getDealsByStage(stage as string);
+      } else if (assignedTo) {
+        deals = await storage.getDealsByAssignee(assignedTo as string);
+      } else {
+        deals = await storage.getAllDeals();
+      }
+      
+      res.json(deals);
+    } catch (error) {
+      console.error('Error fetching deals:', error);
+      res.status(500).json({ error: "Failed to fetch deals" });
+    }
+  });
+
+  app.post("/api/deals", isAdminAuthenticated, async (req, res) => {
+    try {
+      const dealData = req.body;
+      const deal = await storage.createDeal(dealData);
+      res.json(deal);
+    } catch (error) {
+      console.error('Error creating deal:', error);
+      res.status(500).json({ error: "Failed to create deal" });
+    }
+  });
+
+  app.patch("/api/deals/:id", isAdminAuthenticated, async (req, res) => {
+    try {
+      const dealId = parseInt(req.params.id);
+      const updates = req.body;
+      
+      const deal = await storage.updateDeal(dealId, updates);
+      res.json(deal);
+    } catch (error) {
+      console.error('Error updating deal:', error);
+      res.status(500).json({ error: "Failed to update deal" });
+    }
+  });
+
+  app.delete("/api/deals/:id", isAdminAuthenticated, async (req, res) => {
+    try {
+      const dealId = parseInt(req.params.id);
+      await storage.deleteDeal(dealId);
+      res.json({ success: true });
+    } catch (error) {
+      console.error('Error deleting deal:', error);
+      res.status(500).json({ error: "Failed to delete deal" });
+    }
+  });
+
+  // Deal activities
+  app.post("/api/deals/:id/activities", isAdminAuthenticated, async (req, res) => {
+    try {
+      const dealId = parseInt(req.params.id);
+      const activityData = { ...req.body, dealId };
+      
+      const activity = await storage.createDealActivity(activityData);
+      res.json(activity);
+    } catch (error) {
+      console.error('Error creating deal activity:', error);
+      res.status(500).json({ error: "Failed to create deal activity" });
+    }
+  });
+
   // GET /api/analytics/assessments - Get all assessments for analytics
   app.get("/api/analytics/assessments", async (req, res) => {
     try {

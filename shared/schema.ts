@@ -225,6 +225,88 @@ export type Lead = typeof leads.$inferSelect;
 export type InsertLeadActivity = z.infer<typeof insertLeadActivitySchema>;
 export type LeadActivity = typeof leadActivities.$inferSelect;
 
+// CRM Deals/Opportunities table
+export const deals = pgTable("deals", {
+  id: serial("id").primaryKey(),
+  
+  // Deal Information
+  title: text("title").notNull(),
+  description: text("description"),
+  dealValue: decimal("deal_value", { precision: 15, scale: 2 }),
+  
+  // Linked Lead
+  leadId: integer("lead_id").references(() => leads.id),
+  
+  // Deal Stage and Status
+  stage: text("stage").default("prospecting"), // "prospecting", "qualification", "proposal", "negotiation", "closed_won", "closed_lost"
+  probability: integer("probability").default(0), // 0-100%
+  
+  // Important Dates
+  expectedCloseDate: timestamp("expected_close_date"),
+  actualCloseDate: timestamp("actual_close_date"),
+  
+  // Deal Owner and Assignment
+  assignedTo: text("assigned_to"), // Team member ID or email
+  
+  // Source and Classification
+  dealSource: text("deal_source").default("lead_conversion"), // "lead_conversion", "referral", "cold_outreach", etc.
+  dealType: text("deal_type").default("new_business"), // "new_business", "expansion", "renewal"
+  
+  // Additional Information
+  notes: text("notes"),
+  tags: text("tags").array(),
+  
+  // Timestamps
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Deal Activities/Events
+export const dealActivities = pgTable("deal_activities", {
+  id: serial("id").primaryKey(),
+  dealId: integer("deal_id").notNull().references(() => deals.id),
+  
+  activityType: text("activity_type").notNull(), // "stage_change", "note_added", "meeting_scheduled", "proposal_sent", etc.
+  description: text("description").notNull(),
+  metadata: jsonb("metadata"), // Additional structured data
+  
+  createdBy: text("created_by"), // User who performed the activity
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Deal Relations
+export const dealsRelations = relations(deals, ({ one, many }) => ({
+  lead: one(leads, {
+    fields: [deals.leadId],
+    references: [leads.id],
+  }),
+  activities: many(dealActivities),
+}));
+
+export const dealActivitiesRelations = relations(dealActivities, ({ one }) => ({
+  deal: one(deals, {
+    fields: [dealActivities.dealId],
+    references: [deals.id],
+  }),
+}));
+
+// Deal schemas
+export const insertDealSchema = createInsertSchema(deals).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertDealActivitySchema = createInsertSchema(dealActivities).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type InsertDeal = z.infer<typeof insertDealSchema>;
+export type Deal = typeof deals.$inferSelect;
+export type InsertDealActivity = z.infer<typeof insertDealActivitySchema>;
+export type DealActivity = typeof dealActivities.$inferSelect;
+
 // Team management tables
 export const teamMembers = pgTable("team_members", {
   id: serial("id").primaryKey(),
