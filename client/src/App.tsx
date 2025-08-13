@@ -100,6 +100,11 @@ function Router() {
             {isAuthenticated ? <PastAssessments /> : <LoginPage />}
           </Route>
           
+          {/* CRM System - requires authentication */}
+          <Route path="/crm">
+            {isAuthenticated ? <CRMDashboard /> : <LoginPage />}
+          </Route>
+          
           {/* Admin/Team pages - self-authenticated */}
           <Route path="/admin/analytics" component={AnalyticsDashboard} />
           <Route path="/admin/leads" component={LeadsDashboard} />
