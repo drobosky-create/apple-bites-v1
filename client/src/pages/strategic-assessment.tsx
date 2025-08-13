@@ -200,8 +200,11 @@ function GrowthExitAssessment() {
 
   // Load previous assessment data to pre-fill form
   useEffect(() => {
+    console.log('PRE-FILL USEEFFECT STARTED - Attempting to load previous data...');
+    
     const loadPreviousData = async () => {
       try {
+        console.log('Step 1: Checking localStorage...');
         // First, try to load from localStorage (from a previous session)
         const savedData = localStorage.getItem('freeAssessmentData');
         if (savedData) {
@@ -210,6 +213,7 @@ function GrowthExitAssessment() {
           
           // Transform the saved data structure to match our form
           if (parsedData.company || parsedData.annualRevenue || parsedData.ebitda) {
+            console.log('Pre-filling from localStorage...');
             setFormData(prev => ({
               ...prev,
               financials: {
@@ -225,50 +229,67 @@ function GrowthExitAssessment() {
                 otherAdjustments: ""
               }
             }));
+            return; // Exit early if we found localStorage data
           }
         }
         
+        console.log('Step 2: Fetching from API...');
         // Also try to fetch the latest assessment from the API
         const response = await fetch('/api/assessments');
+        console.log('API Response status:', response.status, response.ok);
+        
         if (response.ok) {
           const assessments = await response.json();
+          console.log('Fetched assessments:', assessments?.length || 0, 'total');
+          
           if (assessments && assessments.length > 0) {
             // Get the most recent assessment
             const latestAssessment = assessments
-              .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())[0];
+              .sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())[0];
             
-            console.log('Loading latest assessment for pre-fill:', latestAssessment);
+            console.log('Latest assessment for pre-fill:', latestAssessment);
             
             // Pre-fill with data from the latest assessment
-            if (latestAssessment) {
+            if (latestAssessment && latestAssessment.adjustedEbitda) {
               // Calculate revenue from EBITDA and estimated expenses if available
               const adjustedEbitda = parseFloat(latestAssessment.adjustedEbitda) || 0;
               // Use a more realistic revenue calculation: EBITDA is typically 10-20% of revenue
               const estimatedRevenue = adjustedEbitda > 0 ? Math.round(adjustedEbitda / 0.15) : 0; // Assume 15% EBITDA margin
               const estimatedOperatingExpenses = adjustedEbitda > 0 ? Math.round(adjustedEbitda * 0.3) : 0; // Conservative estimate
               
-              console.log('Pre-filling data:', {
+              console.log('CALCULATING PRE-FILL DATA:', {
                 adjustedEbitda,
                 estimatedRevenue,
                 estimatedOperatingExpenses
               });
               
-              setFormData(prev => ({
-                ...prev,
-                financials: {
-                  annualRevenue: estimatedRevenue.toString(),
-                  costOfGoodsSold: Math.round(estimatedRevenue * 0.4).toString(), // Typical 40% COGS
-                  operatingExpenses: estimatedOperatingExpenses.toString()
-                },
-                adjustments: {
-                  ownerSalary: "75000", // Reasonable owner salary
-                  personalExpenses: "5000",
-                  oneTimeExpenses: "0",
-                  otherAdjustments: "0"
-                }
-              }));
+              console.log('SETTING FORM DATA NOW...');
+              setFormData(prev => {
+                const newData = {
+                  ...prev,
+                  financials: {
+                    annualRevenue: estimatedRevenue.toString(),
+                    costOfGoodsSold: Math.round(estimatedRevenue * 0.4).toString(), // Typical 40% COGS
+                    operatingExpenses: estimatedOperatingExpenses.toString()
+                  },
+                  adjustments: {
+                    ownerSalary: "75000", // Reasonable owner salary
+                    personalExpenses: "5000",
+                    oneTimeExpenses: "0",
+                    otherAdjustments: "0"
+                  }
+                };
+                console.log('NEW FORM DATA SET:', newData.financials);
+                return newData;
+              });
+            } else {
+              console.log('No usable assessment data found');
             }
+          } else {
+            console.log('No assessments found in response');
           }
+        } else {
+          console.log('API request failed with status:', response.status);
         }
       } catch (error) {
         console.error('Error loading previous assessment data:', error);
