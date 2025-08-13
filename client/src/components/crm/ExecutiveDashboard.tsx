@@ -105,19 +105,19 @@ const ExecutiveDashboard = () => {
           return (
             <Grid key={index} size={3}>
               <Card sx={{ height: '140px', width: '100%' }}>
-                <CardContent sx={{ p: 3, height: '100%' }}>
-                  <MDBox display="flex" justifyContent="space-between" alignItems="flex-start" height="100%">
-                    <MDBox flex={1} mr={2}>
-                      <MDTypography variant="caption" color="text" fontWeight="bold" textTransform="uppercase" mb={1}>
+                <CardContent sx={{ p: 3, height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <MDBox display="flex" justifyContent="space-between" alignItems="center" width="100%" height="100%">
+                    <MDBox flex={1} textAlign="left">
+                      <MDTypography variant="caption" color="text" fontWeight="bold" textTransform="uppercase" mb={1} display="block">
                         {kpi.title}
                       </MDTypography>
-                      <MDTypography variant="h4" fontWeight="bold" color="dark" mb={0.5}>
+                      <MDTypography variant="h4" fontWeight="bold" color="dark" mb={0.5} display="block">
                         {kpi.value}
                       </MDTypography>
                       <MDTypography variant="caption" color="text" mb={1} display="block">
                         {kpi.subtitle}
                       </MDTypography>
-                      <MDBox display="flex" alignItems="center">
+                      <MDBox display="flex" alignItems="center" justifyContent="flex-start">
                         <MDTypography variant="caption" sx={{ color: kpi.changeColor }} fontWeight="bold">
                           {kpi.change}
                         </MDTypography>
@@ -135,7 +135,8 @@ const ExecutiveDashboard = () => {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        flexShrink: 0
+                        flexShrink: 0,
+                        ml: 2
                       }}
                     >
                       <IconComponent size={28} color={kpi.color} />
