@@ -4,6 +4,12 @@
 This is a full-stack web application for Meritage Partners, designed as a business valuation calculator. It guides users through a multi-step valuation process, generates professional PDF reports, and provides administrative dashboards for lead and team management. The platform aims to offer comprehensive business valuation services, leveraging AI for narrative generation and integrating with key external services for CRM and email automation. The project's vision is to provide a streamlined, accurate, and professional valuation tool with market potential for various business sizes.
 
 ## Recent Changes (August 2025)
+**✅ COMPLETED: CRM Profile Navigation Fix (August 13, 2025)**
+- Fixed Profile button in CRM sidebar to properly navigate to user profile page instead of CRM overview
+- Added localStorage-based navigation tracking to enable proper back button functionality
+- Profile page back button now correctly returns to CRM system when accessed from CRM sidebar
+- Enhanced user experience by maintaining navigation context between CRM and Profile sections
+
 **✅ COMPLETED: CRM UI Enhancement & Material Dashboard Integration (August 13, 2025)**
 - Successfully converted entire CRM Pipeline dashboard from Material UI to Material Dashboard components
 - Fixed all import errors and JSX structure issues during MD component migration  

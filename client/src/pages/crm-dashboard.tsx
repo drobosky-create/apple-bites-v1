@@ -57,6 +57,8 @@ const CRMDashboard = () => {
 
   const handleSectionChange = (section: string) => {
     if (section === 'profile') {
+      // Set a flag to indicate we came from CRM
+      localStorage.setItem('crmNavigation', 'true');
       // Navigate to the user's profile page
       setLocation('/profile');
       return;
