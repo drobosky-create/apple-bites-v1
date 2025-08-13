@@ -225,43 +225,201 @@ export type Lead = typeof leads.$inferSelect;
 export type InsertLeadActivity = z.infer<typeof insertLeadActivitySchema>;
 export type LeadActivity = typeof leadActivities.$inferSelect;
 
-// CRM Deals/Opportunities table
-export const deals = pgTable("deals", {
+// ============= COMPREHENSIVE CRM TABLES =============
+
+// Contacts Table - Comprehensive contact management
+export const contacts = pgTable("contacts", {
   id: serial("id").primaryKey(),
   
-  // Deal Information
-  title: text("title").notNull(),
-  description: text("description"),
-  dealValue: decimal("deal_value", { precision: 15, scale: 2 }),
+  // Basic Information
+  firstName: varchar("first_name").notNull(),
+  middleName: varchar("middle_name"),
+  lastName: varchar("last_name").notNull(),
+  goesByName: varchar("goes_by_name"),
+  title: varchar("title"),
   
-  // Linked Lead
-  leadId: integer("lead_id").references(() => leads.id),
+  // Contact Methods
+  email: varchar("email"),
+  email2: varchar("email2"),
+  phoneOffice: varchar("phone_office"),
+  phoneOffice2: varchar("phone_office2"),
+  phoneMobile: varchar("phone_mobile"),
+  phoneHome: varchar("phone_home"),
+  phoneHome2: varchar("phone_home2"),
+  phoneFax: varchar("phone_fax"),
+  linkedinUrl: varchar("linkedin_url"),
+  skype: varchar("skype"),
   
-  // Deal Stage and Status
-  stage: text("stage").default("prospecting"), // "prospecting", "qualification", "proposal", "negotiation", "closed_won", "closed_lost"
-  probability: integer("probability").default(0), // 0-100%
+  // Management Info
+  dateAdded: timestamp("date_added").defaultNow(),
+  dateInactive: timestamp("date_inactive"),
+  contactFrequencyDays: integer("contact_frequency_days"),
+  lastUpdated: timestamp("last_updated").defaultNow(),
   
-  // Important Dates
-  expectedCloseDate: timestamp("expected_close_date"),
-  actualCloseDate: timestamp("actual_close_date"),
-  
-  // Deal Owner and Assignment
-  assignedTo: text("assigned_to"), // Team member ID or email
-  
-  // Source and Classification
-  dealSource: text("deal_source").default("lead_conversion"), // "lead_conversion", "referral", "cold_outreach", etc.
-  dealType: text("deal_type").default("new_business"), // "new_business", "expansion", "renewal"
+  // Address Information
+  address1: varchar("address_1"),
+  address2: varchar("address_2"),
+  city: varchar("city"),
+  stateRegion: varchar("state_region"),
+  postalCode: varchar("postal_code"),
+  country: varchar("country"),
   
   // Additional Information
+  department: varchar("department"),
+  initials: varchar("initials"),
   notes: text("notes"),
-  tags: text("tags").array(),
   
-  // Timestamps
+  // Linked to Firm
+  firmId: integer("firm_id"),
+});
+
+// Firms Table - Company/Organization management
+export const firms = pgTable("firms", {
+  id: serial("id").primaryKey(),
+  
+  // Basic Information
+  firmName: varchar("firm_name").notNull(),
+  
+  // Address Information
+  address1: varchar("address_1"),
+  address2: varchar("address_2"),
+  city: varchar("city"),
+  stateRegion: varchar("state_region"),
+  postalCode: varchar("postal_code"),
+  country: varchar("country"),
+  
+  // Contact Information
+  phone: varchar("phone"),
+  fax: varchar("fax"),
+  companyEmail: varchar("company_email"),
+  websiteUrl: varchar("website_url"),
+  
+  // Management Info
+  dateAdded: timestamp("date_added").defaultNow(),
+  dateInactive: timestamp("date_inactive"),
+  lastUpdated: timestamp("last_updated").defaultNow(),
+  
+  // Business Information
+  industry: varchar("industry"), // Tree structure
+  annualRevenue: decimal("annual_revenue", { precision: 15, scale: 2 }),
+  annualEbitda: decimal("annual_ebitda", { precision: 15, scale: 2 }),
+  firmStage: varchar("firm_stage"), // Dropdown values
+  firmTags: text("firm_tags"), // JSON array
+  firmAbout: text("firm_about"),
+  
+  // Primary Contact
+  primaryContactId: integer("primary_contact_id"),
+});
+
+// Opportunities Table - Pre-deal engagement tracking
+export const opportunities = pgTable("opportunities", {
+  id: serial("id").primaryKey(),
+  
+  // Basic Information
+  summary: text("summary").notNull(),
+  opportunityId: varchar("opportunity_id"), // Custom ID system
+  
+  // Relationships
+  clientFirmId: integer("client_firm_id").notNull(),
+  ownerId: varchar("owner_id"), // Team member
+  
+  // Categorization
+  tags: text("tags"), // JSON array
+  transactionType: varchar("transaction_type"),
+  clientStage: varchar("client_stage"),
+  clientIndustry: varchar("client_industry"),
+  tier: varchar("tier"),
+  
+  // Details
+  currentSituation: text("current_situation"),
+  clientNeeds: text("client_needs"),
+  
+  // Timeline
+  engagementStartDate: timestamp("engagement_start_date"),
+  engagementExpiresDate: timestamp("engagement_expires_date"),
+  
+  // Status and Progress
+  status: varchar("status").default("active"),
+  feeInformation: text("fee_information"),
+  probabilityOfClose: integer("probability_of_close"), // Percentage
+  estimatedClosingDate: timestamp("estimated_closing_date"),
+  closedDate: timestamp("closed_date"),
+  
+  // Referral Information
+  referralInfo: text("referral_info"),
+  referralContact: varchar("referral_contact"),
+  referralFirm: varchar("referral_firm"),
+  referralComments: text("referral_comments"),
+  
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
-// Deal Activities/Events
+// Deals Table - Actual transaction tracking
+export const deals = pgTable("deals", {
+  id: serial("id").primaryKey(),
+  
+  // Basic Information
+  dealName: varchar("deal_name").notNull(),
+  dealStage: varchar("deal_stage").notNull().default("prospect_identified"),
+  
+  // Relationships
+  clientFirmId: integer("client_firm_id").notNull(),
+  opportunityId: integer("opportunity_id"), // Link to opportunity
+  ownerId: varchar("owner_id"), // Team member
+  
+  // Transaction Details
+  transactionType: varchar("transaction_type"),
+  estimatedTransactionValue: decimal("estimated_transaction_value", { precision: 15, scale: 2 }),
+  clientStage: varchar("client_stage"),
+  clientIndustry: varchar("client_industry"),
+  description: text("description"),
+  revenue: decimal("revenue", { precision: 15, scale: 2 }),
+  
+  // Timeline
+  engagementStartDate: timestamp("engagement_start_date"),
+  engagementEndDate: timestamp("engagement_end_date"),
+  
+  // Status and Progress
+  dealStatus: varchar("deal_status").default("active"),
+  restricted: boolean("restricted").default(false),
+  fees: text("fees"), // JSON structure for different fee types
+  probabilityOfClose: integer("probability_of_close"), // Percentage
+  estimatedCloseDate: timestamp("estimated_close_date"),
+  actualCloseDate: timestamp("actual_close_date"),
+  
+  // Referral Information
+  referralInfo: text("referral_info"),
+  referralContact: varchar("referral_contact"),
+  referralFirm: varchar("referral_firm"),
+  referralComments: text("referral_comments"),
+  
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Targets Table - Prospect/Lead tracking within deals
+export const targets = pgTable("targets", {
+  id: serial("id").primaryKey(),
+  
+  // Basic Information
+  contactLeadName: varchar("contact_lead_name").notNull(),
+  contactLeadPhone: varchar("contact_lead_phone"),
+  contactLeadEmail: varchar("contact_lead_email"),
+  
+  // Categorization
+  tags: text("tags"), // JSON array
+  targetStage: varchar("target_stage"),
+  passedReason: text("passed_reason"),
+  
+  // Linked to Deal
+  dealId: integer("deal_id"),
+  
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Deal Activities/Events (Enhanced)
 export const dealActivities = pgTable("deal_activities", {
   id: serial("id").primaryKey(),
   dealId: integer("deal_id").notNull().references(() => deals.id),
@@ -274,13 +432,50 @@ export const dealActivities = pgTable("deal_activities", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
-// Deal Relations
+// CRM Relations
+export const contactsRelations = relations(contacts, ({ one }) => ({
+  firm: one(firms, {
+    fields: [contacts.firmId],
+    references: [firms.id],
+  }),
+}));
+
+export const firmsRelations = relations(firms, ({ one, many }) => ({
+  primaryContact: one(contacts, {
+    fields: [firms.primaryContactId],
+    references: [contacts.id],
+  }),
+  contacts: many(contacts),
+  opportunities: many(opportunities),
+  deals: many(deals),
+}));
+
+export const opportunitiesRelations = relations(opportunities, ({ one, many }) => ({
+  clientFirm: one(firms, {
+    fields: [opportunities.clientFirmId],
+    references: [firms.id],
+  }),
+  deals: many(deals),
+}));
+
 export const dealsRelations = relations(deals, ({ one, many }) => ({
-  lead: one(leads, {
-    fields: [deals.leadId],
-    references: [leads.id],
+  clientFirm: one(firms, {
+    fields: [deals.clientFirmId],
+    references: [firms.id],
+  }),
+  opportunity: one(opportunities, {
+    fields: [deals.opportunityId],
+    references: [opportunities.id],
   }),
   activities: many(dealActivities),
+  targets: many(targets),
+}));
+
+export const targetsRelations = relations(targets, ({ one }) => ({
+  deal: one(deals, {
+    fields: [targets.dealId],
+    references: [deals.id],
+  }),
 }));
 
 export const dealActivitiesRelations = relations(dealActivities, ({ one }) => ({
@@ -290,8 +485,32 @@ export const dealActivitiesRelations = relations(dealActivities, ({ one }) => ({
   }),
 }));
 
-// Deal schemas
+// CRM Schemas
+export const insertContactSchema = createInsertSchema(contacts).omit({
+  id: true,
+  dateAdded: true,
+  lastUpdated: true,
+});
+
+export const insertFirmSchema = createInsertSchema(firms).omit({
+  id: true,
+  dateAdded: true,
+  lastUpdated: true,
+});
+
+export const insertOpportunitySchema = createInsertSchema(opportunities).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
 export const insertDealSchema = createInsertSchema(deals).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertTargetSchema = createInsertSchema(targets).omit({
   id: true,
   createdAt: true,
   updatedAt: true,
@@ -302,8 +521,22 @@ export const insertDealActivitySchema = createInsertSchema(dealActivities).omit(
   createdAt: true,
 });
 
+// CRM Types
+export type InsertContact = z.infer<typeof insertContactSchema>;
+export type Contact = typeof contacts.$inferSelect;
+
+export type InsertFirm = z.infer<typeof insertFirmSchema>;
+export type Firm = typeof firms.$inferSelect;
+
+export type InsertOpportunity = z.infer<typeof insertOpportunitySchema>;
+export type Opportunity = typeof opportunities.$inferSelect;
+
 export type InsertDeal = z.infer<typeof insertDealSchema>;
 export type Deal = typeof deals.$inferSelect;
+
+export type InsertTarget = z.infer<typeof insertTargetSchema>;
+export type Target = typeof targets.$inferSelect;
+
 export type InsertDealActivity = z.infer<typeof insertDealActivitySchema>;
 export type DealActivity = typeof dealActivities.$inferSelect;
 

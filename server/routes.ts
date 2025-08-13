@@ -156,12 +156,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // User logout - unified endpoint
   app.post('/api/logout', (req, res) => {
     // Clear all session data
-    req.session.userId = null;
-    req.session.userEmail = null;
-    req.session.userTier = null;
-    req.session.customUserSessionId = null;
-    req.session.teamSessionId = null;
-    req.session.adminAuthenticated = null;
+    req.session.userId = undefined;
+    req.session.userEmail = undefined;
+    req.session.userTier = undefined;
+    req.session.customUserSessionId = undefined;
+    req.session.teamSessionId = undefined;
+    req.session.adminAuthenticated = undefined;
     
     req.session.destroy((err) => {
       if (err) {
@@ -352,12 +352,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Custom user logout - redirect to main logout
   app.post('/api/users/logout', (req, res) => {
     // Clear all session data
-    req.session.userId = null;
-    req.session.userEmail = null;
-    req.session.userTier = null;
-    req.session.customUserSessionId = null;
-    req.session.teamSessionId = null;
-    req.session.adminAuthenticated = null;
+    req.session.userId = undefined;
+    req.session.userEmail = undefined;
+    req.session.userTier = undefined;
+    req.session.customUserSessionId = undefined;
+    req.session.teamSessionId = undefined;
+    req.session.adminAuthenticated = undefined;
     
     req.session.destroy((err) => {
       if (err) {
@@ -1490,6 +1490,186 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error('Error creating deal activity:', error);
       res.status(500).json({ error: "Failed to create deal activity" });
+    }
+  });
+
+  // CRM Contacts routes
+  app.get("/api/contacts", isAdminAuthenticated, async (req, res) => {
+    try {
+      const contacts = await storage.getAllContacts();
+      res.json(contacts);
+    } catch (error) {
+      console.error('Error fetching contacts:', error);
+      res.status(500).json({ error: "Failed to fetch contacts" });
+    }
+  });
+
+  app.post("/api/contacts", isAdminAuthenticated, async (req, res) => {
+    try {
+      const contact = await storage.createContact(req.body);
+      res.json(contact);
+    } catch (error) {
+      console.error('Error creating contact:', error);
+      res.status(500).json({ error: "Failed to create contact" });
+    }
+  });
+
+  app.patch("/api/contacts/:id", isAdminAuthenticated, async (req, res) => {
+    try {
+      const contactId = parseInt(req.params.id);
+      const contact = await storage.updateContact(contactId, req.body);
+      res.json(contact);
+    } catch (error) {
+      console.error('Error updating contact:', error);
+      res.status(500).json({ error: "Failed to update contact" });
+    }
+  });
+
+  app.delete("/api/contacts/:id", isAdminAuthenticated, async (req, res) => {
+    try {
+      const contactId = parseInt(req.params.id);
+      await storage.deleteContact(contactId);
+      res.json({ success: true });
+    } catch (error) {
+      console.error('Error deleting contact:', error);
+      res.status(500).json({ error: "Failed to delete contact" });
+    }
+  });
+
+  // CRM Firms routes
+  app.get("/api/firms", isAdminAuthenticated, async (req, res) => {
+    try {
+      const firms = await storage.getAllFirms();
+      res.json(firms);
+    } catch (error) {
+      console.error('Error fetching firms:', error);
+      res.status(500).json({ error: "Failed to fetch firms" });
+    }
+  });
+
+  app.post("/api/firms", isAdminAuthenticated, async (req, res) => {
+    try {
+      const firm = await storage.createFirm(req.body);
+      res.json(firm);
+    } catch (error) {
+      console.error('Error creating firm:', error);
+      res.status(500).json({ error: "Failed to create firm" });
+    }
+  });
+
+  app.patch("/api/firms/:id", isAdminAuthenticated, async (req, res) => {
+    try {
+      const firmId = parseInt(req.params.id);
+      const firm = await storage.updateFirm(firmId, req.body);
+      res.json(firm);
+    } catch (error) {
+      console.error('Error updating firm:', error);
+      res.status(500).json({ error: "Failed to update firm" });
+    }
+  });
+
+  app.delete("/api/firms/:id", isAdminAuthenticated, async (req, res) => {
+    try {
+      const firmId = parseInt(req.params.id);
+      await storage.deleteFirm(firmId);
+      res.json({ success: true });
+    } catch (error) {
+      console.error('Error deleting firm:', error);
+      res.status(500).json({ error: "Failed to delete firm" });
+    }
+  });
+
+  // CRM Opportunities routes
+  app.get("/api/opportunities", isAdminAuthenticated, async (req, res) => {
+    try {
+      const opportunities = await storage.getAllOpportunities();
+      res.json(opportunities);
+    } catch (error) {
+      console.error('Error fetching opportunities:', error);
+      res.status(500).json({ error: "Failed to fetch opportunities" });
+    }
+  });
+
+  app.post("/api/opportunities", isAdminAuthenticated, async (req, res) => {
+    try {
+      const opportunity = await storage.createOpportunity(req.body);
+      res.json(opportunity);
+    } catch (error) {
+      console.error('Error creating opportunity:', error);
+      res.status(500).json({ error: "Failed to create opportunity" });
+    }
+  });
+
+  app.patch("/api/opportunities/:id", isAdminAuthenticated, async (req, res) => {
+    try {
+      const opportunityId = parseInt(req.params.id);
+      const opportunity = await storage.updateOpportunity(opportunityId, req.body);
+      res.json(opportunity);
+    } catch (error) {
+      console.error('Error updating opportunity:', error);
+      res.status(500).json({ error: "Failed to update opportunity" });
+    }
+  });
+
+  app.delete("/api/opportunities/:id", isAdminAuthenticated, async (req, res) => {
+    try {
+      const opportunityId = parseInt(req.params.id);
+      await storage.deleteOpportunity(opportunityId);
+      res.json({ success: true });
+    } catch (error) {
+      console.error('Error deleting opportunity:', error);
+      res.status(500).json({ error: "Failed to delete opportunity" });
+    }
+  });
+
+  // CRM Targets routes
+  app.get("/api/targets", isAdminAuthenticated, async (req, res) => {
+    try {
+      const { dealId } = req.query;
+      let targets;
+      
+      if (dealId) {
+        targets = await storage.getTargetsByDeal(parseInt(dealId as string));
+      } else {
+        targets = await storage.getAllTargets();
+      }
+      
+      res.json(targets);
+    } catch (error) {
+      console.error('Error fetching targets:', error);
+      res.status(500).json({ error: "Failed to fetch targets" });
+    }
+  });
+
+  app.post("/api/targets", isAdminAuthenticated, async (req, res) => {
+    try {
+      const target = await storage.createTarget(req.body);
+      res.json(target);
+    } catch (error) {
+      console.error('Error creating target:', error);
+      res.status(500).json({ error: "Failed to create target" });
+    }
+  });
+
+  app.patch("/api/targets/:id", isAdminAuthenticated, async (req, res) => {
+    try {
+      const targetId = parseInt(req.params.id);
+      const target = await storage.updateTarget(targetId, req.body);
+      res.json(target);
+    } catch (error) {
+      console.error('Error updating target:', error);
+      res.status(500).json({ error: "Failed to update target" });
+    }
+  });
+
+  app.delete("/api/targets/:id", isAdminAuthenticated, async (req, res) => {
+    try {
+      const targetId = parseInt(req.params.id);
+      await storage.deleteTarget(targetId);
+      res.json({ success: true });
+    } catch (error) {
+      console.error('Error deleting target:', error);
+      res.status(500).json({ error: "Failed to delete target" });
     }
   });
 

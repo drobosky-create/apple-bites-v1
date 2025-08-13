@@ -5,6 +5,12 @@ import {
   teamMembers,
   teamSessions,
   users,
+  contacts,
+  firms,
+  opportunities,
+  deals,
+  targets,
+  dealActivities,
   type ValuationAssessment, 
   type InsertValuationAssessment,
   type Lead,
@@ -16,7 +22,19 @@ import {
   type TeamSession,
   type User,
   type InsertUser,
-  type UpsertUser
+  type UpsertUser,
+  type Contact,
+  type InsertContact,
+  type Firm,
+  type InsertFirm,
+  type Opportunity,
+  type InsertOpportunity,
+  type Deal,
+  type InsertDeal,
+  type Target,
+  type InsertTarget,
+  type DealActivity,
+  type InsertDealActivity
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, and, inArray } from "drizzle-orm";
@@ -68,6 +86,48 @@ export interface IStorage {
   getTeamSession(sessionId: string): Promise<TeamSession | undefined>;
   updateTeamSession(sessionId: string, expiresAt: Date): Promise<void>;
   deleteTeamSession(sessionId: string): Promise<void>;
+
+  // CRM Contact methods
+  createContact(contact: InsertContact): Promise<Contact>;
+  getContact(id: number): Promise<Contact | undefined>;
+  getAllContacts(): Promise<Contact[]>;
+  updateContact(id: number, updates: Partial<Contact>): Promise<Contact>;
+  deleteContact(id: number): Promise<void>;
+
+  // CRM Firm methods
+  createFirm(firm: InsertFirm): Promise<Firm>;
+  getFirm(id: number): Promise<Firm | undefined>;
+  getAllFirms(): Promise<Firm[]>;
+  updateFirm(id: number, updates: Partial<Firm>): Promise<Firm>;
+  deleteFirm(id: number): Promise<void>;
+
+  // CRM Opportunity methods
+  createOpportunity(opportunity: InsertOpportunity): Promise<Opportunity>;
+  getOpportunity(id: number): Promise<Opportunity | undefined>;
+  getAllOpportunities(): Promise<Opportunity[]>;
+  updateOpportunity(id: number, updates: Partial<Opportunity>): Promise<Opportunity>;
+  deleteOpportunity(id: number): Promise<void>;
+
+  // CRM Deal methods
+  createDeal(deal: InsertDeal): Promise<Deal>;
+  getDeal(id: number): Promise<Deal | undefined>;
+  getAllDeals(): Promise<Deal[]>;
+  getDealsByStage(stage: string): Promise<Deal[]>;
+  getDealsByAssignee(assignedTo: string): Promise<Deal[]>;
+  updateDeal(id: number, updates: Partial<Deal>): Promise<Deal>;
+  deleteDeal(id: number): Promise<void>;
+
+  // CRM Target methods
+  createTarget(target: InsertTarget): Promise<Target>;
+  getTarget(id: number): Promise<Target | undefined>;
+  getAllTargets(): Promise<Target[]>;
+  getTargetsByDeal(dealId: number): Promise<Target[]>;
+  updateTarget(id: number, updates: Partial<Target>): Promise<Target>;
+  deleteTarget(id: number): Promise<void>;
+
+  // Deal Activity methods
+  createDealActivity(activity: InsertDealActivity): Promise<DealActivity>;
+  getDealActivities(dealId: number): Promise<DealActivity[]>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -383,6 +443,208 @@ export class DatabaseStorage implements IStorage {
     }
 
     return user;
+  }
+
+  // ============= CRM IMPLEMENTATIONS =============
+
+  // Contact methods
+  async createContact(insertContact: InsertContact): Promise<Contact> {
+    const [contact] = await db
+      .insert(contacts)
+      .values(insertContact)
+      .returning();
+    return contact;
+  }
+
+  async getContact(id: number): Promise<Contact | undefined> {
+    const [contact] = await db.select().from(contacts).where(eq(contacts.id, id));
+    return contact || undefined;
+  }
+
+  async getAllContacts(): Promise<Contact[]> {
+    return await db.select().from(contacts).orderBy(desc(contacts.dateAdded));
+  }
+
+  async updateContact(id: number, updates: Partial<Contact>): Promise<Contact> {
+    const [contact] = await db
+      .update(contacts)
+      .set({ ...updates, lastUpdated: new Date() })
+      .where(eq(contacts.id, id))
+      .returning();
+    
+    if (!contact) {
+      throw new Error(`Contact with id ${id} not found`);
+    }
+    return contact;
+  }
+
+  async deleteContact(id: number): Promise<void> {
+    await db.delete(contacts).where(eq(contacts.id, id));
+  }
+
+  // Firm methods
+  async createFirm(insertFirm: InsertFirm): Promise<Firm> {
+    const [firm] = await db
+      .insert(firms)
+      .values(insertFirm)
+      .returning();
+    return firm;
+  }
+
+  async getFirm(id: number): Promise<Firm | undefined> {
+    const [firm] = await db.select().from(firms).where(eq(firms.id, id));
+    return firm || undefined;
+  }
+
+  async getAllFirms(): Promise<Firm[]> {
+    return await db.select().from(firms).orderBy(desc(firms.dateAdded));
+  }
+
+  async updateFirm(id: number, updates: Partial<Firm>): Promise<Firm> {
+    const [firm] = await db
+      .update(firms)
+      .set({ ...updates, lastUpdated: new Date() })
+      .where(eq(firms.id, id))
+      .returning();
+    
+    if (!firm) {
+      throw new Error(`Firm with id ${id} not found`);
+    }
+    return firm;
+  }
+
+  async deleteFirm(id: number): Promise<void> {
+    await db.delete(firms).where(eq(firms.id, id));
+  }
+
+  // Opportunity methods
+  async createOpportunity(insertOpportunity: InsertOpportunity): Promise<Opportunity> {
+    const [opportunity] = await db
+      .insert(opportunities)
+      .values(insertOpportunity)
+      .returning();
+    return opportunity;
+  }
+
+  async getOpportunity(id: number): Promise<Opportunity | undefined> {
+    const [opportunity] = await db.select().from(opportunities).where(eq(opportunities.id, id));
+    return opportunity || undefined;
+  }
+
+  async getAllOpportunities(): Promise<Opportunity[]> {
+    return await db.select().from(opportunities).orderBy(desc(opportunities.createdAt));
+  }
+
+  async updateOpportunity(id: number, updates: Partial<Opportunity>): Promise<Opportunity> {
+    const [opportunity] = await db
+      .update(opportunities)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(opportunities.id, id))
+      .returning();
+    
+    if (!opportunity) {
+      throw new Error(`Opportunity with id ${id} not found`);
+    }
+    return opportunity;
+  }
+
+  async deleteOpportunity(id: number): Promise<void> {
+    await db.delete(opportunities).where(eq(opportunities.id, id));
+  }
+
+  // Deal methods
+  async createDeal(insertDeal: InsertDeal): Promise<Deal> {
+    const [deal] = await db
+      .insert(deals)
+      .values(insertDeal)
+      .returning();
+    return deal;
+  }
+
+  async getDeal(id: number): Promise<Deal | undefined> {
+    const [deal] = await db.select().from(deals).where(eq(deals.id, id));
+    return deal || undefined;
+  }
+
+  async getAllDeals(): Promise<Deal[]> {
+    return await db.select().from(deals).orderBy(desc(deals.createdAt));
+  }
+
+  async getDealsByStage(stage: string): Promise<Deal[]> {
+    return await db.select().from(deals).where(eq(deals.dealStage, stage)).orderBy(desc(deals.createdAt));
+  }
+
+  async getDealsByAssignee(assignedTo: string): Promise<Deal[]> {
+    return await db.select().from(deals).where(eq(deals.ownerId, assignedTo)).orderBy(desc(deals.createdAt));
+  }
+
+  async updateDeal(id: number, updates: Partial<Deal>): Promise<Deal> {
+    const [deal] = await db
+      .update(deals)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(deals.id, id))
+      .returning();
+    
+    if (!deal) {
+      throw new Error(`Deal with id ${id} not found`);
+    }
+    return deal;
+  }
+
+  async deleteDeal(id: number): Promise<void> {
+    await db.delete(deals).where(eq(deals.id, id));
+  }
+
+  // Target methods
+  async createTarget(insertTarget: InsertTarget): Promise<Target> {
+    const [target] = await db
+      .insert(targets)
+      .values(insertTarget)
+      .returning();
+    return target;
+  }
+
+  async getTarget(id: number): Promise<Target | undefined> {
+    const [target] = await db.select().from(targets).where(eq(targets.id, id));
+    return target || undefined;
+  }
+
+  async getAllTargets(): Promise<Target[]> {
+    return await db.select().from(targets).orderBy(desc(targets.createdAt));
+  }
+
+  async getTargetsByDeal(dealId: number): Promise<Target[]> {
+    return await db.select().from(targets).where(eq(targets.dealId, dealId)).orderBy(desc(targets.createdAt));
+  }
+
+  async updateTarget(id: number, updates: Partial<Target>): Promise<Target> {
+    const [target] = await db
+      .update(targets)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(targets.id, id))
+      .returning();
+    
+    if (!target) {
+      throw new Error(`Target with id ${id} not found`);
+    }
+    return target;
+  }
+
+  async deleteTarget(id: number): Promise<void> {
+    await db.delete(targets).where(eq(targets.id, id));
+  }
+
+  // Deal Activity methods
+  async createDealActivity(insertActivity: InsertDealActivity): Promise<DealActivity> {
+    const [activity] = await db
+      .insert(dealActivities)
+      .values(insertActivity)
+      .returning();
+    return activity;
+  }
+
+  async getDealActivities(dealId: number): Promise<DealActivity[]> {
+    return await db.select().from(dealActivities).where(eq(dealActivities.dealId, dealId)).orderBy(desc(dealActivities.createdAt));
   }
 }
 
