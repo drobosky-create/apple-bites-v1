@@ -378,7 +378,7 @@ export default function CRMPipelineDashboard() {
 
   const renderPipeline = () => (
     <MDBox>
-      <MDBox display="flex" justifyContent="between" alignItems="center" mb={3}>
+      <MDBox display="flex" justifyContent="space-between" alignItems="center" mb={3}>
         <MDTypography variant="h5" fontWeight="bold">
           Deal Pipeline - 14 Stage Process
         </MDTypography>
@@ -514,7 +514,7 @@ export default function CRMPipelineDashboard() {
 
   const renderContacts = () => (
     <MDBox>
-      <MDBox display="flex" justifyContent="between" alignItems="center" mb={3}>
+      <MDBox display="flex" justifyContent="space-between" alignItems="center" mb={3}>
         <MDTypography variant="h5" fontWeight="bold">
           Contact Management
         </MDTypography>
@@ -609,7 +609,7 @@ export default function CRMPipelineDashboard() {
 
   const renderFirms = () => (
     <MDBox>
-      <MDBox display="flex" justifyContent="between" alignItems="center" mb={3}>
+      <MDBox display="flex" justifyContent="space-between" alignItems="center" mb={3}>
         <MDTypography variant="h5" fontWeight="bold">
           Firm Management
         </MDTypography>
@@ -696,7 +696,7 @@ export default function CRMPipelineDashboard() {
   return (
     <DashboardLayout>
       <MDBox py={3}>
-        <MDBox display="flex" justifyContent="between" alignItems="center" mb={3}>
+        <MDBox display="flex" justifyContent="space-between" alignItems="center" mb={3}>
           <MDTypography variant="h4" fontWeight="bold">
             Apple Bites CRM & Deal Pipeline
           </MDTypography>
