@@ -59,7 +59,7 @@ import MDTypography from '@/components/MD/MDTypography';
 import MDButton from '@/components/MD/MDButton';
 import MDInput from '@/components/MD/MDInput';
 // Using Material UI Card with MD styling until MDCard is available
-import { Card, CardContent, CardHeader } from '@mui/material';
+import { Card, CardContent, CardHeader, Grid } from '@mui/material';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { apiRequest } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
