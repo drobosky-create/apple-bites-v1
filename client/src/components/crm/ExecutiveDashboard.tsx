@@ -86,7 +86,7 @@ const ExecutiveDashboard = () => {
 
 
   return (
-    <MDBox p={3} sx={{ width: '100%', maxWidth: 'none', minWidth: 0 }}>
+    <MDBox p={3} sx={{ width: '100%', maxWidth: 'none', minWidth: 0, overflow: 'hidden' }}>
       {/* Header */}
       <MDBox mb={4}>
         <MDTypography variant="h4" fontWeight="bold" color="dark">
@@ -97,27 +97,27 @@ const ExecutiveDashboard = () => {
         </MDTypography>
       </MDBox>
 
-      {/* KPI Cards */}
+      {/* Top Row: 4 Uniform KPI Cards */}
       <MDBox mb={4}>
-        <Grid container spacing={3} sx={{ width: '100%', m: 0 }}>
+        <Grid container spacing={4}>
         {kpiCards.map((kpi, index) => {
           const IconComponent = kpi.icon;
           return (
-            <Grid item xs={12} sm={6} lg={3} key={index} sx={{ width: '100%' }}>
-              <Card sx={{ height: '100%', width: '100%' }}>
-                <CardContent>
-                  <MDBox display="flex" justifyContent="space-between" alignItems="flex-start">
-                    <MDBox>
-                      <MDTypography variant="caption" color="text" fontWeight="bold" textTransform="uppercase">
+            <Grid key={index} size={3}>
+              <Card sx={{ height: '140px', width: '100%' }}>
+                <CardContent sx={{ p: 3, height: '100%' }}>
+                  <MDBox display="flex" justifyContent="space-between" alignItems="flex-start" height="100%">
+                    <MDBox flex={1} mr={2}>
+                      <MDTypography variant="caption" color="text" fontWeight="bold" textTransform="uppercase" mb={1}>
                         {kpi.title}
                       </MDTypography>
-                      <MDTypography variant="h4" fontWeight="bold" color="dark" my={1}>
+                      <MDTypography variant="h4" fontWeight="bold" color="dark" mb={0.5}>
                         {kpi.value}
                       </MDTypography>
-                      <MDTypography variant="caption" color="text">
+                      <MDTypography variant="caption" color="text" mb={1} display="block">
                         {kpi.subtitle}
                       </MDTypography>
-                      <MDBox display="flex" alignItems="center" mt={1}>
+                      <MDBox display="flex" alignItems="center">
                         <MDTypography variant="caption" sx={{ color: kpi.changeColor }} fontWeight="bold">
                           {kpi.change}
                         </MDTypography>
@@ -128,16 +128,17 @@ const ExecutiveDashboard = () => {
                     </MDBox>
                     <MDBox 
                       sx={{
-                        width: 48,
-                        height: 48,
+                        width: 56,
+                        height: 56,
                         borderRadius: '12px',
                         backgroundColor: kpi.bgColor,
                         display: 'flex',
                         alignItems: 'center',
-                        justifyContent: 'center'
+                        justifyContent: 'center',
+                        flexShrink: 0
                       }}
                     >
-                      <IconComponent size={24} color={kpi.color} />
+                      <IconComponent size={28} color={kpi.color} />
                     </MDBox>
                   </MDBox>
                 </CardContent>
@@ -148,11 +149,12 @@ const ExecutiveDashboard = () => {
         </Grid>
       </MDBox>
 
-      {/* Three Column Layout */}
-      <Grid container spacing={3} sx={{ width: '100%', m: 0 }}>
-        {/* Pipeline Health */}
-        <Grid item xs={12} lg={4}>
-          <Card sx={{ height: '500px', width: '100%' }}>
+      {/* Middle Row: 3 Uniform Sections */}
+      <MDBox mb={4}>
+        <Grid container spacing={4}>
+          {/* Pipeline Health */}
+          <Grid size={4}>
+            <Card sx={{ height: '500px', width: '100%' }}>
             <CardContent>
               <MDBox display="flex" alignItems="center" mb={2}>
                 <TrendingUp size={20} color="#3B82F6" />
@@ -261,11 +263,11 @@ const ExecutiveDashboard = () => {
               </MDBox>
             </CardContent>
           </Card>
-        </Grid>
+          </Grid>
 
-        {/* Recent Activity Feed */}
-        <Grid item xs={12} lg={4}>
-          <Card sx={{ height: '500px', width: '100%' }}>
+          {/* Recent Activity Feed */}
+          <Grid size={4}>
+            <Card sx={{ height: '500px', width: '100%' }}>
             <CardContent>
               <MDBox display="flex" alignItems="center" mb={2}>
                 <Activity size={20} color="#059669" />
@@ -324,11 +326,11 @@ const ExecutiveDashboard = () => {
               </MDBox>
             </CardContent>
           </Card>
-        </Grid>
+          </Grid>
 
-        {/* Urgent Tasks */}
-        <Grid item xs={12} lg={4}>
-          <Card sx={{ height: '500px', width: '100%' }}>
+          {/* Priority Dashboard */}
+          <Grid size={4}>
+            <Card sx={{ height: '500px', width: '100%' }}>
             <CardContent>
               <MDBox display="flex" alignItems="center" justifyContent="space-between" mb={2}>
                 <MDBox display="flex" alignItems="center">
@@ -440,14 +442,16 @@ const ExecutiveDashboard = () => {
               </MDBox>
             </CardContent>
           </Card>
+          </Grid>
         </Grid>
-      </Grid>
+      </MDBox>
 
-      {/* Additional Dashboard Row */}
-      <Grid container spacing={3} sx={{ width: '100%', m: 0, mt: 3 }}>
-        {/* Market Intelligence */}
-        <Grid item xs={12} lg={6}>
-          <Card sx={{ height: '300px', width: '100%' }}>
+      {/* Bottom Row: 2 Sections */}
+      <MDBox>
+        <Grid container spacing={4}>
+          {/* Market Intelligence */}
+          <Grid size={6}>
+            <Card sx={{ height: '350px', width: '100%' }}>
             <CardContent>
               <MDBox display="flex" alignItems="center" mb={2}>
                 <Target size={20} color="#8B5CF6" />
@@ -457,7 +461,7 @@ const ExecutiveDashboard = () => {
               </MDBox>
               
               <Grid container spacing={2}>
-                <Grid item xs={6}>
+                <Grid size={6}>
                   <MDBox p={2} sx={{ backgroundColor: '#F3F4F6', borderRadius: '8px' }}>
                     <MDTypography variant="caption" color="text" fontWeight="bold" textTransform="uppercase">
                       Industry Multiples
@@ -470,7 +474,7 @@ const ExecutiveDashboard = () => {
                     </MDTypography>
                   </MDBox>
                 </Grid>
-                <Grid item xs={6}>
+                <Grid size={6}>
                   <MDBox p={2} sx={{ backgroundColor: '#F3F4F6', borderRadius: '8px' }}>
                     <MDTypography variant="caption" color="text" fontWeight="bold" textTransform="uppercase">
                       Market Activity
@@ -483,7 +487,7 @@ const ExecutiveDashboard = () => {
                     </MDTypography>
                   </MDBox>
                 </Grid>
-                <Grid item xs={12}>
+                <Grid size={12}>
                   <MDBox mt={2}>
                     <MDTypography variant="body2" fontWeight="bold" color="dark" mb={1}>
                       Hot Sectors This Quarter
@@ -508,9 +512,9 @@ const ExecutiveDashboard = () => {
                     </MDBox>
                   </MDBox>
                 </Grid>
-                <Grid item xs={12}>
+                <Grid size={12}>
                   <MDBox mt={2} p={2} sx={{ backgroundColor: '#FEF3C7', borderRadius: '8px', border: '1px solid #FCD34D' }}>
-                    <MDTypography variant="caption" color="#92400E" fontWeight="bold">
+                    <MDTypography variant="caption" fontWeight="bold" sx={{ color: '#92400E' }}>
                       🎯 Opportunity Alert: 3 distressed assets in target sectors available for quick acquisition
                     </MDTypography>
                   </MDBox>
@@ -520,9 +524,9 @@ const ExecutiveDashboard = () => {
           </Card>
         </Grid>
 
-        {/* Team Performance Summary */}
-        <Grid item xs={12} lg={6}>
-          <Card sx={{ height: '300px', width: '100%' }}>
+          {/* Team Performance Summary */}
+          <Grid size={6}>
+            <Card sx={{ height: '350px', width: '100%' }}>
             <CardContent>
               <MDBox display="flex" alignItems="center" mb={2}>
                 <Users size={20} color="#059669" />
@@ -532,7 +536,7 @@ const ExecutiveDashboard = () => {
               </MDBox>
               
               <Grid container spacing={2}>
-                <Grid item xs={4}>
+                <Grid size={4}>
                   <MDBox textAlign="center" p={1}>
                     <MDTypography variant="h5" fontWeight="bold" color="success">
                       87%
@@ -542,7 +546,7 @@ const ExecutiveDashboard = () => {
                     </MDTypography>
                   </MDBox>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid size={4}>
                   <MDBox textAlign="center" p={1}>
                     <MDTypography variant="h5" fontWeight="bold" color="info">
                       42
@@ -552,7 +556,7 @@ const ExecutiveDashboard = () => {
                     </MDTypography>
                   </MDBox>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid size={4}>
                   <MDBox textAlign="center" p={1}>
                     <MDTypography variant="h5" fontWeight="bold" color="warning">
                       $3.2M
@@ -562,7 +566,7 @@ const ExecutiveDashboard = () => {
                     </MDTypography>
                   </MDBox>
                 </Grid>
-                <Grid item xs={12}>
+                <Grid size={12}>
                   <MDBox mt={1}>
                     <MDTypography variant="body2" fontWeight="bold" color="dark" mb={2}>
                       Top Performers This Month
@@ -594,8 +598,9 @@ const ExecutiveDashboard = () => {
               </Grid>
             </CardContent>
           </Card>
+          </Grid>
         </Grid>
-      </Grid>
+      </MDBox>
     </MDBox>
   );
 };
