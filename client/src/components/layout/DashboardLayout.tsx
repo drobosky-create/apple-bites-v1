@@ -79,21 +79,28 @@ export default function DashboardLayout({
                   sx={{
                     borderRadius: '8px',
                     bgcolor: isActive ? 'rgba(255,255,255,0.1)' : 'transparent',
-                    color: 'white',
+                    color: 'white !important',
                     '&:hover': {
                       bgcolor: 'rgba(255,255,255,0.05)',
                     },
                     py: 1.5,
+                    '& .MuiListItemText-primary': {
+                      color: 'white !important',
+                    },
+                    '& .MuiListItemIcon-root': {
+                      color: 'white !important',
+                    },
                   }}
                 >
                   <ListItemIcon sx={{ color: 'white', minWidth: '40px' }}>
-                    <IconComponent size={20} />
+                    <IconComponent size={20} color="white" />
                   </ListItemIcon>
                   <ListItemText 
                     primary={item.label}
                     primaryTypographyProps={{
                       fontSize: '14px',
                       fontWeight: isActive ? 600 : 400,
+                      color: 'white',
                     }}
                   />
                   {item.badge && (
