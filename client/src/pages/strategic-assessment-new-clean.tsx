@@ -164,10 +164,14 @@ export default function GrowthExitAssessment() {
         updateValuationFormData("ebitda", ebitdaData);
         updateValuationFormData("adjustments", adjustmentsData);
         
+        // Also update the React Hook Form instances directly
+        forms.ebitda.reset(ebitdaData);
+        forms.adjustments.reset(adjustmentsData);
+        
         setDataPrePopulated(true);
         setShowUpdateButton(true);
         
-        console.log('Pre-fill complete - form data updated');
+        console.log('Pre-fill complete - form data and React Hook Forms updated');
       } else {
         console.log('No EBITDA data found in latest assessment');
       }
