@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from "@/hooks/useAuth";
+import { useLocation } from "wouter";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import CRMOverview from "@/components/crm/CRMOverview";
 import ContactManagement from "@/components/crm/ContactManagement";
@@ -26,7 +27,8 @@ import {
 
 const CRMDashboard = () => {
   const { isAuthenticated, isLoading } = useAuth();
-  const [activeSection, setActiveSection] = useState('profile');
+  const [, setLocation] = useLocation();
+  const [activeSection, setActiveSection] = useState('dashboard');
 
   if (isLoading) {
     return (
@@ -53,10 +55,17 @@ const CRMDashboard = () => {
     { id: 'sequences', label: 'Sequences', icon: Mail },
   ];
 
+  const handleSectionChange = (section: string) => {
+    if (section === 'profile') {
+      // Navigate to the user's profile page
+      setLocation('/profile');
+      return;
+    }
+    setActiveSection(section);
+  };
+
   const renderContent = () => {
     switch (activeSection) {
-      case 'profile':
-        return <CRMOverview />;
       case 'dashboard':
         return <DealPipeline />;
       case 'activity':
@@ -84,7 +93,7 @@ const CRMDashboard = () => {
     <DashboardLayout 
       sidebarItems={sidebarItems}
       activeSection={activeSection}
-      setActiveSection={setActiveSection}
+      setActiveSection={handleSectionChange}
       title="Apple Bites CRM"
     >
       {renderContent()}
