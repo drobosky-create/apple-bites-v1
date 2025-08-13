@@ -239,6 +239,11 @@ export default function Dashboard() {
   const queryClient = useQueryClient();
   // Temporarily disable mobile detection to test dashboard
   const isMobile = false;
+
+  // Fetch assessments data for dashboard metrics
+  const { data: assessments = [] } = useQuery<Assessment[]>({
+    queryKey: ['/api/assessments'],
+  });
   
   // Debug logging
   console.log('Dashboard - isLoading:', isLoading, 'isAuthenticated:', isAuthenticated, 'user:', user);
@@ -314,6 +319,38 @@ export default function Dashboard() {
       case 'growth': return gradients.primary;
       case 'capital': return gradients.glow;
       default: return 'linear-gradient(135deg, #CBD5E1 0%, #94A3B8 100%)';
+    }
+  };
+
+  // Calculate dashboard metrics from assessments
+  const totalAssessments = assessments.length;
+  
+  // Get latest valuation (most recent assessment)
+  const latestAssessment = assessments.length > 0 ? 
+    assessments.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())[0] : 
+    null;
+  
+  const latestValuation = latestAssessment?.midEstimate ? 
+    parseFloat(latestAssessment.midEstimate) : 0;
+
+  // Format currency helper function  
+  const formatCurrency = (value: number) => {
+    if (value >= 1000000) {
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 1,
+        maximumFractionDigits: 1,
+        notation: 'compact',
+        compactDisplay: 'short'
+      }).format(value);
+    } else {
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }).format(value);
     }
   };
 
@@ -539,7 +576,7 @@ export default function Dashboard() {
             <MDBox display="flex" alignItems="center" justifyContent="space-between">
               <MDBox>
                 <MDTypography variant="h4" fontWeight="bold" color="text">
-                  0
+                  {totalAssessments}
                 </MDTypography>
                 <MDTypography variant="body2" color="text">
                   Completed Assessments
@@ -553,7 +590,7 @@ export default function Dashboard() {
             <MDBox display="flex" alignItems="center" justifyContent="space-between">
               <MDBox>
                 <MDTypography variant="h4" fontWeight="bold" color="text">
-                  $0
+                  {latestValuation > 0 ? formatCurrency(latestValuation) : '$0'}
                 </MDTypography>
                 <MDTypography variant="body2" color="text">
                   Estimated Value
