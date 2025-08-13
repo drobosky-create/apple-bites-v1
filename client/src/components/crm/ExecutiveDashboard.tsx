@@ -16,10 +16,9 @@ import {
   Calendar,
   Activity,
   Phone,
-  Mail
+  Mail,
+  FileText
 } from 'lucide-react';
-import RecentActivityFeed from './RecentActivityFeed';
-import QuickAccessWidgets from './QuickAccessWidgets';
 
 const ExecutiveDashboard = () => {
   const { data: deals = [] } = useQuery({ queryKey: ['/api/deals'] });
@@ -153,7 +152,7 @@ const ExecutiveDashboard = () => {
       <Grid container spacing={3}>
         {/* Pipeline Health */}
         <Grid item xs={12} lg={4}>
-          <Card sx={{ height: '400px' }}>
+          <Card sx={{ height: '500px' }}>
             <CardContent>
               <MDBox display="flex" alignItems="center" mb={2}>
                 <TrendingUp size={20} color="#3B82F6" />
@@ -220,12 +219,45 @@ const ExecutiveDashboard = () => {
               </MDBox>
 
               <MDBox mt={3} pt={2} sx={{ borderTop: '1px solid #E5E7EB' }}>
-                <MDTypography variant="body2" color="text" fontWeight="bold" mb={1}>
-                  Forecast (Next 30 Days)
+                <MDTypography variant="body2" color="text" fontWeight="bold" mb={2}>
+                  Revenue Forecast
                 </MDTypography>
-                <MDTypography variant="h6" color="success" fontWeight="bold">
-                  ${((totalPipelineValue * 0.3) / 1000000).toFixed(1)}M projected
-                </MDTypography>
+                
+                <MDBox mb={2}>
+                  <MDBox display="flex" justifyContent="space-between" alignItems="center" mb={1}>
+                    <MDTypography variant="caption" color="text">Next 30 Days</MDTypography>
+                    <MDTypography variant="body2" fontWeight="bold" color="success">
+                      ${((totalPipelineValue * 0.3) / 1000000).toFixed(1)}M
+                    </MDTypography>
+                  </MDBox>
+                  <MDBox sx={{ width: '100%', height: 4, backgroundColor: '#E5E7EB', borderRadius: 2 }}>
+                    <MDBox sx={{ width: '65%', height: '100%', backgroundColor: '#059669', borderRadius: 2 }} />
+                  </MDBox>
+                </MDBox>
+
+                <MDBox mb={2}>
+                  <MDBox display="flex" justifyContent="space-between" alignItems="center" mb={1}>
+                    <MDTypography variant="caption" color="text">Next 90 Days</MDTypography>
+                    <MDTypography variant="body2" fontWeight="bold" color="info">
+                      ${((totalPipelineValue * 0.6) / 1000000).toFixed(1)}M
+                    </MDTypography>
+                  </MDBox>
+                  <MDBox sx={{ width: '100%', height: 4, backgroundColor: '#E5E7EB', borderRadius: 2 }}>
+                    <MDBox sx={{ width: '85%', height: '100%', backgroundColor: '#3B82F6', borderRadius: 2 }} />
+                  </MDBox>
+                </MDBox>
+
+                <MDBox>
+                  <MDBox display="flex" justifyContent="space-between" alignItems="center" mb={1}>
+                    <MDTypography variant="caption" color="text">Confidence Level</MDTypography>
+                    <MDTypography variant="body2" fontWeight="bold" color="warning">
+                      78% High
+                    </MDTypography>
+                  </MDBox>
+                  <MDBox sx={{ width: '100%', height: 4, backgroundColor: '#E5E7EB', borderRadius: 2 }}>
+                    <MDBox sx={{ width: '78%', height: '100%', backgroundColor: '#F59E0B', borderRadius: 2 }} />
+                  </MDBox>
+                </MDBox>
               </MDBox>
             </CardContent>
           </Card>
@@ -233,12 +265,335 @@ const ExecutiveDashboard = () => {
 
         {/* Recent Activity Feed */}
         <Grid item xs={12} lg={4}>
-          <RecentActivityFeed />
+          <Card sx={{ height: '500px' }}>
+            <CardContent>
+              <MDBox display="flex" alignItems="center" mb={2}>
+                <Activity size={20} color="#059669" />
+                <MDTypography variant="h6" fontWeight="bold" color="dark" ml={1}>
+                  Recent Activity
+                </MDTypography>
+              </MDBox>
+              
+              <MDBox sx={{ maxHeight: '420px', overflowY: 'auto' }}>
+                {[
+                  { type: 'deal_update', title: 'TechCorp acquisition moved to Due Diligence', time: '2 hours ago', icon: TrendingUp, value: '$8.5M' },
+                  { type: 'meeting', title: 'Call scheduled with RetailPlus CFO', time: '4 hours ago', icon: Phone, value: '$2.1M' },
+                  { type: 'email', title: 'Proposal sent to Manufacturing Inc.', time: '6 hours ago', icon: Mail, value: '$5.2M' },
+                  { type: 'win', title: 'HealthTech deal closed - Won!', time: '1 day ago', icon: Award, value: '$2.5M' },
+                  { type: 'meeting', title: 'Site visit completed at GlobalTech', time: '2 days ago', icon: Building2, value: '$12.3M' },
+                  { type: 'email', title: 'LOI signed with DataCorp', time: '3 days ago', icon: Mail, value: '$7.8M' },
+                  { type: 'call', title: 'Management presentation to InvestorGroup', time: '4 days ago', icon: Phone, value: '$15.6M' },
+                  { type: 'document', title: 'Financial audit completed for CleanEnergy', time: '5 days ago', icon: FileText, value: '$4.2M' }
+                ].map((activity, index) => {
+                  const IconComponent = activity.icon;
+                  return (
+                    <MDBox key={index} display="flex" alignItems="flex-start" mb={2} p={1.5} sx={{ backgroundColor: index % 2 === 0 ? '#F8FAFC' : 'transparent', borderRadius: '8px' }}>
+                      <MDBox 
+                        sx={{
+                          width: 32,
+                          height: 32,
+                          borderRadius: '8px',
+                          backgroundColor: activity.type === 'win' ? '#DCFCE7' : '#F3F4F6',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          mr: 2,
+                          flexShrink: 0
+                        }}
+                      >
+                        <IconComponent size={16} color={activity.type === 'win' ? '#16A34A' : '#6B7280'} />
+                      </MDBox>
+                      <MDBox flex={1}>
+                        <MDBox display="flex" justifyContent="space-between" alignItems="flex-start">
+                          <MDBox>
+                            <MDTypography variant="body2" fontWeight="medium" color="dark">
+                              {activity.title}
+                            </MDTypography>
+                            <MDTypography variant="caption" color="text">
+                              {activity.time}
+                            </MDTypography>
+                          </MDBox>
+                          <MDTypography variant="caption" fontWeight="bold" color={activity.type === 'win' ? 'success' : 'info'}>
+                            {activity.value}
+                          </MDTypography>
+                        </MDBox>
+                      </MDBox>
+                    </MDBox>
+                  );
+                })}
+              </MDBox>
+            </CardContent>
+          </Card>
         </Grid>
 
         {/* Urgent Tasks */}
         <Grid item xs={12} lg={4}>
-          <QuickAccessWidgets />
+          <Card sx={{ height: '500px' }}>
+            <CardContent>
+              <MDBox display="flex" alignItems="center" justifyContent="space-between" mb={2}>
+                <MDBox display="flex" alignItems="center">
+                  <AlertTriangle size={20} color="#F59E0B" />
+                  <MDTypography variant="h6" fontWeight="bold" color="dark" ml={1}>
+                    Priority Dashboard
+                  </MDTypography>
+                </MDBox>
+                <MDButton 
+                  size="small" 
+                  variant="text" 
+                  sx={{ color: '#3B82F6', minWidth: 'auto', p: 0.5 }}
+                >
+                  Manage
+                </MDButton>
+              </MDBox>
+              
+              <MDBox sx={{ maxHeight: '420px', overflowY: 'auto' }}>
+                {/* Urgent Tasks Section */}
+                <MDTypography variant="subtitle2" fontWeight="bold" color="dark" mb={2}>
+                  Urgent Tasks (4)
+                </MDTypography>
+                {[
+                  { task: 'Follow up on GlobalTech proposal response', deadline: 'Today', priority: 'high', deal: '$12.3M' },
+                  { task: 'Prepare due diligence materials for TechCorp', deadline: 'Tomorrow', priority: 'high', deal: '$8.5M' },
+                  { task: 'Schedule investor meeting for RetailPlus', deadline: '2 days', priority: 'medium', deal: '$2.1M' },
+                  { task: 'Review legal documents for FinanceFirst', deadline: '3 days', priority: 'medium', deal: '$6.7M' },
+                ].map((task, index) => (
+                  <MDBox 
+                    key={index} 
+                    p={2} 
+                    mb={1} 
+                    sx={{ 
+                      backgroundColor: task.priority === 'high' ? 'rgba(239, 68, 68, 0.05)' : 'rgba(107, 114, 128, 0.05)',
+                      borderRadius: '8px',
+                      borderLeft: `3px solid ${task.priority === 'high' ? '#EF4444' : '#6B7280'}`
+                    }}
+                  >
+                    <MDBox display="flex" justifyContent="space-between" alignItems="center" mb={0.5}>
+                      <MDTypography variant="body2" fontWeight="medium" color="dark">
+                        {task.task}
+                      </MDTypography>
+                      <MDTypography variant="caption" fontWeight="bold" color="info">
+                        {task.deal}
+                      </MDTypography>
+                    </MDBox>
+                    <MDBox display="flex" alignItems="center" justifyContent="space-between">
+                      <MDTypography variant="caption" color="text">
+                        Due: {task.deadline}
+                      </MDTypography>
+                      <MDBox 
+                        sx={{
+                          px: 1,
+                          py: 0.25,
+                          borderRadius: '4px',
+                          backgroundColor: task.priority === 'high' ? '#FEF2F2' : '#F9FAFB',
+                          border: `1px solid ${task.priority === 'high' ? '#FECACA' : '#E5E7EB'}`
+                        }}
+                      >
+                        <MDTypography 
+                          variant="caption" 
+                          sx={{ color: task.priority === 'high' ? '#DC2626' : '#6B7280' }}
+                          fontWeight="medium"
+                          textTransform="uppercase"
+                        >
+                          {task.priority}
+                        </MDTypography>
+                      </MDBox>
+                    </MDBox>
+                  </MDBox>
+                ))}
+
+                {/* Performance Metrics Section */}
+                <MDBox mt={3} pt={2} sx={{ borderTop: '1px solid #E5E7EB' }}>
+                  <MDTypography variant="subtitle2" fontWeight="bold" color="dark" mb={2}>
+                    This Month Performance
+                  </MDTypography>
+                  
+                  <MDBox mb={2}>
+                    <MDBox display="flex" justifyContent="space-between" alignItems="center" mb={1}>
+                      <MDTypography variant="caption" color="text">Deals Closed</MDTypography>
+                      <MDTypography variant="body2" fontWeight="bold" color="success">3 deals</MDTypography>
+                    </MDBox>
+                    <MDBox sx={{ width: '100%', height: 4, backgroundColor: '#E5E7EB', borderRadius: 2 }}>
+                      <MDBox sx={{ width: '75%', height: '100%', backgroundColor: '#059669', borderRadius: 2 }} />
+                    </MDBox>
+                  </MDBox>
+
+                  <MDBox mb={2}>
+                    <MDBox display="flex" justifyContent="space-between" alignItems="center" mb={1}>
+                      <MDTypography variant="caption" color="text">Revenue Generated</MDTypography>
+                      <MDTypography variant="body2" fontWeight="bold" color="success">$8.2M</MDTypography>
+                    </MDBox>
+                    <MDBox sx={{ width: '100%', height: 4, backgroundColor: '#E5E7EB', borderRadius: 2 }}>
+                      <MDBox sx={{ width: '82%', height: '100%', backgroundColor: '#059669', borderRadius: 2 }} />
+                    </MDBox>
+                  </MDBox>
+
+                  <MDBox>
+                    <MDBox display="flex" justifyContent="space-between" alignItems="center" mb={1}>
+                      <MDTypography variant="caption" color="text">Pipeline Velocity</MDTypography>
+                      <MDTypography variant="body2" fontWeight="bold" color="info">+15%</MDTypography>
+                    </MDBox>
+                    <MDBox sx={{ width: '100%', height: 4, backgroundColor: '#E5E7EB', borderRadius: 2 }}>
+                      <MDBox sx={{ width: '90%', height: '100%', backgroundColor: '#3B82F6', borderRadius: 2 }} />
+                    </MDBox>
+                  </MDBox>
+                </MDBox>
+              </MDBox>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
+
+      {/* Additional Dashboard Row */}
+      <Grid container spacing={3} mt={2}>
+        {/* Market Intelligence */}
+        <Grid item xs={12} lg={6}>
+          <Card sx={{ height: '300px' }}>
+            <CardContent>
+              <MDBox display="flex" alignItems="center" mb={2}>
+                <Target size={20} color="#8B5CF6" />
+                <MDTypography variant="h6" fontWeight="bold" color="dark" ml={1}>
+                  Market Intelligence
+                </MDTypography>
+              </MDBox>
+              
+              <Grid container spacing={2}>
+                <Grid item xs={6}>
+                  <MDBox p={2} sx={{ backgroundColor: '#F3F4F6', borderRadius: '8px' }}>
+                    <MDTypography variant="caption" color="text" fontWeight="bold" textTransform="uppercase">
+                      Industry Multiples
+                    </MDTypography>
+                    <MDTypography variant="h6" fontWeight="bold" color="dark">
+                      4.2x - 7.8x
+                    </MDTypography>
+                    <MDTypography variant="caption" color="text">
+                      EBITDA range
+                    </MDTypography>
+                  </MDBox>
+                </Grid>
+                <Grid item xs={6}>
+                  <MDBox p={2} sx={{ backgroundColor: '#F3F4F6', borderRadius: '8px' }}>
+                    <MDTypography variant="caption" color="text" fontWeight="bold" textTransform="uppercase">
+                      Market Activity
+                    </MDTypography>
+                    <MDTypography variant="h6" fontWeight="bold" color="success">
+                      +23%
+                    </MDTypography>
+                    <MDTypography variant="caption" color="text">
+                      vs last quarter
+                    </MDTypography>
+                  </MDBox>
+                </Grid>
+                <Grid item xs={12}>
+                  <MDBox mt={2}>
+                    <MDTypography variant="body2" fontWeight="bold" color="dark" mb={1}>
+                      Hot Sectors This Quarter
+                    </MDTypography>
+                    <MDBox display="flex" gap={1} flexWrap="wrap">
+                      {['Technology', 'Healthcare', 'Manufacturing', 'SaaS'].map((sector, index) => (
+                        <MDBox 
+                          key={index}
+                          px={2} 
+                          py={0.5} 
+                          sx={{ 
+                            backgroundColor: '#DBEAFE', 
+                            color: '#1E40AF', 
+                            borderRadius: '12px',
+                            fontSize: '0.75rem',
+                            fontWeight: 'medium'
+                          }}
+                        >
+                          {sector}
+                        </MDBox>
+                      ))}
+                    </MDBox>
+                  </MDBox>
+                </Grid>
+                <Grid item xs={12}>
+                  <MDBox mt={2} p={2} sx={{ backgroundColor: '#FEF3C7', borderRadius: '8px', border: '1px solid #FCD34D' }}>
+                    <MDTypography variant="caption" color="#92400E" fontWeight="bold">
+                      🎯 Opportunity Alert: 3 distressed assets in target sectors available for quick acquisition
+                    </MDTypography>
+                  </MDBox>
+                </Grid>
+              </Grid>
+            </CardContent>
+          </Card>
+        </Grid>
+
+        {/* Team Performance Summary */}
+        <Grid item xs={12} lg={6}>
+          <Card sx={{ height: '300px' }}>
+            <CardContent>
+              <MDBox display="flex" alignItems="center" mb={2}>
+                <Users size={20} color="#059669" />
+                <MDTypography variant="h6" fontWeight="bold" color="dark" ml={1}>
+                  Team Performance
+                </MDTypography>
+              </MDBox>
+              
+              <Grid container spacing={2}>
+                <Grid item xs={4}>
+                  <MDBox textAlign="center" p={1}>
+                    <MDTypography variant="h5" fontWeight="bold" color="success">
+                      87%
+                    </MDTypography>
+                    <MDTypography variant="caption" color="text">
+                      Team Win Rate
+                    </MDTypography>
+                  </MDBox>
+                </Grid>
+                <Grid item xs={4}>
+                  <MDBox textAlign="center" p={1}>
+                    <MDTypography variant="h5" fontWeight="bold" color="info">
+                      42
+                    </MDTypography>
+                    <MDTypography variant="caption" color="text">
+                      Avg Days to Close
+                    </MDTypography>
+                  </MDBox>
+                </Grid>
+                <Grid item xs={4}>
+                  <MDBox textAlign="center" p={1}>
+                    <MDTypography variant="h5" fontWeight="bold" color="warning">
+                      $3.2M
+                    </MDTypography>
+                    <MDTypography variant="caption" color="text">
+                      Avg Deal Size
+                    </MDTypography>
+                  </MDBox>
+                </Grid>
+                <Grid item xs={12}>
+                  <MDBox mt={1}>
+                    <MDTypography variant="body2" fontWeight="bold" color="dark" mb={2}>
+                      Top Performers This Month
+                    </MDTypography>
+                    {[
+                      { name: 'Sarah Johnson', deals: '3 deals', revenue: '$8.2M', badge: '🏆' },
+                      { name: 'Mike Wilson', deals: '2 deals', revenue: '$5.7M', badge: '⭐' },
+                      { name: 'John Smith', deals: '4 deals', revenue: '$12.1M', badge: '🎯' }
+                    ].map((performer, index) => (
+                      <MDBox key={index} display="flex" justifyContent="space-between" alignItems="center" mb={1} p={1} sx={{ backgroundColor: index === 0 ? '#F0FDF4' : '#F9FAFB', borderRadius: '6px' }}>
+                        <MDBox display="flex" alignItems="center">
+                          <MDTypography variant="body2" mr={1}>{performer.badge}</MDTypography>
+                          <MDTypography variant="body2" fontWeight="medium" color="dark">
+                            {performer.name}
+                          </MDTypography>
+                        </MDBox>
+                        <MDBox textAlign="right">
+                          <MDTypography variant="caption" color="success" fontWeight="bold">
+                            {performer.revenue}
+                          </MDTypography>
+                          <MDTypography variant="caption" color="text" display="block">
+                            {performer.deals}
+                          </MDTypography>
+                        </MDBox>
+                      </MDBox>
+                    ))}
+                  </MDBox>
+                </Grid>
+              </Grid>
+            </CardContent>
+          </Card>
         </Grid>
       </Grid>
     </MDBox>
