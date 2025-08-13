@@ -197,6 +197,78 @@ function GrowthExitAssessment() {
       "driver-differentiation-2": ""
     }
   });
+
+  // Load previous assessment data to pre-fill form
+  useEffect(() => {
+    const loadPreviousData = async () => {
+      try {
+        // First, try to load from localStorage (from a previous session)
+        const savedData = localStorage.getItem('freeAssessmentData');
+        if (savedData) {
+          const parsedData = JSON.parse(savedData);
+          console.log('Loading saved assessment data:', parsedData);
+          
+          // Transform the saved data structure to match our form
+          if (parsedData.company || parsedData.annualRevenue || parsedData.ebitda) {
+            setFormData(prev => ({
+              ...prev,
+              financials: {
+                annualRevenue: parsedData.annualRevenue || "",
+                costOfGoodsSold: "", // We'll need to calculate this
+                operatingExpenses: parsedData.operatingExpenses || ""
+              },
+              // If we have EBITDA but not cost of goods sold, calculate it
+              adjustments: {
+                ownerSalary: parsedData.ownerSalary || "",
+                personalExpenses: "",
+                oneTimeExpenses: "",
+                otherAdjustments: ""
+              }
+            }));
+          }
+        }
+        
+        // Also try to fetch the latest assessment from the API
+        const response = await fetch('/api/assessments');
+        if (response.ok) {
+          const assessments = await response.json();
+          if (assessments && assessments.length > 0) {
+            // Get the most recent assessment
+            const latestAssessment = assessments
+              .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())[0];
+            
+            console.log('Loading latest assessment for pre-fill:', latestAssessment);
+            
+            // Pre-fill with data from the latest assessment
+            if (latestAssessment) {
+              // Calculate revenue from EBITDA and estimated expenses if available
+              const adjustedEbitda = parseFloat(latestAssessment.adjustedEbitda) || 0;
+              const estimatedRevenue = adjustedEbitda > 0 ? adjustedEbitda * 4 : 0; // Rough estimate
+              
+              setFormData(prev => ({
+                ...prev,
+                financials: {
+                  annualRevenue: estimatedRevenue > 0 ? estimatedRevenue.toString() : "",
+                  costOfGoodsSold: "",
+                  operatingExpenses: ""
+                },
+                adjustments: {
+                  ownerSalary: "50000", // Reasonable default
+                  personalExpenses: "",
+                  oneTimeExpenses: "",
+                  otherAdjustments: ""
+                }
+              }));
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Error loading previous assessment data:', error);
+      }
+    };
+    
+    loadPreviousData();
+  }, []);
   const [selectedSector, setSelectedSector] = useState("");
   const [selectedSectorCode, setSelectedSectorCode] = useState("");
   const totalSteps = 5;
