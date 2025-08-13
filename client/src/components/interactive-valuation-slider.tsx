@@ -222,7 +222,7 @@ export default function InteractiveValuationSlider() {
                 Based on your Operational Grade of {baseGrade}
               </Typography>
               <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 2, color: 'white !important' }}>
-                ${currentValuation.toLocaleString()}
+                ${currentValuation.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </Typography>
               <Typography variant="h6" sx={{ mb: 2, opacity: 0.9, color: 'white !important' }}>
                 ${currentMultiple}x EBITDA Multiple
@@ -268,7 +268,7 @@ export default function InteractiveValuationSlider() {
                 Based on selected grade ({sliderGrade})
               </Typography>
               <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 2 }}>
-                ${sliderValuation.toLocaleString()}
+                ${sliderValuation.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </Typography>
               <Typography variant="h6" sx={{ mb: 2, opacity: 0.9 }}>
                 ${sliderMultiple}x EBITDA Multiple
@@ -299,7 +299,7 @@ export default function InteractiveValuationSlider() {
               {potentialIncrease > 0 ? '💰 POTENTIAL GAIN' : '⚠️ POTENTIAL LOSS'}
             </Typography>
             <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
-              {potentialIncrease > 0 ? '+' : '-'}${Math.abs(potentialIncrease).toLocaleString()} 
+              {potentialIncrease > 0 ? '+' : '-'}${Math.abs(potentialIncrease).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} 
               ({potentialIncrease > 0 ? '+' : '-'}{Math.abs(percentageIncrease).toFixed(1)}%)
             </Typography>
           </CardContent>
@@ -417,7 +417,7 @@ export default function InteractiveValuationSlider() {
                           EBITDA Multiple
                         </Typography>
                         <Typography variant="h6" sx={{ color: '#111827', mt: 2, fontWeight: 'bold' }}>
-                          ${valuation.toLocaleString()}
+                          ${valuation.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                         </Typography>
                       </Box>
                     </CardContent>
@@ -457,7 +457,7 @@ export default function InteractiveValuationSlider() {
             </Typography>
             <Typography variant="h6" sx={{ mb: 3, opacity: 0.9 }}>
               By improving your operational grade from {baseGrade} to {sliderGrade}, 
-              you could add <strong style={{ color: '#005b8c' }}>${Math.round(potentialIncrease).toLocaleString()}</strong> to your business value.
+              you could add <strong style={{ color: '#005b8c' }}>${Math.round(potentialIncrease).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong> to your business value.
             </Typography>
             <Button 
               variant="contained"
