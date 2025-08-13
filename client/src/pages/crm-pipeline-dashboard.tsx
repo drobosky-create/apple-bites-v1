@@ -1,19 +1,6 @@
 import { useState, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
-  Card,
-  CardContent,
-  CardHeader,
-  Tabs,
-  Tab,
-  Box,
-  Grid,
-  Button,
-  TextField,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -27,11 +14,15 @@ import {
   Paper,
   Chip,
   IconButton,
-  Typography,
   Divider,
   Menu,
   ListItemIcon,
-  ListItemText
+  ListItemText,
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem
 } from '@mui/material';
 
 import {
@@ -67,6 +58,9 @@ import MDBox from '@/components/MD/MDBox';
 import MDTypography from '@/components/MD/MDTypography';
 import MDButton from '@/components/MD/MDButton';
 import MDInput from '@/components/MD/MDInput';
+// Using Material UI Card with MD styling until MDCard is available
+import { Card, CardContent, CardHeader } from '@mui/material';
+import DashboardLayout from '@/components/layout/DashboardLayout';
 import { apiRequest } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
 import AdminLogin from '@/components/admin-login';
@@ -298,11 +292,10 @@ export default function CRMPipelineDashboard() {
 
   // Tab content renderers
   const renderOverview = () => (
-    <Grid container spacing={3}>
+    <MDBox display="grid" gridTemplateColumns="repeat(auto-fit, minmax(250px, 1fr))" gap={3}>
       {/* Statistics Cards */}
-      <Grid xs={12} md={3}>
-        <Card>
-          <CardContent>
+      <Card sx={{ bgcolor: 'background.paper', borderRadius: 2, boxShadow: 3 }}>
+        <CardContent>
             <MDBox display="flex" alignItems="center" justifyContent="space-between">
               <MDBox>
                 <MDTypography variant="h4" fontWeight="bold">
@@ -316,74 +309,71 @@ export default function CRMPipelineDashboard() {
             </MDBox>
           </CardContent>
         </Card>
-      </Grid>
       
-      <Grid xs={12} md={3}>
-        <Card>
-          <CardContent>
-            <MDBox display="flex" alignItems="center" justifyContent="space-between">
-              <MDBox>
-                <MDTypography variant="h4" fontWeight="bold">
-                  {statistics.totalFirms}
-                </MDTypography>
-                <MDTypography variant="body2" color="text">
-                  Total Firms
-                </MDTypography>
-              </MDBox>
-              <Building2 size={32} color="#2e7d32" />
+      <Card sx={{ bgcolor: 'background.paper', borderRadius: 2, boxShadow: 3 }}>
+        <CardContent>
+          <MDBox display="flex" alignItems="center" justifyContent="space-between">
+            <MDBox>
+              <MDTypography variant="h4" fontWeight="bold">
+                {statistics.totalFirms}
+              </MDTypography>
+              <MDTypography variant="body2" color="text">
+                Total Firms
+              </MDTypography>
             </MDBox>
-          </CardContent>
-        </Card>
-      </Grid>
+            <Building2 size={32} color="#2e7d32" />
+          </MDBox>
+        </CardContent>
+      </Card>
 
-      <Grid xs={12} md={3}>
-        <Card>
-          <CardContent>
-            <MDBox display="flex" alignItems="center" justifyContent="space-between">
-              <MDBox>
-                <MDTypography variant="h4" fontWeight="bold">
-                  {statistics.totalDeals}
-                </MDTypography>
-                <MDTypography variant="body2" color="text">
-                  Active Deals
-                </MDTypography>
-              </MDBox>
-              <TrendingUp size={32} color="#ed6c02" />
+      <Card sx={{ bgcolor: 'background.paper', borderRadius: 2, boxShadow: 3 }}>
+        <CardContent>
+          <MDBox display="flex" alignItems="center" justifyContent="space-between">
+            <MDBox>
+              <MDTypography variant="h4" fontWeight="bold">
+                {statistics.totalDeals}
+              </MDTypography>
+              <MDTypography variant="body2" color="text">
+                Active Deals
+              </MDTypography>
             </MDBox>
-          </CardContent>
-        </Card>
-      </Grid>
+            <TrendingUp size={32} color="#ed6c02" />
+          </MDBox>
+        </CardContent>
+      </Card>
 
-      <Grid xs={12} md={3}>
-        <Card>
-          <CardContent>
-            <MDBox display="flex" alignItems="center" justifyContent="space-between">
-              <MDBox>
-                <MDTypography variant="h4" fontWeight="bold">
-                  ${(statistics.totalValue / 1000000).toFixed(1)}M
-                </MDTypography>
-                <MDTypography variant="body2" color="text">
-                  Pipeline Value
-                </MDTypography>
-              </MDBox>
-              <DollarSign size={32} color="#9c27b0" />
+      <Card sx={{ bgcolor: 'background.paper', borderRadius: 2, boxShadow: 3 }}>
+        <CardContent>
+          <MDBox display="flex" alignItems="center" justifyContent="space-between">
+            <MDBox>
+              <MDTypography variant="h4" fontWeight="bold">
+                ${(statistics.totalValue / 1000000).toFixed(1)}M
+              </MDTypography>
+              <MDTypography variant="body2" color="text">
+                Pipeline Value
+              </MDTypography>
             </MDBox>
-          </CardContent>
-        </Card>
-      </Grid>
+            <DollarSign size={32} color="#9c27b0" />
+          </MDBox>
+        </CardContent>
+      </Card>
 
       {/* Recent Activity */}
-      <Grid xs={12}>
-        <Card>
-          <CardHeader title="Recent Activity" />
+      <MDBox gridColumn="1 / -1" mt={3}>
+        <Card sx={{ bgcolor: 'background.paper', borderRadius: 2, boxShadow: 3 }}>
+          <CardHeader 
+            title={
+              <MDTypography variant="h6" fontWeight="bold">Recent Activity</MDTypography>
+            } 
+          />
           <CardContent>
             <MDTypography variant="body2" color="text">
               Recent CRM activities will appear here...
             </MDTypography>
           </CardContent>
         </Card>
-      </Grid>
-    </Grid>
+      </MDBox>
+    </MDBox>
   );
 
   const renderPipeline = () => (
@@ -704,29 +694,32 @@ export default function CRMPipelineDashboard() {
   );
 
   return (
-    <MDBox p={3}>
-      <MDBox mb={3}>
-        <MDTypography variant="h4" fontWeight="bold" color="dark">
-          Apple Bites CRM & Deal Pipeline
-        </MDTypography>
-        <MDTypography variant="body2" color="text">
-          Comprehensive M&A Deal Management System
-        </MDTypography>
-      </MDBox>
-
-      <Card>
-        <MDBox p={0}>
-          <Tabs value={activeTab} onChange={(_, newValue) => setActiveTab(newValue)}>
-            <Tab label="Overview" />
-            <Tab label="Deal Pipeline" />
-            <Tab label="Contacts" />
-            <Tab label="Firms" />
-            <Tab label="Opportunities" />
-            <Tab label="Targets" />
-          </Tabs>
+    <DashboardLayout>
+      <MDBox py={3}>
+        <MDBox display="flex" justifyContent="between" alignItems="center" mb={3}>
+          <MDTypography variant="h4" fontWeight="bold">
+            Apple Bites CRM & Deal Pipeline
+          </MDTypography>
         </MDBox>
 
-        <MDBox p={3}>
+        {/* Navigation Tabs using MD styling */}
+        <MDBox sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
+          <MDBox display="flex" gap={2}>
+            {['Overview', 'Deal Pipeline', 'Contacts', 'Firms', 'Opportunities', 'Targets'].map((tab, index) => (
+              <MDButton
+                key={tab}
+                variant={activeTab === index ? "gradient" : "text"}
+                color={activeTab === index ? "info" : "dark"}
+                onClick={() => setActiveTab(index)}
+                sx={{ minWidth: 'auto', px: 2, py: 1 }}
+              >
+                {tab}
+              </MDButton>
+            ))}
+          </MDBox>
+        </MDBox>
+
+        <MDBox>
           {activeTab === 0 && renderOverview()}
           {activeTab === 1 && renderPipeline()}
           {activeTab === 2 && renderContacts()}
@@ -742,7 +735,6 @@ export default function CRMPipelineDashboard() {
             </MDTypography>
           )}
         </MDBox>
-      </Card>
 
       {/* Contact Form Modal */}
       {modalEntity === 'contact' && (
@@ -801,6 +793,7 @@ export default function CRMPipelineDashboard() {
           </DialogActions>
         </Dialog>
       )}
-    </MDBox>
+      </MDBox>
+    </DashboardLayout>
   );
 }
