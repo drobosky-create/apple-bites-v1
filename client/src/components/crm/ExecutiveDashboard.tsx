@@ -1,6 +1,7 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Card, CardContent, Grid } from '@mui/material';
+import { useLocation } from 'wouter';
 import MDBox from '@/components/MD/MDBox';
 import MDTypography from '@/components/MD/MDTypography';
 import MDButton from '@/components/MD/MDButton';
@@ -21,6 +22,7 @@ import {
 } from 'lucide-react';
 
 const ExecutiveDashboard = () => {
+  const [, setLocation] = useLocation();
   const { data: deals = [] } = useQuery({ queryKey: ['/api/deals'] });
   const { data: contacts = [] } = useQuery({ queryKey: ['/api/contacts'] });
   const { data: firms = [] } = useQuery({ queryKey: ['/api/firms'] });
@@ -344,6 +346,7 @@ const ExecutiveDashboard = () => {
                   size="small" 
                   variant="text" 
                   sx={{ color: '#3B82F6', minWidth: 'auto', p: 0.5 }}
+                  onClick={() => setLocation('/crm-pipeline')}
                 >
                   Manage
                 </MDButton>
