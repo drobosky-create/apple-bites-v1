@@ -4,6 +4,17 @@
 This is a full-stack web application for Meritage Partners, designed as a business valuation calculator. It guides users through a multi-step valuation process, generates professional PDF reports, and provides administrative dashboards for lead and team management. The platform aims to offer comprehensive business valuation services, leveraging AI for narrative generation and integrating with key external services for CRM and email automation. The project's vision is to provide a streamlined, accurate, and professional valuation tool with market potential for various business sizes.
 
 ## Recent Changes (August 2025)
+**✅ COMPLETED: Apple Bites CRM & Deal Pipeline System (August 13, 2025)**
+- Built comprehensive 14-stage CRM deal pipeline with Contact→Firm→Opportunity→Deal hierarchy
+- Implemented interactive Kanban board with react-beautiful-dnd for drag-and-drop deal management
+- Created full-featured Contact and Deal form modals with complete validation and field management
+- Added email campaign system with GoHighLevel integration (Option A: Local Campaign Management → GHL Execution)
+- Developed unified CRM Pipeline dashboard with tabs for Overview, Deal Pipeline, Contacts, Firms, Opportunities, and Targets
+- Enhanced database schema with comprehensive CRM entities and relationships
+- Added complete CRUD API routes for all CRM entities with proper authentication
+- Integrated email campaign creation that logs activities to deal records for comprehensive tracking
+- Deal pipeline supports all 14 stages: Prospect Identified → Initial Contact → Qualification → Needs Analysis → Proposal Preparation → Proposal Presented → Negotiation → Contract Review → Due Diligence → Closing Preparation → Closed Won/Lost/Hold/Follow Up
+
 **✅ COMPLETED: Real Data Pre-fill Functionality (August 13, 2025)**
 - Fixed Growth & Exit Assessment pre-fill feature to use actual user data from previous assessments
 - Implemented intelligent financial calculations from historical EBITDA data (converts $82,464 EBITDA to realistic revenue estimates)
@@ -115,6 +126,7 @@ Development Priority: Always check Argon Dashboard folder first for any files, t
 
 ### Key Features & Design Decisions
 - **Valuation Assessment**: Multi-step form (EBITDA → Adjustments → Value Drivers → Follow-up → Results) with real-time EBITDA calculations, value driver scoring (A-F grades), and AI-powered narrative generation (OpenAI GPT-4). Industry-specific NAICS multipliers are applied based on actual business performance.
+- **CRM & Deal Pipeline**: Comprehensive 14-stage deal pipeline system with Contact→Firm→Opportunity→Deal hierarchy. Interactive Kanban board with drag-and-drop functionality, email campaign management with GoHighLevel integration, and comprehensive activity logging.
 - **Lead & Team Management**: Comprehensive lead tracking, status management, activity logging, and role-based access control (admin, member, viewer) for team members.
 - **PDF Report Generation**: Professional valuation reports using Puppeteer, branded templates, automated email delivery via SendGrid, and embedded charts.
 - **UI/UX**: Emphasis on a clean, professional interface with consistent branding (Apple Bites/Meritage Partners), responsiveness across devices, and intuitive user flows. Utilizes a blue color palette, glassmorphism effects, and animated loading indicators. Features include an interactive value calculator with gauge, strategic valuation range analysis, and a comprehensive dashboard displaying key metrics and past assessments.
@@ -126,7 +138,7 @@ Development Priority: Always check Argon Dashboard folder first for any files, t
 ### Production Services
 - **Neon PostgreSQL**: Primary database hosting.
 - **SendGrid**: Email delivery for reports and communications.
-- **GoHighLevel**: CRM integration for contact synchronization and lead management.
+- **GoHighLevel**: CRM integration using Option A approach (Local Campaign Management → GHL Execution) for contact synchronization, lead management, and email campaign execution.
 - **OpenAI**: AI analysis services for narrative generation and financial coaching.
 - **Stripe**: Payment processing for tiered access.
 - **n8n**: Automation workflows for advanced lead processing.

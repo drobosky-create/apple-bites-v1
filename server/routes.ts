@@ -1673,6 +1673,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Email Campaign routes for GHL integration
+  app.post("/api/campaigns", isAdminAuthenticated, async (req, res) => {
+    try {
+      const campaign = await storage.createEmailCampaign(req.body);
+      
+      // Log activity if associated with a deal
+      if (req.body.dealId) {
+        await storage.createDealActivity({
+          dealId: req.body.dealId,
+          activityType: 'email_campaign',
+          description: `Email campaign "${req.body.campaignName}" created and queued for GHL execution`,
+          performedBy: 'System',
+          notes: `Campaign targets: ${req.body.targetAudience}, Recipients: ${req.body.selectedContacts?.length || 'TBD'}`
+        });
+      }
+      
+      res.json(campaign);
+    } catch (error) {
+      console.error('Error creating email campaign:', error);
+      res.status(500).json({ error: "Failed to create email campaign" });
+    }
+  });
+
   // GET /api/analytics/assessments - Get all assessments for analytics
   app.get("/api/analytics/assessments", async (req, res) => {
     try {

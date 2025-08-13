@@ -71,6 +71,9 @@ import { apiRequest } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
 import AdminLogin from '@/components/admin-login';
 import { useAdminAuth } from '@/hooks/use-admin-auth';
+import ContactFormModal from '@/components/crm/ContactFormModal';
+import DealFormModal from '@/components/crm/DealFormModal';
+import EmailCampaignModal from '@/components/crm/EmailCampaignModal';
 
 import type { 
   Contact, 
@@ -133,6 +136,9 @@ export default function CRMPipelineDashboard() {
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState<'create' | 'edit' | 'view'>('create');
   const [modalEntity, setModalEntity] = useState<'contact' | 'firm' | 'opportunity' | 'deal' | 'target'>('contact');
+  const [showEmailModal, setShowEmailModal] = useState(false);
+  const [selectedContacts, setSelectedContacts] = useState<Contact[]>([]);
+  const [selectedDealId, setSelectedDealId] = useState<number | undefined>();
   
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -386,18 +392,30 @@ export default function CRMPipelineDashboard() {
         <MDTypography variant="h5" fontWeight="bold">
           Deal Pipeline - 14 Stage Process
         </MDTypography>
-        <MDButton
-          variant="gradient"
-          color="info"
-          onClick={() => {
-            setModalType('create');
-            setModalEntity('deal');
-            setShowModal(true);
-          }}
-        >
-          <Plus size={16} />
-          &nbsp;New Deal
-        </MDButton>
+        <MDBox display="flex" gap={1}>
+          <MDButton
+            variant="gradient"
+            color="info"
+            onClick={() => {
+              setModalType('create');
+              setModalEntity('deal');
+              setShowModal(true);
+            }}
+          >
+            <Plus size={16} />
+            &nbsp;New Deal
+          </MDButton>
+          <MDButton
+            variant="outlined"
+            color="info"
+            onClick={() => {
+              setShowEmailModal(true);
+            }}
+          >
+            <Mail size={16} />
+            &nbsp;Email Campaign
+          </MDButton>
+        </MDBox>
       </MDBox>
 
       <DragDropContext onDragEnd={handleDragEnd}>
@@ -463,7 +481,7 @@ export default function CRMPipelineDashboard() {
                                       ${(parseFloat(deal.estimatedTransactionValue || '0') / 1000).toFixed(0)}K
                                     </MDTypography>
                                   </MDBox>
-                                  <MDBox display="flex" justifyContent="end" mt={1}>
+                                  <MDBox display="flex" justifyContent="end" mt={1} gap={0.5}>
                                     <IconButton 
                                       size="small"
                                       onClick={() => {
@@ -474,6 +492,16 @@ export default function CRMPipelineDashboard() {
                                       }}
                                     >
                                       <Eye size={16} />
+                                    </IconButton>
+                                    <IconButton 
+                                      size="small"
+                                      onClick={() => {
+                                        setSelectedDealId(deal.id);
+                                        setShowEmailModal(true);
+                                      }}
+                                      title="Send Email Campaign"
+                                    >
+                                      <Mail size={16} />
                                     </IconButton>
                                   </MDBox>
                                 </CardContent>
@@ -569,6 +597,16 @@ export default function CRMPipelineDashboard() {
                     }}
                   >
                     <Edit size={16} />
+                  </IconButton>
+                  <IconButton
+                    size="small"
+                    onClick={() => {
+                      setSelectedContacts([contact]);
+                      setShowEmailModal(true);
+                    }}
+                    title="Send Email"
+                  >
+                    <Mail size={16} />
                   </IconButton>
                 </TableCell>
               </TableRow>
@@ -706,28 +744,63 @@ export default function CRMPipelineDashboard() {
         </MDBox>
       </Card>
 
-      {/* Create/Edit Modal - Basic placeholder for now */}
-      <Dialog 
-        open={showModal} 
-        onClose={() => setShowModal(false)}
-        maxWidth="md"
-        fullWidth
-      >
-        <DialogTitle>
-          {modalType === 'create' ? 'Create' : modalType === 'edit' ? 'Edit' : 'View'} {modalEntity}
-        </DialogTitle>
-        <DialogContent>
-          <MDTypography variant="body2">
-            {modalType} {modalEntity} form will be implemented here...
-          </MDTypography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setShowModal(false)}>Close</Button>
-          {modalType !== 'view' && (
-            <Button variant="contained">Save</Button>
-          )}
-        </DialogActions>
-      </Dialog>
+      {/* Contact Form Modal */}
+      {modalEntity === 'contact' && (
+        <ContactFormModal
+          open={showModal}
+          onClose={() => setShowModal(false)}
+          contact={selectedEntity}
+          mode={modalType}
+        />
+      )}
+
+      {/* Deal Form Modal */}
+      {modalEntity === 'deal' && (
+        <DealFormModal
+          open={showModal}
+          onClose={() => setShowModal(false)}
+          deal={selectedEntity}
+          mode={modalType}
+          preSelectedStage={modalType === 'create' ? 'prospect_identified' : undefined}
+        />
+      )}
+
+      {/* Email Campaign Modal */}
+      <EmailCampaignModal
+        open={showEmailModal}
+        onClose={() => {
+          setShowEmailModal(false);
+          setSelectedDealId(undefined);
+          setSelectedContacts([]);
+        }}
+        dealId={selectedDealId}
+        selectedContacts={selectedContacts}
+      />
+
+      {/* Placeholder for other entity forms */}
+      {(modalEntity === 'firm' || modalEntity === 'opportunity' || modalEntity === 'target') && (
+        <Dialog 
+          open={showModal} 
+          onClose={() => setShowModal(false)}
+          maxWidth="md"
+          fullWidth
+        >
+          <DialogTitle>
+            {modalType === 'create' ? 'Create' : modalType === 'edit' ? 'Edit' : 'View'} {modalEntity}
+          </DialogTitle>
+          <DialogContent>
+            <MDTypography variant="body2">
+              {modalType} {modalEntity} form will be implemented here...
+            </MDTypography>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setShowModal(false)}>Close</Button>
+            {modalType !== 'view' && (
+              <Button variant="contained">Save</Button>
+            )}
+          </DialogActions>
+        </Dialog>
+      )}
     </MDBox>
   );
 }

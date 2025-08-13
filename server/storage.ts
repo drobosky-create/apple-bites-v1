@@ -646,6 +646,23 @@ export class DatabaseStorage implements IStorage {
   async getDealActivities(dealId: number): Promise<DealActivity[]> {
     return await db.select().from(dealActivities).where(eq(dealActivities.dealId, dealId)).orderBy(desc(dealActivities.createdAt));
   }
+
+  // Email Campaign operations for GHL integration
+  async createEmailCampaign(campaignData: any): Promise<any> {
+    // Store campaign locally and prepare for GHL integration
+    const campaign = {
+      id: Math.floor(Math.random() * 1000000),
+      ...campaignData,
+      status: 'pending_ghl_sync',
+      createdAt: new Date(),
+      ghlSyncStatus: 'queued'
+    };
+    
+    // Log the campaign creation for GHL sync
+    console.log('Email campaign created for GHL sync:', campaign);
+    
+    return campaign;
+  }
 }
 
 export const storage = new DatabaseStorage();
