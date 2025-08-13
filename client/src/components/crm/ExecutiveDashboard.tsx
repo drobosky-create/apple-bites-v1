@@ -453,7 +453,7 @@ const ExecutiveDashboard = () => {
           {/* Market Intelligence */}
           <Grid size={6}>
             <Card sx={{ height: '350px', width: '100%' }}>
-            <CardContent>
+            <CardContent sx={{ height: '100%', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
               <MDBox display="flex" alignItems="center" mb={2}>
                 <Target size={20} color="#8B5CF6" />
                 <MDTypography variant="h6" fontWeight="bold" color="dark" ml={1}>
@@ -461,66 +461,68 @@ const ExecutiveDashboard = () => {
                 </MDTypography>
               </MDBox>
               
-              <Grid container spacing={2}>
-                <Grid size={6}>
-                  <MDBox p={2} sx={{ backgroundColor: '#F3F4F6', borderRadius: '8px' }}>
-                    <MDTypography variant="caption" color="text" fontWeight="bold" textTransform="uppercase">
-                      Industry Multiples
-                    </MDTypography>
-                    <MDTypography variant="h6" fontWeight="bold" color="dark">
-                      4.2x - 7.8x
-                    </MDTypography>
-                    <MDTypography variant="caption" color="text">
-                      EBITDA range
-                    </MDTypography>
-                  </MDBox>
-                </Grid>
-                <Grid size={6}>
-                  <MDBox p={2} sx={{ backgroundColor: '#F3F4F6', borderRadius: '8px' }}>
-                    <MDTypography variant="caption" color="text" fontWeight="bold" textTransform="uppercase">
-                      Market Activity
-                    </MDTypography>
-                    <MDTypography variant="h6" fontWeight="bold" color="success">
-                      +23%
-                    </MDTypography>
-                    <MDTypography variant="caption" color="text">
-                      vs last quarter
-                    </MDTypography>
-                  </MDBox>
-                </Grid>
-                <Grid size={12}>
-                  <MDBox mt={2}>
-                    <MDTypography variant="body2" fontWeight="bold" color="dark" mb={1}>
-                      Hot Sectors This Quarter
-                    </MDTypography>
-                    <MDBox display="flex" gap={1} flexWrap="wrap">
-                      {['Technology', 'Healthcare', 'Manufacturing', 'SaaS'].map((sector, index) => (
-                        <MDBox 
-                          key={index}
-                          px={2} 
-                          py={0.5} 
-                          sx={{ 
-                            backgroundColor: '#DBEAFE', 
-                            color: '#1E40AF', 
-                            borderRadius: '12px',
-                            fontSize: '0.75rem',
-                            fontWeight: 'medium'
-                          }}
-                        >
-                          {sector}
-                        </MDBox>
-                      ))}
+              <MDBox flex={1} overflow="auto" mt={2}>
+                <Grid container spacing={2}>
+                  <Grid size={6}>
+                    <MDBox p={2} sx={{ backgroundColor: '#F3F4F6', borderRadius: '8px' }}>
+                      <MDTypography variant="caption" color="text" fontWeight="bold" textTransform="uppercase">
+                        Industry Multiples
+                      </MDTypography>
+                      <MDTypography variant="h6" fontWeight="bold" color="dark">
+                        4.2x - 7.8x
+                      </MDTypography>
+                      <MDTypography variant="caption" color="text">
+                        EBITDA range
+                      </MDTypography>
                     </MDBox>
-                  </MDBox>
+                  </Grid>
+                  <Grid size={6}>
+                    <MDBox p={2} sx={{ backgroundColor: '#F3F4F6', borderRadius: '8px' }}>
+                      <MDTypography variant="caption" color="text" fontWeight="bold" textTransform="uppercase">
+                        Market Activity
+                      </MDTypography>
+                      <MDTypography variant="h6" fontWeight="bold" color="success">
+                        +23%
+                      </MDTypography>
+                      <MDTypography variant="caption" color="text">
+                        vs last quarter
+                      </MDTypography>
+                    </MDBox>
+                  </Grid>
+                  <Grid size={12}>
+                    <MDBox mt={1}>
+                      <MDTypography variant="body2" fontWeight="bold" color="dark" mb={1}>
+                        Hot Sectors This Quarter
+                      </MDTypography>
+                      <MDBox display="flex" gap={1} flexWrap="wrap">
+                        {['Technology', 'Healthcare', 'Manufacturing', 'SaaS'].map((sector, index) => (
+                          <MDBox 
+                            key={index}
+                            px={1.5} 
+                            py={0.5} 
+                            sx={{ 
+                              backgroundColor: '#DBEAFE', 
+                              color: '#1E40AF', 
+                              borderRadius: '8px',
+                              fontSize: '0.7rem',
+                              fontWeight: 'medium'
+                            }}
+                          >
+                            {sector}
+                          </MDBox>
+                        ))}
+                      </MDBox>
+                    </MDBox>
+                  </Grid>
+                  <Grid size={12}>
+                    <MDBox mt={1} p={1.5} sx={{ backgroundColor: '#FEF3C7', borderRadius: '8px', border: '1px solid #FCD34D' }}>
+                      <MDTypography variant="caption" fontWeight="bold" sx={{ color: '#92400E', fontSize: '0.7rem' }}>
+                        🎯 Opportunity Alert: 3 distressed assets in target sectors available for quick acquisition
+                      </MDTypography>
+                    </MDBox>
+                  </Grid>
                 </Grid>
-                <Grid size={12}>
-                  <MDBox mt={2} p={2} sx={{ backgroundColor: '#FEF3C7', borderRadius: '8px', border: '1px solid #FCD34D' }}>
-                    <MDTypography variant="caption" fontWeight="bold" sx={{ color: '#92400E' }}>
-                      🎯 Opportunity Alert: 3 distressed assets in target sectors available for quick acquisition
-                    </MDTypography>
-                  </MDBox>
-                </Grid>
-              </Grid>
+              </MDBox>
             </CardContent>
           </Card>
         </Grid>
@@ -528,7 +530,7 @@ const ExecutiveDashboard = () => {
           {/* Team Performance Summary */}
           <Grid size={6}>
             <Card sx={{ height: '350px', width: '100%' }}>
-            <CardContent>
+            <CardContent sx={{ height: '100%', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
               <MDBox display="flex" alignItems="center" mb={2}>
                 <Users size={20} color="#059669" />
                 <MDTypography variant="h6" fontWeight="bold" color="dark" ml={1}>
@@ -536,7 +538,7 @@ const ExecutiveDashboard = () => {
                 </MDTypography>
               </MDBox>
               
-              <Grid container spacing={2}>
+              <Grid container spacing={2} sx={{ mb: 2 }}>
                 <Grid size={4}>
                   <MDBox textAlign="center" p={1}>
                     <MDTypography variant="h5" fontWeight="bold" color="success">
@@ -567,36 +569,35 @@ const ExecutiveDashboard = () => {
                     </MDTypography>
                   </MDBox>
                 </Grid>
-                <Grid size={12}>
-                  <MDBox mt={1}>
-                    <MDTypography variant="body2" fontWeight="bold" color="dark" mb={2}>
-                      Top Performers This Month
-                    </MDTypography>
-                    {[
-                      { name: 'Sarah Johnson', deals: '3 deals', revenue: '$8.2M', badge: '🏆' },
-                      { name: 'Mike Wilson', deals: '2 deals', revenue: '$5.7M', badge: '⭐' },
-                      { name: 'John Smith', deals: '4 deals', revenue: '$12.1M', badge: '🎯' }
-                    ].map((performer, index) => (
-                      <MDBox key={index} display="flex" justifyContent="space-between" alignItems="center" mb={1} p={1} sx={{ backgroundColor: index === 0 ? '#F0FDF4' : '#F9FAFB', borderRadius: '6px' }}>
-                        <MDBox display="flex" alignItems="center">
-                          <MDTypography variant="body2" mr={1}>{performer.badge}</MDTypography>
-                          <MDTypography variant="body2" fontWeight="medium" color="dark">
-                            {performer.name}
-                          </MDTypography>
-                        </MDBox>
-                        <MDBox textAlign="right">
-                          <MDTypography variant="caption" color="success" fontWeight="bold">
-                            {performer.revenue}
-                          </MDTypography>
-                          <MDTypography variant="caption" color="text" display="block">
-                            {performer.deals}
-                          </MDTypography>
-                        </MDBox>
-                      </MDBox>
-                    ))}
-                  </MDBox>
-                </Grid>
               </Grid>
+              
+              <MDBox flex={1} overflow="auto">
+                <MDTypography variant="body2" fontWeight="bold" color="dark" mb={1}>
+                  Top Performers This Month
+                </MDTypography>
+                {[
+                  { name: 'Sarah Johnson', deals: '3 deals', revenue: '$8.2M', badge: '🏆' },
+                  { name: 'Mike Wilson', deals: '2 deals', revenue: '$5.7M', badge: '⭐' },
+                  { name: 'John Smith', deals: '4 deals', revenue: '$12.1M', badge: '🎯' }
+                ].map((performer, index) => (
+                  <MDBox key={index} display="flex" justifyContent="space-between" alignItems="center" mb={1} p={1} sx={{ backgroundColor: index === 0 ? '#F0FDF4' : '#F9FAFB', borderRadius: '6px' }}>
+                    <MDBox display="flex" alignItems="center">
+                      <MDTypography variant="body2" mr={1}>{performer.badge}</MDTypography>
+                      <MDTypography variant="body2" fontWeight="medium" color="dark">
+                        {performer.name}
+                      </MDTypography>
+                    </MDBox>
+                    <MDBox textAlign="right">
+                      <MDTypography variant="caption" color="success" fontWeight="bold">
+                        {performer.revenue}
+                      </MDTypography>
+                      <MDTypography variant="caption" color="text" display="block">
+                        {performer.deals}
+                      </MDTypography>
+                    </MDBox>
+                  </MDBox>
+                ))}
+              </MDBox>
             </CardContent>
           </Card>
           </Grid>
