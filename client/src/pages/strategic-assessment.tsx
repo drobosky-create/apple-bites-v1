@@ -243,20 +243,28 @@ function GrowthExitAssessment() {
             if (latestAssessment) {
               // Calculate revenue from EBITDA and estimated expenses if available
               const adjustedEbitda = parseFloat(latestAssessment.adjustedEbitda) || 0;
-              const estimatedRevenue = adjustedEbitda > 0 ? adjustedEbitda * 4 : 0; // Rough estimate
+              // Use a more realistic revenue calculation: EBITDA is typically 10-20% of revenue
+              const estimatedRevenue = adjustedEbitda > 0 ? Math.round(adjustedEbitda / 0.15) : 0; // Assume 15% EBITDA margin
+              const estimatedOperatingExpenses = adjustedEbitda > 0 ? Math.round(adjustedEbitda * 0.3) : 0; // Conservative estimate
+              
+              console.log('Pre-filling data:', {
+                adjustedEbitda,
+                estimatedRevenue,
+                estimatedOperatingExpenses
+              });
               
               setFormData(prev => ({
                 ...prev,
                 financials: {
-                  annualRevenue: estimatedRevenue > 0 ? estimatedRevenue.toString() : "",
-                  costOfGoodsSold: "",
-                  operatingExpenses: ""
+                  annualRevenue: estimatedRevenue.toString(),
+                  costOfGoodsSold: Math.round(estimatedRevenue * 0.4).toString(), // Typical 40% COGS
+                  operatingExpenses: estimatedOperatingExpenses.toString()
                 },
                 adjustments: {
-                  ownerSalary: "50000", // Reasonable default
-                  personalExpenses: "",
-                  oneTimeExpenses: "",
-                  otherAdjustments: ""
+                  ownerSalary: "75000", // Reasonable owner salary
+                  personalExpenses: "5000",
+                  oneTimeExpenses: "0",
+                  otherAdjustments: "0"
                 }
               }));
             }
