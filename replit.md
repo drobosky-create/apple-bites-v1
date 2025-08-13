@@ -4,6 +4,14 @@
 This is a full-stack web application for Meritage Partners, designed as a business valuation calculator. It guides users through a multi-step valuation process, generates professional PDF reports, and provides administrative dashboards for lead and team management. The platform aims to offer comprehensive business valuation services, leveraging AI for narrative generation and integrating with key external services for CRM and email automation. The project's vision is to provide a streamlined, accurate, and professional valuation tool with market potential for various business sizes.
 
 ## Recent Changes (August 2025)
+**✅ COMPLETED: Dynamic Pricing Integration (August 13, 2025)**
+- Replaced all hardcoded pricing ($795, $1,995) with dynamic Stripe price fetching
+- Updated pricing page to pull live prices from `/api/stripe/products` endpoint
+- Enhanced strategic assessment page with dynamic pricing display
+- Implemented automatic price formatting for proper currency display
+- Added fallback pricing for offline scenarios while maintaining user experience
+- Future price changes in Stripe now automatically update throughout the entire application
+
 **✅ COMPLETED: UI Consistency Fixes (August 12, 2025)**
 - Fixed "Free Assessment" identifier consistency by updating header title to match button text
 - Resolved valuation results overflow on mobile with responsive grid layout that stacks properly

@@ -1,8 +1,9 @@
 import React from 'react';
-import { Box, Card, CardContent, Button, Typography, Container, Grid } from '@mui/material';
+import { Box, Card, CardContent, Button, Typography, Container, Grid, CircularProgress } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { CheckCircle } from '@mui/icons-material';
 import { useLocation } from 'wouter';
+import { useQuery } from '@tanstack/react-query';
 
 const PricingContainer = styled(Box)(({ theme }) => ({
   minHeight: '100vh',
@@ -36,12 +37,46 @@ const FeatureList = ({ features }: { features: string[] }) => (
   </Box>
 );
 
+interface StripeProduct {
+  id: string;
+  name: string;
+  description: string;
+  price: {
+    id: string;
+    amount: number;
+    currency: string;
+  } | null;
+}
+
 export default function PricingPage() {
   const [, setLocation] = useLocation();
 
-  const handleUpgrade = (tier: string) => {
-    setLocation(`/checkout?tier=${tier}`);
+  // Fetch products from Stripe
+  const { data: productsData, isLoading, error } = useQuery({
+    queryKey: ['/api/stripe/products'],
+    retry: false,
+  });
+
+  const handleUpgrade = (tier: string, priceId?: string) => {
+    setLocation(`/checkout?tier=${tier}${priceId ? `&priceId=${priceId}` : ''}`);
   };
+
+  // Helper function to format price
+  const formatPrice = (amount: number, currency: string) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: currency.toUpperCase(),
+    }).format(amount / 100);
+  };
+
+  // Find specific products from Stripe data
+  const growthProduct = productsData?.products?.find((p: StripeProduct) => 
+    p.name?.toLowerCase().includes('growth') || p.id === 'prod_Sddbk2RWzr8kyL'
+  );
+  
+  const capitalProduct = productsData?.products?.find((p: StripeProduct) => 
+    p.name?.toLowerCase().includes('capital') || p.id === 'prod_Sdvq23217qaGhp'
+  );
 
   const plans = [
     {
@@ -61,7 +96,7 @@ export default function PricingPage() {
     },
     {
       name: 'Growth & Exit Assessment',
-      price: '$795',
+      price: growthProduct?.price ? formatPrice(growthProduct.price.amount, growthProduct.price.currency) : '$795',
       description: 'Comprehensive analysis for business growth and exit planning',
       features: [
         'Industry-specific NAICS valuation analysis',
@@ -76,10 +111,11 @@ export default function PricingPage() {
       buttonColor: 'primary' as const,
       tier: 'growth',
       popular: true,
+      priceId: growthProduct?.price?.id,
     },
     {
       name: 'Capital Readiness Assessment',
-      price: '$1,995',
+      price: capitalProduct?.price ? formatPrice(capitalProduct.price.amount, capitalProduct.price.currency) : '$1,995',
       description: 'Premium solution for investment readiness and capital raising',
       features: [
         'Everything in Growth & Exit Assessment',
@@ -94,8 +130,28 @@ export default function PricingPage() {
       buttonText: 'Upgrade to Capital',
       buttonColor: 'primary' as const,
       tier: 'capital',
+      priceId: capitalProduct?.price?.id,
     },
   ];
+
+  if (isLoading) {
+    return (
+      <PricingContainer>
+        <Container maxWidth="lg">
+          <Box textAlign="center">
+            <CircularProgress size={60} sx={{ color: 'white' }} />
+            <Typography variant="h6" sx={{ color: 'white', mt: 2 }}>
+              Loading current pricing...
+            </Typography>
+          </Box>
+        </Container>
+      </PricingContainer>
+    );
+  }
+
+  if (error) {
+    console.error('Error loading pricing:', error);
+  }
 
   return (
     <PricingContainer>
@@ -166,7 +222,7 @@ export default function PricingPage() {
                       size="large"
                       fullWidth
                       disabled={plan.disabled}
-                      onClick={() => plan.tier && handleUpgrade(plan.tier)}
+                      onClick={() => plan.tier && handleUpgrade(plan.tier, plan.priceId)}
                       sx={{ 
                         py: 1.5,
                         fontSize: '1.1rem',

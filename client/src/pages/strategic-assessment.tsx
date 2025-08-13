@@ -117,9 +117,44 @@ interface NAICSSector {
   title: string;
 }
 
+interface StripeProduct {
+  id: string;
+  name: string;
+  description: string;
+  price: {
+    id: string;
+    amount: number;
+    currency: string;
+  } | null;
+}
+
 function GrowthExitAssessment() {
   const [, setLocation] = useLocation();
   const [currentStep, setCurrentStep] = useState(1);
+  
+  // Fetch products from Stripe for dynamic pricing
+  const { data: productsData } = useQuery({
+    queryKey: ['/api/stripe/products'],
+    retry: false,
+  });
+
+  // Helper function to format price
+  const formatPrice = (amount: number, currency: string) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: currency.toUpperCase(),
+    }).format(amount / 100);
+  };
+
+  // Find Growth product from Stripe data
+  const growthProduct = productsData?.products?.find((p: StripeProduct) => 
+    p.name?.toLowerCase().includes('growth') || p.id === 'prod_Sddbk2RWzr8kyL'
+  );
+
+  const growthPrice = growthProduct?.price ? 
+    formatPrice(growthProduct.price.amount, growthProduct.price.currency) : 
+    '$795';
+
   const [formData, setFormData] = useState({
     primarySector: "",
     specificIndustry: "",
@@ -1336,7 +1371,7 @@ function GrowthExitAssessment() {
                   onClick={handlePaygateClick}
                   
                 >
-                  Get Growth & Exit Assessment - $795
+                  Get Growth & Exit Assessment - {growthPrice}
                 </Button>
                 <p >
                   Secure payment processed by Stripe • Includes 60-minute Discovery Call
