@@ -96,6 +96,7 @@ const DEAL_STAGES = [
 
 // View mode type
 type ViewMode = 'kanban' | 'table';
+type EntityType = 'opportunities' | 'deals';
 
 // Priority levels
 const PRIORITY_LEVELS = [
@@ -103,6 +104,18 @@ const PRIORITY_LEVELS = [
   { value: 'medium', label: 'Medium', color: '#ff9800' },
   { value: 'high', label: 'High', color: '#f44336' },
   { value: 'urgent', label: 'Urgent', color: '#9c27b0' }
+];
+
+// Opportunity stages (different from deal stages)
+const OPPORTUNITY_STAGES = [
+  { id: 'identified', name: 'Identified', color: '#e3f2fd', textColor: '#0d47a1', probability: 10 },
+  { id: 'contacted', name: 'Initial Contact', color: '#f3e5f5', textColor: '#4a148c', probability: 20 },
+  { id: 'qualified', name: 'Qualified', color: '#e8f5e8', textColor: '#1b5e20', probability: 30 },
+  { id: 'proposal', name: 'Proposal Stage', color: '#fff3e0', textColor: '#e65100', probability: 50 },
+  { id: 'negotiation', name: 'Negotiation', color: '#f1f8e9', textColor: '#33691e', probability: 70 },
+  { id: 'closed_won', name: 'Closed Won', color: '#e8f5e8', textColor: '#2e7d32', probability: 100 },
+  { id: 'closed_lost', name: 'Closed Lost', color: '#ffebee', textColor: '#c62828', probability: 0 },
+  { id: 'on_hold', name: 'On Hold', color: '#f5f5f5', textColor: '#616161', probability: 0 }
 ];
 
 // Deal card component for Kanban view
@@ -339,12 +352,14 @@ const DealTableRow = ({ deal }: { deal: any }) => {
 
 const CRMPipelineDashboard = () => {
   const { isAuthenticated } = useAdminAuth();
+  const [entityType, setEntityType] = useState<EntityType>('opportunities');
   const [viewMode, setViewMode] = useState<ViewMode>('kanban');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedStage, setSelectedStage] = useState('all');
   const [selectedPriority, setSelectedPriority] = useState('all');
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [isDealModalOpen, setIsDealModalOpen] = useState(false);
+  const [isOpportunityModalOpen, setIsOpportunityModalOpen] = useState(false);
   const [isFirmModalOpen, setIsFirmModalOpen] = useState(false);
   const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
 
@@ -353,37 +368,48 @@ const CRMPipelineDashboard = () => {
 
   // Data queries
   const { data: deals = [] } = useQuery({ queryKey: ['/api/deals'] });
+  const { data: opportunities = [] } = useQuery({ queryKey: ['/api/opportunities'] });
   const { data: contacts = [] } = useQuery({ queryKey: ['/api/contacts'] });
   const { data: firms = [] } = useQuery({ queryKey: ['/api/firms'] });
 
   // Type the data properly
   const typedDeals = deals as any[];
+  const typedOpportunities = opportunities as any[];
   const typedContacts = contacts as any[];
   const typedFirms = firms as any[];
 
-  // Filter deals based on search and filters
-  const filteredDeals = useMemo(() => {
-    return typedDeals.filter((deal: any) => {
-      const matchesSearch = deal.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           deal.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           deal.firmName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           deal.contactName?.toLowerCase().includes(searchTerm.toLowerCase());
+  // Get current data based on entity type
+  const currentData = entityType === 'opportunities' ? typedOpportunities : typedDeals;
+  const currentStages = entityType === 'opportunities' ? OPPORTUNITY_STAGES : DEAL_STAGES;
+
+  // Filter items based on search and filters
+  const filteredItems = useMemo(() => {
+    return currentData.filter((item: any) => {
+      const searchFields = entityType === 'opportunities' 
+        ? [item.summary, item.currentSituation, item.clientNeeds]
+        : [item.dealName, item.title, item.description, item.dealSummary];
       
-      const matchesStage = selectedStage === 'all' || deal.currentStage === selectedStage;
-      const matchesPriority = selectedPriority === 'all' || deal.priority === selectedPriority;
+      const matchesSearch = searchFields.some(field => 
+        field?.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      
+      const stageField = entityType === 'opportunities' ? item.status : item.currentStage;
+      const matchesStage = selectedStage === 'all' || stageField === selectedStage;
+      const matchesPriority = selectedPriority === 'all' || item.priority === selectedPriority;
       
       return matchesSearch && matchesStage && matchesPriority;
     });
-  }, [typedDeals, searchTerm, selectedStage, selectedPriority]);
+  }, [currentData, searchTerm, selectedStage, selectedPriority, entityType]);
 
-  // Group deals by stage for Kanban view
-  const groupedDeals = useMemo(() => {
+  // Group items by stage for Kanban view
+  const groupedItems = useMemo(() => {
     const grouped: { [key: string]: any[] } = {};
-    DEAL_STAGES.forEach(stage => {
-      grouped[stage.id] = filteredDeals.filter((deal: any) => deal.currentStage === stage.id);
+    currentStages.forEach(stage => {
+      const stageField = entityType === 'opportunities' ? 'status' : 'currentStage';
+      grouped[stage.id] = filteredItems.filter((item: any) => item[stageField] === stage.id);
     });
     return grouped;
-  }, [filteredDeals]);
+  }, [filteredItems, currentStages, entityType]);
 
   // Handle drag and drop for Kanban
   const handleDragEnd = async (result: DropResult) => {
@@ -394,19 +420,22 @@ const CRMPipelineDashboard = () => {
     if (source.droppableId === destination.droppableId) return;
 
     try {
-      await apiRequest('PATCH', `/api/deals/${draggableId}`, {
-        currentStage: destination.droppableId
+      const updateField = entityType === 'opportunities' ? 'status' : 'currentStage';
+      const endpoint = entityType === 'opportunities' ? '/api/opportunities' : '/api/deals';
+      
+      await apiRequest('PATCH', `${endpoint}/${draggableId}`, {
+        [updateField]: destination.droppableId
       });
       
-      queryClient.invalidateQueries({ queryKey: ['/api/deals'] });
+      queryClient.invalidateQueries({ queryKey: [endpoint] });
       toast({
-        title: "Deal Updated",
-        description: "Deal stage updated successfully",
+        title: `${entityType === 'opportunities' ? 'Opportunity' : 'Deal'} Updated`,
+        description: `${entityType === 'opportunities' ? 'Opportunity' : 'Deal'} stage updated successfully`,
       });
     } catch (error) {
       toast({
         title: "Error",
-        description: "Failed to update deal stage",
+        description: `Failed to update ${entityType === 'opportunities' ? 'opportunity' : 'deal'} stage`,
         variant: "destructive",
       });
     }
@@ -423,15 +452,38 @@ const CRMPipelineDashboard = () => {
         <MDBox display="flex" justifyContent="space-between" alignItems="center" mb={3}>
           <MDBox>
             <MDTypography variant="h4" fontWeight="bold" color="dark">
-              Apple Bites CRM & Deal Pipeline
+              Apple Bites CRM & {entityType === 'opportunities' ? 'Opportunity' : 'Deal'} Pipeline
             </MDTypography>
             <MDTypography variant="body2" color="text">
-              Manage your M&A deal pipeline with advanced tracking and automation
+              Manage your M&A {entityType === 'opportunities' ? 'opportunities' : 'deal pipeline'} with advanced tracking and automation
             </MDTypography>
           </MDBox>
           
-          {/* View Mode Toggle */}
+          {/* Entity Type and View Mode Toggle */}
           <MDBox display="flex" alignItems="center" gap={2}>
+            {/* Entity Type Toggle */}
+            <MDBox display="flex" sx={{ backgroundColor: '#e3f2fd', borderRadius: '6px', p: 0.5 }}>
+              <MDButton
+                variant={entityType === 'opportunities' ? 'contained' : 'text'}
+                size="small"
+                onClick={() => setEntityType('opportunities')}
+                sx={{ minWidth: 'auto', px: 2 }}
+              >
+                <TargetIcon size={16} style={{ marginRight: 4 }} />
+                Opportunities
+              </MDButton>
+              <MDButton
+                variant={entityType === 'deals' ? 'contained' : 'text'}
+                size="small"
+                onClick={() => setEntityType('deals')}
+                sx={{ minWidth: 'auto', px: 2 }}
+              >
+                <TrendingUp size={16} style={{ marginRight: 4 }} />
+                Deals
+              </MDButton>
+            </MDBox>
+            
+            {/* View Mode Toggle */}
             <MDBox display="flex" sx={{ backgroundColor: '#f5f5f5', borderRadius: '6px', p: 0.5 }}>
               <MDButton
                 variant={viewMode === 'kanban' ? 'contained' : 'text'}
@@ -457,9 +509,9 @@ const CRMPipelineDashboard = () => {
               variant="contained"
               color="primary"
               startIcon={<Plus size={16} />}
-              onClick={() => setIsDealModalOpen(true)}
+              onClick={() => entityType === 'opportunities' ? setIsOpportunityModalOpen(true) : setIsDealModalOpen(true)}
             >
-              New Deal
+              New {entityType === 'opportunities' ? 'Opportunity' : 'Deal'}
             </MDButton>
             
             <MDButton
@@ -475,7 +527,7 @@ const CRMPipelineDashboard = () => {
         {/* Filters and Search */}
         <MDBox display="flex" gap={2} mb={3} flexWrap="wrap">
           <MDInput
-            placeholder="Search deals, firms, contacts..."
+            placeholder={`Search ${entityType}, firms, contacts...`}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             sx={{ minWidth: 300 }}
@@ -492,7 +544,7 @@ const CRMPipelineDashboard = () => {
               label="Stage"
             >
               <MenuItem value="all">All Stages</MenuItem>
-              {DEAL_STAGES.map(stage => (
+              {currentStages.map(stage => (
                 <MenuItem key={stage.id} value={stage.id}>
                   {stage.name}
                 </MenuItem>
@@ -522,11 +574,11 @@ const CRMPipelineDashboard = () => {
           <DragDropContext onDragEnd={handleDragEnd}>
             <MDBox sx={{ overflowX: 'auto', pb: 2 }}>
               <MDBox display="flex" gap={2} sx={{ minWidth: 'fit-content' }}>
-                {DEAL_STAGES.map(stage => (
+                {currentStages.map(stage => (
                   <KanbanColumn
                     key={stage.id}
                     stage={stage}
-                    deals={groupedDeals[stage.id] || []}
+                    deals={groupedItems[stage.id] || []}
                   />
                 ))}
               </MDBox>
@@ -537,9 +589,9 @@ const CRMPipelineDashboard = () => {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>Deal</TableCell>
+                  <TableCell>{entityType === 'opportunities' ? 'Opportunity' : 'Deal'}</TableCell>
                   <TableCell>Stage</TableCell>
-                  <TableCell>Value</TableCell>
+                  <TableCell>{entityType === 'opportunities' ? 'Probability' : 'Value'}</TableCell>
                   <TableCell>Firm</TableCell>
                   <TableCell>Contact</TableCell>
                   <TableCell>Progress</TableCell>
@@ -548,8 +600,8 @@ const CRMPipelineDashboard = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {filteredDeals.map((deal: any) => (
-                  <DealTableRow key={deal.id} deal={deal} />
+                {filteredItems.map((item: any) => (
+                  <DealTableRow key={item.id} deal={item} />
                 ))}
               </TableBody>
             </Table>
@@ -568,6 +620,22 @@ const CRMPipelineDashboard = () => {
           onClose={() => setIsDealModalOpen(false)}
           mode="create"
         />
+        
+        {/* Opportunity Modal - will need to create this component */}
+        {isOpportunityModalOpen && (
+          <Dialog open={isOpportunityModalOpen} onClose={() => setIsOpportunityModalOpen(false)} maxWidth="md" fullWidth>
+            <DialogTitle>Create New Opportunity</DialogTitle>
+            <DialogContent>
+              <MDTypography variant="body2" color="text">
+                Opportunity creation form will be implemented here
+              </MDTypography>
+            </DialogContent>
+            <DialogActions>
+              <MDButton onClick={() => setIsOpportunityModalOpen(false)}>Cancel</MDButton>
+              <MDButton variant="contained">Create</MDButton>
+            </DialogActions>
+          </Dialog>
+        )}
         
         <FirmFormModal
           open={isFirmModalOpen}
