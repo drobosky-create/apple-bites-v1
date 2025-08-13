@@ -86,7 +86,7 @@ const ExecutiveDashboard = () => {
 
 
   return (
-    <MDBox p={3}>
+    <MDBox p={3} sx={{ width: '100%', maxWidth: 'none', minWidth: 0 }}>
       {/* Header */}
       <MDBox mb={4}>
         <MDTypography variant="h4" fontWeight="bold" color="dark">
@@ -99,12 +99,12 @@ const ExecutiveDashboard = () => {
 
       {/* KPI Cards */}
       <MDBox mb={4}>
-        <Grid container spacing={3}>
+        <Grid container spacing={3} sx={{ width: '100%', m: 0 }}>
         {kpiCards.map((kpi, index) => {
           const IconComponent = kpi.icon;
           return (
-            <Grid item xs={12} sm={6} lg={3} key={index}>
-              <Card sx={{ height: '100%' }}>
+            <Grid item xs={12} sm={6} lg={3} key={index} sx={{ width: '100%' }}>
+              <Card sx={{ height: '100%', width: '100%' }}>
                 <CardContent>
                   <MDBox display="flex" justifyContent="space-between" alignItems="flex-start">
                     <MDBox>
@@ -149,10 +149,10 @@ const ExecutiveDashboard = () => {
       </MDBox>
 
       {/* Three Column Layout */}
-      <Grid container spacing={3}>
+      <Grid container spacing={3} sx={{ width: '100%', m: 0 }}>
         {/* Pipeline Health */}
         <Grid item xs={12} lg={4}>
-          <Card sx={{ height: '500px' }}>
+          <Card sx={{ height: '500px', width: '100%' }}>
             <CardContent>
               <MDBox display="flex" alignItems="center" mb={2}>
                 <TrendingUp size={20} color="#3B82F6" />
@@ -265,7 +265,7 @@ const ExecutiveDashboard = () => {
 
         {/* Recent Activity Feed */}
         <Grid item xs={12} lg={4}>
-          <Card sx={{ height: '500px' }}>
+          <Card sx={{ height: '500px', width: '100%' }}>
             <CardContent>
               <MDBox display="flex" alignItems="center" mb={2}>
                 <Activity size={20} color="#059669" />
@@ -328,7 +328,7 @@ const ExecutiveDashboard = () => {
 
         {/* Urgent Tasks */}
         <Grid item xs={12} lg={4}>
-          <Card sx={{ height: '500px' }}>
+          <Card sx={{ height: '500px', width: '100%' }}>
             <CardContent>
               <MDBox display="flex" alignItems="center" justifyContent="space-between" mb={2}>
                 <MDBox display="flex" alignItems="center">
@@ -444,10 +444,10 @@ const ExecutiveDashboard = () => {
       </Grid>
 
       {/* Additional Dashboard Row */}
-      <Grid container spacing={3} mt={2}>
+      <Grid container spacing={3} sx={{ width: '100%', m: 0, mt: 3 }}>
         {/* Market Intelligence */}
         <Grid item xs={12} lg={6}>
-          <Card sx={{ height: '300px' }}>
+          <Card sx={{ height: '300px', width: '100%' }}>
             <CardContent>
               <MDBox display="flex" alignItems="center" mb={2}>
                 <Target size={20} color="#8B5CF6" />
@@ -522,7 +522,7 @@ const ExecutiveDashboard = () => {
 
         {/* Team Performance Summary */}
         <Grid item xs={12} lg={6}>
-          <Card sx={{ height: '300px' }}>
+          <Card sx={{ height: '300px', width: '100%' }}>
             <CardContent>
               <MDBox display="flex" alignItems="center" mb={2}>
                 <Users size={20} color="#059669" />
