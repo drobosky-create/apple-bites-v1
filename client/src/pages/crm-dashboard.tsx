@@ -6,6 +6,9 @@ import CRMOverview from "@/components/crm/CRMOverview";
 import ContactManagement from "@/components/crm/ContactManagement";
 import FirmManagement from "@/components/crm/FirmManagement";
 import DealPipeline from "@/components/crm/DealPipeline";
+import ExecutiveDashboard from "@/components/crm/ExecutiveDashboard";
+import EnhancedDealPipeline from "@/components/crm/EnhancedDealPipeline";
+import AnalyticsInsights from "@/components/crm/AnalyticsInsights";
 import ActivityFeed from "@/components/crm/ActivityFeed";
 import CRMCalendar from "@/components/crm/CRMCalendar";
 import CRMTasks from "@/components/crm/CRMTasks";
@@ -22,13 +25,15 @@ import {
   Users, 
   Building2, 
   Send, 
-  Mail
+  Mail,
+  Target,
+  TrendingUp
 } from 'lucide-react';
 
 const CRMDashboard = () => {
   const { isAuthenticated, isLoading } = useAuth();
   const [, setLocation] = useLocation();
-  const [activeSection, setActiveSection] = useState('dashboard');
+  const [activeSection, setActiveSection] = useState('executive');
 
   if (isLoading) {
     return (
@@ -44,7 +49,9 @@ const CRMDashboard = () => {
 
   const sidebarItems = [
     { id: 'profile', label: 'Profile', icon: User },
-    { id: 'dashboard', label: 'Dashboard', icon: BarChart3 },
+    { id: 'executive', label: 'Executive', icon: BarChart3 },
+    { id: 'pipeline', label: 'Deal Pipeline', icon: Target },
+    { id: 'analytics', label: 'Analytics', icon: TrendingUp },
     { id: 'activity', label: 'Activity Feed', icon: Activity },
     { id: 'calendar', label: 'Calendar', icon: Calendar, badge: 'New' },
     { id: 'tasks', label: 'Tasks', icon: CheckSquare },
@@ -68,8 +75,12 @@ const CRMDashboard = () => {
 
   const renderContent = () => {
     switch (activeSection) {
-      case 'dashboard':
-        return <DealPipeline />;
+      case 'executive':
+        return <ExecutiveDashboard />;
+      case 'pipeline':
+        return <EnhancedDealPipeline />;
+      case 'analytics':
+        return <AnalyticsInsights />;
       case 'activity':
         return <ActivityFeed />;
       case 'calendar':
