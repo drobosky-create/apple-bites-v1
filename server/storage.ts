@@ -647,6 +647,41 @@ export class DatabaseStorage implements IStorage {
     return await db.select().from(dealActivities).where(eq(dealActivities.dealId, dealId)).orderBy(desc(dealActivities.createdAt));
   }
 
+  // Firm operations
+  async createFirm(insertFirm: InsertFirm): Promise<Firm> {
+    const [firm] = await db
+      .insert(firms)
+      .values(insertFirm)
+      .returning();
+    return firm;
+  }
+
+  async getFirm(id: number): Promise<Firm | undefined> {
+    const [firm] = await db.select().from(firms).where(eq(firms.id, id));
+    return firm;
+  }
+
+  async getAllFirms(): Promise<Firm[]> {
+    return await db.select().from(firms).orderBy(desc(firms.dateAdded));
+  }
+
+  async updateFirm(id: number, updates: Partial<InsertFirm>): Promise<Firm> {
+    const [firm] = await db
+      .update(firms)
+      .set({ ...updates, lastUpdated: new Date() })
+      .where(eq(firms.id, id))
+      .returning();
+    
+    if (!firm) {
+      throw new Error(`Firm with id ${id} not found`);
+    }
+    return firm;
+  }
+
+  async deleteFirm(id: number): Promise<void> {
+    await db.delete(firms).where(eq(firms.id, id));
+  }
+
   // Email Campaign operations for GHL integration
   async createEmailCampaign(campaignData: any): Promise<any> {
     // Store campaign locally and prepare for GHL integration

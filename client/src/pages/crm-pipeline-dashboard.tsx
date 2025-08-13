@@ -67,6 +67,7 @@ import AdminLogin from '@/components/admin-login';
 import { useAdminAuth } from '@/hooks/use-admin-auth';
 import ContactFormModal from '@/components/crm/ContactFormModal';
 import DealFormModal from '@/components/crm/DealFormModal';
+import FirmFormModal from '@/components/crm/FirmFormModal';
 import EmailCampaignModal from '@/components/crm/EmailCampaignModal';
 
 import type { 
@@ -433,7 +434,7 @@ export default function CRMPipelineDashboard() {
                         {...provided.droppableProps}
                         minHeight="200px"
                         bgcolor={snapshot.isDraggingOver ? 'rgba(0,0,0,0.05)' : 'transparent'}
-                        borderRadius="8px"
+                        borderRadius={1}
                         p={1}
                       >
                         {(dealsByStage[stage.id] || []).map((deal, index) => (
@@ -769,8 +770,21 @@ export default function CRMPipelineDashboard() {
         selectedContacts={selectedContacts}
       />
 
-      {/* Placeholder for other entity forms */}
-      {(modalEntity === 'firm' || modalEntity === 'opportunity' || modalEntity === 'target') && (
+      {/* Firm Form Modal */}
+      {modalEntity === 'firm' && (
+        <FirmFormModal
+          open={showModal}
+          onClose={() => {
+            setShowModal(false);
+            setSelectedEntity(null);
+          }}
+          firm={selectedEntity as any}
+          mode={modalType}
+        />
+      )}
+
+      {/* Placeholder for remaining entity forms */}
+      {(modalEntity === 'opportunity' || modalEntity === 'target') && (
         <Dialog 
           open={showModal} 
           onClose={() => setShowModal(false)}
@@ -786,9 +800,9 @@ export default function CRMPipelineDashboard() {
             </MDTypography>
           </DialogContent>
           <DialogActions>
-            <Button onClick={() => setShowModal(false)}>Close</Button>
+            <MDButton onClick={() => setShowModal(false)}>Close</MDButton>
             {modalType !== 'view' && (
-              <Button variant="contained">Save</Button>
+              <MDButton variant="contained">Save</MDButton>
             )}
           </DialogActions>
         </Dialog>

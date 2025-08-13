@@ -268,6 +268,9 @@ export const contacts = pgTable("contacts", {
   department: varchar("department"),
   initials: varchar("initials"),
   notes: text("notes"),
+  tags: text("tags"), // JSON array for contact tags
+  leadSource: varchar("lead_source"), // How they were acquired
+  contactStage: varchar("contact_stage"), // Current relationship stage
   
   // Linked to Firm
   firmId: integer("firm_id"),
@@ -373,6 +376,16 @@ export const deals = pgTable("deals", {
   estimatedTransactionValue: decimal("estimated_transaction_value", { precision: 15, scale: 2 }),
   clientStage: varchar("client_stage"),
   clientIndustry: varchar("client_industry"),
+  
+  // Additional deal fields
+  keyContacts: text("key_contacts"), // Other important contacts
+  dealOwner: varchar("deal_owner"), // Team member responsible
+  dealSummary: text("deal_summary"), // Brief overview
+  notes: text("notes"), // Internal notes
+  tags: text("tags"), // Deal tags
+  contactId: integer("contact_id"), // Primary contact
+  firmId: integer("firm_id"), // Alternative to clientFirmId for compatibility
+  estimatedClosingDate: timestamp("estimated_closing_date"), // Match form field name
   description: text("description"),
   revenue: decimal("revenue", { precision: 15, scale: 2 }),
   
