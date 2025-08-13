@@ -461,68 +461,66 @@ const ExecutiveDashboard = () => {
                 </MDTypography>
               </MDBox>
               
-              <MDBox flex={1} overflow="auto" mt={2}>
-                <Grid container spacing={2}>
-                  <Grid size={6}>
-                    <MDBox p={2} sx={{ backgroundColor: '#F3F4F6', borderRadius: '8px' }}>
-                      <MDTypography variant="caption" color="text" fontWeight="bold" textTransform="uppercase">
-                        Industry Multiples
-                      </MDTypography>
-                      <MDTypography variant="h6" fontWeight="bold" color="dark">
-                        4.2x - 7.8x
-                      </MDTypography>
-                      <MDTypography variant="caption" color="text">
-                        EBITDA range
-                      </MDTypography>
-                    </MDBox>
-                  </Grid>
-                  <Grid size={6}>
-                    <MDBox p={2} sx={{ backgroundColor: '#F3F4F6', borderRadius: '8px' }}>
-                      <MDTypography variant="caption" color="text" fontWeight="bold" textTransform="uppercase">
-                        Market Activity
-                      </MDTypography>
-                      <MDTypography variant="h6" fontWeight="bold" color="success">
-                        +23%
-                      </MDTypography>
-                      <MDTypography variant="caption" color="text">
-                        vs last quarter
-                      </MDTypography>
-                    </MDBox>
-                  </Grid>
-                  <Grid size={12}>
-                    <MDBox mt={1}>
-                      <MDTypography variant="body2" fontWeight="bold" color="dark" mb={1}>
-                        Hot Sectors This Quarter
-                      </MDTypography>
-                      <MDBox display="flex" gap={1} flexWrap="wrap">
-                        {['Technology', 'Healthcare', 'Manufacturing', 'SaaS'].map((sector, index) => (
-                          <MDBox 
-                            key={index}
-                            px={1.5} 
-                            py={0.5} 
-                            sx={{ 
-                              backgroundColor: '#DBEAFE', 
-                              color: '#1E40AF', 
-                              borderRadius: '8px',
-                              fontSize: '0.7rem',
-                              fontWeight: 'medium'
-                            }}
-                          >
-                            {sector}
-                          </MDBox>
-                        ))}
-                      </MDBox>
-                    </MDBox>
-                  </Grid>
-                  <Grid size={12}>
-                    <MDBox mt={1} p={1.5} sx={{ backgroundColor: '#FEF3C7', borderRadius: '8px', border: '1px solid #FCD34D' }}>
-                      <MDTypography variant="caption" fontWeight="bold" sx={{ color: '#92400E', fontSize: '0.7rem' }}>
-                        🎯 Opportunity Alert: 3 distressed assets in target sectors available for quick acquisition
-                      </MDTypography>
-                    </MDBox>
-                  </Grid>
+              <Grid container spacing={1.5} sx={{ flex: 1 }}>
+                <Grid size={6}>
+                  <MDBox p={1.5} sx={{ backgroundColor: '#F3F4F6', borderRadius: '6px' }}>
+                    <MDTypography variant="caption" color="text" fontWeight="bold" textTransform="uppercase" sx={{ fontSize: '0.65rem' }}>
+                      Industry Multiples
+                    </MDTypography>
+                    <MDTypography variant="h6" fontWeight="bold" color="dark" sx={{ fontSize: '1.1rem' }}>
+                      4.2x - 7.8x
+                    </MDTypography>
+                    <MDTypography variant="caption" color="text" sx={{ fontSize: '0.65rem' }}>
+                      EBITDA range
+                    </MDTypography>
+                  </MDBox>
                 </Grid>
-              </MDBox>
+                <Grid size={6}>
+                  <MDBox p={1.5} sx={{ backgroundColor: '#F3F4F6', borderRadius: '6px' }}>
+                    <MDTypography variant="caption" color="text" fontWeight="bold" textTransform="uppercase" sx={{ fontSize: '0.65rem' }}>
+                      Market Activity
+                    </MDTypography>
+                    <MDTypography variant="h6" fontWeight="bold" color="success" sx={{ fontSize: '1.1rem' }}>
+                      +23%
+                    </MDTypography>
+                    <MDTypography variant="caption" color="text" sx={{ fontSize: '0.65rem' }}>
+                      vs last quarter
+                    </MDTypography>
+                  </MDBox>
+                </Grid>
+                <Grid size={12}>
+                  <MDBox mt={0.5}>
+                    <MDTypography variant="body2" fontWeight="bold" color="dark" mb={0.5} sx={{ fontSize: '0.8rem' }}>
+                      Hot Sectors This Quarter
+                    </MDTypography>
+                    <MDBox display="flex" gap={0.5} flexWrap="wrap">
+                      {['Technology', 'Healthcare', 'Manufacturing', 'SaaS'].map((sector, index) => (
+                        <MDBox 
+                          key={index}
+                          px={1} 
+                          py={0.25} 
+                          sx={{ 
+                            backgroundColor: '#DBEAFE', 
+                            color: '#1E40AF', 
+                            borderRadius: '4px',
+                            fontSize: '0.65rem',
+                            fontWeight: 'medium'
+                          }}
+                        >
+                          {sector}
+                        </MDBox>
+                      ))}
+                    </MDBox>
+                  </MDBox>
+                </Grid>
+                <Grid size={12}>
+                  <MDBox p={1} sx={{ backgroundColor: '#FEF3C7', borderRadius: '6px', border: '1px solid #FCD34D' }}>
+                    <MDTypography variant="caption" fontWeight="bold" sx={{ color: '#92400E', fontSize: '0.65rem' }}>
+                      🎯 Opportunity Alert: 3 distressed assets in target sectors available for quick acquisition
+                    </MDTypography>
+                  </MDBox>
+                </Grid>
+              </Grid>
             </CardContent>
           </Card>
         </Grid>
@@ -538,41 +536,41 @@ const ExecutiveDashboard = () => {
                 </MDTypography>
               </MDBox>
               
-              <Grid container spacing={2} sx={{ mb: 2 }}>
+              <Grid container spacing={1} sx={{ mb: 1.5 }}>
                 <Grid size={4}>
-                  <MDBox textAlign="center" p={1}>
-                    <MDTypography variant="h5" fontWeight="bold" color="success">
+                  <MDBox textAlign="center" p={0.5}>
+                    <MDTypography variant="h5" fontWeight="bold" color="success" sx={{ fontSize: '1.1rem' }}>
                       87%
                     </MDTypography>
-                    <MDTypography variant="caption" color="text">
+                    <MDTypography variant="caption" color="text" sx={{ fontSize: '0.65rem' }}>
                       Team Win Rate
                     </MDTypography>
                   </MDBox>
                 </Grid>
                 <Grid size={4}>
-                  <MDBox textAlign="center" p={1}>
-                    <MDTypography variant="h5" fontWeight="bold" color="info">
+                  <MDBox textAlign="center" p={0.5}>
+                    <MDTypography variant="h5" fontWeight="bold" color="info" sx={{ fontSize: '1.1rem' }}>
                       42
                     </MDTypography>
-                    <MDTypography variant="caption" color="text">
+                    <MDTypography variant="caption" color="text" sx={{ fontSize: '0.65rem' }}>
                       Avg Days to Close
                     </MDTypography>
                   </MDBox>
                 </Grid>
                 <Grid size={4}>
-                  <MDBox textAlign="center" p={1}>
-                    <MDTypography variant="h5" fontWeight="bold" color="warning">
+                  <MDBox textAlign="center" p={0.5}>
+                    <MDTypography variant="h5" fontWeight="bold" color="warning" sx={{ fontSize: '1.1rem' }}>
                       $3.2M
                     </MDTypography>
-                    <MDTypography variant="caption" color="text">
+                    <MDTypography variant="caption" color="text" sx={{ fontSize: '0.65rem' }}>
                       Avg Deal Size
                     </MDTypography>
                   </MDBox>
                 </Grid>
               </Grid>
               
-              <MDBox flex={1} overflow="auto">
-                <MDTypography variant="body2" fontWeight="bold" color="dark" mb={1}>
+              <MDBox>
+                <MDTypography variant="body2" fontWeight="bold" color="dark" mb={0.5} sx={{ fontSize: '0.8rem' }}>
                   Top Performers This Month
                 </MDTypography>
                 {[
@@ -580,18 +578,18 @@ const ExecutiveDashboard = () => {
                   { name: 'Mike Wilson', deals: '2 deals', revenue: '$5.7M', badge: '⭐' },
                   { name: 'John Smith', deals: '4 deals', revenue: '$12.1M', badge: '🎯' }
                 ].map((performer, index) => (
-                  <MDBox key={index} display="flex" justifyContent="space-between" alignItems="center" mb={1} p={1} sx={{ backgroundColor: index === 0 ? '#F0FDF4' : '#F9FAFB', borderRadius: '6px' }}>
+                  <MDBox key={index} display="flex" justifyContent="space-between" alignItems="center" mb={0.5} p={0.75} sx={{ backgroundColor: index === 0 ? '#F0FDF4' : '#F9FAFB', borderRadius: '4px' }}>
                     <MDBox display="flex" alignItems="center">
-                      <MDTypography variant="body2" mr={1}>{performer.badge}</MDTypography>
-                      <MDTypography variant="body2" fontWeight="medium" color="dark">
+                      <MDTypography variant="body2" mr={0.5} sx={{ fontSize: '0.75rem' }}>{performer.badge}</MDTypography>
+                      <MDTypography variant="body2" fontWeight="medium" color="dark" sx={{ fontSize: '0.75rem' }}>
                         {performer.name}
                       </MDTypography>
                     </MDBox>
                     <MDBox textAlign="right">
-                      <MDTypography variant="caption" color="success" fontWeight="bold">
+                      <MDTypography variant="caption" color="success" fontWeight="bold" sx={{ fontSize: '0.7rem' }}>
                         {performer.revenue}
                       </MDTypography>
-                      <MDTypography variant="caption" color="text" display="block">
+                      <MDTypography variant="caption" color="text" display="block" sx={{ fontSize: '0.65rem' }}>
                         {performer.deals}
                       </MDTypography>
                     </MDBox>
