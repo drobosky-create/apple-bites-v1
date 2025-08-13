@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   Dialog,
@@ -14,15 +14,18 @@ import {
   Paper,
   Chip,
   IconButton,
-  Divider,
   Menu,
+  MenuItem,
   ListItemIcon,
   ListItemText,
   TextField,
   FormControl,
   InputLabel,
   Select,
-  MenuItem
+  Avatar,
+  Tooltip,
+  LinearProgress,
+  Box
 } from '@mui/material';
 
 import {
@@ -51,14 +54,17 @@ import {
   TrendingUp,
   FileText,
   User,
-  Activity
+  Activity,
+  Grid3X3,
+  List,
+  Clock,
+  AlertTriangle
 } from 'lucide-react';
 
 import MDBox from '@/components/MD/MDBox';
 import MDTypography from '@/components/MD/MDTypography';
 import MDButton from '@/components/MD/MDButton';
 import MDInput from '@/components/MD/MDInput';
-// Using Material UI Card with MD styling until MDCard is available
 import { Card, CardContent, CardHeader, Grid } from '@mui/material';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { apiRequest } from '@/lib/queryClient';
@@ -70,744 +76,512 @@ import DealFormModal from '@/components/crm/DealFormModal';
 import FirmFormModal from '@/components/crm/FirmFormModal';
 import EmailCampaignModal from '@/components/crm/EmailCampaignModal';
 
-import type { 
-  Contact, 
-  Firm, 
-  Opportunity, 
-  Deal, 
-  Target, 
-  InsertContact,
-  InsertFirm,
-  InsertOpportunity,
-  InsertDeal,
-  InsertTarget
-} from '@shared/schema';
-
-// 14-Stage Deal Pipeline Constants
+// Deal stages configuration
 const DEAL_STAGES = [
-  { id: 'prospect_identified', name: 'Prospect Identified', color: '#e3f2fd' },
-  { id: 'initial_contact', name: 'Initial Contact', color: '#f3e5f5' },
-  { id: 'qualification', name: 'Qualification', color: '#e8f5e8' },
-  { id: 'needs_analysis', name: 'Needs Analysis', color: '#fff3e0' },
-  { id: 'proposal_preparation', name: 'Proposal Preparation', color: '#fce4ec' },
-  { id: 'proposal_presented', name: 'Proposal Presented', color: '#e0f2f1' },
-  { id: 'negotiation', name: 'Negotiation', color: '#f1f8e9' },
-  { id: 'contract_review', name: 'Contract Review', color: '#e8eaf6' },
-  { id: 'due_diligence', name: 'Due Diligence', color: '#fdf6e3' },
-  { id: 'closing_preparation', name: 'Closing Preparation', color: '#e4f3ff' },
-  { id: 'closed_won', name: 'Closed Won', color: '#e8f5e8' },
-  { id: 'closed_lost', name: 'Closed Lost', color: '#ffebee' },
-  { id: 'on_hold', name: 'On Hold', color: '#f5f5f5' },
-  { id: 'follow_up', name: 'Follow Up', color: '#fff8e1' }
+  { id: 'prospect', name: 'Prospect Identified', color: '#e3f2fd', textColor: '#0d47a1', probability: 10 },
+  { id: 'initial', name: 'Initial Contact', color: '#f3e5f5', textColor: '#4a148c', probability: 20 },
+  { id: 'qualification', name: 'Qualification', color: '#e8f5e8', textColor: '#1b5e20', probability: 30 },
+  { id: 'needs', name: 'Needs Analysis', color: '#fff3e0', textColor: '#e65100', probability: 40 },
+  { id: 'proposal_prep', name: 'Proposal Preparation', color: '#fce4ec', textColor: '#880e4f', probability: 50 },
+  { id: 'proposal_presented', name: 'Proposal Presented', color: '#e0f2f1', textColor: '#004d40', probability: 60 },
+  { id: 'negotiation', name: 'Negotiation', color: '#f1f8e9', textColor: '#33691e', probability: 70 },
+  { id: 'contract', name: 'Contract Review', color: '#fff8e1', textColor: '#ff6f00', probability: 80 },
+  { id: 'due_diligence', name: 'Due Diligence', color: '#e8eaf6', textColor: '#283593', probability: 85 },
+  { id: 'closing', name: 'Closing Preparation', color: '#f9fbe7', textColor: '#827717', probability: 90 },
+  { id: 'closed_won', name: 'Closed Won', color: '#e8f5e8', textColor: '#2e7d32', probability: 100 },
+  { id: 'closed_lost', name: 'Closed Lost', color: '#ffebee', textColor: '#c62828', probability: 0 },
+  { id: 'closed_hold', name: 'Closed Hold', color: '#f5f5f5', textColor: '#616161', probability: 0 },
+  { id: 'follow_up', name: 'Follow Up', color: '#e1f5fe', textColor: '#0277bd', probability: 15 }
 ];
 
-const TRANSACTION_TYPES = [
-  'M&A - Buy Side',
-  'M&A - Sell Side',
-  'Capital Raise',
-  'Strategic Advisory',
-  'Valuation',
-  'Due Diligence',
-  'Business Sale',
-  'Asset Purchase',
-  'Merger',
-  'Joint Venture'
+// View mode type
+type ViewMode = 'kanban' | 'table';
+
+// Priority levels
+const PRIORITY_LEVELS = [
+  { value: 'low', label: 'Low', color: '#4caf50' },
+  { value: 'medium', label: 'Medium', color: '#ff9800' },
+  { value: 'high', label: 'High', color: '#f44336' },
+  { value: 'urgent', label: 'Urgent', color: '#9c27b0' }
 ];
 
-const CLIENT_STAGES = [
-  'Early Stage',
-  'Growth Stage',
-  'Mature',
-  'Distressed',
-  'Turnaround',
-  'Exit Ready'
-];
-
-export default function CRMPipelineDashboard() {
-  const [activeTab, setActiveTab] = useState(0);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [stageFilter, setStageFilter] = useState('all');
-  const [selectedEntity, setSelectedEntity] = useState<any>(null);
-  const [showModal, setShowModal] = useState(false);
-  const [modalType, setModalType] = useState<'create' | 'edit' | 'view'>('create');
-  const [modalEntity, setModalEntity] = useState<'contact' | 'firm' | 'opportunity' | 'deal' | 'target'>('contact');
-  const [showEmailModal, setShowEmailModal] = useState(false);
-  const [selectedContacts, setSelectedContacts] = useState<Contact[]>([]);
-  const [selectedDealId, setSelectedDealId] = useState<number | undefined>();
+// Deal card component for Kanban view
+const DealCard = ({ deal, index }: { deal: any; index: number }) => {
+  const priorityConfig = PRIORITY_LEVELS.find(p => p.value === deal.priority) || PRIORITY_LEVELS[0];
   
-  const { toast } = useToast();
+  return (
+    <Draggable draggableId={deal.id} index={index}>
+      {(provided, snapshot) => (
+        <div
+          ref={provided.innerRef}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+          style={{
+            ...provided.draggableProps.style,
+            transform: snapshot.isDragging ? provided.draggableProps.style?.transform : "none"
+          }}
+        >
+          <Card 
+            sx={{ 
+              mb: 2, 
+              cursor: 'grab',
+              boxShadow: snapshot.isDragging ? 4 : 1,
+              '&:hover': { boxShadow: 2 }
+            }}
+          >
+            <CardContent sx={{ p: 2 }}>
+              <MDBox display="flex" justifyContent="space-between" alignItems="flex-start" mb={1}>
+                <MDTypography variant="subtitle2" fontWeight="bold" color="dark">
+                  {deal.title}
+                </MDTypography>
+                <Chip
+                  size="small"
+                  label={priorityConfig.label}
+                  sx={{
+                    backgroundColor: priorityConfig.color,
+                    color: 'white',
+                    fontSize: '0.7rem',
+                    height: '20px'
+                  }}
+                />
+              </MDBox>
+              
+              <MDBox display="flex" alignItems="center" mb={1}>
+                <DollarSign size={14} color="#1976d2" />
+                <MDTypography variant="body2" fontWeight="bold" color="info" ml={0.5}>
+                  ${(deal.value || 0).toLocaleString()}
+                </MDTypography>
+              </MDBox>
+              
+              <MDBox display="flex" alignItems="center" mb={1}>
+                <Building2 size={14} color="#666" />
+                <MDTypography variant="caption" color="text" ml={0.5}>
+                  {deal.firmName || 'No firm assigned'}
+                </MDTypography>
+              </MDBox>
+              
+              <MDBox display="flex" alignItems="center" mb={1}>
+                <User size={14} color="#666" />
+                <MDTypography variant="caption" color="text" ml={0.5}>
+                  {deal.contactName || 'No contact assigned'}
+                </MDTypography>
+              </MDBox>
+              
+              {deal.expectedCloseDate && (
+                <MDBox display="flex" alignItems="center" mb={1}>
+                  <Calendar size={14} color="#666" />
+                  <MDTypography variant="caption" color="text" ml={0.5}>
+                    Expected: {new Date(deal.expectedCloseDate).toLocaleDateString()}
+                  </MDTypography>
+                </MDBox>
+              )}
+              
+              <MDBox display="flex" justifyContent="space-between" alignItems="center" mt={2}>
+                <MDBox display="flex" gap={0.5}>
+                  <IconButton size="small">
+                    <Eye size={16} />
+                  </IconButton>
+                  <IconButton size="small">
+                    <Edit size={16} />
+                  </IconButton>
+                  <IconButton size="small">
+                    <Mail size={16} />
+                  </IconButton>
+                </MDBox>
+                <LinearProgress
+                  variant="determinate"
+                  value={DEAL_STAGES.find(s => s.id === deal.currentStage)?.probability || 0}
+                  sx={{ width: 60, height: 4, borderRadius: 2 }}
+                />
+              </MDBox>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+    </Draggable>
+  );
+};
+
+// Kanban column component
+const KanbanColumn = ({ stage, deals }: { stage: any; deals: any[] }) => {
+  return (
+    <Card sx={{ minWidth: 280, maxWidth: 280, height: 'fit-content' }}>
+      <CardHeader
+        title={
+          <MDBox>
+            <MDTypography variant="subtitle1" fontWeight="bold" color="dark">
+              {stage.name}
+            </MDTypography>
+            <MDTypography variant="caption" color="text">
+              {deals.length} deals • {stage.probability}% avg probability
+            </MDTypography>
+          </MDBox>
+        }
+        action={
+          <IconButton size="small">
+            <Plus size={16} />
+          </IconButton>
+        }
+        sx={{ 
+          backgroundColor: stage.color,
+          color: stage.textColor,
+          pb: 1
+        }}
+      />
+      <Droppable droppableId={stage.id}>
+        {(provided, snapshot) => (
+          <CardContent
+            ref={provided.innerRef}
+            {...provided.droppableProps}
+            sx={{
+              minHeight: 400,
+              maxHeight: 600,
+              overflowY: 'auto',
+              backgroundColor: snapshot.isDraggingOver ? '#f5f5f5' : 'transparent',
+              transition: 'background-color 0.2s ease'
+            }}
+          >
+            {deals.map((deal, index) => (
+              <DealCard key={deal.id} deal={deal} index={index} />
+            ))}
+            {provided.placeholder}
+          </CardContent>
+        )}
+      </Droppable>
+    </Card>
+  );
+};
+
+// Table row component for Monday.com style view
+const DealTableRow = ({ deal }: { deal: any }) => {
+  const stage = DEAL_STAGES.find(s => s.id === deal.currentStage);
+  const priorityConfig = PRIORITY_LEVELS.find(p => p.value === deal.priority) || PRIORITY_LEVELS[0];
+  
+  return (
+    <TableRow hover>
+      <TableCell>
+        <MDBox display="flex" alignItems="center">
+          <Chip
+            size="small"
+            label={priorityConfig.label}
+            sx={{
+              backgroundColor: priorityConfig.color,
+              color: 'white',
+              fontSize: '0.7rem',
+              height: '20px',
+              mr: 1
+            }}
+          />
+          <MDTypography variant="body2" fontWeight="medium">
+            {deal.title}
+          </MDTypography>
+        </MDBox>
+      </TableCell>
+      <TableCell>
+        <Chip
+          label={stage?.name || 'Unknown'}
+          size="small"
+          sx={{
+            backgroundColor: stage?.color || '#f5f5f5',
+            color: stage?.textColor || '#666'
+          }}
+        />
+      </TableCell>
+      <TableCell>
+        <MDTypography variant="body2" fontWeight="bold" color="info">
+          ${(deal.value || 0).toLocaleString()}
+        </MDTypography>
+      </TableCell>
+      <TableCell>
+        <MDTypography variant="body2">
+          {deal.firmName || '-'}
+        </MDTypography>
+      </TableCell>
+      <TableCell>
+        <MDTypography variant="body2">
+          {deal.contactName || '-'}
+        </MDTypography>
+      </TableCell>
+      <TableCell>
+        <LinearProgress
+          variant="determinate"
+          value={stage?.probability || 0}
+          sx={{ height: 6, borderRadius: 3 }}
+        />
+        <MDTypography variant="caption" color="text">
+          {stage?.probability || 0}%
+        </MDTypography>
+      </TableCell>
+      <TableCell>
+        <MDTypography variant="body2">
+          {deal.expectedCloseDate 
+            ? new Date(deal.expectedCloseDate).toLocaleDateString() 
+            : '-'
+          }
+        </MDTypography>
+      </TableCell>
+      <TableCell>
+        <MDBox display="flex" gap={0.5}>
+          <IconButton size="small">
+            <Eye size={16} />
+          </IconButton>
+          <IconButton size="small">
+            <Edit size={16} />
+          </IconButton>
+          <IconButton size="small">
+            <MoreVertical size={16} />
+          </IconButton>
+        </MDBox>
+      </TableCell>
+    </TableRow>
+  );
+};
+
+const CRMPipelineDashboard = () => {
+  const { isAuthenticated } = useAdminAuth();
+  const [viewMode, setViewMode] = useState<ViewMode>('kanban');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedStage, setSelectedStage] = useState('all');
+  const [selectedPriority, setSelectedPriority] = useState('all');
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
+  const [isDealModalOpen, setIsDealModalOpen] = useState(false);
+  const [isFirmModalOpen, setIsFirmModalOpen] = useState(false);
+  const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
+
   const queryClient = useQueryClient();
-  const { isAuthenticated, isLoading } = useAdminAuth();
+  const { toast } = useToast();
 
-  // Queries for all CRM entities
-  const { data: contacts = [] } = useQuery<Contact[]>({
-    queryKey: ['/api/contacts'],
-    enabled: isAuthenticated
-  });
+  // Data queries
+  const { data: deals = [] } = useQuery({ queryKey: ['/api/deals'] });
+  const { data: contacts = [] } = useQuery({ queryKey: ['/api/contacts'] });
+  const { data: firms = [] } = useQuery({ queryKey: ['/api/firms'] });
 
-  const { data: firms = [] } = useQuery<Firm[]>({
-    queryKey: ['/api/firms'],
-    enabled: isAuthenticated
-  });
+  // Type the data properly
+  const typedDeals = deals as any[];
+  const typedContacts = contacts as any[];
+  const typedFirms = firms as any[];
 
-  const { data: opportunities = [] } = useQuery<Opportunity[]>({
-    queryKey: ['/api/opportunities'],
-    enabled: isAuthenticated
-  });
+  // Filter deals based on search and filters
+  const filteredDeals = useMemo(() => {
+    return typedDeals.filter((deal: any) => {
+      const matchesSearch = deal.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           deal.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           deal.firmName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           deal.contactName?.toLowerCase().includes(searchTerm.toLowerCase());
+      
+      const matchesStage = selectedStage === 'all' || deal.currentStage === selectedStage;
+      const matchesPriority = selectedPriority === 'all' || deal.priority === selectedPriority;
+      
+      return matchesSearch && matchesStage && matchesPriority;
+    });
+  }, [typedDeals, searchTerm, selectedStage, selectedPriority]);
 
-  const { data: deals = [] } = useQuery<Deal[]>({
-    queryKey: ['/api/deals'],
-    enabled: isAuthenticated
-  });
+  // Group deals by stage for Kanban view
+  const groupedDeals = useMemo(() => {
+    const grouped: { [key: string]: any[] } = {};
+    DEAL_STAGES.forEach(stage => {
+      grouped[stage.id] = filteredDeals.filter((deal: any) => deal.currentStage === stage.id);
+    });
+    return grouped;
+  }, [filteredDeals]);
 
-  const { data: targets = [] } = useQuery<Target[]>({
-    queryKey: ['/api/targets'],
-    enabled: isAuthenticated
-  });
+  // Handle drag and drop for Kanban
+  const handleDragEnd = async (result: DropResult) => {
+    if (!result.destination) return;
 
-  // Mutation for updating deal stages
-  const updateDealMutation = useMutation({
-    mutationFn: async ({ id, updates }: { id: number; updates: Partial<Deal> }) => {
-      return apiRequest('PATCH', `/api/deals/${id}`, updates);
-    },
-    onSuccess: () => {
+    const { source, destination, draggableId } = result;
+    
+    if (source.droppableId === destination.droppableId) return;
+
+    try {
+      await apiRequest('PATCH', `/api/deals/${draggableId}`, {
+        currentStage: destination.droppableId
+      });
+      
       queryClient.invalidateQueries({ queryKey: ['/api/deals'] });
       toast({
-        title: "Success",
-        description: "Deal updated successfully",
+        title: "Deal Updated",
+        description: "Deal stage updated successfully",
       });
-    },
-    onError: () => {
+    } catch (error) {
       toast({
         title: "Error",
-        description: "Failed to update deal",
+        description: "Failed to update deal stage",
         variant: "destructive",
       });
     }
-  });
-
-  // Generic create/update mutations
-  const createMutation = useMutation({
-    mutationFn: async ({ entity, data }: { entity: string; data: any }) => {
-      return apiRequest('POST', `/api/${entity}`, data);
-    },
-    onSuccess: (_, { entity }) => {
-      queryClient.invalidateQueries({ queryKey: [`/api/${entity}`] });
-      setShowModal(false);
-      toast({
-        title: "Success",
-        description: `${entity.slice(0, -1)} created successfully`,
-      });
-    }
-  });
-
-  const updateMutation = useMutation({
-    mutationFn: async ({ entity, id, data }: { entity: string; id: number; data: any }) => {
-      return apiRequest('PATCH', `/api/${entity}/${id}`, data);
-    },
-    onSuccess: (_, { entity }) => {
-      queryClient.invalidateQueries({ queryKey: [`/api/${entity}`] });
-      setShowModal(false);
-      toast({
-        title: "Success",
-        description: `${entity.slice(0, -1)} updated successfully`,
-      });
-    }
-  });
-
-  const deleteMutation = useMutation({
-    mutationFn: async ({ entity, id }: { entity: string; id: number }) => {
-      return apiRequest('DELETE', `/api/${entity}/${id}`);
-    },
-    onSuccess: (_, { entity }) => {
-      queryClient.invalidateQueries({ queryKey: [`/api/${entity}`] });
-      toast({
-        title: "Success",
-        description: `${entity.slice(0, -1)} deleted successfully`,
-      });
-    }
-  });
-
-  // Handle drag and drop for deal pipeline
-  const handleDragEnd = (result: DropResult) => {
-    if (!result.destination) return;
-
-    const dealId = parseInt(result.draggableId);
-    const newStage = result.destination.droppableId;
-    
-    updateDealMutation.mutate({
-      id: dealId,
-      updates: { dealStage: newStage }
-    });
   };
-
-  // Filter deals by stage for pipeline view
-  const dealsByStage = useMemo(() => {
-    const grouped: Record<string, Deal[]> = {};
-    
-    DEAL_STAGES.forEach(stage => {
-      grouped[stage.id] = deals.filter((deal: Deal) => deal.dealStage === stage.id);
-    });
-    
-    return grouped;
-  }, [deals]);
-
-  // Statistics calculations
-  const statistics = useMemo(() => {
-    const totalDeals = deals.length;
-    const totalValue = deals.reduce((sum: number, deal: Deal) => 
-      sum + (parseFloat(deal.estimatedTransactionValue || '0')), 0);
-    const avgProbability = deals.length > 0 
-      ? deals.reduce((sum: number, deal: Deal) => sum + (deal.probabilityOfClose || 0), 0) / deals.length 
-      : 0;
-
-    const stageDistribution = DEAL_STAGES.map(stage => ({
-      stage: stage.name,
-      count: dealsByStage[stage.id]?.length || 0,
-      value: dealsByStage[stage.id]?.reduce((sum: number, deal: Deal) => 
-        sum + (parseFloat(deal.estimatedTransactionValue || '0')), 0) || 0
-    }));
-
-    return {
-      totalContacts: contacts.length,
-      totalFirms: firms.length,
-      totalOpportunities: opportunities.length,
-      totalDeals,
-      totalValue,
-      avgProbability,
-      stageDistribution
-    };
-  }, [contacts, firms, opportunities, deals, dealsByStage]);
-
-  if (isLoading) {
-    return (
-      <MDBox p={3}>
-        <MDTypography variant="h6">Loading CRM Dashboard...</MDTypography>
-      </MDBox>
-    );
-  }
 
   if (!isAuthenticated) {
     return <AdminLogin onLoginSuccess={() => {}} />;
   }
 
-  // Tab content renderers
-  const renderOverview = () => (
-    <MDBox display="grid" gridTemplateColumns="repeat(auto-fit, minmax(250px, 1fr))" gap={3}>
-      {/* Statistics Cards */}
-      <Card sx={{ bgcolor: 'background.paper', borderRadius: 2, boxShadow: 3 }}>
-        <CardContent>
-            <MDBox display="flex" alignItems="center" justifyContent="space-between">
-              <MDBox>
-                <MDTypography variant="h4" fontWeight="bold">
-                  {statistics.totalContacts}
-                </MDTypography>
-                <MDTypography variant="body2" color="text">
-                  Total Contacts
-                </MDTypography>
-              </MDBox>
-              <Users size={32} color="#1976d2" />
-            </MDBox>
-          </CardContent>
-        </Card>
-      
-      <Card sx={{ bgcolor: 'background.paper', borderRadius: 2, boxShadow: 3 }}>
-        <CardContent>
-          <MDBox display="flex" alignItems="center" justifyContent="space-between">
-            <MDBox>
-              <MDTypography variant="h4" fontWeight="bold">
-                {statistics.totalFirms}
-              </MDTypography>
-              <MDTypography variant="body2" color="text">
-                Total Firms
-              </MDTypography>
-            </MDBox>
-            <Building2 size={32} color="#2e7d32" />
-          </MDBox>
-        </CardContent>
-      </Card>
-
-      <Card sx={{ bgcolor: 'background.paper', borderRadius: 2, boxShadow: 3 }}>
-        <CardContent>
-          <MDBox display="flex" alignItems="center" justifyContent="space-between">
-            <MDBox>
-              <MDTypography variant="h4" fontWeight="bold">
-                {statistics.totalDeals}
-              </MDTypography>
-              <MDTypography variant="body2" color="text">
-                Active Deals
-              </MDTypography>
-            </MDBox>
-            <TrendingUp size={32} color="#ed6c02" />
-          </MDBox>
-        </CardContent>
-      </Card>
-
-      <Card sx={{ bgcolor: 'background.paper', borderRadius: 2, boxShadow: 3 }}>
-        <CardContent>
-          <MDBox display="flex" alignItems="center" justifyContent="space-between">
-            <MDBox>
-              <MDTypography variant="h4" fontWeight="bold">
-                ${(statistics.totalValue / 1000000).toFixed(1)}M
-              </MDTypography>
-              <MDTypography variant="body2" color="text">
-                Pipeline Value
-              </MDTypography>
-            </MDBox>
-            <DollarSign size={32} color="#9c27b0" />
-          </MDBox>
-        </CardContent>
-      </Card>
-
-      {/* Recent Activity */}
-      <MDBox gridColumn="1 / -1" mt={3}>
-        <Card sx={{ bgcolor: 'background.paper', borderRadius: 2, boxShadow: 3 }}>
-          <CardHeader 
-            title={
-              <MDTypography variant="h6" fontWeight="bold">Recent Activity</MDTypography>
-            } 
-          />
-          <CardContent>
-            <MDTypography variant="body2" color="text">
-              Recent CRM activities will appear here...
-            </MDTypography>
-          </CardContent>
-        </Card>
-      </MDBox>
-    </MDBox>
-  );
-
-  const renderPipeline = () => (
-    <MDBox>
-      <MDBox display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-        <MDTypography variant="h5" fontWeight="bold">
-          Deal Pipeline - 14 Stage Process
-        </MDTypography>
-        <MDBox display="flex" gap={1}>
-          <MDButton
-            variant="gradient"
-            color="info"
-            onClick={() => {
-              setModalType('create');
-              setModalEntity('deal');
-              setShowModal(true);
-            }}
-          >
-            <Plus size={16} />
-            &nbsp;New Deal
-          </MDButton>
-          <MDButton
-            variant="outlined"
-            color="info"
-            onClick={() => {
-              setShowEmailModal(true);
-            }}
-          >
-            <Mail size={16} />
-            &nbsp;Email Campaign
-          </MDButton>
-        </MDBox>
-      </MDBox>
-
-      <DragDropContext onDragEnd={handleDragEnd}>
-        <MDBox display="flex" gap={2} overflow="auto" pb={2}>
-          {DEAL_STAGES.map((stage) => (
-            <MDBox key={stage.id} minWidth="280px">
-              <Card sx={{ backgroundColor: stage.color }}>
-                <CardHeader 
-                  title={
-                    <MDBox>
-                      <MDTypography variant="h6" fontWeight="bold">
-                        {stage.name}
-                      </MDTypography>
-                      <MDTypography variant="caption" color="text">
-                        {dealsByStage[stage.id]?.length || 0} deals
-                      </MDTypography>
-                    </MDBox>
-                  }
-                />
-                <CardContent>
-                  <Droppable droppableId={stage.id}>
-                    {(provided, snapshot) => (
-                      <MDBox
-                        ref={provided.innerRef}
-                        {...provided.droppableProps}
-                        minHeight="200px"
-                        bgcolor={snapshot.isDraggingOver ? 'rgba(0,0,0,0.05)' : 'transparent'}
-                        borderRadius={1}
-                        p={1}
-                      >
-                        {(dealsByStage[stage.id] || []).map((deal, index) => (
-                          <Draggable
-                            key={deal.id}
-                            draggableId={deal.id.toString()}
-                            index={index}
-                          >
-                            {(provided, snapshot) => (
-                              <Card
-                                ref={provided.innerRef}
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                                sx={{
-                                  mb: 1,
-                                  cursor: 'grab',
-                                  opacity: snapshot.isDragging ? 0.8 : 1,
-                                  transform: snapshot.isDragging ? 'rotate(5deg)' : 'rotate(0deg)',
-                                }}
-                              >
-                                <CardContent sx={{ p: 2 }}>
-                                  <MDTypography variant="subtitle2" fontWeight="bold">
-                                    {deal.dealName}
-                                  </MDTypography>
-                                  <MDTypography variant="caption" color="text">
-                                    {deal.transactionType}
-                                  </MDTypography>
-                                  <MDBox display="flex" justifyContent="between" alignItems="center" mt={1}>
-                                    <Chip 
-                                      label={`${deal.probabilityOfClose || 0}%`} 
-                                      size="small" 
-                                      color="primary"
-                                    />
-                                    <MDTypography variant="caption" fontWeight="bold">
-                                      ${(parseFloat(deal.estimatedTransactionValue || '0') / 1000).toFixed(0)}K
-                                    </MDTypography>
-                                  </MDBox>
-                                  <MDBox display="flex" justifyContent="end" mt={1} gap={0.5}>
-                                    <IconButton 
-                                      size="small"
-                                      onClick={() => {
-                                        setSelectedEntity(deal);
-                                        setModalType('view');
-                                        setModalEntity('deal');
-                                        setShowModal(true);
-                                      }}
-                                    >
-                                      <Eye size={16} />
-                                    </IconButton>
-                                    <IconButton 
-                                      size="small"
-                                      onClick={() => {
-                                        setSelectedDealId(deal.id);
-                                        setShowEmailModal(true);
-                                      }}
-                                      title="Send Email Campaign"
-                                    >
-                                      <Mail size={16} />
-                                    </IconButton>
-                                  </MDBox>
-                                </CardContent>
-                              </Card>
-                            )}
-                          </Draggable>
-                        ))}
-                        {provided.placeholder}
-                      </MDBox>
-                    )}
-                  </Droppable>
-                </CardContent>
-              </Card>
-            </MDBox>
-          ))}
-        </MDBox>
-      </DragDropContext>
-    </MDBox>
-  );
-
-  const renderContacts = () => (
-    <MDBox>
-      <MDBox display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-        <MDTypography variant="h5" fontWeight="bold">
-          Contact Management
-        </MDTypography>
-        <MDButton
-          variant="gradient"
-          color="info"
-          onClick={() => {
-            setModalType('create');
-            setModalEntity('contact');
-            setShowModal(true);
-          }}
-        >
-          <Plus size={16} />
-          &nbsp;New Contact
-        </MDButton>
-      </MDBox>
-
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell>Title</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Phone</TableCell>
-              <TableCell>Firm</TableCell>
-              <TableCell>Actions</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {contacts.map((contact: Contact) => (
-              <TableRow key={contact.id}>
-                <TableCell>
-                  <MDBox>
-                    <MDTypography variant="subtitle2" fontWeight="bold">
-                      {contact.firstName} {contact.lastName}
-                    </MDTypography>
-                    {contact.goesByName && (
-                      <MDTypography variant="caption" color="text">
-                        ({contact.goesByName})
-                      </MDTypography>
-                    )}
-                  </MDBox>
-                </TableCell>
-                <TableCell>{contact.title || '—'}</TableCell>
-                <TableCell>{contact.email || '—'}</TableCell>
-                <TableCell>{contact.phoneMobile || contact.phoneOffice || '—'}</TableCell>
-                <TableCell>
-                  {contact.firmId ? `Firm #${contact.firmId}` : '—'}
-                </TableCell>
-                <TableCell>
-                  <IconButton
-                    size="small"
-                    onClick={() => {
-                      setSelectedEntity(contact);
-                      setModalType('view');
-                      setModalEntity('contact');
-                      setShowModal(true);
-                    }}
-                  >
-                    <Eye size={16} />
-                  </IconButton>
-                  <IconButton
-                    size="small"
-                    onClick={() => {
-                      setSelectedEntity(contact);
-                      setModalType('edit');
-                      setModalEntity('contact');
-                      setShowModal(true);
-                    }}
-                  >
-                    <Edit size={16} />
-                  </IconButton>
-                  <IconButton
-                    size="small"
-                    onClick={() => {
-                      setSelectedContacts([contact]);
-                      setShowEmailModal(true);
-                    }}
-                    title="Send Email"
-                  >
-                    <Mail size={16} />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </MDBox>
-  );
-
-  const renderFirms = () => (
-    <MDBox>
-      <MDBox display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-        <MDTypography variant="h5" fontWeight="bold">
-          Firm Management
-        </MDTypography>
-        <MDButton
-          variant="gradient"
-          color="info"
-          onClick={() => {
-            setModalType('create');
-            setModalEntity('firm');
-            setShowModal(true);
-          }}
-        >
-          <Plus size={16} />
-          &nbsp;New Firm
-        </MDButton>
-      </MDBox>
-
-      <Grid container spacing={3}>
-        {firms.map((firm: Firm) => (
-          <Grid xs={12} md={6} lg={4} key={firm.id}>
-            <Card>
-              <CardContent>
-                <MDBox display="flex" justifyContent="between" alignItems="start" mb={2}>
-                  <MDBox>
-                    <MDTypography variant="h6" fontWeight="bold">
-                      {firm.firmName}
-                    </MDTypography>
-                    <MDTypography variant="caption" color="text">
-                      {firm.industry || 'Industry not specified'}
-                    </MDTypography>
-                  </MDBox>
-                  <IconButton
-                    size="small"
-                    onClick={() => {
-                      setSelectedEntity(firm);
-                      setModalType('view');
-                      setModalEntity('firm');
-                      setShowModal(true);
-                    }}
-                  >
-                    <Eye size={16} />
-                  </IconButton>
-                </MDBox>
-
-                <MDBox mb={2}>
-                  <MDTypography variant="body2">
-                    📍 {firm.city}, {firm.stateRegion}
-                  </MDTypography>
-                  {firm.websiteUrl && (
-                    <MDTypography variant="body2">
-                      🌐 <a href={firm.websiteUrl} target="_blank" rel="noopener noreferrer">
-                        {firm.websiteUrl}
-                      </a>
-                    </MDTypography>
-                  )}
-                </MDBox>
-
-                {(firm.annualRevenue || firm.annualEbitda) && (
-                  <MDBox>
-                    {firm.annualRevenue && (
-                      <Chip 
-                        label={`Revenue: $${(parseFloat(firm.annualRevenue) / 1000000).toFixed(1)}M`}
-                        size="small"
-                        sx={{ mr: 1, mb: 1 }}
-                      />
-                    )}
-                    {firm.annualEbitda && (
-                      <Chip 
-                        label={`EBITDA: $${(parseFloat(firm.annualEbitda) / 1000000).toFixed(1)}M`}
-                        size="small"
-                        sx={{ mb: 1 }}
-                      />
-                    )}
-                  </MDBox>
-                )}
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-    </MDBox>
-  );
-
   return (
     <DashboardLayout>
-      <MDBox py={3}>
+      <MDBox p={3}>
+        {/* Header */}
         <MDBox display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-          <MDTypography variant="h4" fontWeight="bold">
-            Apple Bites CRM & Deal Pipeline
-          </MDTypography>
-        </MDBox>
-
-        {/* Navigation Tabs using MD styling */}
-        <MDBox sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
-          <MDBox display="flex" gap={2}>
-            {['Overview', 'Deal Pipeline', 'Contacts', 'Firms', 'Opportunities', 'Targets'].map((tab, index) => (
+          <MDBox>
+            <MDTypography variant="h4" fontWeight="bold" color="dark">
+              Apple Bites CRM & Deal Pipeline
+            </MDTypography>
+            <MDTypography variant="body2" color="text">
+              Manage your M&A deal pipeline with advanced tracking and automation
+            </MDTypography>
+          </MDBox>
+          
+          {/* View Mode Toggle */}
+          <MDBox display="flex" alignItems="center" gap={2}>
+            <MDBox display="flex" sx={{ backgroundColor: '#f5f5f5', borderRadius: '6px', p: 0.5 }}>
               <MDButton
-                key={tab}
-                variant={activeTab === index ? "gradient" : "text"}
-                color={activeTab === index ? "info" : "dark"}
-                onClick={() => setActiveTab(index)}
-                sx={{ minWidth: 'auto', px: 2, py: 1 }}
+                variant={viewMode === 'kanban' ? 'contained' : 'text'}
+                size="small"
+                onClick={() => setViewMode('kanban')}
+                sx={{ minWidth: 'auto', px: 2 }}
               >
-                {tab}
+                <Grid3X3 size={16} style={{ marginRight: 4 }} />
+                Kanban
               </MDButton>
-            ))}
+              <MDButton
+                variant={viewMode === 'table' ? 'contained' : 'text'}
+                size="small"
+                onClick={() => setViewMode('table')}
+                sx={{ minWidth: 'auto', px: 2 }}
+              >
+                <List size={16} style={{ marginRight: 4 }} />
+                Table
+              </MDButton>
+            </MDBox>
+            
+            <MDButton
+              variant="contained"
+              color="primary"
+              startIcon={<Plus size={16} />}
+              onClick={() => setIsDealModalOpen(true)}
+            >
+              New Deal
+            </MDButton>
+            
+            <MDButton
+              variant="outlined"
+              startIcon={<Mail size={16} />}
+              onClick={() => setIsEmailModalOpen(true)}
+            >
+              Email Campaign
+            </MDButton>
           </MDBox>
         </MDBox>
 
-        <MDBox>
-          {activeTab === 0 && renderOverview()}
-          {activeTab === 1 && renderPipeline()}
-          {activeTab === 2 && renderContacts()}
-          {activeTab === 3 && renderFirms()}
-          {activeTab === 4 && (
-            <MDTypography variant="h6">
-              Opportunities management coming soon...
-            </MDTypography>
-          )}
-          {activeTab === 5 && (
-            <MDTypography variant="h6">
-              Targets management coming soon...
-            </MDTypography>
-          )}
+        {/* Filters and Search */}
+        <MDBox display="flex" gap={2} mb={3} flexWrap="wrap">
+          <MDInput
+            placeholder="Search deals, firms, contacts..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            sx={{ minWidth: 300 }}
+            InputProps={{
+              startAdornment: <Search size={20} style={{ marginRight: 8, color: '#666' }} />
+            }}
+          />
+          
+          <FormControl size="small" sx={{ minWidth: 150 }}>
+            <InputLabel>Stage</InputLabel>
+            <Select
+              value={selectedStage}
+              onChange={(e) => setSelectedStage(e.target.value)}
+              label="Stage"
+            >
+              <MenuItem value="all">All Stages</MenuItem>
+              {DEAL_STAGES.map(stage => (
+                <MenuItem key={stage.id} value={stage.id}>
+                  {stage.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          
+          <FormControl size="small" sx={{ minWidth: 150 }}>
+            <InputLabel>Priority</InputLabel>
+            <Select
+              value={selectedPriority}
+              onChange={(e) => setSelectedPriority(e.target.value)}
+              label="Priority"
+            >
+              <MenuItem value="all">All Priorities</MenuItem>
+              {PRIORITY_LEVELS.map(priority => (
+                <MenuItem key={priority.value} value={priority.value}>
+                  {priority.label}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </MDBox>
 
-      {/* Contact Form Modal */}
-      {modalEntity === 'contact' && (
+        {/* Main Content */}
+        {viewMode === 'kanban' ? (
+          <DragDropContext onDragEnd={handleDragEnd}>
+            <MDBox sx={{ overflowX: 'auto', pb: 2 }}>
+              <MDBox display="flex" gap={2} sx={{ minWidth: 'fit-content' }}>
+                {DEAL_STAGES.map(stage => (
+                  <KanbanColumn
+                    key={stage.id}
+                    stage={stage}
+                    deals={groupedDeals[stage.id] || []}
+                  />
+                ))}
+              </MDBox>
+            </MDBox>
+          </DragDropContext>
+        ) : (
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Deal</TableCell>
+                  <TableCell>Stage</TableCell>
+                  <TableCell>Value</TableCell>
+                  <TableCell>Firm</TableCell>
+                  <TableCell>Contact</TableCell>
+                  <TableCell>Progress</TableCell>
+                  <TableCell>Expected Close</TableCell>
+                  <TableCell>Actions</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {filteredDeals.map((deal: any) => (
+                  <DealTableRow key={deal.id} deal={deal} />
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        )}
+
+        {/* Modals */}
         <ContactFormModal
-          open={showModal}
-          onClose={() => setShowModal(false)}
-          contact={selectedEntity}
-          mode={modalType}
+          open={isContactModalOpen}
+          onClose={() => setIsContactModalOpen(false)}
+          mode="create"
         />
-      )}
-
-      {/* Deal Form Modal */}
-      {modalEntity === 'deal' && (
+        
         <DealFormModal
-          open={showModal}
-          onClose={() => setShowModal(false)}
-          deal={selectedEntity}
-          mode={modalType}
-          preSelectedStage={modalType === 'create' ? 'prospect_identified' : undefined}
+          open={isDealModalOpen}
+          onClose={() => setIsDealModalOpen(false)}
+          mode="create"
         />
-      )}
-
-      {/* Email Campaign Modal */}
-      <EmailCampaignModal
-        open={showEmailModal}
-        onClose={() => {
-          setShowEmailModal(false);
-          setSelectedDealId(undefined);
-          setSelectedContacts([]);
-        }}
-        dealId={selectedDealId}
-        selectedContacts={selectedContacts}
-      />
-
-      {/* Firm Form Modal */}
-      {modalEntity === 'firm' && (
+        
         <FirmFormModal
-          open={showModal}
-          onClose={() => {
-            setShowModal(false);
-            setSelectedEntity(null);
-          }}
-          firm={selectedEntity as any}
-          mode={modalType}
+          open={isFirmModalOpen}
+          onClose={() => setIsFirmModalOpen(false)}
+          mode="create"
         />
-      )}
-
-      {/* Placeholder for remaining entity forms */}
-      {(modalEntity === 'opportunity' || modalEntity === 'target') && (
-        <Dialog 
-          open={showModal} 
-          onClose={() => setShowModal(false)}
-          maxWidth="md"
-          fullWidth
-        >
-          <DialogTitle>
-            {modalType === 'create' ? 'Create' : modalType === 'edit' ? 'Edit' : 'View'} {modalEntity}
-          </DialogTitle>
-          <DialogContent>
-            <MDTypography variant="body2">
-              {modalType} {modalEntity} form will be implemented here...
-            </MDTypography>
-          </DialogContent>
-          <DialogActions>
-            <MDButton onClick={() => setShowModal(false)}>Close</MDButton>
-            {modalType !== 'view' && (
-              <MDButton variant="contained">Save</MDButton>
-            )}
-          </DialogActions>
-        </Dialog>
-      )}
+        
+        <EmailCampaignModal
+          open={isEmailModalOpen}
+          onClose={() => setIsEmailModalOpen(false)}
+        />
       </MDBox>
     </DashboardLayout>
   );
-}
+};
+
+export default CRMPipelineDashboard;
