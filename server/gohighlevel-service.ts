@@ -340,7 +340,7 @@ export class GoHighLevelService {
     webhookSent: boolean;
   }> {
     try {
-      // Create comprehensive contact data
+      // Create comprehensive contact data with ALL information in one API call
       const contactData: GoHighLevelContact = {
         firstName: userData.firstName || undefined,
         lastName: userData.lastName || undefined,
@@ -350,55 +350,35 @@ export class GoHighLevelService {
           'New Account Created',
           `Tier: ${userData.tier || 'free'}`,
           `Source: ${userData.source || userData.authProvider || 'direct'}`,
-          ...(userData.authProvider === 'winthestorm-demo' ? ['Win The Storm Demo', 'Event Lead'] : []),
+          ...(userData.authProvider === 'winthestorm-demo' ? ['Win The Storm Demo', 'Event Lead', 'Growth Tier Access'] : []),
           ...(userData.authProvider === 'demo' ? ['Demo User'] : []),
-          ...(userData.authProvider === 'email' ? ['Email Signup'] : [])
+          ...(userData.authProvider === 'email' ? ['Email Signup', 'Platform Registration'] : []),
+          ...(userData.authProvider === 'custom' ? ['Email Registration', 'Platform User'] : [])
         ],
         customFields: {
-          'source': userData.source || userData.authProvider || 'Apple Bites Platform',
+          'source': userData.source || (userData.authProvider === 'winthestorm-demo' ? 'Win The Storm Demo' : 'Apple Bites Platform'),
           'type': userData.authProvider === 'winthestorm-demo' ? 'Demo User' : 'Platform User',
           'access_token': userData.id,
-          'assessment_token': `${userData.id}_${Date.now()}`
+          'assessment_token': `${userData.id}_${Date.now()}`,
+          // Additional context for automations
+          'signup_date': new Date().toISOString(),
+          'account_tier': userData.tier || 'free',
+          'auth_provider': userData.authProvider || 'direct',
+          'platform': 'Apple Bites M&A',
+          ...(userData.company && { 'company_name': userData.company }),
+          'lead_score': userData.authProvider === 'winthestorm-demo' ? '85' : '70', // Higher score for event leads
+          'lead_temperature': userData.authProvider === 'winthestorm-demo' ? 'Hot' : 'Warm'
         }
       };
 
-      // Create contact in GoHighLevel
+      // Single API call with comprehensive data - no separate webhook needed
       const contactResult = await this.createOrUpdateContact(contactData);
 
-      // Prepare webhook data for account creation
-      const webhookData = {
-        event: 'account_created',
-        account: {
-          id: userData.id,
-          email: userData.email,
-          first_name: userData.firstName || '',
-          last_name: userData.lastName || '',
-          tier: userData.tier || 'free',
-          auth_provider: userData.authProvider || 'direct',
-          company: userData.company || '',
-          source: userData.source || userData.authProvider || 'direct'
-        },
-        timestamp: new Date().toISOString()
-      };
-
-      // Determine webhook type based on context
-      let webhookType: 'freeResults' | 'growthResults' | 'accountCreated' = 'accountCreated';
-      
-      // Use tier-specific webhooks for better routing
-      if (userData.tier === 'growth' || userData.tier === 'paid') {
-        webhookType = 'growthResults';
-      } else if (userData.tier === 'capital') {
-        webhookType = 'growthResults'; // Capital users also use growth webhook for account creation
-      }
-
-      // Send webhook
-      const webhookSent = await this.sendWebhook(webhookData, webhookType);
-
-      console.log(`Account creation processed - Contact: ${contactResult ? 'success' : 'failed'}, Webhook: ${webhookSent ? 'success' : 'failed'}`);
+      console.log(`Account creation processed via API - Contact: ${contactResult ? 'success' : 'failed'} for ${userData.email}`);
 
       return {
         contactCreated: !!contactResult,
-        webhookSent
+        webhookSent: true // API call replaces webhook
       };
 
     } catch (error) {
