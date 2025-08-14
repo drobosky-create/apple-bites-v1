@@ -404,9 +404,13 @@ export class GoHighLevelService {
         phone: assessment.phone || undefined,
         companyName: assessment.company || undefined,
         tags: [
-          'Business Valuation Lead',
+          // Tier-specific assessment tags for better automation targeting
+          assessment.tier === 'free' ? 'Free Assessment Completed' : 
+          assessment.tier === 'growth' || assessment.tier === 'paid' ? 'Growth Assessment Completed' :
+          assessment.tier === 'capital' ? 'Capital Assessment Completed' : 'Business Valuation Lead',
           `Grade: ${assessment.overallScore}`,
-          `Value: $${Number(assessment.midEstimate).toLocaleString()}`
+          `Value: $${Number(assessment.midEstimate).toLocaleString()}`,
+          `Tier: ${assessment.tier || 'free'}`
         ],
         customFields: {
           // Convert decimal strings to numbers for GoHighLevel
