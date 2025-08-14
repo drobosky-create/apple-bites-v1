@@ -19,6 +19,7 @@ import DealPipelineSimple from "@/pages/deal-pipeline-simple";
 import TeamDashboard from "@/pages/team-dashboard";
 import AdminDashboard from "@/pages/admin-dashboard";
 import Dashboard from "@/pages/dashboard";
+import EnhancedDashboard from "@/pages/enhanced-dashboard";
 import AssessmentResults from "@/pages/assessment-results";
 import Profile from "@/pages/profile";
 import PastAssessments from "@/pages/past-assessments";
@@ -106,6 +107,9 @@ function Router() {
           <Route path="/crm">
             {isAuthenticated ? <CRMDashboard /> : <LoginPage />}
           </Route>
+          
+          {/* Enhanced Dashboard - TeamTrack style */}
+          <Route path="/enhanced-dashboard" component={EnhancedDashboard} />
           
           {/* Admin/Team pages - self-authenticated */}
           <Route path="/admin/analytics" component={AnalyticsDashboard} />
