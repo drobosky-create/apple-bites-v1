@@ -4,6 +4,15 @@
 This is a full-stack web application for Meritage Partners, designed as the foundation for the Apple Bites M&A ecosystem. Currently implemented as a business valuation calculator, it represents the first pillar of a comprehensive four-module platform that will include: (1) Apple Bites Assessment Engine, (2) CRM Module for Opportunity & Deal Flow management, (3) Virtual Data Room for secure document storage, and (4) Team Management for internal operations. The platform aims to replace Made Market and Suralink while providing a complete M&A workflow from lead generation to transaction close. Development prioritizes Material Dashboard (MD) components and pre-built pages from the TeamTrack repository for consistency and efficiency.
 
 ## Recent Changes (August 2025)
+**✅ COMPLETED: Streamlined GoHighLevel Integration (August 14, 2025)**
+- Eliminated triple redundancy in GHL integration by switching to pure API-only approach
+- Removed legacy webhook-based assessment processing in favor of comprehensive REST API calls
+- Implemented tier-specific assessment completion tags for better automation targeting
+- Updated tags: "Free Assessment Completed", "Growth Assessment Completed", "Capital Assessment Completed"
+- Universal account creation webhook now triggers automatic GHL contact creation for all user signups
+- All contact updates include comprehensive tagging system for automation triggers
+- Consolidated all GHL communications through single API service with enhanced error handling
+
 **✅ COMPLETED: Real Data Pre-fill Functionality (August 13, 2025)**
 - Fixed Growth & Exit Assessment pre-fill feature to use actual user data from previous assessments
 - Implemented intelligent financial calculations from historical EBITDA data (converts $82,464 EBITDA to realistic revenue estimates)
