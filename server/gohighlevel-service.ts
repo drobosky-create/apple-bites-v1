@@ -355,12 +355,10 @@ export class GoHighLevelService {
           ...(userData.authProvider === 'email' ? ['Email Signup'] : [])
         ],
         customFields: {
-          'account_id': userData.id,
-          'account_tier': userData.tier || 'free',
-          'auth_provider': userData.authProvider || 'direct',
-          'signup_date': new Date().toISOString(),
-          'lead_source': userData.source || userData.authProvider || 'direct',
-          ...(userData.company && { 'company_name': userData.company })
+          'source': userData.source || userData.authProvider || 'Apple Bites Platform',
+          'type': userData.authProvider === 'winthestorm-demo' ? 'Demo User' : 'Platform User',
+          'access_token': userData.id,
+          'assessment_token': `${userData.id}_${Date.now()}`
         }
       };
 
