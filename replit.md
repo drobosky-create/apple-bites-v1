@@ -92,6 +92,14 @@ Preferred communication style: Simple, everyday language. Focus on actions and p
 
 Development Priority: Always prioritize Material Dashboard (MD) components and pre-built pages from the TeamTrack repository (https://github.com/drobosky-create/TeamTrack) for consistency and efficiency. Use TeamTrack components, styles, and logic as the primary source for M&A platform development. This ensures architectural alignment with the broader ecosystem vision.
 
+**Available TeamTrack MD Components:**
+- MDAlert, MDAvatar, MDBadge, MDBox, MDButton, MDInput, MDPagination, MDProgress, MDSnackbar, MDTypography
+
+**Available TeamTrack Pages:**
+- dashboard, billing, branding, goals, notifications, profile, settings, team-directory, templates, setup-wizard
+
+**Current Development Branch:** ecosystem-modules (protecting main Apple Bites platform)
+
 ## System Architecture
 
 ### Frontend
