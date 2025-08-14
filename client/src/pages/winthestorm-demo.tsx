@@ -27,8 +27,8 @@ export default function WinTheStormDemo() {
       return response.json();
     },
     onSuccess: async () => {
-      // Redirect to dashboard - session will be established by server
-      setLocation('/dashboard');
+      // Force page reload to ensure cookies are properly loaded
+      window.location.href = '/dashboard';
     },
     onError: (error) => {
       console.error('Demo signup failed:', error);
