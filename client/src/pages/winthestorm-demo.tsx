@@ -241,6 +241,24 @@ export default function WinTheStormDemo() {
             />
           </div>
 
+          {/* Compliance Disclaimer */}
+          <div style={{
+            padding: '16px',
+            backgroundColor: '#F8FAFC',
+            border: '1px solid #E2E8F0',
+            borderRadius: '8px',
+            marginTop: '8px'
+          }}>
+            <p style={{
+              fontSize: '12px',
+              color: '#64748B',
+              lineHeight: '1.4',
+              margin: 0
+            }}>
+              By submitting this form, you consent to receive email communications and SMS messages from Meritage Partners and Apple Bites regarding your business valuation, M&A opportunities, and related services. You may opt out at any time by replying STOP to SMS messages or using the unsubscribe link in emails. Standard message and data rates may apply.
+            </p>
+          </div>
+
           <button
             type="submit"
             disabled={demoSignupMutation.isPending}
@@ -255,7 +273,7 @@ export default function WinTheStormDemo() {
               fontWeight: '600',
               cursor: demoSignupMutation.isPending ? 'not-allowed' : 'pointer',
               transition: 'background-color 0.2s',
-              marginTop: '8px'
+              marginTop: '16px'
             }}
             onMouseEnter={(e) => {
               if (!demoSignupMutation.isPending) {
