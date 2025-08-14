@@ -85,7 +85,7 @@ const CRMDashboard = () => {
   const renderContent = () => {
     switch (activeSection) {
       case 'executive':
-        return <ExecutiveDashboard />;
+        return <ExecutiveDashboard onNavigateToTasks={() => setActiveSection('tasks')} />;
       case 'pipeline':
         return <EnhancedDealPipeline />;
       case 'analytics':
