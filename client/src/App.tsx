@@ -15,6 +15,7 @@ import LeadsDashboard from "@/pages/leads-dashboard";
 import CRMDashboard from "@/pages/crm-dashboard";
 import CRMPipelineDashboard from "@/pages/crm-pipeline-dashboard";
 import CRMPhase1Summary from "@/pages/crm-phase1-summary";
+import DealPipelineSimple from "@/pages/deal-pipeline-simple";
 import TeamDashboard from "@/pages/team-dashboard";
 import AdminDashboard from "@/pages/admin-dashboard";
 import Dashboard from "@/pages/dashboard";
@@ -112,6 +113,7 @@ function Router() {
           <Route path="/admin/crm" component={CRMDashboard} />
           <Route path="/admin/crm-pipeline" component={CRMPipelineDashboard} />
           <Route path="/admin/crm-phase1" component={CRMPhase1Summary} />
+          <Route path="/admin/deal-pipeline" component={DealPipelineSimple} />
           <Route path="/admin/team" component={AdminLoginPage} />
           <Route path="/team" component={TeamDashboard} />
           
