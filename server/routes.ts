@@ -273,59 +273,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       });
       
-      // Send lead to GoHighLevel and n8n (async, don't wait for session)
-      (async () => {
-        try {
-          const leadData = {
-            firstName,
-            lastName,
-            email: demoUser.email, // Use the potentially modified email
-            company,
-            source: 'Win The Storm Demo',
-            tier: 'growth',
-            authProvider: 'winthestorm-demo',
-            event: 'demo_signup',
-            timestamp: new Date().toISOString()
-          };
-          
-          // Also create contact in GoHighLevel
-          const contactData = {
-            firstName,
-            lastName,
-            email: demoUser.email,
-            companyName: company,
-            tags: [
-              'Win The Storm Demo',
-              'Demo User',
-              'Growth Tier Access',
-              'Event Lead'
-            ],
-            customFields: {
-              'lead_source': 'Win The Storm Demo',
-              'demo_signup_date': new Date().toISOString(),
-              'tier': 'growth',
-              'auth_provider': 'winthestorm-demo'
-            }
-          };
-          
-          const [webhookResult, contactResult] = await Promise.allSettled([
-            goHighLevelService.sendLeadToAllSystems(leadData, 'demoSignup'),
-            goHighLevelService.createOrUpdateContact(contactData)
-          ]);
-          
-          const webhookSuccess = webhookResult.status === 'fulfilled' && webhookResult.value;
-          const contactSuccess = contactResult.status === 'fulfilled';
-          
-          console.log(`Win The Storm processing - Webhook: ${webhookSuccess ? 'success' : 'failed'}, Contact: ${contactSuccess ? 'success' : 'failed'}`);
-          
-          if (webhookSuccess && typeof webhookSuccess === 'object') {
-            console.log(`- GHL: ${webhookSuccess.ghlWebhookSent}, n8n: ${webhookSuccess.n8nWebhookSent}`);
-          }
-          
-        } catch (webhookError) {
-          console.error('Failed to send Win The Storm lead to webhooks:', webhookError);
-        }
-      })();
+      // Account creation webhook is now handled automatically by storage layer
       
     } catch (error: any) {
       console.error("Win The Storm demo signup error:", error);

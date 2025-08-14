@@ -20,6 +20,7 @@ import {
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, and, inArray } from "drizzle-orm";
+import { goHighLevelService } from "./gohighlevel-service";
 
 export interface IStorage {
   // Valuation Assessment methods
@@ -212,6 +213,24 @@ export class DatabaseStorage implements IStorage {
       })
       .returning();
     
+    // Trigger account creation webhook asynchronously
+    (async () => {
+      try {
+        await goHighLevelService.processAccountCreation({
+          id: user.id,
+          email: user.email,
+          firstName: user.firstName ?? undefined,
+          lastName: user.lastName ?? undefined,
+          tier: user.tier || 'free',
+          authProvider: user.authProvider || 'custom',
+          company: (userData as any).company,
+          source: userData.authProvider === 'winthestorm-demo' ? 'Win The Storm Demo' : undefined
+        });
+      } catch (error) {
+        console.error('Account creation webhook failed for user:', user.id, error);
+      }
+    })();
+    
     return user;
   }
 
@@ -359,6 +378,23 @@ export class DatabaseStorage implements IStorage {
         updatedAt: new Date(),
       })
       .returning();
+    
+    // Trigger account creation webhook asynchronously
+    (async () => {
+      try {
+        await goHighLevelService.processAccountCreation({
+          id: user.id,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          tier: user.tier || 'free',
+          authProvider: 'email',
+          source: 'Email Registration'
+        });
+      } catch (error) {
+        console.error('Account creation webhook failed for custom user:', user.id, error);
+      }
+    })();
     
     return user;
   }

@@ -31,6 +31,7 @@ export class GoHighLevelService {
     growthPurchase: string;
     growthResults: string;
     capitalPurchase: string;
+    accountCreated: string;
     n8nLead: string;
   };
   private baseUrl = 'https://services.leadconnectorhq.com';
@@ -50,6 +51,7 @@ export class GoHighLevelService {
       growthPurchase: 'https://applebites.ai/api/webhook/growth-purchase', // Incoming webhook endpoint
       growthResults: process.env.GHL_WEBHOOK_GROWTH_RESULTS || 'https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhldFd0Z/webhook-trigger/016d7395-74cf-4bd0-9c13-263f55efe657',
       capitalPurchase: process.env.GHL_WEBHOOK_CAPITAL_PURCHASE || 'https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhldFd0Z/webhook-trigger/3c15954e-9d4b-4fde-b064-8b47193d1fcb',
+      accountCreated: process.env.GHL_WEBHOOK_ACCOUNT_CREATED || 'https://services.leadconnectorhq.com/hooks/QNFFrENaRuI2JhldFd0Z/webhook-trigger/016d7395-74cf-4bd0-9c13-263f55efe657', // Use growthResults as fallback
       n8nLead: 'https://drobosky.app.n8n.cloud/webhook-test/replit-lead'
     };
   }
@@ -187,7 +189,7 @@ export class GoHighLevelService {
     }
   }
 
-  async sendWebhook(data: any, webhookType: 'freeResults' | 'growthPurchase' | 'growthResults' | 'capitalPurchase' | 'n8nLead' = 'freeResults'): Promise<boolean> {
+  async sendWebhook(data: any, webhookType: 'freeResults' | 'growthPurchase' | 'growthResults' | 'capitalPurchase' | 'accountCreated' | 'n8nLead' = 'freeResults'): Promise<boolean> {
     try {
       const webhookUrl = this.webhookUrls[webhookType];
       const response = await fetch(webhookUrl, {
@@ -319,6 +321,93 @@ export class GoHighLevelService {
       return {
         ghlWebhookSent: false,
         n8nWebhookSent: false
+      };
+    }
+  }
+
+  // New dedicated webhook for account creation events
+  async processAccountCreation(userData: {
+    id: string;
+    email: string;
+    firstName?: string;
+    lastName?: string;
+    tier?: string;
+    authProvider?: string;
+    company?: string;
+    source?: string;
+  }): Promise<{
+    contactCreated: boolean;
+    webhookSent: boolean;
+  }> {
+    try {
+      // Create comprehensive contact data
+      const contactData: GoHighLevelContact = {
+        firstName: userData.firstName || undefined,
+        lastName: userData.lastName || undefined,
+        email: userData.email,
+        companyName: userData.company || undefined,
+        tags: [
+          'New Account Created',
+          `Tier: ${userData.tier || 'free'}`,
+          `Source: ${userData.source || userData.authProvider || 'direct'}`,
+          ...(userData.authProvider === 'winthestorm-demo' ? ['Win The Storm Demo', 'Event Lead'] : []),
+          ...(userData.authProvider === 'demo' ? ['Demo User'] : []),
+          ...(userData.authProvider === 'email' ? ['Email Signup'] : [])
+        ],
+        customFields: {
+          'account_id': userData.id,
+          'account_tier': userData.tier || 'free',
+          'auth_provider': userData.authProvider || 'direct',
+          'signup_date': new Date().toISOString(),
+          'lead_source': userData.source || userData.authProvider || 'direct',
+          ...(userData.company && { 'company_name': userData.company })
+        }
+      };
+
+      // Create contact in GoHighLevel
+      const contactResult = await this.createOrUpdateContact(contactData);
+
+      // Prepare webhook data for account creation
+      const webhookData = {
+        event: 'account_created',
+        account: {
+          id: userData.id,
+          email: userData.email,
+          first_name: userData.firstName || '',
+          last_name: userData.lastName || '',
+          tier: userData.tier || 'free',
+          auth_provider: userData.authProvider || 'direct',
+          company: userData.company || '',
+          source: userData.source || userData.authProvider || 'direct'
+        },
+        timestamp: new Date().toISOString()
+      };
+
+      // Determine webhook type based on context
+      let webhookType: 'freeResults' | 'growthResults' | 'accountCreated' = 'accountCreated';
+      
+      // Use tier-specific webhooks for better routing
+      if (userData.tier === 'growth' || userData.tier === 'paid') {
+        webhookType = 'growthResults';
+      } else if (userData.tier === 'capital') {
+        webhookType = 'growthResults'; // Capital users also use growth webhook for account creation
+      }
+
+      // Send webhook
+      const webhookSent = await this.sendWebhook(webhookData, webhookType);
+
+      console.log(`Account creation processed - Contact: ${contactResult ? 'success' : 'failed'}, Webhook: ${webhookSent ? 'success' : 'failed'}`);
+
+      return {
+        contactCreated: !!contactResult,
+        webhookSent
+      };
+
+    } catch (error) {
+      console.error('Error processing account creation:', error);
+      return {
+        contactCreated: false,
+        webhookSent: false
       };
     }
   }
