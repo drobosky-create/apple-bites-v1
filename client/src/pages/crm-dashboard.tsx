@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from "@/hooks/useAuth";
 import { useLocation } from "wouter";
 import DashboardLayout from "@/components/layout/DashboardLayout";
@@ -34,6 +34,15 @@ const CRMDashboard = () => {
   const { isAuthenticated, isLoading } = useAuth();
   const [, setLocation] = useLocation();
   const [activeSection, setActiveSection] = useState('executive');
+
+  // Check for tab parameter in URL
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const tab = urlParams.get('tab');
+    if (tab && ['executive', 'pipeline', 'analytics', 'activity', 'calendar', 'tasks', 'reports', 'contacts', 'firms', 'distributions', 'sequences'].includes(tab)) {
+      setActiveSection(tab);
+    }
+  }, []);
 
   if (isLoading) {
     return (
