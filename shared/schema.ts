@@ -21,6 +21,7 @@ export const users = pgTable("users", {
   firstName: varchar("first_name"),
   lastName: varchar("last_name"),
   fullName: varchar("full_name"), // For custom registrations
+  company: varchar("company"), // Company name for demo and business users
   profileImageUrl: varchar("profile_image_url"),
   passwordHash: varchar("password_hash"), // For custom auth users (null for Replit users)
   authProvider: text("auth_provider").notNull().default("custom"), // "replit" or "custom"

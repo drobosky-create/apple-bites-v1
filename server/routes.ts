@@ -216,6 +216,69 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Win The Storm demo signup endpoint
+  app.post('/api/demo/winthestorm-signup', async (req, res) => {
+    try {
+      const { firstName, lastName, email, company } = req.body;
+      
+      // Validate input
+      if (!firstName || !lastName || !email || !company) {
+        return res.status(400).json({ message: "All fields are required" });
+      }
+      
+      // Create unique demo email if user already exists
+      let demoEmail = email;
+      let existingUser = await storage.getUserByEmail(demoEmail);
+      
+      // If user exists, create a demo variant
+      if (existingUser) {
+        const timestamp = Date.now();
+        demoEmail = `wts-demo-${timestamp}-${email}`;
+      }
+      
+      // Create demo user with growth tier access
+      const demoUser = await storage.createUser({
+        email: demoEmail,
+        firstName,
+        lastName,
+        tier: 'growth', // Give them growth tier for Free + Growth assessments
+        authProvider: 'winthestorm-demo',
+        isActive: true,
+        company: company
+      });
+      
+      // Create session
+      req.session.userId = demoUser.id;
+      req.session.userEmail = demoUser.email;
+      req.session.userTier = demoUser.tier;
+      
+      // Save session explicitly
+      req.session.save((err: any) => {
+        if (err) {
+          console.error('Win The Storm demo session save error:', err);
+          return res.status(500).json({ message: "Session save failed" });
+        }
+        
+        console.log('Win The Storm demo session created for:', demoUser.email);
+        res.json({
+          message: "Demo access granted",
+          user: {
+            id: demoUser.id,
+            email: demoUser.email,
+            firstName: demoUser.firstName,
+            lastName: demoUser.lastName,
+            tier: demoUser.tier,
+            authProvider: demoUser.authProvider
+          },
+        });
+      });
+      
+    } catch (error: any) {
+      console.error("Win The Storm demo signup error:", error);
+      res.status(500).json({ message: "Demo signup failed" });
+    }
+  });
+
   // Custom user authentication middleware
   const isCustomUserAuthenticated = async (req: any, res: any, next: any) => {
     const sessionId = req.session?.customUserSessionId;
@@ -352,12 +415,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Custom user logout - redirect to main logout
   app.post('/api/users/logout', (req, res) => {
     // Clear all session data
-    req.session.userId = null;
-    req.session.userEmail = null;
-    req.session.userTier = null;
-    req.session.customUserSessionId = null;
-    req.session.teamSessionId = null;
-    req.session.adminAuthenticated = null;
+    delete req.session.userId;
+    delete req.session.userEmail;
+    delete req.session.userTier;
+    delete req.session.customUserSessionId;
+    delete req.session.teamSessionId;
+    delete req.session.adminAuthenticated;
     
     req.session.destroy((err) => {
       if (err) {

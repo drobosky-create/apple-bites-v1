@@ -26,6 +26,7 @@ import PricingPage from "@/pages/pricing";
 import LandingPage from "@/pages/landing";
 import CheckoutSuccess from "@/pages/checkout-success";
 import AdminLoginPage from "@/pages/admin-login";
+import WinTheStormDemo from "@/pages/winthestorm-demo";
 import CookieBanner from "@/components/CookieBanner";
 
 function Router() {
@@ -50,7 +51,8 @@ function Router() {
     <div style={{ minHeight: '100vh', backgroundColor: 'white' }}>
       <MobileNavigation>
         <Switch>
-          {/* Authentication routes - always accessible */}
+          {/* Demo and Authentication routes - always accessible */}
+          <Route path="/winthestorm" component={WinTheStormDemo} />
           <Route path="/signup" component={SignupPage} />
           <Route path="/login" component={LoginPage} />
           <Route path="/admin" component={AdminLoginPage} />
