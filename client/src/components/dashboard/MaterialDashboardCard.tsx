@@ -28,25 +28,25 @@ const MaterialDashboardCard: React.FC<MaterialDashboardCardProps> = ({
 }) => {
   const getGradientByColor = (colorName: string) => {
     switch (colorName) {
-      case 'primary': return 'linear-gradient(195deg, #42424a, #191919)';
-      case 'success': return 'linear-gradient(195deg, #66bb6a, #43a047)';
-      case 'info': return 'linear-gradient(195deg, #49a3f1, #1a73e8)';
-      case 'warning': return 'linear-gradient(195deg, #ffa726, #fb8c00)';
-      case 'error': return 'linear-gradient(195deg, #ef5350, #e53935)';
-      case 'dark': return 'linear-gradient(195deg, #42424a, #191919)';
-      default: return 'linear-gradient(195deg, #66bb6a, #43a047)';
+      case 'primary': return 'linear-gradient(195deg, #0b2147, #07152E)';
+      case 'success': return 'linear-gradient(195deg, #16A34A, #15803D)';
+      case 'info': return 'linear-gradient(195deg, #005b8c, #004662)';
+      case 'warning': return 'linear-gradient(195deg, #F59E0B, #D97706)';
+      case 'error': return 'linear-gradient(195deg, #DC2626, #B91C1C)';
+      case 'dark': return 'linear-gradient(195deg, #0b2147, #07152E)';
+      default: return 'linear-gradient(195deg, #005b8c, #004662)';
     }
   };
 
   const getShadowByColor = (colorName: string) => {
     switch (colorName) {
-      case 'primary': return '0 4px 20px 0 rgba(66, 66, 74, 0.14), 0 7px 10px -5px rgba(66, 66, 74, 0.4)';
-      case 'success': return '0 4px 20px 0 rgba(102, 187, 106, 0.14), 0 7px 10px -5px rgba(76, 175, 80, 0.4)';
-      case 'info': return '0 4px 20px 0 rgba(73, 163, 241, 0.14), 0 7px 10px -5px rgba(26, 115, 232, 0.4)';
-      case 'warning': return '0 4px 20px 0 rgba(255, 167, 38, 0.14), 0 7px 10px -5px rgba(251, 140, 0, 0.4)';
-      case 'error': return '0 4px 20px 0 rgba(239, 83, 80, 0.14), 0 7px 10px -5px rgba(229, 57, 53, 0.4)';
-      case 'dark': return '0 4px 20px 0 rgba(66, 66, 74, 0.14), 0 7px 10px -5px rgba(66, 66, 74, 0.4)';
-      default: return '0 4px 20px 0 rgba(102, 187, 106, 0.14), 0 7px 10px -5px rgba(76, 175, 80, 0.4)';
+      case 'primary': return '0 4px 20px 0 rgba(11, 33, 71, 0.14), 0 7px 10px -5px rgba(11, 33, 71, 0.4)';
+      case 'success': return '0 4px 20px 0 rgba(22, 163, 74, 0.14), 0 7px 10px -5px rgba(21, 128, 61, 0.4)';
+      case 'info': return '0 4px 20px 0 rgba(0, 91, 140, 0.14), 0 7px 10px -5px rgba(0, 70, 98, 0.4)';
+      case 'warning': return '0 4px 20px 0 rgba(245, 158, 11, 0.14), 0 7px 10px -5px rgba(217, 119, 6, 0.4)';
+      case 'error': return '0 4px 20px 0 rgba(220, 38, 38, 0.14), 0 7px 10px -5px rgba(185, 28, 28, 0.4)';
+      case 'dark': return '0 4px 20px 0 rgba(11, 33, 71, 0.14), 0 7px 10px -5px rgba(11, 33, 71, 0.4)';
+      default: return '0 4px 20px 0 rgba(0, 91, 140, 0.14), 0 7px 10px -5px rgba(0, 70, 98, 0.4)';
     }
   };
 
@@ -115,9 +115,9 @@ const MaterialDashboardCard: React.FC<MaterialDashboardCardProps> = ({
               variant="button"
               sx={{
                 fontWeight: 700,
-                color: percentage.color === 'success' ? '#4caf50' :
-                       percentage.color === 'error' ? '#f44336' :
-                       percentage.color === 'warning' ? '#ffa726' : '#4caf50'
+                color: percentage.color === 'success' ? '#16A34A' :
+                       percentage.color === 'error' ? '#DC2626' :
+                       percentage.color === 'warning' ? '#F59E0B' : '#16A34A'
               }}
             >
               {percentage.amount}

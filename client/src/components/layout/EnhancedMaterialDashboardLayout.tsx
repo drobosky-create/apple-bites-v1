@@ -119,7 +119,7 @@ export const EnhancedMaterialDashboardLayout: React.FC<EnhancedMaterialDashboard
     <Box>
       <Box sx={{
         p: 3,
-        background: 'linear-gradient(195deg, #42424a, #191919)',
+        background: 'linear-gradient(195deg, #0b2147, #07152E)',
         color: 'white',
         textAlign: 'center'
       }}>
@@ -218,7 +218,7 @@ export const EnhancedMaterialDashboardLayout: React.FC<EnhancedMaterialDashboard
           '& .MuiDrawer-paper': {
             width: drawerWidth,
             boxSizing: 'border-box',
-            background: 'linear-gradient(195deg, #66bb6a, #43a047)',
+            background: 'linear-gradient(195deg, #005b8c, #004662)',
             border: 'none',
           },
         }}
@@ -240,7 +240,7 @@ export const EnhancedMaterialDashboardLayout: React.FC<EnhancedMaterialDashboard
           '& .MuiDrawer-paper': {
             boxSizing: 'border-box',
             width: drawerWidth,
-            background: 'linear-gradient(195deg, #66bb6a, #43a047)',
+            background: 'linear-gradient(195deg, #005b8c, #004662)',
           },
         }}
       >

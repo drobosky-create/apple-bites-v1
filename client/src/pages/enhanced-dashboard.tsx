@@ -142,26 +142,26 @@ export default function EnhancedDashboard() {
         </Typography>
 
         {/* Win The Storm Event Banner */}
-        <Paper sx={{ mb: 4, p: 3, background: 'linear-gradient(195deg, #e3f2fd, #bbdefb)', border: 'none', boxShadow: 'none' }}>
+        <Paper sx={{ mb: 4, p: 3, background: 'linear-gradient(195deg, #f0f8ff, #e1f0ff)', border: 'none', boxShadow: 'none' }}>
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 2 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
               <Box sx={{
                 width: 56,
                 height: 56,
                 borderRadius: '50%',
-                background: 'linear-gradient(195deg, #42a5f5, #1976d2)',
+                background: 'linear-gradient(195deg, #005b8c, #004662)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                boxShadow: '0 4px 8px rgba(66, 165, 245, 0.3)'
+                boxShadow: '0 4px 8px rgba(0, 91, 140, 0.3)'
               }}>
                 <StarIcon sx={{ color: 'white', fontSize: '1.75rem' }} />
               </Box>
               <Box>
-                <Typography variant="h6" sx={{ fontWeight: 600, color: '#1976d2', mb: 0.5 }}>
+                <Typography variant="h6" sx={{ fontWeight: 600, color: '#0b2147', mb: 0.5 }}>
                   Win The Storm Event Ready
                 </Typography>
-                <Typography variant="body2" sx={{ color: '#424242', maxWidth: '500px' }}>
+                <Typography variant="body2" sx={{ color: '#344767', maxWidth: '500px' }}>
                   Your comprehensive M&A platform is ready for presentation. All deal pipeline and CRM features are fully operational.
                 </Typography>
               </Box>
@@ -171,7 +171,7 @@ export default function EnhancedDashboard() {
               href="/admin/deal-pipeline"
               sx={{
                 textDecoration: 'none',
-                background: 'linear-gradient(195deg, #66bb6a, #43a047)',
+                background: 'linear-gradient(195deg, #16A34A, #15803D)',
                 color: 'white',
                 px: 3,
                 py: 1.5,
@@ -182,10 +182,10 @@ export default function EnhancedDashboard() {
                 alignItems: 'center',
                 gap: 1,
                 transition: 'all 0.3s ease',
-                boxShadow: '0 2px 4px rgba(102, 187, 106, 0.3)',
+                boxShadow: '0 2px 4px rgba(22, 163, 74, 0.3)',
                 '&:hover': {
                   transform: 'translateY(-2px)',
-                  boxShadow: '0 6px 12px rgba(102, 187, 106, 0.4)'
+                  boxShadow: '0 6px 12px rgba(22, 163, 74, 0.4)'
                 }
               }}
             >
@@ -360,7 +360,7 @@ export default function EnhancedDashboard() {
                         <Avatar
                           sx={{
                             bgcolor: 'primary.main',
-                            background: 'linear-gradient(195deg, #66bb6a, #43a047)',
+                            background: 'linear-gradient(195deg, #005b8c, #004662)',
                             width: 45,
                             height: 45
                           }}
@@ -414,7 +414,7 @@ export default function EnhancedDashboard() {
                                 variant="body2"
                                 sx={{ 
                                   fontWeight: 700, 
-                                  color: '#66bb6a',
+                                  color: '#16A34A',
                                   fontSize: '0.8rem',
                                   mt: 0.5
                                 }}
@@ -430,7 +430,7 @@ export default function EnhancedDashboard() {
                         sx={{
                           color: '#344767',
                           '&:hover': {
-                            backgroundColor: 'rgba(102, 187, 106, 0.1)'
+                            backgroundColor: 'rgba(0, 91, 140, 0.1)'
                           }
                         }}
                       >
