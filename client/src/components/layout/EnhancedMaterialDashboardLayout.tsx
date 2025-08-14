@@ -29,15 +29,21 @@ const drawerWidth = 280;
 
 const navigationItems = [
   {
-    text: 'Dashboard',
+    text: 'Enhanced Dashboard',
     icon: <DashboardIcon />,
-    path: '/',
+    path: '/enhanced-dashboard',
     roles: ['admin', 'manager', 'team_member']
   },
   {
-    text: 'Business Assessment',
+    text: 'Free Assessment',
     icon: <AssessmentIcon />,
-    path: '/assessment',
+    path: '/assessment/free',
+    roles: ['admin', 'manager', 'team_member']
+  },
+  {
+    text: 'Growth & Exit Assessment',
+    icon: <TrendingUpIcon />,
+    path: '/assessment/paid',
     roles: ['admin', 'manager', 'team_member']
   },
   {
@@ -47,7 +53,7 @@ const navigationItems = [
     roles: ['admin', 'manager', 'team_member']
   },
   {
-    text: 'Analytics',
+    text: 'Analytics Dashboard',
     icon: <AnalyticsIcon />,
     path: '/admin/analytics',
     roles: ['admin', 'manager']
@@ -72,7 +78,7 @@ const navigationItems = [
   },
   {
     text: 'CRM Pipeline',
-    icon: <TrendingUpIcon />,
+    icon: <BusinessIcon />,
     path: '/admin/crm-pipeline',
     roles: ['admin', 'manager']
   },
@@ -83,22 +89,16 @@ const navigationItems = [
     roles: ['admin']
   },
   {
-    text: 'University',
-    icon: <SchoolIcon />,
-    path: '/university',
-    roles: ['admin', 'manager', 'team_member']
-  },
-  {
     text: 'Profile',
     icon: <PersonIcon />,
     path: '/profile',
     roles: ['admin', 'manager', 'team_member']
   },
   {
-    text: 'Settings',
-    icon: <SettingsIcon />,
-    path: '/settings',
-    roles: ['admin']
+    text: 'Past Assessments',
+    icon: <HistoryIcon />,
+    path: '/past-assessments',
+    roles: ['admin', 'manager', 'team_member']
   }
 ];
 
@@ -134,7 +134,7 @@ export const EnhancedMaterialDashboardLayout: React.FC<EnhancedMaterialDashboard
       <List sx={{ pt: 0 }}>
         {navigationItems.map((item) => {
           const isActive = location === item.path;
-          const hasAccess = item.roles.includes(user?.role || 'team_member');
+          const hasAccess = item.roles.includes((user as any)?.role || 'team_member');
 
           if (!hasAccess) return null;
 
@@ -291,7 +291,7 @@ export const EnhancedMaterialDashboardLayout: React.FC<EnhancedMaterialDashboard
             </IconButton>
 
             <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: '#344767' }}>
-              Welcome back, {user?.firstName || user?.email?.split('@')[0]}
+              Welcome back, {(user as any)?.firstName || (user as any)?.email?.split('@')[0]}
             </Typography>
           </Toolbar>
         </AppBar>
