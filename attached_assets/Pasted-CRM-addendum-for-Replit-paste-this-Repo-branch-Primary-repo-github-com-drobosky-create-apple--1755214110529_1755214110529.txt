@@ -1,0 +1,177 @@
+CRM addendum for Replit (paste this)
+
+Repo & branch
+
+Primary repo: github.com/drobosky-create/apple-bites-v1
+
+Branch: ecosystem-modules (create if missing)
+
+Component source: Reuse Material Dashboard React components already in AppleBites; additionally reference TeamTrack example pages for layout patterns. If needed, add TeamTrack as a git submodule at /vendor/teamtrack (read-only for examples; do not import code at runtime).
+
+Do not build bespoke pages
+
+Only compose screens using existing MD React example layouts/patterns (cards, stats, tables, kanban-like boards, timeline, profile, calendar).
+
+Allowed building blocks: MDBox, MDTypography, MDButton, MDInput, MUI DataGrid, MD Card variants, MD Timeline, MD Tabs, MD Drawer/AppBar, MD Avatars/Chips/Badges, MD Kanban/board pattern from example.
+
+Any new screen must be a composition of these (no new custom component libraries, no custom CSS frameworks).
+
+Views (in addition to Kanban)
+
+Create a Deals module shell with tabs. Use MD Tabs across the top, routing per tab:
+
+Kanban (default)
+
+Swimlanes: Lead → Qualified → LOI → Diligence → Closing.
+
+Drag & drop with probability updates and auto next-task prompt.
+
+List (Table)
+
+MUI DataGrid w/ column set: Name, Type (Buy/Sell), Stage, Owner, Probability %, Valuation Range, Engagement Fee, Success Fee, Expected Close, Updated.
+
+Column filters + saved views. Bulk actions (assign owner, stage, add tag).
+
+Calendar
+
+Month/Week views of Expected Close Date + stage reminders and key milestones (LOI date, diligence start/end, docs due).
+
+Click event → open deal drawer.
+
+Targets
+
+Two sub-tabs: Target Lists and Directory.
+
+Target Lists = user-defined collections (e.g., “Industrial PE – Midwest”), with counts by status (Contacted, NDA, Teaser Sent, Passed, Active).
+
+Directory = table of Firms with filters (PE/FO/Strategic, AUM, NAICS focus, check size, geography). Multi-select to “Add to List”.
+
+Reports (stub using MD cards)
+
+Tiles for pipeline $, weighted pipeline, win rate, cycle time, fees forecast. (Plumb later—render cards now.)
+
+Deal detail drawer/page
+
+Use MD two-column layout: left Summary (fields below), right Timeline (MD Timeline component) + Tasks (MUI list).
+
+Tabs inside detail: Overview | Documents | Emails | Notes | Fees | Targets.
+
+Data model (add/confirm)
+
+Minimum entities and relationships:
+
+Firm: id, name, type (PE|FO|Strategic|Advisor|Other), website, hq_region, size/aum(optional), naics_focus[], notes.
+
+Contact: id, first_name, last_name, email, phone, title, firm_id (nullable), relationships[].
+
+Opportunity (pre-LOI): id, name, seller_firm_id?, stage(Prospect→Pitch), owner_id, probability, valuation_min, valuation_max, expected_close_date (nullable), tags[].
+
+Deal (post-LOI): id, name, type(Sell|Buy), stage(LOI→Diligence→Closing), owner_id, probability, valuation_min, valuation_max, **engagement_fee_amount**, **success_fee_type (%|fixed|tiered)**, **success_fee_value**, **expected_close_date**, fee_notes, tags[].
+
+Assignment state (for Contacts/Firms): assignment_type: Unassigned | Opportunity:<id> | Deal:<id> (store as nullable opportunity_id and deal_id, both nullable—only one allowed at a time; enforce with validation).
+
+TargetList: id, name, description, owner_id, tags[].
+
+TargetListItem (join): id, target_list_id, firm_id, **status(Identified|Contacted|NDA|Teaser Sent|IOI|Passed|Active)**, last_activity_at, notes.
+
+Milestone: id, deal_id, type(LOI Signed|CIM Distributed|Mgmt Call|QA Delivered|SPA Drafted|Close), date, owner_id, notes.
+
+Keep opportunities and deals separate collections; allow an opportunity to be “promoted” to a deal (carry forward fields, keep audit trail).
+
+Forms/fields to surface (no custom widgets)
+
+Deal/Opportunity create & edit
+
+Left column: Name, Type, Stage, Owner, Probability, Tags
+
+Middle: Valuation Range (min/max), Expected Close Date, Readiness Score (if from AppleBites)
+
+Right (Fees block; Deals only):
+
+Engagement Fee (currency)
+
+Success Fee Type (select: %, fixed, tiered)
+
+Success Fee Value (if %, store decimal; if fixed, currency; if tiered, show textarea for now)
+
+Fee Notes
+
+Target Lists
+
+CRUD with MD Card list view + drawer edit.
+
+Add firms via Directory multi-select → “Add to List”.
+
+Workflows & rules
+
+Auto-promotion: When an Opportunity moves to LOI, prompt “Create Deal from Opportunity?” → copy fields + link back via source_opportunity_id.
+
+Reminders: On stage change, create default milestone tasks (due dates relative to today).
+
+Assignment rules: A Contact or Firm can be unassigned, or linked to either an Opportunity or a Deal. Enforce mutually exclusive link in UI (radio: Unassigned / Opportunity / Deal).
+
+Routing & file scaffold (examples, not bespoke)
+
+src/pages/crm/Deals/index.tsx → Tabs shell (Kanban/List/Calendar/Targets/Reports)
+
+src/pages/crm/Deals/Kanban.tsx → MD board example composition
+
+src/pages/crm/Deals/List.tsx → MUI DataGrid composition
+
+src/pages/crm/Deals/Calendar.tsx → MD calendar example
+
+src/pages/crm/Targets/Lists.tsx & Directory.tsx
+
+src/pages/crm/DealDetail.tsx → MD two-column layout + MD Timeline
+
+Use the Material Dashboard “Dashboard”, “Tables”, “Calendar”, “Profile”, and “RTL/Timeline” examples as the only layout sources. Compose from those; no custom new layout primitives.
+
+Acceptance criteria (must pass)
+
+Fees: I can enter Engagement Fee, Success Fee (%, fixed, or tiered note), and see them in the List table and Deal detail Fees tab.
+
+Expected Close: Setting it shows up in Calendar view; dragging an event changes the date.
+
+Views: Switching tabs (Kanban/List/Calendar/Targets/Reports) keeps router state; deep link to a specific tab works (/crm/deals?view=list).
+
+Targets: I can create a Target List, add 10+ Firms from Directory in bulk, and see counts by status on the list card.
+
+Assignments: From a Contact or Firm, I can set assignment to Unassigned / an Opportunity / a Deal (mutually exclusive), and see that reflected on the destination record.
+
+No bespoke UI: Every screen is composed from MD example components; no custom CSS frameworks and no new layout systems.
+
+Promotion: Moving an Opportunity to LOI offers “Create Deal” → new Deal created with fees block visible; original Opportunity remains accessible and linked.
+
+Nice-to-have (don’t block)
+
+Weighted pipeline metric tile: sum(valuation_midpoint * probability).
+
+Fee forecast tile: sum(success_fee_estimate on deals in Closing with Expected Close this quarter).
+
+Save table filters as named views.
+
+Integration stubs
+
+Leave AppleBites Admin page as-is for now; add a route placeholder under CRM for “Admin (legacy)” to remind us it will be merged later.
+
+Add simple adapter functions (appleBitesAssessmentToOpportunity, opportunityToDeal) but keep them mocked.
+
+Hand-off checklist for you (Replit)
+
+ Create ecosystem-modules branch in apple-bites-v1.
+
+ If needed, add TeamTrack as submodule at /vendor/teamtrack (examples reference only).
+
+ Scaffold routes and tab shell; wire MD example components.
+
+ Implement entities & minimal CRUD (local store or existing API; use fake service if API not ready).
+
+ Implement Kanban, List, Calendar, Targets (Lists + Directory), Reports (cards only).
+
+ Implement Deal detail drawer/page with Fees tab.
+
+ Enforce assignment rule (one of: Unassigned | Opportunity | Deal).
+
+ Implement Opportunity→Deal promotion flow.
+
+ Add unit smoke tests for list columns, calendar events, and target list bulk-add.
