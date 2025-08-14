@@ -3,6 +3,7 @@ import { useLocation } from 'wouter';
 import { useMutation } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
 import { useAuth } from '@/hooks/useAuth';
+import wtsLogo from '@assets/WTS M&A Lounge_1755208564608.png';
 
 interface DemoSignupData {
   firstName: string;
@@ -63,8 +64,27 @@ export default function WinTheStormDemo() {
         width: '100%',
         maxWidth: '500px'
       }}>
-        {/* Header */}
+        {/* Header with Logo */}
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+          {/* Logo with dark background */}
+          <div style={{
+            backgroundColor: '#0A1F44',
+            padding: '24px',
+            borderRadius: '12px',
+            marginBottom: '24px',
+            display: 'inline-block'
+          }}>
+            <img 
+              src={wtsLogo} 
+              alt="Win The Storm M&A Lounge" 
+              style={{
+                height: '60px',
+                width: 'auto',
+                objectFit: 'contain'
+              }}
+            />
+          </div>
+          
           <h1 style={{
             fontSize: '32px',
             fontWeight: '700',
@@ -72,22 +92,23 @@ export default function WinTheStormDemo() {
             marginBottom: '8px',
             lineHeight: '1.2'
           }}>
-            Win The Storm
-          </h1>
-          <h2 style={{
-            fontSize: '24px',
-            fontWeight: '600',
-            color: '#1B2C4F',
-            marginBottom: '16px'
-          }}>
             Apple Bites Demo
-          </h2>
+          </h1>
           <p style={{
             color: '#64748B',
             fontSize: '16px',
+            lineHeight: '1.5',
+            marginBottom: '8px'
+          }}>
+            Experience our complete M&A Assessment Platform
+          </p>
+          <p style={{
+            color: '#059669',
+            fontSize: '16px',
+            fontWeight: '600',
             lineHeight: '1.5'
           }}>
-            Experience our complete M&A Assessment Platform. Get instant access to Free and Growth & Exit assessments.
+            Get instant access to Free and Growth & Exit assessments
           </p>
         </div>
 
