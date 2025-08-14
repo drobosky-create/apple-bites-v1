@@ -155,7 +155,7 @@ export default function EnhancedDashboard() {
                 justifyContent: 'center',
                 boxShadow: '0 4px 8px rgba(0, 91, 140, 0.3)'
               }}>
-                <StarIcon sx={{ color: 'white', fontSize: '1.75rem' }} />
+                <StarIcon sx={{ color: '#ffffff', fontSize: '1.75rem' }} />
               </Box>
               <Box>
                 <Typography variant="h6" sx={{ fontWeight: 600, color: '#0b2147', mb: 0.5 }}>
@@ -189,7 +189,7 @@ export default function EnhancedDashboard() {
                 }
               }}
             >
-              <BusinessIcon sx={{ fontSize: '1rem' }} />
+              <BusinessIcon sx={{ fontSize: '1rem', color: '#ffffff' }} />
               View Deal Pipeline
             </Box>
           </Box>
@@ -362,7 +362,10 @@ export default function EnhancedDashboard() {
                             bgcolor: 'primary.main',
                             background: 'linear-gradient(195deg, #005b8c, #004662)',
                             width: 45,
-                            height: 45
+                            height: 45,
+                            '& svg': {
+                              color: '#ffffff'
+                            }
                           }}
                         >
                           {getActivityIcon(activity.type)}

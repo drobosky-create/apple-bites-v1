@@ -66,7 +66,8 @@ const MaterialDashboardCard: React.FC<MaterialDashboardCardProps> = ({
             mt: -3,
             boxShadow: getShadowByColor(color),
             '& svg': {
-              fontSize: '1.5rem'
+              fontSize: '1.5rem',
+              color: '#ffffff'
             }
           }}
         >

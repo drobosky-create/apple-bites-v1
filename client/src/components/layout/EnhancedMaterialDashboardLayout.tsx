@@ -156,8 +156,11 @@ export const EnhancedMaterialDashboardLayout: React.FC<EnhancedMaterialDashboard
                 data-testid={`nav-item-${item.text.toLowerCase().replace(' ', '-')}`}
               >
                 <ListItemIcon sx={{
-                  color: 'inherit',
-                  minWidth: 40
+                  color: '#ffffff',
+                  minWidth: 40,
+                  '& svg': {
+                    color: '#ffffff'
+                  }
                 }}>
                   {item.icon}
                 </ListItemIcon>
@@ -190,8 +193,11 @@ export const EnhancedMaterialDashboardLayout: React.FC<EnhancedMaterialDashboard
           data-testid="nav-item-logout"
         >
           <ListItemIcon sx={{
-            color: 'inherit',
-            minWidth: 40
+            color: '#ffffff',
+            minWidth: 40,
+            '& svg': {
+              color: '#ffffff'
+            }
           }}>
             <LogoutIcon />
           </ListItemIcon>
@@ -273,7 +279,13 @@ export const EnhancedMaterialDashboardLayout: React.FC<EnhancedMaterialDashboard
               aria-label="open drawer"
               edge="start"
               onClick={handleDrawerToggle}
-              sx={{ mr: 2, display: { md: 'none' } }}
+              sx={{ 
+                mr: 2, 
+                display: { md: 'none' },
+                '& svg': {
+                  color: '#344767'
+                }
+              }}
             >
               <MenuIcon />
             </IconButton>
