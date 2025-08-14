@@ -90,7 +90,9 @@ export default function WinTheStormDemo() {
             fontWeight: '700',
             color: '#0A1F44',
             marginBottom: '8px',
-            lineHeight: '1.2'
+            lineHeight: '1.2',
+            textTransform: 'uppercase',
+            letterSpacing: '1px'
           }}>
             Apple Bites Demo
           </h1>
