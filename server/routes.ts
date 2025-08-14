@@ -896,83 +896,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      // Send additional webhook for legacy compatibility (direct webhook call)
-      try {
-        // Determine which webhook URL to use based on assessment tier
-        let webhookUrl = process.env.GHL_WEBHOOK_FREE_RESULTS; // Default to free results
-        
-        if (assessment.tier === 'growth' || assessment.tier === 'paid') {
-          webhookUrl = process.env.GHL_WEBHOOK_GROWTH_RESULTS;
-        } else if (assessment.tier === 'capital') {
-          webhookUrl = process.env.GHL_WEBHOOK_CAPITAL_PURCHASE;
-        }
-
-        const webhookData = {
-          name: `${assessment.firstName} ${assessment.lastName}`,
-          email: assessment.email,
-          phone: assessment.phone,
-          company: assessment.company,
-          jobTitle: assessment.jobTitle || '',
-          tier: assessment.tier || 'free',
-          adjustedEBITDA: metrics.adjustedEbitda,
-          valuationEstimate: metrics.midEstimate,
-          valuationLow: metrics.lowEstimate,
-          valuationHigh: metrics.highEstimate,
-          overallScore: metrics.overallScore,
-          financialPerformanceGrade: assessment.financialPerformance,
-          customerConcentrationGrade: assessment.customerConcentration,
-          managementTeamGrade: assessment.managementTeam,
-          competitivePositionGrade: assessment.competitivePosition,
-          growthProspectsGrade: assessment.growthProspects,
-          systemsProcessesGrade: assessment.systemsProcesses,
-          assetQualityGrade: assessment.assetQuality,
-          industryOutlookGrade: assessment.industryOutlook,
-          riskFactorsGrade: assessment.riskFactors,
-          ownerDependencyGrade: assessment.ownerDependency,
-          followUpIntent: assessment.followUpIntent,
-          executiveSummary: assessment.executiveSummary || '',
-          submissionDate: new Date().toISOString(),
-          leadSource: 'Business Valuation Calculator',
-          pdfLink: assessment.pdfUrl ? `${req.protocol}://${req.get('host')}${assessment.pdfUrl}` : null
-        };
-
-        console.log(`Sending webhook data to ${assessment.tier || 'free'} tier:`, JSON.stringify(webhookData, null, 2));
-        
-        // Send to GoHighLevel webhook
-        if (webhookUrl) {
-          const webhookResponse = await fetch(webhookUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(webhookData)
-          });
-          
-          console.log('GHL Webhook response status:', webhookResponse.status);
-          console.log('GHL Webhook response:', await webhookResponse.text());
-          console.log(`Lead data sent to GHL CRM for ${assessment.email} (${assessment.tier || 'free'} tier)`);
-        } else {
-          console.error('No GHL webhook URL configured for tier:', assessment.tier || 'free');
-        }
-
-        // Send to n8n webhook (same data as GHL_WEBHOOK_FREE_RESULTS)
-        try {
-          const n8nWebhookUrl = 'https://drobosky.app.n8n.cloud/webhook-test/replit-lead';
-          const n8nResponse = await fetch(n8nWebhookUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(webhookData)
-          });
-          
-          console.log('n8n Webhook response status:', n8nResponse.status);
-          console.log('n8n Webhook response:', await n8nResponse.text());
-          console.log(`Lead data sent to n8n webhook for ${assessment.email}`);
-        } catch (n8nError) {
-          console.error('n8n webhook failed:', n8nError);
-          // Continue even if n8n webhook fails
-        }
-      } catch (webhookError) {
-        console.error('Failed to send lead data to CRM, but continuing:', webhookError);
-        // Don't fail the entire request if webhook fails
-      }
+      // Assessment data and contact updates are now handled via GHL API (in processValuationAssessment above)
+      // This eliminates webhook redundancy and provides more reliable data sync
 
       res.json(assessment);
     } catch (error) {

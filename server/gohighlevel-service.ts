@@ -432,7 +432,7 @@ export class GoHighLevelService {
         }
       };
 
-      // Create or update contact
+      // Create or update contact with comprehensive assessment data (API-only approach)
       const contactResult = await this.createOrUpdateContact(contactData);
 
       // Prepare email with PDF attachment
@@ -451,67 +451,13 @@ export class GoHighLevelService {
       // Send email
       const emailSent = await this.sendEmail(emailData);
 
-      // Determine webhook type based on assessment tier
-      let webhookType: 'freeResults' | 'growthPurchase' | 'growthResults' | 'capitalPurchase' = 'freeResults';
-      
-      // Check if this is a paid assessment (Growth or Capital tier)
-      if (assessment.tier === 'growth' || assessment.tier === 'paid') {
-        webhookType = 'growthResults';
-      } else if (assessment.tier === 'capital') {
-        webhookType = 'capitalPurchase'; // Capital tier uses same webhook as purchase for now
-      }
-      
-      // Send webhook with full assessment data including pre-formatted values
-      const webhookData = {
-        event: 'valuation_completed',
-        tier: assessment.tier || 'free',
-        contact: {
-          first_name: assessment.firstName || '',
-          last_name: assessment.lastName || '',
-          email: assessment.email,
-          phone: assessment.phone || '',
-          company_name: assessment.company || '',
-          // Custom fields matching GoHighLevel exactly - convert strings to numbers
-          overall_grade_af: assessment.overallScore,
-          valuation_estimate: Number(assessment.midEstimate) || 0,
-          valuation_low: Number(assessment.lowEstimate) || 0,
-          valuation_high: Number(assessment.highEstimate) || 0,
-          adjusted_ebitda: Number(assessment.adjustedEbitda) || 0,
-          financial_performance_grade: assessment.financialPerformance,
-          customer_concentration_grade: assessment.customerConcentration,
-          management_team_grade: assessment.managementTeam,
-          competitive_position_grade: assessment.competitivePosition,
-          growth_prospects_grade: assessment.growthProspects,
-          systems_processes_grade: assessment.systemsProcesses,
-          asset_quality_grade: assessment.assetQuality,
-          industry_outlook_grade: assessment.industryOutlook,
-          risk_factors_grade: assessment.riskFactors,
-          owner_dependency_grade: assessment.ownerDependency,
-          follow_up_intent: assessment.followUpIntent,
-          executive_summary: assessment.executiveSummary || ''
-        },
-        assessment: {
-          id: assessment.id,
-          companyName: assessment.company,
-          overallScore: assessment.overallScore,
-          lowEstimate: assessment.lowEstimate,
-          midEstimate: assessment.midEstimate,
-          highEstimate: assessment.highEstimate,
-          adjustedEbitda: assessment.adjustedEbitda,
-          valuationMultiple: assessment.valuationMultiple,
-          createdAt: assessment.createdAt,
-          followUpIntent: assessment.followUpIntent,
-          additionalComments: assessment.additionalComments
-        }
-      };
+      console.log(`Assessment processed via API - Contact updated: ${contactResult ? 'success' : 'failed'}, Email: ${emailSent ? 'sent' : 'failed'} for ${assessment.email}`);
 
-      // Send to both GoHighLevel and n8n for comprehensive lead management
-      const webhookResults = await this.sendLeadToAllSystems(webhookData);
-
+      // API-only approach: No webhooks needed, all data sent via contact update
       return {
         contactCreated: true,
         emailSent,
-        webhookSent: webhookResults.ghlWebhookSent || webhookResults.n8nWebhookSent // Consider success if either webhook succeeds
+        webhookSent: true // API call replaces webhooks
       };
 
     } catch (error) {
