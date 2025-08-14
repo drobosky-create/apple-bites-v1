@@ -6,13 +6,13 @@ This full-stack web application for Meritage Partners functions as a business va
 ## User Preferences
 Preferred communication style: Simple, everyday language. Focus on actions and progress rather than repetitive phrases. Perform periodic audits for project cleanup rather than extensive organizational work.
 
-Development Priority: Always check Argon Dashboard folder first for any files, templates, or assets. Use Argon components, styles, and logic as the primary source. Only look elsewhere if Argon folder doesn't contain a relevant match.
+Development Priority: Enhanced Material Dashboard layout implemented using TeamTrack-inspired components with Apple Bites universal brand colors. Professional M&A platform presentation with sophisticated gradients and floating dashboard cards.
 
 ## System Architecture
 
 ### Frontend
 - **Framework**: React 18 with TypeScript.
-- **Styling**: Material Dashboard design system, featuring a professional blue-based color scheme with subtle shadows and a clean, modern aesthetic. Prioritizes a two-column authentication layout and Material Dashboard components.
+- **Styling**: Enhanced Material Dashboard design system with Apple Bites universal brand colors (Navy #0b2147, Teal #005b8c, Blue #4493de, Green #16A34A, Amber #F59E0B, Red #DC2626). Features professional gradients, floating dashboard cards with white icons, and sophisticated TeamTrack-inspired layout aesthetics.
 - **State Management**: React Hook Form for form state, TanStack Query for server state.
 - **Routing**: Wouter for client-side routing.
 - **Build Tool**: Vite.
@@ -31,6 +31,7 @@ Development Priority: Always check Argon Dashboard folder first for any files, t
 
 ### Key Features & Design Decisions
 - **Valuation Assessment**: Multi-step form for EBITDA, adjustments, value drivers, follow-up, and results. Includes real-time EBITDA calculations, value driver scoring (A-F grades), and AI-powered narrative generation (OpenAI GPT-4) with industry-specific NAICS multipliers.
+- **Enhanced Material Dashboard (August 2025)**: TeamTrack-inspired sophisticated layout with Apple Bites branding, featuring floating gradient cards, professional sidebar navigation, and comprehensive M&A metrics display.
 - **Enhanced CRM System - Phase 1 Implementation (August 2025)**: Comprehensive headless CRM with M&A-specific features including:
   * 14-stage deal pipeline (Contact→Firm→Opportunity→Deal hierarchy) with interactive Kanban board (drag-and-drop)
   * Enhanced activity tracking with granular relationship mapping (Contact/Firm/Opportunity/Deal associations)
