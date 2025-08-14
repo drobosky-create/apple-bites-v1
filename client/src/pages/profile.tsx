@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'wouter';
+import { Link } from 'wouter';
 import { useAuth } from '@/hooks/useAuth';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
@@ -57,7 +57,6 @@ interface ProfileData {
 export default function ProfilePage() {
   const { user, isAuthenticated } = useAuth();
   const queryClient = useQueryClient();
-  const [, setLocation] = useLocation();
   const [editMode, setEditMode] = useState(false);
   
   // Show demo profile for non-authenticated users
@@ -180,29 +179,22 @@ export default function ProfilePage() {
           }}
         >
           <MDBox display="flex" alignItems="center">
-            <MDButton
-              onClick={() => {
-                // Check if we came from CRM
-                if (localStorage.getItem('crmNavigation') === 'true') {
-                  localStorage.removeItem('crmNavigation');
-                  setLocation('/crm');
-                } else {
-                  setLocation('/dashboard');
-                }
-              }}
-              sx={{
-                background: 'transparent',
-                color: '#0A1F44',
-                minWidth: 'auto',
-                p: 1,
-                mr: 2,
-                '&:hover': {
-                  background: 'rgba(0, 191, 166, 0.1)'
-                }
-              }}
-            >
-              <ArrowLeft size={20} />
-            </MDButton>
+            <Link href="/dashboard">
+              <MDButton
+                sx={{
+                  background: 'transparent',
+                  color: '#0A1F44',
+                  minWidth: 'auto',
+                  p: 1,
+                  mr: 2,
+                  '&:hover': {
+                    background: 'rgba(0, 191, 166, 0.1)'
+                  }
+                }}
+              >
+                <ArrowLeft size={20} />
+              </MDButton>
+            </Link>
             <MDTypography variant="h4" fontWeight="bold" sx={{ color: '#111827' }}>
               Profile
             </MDTypography>

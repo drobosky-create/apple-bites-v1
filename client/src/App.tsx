@@ -12,14 +12,9 @@ import GrowthExitAssessment from "@/pages/strategic-assessment-new-clean";
 import AnalyticsDashboard from "@/pages/analytics-dashboard";
 import ValueCalculator from "@/pages/value-calculator";
 import LeadsDashboard from "@/pages/leads-dashboard";
-import CRMDashboard from "@/pages/crm-dashboard";
-import CRMPipelineDashboard from "@/pages/crm-pipeline-dashboard";
-import CRMPhase1Summary from "@/pages/crm-phase1-summary";
-import DealPipelineSimple from "@/pages/deal-pipeline-simple";
 import TeamDashboard from "@/pages/team-dashboard";
 import AdminDashboard from "@/pages/admin-dashboard";
 import Dashboard from "@/pages/dashboard";
-import EnhancedDashboard from "@/pages/enhanced-dashboard";
 import AssessmentResults from "@/pages/assessment-results";
 import Profile from "@/pages/profile";
 import PastAssessments from "@/pages/past-assessments";
@@ -103,21 +98,9 @@ function Router() {
             {isAuthenticated ? <PastAssessments /> : <LoginPage />}
           </Route>
           
-          {/* CRM System - requires authentication */}
-          <Route path="/crm">
-            {isAuthenticated ? <CRMDashboard /> : <LoginPage />}
-          </Route>
-          
-          {/* Enhanced Dashboard - TeamTrack style */}
-          <Route path="/enhanced-dashboard" component={EnhancedDashboard} />
-          
           {/* Admin/Team pages - self-authenticated */}
           <Route path="/admin/analytics" component={AnalyticsDashboard} />
           <Route path="/admin/leads" component={LeadsDashboard} />
-          <Route path="/admin/crm" component={CRMDashboard} />
-          <Route path="/admin/crm-pipeline" component={CRMPipelineDashboard} />
-          <Route path="/admin/crm-phase1" component={CRMPhase1Summary} />
-          <Route path="/admin/deal-pipeline" component={DealPipelineSimple} />
           <Route path="/admin/team" component={AdminLoginPage} />
           <Route path="/team" component={TeamDashboard} />
           

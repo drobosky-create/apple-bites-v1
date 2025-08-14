@@ -12,15 +12,15 @@ const MDTypographyRoot = styled(Typography)<{ mdProps: MDTypographyProps }>(({ t
   const { color, fontWeight, textTransform } = mdProps;
 
   const colors = {
-    primary: "#0b2147",
-    secondary: "#005b8c",
-    info: "#4493de",
-    success: "#16A34A",
-    warning: "#F59E0B",
-    error: "#DC2626",
-    dark: "#0b2147",
+    primary: "#00718d",
+    secondary: "#7b1fa2",
+    info: "#1A73E8",
+    success: "#4CAF50",
+    warning: "#fb8c00",
+    error: "#F44335",
+    dark: "#344767",
     white: "#ffffff",
-    text: "#344767",
+    text: "#67748e",
     light: "#f0f2f5",
   };
 
@@ -41,9 +41,12 @@ const MDTypographyRoot = styled(Typography)<{ mdProps: MDTypographyProps }>(({ t
 
 const MDTypography = forwardRef<HTMLElement, MDTypographyProps>(
   ({ color = "dark", fontWeight = "regular", textTransform = "none", children, ...rest }, ref) => {
+    // Remove mdProps from DOM to prevent React warnings
+    const { color: _, fontWeight: __, textTransform: ___, ...domProps } = rest;
+    
     return (
       <MDTypographyRoot
-        {...rest}
+        {...domProps}
         ref={ref}
         mdProps={{ color, fontWeight, textTransform }}
       >
