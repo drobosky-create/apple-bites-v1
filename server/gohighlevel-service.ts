@@ -282,14 +282,18 @@ export class GoHighLevelService {
   }
 
   // Send lead data to both GoHighLevel and n8n for comprehensive lead management
-  async sendLeadToAllSystems(leadData: any): Promise<{
+  async sendLeadToAllSystems(leadData: any, webhookContext?: string): Promise<{
     ghlWebhookSent: boolean;
     n8nWebhookSent: boolean;
   }> {
     try {
-      // Send to appropriate GoHighLevel webhook based on tier
-      let ghlWebhookType: 'freeResults' | 'growthResults' | 'capitalPurchase' = 'freeResults';
-      if (leadData.tier === 'growth' || leadData.tier === 'paid') {
+      // Send to appropriate GoHighLevel webhook based on tier and context
+      let ghlWebhookType: 'freeResults' | 'growthResults' | 'capitalPurchase' | 'demoSignup' = 'freeResults';
+      
+      // Handle demo signup specially
+      if (webhookContext === 'demoSignup') {
+        ghlWebhookType = 'growthResults'; // Demo users get growth tier, so use growthResults webhook
+      } else if (leadData.tier === 'growth' || leadData.tier === 'paid') {
         ghlWebhookType = 'growthResults';
       } else if (leadData.tier === 'capital') {
         ghlWebhookType = 'capitalPurchase';
