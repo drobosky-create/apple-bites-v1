@@ -14,6 +14,7 @@ import ValueCalculator from "@/pages/value-calculator";
 import LeadsDashboard from "@/pages/leads-dashboard";
 import CRMDashboard from "@/pages/crm-dashboard";
 import CRMPipelineDashboard from "@/pages/crm-pipeline-dashboard";
+import CRMPhase1Summary from "@/pages/crm-phase1-summary";
 import TeamDashboard from "@/pages/team-dashboard";
 import AdminDashboard from "@/pages/admin-dashboard";
 import Dashboard from "@/pages/dashboard";
@@ -110,6 +111,7 @@ function Router() {
           <Route path="/admin/leads" component={LeadsDashboard} />
           <Route path="/admin/crm" component={CRMDashboard} />
           <Route path="/admin/crm-pipeline" component={CRMPipelineDashboard} />
+          <Route path="/admin/crm-phase1" component={CRMPhase1Summary} />
           <Route path="/admin/team" component={AdminLoginPage} />
           <Route path="/team" component={TeamDashboard} />
           

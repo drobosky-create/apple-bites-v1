@@ -11,6 +11,11 @@ import {
   deals,
   targets,
   dealActivities,
+  activities,
+  tasks,
+  documents,
+  emailCampaigns,
+  dealValuations,
   type ValuationAssessment, 
   type InsertValuationAssessment,
   type Lead,
@@ -34,7 +39,17 @@ import {
   type Target,
   type InsertTarget,
   type DealActivity,
-  type InsertDealActivity
+  type InsertDealActivity,
+  type Activity,
+  type InsertActivity,
+  type Task,
+  type InsertTask,
+  type Document,
+  type InsertDocument,
+  type EmailCampaign,
+  type InsertEmailCampaign,
+  type DealValuation,
+  type InsertDealValuation
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, and, inArray } from "drizzle-orm";
@@ -128,6 +143,47 @@ export interface IStorage {
   // Deal Activity methods
   createDealActivity(activity: InsertDealActivity): Promise<DealActivity>;
   getDealActivities(dealId: number): Promise<DealActivity[]>;
+
+  // Enhanced CRM - Phase 1 methods
+  // Activity management
+  createActivity(activity: InsertActivity): Promise<Activity>;
+  getActivity(id: number): Promise<Activity | undefined>;
+  getActivitiesByContact(contactId: number): Promise<Activity[]>;
+  getActivitiesByFirm(firmId: number): Promise<Activity[]>;
+  getActivitiesByDeal(dealId: number): Promise<Activity[]>;
+  updateActivity(id: number, updates: Partial<Activity>): Promise<Activity>;
+  deleteActivity(id: number): Promise<void>;
+
+  // Task management
+  createTask(task: InsertTask): Promise<Task>;
+  getTask(id: number): Promise<Task | undefined>;
+  getAllTasks(): Promise<Task[]>;
+  getTasksByAssignee(assignedTo: string): Promise<Task[]>;
+  getTasksByDeal(dealId: number): Promise<Task[]>;
+  updateTask(id: number, updates: Partial<Task>): Promise<Task>;
+  deleteTask(id: number): Promise<void>;
+
+  // Document management
+  createDocument(document: InsertDocument): Promise<Document>;
+  getDocument(id: number): Promise<Document | undefined>;
+  getDocumentsByDeal(dealId: number): Promise<Document[]>;
+  getDocumentsByContact(contactId: number): Promise<Document[]>;
+  updateDocument(id: number, updates: Partial<Document>): Promise<Document>;
+  deleteDocument(id: number): Promise<void>;
+
+  // Email campaign management
+  createEmailCampaign(campaign: InsertEmailCampaign): Promise<EmailCampaign>;
+  getEmailCampaign(id: number): Promise<EmailCampaign | undefined>;
+  getAllEmailCampaigns(): Promise<EmailCampaign[]>;
+  updateEmailCampaign(id: number, updates: Partial<EmailCampaign>): Promise<EmailCampaign>;
+  deleteEmailCampaign(id: number): Promise<void>;
+
+  // Deal valuation management
+  createDealValuation(valuation: InsertDealValuation): Promise<DealValuation>;
+  getDealValuation(id: number): Promise<DealValuation | undefined>;
+  getValuationsByDeal(dealId: number): Promise<DealValuation[]>;
+  updateDealValuation(id: number, updates: Partial<DealValuation>): Promise<DealValuation>;
+  deleteValuation(id: number): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -682,21 +738,201 @@ export class DatabaseStorage implements IStorage {
     await db.delete(firms).where(eq(firms.id, id));
   }
 
-  // Email Campaign operations for GHL integration
-  async createEmailCampaign(campaignData: any): Promise<any> {
-    // Store campaign locally and prepare for GHL integration
-    const campaign = {
-      id: Math.floor(Math.random() * 1000000),
-      ...campaignData,
-      status: 'pending_ghl_sync',
-      createdAt: new Date(),
-      ghlSyncStatus: 'queued'
-    };
+  // ============= ENHANCED CRM - PHASE 1 IMPLEMENTATIONS =============
+
+  // Activity management
+  async createActivity(insertActivity: InsertActivity): Promise<Activity> {
+    const [activity] = await db
+      .insert(activities)
+      .values(insertActivity)
+      .returning();
+    return activity;
+  }
+
+  async getActivity(id: number): Promise<Activity | undefined> {
+    const [activity] = await db.select().from(activities).where(eq(activities.id, id));
+    return activity;
+  }
+
+  async getActivitiesByContact(contactId: number): Promise<Activity[]> {
+    return await db.select().from(activities).where(eq(activities.contactId, contactId)).orderBy(desc(activities.createdAt));
+  }
+
+  async getActivitiesByFirm(firmId: number): Promise<Activity[]> {
+    return await db.select().from(activities).where(eq(activities.firmId, firmId)).orderBy(desc(activities.createdAt));
+  }
+
+  async getActivitiesByDeal(dealId: number): Promise<Activity[]> {
+    return await db.select().from(activities).where(eq(activities.dealId, dealId)).orderBy(desc(activities.createdAt));
+  }
+
+  async updateActivity(id: number, updates: Partial<Activity>): Promise<Activity> {
+    const [activity] = await db
+      .update(activities)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(activities.id, id))
+      .returning();
     
-    // Log the campaign creation for GHL sync
-    console.log('Email campaign created for GHL sync:', campaign);
+    if (!activity) {
+      throw new Error(`Activity with id ${id} not found`);
+    }
+    return activity;
+  }
+
+  async deleteActivity(id: number): Promise<void> {
+    await db.delete(activities).where(eq(activities.id, id));
+  }
+
+  // Task management
+  async createTask(insertTask: InsertTask): Promise<Task> {
+    const [task] = await db
+      .insert(tasks)
+      .values(insertTask)
+      .returning();
+    return task;
+  }
+
+  async getTask(id: number): Promise<Task | undefined> {
+    const [task] = await db.select().from(tasks).where(eq(tasks.id, id));
+    return task;
+  }
+
+  async getAllTasks(): Promise<Task[]> {
+    return await db.select().from(tasks).orderBy(desc(tasks.createdAt));
+  }
+
+  async getTasksByAssignee(assignedTo: string): Promise<Task[]> {
+    return await db.select().from(tasks).where(eq(tasks.assignedTo, assignedTo)).orderBy(desc(tasks.createdAt));
+  }
+
+  async getTasksByDeal(dealId: number): Promise<Task[]> {
+    return await db.select().from(tasks).where(eq(tasks.dealId, dealId)).orderBy(desc(tasks.createdAt));
+  }
+
+  async updateTask(id: number, updates: Partial<Task>): Promise<Task> {
+    const [task] = await db
+      .update(tasks)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(tasks.id, id))
+      .returning();
     
+    if (!task) {
+      throw new Error(`Task with id ${id} not found`);
+    }
+    return task;
+  }
+
+  async deleteTask(id: number): Promise<void> {
+    await db.delete(tasks).where(eq(tasks.id, id));
+  }
+
+  // Document management
+  async createDocument(insertDocument: InsertDocument): Promise<Document> {
+    const [document] = await db
+      .insert(documents)
+      .values(insertDocument)
+      .returning();
+    return document;
+  }
+
+  async getDocument(id: number): Promise<Document | undefined> {
+    const [document] = await db.select().from(documents).where(eq(documents.id, id));
+    return document;
+  }
+
+  async getDocumentsByDeal(dealId: number): Promise<Document[]> {
+    return await db.select().from(documents).where(eq(documents.dealId, dealId)).orderBy(desc(documents.createdAt));
+  }
+
+  async getDocumentsByContact(contactId: number): Promise<Document[]> {
+    return await db.select().from(documents).where(eq(documents.contactId, contactId)).orderBy(desc(documents.createdAt));
+  }
+
+  async updateDocument(id: number, updates: Partial<Document>): Promise<Document> {
+    const [document] = await db
+      .update(documents)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(documents.id, id))
+      .returning();
+    
+    if (!document) {
+      throw new Error(`Document with id ${id} not found`);
+    }
+    return document;
+  }
+
+  async deleteDocument(id: number): Promise<void> {
+    await db.delete(documents).where(eq(documents.id, id));
+  }
+
+  // Enhanced Email Campaign management
+  async createEmailCampaign(insertCampaign: InsertEmailCampaign): Promise<EmailCampaign> {
+    const [campaign] = await db
+      .insert(emailCampaigns)
+      .values(insertCampaign)
+      .returning();
     return campaign;
+  }
+
+  async getEmailCampaign(id: number): Promise<EmailCampaign | undefined> {
+    const [campaign] = await db.select().from(emailCampaigns).where(eq(emailCampaigns.id, id));
+    return campaign;
+  }
+
+  async getAllEmailCampaigns(): Promise<EmailCampaign[]> {
+    return await db.select().from(emailCampaigns).orderBy(desc(emailCampaigns.createdAt));
+  }
+
+  async updateEmailCampaign(id: number, updates: Partial<EmailCampaign>): Promise<EmailCampaign> {
+    const [campaign] = await db
+      .update(emailCampaigns)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(emailCampaigns.id, id))
+      .returning();
+    
+    if (!campaign) {
+      throw new Error(`Email campaign with id ${id} not found`);
+    }
+    return campaign;
+  }
+
+  async deleteEmailCampaign(id: number): Promise<void> {
+    await db.delete(emailCampaigns).where(eq(emailCampaigns.id, id));
+  }
+
+  // Deal valuation management
+  async createDealValuation(insertValuation: InsertDealValuation): Promise<DealValuation> {
+    const [valuation] = await db
+      .insert(dealValuations)
+      .values(insertValuation)
+      .returning();
+    return valuation;
+  }
+
+  async getDealValuation(id: number): Promise<DealValuation | undefined> {
+    const [valuation] = await db.select().from(dealValuations).where(eq(dealValuations.id, id));
+    return valuation;
+  }
+
+  async getValuationsByDeal(dealId: number): Promise<DealValuation[]> {
+    return await db.select().from(dealValuations).where(eq(dealValuations.dealId, dealId)).orderBy(desc(dealValuations.createdAt));
+  }
+
+  async updateDealValuation(id: number, updates: Partial<DealValuation>): Promise<DealValuation> {
+    const [valuation] = await db
+      .update(dealValuations)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(dealValuations.id, id))
+      .returning();
+    
+    if (!valuation) {
+      throw new Error(`Deal valuation with id ${id} not found`);
+    }
+    return valuation;
+  }
+
+  async deleteValuation(id: number): Promise<void> {
+    await db.delete(dealValuations).where(eq(dealValuations.id, id));
   }
 }
 

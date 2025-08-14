@@ -697,3 +697,517 @@ export type EbitdaData = z.infer<typeof ebitdaSchema>;
 export type AdjustmentsData = z.infer<typeof adjustmentsSchema>;
 export type ValueDriversData = z.infer<typeof valueDriversSchema>;
 export type FollowUpData = z.infer<typeof followUpSchema>;
+
+// ============= ENHANCED CRM EXPANSION - PHASE 1 =============
+
+// Activities Table - Comprehensive activity/interaction tracking
+export const activities = pgTable("activities", {
+  id: serial("id").primaryKey(),
+  
+  // Relationships
+  contactId: integer("contact_id"),
+  firmId: integer("firm_id"),
+  opportunityId: integer("opportunity_id"),
+  dealId: integer("deal_id"),
+  
+  // Activity Details
+  activityType: varchar("activity_type").notNull(), // "call", "email", "meeting", "note", "task", "document", "proposal"
+  subject: varchar("subject").notNull(),
+  description: text("description"),
+  outcome: varchar("outcome"), // "completed", "scheduled", "cancelled", "no_response"
+  
+  // Scheduling
+  scheduledDate: timestamp("scheduled_date"),
+  completedDate: timestamp("completed_date"),
+  dueDate: timestamp("due_date"),
+  
+  // Metadata
+  priority: varchar("priority").default("medium"), // "low", "medium", "high", "urgent"
+  status: varchar("status").default("pending"), // "pending", "in_progress", "completed", "cancelled"
+  duration: integer("duration"), // Minutes
+  location: varchar("location"),
+  
+  // Email/Communication specific
+  emailSubject: varchar("email_subject"),
+  emailBody: text("email_body"),
+  emailStatus: varchar("email_status"), // "sent", "delivered", "opened", "clicked", "replied"
+  
+  // Assignment
+  assignedTo: varchar("assigned_to"), // Team member ID
+  createdBy: varchar("created_by"), // Team member who created
+  
+  // Additional data
+  metadata: jsonb("metadata"), // Custom fields and additional data
+  tags: text("tags"), // JSON array of tags
+  
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Email Campaigns Table - Campaign management
+export const emailCampaigns = pgTable("email_campaigns", {
+  id: serial("id").primaryKey(),
+  
+  // Campaign Details
+  name: varchar("name").notNull(),
+  subject: varchar("subject").notNull(),
+  htmlContent: text("html_content"),
+  textContent: text("text_content"),
+  
+  // Targeting
+  targetAudience: text("target_audience"), // JSON criteria for targeting
+  contactIds: text("contact_ids"), // JSON array of specific contact IDs
+  
+  // Campaign Settings
+  status: varchar("status").default("draft"), // "draft", "scheduled", "sending", "sent", "paused"
+  scheduledDate: timestamp("scheduled_date"),
+  sentDate: timestamp("sent_date"),
+  
+  // Templates and Design
+  templateId: integer("template_id"),
+  isTemplate: boolean("is_template").default(false),
+  
+  // Tracking
+  totalSent: integer("total_sent").default(0),
+  totalDelivered: integer("total_delivered").default(0),
+  totalOpened: integer("total_opened").default(0),
+  totalClicked: integer("total_clicked").default(0),
+  totalReplies: integer("total_replies").default(0),
+  
+  // Assignment
+  createdBy: varchar("created_by"),
+  
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Email Campaign Recipients - Track individual recipient status
+export const emailCampaignRecipients = pgTable("email_campaign_recipients", {
+  id: serial("id").primaryKey(),
+  
+  campaignId: integer("campaign_id").notNull(),
+  contactId: integer("contact_id").notNull(),
+  
+  // Status tracking
+  status: varchar("status").default("pending"), // "pending", "sent", "delivered", "failed", "bounced"
+  sentAt: timestamp("sent_at"),
+  deliveredAt: timestamp("delivered_at"),
+  openedAt: timestamp("opened_at"),
+  clickedAt: timestamp("clicked_at"),
+  repliedAt: timestamp("replied_at"),
+  
+  // Error tracking
+  errorMessage: text("error_message"),
+  bounceReason: text("bounce_reason"),
+  
+  // Personalization data used
+  personalizationData: jsonb("personalization_data"),
+  
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Documents Table - Document/file management
+export const documents = pgTable("documents", {
+  id: serial("id").primaryKey(),
+  
+  // Basic Info
+  fileName: varchar("file_name").notNull(),
+  originalFileName: varchar("original_file_name").notNull(),
+  fileSize: integer("file_size"), // bytes
+  mimeType: varchar("mime_type"),
+  fileUrl: varchar("file_url"), // Storage URL
+  
+  // Categorization
+  documentType: varchar("document_type"), // "contract", "proposal", "financial", "due_diligence", "presentation"
+  category: varchar("category"),
+  tags: text("tags"), // JSON array
+  
+  // Relationships
+  contactId: integer("contact_id"),
+  firmId: integer("firm_id"),
+  opportunityId: integer("opportunity_id"),
+  dealId: integer("deal_id"),
+  
+  // Access Control
+  isConfidential: boolean("is_confidential").default(false),
+  accessLevel: varchar("access_level").default("team"), // "public", "team", "restricted", "confidential"
+  
+  // Metadata
+  description: text("description"),
+  version: varchar("version").default("1.0"),
+  status: varchar("status").default("active"), // "active", "archived", "deleted"
+  
+  // Tracking
+  downloadCount: integer("download_count").default(0),
+  lastAccessedAt: timestamp("last_accessed_at"),
+  
+  // Assignment
+  uploadedBy: varchar("uploaded_by"),
+  
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Tasks Table - Task and todo management
+export const tasks = pgTable("tasks", {
+  id: serial("id").primaryKey(),
+  
+  // Task Details
+  title: varchar("title").notNull(),
+  description: text("description"),
+  priority: varchar("priority").default("medium"), // "low", "medium", "high", "urgent"
+  status: varchar("status").default("pending"), // "pending", "in_progress", "completed", "cancelled", "on_hold"
+  
+  // Relationships
+  contactId: integer("contact_id"),
+  firmId: integer("firm_id"),
+  opportunityId: integer("opportunity_id"),
+  dealId: integer("deal_id"),
+  parentTaskId: integer("parent_task_id"), // For subtasks
+  
+  // Scheduling
+  dueDate: timestamp("due_date"),
+  startDate: timestamp("start_date"),
+  completedDate: timestamp("completed_date"),
+  estimatedHours: decimal("estimated_hours", { precision: 5, scale: 2 }),
+  actualHours: decimal("actual_hours", { precision: 5, scale: 2 }),
+  
+  // Assignment
+  assignedTo: varchar("assigned_to"), // Team member ID
+  createdBy: varchar("created_by"),
+  
+  // Progress tracking
+  progressPercent: integer("progress_percent").default(0), // 0-100
+  
+  // Additional data
+  tags: text("tags"), // JSON array
+  metadata: jsonb("metadata"),
+  
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// M&A Specific Tables
+
+// Deal Valuations - Track valuation history for deals
+export const dealValuations = pgTable("deal_valuations", {
+  id: serial("id").primaryKey(),
+  
+  dealId: integer("deal_id").notNull(),
+  
+  // Valuation Details
+  valuationType: varchar("valuation_type").notNull(), // "preliminary", "formal", "updated", "final"
+  valuationDate: timestamp("valuation_date").notNull(),
+  
+  // Financial Metrics
+  revenue: decimal("revenue", { precision: 15, scale: 2 }),
+  ebitda: decimal("ebitda", { precision: 15, scale: 2 }),
+  adjustedEbitda: decimal("adjusted_ebitda", { precision: 15, scale: 2 }),
+  
+  // Valuation Range
+  lowValuation: decimal("low_valuation", { precision: 15, scale: 2 }),
+  midValuation: decimal("mid_valuation", { precision: 15, scale: 2 }),
+  highValuation: decimal("high_valuation", { precision: 15, scale: 2 }),
+  
+  // Multiples
+  revenueMultiple: decimal("revenue_multiple", { precision: 8, scale: 2 }),
+  ebitdaMultiple: decimal("ebitda_multiple", { precision: 8, scale: 2 }),
+  
+  // Analysis
+  valuationMethod: varchar("valuation_method"), // "comparable_company", "dcf", "precedent_transaction"
+  assumptions: text("assumptions"),
+  notes: text("notes"),
+  
+  // Approval
+  approvedBy: varchar("approved_by"),
+  approvedAt: timestamp("approved_at"),
+  status: varchar("status").default("draft"), // "draft", "review", "approved", "archived"
+  
+  createdBy: varchar("created_by"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Deal Stages Configuration - Configurable pipeline stages
+export const dealStageConfig = pgTable("deal_stage_config", {
+  id: serial("id").primaryKey(),
+  
+  // Stage Details
+  stageName: varchar("stage_name").notNull(),
+  stageOrder: integer("stage_order").notNull(),
+  stageType: varchar("stage_type").notNull(), // "opportunity", "deal"
+  
+  // Configuration
+  isActive: boolean("is_active").default(true),
+  requiresApproval: boolean("requires_approval").default(false),
+  autoAdvance: boolean("auto_advance").default(false),
+  
+  // Display
+  color: varchar("color").default("#3B82F6"),
+  icon: varchar("icon"),
+  description: text("description"),
+  
+  // Workflow
+  requiredFields: text("required_fields"), // JSON array of required fields
+  nextStages: text("next_stages"), // JSON array of possible next stages
+  
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Pipeline Performance Metrics - Track pipeline performance
+export const pipelineMetrics = pgTable("pipeline_metrics", {
+  id: serial("id").primaryKey(),
+  
+  // Time Period
+  metricDate: timestamp("metric_date").notNull(),
+  periodType: varchar("period_type").notNull(), // "daily", "weekly", "monthly", "quarterly"
+  
+  // Deal Metrics
+  totalDeals: integer("total_deals").default(0),
+  newDeals: integer("new_deals").default(0),
+  closedWonDeals: integer("closed_won_deals").default(0),
+  closedLostDeals: integer("closed_lost_deals").default(0),
+  
+  // Value Metrics
+  totalPipelineValue: decimal("total_pipeline_value", { precision: 15, scale: 2 }).default("0"),
+  newPipelineValue: decimal("new_pipeline_value", { precision: 15, scale: 2 }).default("0"),
+  closedWonValue: decimal("closed_won_value", { precision: 15, scale: 2 }).default("0"),
+  
+  // Conversion Metrics
+  conversionRate: decimal("conversion_rate", { precision: 5, scale: 2 }), // Percentage
+  averageDealSize: decimal("average_deal_size", { precision: 15, scale: 2 }),
+  averageSalesCycle: integer("average_sales_cycle"), // Days
+  
+  // Stage-specific metrics
+  stageMetrics: jsonb("stage_metrics"), // JSON object with stage-specific data
+  
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// ============= ENHANCED RELATIONS - PHASE 1 =============
+
+// Enhanced Activities Relations
+export const activitiesRelations = relations(activities, ({ one }) => ({
+  contact: one(contacts, {
+    fields: [activities.contactId],
+    references: [contacts.id],
+  }),
+  firm: one(firms, {
+    fields: [activities.firmId],
+    references: [firms.id],
+  }),
+  opportunity: one(opportunities, {
+    fields: [activities.opportunityId],
+    references: [opportunities.id],
+  }),
+  deal: one(deals, {
+    fields: [activities.dealId],
+    references: [deals.id],
+  }),
+}));
+
+// Email Campaign Relations
+export const emailCampaignsRelations = relations(emailCampaigns, ({ many }) => ({
+  recipients: many(emailCampaignRecipients),
+}));
+
+export const emailCampaignRecipientsRelations = relations(emailCampaignRecipients, ({ one }) => ({
+  campaign: one(emailCampaigns, {
+    fields: [emailCampaignRecipients.campaignId],
+    references: [emailCampaigns.id],
+  }),
+  contact: one(contacts, {
+    fields: [emailCampaignRecipients.contactId],
+    references: [contacts.id],
+  }),
+}));
+
+// Document Relations
+export const documentsRelations = relations(documents, ({ one }) => ({
+  contact: one(contacts, {
+    fields: [documents.contactId],
+    references: [contacts.id],
+  }),
+  firm: one(firms, {
+    fields: [documents.firmId],
+    references: [firms.id],
+  }),
+  opportunity: one(opportunities, {
+    fields: [documents.opportunityId],
+    references: [opportunities.id],
+  }),
+  deal: one(deals, {
+    fields: [documents.dealId],
+    references: [deals.id],
+  }),
+}));
+
+// Task Relations
+export const tasksRelations = relations(tasks, ({ one }) => ({
+  contact: one(contacts, {
+    fields: [tasks.contactId],
+    references: [contacts.id],
+  }),
+  firm: one(firms, {
+    fields: [tasks.firmId],
+    references: [firms.id],
+  }),
+  opportunity: one(opportunities, {
+    fields: [tasks.opportunityId],
+    references: [opportunities.id],
+  }),
+  deal: one(deals, {
+    fields: [tasks.dealId],
+    references: [deals.id],
+  }),
+  parentTask: one(tasks, {
+    fields: [tasks.parentTaskId],
+    references: [tasks.id],
+  }),
+}));
+
+// Deal Valuation Relations
+export const dealValuationsRelations = relations(dealValuations, ({ one }) => ({
+  deal: one(deals, {
+    fields: [dealValuations.dealId],
+    references: [deals.id],
+  }),
+}));
+
+// Enhanced existing relations to include new tables
+export const enhancedContactsRelations = relations(contacts, ({ one, many }) => ({
+  firm: one(firms, {
+    fields: [contacts.firmId],
+    references: [firms.id],
+  }),
+  activities: many(activities),
+  documents: many(documents),
+  tasks: many(tasks),
+  emailCampaignRecipients: many(emailCampaignRecipients),
+}));
+
+export const enhancedFirmsRelations = relations(firms, ({ one, many }) => ({
+  primaryContact: one(contacts, {
+    fields: [firms.primaryContactId],
+    references: [contacts.id],
+  }),
+  contacts: many(contacts),
+  opportunities: many(opportunities),
+  deals: many(deals),
+  activities: many(activities),
+  documents: many(documents),
+  tasks: many(tasks),
+}));
+
+export const enhancedOpportunitiesRelations = relations(opportunities, ({ one, many }) => ({
+  clientFirm: one(firms, {
+    fields: [opportunities.clientFirmId],
+    references: [firms.id],
+  }),
+  deals: many(deals),
+  activities: many(activities),
+  documents: many(documents),
+  tasks: many(tasks),
+}));
+
+export const enhancedDealsRelations = relations(deals, ({ one, many }) => ({
+  clientFirm: one(firms, {
+    fields: [deals.clientFirmId],
+    references: [firms.id],
+  }),
+  opportunity: one(opportunities, {
+    fields: [deals.opportunityId],
+    references: [opportunities.id],
+  }),
+  activities: many(dealActivities),
+  targets: many(targets),
+  enhancedActivities: many(activities),
+  documents: many(documents),
+  tasks: many(tasks),
+  valuations: many(dealValuations),
+}));
+
+// ============= ENHANCED SCHEMAS - PHASE 1 =============
+
+// Activity Schemas
+export const insertActivitySchema = createInsertSchema(activities).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+// Email Campaign Schemas
+export const insertEmailCampaignSchema = createInsertSchema(emailCampaigns).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertEmailCampaignRecipientSchema = createInsertSchema(emailCampaignRecipients).omit({
+  id: true,
+  createdAt: true,
+});
+
+// Document Schemas
+export const insertDocumentSchema = createInsertSchema(documents).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+// Task Schemas
+export const insertTaskSchema = createInsertSchema(tasks).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+// Deal Valuation Schemas
+export const insertDealValuationSchema = createInsertSchema(dealValuations).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+// Pipeline Configuration Schemas
+export const insertDealStageConfigSchema = createInsertSchema(dealStageConfig).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertPipelineMetricSchema = createInsertSchema(pipelineMetrics).omit({
+  id: true,
+  createdAt: true,
+});
+
+// ============= ENHANCED TYPES - PHASE 1 =============
+
+// Activity Types
+export type InsertActivity = z.infer<typeof insertActivitySchema>;
+export type Activity = typeof activities.$inferSelect;
+
+// Email Campaign Types
+export type InsertEmailCampaign = z.infer<typeof insertEmailCampaignSchema>;
+export type EmailCampaign = typeof emailCampaigns.$inferSelect;
+export type InsertEmailCampaignRecipient = z.infer<typeof insertEmailCampaignRecipientSchema>;
+export type EmailCampaignRecipient = typeof emailCampaignRecipients.$inferSelect;
+
+// Document Types
+export type InsertDocument = z.infer<typeof insertDocumentSchema>;
+export type Document = typeof documents.$inferSelect;
+
+// Task Types
+export type InsertTask = z.infer<typeof insertTaskSchema>;
+export type Task = typeof tasks.$inferSelect;
+
+// Deal Valuation Types
+export type InsertDealValuation = z.infer<typeof insertDealValuationSchema>;
+export type DealValuation = typeof dealValuations.$inferSelect;
+
+// Pipeline Configuration Types
+export type InsertDealStageConfig = z.infer<typeof insertDealStageConfigSchema>;
+export type DealStageConfig = typeof dealStageConfig.$inferSelect;
+export type InsertPipelineMetric = z.infer<typeof insertPipelineMetricSchema>;
+export type PipelineMetric = typeof pipelineMetrics.$inferSelect;

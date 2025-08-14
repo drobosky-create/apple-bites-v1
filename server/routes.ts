@@ -3522,6 +3522,264 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   }
 
+  // ============= ENHANCED CRM - PHASE 1 API ROUTES =============
+
+  // Enhanced Activity Management Routes
+  app.get("/api/activities", isAdminAuthenticated, async (req, res) => {
+    try {
+      const { contactId, firmId, dealId } = req.query;
+      
+      let activities;
+      if (contactId) {
+        activities = await storage.getActivitiesByContact(parseInt(contactId as string));
+      } else if (firmId) {
+        activities = await storage.getActivitiesByFirm(parseInt(firmId as string));
+      } else if (dealId) {
+        activities = await storage.getActivitiesByDeal(parseInt(dealId as string));
+      } else {
+        // Get all activities - we'll implement this if needed
+        activities = [];
+      }
+      
+      res.json(activities);
+    } catch (error) {
+      console.error('Error fetching activities:', error);
+      res.status(500).json({ error: "Failed to fetch activities" });
+    }
+  });
+
+  app.post("/api/activities", isAdminAuthenticated, async (req, res) => {
+    try {
+      const activity = await storage.createActivity(req.body);
+      res.json(activity);
+    } catch (error) {
+      console.error('Error creating activity:', error);
+      res.status(500).json({ error: "Failed to create activity" });
+    }
+  });
+
+  app.patch("/api/activities/:id", isAdminAuthenticated, async (req, res) => {
+    try {
+      const activityId = parseInt(req.params.id);
+      const activity = await storage.updateActivity(activityId, req.body);
+      res.json(activity);
+    } catch (error) {
+      console.error('Error updating activity:', error);
+      res.status(500).json({ error: "Failed to update activity" });
+    }
+  });
+
+  app.delete("/api/activities/:id", isAdminAuthenticated, async (req, res) => {
+    try {
+      const activityId = parseInt(req.params.id);
+      await storage.deleteActivity(activityId);
+      res.json({ success: true });
+    } catch (error) {
+      console.error('Error deleting activity:', error);
+      res.status(500).json({ error: "Failed to delete activity" });
+    }
+  });
+
+  // Enhanced Task Management Routes
+  app.get("/api/tasks", isAdminAuthenticated, async (req, res) => {
+    try {
+      const { assignedTo, dealId } = req.query;
+      
+      let tasks;
+      if (assignedTo) {
+        tasks = await storage.getTasksByAssignee(assignedTo as string);
+      } else if (dealId) {
+        tasks = await storage.getTasksByDeal(parseInt(dealId as string));
+      } else {
+        tasks = await storage.getAllTasks();
+      }
+      
+      res.json(tasks);
+    } catch (error) {
+      console.error('Error fetching tasks:', error);
+      res.status(500).json({ error: "Failed to fetch tasks" });
+    }
+  });
+
+  app.post("/api/tasks", isAdminAuthenticated, async (req, res) => {
+    try {
+      const task = await storage.createTask(req.body);
+      res.json(task);
+    } catch (error) {
+      console.error('Error creating task:', error);
+      res.status(500).json({ error: "Failed to create task" });
+    }
+  });
+
+  app.patch("/api/tasks/:id", isAdminAuthenticated, async (req, res) => {
+    try {
+      const taskId = parseInt(req.params.id);
+      const task = await storage.updateTask(taskId, req.body);
+      res.json(task);
+    } catch (error) {
+      console.error('Error updating task:', error);
+      res.status(500).json({ error: "Failed to update task" });
+    }
+  });
+
+  app.delete("/api/tasks/:id", isAdminAuthenticated, async (req, res) => {
+    try {
+      const taskId = parseInt(req.params.id);
+      await storage.deleteTask(taskId);
+      res.json({ success: true });
+    } catch (error) {
+      console.error('Error deleting task:', error);
+      res.status(500).json({ error: "Failed to delete task" });
+    }
+  });
+
+  // Enhanced Document Management Routes
+  app.get("/api/documents", isAdminAuthenticated, async (req, res) => {
+    try {
+      const { dealId, contactId } = req.query;
+      
+      let documents;
+      if (dealId) {
+        documents = await storage.getDocumentsByDeal(parseInt(dealId as string));
+      } else if (contactId) {
+        documents = await storage.getDocumentsByContact(parseInt(contactId as string));
+      } else {
+        documents = [];
+      }
+      
+      res.json(documents);
+    } catch (error) {
+      console.error('Error fetching documents:', error);
+      res.status(500).json({ error: "Failed to fetch documents" });
+    }
+  });
+
+  app.post("/api/documents", isAdminAuthenticated, async (req, res) => {
+    try {
+      const document = await storage.createDocument(req.body);
+      res.json(document);
+    } catch (error) {
+      console.error('Error creating document:', error);
+      res.status(500).json({ error: "Failed to create document" });
+    }
+  });
+
+  app.patch("/api/documents/:id", isAdminAuthenticated, async (req, res) => {
+    try {
+      const documentId = parseInt(req.params.id);
+      const document = await storage.updateDocument(documentId, req.body);
+      res.json(document);
+    } catch (error) {
+      console.error('Error updating document:', error);
+      res.status(500).json({ error: "Failed to update document" });
+    }
+  });
+
+  app.delete("/api/documents/:id", isAdminAuthenticated, async (req, res) => {
+    try {
+      const documentId = parseInt(req.params.id);
+      await storage.deleteDocument(documentId);
+      res.json({ success: true });
+    } catch (error) {
+      console.error('Error deleting document:', error);
+      res.status(500).json({ error: "Failed to delete document" });
+    }
+  });
+
+  // Enhanced Email Campaign Management Routes
+  app.get("/api/enhanced-campaigns", isAdminAuthenticated, async (req, res) => {
+    try {
+      const campaigns = await storage.getAllEmailCampaigns();
+      res.json(campaigns);
+    } catch (error) {
+      console.error('Error fetching email campaigns:', error);
+      res.status(500).json({ error: "Failed to fetch email campaigns" });
+    }
+  });
+
+  app.post("/api/enhanced-campaigns", isAdminAuthenticated, async (req, res) => {
+    try {
+      const campaign = await storage.createEmailCampaign(req.body);
+      res.json(campaign);
+    } catch (error) {
+      console.error('Error creating email campaign:', error);
+      res.status(500).json({ error: "Failed to create email campaign" });
+    }
+  });
+
+  app.patch("/api/enhanced-campaigns/:id", isAdminAuthenticated, async (req, res) => {
+    try {
+      const campaignId = parseInt(req.params.id);
+      const campaign = await storage.updateEmailCampaign(campaignId, req.body);
+      res.json(campaign);
+    } catch (error) {
+      console.error('Error updating email campaign:', error);
+      res.status(500).json({ error: "Failed to update email campaign" });
+    }
+  });
+
+  app.delete("/api/enhanced-campaigns/:id", isAdminAuthenticated, async (req, res) => {
+    try {
+      const campaignId = parseInt(req.params.id);
+      await storage.deleteEmailCampaign(campaignId);
+      res.json({ success: true });
+    } catch (error) {
+      console.error('Error deleting email campaign:', error);
+      res.status(500).json({ error: "Failed to delete email campaign" });
+    }
+  });
+
+  // Deal Valuation Management Routes
+  app.get("/api/deal-valuations", isAdminAuthenticated, async (req, res) => {
+    try {
+      const { dealId } = req.query;
+      
+      let valuations;
+      if (dealId) {
+        valuations = await storage.getValuationsByDeal(parseInt(dealId as string));
+      } else {
+        valuations = [];
+      }
+      
+      res.json(valuations);
+    } catch (error) {
+      console.error('Error fetching deal valuations:', error);
+      res.status(500).json({ error: "Failed to fetch deal valuations" });
+    }
+  });
+
+  app.post("/api/deal-valuations", isAdminAuthenticated, async (req, res) => {
+    try {
+      const valuation = await storage.createDealValuation(req.body);
+      res.json(valuation);
+    } catch (error) {
+      console.error('Error creating deal valuation:', error);
+      res.status(500).json({ error: "Failed to create deal valuation" });
+    }
+  });
+
+  app.patch("/api/deal-valuations/:id", isAdminAuthenticated, async (req, res) => {
+    try {
+      const valuationId = parseInt(req.params.id);
+      const valuation = await storage.updateDealValuation(valuationId, req.body);
+      res.json(valuation);
+    } catch (error) {
+      console.error('Error updating deal valuation:', error);
+      res.status(500).json({ error: "Failed to update deal valuation" });
+    }
+  });
+
+  app.delete("/api/deal-valuations/:id", isAdminAuthenticated, async (req, res) => {
+    try {
+      const valuationId = parseInt(req.params.id);
+      await storage.deleteValuation(valuationId);
+      res.json({ success: true });
+    } catch (error) {
+      console.error('Error deleting deal valuation:', error);
+      res.status(500).json({ error: "Failed to delete deal valuation" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
