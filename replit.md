@@ -1,7 +1,7 @@
 # replit.md
 
 ## Overview
-This is a full-stack web application for Meritage Partners, designed as a business valuation calculator. It guides users through a multi-step valuation process, generates professional PDF reports, and provides administrative dashboards for lead and team management. The platform aims to offer comprehensive business valuation services, leveraging AI for narrative generation and integrating with key external services for CRM and email automation. The project's vision is to provide a streamlined, accurate, and professional valuation tool with market potential for various business sizes.
+This is a full-stack web application for Meritage Partners, designed as the foundation for the Apple Bites M&A ecosystem. Currently implemented as a business valuation calculator, it represents the first pillar of a comprehensive four-module platform that will include: (1) Apple Bites Assessment Engine, (2) CRM Module for Opportunity & Deal Flow management, (3) Virtual Data Room for secure document storage, and (4) Team Management for internal operations. The platform aims to replace Made Market and Suralink while providing a complete M&A workflow from lead generation to transaction close. Development prioritizes Material Dashboard (MD) components and pre-built pages from the TeamTrack repository for consistency and efficiency.
 
 ## Recent Changes (August 2025)
 **✅ COMPLETED: Real Data Pre-fill Functionality (August 13, 2025)**
@@ -90,7 +90,7 @@ This is a full-stack web application for Meritage Partners, designed as a busine
 ## User Preferences
 Preferred communication style: Simple, everyday language. Focus on actions and progress rather than repetitive phrases. Perform periodic audits for project cleanup rather than extensive organizational work.
 
-Development Priority: Always check Argon Dashboard folder first for any files, templates, or assets. Use Argon components, styles, and logic as the primary source. Only look elsewhere if Argon folder doesn't contain a relevant match.
+Development Priority: Always prioritize Material Dashboard (MD) components and pre-built pages from the TeamTrack repository (https://github.com/drobosky-create/TeamTrack) for consistency and efficiency. Use TeamTrack components, styles, and logic as the primary source for M&A platform development. This ensures architectural alignment with the broader ecosystem vision.
 
 ## System Architecture
 
