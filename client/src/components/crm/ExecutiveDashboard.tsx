@@ -346,7 +346,7 @@ const ExecutiveDashboard = () => {
                   size="small" 
                   variant="text" 
                   sx={{ color: '#3B82F6', minWidth: 'auto', p: 0.5 }}
-                  onClick={() => setLocation('/admin/crm-pipeline')}
+                  onClick={() => setLocation('/admin/crm?tab=tasks')}
                 >
                   Manage
                 </MDButton>
