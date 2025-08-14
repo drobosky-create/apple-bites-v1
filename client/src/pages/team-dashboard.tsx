@@ -25,7 +25,7 @@ import { useTeamAuth } from '@/hooks/use-team-auth';
 import { useAdminAuth } from '@/hooks/use-admin-auth';
 import PasswordChangeForm from '@/components/password-change-form';
 import PasswordChangeModal from '@/components/password-change-modal';
-import appleBitesLogoImage from '@assets/apple-bites-logo.png';
+// Logo is available in public folder
 
 export default function TeamDashboard() {
   const { user, isAuthenticated, isLoading, hasRole, logout, login } = useTeamAuth();
@@ -177,7 +177,7 @@ export default function TeamDashboard() {
         <div >
           <div >
             <img 
-              src={appleBitesLogoImage} 
+              src="/apple-bites-logo.png" 
               alt="Apple Bites Business Assessment" 
               className="h-12 w-auto"
             />
@@ -229,7 +229,7 @@ export default function TeamDashboard() {
                 </Button>
               </DialogActions>
             </Dialog>
-            <Button variant="outline" onClick={logout} >
+            <Button variant="outlined" onClick={logout}>
               <LogOut  />
               Logout
             </Button>
@@ -423,8 +423,8 @@ export default function TeamDashboard() {
                             <TableCell>
                               <div >
                                 <Button
-                                  size="sm"
-                                  variant="outline"
+                                  size="small"
+                                  variant="outlined"
                                   onClick={() =>
                                     updateMemberMutation.mutate({
                                       id: member.id,
