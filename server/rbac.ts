@@ -1,5 +1,4 @@
 import type { RequestHandler } from "express";
-import { teamMembers } from "@shared/schema";
 import { storage } from "./storage";
 
 // Apple Bites RBAC System - Server-First, Default Deny
@@ -72,18 +71,16 @@ export const ROLE_CAPABILITIES = {
 /**
  * Check if user has required role
  */
-export function hasRole(userRole: string, requiredRole: string): boolean {
-  return userRole === requiredRole || userRole === "Admin";
+export function hasRole(userRole: UserRole, requiredRole: UserRole): boolean {
+  return userRole === requiredRole || userRole === "admin";
 }
 
 /**
- * Check if user has required scope based on their role
+ * Check if user has access to route
  */
-export function hasScope(userRole: string, requiredScope: string): boolean {
-  const role = Object.values(ROLES).find(r => r.name === userRole);
-  if (!role) return false;
-  
-  return role.scopes.includes(requiredScope as any);
+export function hasRouteAccess(userRole: UserRole, route: string): boolean {
+  const allowedRoles = ROUTE_PERMISSIONS[route];
+  return allowedRoles ? allowedRoles.includes(userRole) : false;
 }
 
 /**
@@ -98,12 +95,8 @@ export async function hasObjectAccess(
   scope: string
 ): Promise<boolean> {
   try {
-    // TODO: Implement storage.checkAccess method
-    // const hasAccess = await storage.checkAccess(objectType, objectId, subjectType, subjectId, scope);
-    // return hasAccess;
-    
-    // For now, return true to allow development to continue
-    // This will be implemented when storage layer is expanded
+    // TODO: Implement storage.checkAccess method when VDR module is built
+    // For now, return true for development - will be implemented with VDR
     return true;
   } catch (error) {
     console.error("Error checking object access:", error);
@@ -118,12 +111,12 @@ export function requireRouteAccess(): RequestHandler {
   return async (req, res, next) => {
     try {
       // Get user (from existing auth)
-      const userId = req.session?.teamMemberId || req.session?.userId;
+      const userId = (req.session as any)?.teamMemberId || req.session?.userId;
       if (!userId) {
         return res.status(401).json({ error: "Authentication required" });
       }
 
-      const user = await storage.getTeamMember?.(userId) || await storage.getUser?.(userId);
+      const user = await storage.getTeamMemberById?.(userId) || await storage.getUser?.(userId);
       if (!user || !user.isActive) {
         return res.status(401).json({ error: "User not found or inactive" });
       }
@@ -141,13 +134,12 @@ export function requireRouteAccess(): RequestHandler {
 
       const userRole = user.role?.toLowerCase() as UserRole;
       if (!allowedRoles.includes(userRole)) {
-        // Log unauthorized access attempt
+        // Log unauthorized access attempt  
         await logAudit(
-          user.id,
-          "UNAUTHORIZED_ACCESS_ATTEMPT",
+          String(user.id),
+          "UNAUTHORIZED_ACCESS_ATTEMPT", 
           "route",
-          0,
-          req.ip
+          req.ip || "unknown"
         );
         
         return res.status(403).json({ 

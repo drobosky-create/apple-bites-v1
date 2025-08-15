@@ -2,7 +2,7 @@ import type { Express, Request } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, isAuthenticated } from "./simpleAuth";
-import { insertValuationAssessmentSchema, type ValuationAssessment, loginSchema, insertTeamMemberSchema, type LoginCredentials, type InsertTeamMember, type TeamMember, registerUserSchema, loginUserSchema, type RegisterUser, type LoginUser } from "@shared/schema";
+import { insertValuationAssessmentSchema, type ValuationAssessment, loginSchema, insertTeamMemberSchema, type InsertTeamMember, type TeamMember, registerUserSchema, loginUserSchema, type RegisterUser, type LoginUser } from "@shared/schema";
 import { generateValuationNarrative, type ValuationAnalysisInput } from "./openai";
 import { generateFinancialCoachingTips, generateContextualInsights, type FinancialCoachingData } from "./services/aiCoaching";
 import { generateValuationPDF } from "./pdf-generator";
@@ -37,7 +37,13 @@ declare module 'express-session' {
 declare global {
   namespace Express {
     interface Request {
-      user?: any;
+      user?: {
+        id: string | number;
+        role: string;
+        orgId?: string;
+        isActive?: boolean;
+        email?: string;
+      };
       currentUser?: any;
       authType?: string;
     }
@@ -196,12 +202,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // User logout - unified endpoint
   app.post('/api/logout', (req, res) => {
     // Clear all session data
-    req.session.userId = null;
-    req.session.userEmail = null;
-    req.session.userTier = null;
-    req.session.customUserSessionId = null;
-    req.session.teamSessionId = null;
-    req.session.adminAuthenticated = null;
+    delete req.session.userId;
+    delete req.session.userEmail;
+    delete req.session.userTier;
+    delete (req.session as any).customUserSessionId;
+    delete (req.session as any).teamSessionId;
+    delete (req.session as any).adminAuthenticated;
     
     req.session.destroy((err) => {
       if (err) {

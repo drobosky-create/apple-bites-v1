@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, ButtonProps } from "@mui/material";
 
-interface MDButtonProps extends ButtonProps {
+interface MDButtonProps extends Omit<ButtonProps, 'variant' | 'color'> {
   variant?: "text" | "outlined" | "contained" | "gradient";
   color?: "primary" | "secondary" | "success" | "error" | "info" | "warning";
 }
@@ -38,7 +38,7 @@ const MDButton = React.forwardRef<HTMLButtonElement, MDButtonProps>(({
   };
 
   const mdSx = {
-    textTransform: "none",
+    textTransform: "none" as const,
     fontWeight: 500,
     ...getButtonStyles(),
     ...sx
@@ -49,8 +49,8 @@ const MDButton = React.forwardRef<HTMLButtonElement, MDButtonProps>(({
   return (
     <Button 
       ref={ref} 
-      variant={buttonVariant} 
-      color={color} 
+      variant={buttonVariant as "text" | "outlined" | "contained"} 
+      color={color as "primary" | "secondary" | "success" | "error" | "info" | "warning"} 
       sx={mdSx} 
       {...props} 
     />
