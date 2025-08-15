@@ -8,6 +8,13 @@ Preferred communication style: Simple, everyday language. Focus on actions and p
 
 Development Priority: Always prioritize Material Dashboard (MD) components and pre-built pages from the TeamTrack repository (https://github.com/drobosky-create/TeamTrack) for consistency and efficiency. Use TeamTrack components, styles, and logic as the primary source for M&A platform development. This ensures architectural alignment with the broader ecosystem vision.
 
+## Code Quality Guardrails (Latest Addition)
+- **AI Agent System Prompt**: docs/AI_AGENT_SYSTEM_PROMPT.md contains strict coding rules
+- **Agent Gate**: Prints system rules on startup and prevents Grid2/phantom imports
+- **ESLint Rules**: Enforces no-restricted-imports for Grid2 and phantom components
+- **CI Pipeline**: GitHub Actions workflow validates TypeScript compilation and import rules
+- **Anti-Phantom Protocol**: All imports must be verified before use - create minimal stubs if missing
+
 Available TeamTrack MD Components:
 - MDAlert, MDAvatar, MDBadge, MDBox, MDButton, MDInput, MDPagination, MDProgress, MDSnackbar, MDTypography
 

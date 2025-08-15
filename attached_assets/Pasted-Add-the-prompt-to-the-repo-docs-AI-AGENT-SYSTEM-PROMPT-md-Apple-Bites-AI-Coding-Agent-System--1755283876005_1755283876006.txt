@@ -1,0 +1,135 @@
+Add the prompt to the repo
+
+/docs/AI_AGENT_SYSTEM_PROMPT.md
+
+# Apple Bites AI Coding Agent — System Rules (Strict)
+
+Always follow these when implementing, modifying, or planning code for applebites-v1.
+
+- Repo: https://github.com/drobosky-create/applebites-v1
+- Branch: ecosystem-modules
+- Use Material Dashboard components that already exist. No Grid2. No phantom imports.
+- Verify paths before importing. If missing: pick an existing alternative or create a local minimal stub.
+- No new deps unless found in package.json (or added explicitly in a dedicated commit).
+- Route split: /portal (clients) vs /workspace (internal). RBAC + object ACL scopes: 
+  assessments:view:self | assessments:view:org | crm:deal:{read|write|admin} | vdr:room:{read|upload|manage} | team:{read|manage}
+- Lead ingestion is tag-based (GHL): tier:*, status:*, source:*; idempotent upserts (Firm/Contact/Opportunity).
+- Implementation order, feature flags, commit/PR checklist, and runtime notes as previously defined.
+
+(Full version you and I finalized goes here—paste the exact prompt.)
+
+2) Print a banner at runtime (keeps the agent “accountable”)
+
+/src/guardrails/agentGate.ts
+
+/* Agent Guard: prints rules and fails fast on obvious violations */
+import fs from "fs";
+import path from "path";
+
+export function agentGate() {
+  const promptPath = path.resolve(process.cwd(), "docs/AI_AGENT_SYSTEM_PROMPT.md");
+  if (!fs.existsSync(promptPath)) {
+    console.warn("[agentGate] Missing docs/AI_AGENT_SYSTEM_PROMPT.md — add it to keep rules visible.");
+  } else {
+    const snippet = fs.readFileSync(promptPath, "utf8").split("\n").slice(0, 12).join("\n");
+    // Short banner so the agent sees rules in logs
+    console.log("\n=== AI AGENT SYSTEM PROMPT (excerpt) ===\n" + snippet + "\n========================================\n");
+  }
+
+  // Hard stops for common “phantom” issues
+  const banned = [
+    "@mui/material/Unstable_Grid2", // Grid2 is not allowed
+  ];
+  const pkgPath = path.resolve(process.cwd(), "package.json");
+  const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf8"));
+  const deps = { ...(pkg.dependencies || {}), ...(pkg.devDependencies || {}) };
+  if (deps["@mui/material/Unstable_Grid2"]) {
+    throw new Error("Grid2 detected in package.json. Use standard MUI Grid instead.");
+  }
+}
+
+
+Call it once on app start (e.g., in your main entry):
+/src/main.tsx (or wherever your app boots)
+
+import { agentGate } from "./guardrails/agentGate";
+agentGate();
+
+3) CI guardrails (block phantom code and Grid2)
+
+/.github/workflows/guardrails.yml
+
+name: Guardrails
+
+on:
+  pull_request:
+    branches: [ main, ecosystem-modules ]
+  push:
+    branches: [ ecosystem-modules ]
+
+jobs:
+  guardrails:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+
+      - name: Install
+        run: |
+          npm ci || yarn install || pnpm install
+
+      - name: No Grid2 / banned imports
+        run: |
+          if git grep -n "@mui/material/Unstable_Grid2"; then
+            echo "❌ Grid2 import found. Use standard MUI Grid."; exit 1; fi
+
+      - name: Typecheck (catches phantom imports)
+        run: |
+          npx tsc --noEmit
+
+      - name: Lint
+        run: |
+          npx eslint . || true
+
+4) ESLint rule to forbid Grid2 (and any other imports you want)
+
+/.eslintrc.cjs (add or extend)
+
+module.exports = {
+  // ...your existing config
+  rules: {
+    "no-restricted-imports": ["error", {
+      "paths": [
+        { "name": "@mui/material/Unstable_Grid2", "message": "Use MUI Grid, not Grid2." }
+      ]
+    }]
+  }
+};
+
+5) Add a script so the Agent runs checks locally too
+
+package.json (add scripts)
+
+{
+  "scripts": {
+    "guard": "node -e \"require('./dist/guardrails/agentGate.js').agentGate()\" || echo 'agentGate will run in app; build to generate dist'",
+    "check": "npm run typecheck && npm run lint && npm run guard",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint ."
+  }
+}
+
+
+(If you don’t build to dist/ locally, the runtime call in main.tsx already enforces it. The guard script is optional.)
+
+6) Optional: “Task protocol” the Agent must follow (checked in logs)
+
+Tell the Replit Agent to always start work by outputting:
+
+PLAN → FILE IMPACT LIST → DIFFS → POST‑CHECKS
+- Confirm all imports exist (no phantom paths).
+- If a path is missing, use an existing alternative or create a local minimal stub in the same feature folder.
+- No Grid2. No new deps without checking package.json.

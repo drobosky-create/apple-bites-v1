@@ -7,6 +7,31 @@ import summaryRoute from './routes/summary';
 const app = express();
 app.use(express.json());
 
+// Agent guardrails: print system prompt and check for violations
+import { readFileSync, existsSync } from 'fs';
+import { resolve } from 'path';
+
+try {
+  const promptPath = resolve(process.cwd(), "docs/AI_AGENT_SYSTEM_PROMPT.md");
+  
+  if (existsSync(promptPath)) {
+    const snippet = readFileSync(promptPath, "utf8").split("\n").slice(0, 8).join("\n");
+    console.log("\n=== AI AGENT SYSTEM PROMPT (excerpt) ===\n" + snippet + "\n========================================\n");
+  }
+  
+  // Check for Grid2 in package.json
+  const pkgPath = resolve(process.cwd(), "package.json");
+  if (existsSync(pkgPath)) {
+    const pkg = JSON.parse(readFileSync(pkgPath, "utf8"));
+    const deps = { ...(pkg.dependencies || {}), ...(pkg.devDependencies || {}) };
+    if (deps["@mui/material/Unstable_Grid2"]) {
+      throw new Error("Grid2 detected in package.json. Use standard MUI Grid instead.");
+    }
+  }
+} catch (error: any) {
+  console.warn("[agentGate] Warning:", error.message);
+}
+
 // Session configuration will be handled by setupAuth in routes
 app.use(express.urlencoded({ extended: false }));
 

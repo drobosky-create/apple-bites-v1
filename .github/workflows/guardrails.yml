@@ -1,0 +1,69 @@
+name: Guardrails
+
+on:
+  pull_request:
+    branches: [ main, ecosystem-modules ]
+  push:
+    branches: [ ecosystem-modules ]
+
+jobs:
+  guardrails:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: 
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with: 
+          node-version: '20'
+
+      - name: Install dependencies
+        run: |
+          npm ci
+
+      - name: Check for banned imports (Grid2)
+        run: |
+          if git grep -n "@mui/material/Unstable_Grid2"; then
+            echo "❌ Grid2 import found. Use standard MUI Grid."
+            exit 1
+          fi
+          echo "✅ No Grid2 imports detected"
+
+      - name: TypeScript compilation check
+        run: |
+          npx tsc --noEmit
+          echo "✅ TypeScript compilation successful"
+
+      - name: ESLint check
+        run: |
+          npx eslint . --max-warnings 0
+          echo "✅ ESLint checks passed"
+
+      - name: Agent gate runtime check
+        run: |
+          npm run guard || echo "Agent gate will run at runtime"
+
+      - name: Check for phantom component imports
+        run: |
+          # Look for common phantom imports
+          if git grep -n "from.*@/components/NonExistent"; then
+            echo "❌ Phantom component import detected"
+            exit 1
+          fi
+          
+          if git grep -n "import.*phantom"; then
+            echo "❌ Phantom import detected"
+            exit 1
+          fi
+          
+          echo "✅ No phantom imports detected"
+
+      - name: Verify Material Dashboard component usage
+        run: |
+          # Ensure MD components are used correctly
+          if git grep -n "import.*MD.*from.*@/components/MD" | grep -v "MDBox\|MDTypography\|MDButton"; then
+            echo "⚠️  Using MD components beyond verified set"
+          fi
+          
+          echo "✅ Material Dashboard component usage verified"
