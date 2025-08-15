@@ -1,134 +1,20 @@
 # replit.md
 
 ## Overview
-This is a full-stack web application for Meritage Partners, designed as the foundation for the Apple Bites M&A ecosystem. Currently implemented as a business valuation calculator, it represents the first pillar of a comprehensive four-module platform that will include: (1) Apple Bites Assessment Engine, (2) CRM Module for Opportunity & Deal Flow management, (3) Virtual Data Room for secure document storage, and (4) Team Management for internal operations. The platform aims to replace Made Market and Suralink while providing a complete M&A workflow from lead generation to transaction close. Development prioritizes Material Dashboard (MD) components and pre-built pages from the TeamTrack repository for consistency and efficiency.
-
-## Recent Changes (August 2025)
-**✅ COMPLETED: Stripe Embedded Checkout Implementation (August 15, 2025)**
-- Replaced complex custom checkout with Stripe's official embedded checkout system
-- Eliminated 200+ lines of custom coupon validation code - now handled natively by Stripe
-- Implemented secure client-secret flow following Stripe's official documentation
-- Added professional return page handling success, failure, and expired checkout sessions
-- Users enter promotion codes directly in Stripe's secure embedded form (Test25 works automatically)
-- Embedded checkout loads payment form directly on website while maintaining Stripe security
-- Automatic tax calculation, multiple payment methods, and PCI compliance built-in
-- Removed deprecated `/api/validate-coupon` endpoint - coupons handled by Stripe natively
-- Cleaned up unused checkout code and components for cleaner codebase
-
-**✅ COMPLETED: Dynamic Stripe Pricing System Fixed (August 15, 2025)**
-- Removed hardcoded price ID mappings that prevented automatic pricing updates
-- Implemented fully dynamic pricing system that fetches current active prices from Stripe API
-- Added cache invalidation headers and query configuration to ensure fresh pricing data
-- Pricing page now automatically reflects all Stripe dashboard price changes in real-time
-- Updated pricing detected: Growth & Exit Assessment now $1,995 (was $795) with new price ID automatically captured
-- Fixed all hardcoded $795 references across 6+ files (checkout, pricing pages, landing page, etc.)
-- Checkout system now dynamically fetches pricing from Stripe to ensure accuracy
-- Fixed `/checkout?product=prod_xxx` parameter handling to properly fetch current Stripe pricing
-- **Removed ALL hardcoded price fallbacks** - system now purely dynamic, loads from Stripe API only
-**✅ COMPLETED: Streamlined GoHighLevel Integration (August 14, 2025)**
-- Eliminated triple redundancy in GHL integration by switching to pure API-only approach
-- Removed legacy webhook-based assessment processing in favor of comprehensive REST API calls
-- Implemented tier-specific assessment completion tags for better automation targeting
-- Updated tags: "Free Assessment Completed", "Growth Assessment Completed", "Capital Assessment Completed"
-- Universal account creation webhook now triggers automatic GHL contact creation for all user signups
-- All contact updates include comprehensive tagging system for automation triggers
-- Consolidated all GHL communications through single API service with enhanced error handling
-
-**✅ COMPLETED: Real Data Pre-fill Functionality (August 13, 2025)**
-- Fixed Growth & Exit Assessment pre-fill feature to use actual user data from previous assessments
-- Implemented intelligent financial calculations from historical EBITDA data (converts $82,464 EBITDA to realistic revenue estimates)
-- Updated React Hook Form instances to properly display pre-filled values in all form fields
-- Added comprehensive debugging for data loading and form population processes
-- Pre-fill now calculates: Net Income ($57,725), Interest ($10,995), Taxes ($14,431), Depreciation ($16,493), Amortization ($5,498)
-- Growth & Exit Assessment forms now display meaningful business data instead of blank fields
-
-**✅ COMPLETED: Dynamic Pricing Integration (August 13, 2025)**
-- Replaced all hardcoded pricing ($795, $1,995) with dynamic Stripe price fetching
-- Updated pricing page to pull live prices from `/api/stripe/products` endpoint
-- Enhanced strategic assessment page with dynamic pricing display
-- Implemented automatic price formatting for proper currency display
-- Added fallback pricing for offline scenarios while maintaining user experience
-- Future price changes in Stripe now automatically update throughout the entire application
-
-**✅ COMPLETED: UI Consistency Fixes (August 12, 2025)**
-- Fixed "Free Assessment" identifier consistency by updating header title to match button text
-- Resolved valuation results overflow on mobile with responsive grid layout that stacks properly
-- Fixed "Explore" button navigation to properly link to dashboard instead of showing sidebar
-- Updated mobile navigation "Apple Bites" text color to proper shade (#e9ecf2)
-- Enhanced Free Assessment badge with flexbox centering to ensure text displays within styled container
-
-**✅ COMPLETED: Full Admin Dashboard Rebuild**
-- Migrated from shadcn/ui to Material Dashboard React components
-- Implemented unified admin interface with internal tab navigation
-- Fixed routing issues by replacing separate route components with state-managed tabs
-- Added complete functionality for all admin sections:
-  - Dashboard Overview: System metrics and team statistics
-  - Team Members: Full CRUD operations with modal forms
-  - Leads Management: Search, filter, and table view of all leads
-  - Analytics Dashboard: System analytics and key performance metrics
-- Resolved Material UI Grid syntax errors and JSX fragment issues
-- Authentication confirmed working with email/password login
-
-**✅ COMPLETED: Enhanced Leads Section with Dual View Functionality**
-- Integrated valuation results viewing directly within existing Leads tab
-- Added toggle buttons to switch between "Leads" and "Assessments" views
-- Unified interface displays both lead management and completed assessment results
-- Assessment view shows comprehensive data: business info, valuations, scores, tiers
-- Includes action buttons for PDF reports and full assessment viewing
-- Enhanced user experience by removing separate Valuations tab in favor of unified view
-- Successfully tested and confirmed working with existing assessment data
-
-**✅ COMPLETED: Mobile Navigation Drawer with Full Layout Fixes (August 11, 2025)**
-- Implemented unified mobile navigation drawer with body scroll lock
-- Fixed original sidebar overlapping issue by hiding desktop sidebar on mobile
-- Removed fixed left margin from main content on mobile devices
-- Added hamburger menu with white icon color in mobile navigation bar
-- Fixed login form input text color to white on mobile devices
-- Prevented horizontal scrolling with proper container constraints
-- Made dashboard cards stack vertically on mobile for better fit
-- Fixed logout functionality to use useAuth hook for proper session cleanup and cache invalidation
-- Mobile logout now works correctly with proper authentication state management
-
-**✅ COMPLETED: Add Team Member Modal UI Fix (August 5, 2025)**
-- Fixed Last Name field display issue in Add Team Member popup form
-- Resolved modal transparency problem by replacing MDBox with standard Material-UI Box
-- Enhanced modal backdrop with dark overlay and blur effect for professional appearance
-- Improved form layout using flexbox for proper side-by-side field arrangement
-- Modal now displays with solid white background and proper visual hierarchy
-
-**✅ COMPLETED: Admin Login Authentication System Fixed (August 5, 2025)**
-- Resolved auto-logout issue that was clearing admin sessions on frontend mount
-- Admin authentication working perfectly with both credential sets:
-  - Primary: drobosky@meritage-partners.com / Cooper12!!
-  - Fallback: admin / admin123
-- Sessions now persist correctly across page refreshes
-- Full admin dashboard access confirmed with all tabs functional
-- User management and deletion operations working correctly
-
-**✅ COMPLETED: Analytics Dashboard Accuracy & Real Data Integration (August 5, 2025)**
-- Completely rebuilt analytics dashboard with proper Material-UI components
-- Fixed 104+ component import errors and Material-UI variant issues
-- Connected to real assessment data via /api/analytics/assessments endpoint
-- Dashboard now shows accurate metrics from actual platform usage:
-  - 16 total users in system
-  - 114 total completed assessments
-  - Real average valuations, EBITDA totals, and completion rates
-  - Authentic follow-up intent and score distributions
-  - Genuine monthly trend data from actual assessment dates
-- Professional tabbed interface with interactive charts displaying real business intelligence
+This full-stack web application for Meritage Partners is the foundational component of the Apple Bites M&A ecosystem. It currently functions as a business valuation calculator, serving as the first of four planned modules. The complete platform will include an Assessment Engine, a CRM Module for Opportunity & Deal Flow, a Virtual Data Room for secure document storage, and a Team Management system for internal operations. The overarching goal is to replace existing tools like Made Market and Suralink, providing a comprehensive M&A workflow from lead generation to transaction close. The project emphasizes the use of Material Dashboard (MD) components and pre-built pages from the TeamTrack repository to ensure consistency and development efficiency.
 
 ## User Preferences
 Preferred communication style: Simple, everyday language. Focus on actions and progress rather than repetitive phrases. Perform periodic audits for project cleanup rather than extensive organizational work.
 
 Development Priority: Always prioritize Material Dashboard (MD) components and pre-built pages from the TeamTrack repository (https://github.com/drobosky-create/TeamTrack) for consistency and efficiency. Use TeamTrack components, styles, and logic as the primary source for M&A platform development. This ensures architectural alignment with the broader ecosystem vision.
 
-**Available TeamTrack MD Components:**
+Available TeamTrack MD Components:
 - MDAlert, MDAvatar, MDBadge, MDBox, MDButton, MDInput, MDPagination, MDProgress, MDSnackbar, MDTypography
 
-**Available TeamTrack Pages:**
+Available TeamTrack Pages:
 - dashboard, billing, branding, goals, notifications, profile, settings, team-directory, templates, setup-wizard
 
-**Current Development Branch:** ecosystem-modules (protecting main Apple Bites platform)
+Current Development Branch: ecosystem-modules (protecting main Apple Bites platform)
 
 ## System Architecture
 
@@ -152,25 +38,25 @@ Development Priority: Always prioritize Material Dashboard (MD) components and p
 - **Schema Management**: Drizzle Kit for migrations.
 
 ### Key Features & Design Decisions
-- **Valuation Assessment**: Multi-step form (EBITDA → Adjustments → Value Drivers → Follow-up → Results) with real-time EBITDA calculations, value driver scoring (A-F grades), and AI-powered narrative generation (OpenAI GPT-4). Industry-specific NAICS multipliers are applied based on actual business performance.
-- **Lead & Team Management**: Comprehensive lead tracking, status management, activity logging, and role-based access control (admin, member, viewer) for team members.
-- **PDF Report Generation**: Professional valuation reports using Puppeteer, branded templates, automated email delivery via SendGrid, and embedded charts.
-- **UI/UX**: Emphasis on a clean, professional interface with consistent branding (Apple Bites/Meritage Partners), responsiveness across devices, and intuitive user flows. Utilizes a blue color palette, glassmorphism effects, and animated loading indicators. Features include an interactive value calculator with gauge, strategic valuation range analysis, and a comprehensive dashboard displaying key metrics and past assessments.
-- **Payment & Tier System**: Two-tier system (Free, Growth & Exit) with dynamic Stripe integration for pricing and payment processing. Includes automatic tier activation and user management.
+- **Valuation Assessment**: Multi-step form with real-time EBITDA calculations, value driver scoring (A-F grades), and AI-powered narrative generation (OpenAI GPT-4). Industry-specific NAICS multipliers are applied.
+- **Lead & Team Management**: Comprehensive lead tracking, status management, activity logging, and role-based access control (admin, member, viewer).
+- **PDF Report Generation**: Professional valuation reports using Puppeteer, branded templates, and automated email delivery.
+- **UI/UX**: Clean, professional interface with consistent branding (Apple Bites/Meritage Partners), responsiveness, and intuitive user flows. Utilizes a blue color palette, glassmorphism effects, and animated loading indicators. Features include an interactive value calculator with gauge, strategic valuation range analysis, and a comprehensive dashboard.
+- **Payment & Tier System**: Two-tier system (Free, Growth & Exit) with dynamic Stripe integration for pricing and payment processing, including automatic tier activation and user management.
 - **Legal Compliance**: Integrated cookie banner, privacy policy, and terms of use pages.
 
 ## External Dependencies
 
 ### Production Services
 - **Neon PostgreSQL**: Primary database hosting.
-- **SendGrid**: Email delivery for reports and communications.
+- **SendGrid**: Email delivery.
 - **GoHighLevel**: CRM integration for contact synchronization and lead management.
-- **OpenAI**: AI analysis services for narrative generation and financial coaching.
-- **Stripe**: Payment processing for tiered access.
-- **n8n**: Automation workflows for advanced lead processing.
+- **OpenAI**: AI analysis services.
+- **Stripe**: Payment processing.
+- **n8n**: Automation workflows.
 
 ### Development Tools & Libraries
-- **Puppeteer**: PDF generation (Chromium).
+- **Puppeteer**: PDF generation.
 - **Drizzle**: Database ORM and migrations.
 - **TanStack Query**: Server state management.
 - **React Hook Form**: Form validation and state.
@@ -179,7 +65,5 @@ Development Priority: Always prioritize Material Dashboard (MD) components and p
 - **esbuild**: Backend bundling.
 
 ### UI/UX Libraries
-- **shadcn/ui**: (Removed during Material Dashboard migration, but part of initial structure)
-- **Radix UI**: (Removed during Material Dashboard migration)
 - **Material-UI (MUI)**: Core UI component library.
-- **Material Dashboard**: Theme and component system for consistent styling.
+- **Material Dashboard**: Theme and component system.
