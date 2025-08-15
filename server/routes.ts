@@ -2487,9 +2487,66 @@ export async function registerRoutes(app: Express): Promise<Server> {
       try {
         const { couponCode } = req.body;
         
-        // First try to retrieve coupon from Stripe
+        // First try to retrieve promotion code from Stripe (for user-friendly codes like "Test25")
         try {
-          console.log('Validating Stripe coupon:', couponCode);
+          console.log('Validating Stripe promotion code:', couponCode);
+          const promotionCodes = await stripe.promotionCodes.list({
+            code: couponCode,
+            limit: 1
+          });
+          
+          if (promotionCodes.data.length > 0) {
+            const promotionCode = promotionCodes.data[0];
+            console.log('Found promotion code:', promotionCode.code, 'active:', promotionCode.active);
+            
+            if (!promotionCode.active) {
+              return res.status(400).json({ 
+                valid: false, 
+                message: 'Promotion code is not active' 
+              });
+            }
+            
+            // Get the associated coupon details
+            const couponId = typeof promotionCode.coupon === 'string' ? promotionCode.coupon : promotionCode.coupon.id;
+            const coupon = await stripe.coupons.retrieve(couponId);
+            console.log('Associated coupon:', coupon.id, coupon.valid);
+            
+            if (!coupon.valid) {
+              return res.status(400).json({ 
+                valid: false, 
+                message: 'Coupon is not valid or has expired' 
+              });
+            }
+            
+            // Return promotion code and coupon details
+            return res.json({
+              valid: true,
+              source: 'promotion_code',
+              coupon: {
+                id: coupon.id,
+                name: coupon.name,
+                percent_off: coupon.percent_off,
+                amount_off: coupon.amount_off,
+                currency: coupon.currency,
+                duration: coupon.duration,
+                duration_in_months: coupon.duration_in_months,
+                max_redemptions: coupon.max_redemptions,
+                times_redeemed: coupon.times_redeemed,
+                valid: coupon.valid
+              },
+              promotionCode: {
+                code: promotionCode.code,
+                active: promotionCode.active
+              }
+            });
+          }
+        } catch (promotionError: any) {
+          console.log('Promotion code lookup failed, trying direct coupon:', promotionError.message);
+        }
+
+        // If promotion code not found, try direct coupon lookup
+        try {
+          console.log('Validating direct Stripe coupon:', couponCode);
           const coupon = await stripe.coupons.retrieve(couponCode);
           console.log('Stripe coupon retrieved:', coupon.id, coupon.valid);
           
@@ -2503,7 +2560,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           // Return Stripe coupon details
           return res.json({
             valid: true,
-            source: 'stripe',
+            source: 'coupon',
             coupon: {
               id: coupon.id,
               name: coupon.name,
@@ -2523,7 +2580,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           // Provide more specific error messages based on Stripe error codes
           let errorMessage = 'Invalid coupon code';
           if (stripeError.code === 'resource_missing') {
-            errorMessage = `Coupon "${couponCode}" not found. Please check the code and try again.`;
+            errorMessage = `Coupon or promotion code "${couponCode}" not found. Please check the code and try again.`;
           } else if (stripeError.code === 'coupon_expired') {
             errorMessage = 'This coupon has expired.';
           } else if (stripeError.code === 'max_redemptions_exceeded') {
