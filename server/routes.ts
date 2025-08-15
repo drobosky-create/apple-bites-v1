@@ -2825,6 +2825,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 const contactResult = await goHighLevelService.createOrUpdateContact(ghlContact);
                 console.log(`GHL contact ${contactResult.isNew ? 'created' : 'updated'} for purchase:`, session.customer_details.email);
 
+                // Create or update user account with paid tier
+                try {
+                  let user = await storage.getUserByEmail(session.customer_details.email);
+                  
+                  if (!user) {
+                    // Create new user account for paid customer
+                    const newUser = {
+                      email: session.customer_details.email,
+                      fullName: session.customer_details.name || `${firstName} ${lastName}`.trim(),
+                      tier, // Set to 'growth' or 'capital' based on purchase
+                      isActive: true,
+                      createdAt: new Date(),
+                      resultReady: false // They can now take the assessment
+                    };
+                    
+                    user = await storage.createUser(newUser);
+                    console.log(`Created user account for paid customer: ${user.email} with ${tier} tier`);
+                  } else {
+                    // Update existing user to paid tier
+                    await storage.updateUserTier(user.id, tier);
+                    console.log(`Updated existing user ${user.email} to ${tier} tier`);
+                  }
+                } catch (error) {
+                  console.error('Error creating/updating user account for purchase:', error);
+                  // Don't fail the webhook if user creation fails
+                }
+
                 // Also send webhook for additional automations
                 const webhookData = {
                   type: 'purchase_completed',
