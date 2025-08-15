@@ -37,7 +37,8 @@ import {
   type Deal,
   type InsertDeal,
   type Milestone,
-  type InsertMilestone
+  type InsertMilestone,
+  auditEvents
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, and, inArray, ilike, or } from "drizzle-orm";

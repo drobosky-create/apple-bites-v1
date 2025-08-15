@@ -1,0 +1,325 @@
+Killer update—RBAC + sidebar look tight. Let’s keep momentum and layer on two things that’ll make the CRM feel “alive”:
+
+a lightweight Audit Log (who did what, when, before/after), and
+
+a JSON‑driven Automation Rules Engine (triggers → actions: e.g., when lead.status becomes “qualified”, assign owner + schedule follow‑up).
+
+I’ve kept this drop‑in and aligned with your current structure.
+
+1) Audit Log (server + DB)
+/shared/schema.ts (add table)
+import { pgTable, uuid, text, jsonb, timestamp } from 'drizzle-orm/pg-core';
+
+export const auditEvents = pgTable('audit_events', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  actor: text('actor').notNull(),              // email or user id
+  actorRole: text('actor_role').notNull(),
+  entityType: text('entity_type').notNull(),   // 'lead' | 'account' | ...
+  entityId: text('entity_id').notNull(),
+  action: text('action').notNull(),            // 'create' | 'update' | 'delete'
+  before: jsonb('before'),
+  after: jsonb('after'),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+});
+
+
+Run
+
+cd /home/runner/workspace
+npm run db:push --force
+
+/server/storage.ts (wrap mutations to write audit rows)
+import { sql } from './sql';
+
+async function writeAudit({
+  actor, actorRole, entityType, entityId, action, before, after,
+}: any) {
+  await sql(
+    `INSERT INTO audit_events (actor, actor_role, entity_type, entity_id, action, before, after)
+     VALUES ($1,$2,$3,$4,$5,$6,$7)`,
+    [actor, actorRole, entityType, entityId, action, before ?? null, after ?? null]
+  );
+}
+
+export const db = {
+  leads: {
+    async list() { /* (unchanged) */ },
+
+    async create(data: any, ctx?: { user?: { email: string; role: string } }) {
+      const { rows } = await sql(`
+        INSERT INTO leads (name, company, email, phone, status, naics)
+        VALUES ($1,$2,$3,$4,$5,$6)
+        RETURNING *`,
+        [data.name, data.company, data.email ?? null, data.phone ?? null, data.status ?? 'new', data.naics ?? null]
+      );
+      const created = rows[0];
+      if (ctx?.user) {
+        await writeAudit({
+          actor: ctx.user.email, actorRole: ctx.user.role,
+          entityType: 'lead', entityId: created.id, action: 'create',
+          before: null, after: created
+        });
+      }
+      return created;
+    },
+
+    async update(id: string, data: any, ctx?: { user?: { email: string; role: string } }) {
+      const before = await sql(`SELECT * FROM leads WHERE id=$1`, [id]).then(r => r.rows[0]);
+      const fields: string[] = []; const vals: any[] = []; let i = 1;
+      for (const [k, v] of Object.entries(data)) { fields.push(`${k}=$${i++}`); vals.push(v); }
+      vals.push(id);
+      const { rows } = await sql(`UPDATE leads SET ${fields.join(', ')}, updated_at=NOW() WHERE id=$${i} RETURNING *`, vals);
+      const after = rows[0];
+      if (ctx?.user) {
+        await writeAudit({
+          actor: ctx.user.email, actorRole: ctx.user.role,
+          entityType: 'lead', entityId: id, action: 'update',
+          before, after
+        });
+      }
+      return after;
+    },
+
+    async remove(id: string, ctx?: { user?: { email: string; role: string } }) {
+      const before = await sql(`SELECT * FROM leads WHERE id=$1`, [id]).then(r => r.rows[0]);
+      await sql(`DELETE FROM leads WHERE id=$1`, [id]);
+      if (ctx?.user) {
+        await writeAudit({
+          actor: ctx.user.email, actorRole: ctx.user.role,
+          entityType: 'lead', entityId: id, action: 'delete',
+          before, after: null
+        });
+      }
+    }
+  }
+};
+
+/server/routes/leads.ts (pass user ctx)
+router.get('/', requirePerm('lead.read'), async (_req, res) => {
+  const rows = await db.leads.list();
+  res.json(rows);
+});
+
+router.post('/', requirePerm('lead.create'), async (req, res) => {
+  const created = await db.leads.create(req.body, { user: req.user! });
+  res.status(201).json(created);
+});
+
+router.patch('/:id', requirePerm('lead.update'), async (req, res) => {
+  const updated = await db.leads.update(req.params.id, req.body, { user: req.user! });
+  res.json(updated);
+});
+
+router.delete('/:id', requirePerm('lead.delete'), async (req, res) => {
+  await db.leads.remove(req.params.id, { user: req.user! });
+  res.status(204).end();
+});
+
+(Optional) /server/routes/audit.ts (read‑only endpoint)
+import { Router } from 'express';
+import { requireAuth } from '../middleware/auth';
+import { sql } from '../storage/sql';
+
+const router = Router();
+router.use(requireAuth);
+
+router.get('/', async (_req, res) => {
+  const { rows } = await sql(`SELECT * FROM audit_events ORDER BY created_at DESC LIMIT 200`);
+  res.json(rows);
+});
+
+export default router;
+// in server/index.ts: app.use('/api/audit', audit);
+
+2) Automation Rules Engine (server)
+Concept
+
+rules table holds JSON rules.
+
+eventBus emits domain events (lead.created, lead.updated).
+
+executor evaluates rule.conditions → perform actions.
+
+/shared/schema.ts (add rules table)
+export const automationRules = pgTable('automation_rules', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  name: text('name').notNull(),
+  enabled: text('enabled').notNull().default('true'),
+  // JSON: { on: 'lead.updated', if: [{path:'status', op:'eq', value:'qualified'}], do: [{type:'assignOwner', value:'auto'}, {type:'createTask', title:'Discovery Call', dueIn:'P3D'}] }
+  spec: jsonb('spec').notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+});
+
+
+Run
+
+npm run db:push --force
+
+/server/automation/eventBus.ts
+type Handler = (payload: any) => Promise<void> | void;
+const listeners = new Map<string, Handler[]>();
+
+export function on(event: string, handler: Handler) {
+  const arr = listeners.get(event) ?? [];
+  arr.push(handler); listeners.set(event, arr);
+}
+
+export async function emit(event: string, payload: any) {
+  const arr = listeners.get(event) ?? [];
+  for (const h of arr) await Promise.resolve(h(payload));
+}
+
+/server/automation/executor.ts
+import { sql } from '../storage/sql';
+import { on } from './eventBus';
+
+type Condition = { path: string; op: 'eq'|'ne'|'contains'; value: any };
+type Action =
+  | { type: 'assignOwner'; value: 'auto' | string }
+  | { type: 'createTask'; title: string; dueIn?: string } // ISO 8601 duration like 'P3D'
+  | { type: 'webhook'; url: string; body?: any }
+  | { type: 'email'; to: string; subject: string; text: string };
+
+type RuleSpec = { on: string; if?: Condition[]; do: Action[] };
+
+function get(obj: any, path: string) {
+  return path.split('.').reduce((a, k) => (a ? a[k] : undefined), obj);
+}
+
+function check(conds: Condition[] | undefined, ctx: any) {
+  if (!conds?.length) return true;
+  return conds.every(c => {
+    const v = get(ctx, c.path);
+    if (c.op === 'eq') return v === c.value;
+    if (c.op === 'ne') return v !== c.value;
+    if (c.op === 'contains') return Array.isArray(v) && v.includes(c.value);
+    return false;
+  });
+}
+
+async function runAction(a: Action, ctx: any) {
+  if (a.type === 'assignOwner') {
+    const owner = a.value === 'auto' ? (ctx.after?.ownerId ?? ctx.user?.id ?? null) : a.value;
+    if (owner && ctx.entityType === 'lead') {
+      await sql(`UPDATE leads SET owner_id=$1 WHERE id=$2`, [owner, ctx.entityId]);
+    }
+  }
+  if (a.type === 'createTask') {
+    // naive due date calc; expand later
+    await sql(
+      `INSERT INTO tasks (entity_type, entity_id, title, due_at) 
+       VALUES ($1,$2,$3, NOW() + INTERVAL '3 days')`,
+      [ctx.entityType, ctx.entityId, a.title]
+    );
+  }
+  if (a.type === 'webhook') {
+    // fire-and-forget; replace with queue later
+    fetch(a.url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(a.body ?? ctx) }).catch(()=>{});
+  }
+  if (a.type === 'email') {
+    // placeholder; integrate your Mailer
+    console.log(`EMAIL → ${a.to}: ${a.subject}`);
+  }
+}
+
+export async function loadAndBindRules() {
+  const { rows } = await sql<{ spec: RuleSpec; enabled: string }>(`SELECT spec, enabled FROM automation_rules`);
+  for (const r of rows) {
+    if (r.enabled !== 'true') continue;
+    const spec = r.spec as RuleSpec;
+    on(spec.on, async (ctx) => {
+      if (check(spec.if, ctx)) {
+        for (const a of spec.do) await runAction(a, ctx);
+      }
+    });
+  }
+}
+
+/server/index.ts (wire the bus & executor)
+import { emit } from './automation/eventBus';
+import { loadAndBindRules } from './automation/executor';
+
+app.listen(PORT, async () => {
+  await loadAndBindRules();
+  console.log(`API up on ${PORT}`);
+});
+
+// export emit for use in storage hooks:
+export { emit };
+
+/server/storage.ts (emit events on mutations)
+import { emit } from './index'; // from server entry
+
+// inside create():
+const created = rows[0];
+await emit('lead.created', {
+  entityType: 'lead', entityId: created.id, user: ctx?.user, after: created
+});
+return created;
+
+// inside update():
+const after = rows[0];
+await emit('lead.updated', {
+  entityType: 'lead', entityId: id, user: ctx?.user, before, after
+});
+return after;
+
+// inside remove():
+await emit('lead.deleted', {
+  entityType: 'lead', entityId: id, user: ctx?.user, before
+});
+
+Seed a couple of rules (SQL)
+INSERT INTO automation_rules (name, enabled, spec)
+VALUES
+('Auto-assign and task on Qualified',
+ 'true',
+ '{
+    "on":"lead.updated",
+    "if":[{"path":"after.status","op":"eq","value":"qualified"}],
+    "do":[
+      {"type":"assignOwner","value":"auto"},
+      {"type":"createTask","title":"Discovery Call","dueIn":"P3D"}
+    ]
+  }'::jsonb),
+('Webhook on Won',
+ 'true',
+ '{
+    "on":"lead.updated",
+    "if":[{"path":"after.status","op":"eq","value":"won"}],
+    "do":[{"type":"webhook","url":"https://example.com/crm/hook"}]
+  }'::jsonb);
+
+3) Client niceties (tiny, optional)
+
+Show current role in the workspace header:
+
+// in WorkspaceLayout main header area
+<div className="text-sm text-gray-500">Role: {user.role}</div>
+
+
+Handle 403 gracefully in LeadTable:
+
+if (err?.includes('403')) return <div className="text-amber-700">You don’t have permission to perform this action.</div>;
+
+4) Quick checks
+
+Audit rows appear:
+
+curl -s -H "x-role: admin" -H "x-user: admin@example.com" \
+  http://localhost:5000/api/leads | jq '.[0].id'   # pick an id
+
+curl -s -X PATCH -H "Content-Type: application/json" \
+  -H "x-role: manager" -H "x-user: mgr@example.com" \
+  -d '{"status":"qualified"}' \
+  http://localhost:5000/api/leads/<ID>
+
+curl -s -H "x-role: admin" -H "x-user: admin@example.com" \
+  http://localhost:5000/api/audit | head
+
+
+Rule fires: after setting status: "qualified", check DB:
+
+psql ... -c "select owner_id from leads where id='<ID>'"
+psql ... -c "select * from tasks order by created_at desc limit 5"

@@ -332,6 +332,48 @@ export type UpsertUser = typeof users.$inferInsert;
 export type TeamMember = typeof teamMembers.$inferSelect;
 export type TeamSession = typeof teamSessions.$inferSelect;
 export type User = typeof users.$inferSelect;
+
+// Audit Events table for tracking all system changes
+export const auditEvents = pgTable('audit_events', {
+  id: varchar('id').primaryKey(),
+  actor: text('actor').notNull(),              // email or user id
+  actorRole: text('actor_role').notNull(),
+  entityType: text('entity_type').notNull(),   // 'lead' | 'account' | ...
+  entityId: text('entity_id').notNull(),
+  action: text('action').notNull(),            // 'create' | 'update' | 'delete'
+  before: jsonb('before'),
+  after: jsonb('after'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
+// Automation Rules table for workflow automation
+export const automationRules = pgTable('automation_rules', {
+  id: varchar('id').primaryKey(),
+  name: text('name').notNull(),
+  enabled: text('enabled').notNull().default('true'),
+  // JSON: { on: 'lead.updated', if: [{path:'status', op:'eq', value:'qualified'}], do: [{type:'assignOwner', value:'auto'}, {type:'createTask', title:'Discovery Call', dueIn:'P3D'}] }
+  spec: jsonb('spec').notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+// Tasks table for automated task creation
+export const tasks = pgTable('tasks', {
+  id: varchar('id').primaryKey(),
+  entityType: text('entity_type').notNull(),
+  entityId: text('entity_id').notNull(),
+  title: text('title').notNull(),
+  description: text('description'),
+  status: text('status').notNull().default('pending'),
+  assignedTo: text('assigned_to'),
+  dueAt: timestamp('due_at'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export type AuditEvent = typeof auditEvents.$inferSelect;
+export type AutomationRule = typeof automationRules.$inferSelect;
+export type Task = typeof tasks.$inferSelect;
 export type LoginCredentials = z.infer<typeof loginSchema>;
 
 // Custom user registration/login schemas

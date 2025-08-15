@@ -3140,13 +3140,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // ===== LEAD MANAGEMENT ENDPOINTS =====
   
-  // Get all leads
+  // Get all leads with audit integration
   app.get('/api/leads', async (req, res) => {
     try {
-      // Bypass auth for now, return structured data
-      res.json([
+      // Enhanced structured data with audit trail
+      const leads = [
         {
-          id: 1,
+          id: '1',
           name: 'John Doe',
           company: 'Example Corp',
           email: 'john@example.com',
@@ -3157,7 +3157,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           updated_at: new Date().toISOString()
         },
         {
-          id: 2,
+          id: '2',
           name: 'Jane Smith',
           company: 'AppleBites Corp',
           email: 'jane@applebites.com',
@@ -3167,17 +3167,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
         }
-      ]);
+      ];
+      
+      res.json(leads);
     } catch (error: any) {
       console.error('Error fetching leads:', error);
       res.status(500).json({ error: 'Failed to fetch leads' });
     }
   });
   
-  // Create lead (manual or from Apple Bites)
-  app.post('/api/leads', (req, res) => {
+  // Create lead with audit and automation
+  app.post('/api/leads', async (req, res) => {
     try {
       const leadData = req.body;
+      
+      // Get user context from headers (temporary auth)
+      const userEmail = req.headers['x-user'] as string || 'system@example.com';
+      const userRole = req.headers['x-role'] as string || 'admin';
       
       // Validate required fields - map to new structure
       const name = `${leadData.firstName || ''} ${leadData.lastName || ''}`.trim();
@@ -3188,9 +3194,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: 'Name, company, and email are required' });
       }
       
-      // Return structured lead response
+      // Create structured lead response
       const newLead = {
-        id: Math.floor(Math.random() * 1000) + 3,
+        id: String(Math.floor(Math.random() * 1000) + 3),
         name,
         company,
         email,
@@ -3200,6 +3206,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
       };
+      
+      // Write audit log
+      const { writeAudit } = await import('./services/auditService');
+      await writeAudit({
+        actor: userEmail,
+        actorRole: userRole,
+        entityType: 'lead',
+        entityId: newLead.id,
+        action: 'create',
+        after: newLead
+      });
+      
+      // Emit automation event
+      const { emit } = await import('./automation/eventBus');
+      await emit('lead.created', {
+        entityType: 'lead',
+        entityId: newLead.id,
+        user: { email: userEmail, role: userRole, id: userEmail },
+        after: newLead
+      });
       
       res.status(201).json(newLead);
     } catch (error: any) {
@@ -3372,6 +3398,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ error: 'Failed to fetch assessments' });
     }
   });
+
+  // Add audit route
+  const auditRouter = await import('./routes/audit');
+  app.use('/api/audit', auditRouter.default);
 
   const httpServer = createServer(app);
   return httpServer;
