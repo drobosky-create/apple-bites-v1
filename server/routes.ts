@@ -2616,6 +2616,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           ],
           mode: mode,
           return_url: `${YOUR_DOMAIN}/checkout-return?session_id={CHECKOUT_SESSION_ID}`,
+          allow_promotion_codes: true, // Enable promotion codes in embedded checkout
           automatic_tax: {
             enabled: true,
           },
