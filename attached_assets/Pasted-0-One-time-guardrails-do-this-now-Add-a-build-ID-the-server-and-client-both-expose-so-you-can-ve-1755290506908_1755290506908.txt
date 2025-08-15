@@ -1,0 +1,124 @@
+0) One‑time guardrails (do this now)
+
+Add a build ID the server and client both expose so you can verify you’re not looking at an old bundle.
+
+server/index.ts
+
+const BUILD_ID = process.env.BUILD_ID || new Date().toISOString();
+
+app.get('/__version', (_req, res) => {
+  res.json({ build: BUILD_ID });
+});
+
+
+client (show it somewhere tiny, e.g. footer)
+
+// e.g. inject via define in Vite or read window.__BUILD__
+
+
+When you deploy, set BUILD_ID=$(date +%s) (or just let the timestamp change) and check:
+
+curl -s http://localhost:5000/__version
+
+
+If it didn’t change, you’re not running the new code.
+
+1) Serve order + cache headers (make this exact)
+import path from 'path';
+import express from 'express';
+const dist = path.join(__dirname, '../dist/public');
+
+// 1) Fingerprinted assets: cache hard (safe)
+app.use(
+  '/assets',
+  express.static(path.join(dist, 'assets'), { maxAge: '1y', immutable: true })
+);
+
+// 2) Everything else in dist: don't cache HTML
+app.use((req, res, next) => {
+  // avoid stale index.html in Replit/CDN/browser
+  res.setHeader('Cache-Control', 'no-cache');
+  next();
+});
+app.use(express.static(dist)); // images, fonts, etc. are fine with no-cache
+
+// 3) API (auth here ONLY)
+app.use('/api', authMiddleware, apiRouter);
+
+// 4) SPA fallback (after API)
+app.get(['/workspace', '/workspace/*'], (_req, res) =>
+  res.sendFile(path.join(dist, 'index.html'))
+);
+
+
+Common gotcha: if you put authMiddleware before express.static, CSS/JS can get blocked. Also if you cache index.html, you’ll keep booting the old app even if the CSS/JS filenames changed.
+
+2) Bulletproof refresh routine (use this whenever UI “doesn’t change”)
+
+Stop server.
+
+Clean & rebuild client:
+
+rm -rf dist
+npm run build
+
+
+Start server (make sure it logs your new BUILD_ID).
+
+Hard‑reload the browser: Ctrl/Cmd+Shift+R.
+
+If still stale, open DevTools → Application → Service Workers and Unregister any SW (even an old one from a prior experiment can hijack assets).
+
+Clear Storage (Application tab) → “Clear site data”.
+
+Optional: hit the app with a cache‑buster once: /workspace?bust=TIMESTAMP.
+
+3) Quick verification commands (so you’re not guessing)
+
+New CSS actually exists on the server
+
+ls -la dist/public/assets | head
+
+
+Filenames should be hashed (e.g., index-XYZ.css). If the hash didn’t change, Vite didn’t rebuild the thing you changed.
+
+Browser is fetching the right file (not from cache)
+In DevTools → Network, check the CSS/JS requests:
+
+Status should be 200 (not (from disk cache)).
+
+Cache-Control for index.html should be no-cache.
+
+Cache-Control for /assets/* should be public, max-age=31536000, immutable.
+
+Server actually running your latest
+
+curl -s http://localhost:5000/__version
+
+
+Compare with what you expect. If it’s old, Replit didn’t restart the process you think it did.
+
+4) Typical Replit‑specific culprits (and fixes)
+
+Multiple processes: If you have both a Vite dev server and Express serving dist, you might be loading the dev server URL (old) while rebuilding prod (new). Use one: for prod preview, only open the Express port.
+
+Service worker left over: Even if your code doesn’t use one, past experiments or libraries might have registered it. Unregister it (step 2.5 above).
+
+Index.html cached by a proxy: that’s why we set no-cache for HTML.
+
+Auth before static: blocks CSS/JS; the snippet above fixes the order.
+
+Wrong base path: If your app lives under /workspace, ensure router base in Vite/React Router matches, and that SPA fallback targets /workspace/*.
+
+5) If you want this 100% observable
+
+Add a tiny footer in the app UI like: v{BUILD_ID}.
+
+Log the BUILD_ID on server start.
+
+Add a CI-ish script:
+
+BUILD_ID=$(date +%s) npm run build && node server/index.js
+
+
+Now if the footer or GET /__version doesn’t change, you know instantly where the problem is (browser cache vs. server not restarted vs. build not run).

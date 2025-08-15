@@ -8,6 +8,13 @@ import summaryRoute from './routes/summary';
 const app = express();
 app.use(express.json());
 
+// Build ID for version verification
+const BUILD_ID = process.env.BUILD_ID || new Date().toISOString();
+
+app.get('/__version', (_req, res) => {
+  res.json({ build: BUILD_ID });
+});
+
 // Agent guardrails: print system prompt and check for violations
 import { readFileSync, existsSync } from 'fs';
 import { resolve } from 'path';
@@ -67,13 +74,28 @@ app.use((req, res, next) => {
 });
 
 (async () => {
-  // 1) Static assets FIRST (no auth, for production)
   const clientDist = path.resolve(import.meta.dirname, '..', 'dist', 'public');
+  
   if (app.get("env") !== "development") {
+    // 1) Fingerprinted assets: cache hard (safe)
+    app.use(
+      '/assets',
+      express.static(path.join(clientDist, 'assets'), { 
+        maxAge: '1y', 
+        immutable: true 
+      })
+    );
+
+    // 2) Everything else in dist: don't cache HTML
+    app.use((_req, res, next) => {
+      // avoid stale index.html in Replit/CDN/browser
+      res.setHeader('Cache-Control', 'no-cache');
+      next();
+    });
     app.use(express.static(clientDist, { index: false }));
   }
   
-  // 2) Serve public directory assets (always available)
+  // 3) Serve public directory assets (always available)
   app.use(express.static('public'));
   
   // 3) API routes with auth scoped properly
@@ -120,6 +142,6 @@ app.use((req, res, next) => {
     host: "0.0.0.0",
     reusePort: true,
   }, () => {
-    log(`serving on port ${port}`);
+    log(`serving on port ${port} (build: ${BUILD_ID})`);
   });
 })();
