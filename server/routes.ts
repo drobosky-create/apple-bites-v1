@@ -2797,42 +2797,52 @@ export async function registerRoutes(app: Express): Promise<Server> {
             const session = event.data.object;
             console.log('Checkout session completed:', session.id);
             
-            // Enhanced GHL integration with full customer data
+            // Direct GHL API integration for purchase completion
             if (session.payment_status === 'paid' && session.customer_details) {
               try {
-                const customerData = {
+                const tier = session.metadata?.mode === 'subscription' ? 'capital' : 'growth';
+                const amount = session.amount_total / 100;
+                
+                // Parse customer name
+                const nameParts = session.customer_details.name?.split(' ') || [];
+                const firstName = nameParts[0] || '';
+                const lastName = nameParts.slice(1).join(' ') || '';
+
+                // Create/update contact in GHL directly
+                const ghlContact = {
+                  firstName,
+                  lastName,
+                  email: session.customer_details.email,
+                  phone: session.customer_details.phone,
+                  companyName: '', // Not collected in checkout
+                  tags: [
+                    'Apple Bites Customer',
+                    tier === 'capital' ? 'Capital Assessment Completed' : 'Growth Assessment Completed',
+                    `Paid $${amount}`
+                  ]
+                };
+
+                const contactResult = await goHighLevelService.createOrUpdateContact(ghlContact);
+                console.log(`GHL contact ${contactResult.isNew ? 'created' : 'updated'} for purchase:`, session.customer_details.email);
+
+                // Also send webhook for additional automations
+                const webhookData = {
                   type: 'purchase_completed',
                   sessionId: session.id,
                   email: session.customer_details.email,
                   phone: session.customer_details.phone,
                   name: session.customer_details.name,
-                  address: session.customer_details.address,
-                  amount: session.amount_total / 100,
-                  currency: session.currency,
-                  productName: session.metadata?.lookup_key || 'Growth & Exit Assessment',
-                  tier: session.metadata?.mode === 'subscription' ? 'capital' : 'growth',
+                  amount,
+                  tier,
                   timestamp: new Date().toISOString(),
-                  userId: session.metadata?.userId || 'checkout_customer',
+                  contactId: contactResult.contactId
                 };
 
-                // Send to N8N webhook for GHL integration
-                const n8nWebhookUrl = 'https://drobosky.app.n8n.cloud/webhook-test/replit-lead';
-                const response = await fetch(n8nWebhookUrl, {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify(customerData),
-                });
-                
-                console.log('GHL webhook sent for checkout completion:', response.status);
-                console.log('Customer data sent to GHL:', {
-                  email: customerData.email,
-                  phone: customerData.phone,
-                  amount: customerData.amount,
-                  tier: customerData.tier
-                });
+                await goHighLevelService.sendWebhook(webhookData);
+                console.log('Purchase completion sent to GHL API and webhook');
 
               } catch (error) {
-                console.error('Error sending checkout data to GHL:', error);
+                console.error('Error updating GHL contact for purchase:', error);
               }
             }
             break;
