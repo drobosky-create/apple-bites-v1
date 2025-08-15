@@ -2357,17 +2357,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const formattedProducts = await Promise.all(products.data.map(async (product) => {
           let price = null;
           
-          // Fetch the most recent active price for this product
+          // Fetch the most recent active price for this product (sorted by creation date)
           try {
             const prices = await stripe.prices.list({
               product: product.id,
               active: true,
-              limit: 1,
+              limit: 10, // Get more prices to find the most recent
               expand: ['data.product']
             });
             
             if (prices.data.length > 0) {
-              const priceObj = prices.data[0];
+              // Sort by creation date descending to get the newest price
+              const sortedPrices = prices.data.sort((a, b) => b.created - a.created);
+              const priceObj = sortedPrices[0];
               console.log(`Retrieved current price for ${product.name}:`, {
                 id: priceObj.id,
                 amount: priceObj.unit_amount,
@@ -2422,10 +2424,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
           const prices = await stripe.prices.list({
             product: product.id,
             active: true,
-            limit: 1
+            limit: 10
           });
           
-          const currentPrice = prices.data[0];
+          // Get the most recently created price
+          const sortedPrices = prices.data.sort((a, b) => b.created - a.created);
+          const currentPrice = sortedPrices[0];
           productDetails.push({
             productId: product.id,
             name: product.name,
