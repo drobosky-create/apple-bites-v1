@@ -51,10 +51,14 @@ interface StripeProduct {
 export default function PricingPage() {
   const [, setLocation] = useLocation();
 
-  // Fetch products from Stripe
+  // Fetch products from Stripe with cache invalidation
   const { data: productsData, isLoading, error } = useQuery({
     queryKey: ['/api/stripe/products'],
     retry: false,
+    staleTime: 0, // Always refetch from server
+    cacheTime: 0, // Don't cache the response
+    refetchOnMount: true, // Always refetch when component mounts
+    refetchOnWindowFocus: true, // Refetch when window regains focus
   });
 
   const handleUpgrade = (tier: string, priceId?: string) => {
