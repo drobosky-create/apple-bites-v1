@@ -2395,11 +2395,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
           };
         }));
 
-        // Set cache headers to ensure fresh data
+        // Set cache headers to ensure fresh data and clear any Stripe API caching
         res.set({
           'Cache-Control': 'no-cache, no-store, must-revalidate',
           'Pragma': 'no-cache',
-          'Expires': '0'
+          'Expires': '0',
+          'Last-Modified': new Date().toUTCString()
         });
 
         res.json({ products: formattedProducts });
@@ -2449,6 +2450,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
       } catch (error: any) {
         console.error('Pricing refresh error:', error);
         res.status(500).json({ error: 'Failed to refresh pricing' });
+      }
+    });
+
+    // Update product description (if needed)
+    app.post('/api/stripe/update-product/:productId', async (req, res) => {
+      try {
+        const { productId } = req.params;
+        const { description } = req.body;
+        
+        const product = await stripe.products.update(productId, {
+          description: description
+        });
+        
+        res.json({ success: true, product });
+      } catch (error: any) {
+        console.error('Error updating product:', error);
+        res.status(500).json({ error: 'Failed to update product' });
       }
     });
 
