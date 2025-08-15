@@ -3129,6 +3129,77 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // ===== APPLE BITES ECOSYSTEM API ROUTES =====
+  
+  // Portal routes - customer-facing assessment history and invited data rooms
+  app.get('/api/portal/assessments', isAuthenticated, async (req, res) => {
+    try {
+      // Return user's assessment history with related firm data
+      const assessments = await storage.getAllValuationAssessments();
+      // TODO: Filter by current user when user authentication is integrated
+      res.json(assessments.slice(0, 10)); // Limit to 10 most recent for demo
+    } catch (error) {
+      console.error('Error fetching portal assessments:', error);
+      res.status(500).json({ error: 'Failed to fetch assessments' });
+    }
+  });
+
+  app.get('/api/portal/vdr-rooms', isAuthenticated, async (req, res) => {
+    try {
+      // Return VDR rooms user has been invited to
+      // TODO: Implement proper VDR room access control
+      res.json([]); // Empty for now - VDR functionality in development
+    } catch (error) {
+      console.error('Error fetching portal VDR rooms:', error);
+      res.status(500).json({ error: 'Failed to fetch VDR rooms' });
+    }
+  });
+
+  // Workspace routes - internal team functionality  
+  app.get('/api/workspace/crm/pipeline', isAuthenticated, async (req, res) => {
+    try {
+      // Return deal pipeline data for CRM module
+      // TODO: Implement deal pipeline with proper RBAC
+      res.json({ message: 'CRM pipeline coming soon', featureFlag: 'FEATURE_CRM_PIPELINE' });
+    } catch (error) {
+      console.error('Error fetching CRM pipeline:', error);
+      res.status(500).json({ error: 'Failed to fetch pipeline' });
+    }
+  });
+
+  app.get('/api/workspace/vdr/rooms', isAuthenticated, async (req, res) => {
+    try {
+      // Return VDR rooms for internal management
+      // TODO: Implement VDR room management with proper RBAC
+      res.json({ message: 'VDR management coming soon', featureFlag: 'FEATURE_VDR_MANAGEMENT' });
+    } catch (error) {
+      console.error('Error fetching VDR management:', error);
+      res.status(500).json({ error: 'Failed to fetch VDR rooms' });
+    }
+  });
+
+  app.get('/api/workspace/team/members', isAuthenticated, async (req, res) => {
+    try {
+      // Return team directory for internal users
+      const teamMembers = await storage.getAllTeamMembers();
+      res.json(teamMembers.slice(0, 10)); // Limit for demo
+    } catch (error) {
+      console.error('Error fetching team members:', error);
+      res.status(500).json({ error: 'Failed to fetch team members' });
+    }
+  });
+
+  app.get('/api/workspace/assessments/admin', isAuthenticated, async (req, res) => {
+    try {
+      // Return cross-org assessment search for internal users
+      const assessments = await storage.getAllValuationAssessments();
+      res.json(assessments.slice(0, 20)); // More results for admin view
+    } catch (error) {
+      console.error('Error fetching admin assessments:', error);
+      res.status(500).json({ error: 'Failed to fetch assessments' });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

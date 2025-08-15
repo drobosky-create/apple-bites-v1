@@ -105,6 +105,24 @@ function Router() {
             {isAuthenticated ? <PastAssessments /> : <LoginPage />}
           </Route>
           
+          {/* Apple Bites Ecosystem - Portal & Workspace */}
+          <Route path="/portal">
+            {isAuthenticated ? 
+              <Suspense fallback={<div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Loading Portal...</div>}>
+                {React.createElement(lazy(() => import("./pages/portal/PortalLayout")))}
+              </Suspense>
+              : <LoginPage />
+            }
+          </Route>
+          <Route path="/workspace">
+            {isAuthenticated ? 
+              <Suspense fallback={<div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Loading Workspace...</div>}>
+                {React.createElement(lazy(() => import("./pages/workspace/WorkspaceLayout")))}
+              </Suspense>
+              : <LoginPage />
+            }
+          </Route>
+
           {/* Admin/Team pages - self-authenticated */}
           <Route path="/admin/analytics" component={AnalyticsDashboard} />
           <Route path="/admin/leads" component={LeadsDashboard} />

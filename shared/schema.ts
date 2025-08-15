@@ -371,201 +371,219 @@ export type AdjustmentsData = z.infer<typeof adjustmentsSchema>;
 export type ValueDriversData = z.infer<typeof valueDriversSchema>;
 export type FollowUpData = z.infer<typeof followUpSchema>;
 
-// ===== CRM ENTITIES =====
+// ===== APPLE BITES ECOSYSTEM DATA MODEL =====
 
-// Firms table for managing PE/FO/Strategic/Advisor companies
+// Core CRM - Firms (businesses we're evaluating/working with)
 export const firms = pgTable("firms", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 255 }).notNull(),
-  type: text("type").notNull(), // "PE", "FO", "Strategic", "Advisor", "Other"
-  website: varchar("website", { length: 255 }),
-  hqRegion: varchar("hq_region", { length: 100 }),
-  aum: decimal("aum", { precision: 15, scale: 2 }), // Assets Under Management
-  size: varchar("size", { length: 50 }), // "Small", "Mid", "Large"
-  naicsFocus: text("naics_focus").array(), // Array of NAICS codes
-  checkSizeMin: decimal("check_size_min", { precision: 15, scale: 2 }),
-  checkSizeMax: decimal("check_size_max", { precision: 15, scale: 2 }),
+  domain: varchar("domain", { length: 255 }), // For email domain matching
+  size: varchar("size", { length: 50 }), // "1-10", "11-50", "51-200", "200+"
+  naics: varchar("naics", { length: 10 }), // Primary NAICS code
+  geography: varchar("geography", { length: 100 }), // Primary location
   notes: text("notes"),
-  tags: text("tags").array(),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
-// Contacts table for managing individual people at firms
+// Core CRM - Contacts at firms
 export const contacts = pgTable("contacts", {
   id: serial("id").primaryKey(),
+  firmId: integer("firm_id").notNull().references(() => firms.id),
   firstName: varchar("first_name", { length: 100 }).notNull(),
   lastName: varchar("last_name", { length: 100 }).notNull(),
-  email: varchar("email", { length: 255 }).unique(),
+  email: varchar("email", { length: 255 }).unique().notNull(),
   phone: varchar("phone", { length: 50 }),
   title: varchar("title", { length: 150 }),
-  firmId: integer("firm_id").references(() => firms.id),
-  
-  // Assignment state (mutually exclusive)
-  opportunityId: integer("opportunity_id"), // Will reference opportunities.id
-  dealId: integer("deal_id"), // Will reference deals.id
-  
-  relationships: text("relationships").array(), // Array of relationship types
-  notes: text("notes"),
-  tags: text("tags").array(),
+  ownerId: integer("owner_id").references(() => teamMembers.id), // Assigned team member
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
-// Opportunities table for pre-LOI prospects
+// Core CRM - Opportunities (assessment → deal pipeline)
 export const opportunities = pgTable("opportunities", {
   id: serial("id").primaryKey(),
-  name: varchar("name", { length: 255 }).notNull(),
-  sellerFirmId: integer("seller_firm_id").references(() => firms.id),
-  stage: text("stage").notNull().default("Prospect"), // "Prospect", "Qualified", "Pitch"
-  ownerId: varchar("owner_id").references(() => teamMembers.id),
-  probability: integer("probability").default(0), // 0-100%
-  valuationMin: decimal("valuation_min", { precision: 15, scale: 2 }),
-  valuationMax: decimal("valuation_max", { precision: 15, scale: 2 }),
-  expectedCloseDate: timestamp("expected_close_date"),
-  tags: text("tags").array(),
-  notes: text("notes"),
-  
-  // Link to assessment if created from Apple Bites
-  assessmentId: integer("assessment_id").references(() => valuationAssessments.id),
-  readinessScore: text("readiness_score"), // A-F grade from assessment
-  
+  firmId: integer("firm_id").notNull().references(() => firms.id),
+  primaryContactId: integer("primary_contact_id").notNull().references(() => contacts.id),
+  tier: text("tier").notNull(), // "free", "growth", "capital" from GHL tags
+  source: text("source").notNull(), // "fb", "li", "referral", "site", "event"
+  status: text("status").notNull().default("new"), // "new", "qualified", "nurture", "won", "lost" 
+  score: integer("score"), // Assessment overall score
+  estValue: decimal("est_value", { precision: 15, scale: 2 }), // Estimated business value
+  ownerId: integer("owner_id").references(() => teamMembers.id),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
-// Deals table for post-LOI transactions
+// Assessment results linked to opportunities
+export const assessments = pgTable("assessments", {
+  id: serial("id").primaryKey(),
+  firmId: integer("firm_id").notNull().references(() => firms.id),
+  contactId: integer("contact_id").notNull().references(() => contacts.id),
+  opportunityId: integer("opportunity_id").references(() => opportunities.id),
+  tier: text("tier").notNull(), // "free", "growth", "capital"
+  ebitda: decimal("ebitda", { precision: 15, scale: 2 }).notNull(),
+  adjustments: decimal("adjustments", { precision: 15, scale: 2 }).default("0"),
+  valueLow: decimal("value_low", { precision: 15, scale: 2 }),
+  valueHigh: decimal("value_high", { precision: 15, scale: 2 }),
+  reportUrl: text("report_url"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Deals (promoted opportunities)
 export const deals = pgTable("deals", {
   id: serial("id").primaryKey(),
+  firmId: integer("firm_id").notNull().references(() => firms.id),
   name: varchar("name", { length: 255 }).notNull(),
-  type: text("type").notNull(), // "Sell", "Buy"
-  stage: text("stage").notNull().default("LOI"), // "LOI", "Diligence", "Closing"
-  ownerId: varchar("owner_id").references(() => teamMembers.id),
-  probability: integer("probability").default(50), // 0-100%
-  valuationMin: decimal("valuation_min", { precision: 15, scale: 2 }),
-  valuationMax: decimal("valuation_max", { precision: 15, scale: 2 }),
-  
-  // Fee tracking
-  engagementFeeAmount: decimal("engagement_fee_amount", { precision: 15, scale: 2 }),
-  successFeeType: text("success_fee_type"), // "%", "fixed", "tiered"
-  successFeeValue: decimal("success_fee_value", { precision: 8, scale: 4 }), // % as decimal or fixed amount
-  feeNotes: text("fee_notes"),
-  
-  expectedCloseDate: timestamp("expected_close_date"),
-  tags: text("tags").array(),
-  notes: text("notes"),
-  
-  // Link back to originating opportunity
-  sourceOpportunityId: integer("source_opportunity_id").references(() => opportunities.id),
-  
+  stage: text("stage").notNull().default("Pre-LOI"), // "Pre-LOI", "LOI", "DD", "Closing", "Closed"
+  feeModel: text("fee_model"), // "Success", "Retainer", "Hybrid"
+  expectedClose: timestamp("expected_close"),
+  ownerId: integer("owner_id").notNull().references(() => teamMembers.id),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
-// Target Lists for organizing firms
-export const targetLists = pgTable("target_lists", {
-  id: serial("id").primaryKey(),
-  name: varchar("name", { length: 255 }).notNull(),
-  description: text("description"),
-  ownerId: varchar("owner_id").references(() => teamMembers.id),
-  tags: text("tags").array(),
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
-});
-
-// Join table for target list items with status tracking
-export const targetListItems = pgTable("target_list_items", {
-  id: serial("id").primaryKey(),
-  targetListId: integer("target_list_id").notNull().references(() => targetLists.id, { onDelete: "cascade" }),
-  firmId: integer("firm_id").notNull().references(() => firms.id, { onDelete: "cascade" }),
-  status: text("status").notNull().default("Identified"), // "Identified", "Contacted", "NDA", "Teaser Sent", "IOI", "Passed", "Active"
-  lastActivityAt: timestamp("last_activity_at"),
-  notes: text("notes"),
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
-});
-
-// Milestones for deal tracking
+// Deal milestones/tasks
 export const milestones = pgTable("milestones", {
   id: serial("id").primaryKey(),
-  dealId: integer("deal_id").notNull().references(() => deals.id, { onDelete: "cascade" }),
-  type: text("type").notNull(), // "LOI Signed", "CIM Distributed", "Mgmt Call", "QA Delivered", "SPA Drafted", "Close"
-  date: timestamp("date").notNull(),
-  ownerId: varchar("owner_id").references(() => teamMembers.id),
-  notes: text("notes"),
+  dealId: integer("deal_id").notNull().references(() => deals.id),
+  type: text("type").notNull(), // "document", "call", "meeting", "deadline"
+  title: varchar("title", { length: 255 }).notNull(),
+  dueAt: timestamp("due_at"),
+  doneAt: timestamp("done_at"),
+  assigneeId: integer("assignee_id").references(() => teamMembers.id),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
-// ===== CRM RELATIONS =====
+// VDR - Rooms (one per deal)
+export const vdrRooms = pgTable("vdr_rooms", {
+  id: serial("id").primaryKey(),
+  dealId: integer("deal_id").references(() => deals.id),
+  name: varchar("name", { length: 255 }).notNull(),
+  policyTemplateId: integer("policy_template_id"), // For future template system
+  status: text("status").default("active"), // "active", "archived"
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// VDR - Folders (hierarchical structure within rooms)
+export const vdrFolders = pgTable("vdr_folders", {
+  id: serial("id").primaryKey(),
+  roomId: integer("room_id").notNull().references(() => vdrRooms.id),
+  path: varchar("path", { length: 500 }).notNull(), // Full path like "/Financial/2024"
+  visibilityRule: text("visibility_rule").default("room"), // "room", "restricted", "public"
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// VDR - Documents
+export const vdrDocs = pgTable("vdr_docs", {
+  id: serial("id").primaryKey(),
+  roomId: integer("room_id").notNull().references(() => vdrRooms.id),
+  folderId: integer("folder_id").references(() => vdrFolders.id),
+  name: varchar("name", { length: 255 }).notNull(),
+  version: integer("version").default(1),
+  storageKey: text("storage_key").notNull(), // File storage key
+  checksum: varchar("checksum", { length: 64 }), // For integrity
+  uploadedBy: integer("uploaded_by").references(() => teamMembers.id),
+  uploadedAt: timestamp("uploaded_at").defaultNow(),
+});
+
+// RBAC - Access control (object-level permissions)
+export const access = pgTable("access", {
+  id: serial("id").primaryKey(),
+  objectType: text("object_type").notNull(), // "deal", "room", "folder"
+  objectId: integer("object_id").notNull(),
+  subjectType: text("subject_type").notNull(), // "user", "role", "firm"
+  subjectId: varchar("subject_id", { length: 255 }).notNull(), // ID or role name
+  scope: text("scope").notNull(), // "read", "upload", "manage", etc.
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Audit log
+export const audit = pgTable("audit", {
+  id: serial("id").primaryKey(),
+  actorId: integer("actor_id").references(() => teamMembers.id),
+  action: text("action").notNull(),
+  objectType: text("object_type").notNull(),
+  objectId: integer("object_id").notNull(),
+  ip: varchar("ip", { length: 45 }),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Invites for external access
+export const invites = pgTable("invites", {
+  id: serial("id").primaryKey(),
+  roomId: integer("room_id").references(() => vdrRooms.id),
+  dealId: integer("deal_id").references(() => deals.id),
+  email: varchar("email", { length: 255 }).notNull(),
+  role: text("role").notNull(), // "Client", "Client Admin", etc.
+  expiresAt: timestamp("expires_at").notNull(),
+  acceptedAt: timestamp("accepted_at"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// ===== RELATIONS =====
 
 export const firmsRelations = relations(firms, ({ many }) => ({
   contacts: many(contacts),
   opportunities: many(opportunities),
-  targetListItems: many(targetListItems),
+  assessments: many(assessments),
+  deals: many(deals),
 }));
 
-export const contactsRelations = relations(contacts, ({ one }) => ({
+export const contactsRelations = relations(contacts, ({ one, many }) => ({
   firm: one(firms, {
     fields: [contacts.firmId],
     references: [firms.id],
   }),
-  opportunity: one(opportunities, {
-    fields: [contacts.opportunityId],
-    references: [opportunities.id],
-  }),
-  deal: one(deals, {
-    fields: [contacts.dealId],
-    references: [deals.id],
+  owner: one(teamMembers, {
+    fields: [contacts.ownerId],
+    references: [teamMembers.id],
   }),
 }));
 
 export const opportunitiesRelations = relations(opportunities, ({ one, many }) => ({
-  sellerFirm: one(firms, {
-    fields: [opportunities.sellerFirmId],
+  firm: one(firms, {
+    fields: [opportunities.firmId],
     references: [firms.id],
+  }),
+  primaryContact: one(contacts, {
+    fields: [opportunities.primaryContactId],
+    references: [contacts.id],
   }),
   owner: one(teamMembers, {
     fields: [opportunities.ownerId],
     references: [teamMembers.id],
   }),
-  assessment: one(valuationAssessments, {
-    fields: [opportunities.assessmentId],
-    references: [valuationAssessments.id],
+  assessments: many(assessments),
+}));
+
+export const assessmentsRelations = relations(assessments, ({ one }) => ({
+  firm: one(firms, {
+    fields: [assessments.firmId],
+    references: [firms.id],
   }),
-  assignedContacts: many(contacts),
-  deals: many(deals),
+  contact: one(contacts, {
+    fields: [assessments.contactId],
+    references: [contacts.id],
+  }),
+  opportunity: one(opportunities, {
+    fields: [assessments.opportunityId],
+    references: [opportunities.id],
+  }),
 }));
 
 export const dealsRelations = relations(deals, ({ one, many }) => ({
+  firm: one(firms, {
+    fields: [deals.firmId],
+    references: [firms.id],
+  }),
   owner: one(teamMembers, {
     fields: [deals.ownerId],
     references: [teamMembers.id],
   }),
-  sourceOpportunity: one(opportunities, {
-    fields: [deals.sourceOpportunityId],
-    references: [opportunities.id],
-  }),
-  assignedContacts: many(contacts),
   milestones: many(milestones),
-}));
-
-export const targetListsRelations = relations(targetLists, ({ one, many }) => ({
-  owner: one(teamMembers, {
-    fields: [targetLists.ownerId],
-    references: [teamMembers.id],
-  }),
-  items: many(targetListItems),
-}));
-
-export const targetListItemsRelations = relations(targetListItems, ({ one }) => ({
-  targetList: one(targetLists, {
-    fields: [targetListItems.targetListId],
-    references: [targetLists.id],
-  }),
-  firm: one(firms, {
-    fields: [targetListItems.firmId],
-    references: [firms.id],
-  }),
+  vdrRooms: many(vdrRooms),
 }));
 
 export const milestonesRelations = relations(milestones, ({ one }) => ({
@@ -573,13 +591,45 @@ export const milestonesRelations = relations(milestones, ({ one }) => ({
     fields: [milestones.dealId],
     references: [deals.id],
   }),
-  owner: one(teamMembers, {
-    fields: [milestones.ownerId],
+  assignee: one(teamMembers, {
+    fields: [milestones.assigneeId],
     references: [teamMembers.id],
   }),
 }));
 
-// ===== CRM SCHEMAS =====
+export const vdrRoomsRelations = relations(vdrRooms, ({ one, many }) => ({
+  deal: one(deals, {
+    fields: [vdrRooms.dealId],
+    references: [deals.id],
+  }),
+  folders: many(vdrFolders),
+  docs: many(vdrDocs),
+}));
+
+export const vdrFoldersRelations = relations(vdrFolders, ({ one, many }) => ({
+  room: one(vdrRooms, {
+    fields: [vdrFolders.roomId],
+    references: [vdrRooms.id],
+  }),
+  docs: many(vdrDocs),
+}));
+
+export const vdrDocsRelations = relations(vdrDocs, ({ one }) => ({
+  room: one(vdrRooms, {
+    fields: [vdrDocs.roomId],
+    references: [vdrRooms.id],
+  }),
+  folder: one(vdrFolders, {
+    fields: [vdrDocs.folderId],
+    references: [vdrFolders.id],
+  }),
+  uploadedByUser: one(teamMembers, {
+    fields: [vdrDocs.uploadedBy],
+    references: [teamMembers.id],
+  }),
+}));
+
+// ===== SCHEMA TYPES =====
 
 export const insertFirmSchema = createInsertSchema(firms).omit({
   id: true,
@@ -599,22 +649,46 @@ export const insertOpportunitySchema = createInsertSchema(opportunities).omit({
   updatedAt: true,
 });
 
+export const insertAssessmentSchema = createInsertSchema(assessments).omit({
+  id: true,
+  createdAt: true,
+});
+
 export const insertDealSchema = createInsertSchema(deals).omit({
   id: true,
   createdAt: true,
   updatedAt: true,
 });
 
-export const insertTargetListSchema = createInsertSchema(targetLists).omit({
+export const insertVdrRoomSchema = createInsertSchema(vdrRooms).omit({
   id: true,
   createdAt: true,
   updatedAt: true,
 });
 
-export const insertTargetListItemSchema = createInsertSchema(targetListItems).omit({
+export const insertVdrFolderSchema = createInsertSchema(vdrFolders).omit({
   id: true,
   createdAt: true,
-  updatedAt: true,
+});
+
+export const insertVdrDocSchema = createInsertSchema(vdrDocs).omit({
+  id: true,
+  uploadedAt: true,
+});
+
+export const insertAccessSchema = createInsertSchema(access).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertAuditSchema = createInsertSchema(audit).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertInviteSchema = createInsertSchema(invites).omit({
+  id: true,
+  createdAt: true,
 });
 
 export const insertMilestoneSchema = createInsertSchema(milestones).omit({
@@ -622,7 +696,7 @@ export const insertMilestoneSchema = createInsertSchema(milestones).omit({
   createdAt: true,
 });
 
-// ===== CRM TYPES =====
+// ===== ECOSYSTEM TYPES =====
 
 export type Firm = typeof firms.$inferSelect;
 export type InsertFirm = z.infer<typeof insertFirmSchema>;
@@ -633,14 +707,29 @@ export type InsertContact = z.infer<typeof insertContactSchema>;
 export type Opportunity = typeof opportunities.$inferSelect;
 export type InsertOpportunity = z.infer<typeof insertOpportunitySchema>;
 
+export type Assessment = typeof assessments.$inferSelect;
+export type InsertAssessment = z.infer<typeof insertAssessmentSchema>;
+
 export type Deal = typeof deals.$inferSelect;
 export type InsertDeal = z.infer<typeof insertDealSchema>;
 
-export type TargetList = typeof targetLists.$inferSelect;
-export type InsertTargetList = z.infer<typeof insertTargetListSchema>;
-
-export type TargetListItem = typeof targetListItems.$inferSelect;
-export type InsertTargetListItem = z.infer<typeof insertTargetListItemSchema>;
-
 export type Milestone = typeof milestones.$inferSelect;
 export type InsertMilestone = z.infer<typeof insertMilestoneSchema>;
+
+export type VdrRoom = typeof vdrRooms.$inferSelect;
+export type InsertVdrRoom = z.infer<typeof insertVdrRoomSchema>;
+
+export type VdrFolder = typeof vdrFolders.$inferSelect;
+export type InsertVdrFolder = z.infer<typeof insertVdrFolderSchema>;
+
+export type VdrDoc = typeof vdrDocs.$inferSelect;
+export type InsertVdrDoc = z.infer<typeof insertVdrDocSchema>;
+
+export type Access = typeof access.$inferSelect;
+export type InsertAccess = z.infer<typeof insertAccessSchema>;
+
+export type Audit = typeof audit.$inferSelect;
+export type InsertAudit = z.infer<typeof insertAuditSchema>;
+
+export type Invite = typeof invites.$inferSelect;
+export type InsertInvite = z.infer<typeof insertInviteSchema>;
