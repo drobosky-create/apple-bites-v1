@@ -2672,55 +2672,69 @@ export async function registerRoutes(app: Express): Promise<Server> {
     // Create Stripe Checkout Session (Official Prebuilt Implementation)
     app.post("/api/create-checkout-session", async (req, res) => {
       try {
-        const { lookup_key, couponId } = req.body;
+        const { lookup_key, couponId, priceId } = req.body;
         
-        console.log('Creating checkout session with lookup_key:', lookup_key, 'couponId:', couponId);
+        console.log('Creating checkout session with priceId:', priceId, 'lookup_key:', lookup_key, 'couponId:', couponId);
         
-        // Map lookup keys to live price IDs with mode detection
-        const priceConfig = {
-          'growth_exit_assessment': { 
-            priceId: 'price_1RqzLKAYDUS7LgRZj5ujxTbw', // Growth - $795 (updated)
-            mode: 'payment' // One-time payment
-          },
-          'basic_assessment': { 
-            priceId: 'price_1RqzLKAYDUS7LgRZj5ujxTbw', // Same as growth (updated)
-            mode: 'payment' // One-time payment
-          },
-          'capital_market_plan': { 
-            priceId: 'price_1RqZhaAYDUS7LgRZfYL9gP1H', // Capital One-Time - $3,495
-            mode: 'payment' // One-time payment
-          },
-          'capital_monthly': { 
-            priceId: 'price_1RqZi5AYDUS7LgRZFoyi63cy', // Capital Monthly - recurring
-            mode: 'subscription' // Subscription mode for recurring prices
-          }
-        };
+        // Use priceId directly if provided, otherwise fall back to lookup_key
+        let finalPriceId = priceId;
+        let mode = 'payment'; // Default to one-time payment
+        
+        if (!finalPriceId && lookup_key) {
+          // Map lookup keys to live price IDs with mode detection
+          const priceConfig = {
+            'growth_exit_assessment': { 
+              priceId: 'price_1RwQghAYDUS7LgRZAssgVs6A', // Current Growth price - $1,995
+              mode: 'payment'
+            },
+            'basic_assessment': { 
+              priceId: 'price_1RwQghAYDUS7LgRZAssgVs6A', // Same as growth
+              mode: 'payment'
+            },
+            'capital_market_plan': { 
+              priceId: 'price_1RqZi5AYDUS7LgRZFoyi63cy', // Capital - $300
+              mode: 'payment'
+            },
+          };
 
-        const config = priceConfig[lookup_key as keyof typeof priceConfig];
-        if (!config) {
-          return res.status(400).json({ error: 'Invalid product lookup key' });
+          const config = priceConfig[lookup_key as keyof typeof priceConfig];
+          if (!config) {
+            return res.status(400).json({ error: 'Invalid product lookup key' });
+          }
+          
+          finalPriceId = config.priceId;
+          mode = config.mode;
+        }
+        
+        if (!finalPriceId) {
+          return res.status(400).json({ error: 'Price ID or lookup key required' });
         }
 
-        console.log('Using price config:', config, 'for lookup key:', lookup_key);
+        console.log('Using final priceId:', finalPriceId, 'mode:', mode);
 
         const YOUR_DOMAIN = `${req.protocol}://${req.get('host')}`;
         
         // Build checkout session data
         const sessionData: any = {
+          payment_method_types: ['card'],
           billing_address_collection: 'auto',
           line_items: [
             {
-              price: config.priceId,
+              price: finalPriceId,
               quantity: 1,
             },
           ],
-          mode: config.mode,
-          success_url: `${YOUR_DOMAIN}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+          mode: mode,
+          success_url: `${YOUR_DOMAIN}/checkout-success?session_id={CHECKOUT_SESSION_ID}`,
           cancel_url: `${YOUR_DOMAIN}/checkout?canceled=true`,
+          allow_promotion_codes: true, // Enable Stripe's built-in coupon handling
+          automatic_tax: {
+            enabled: true,
+          },
           metadata: {
-            lookup_key,
-            priceId: config.priceId,
-            mode: config.mode,
+            lookup_key: lookup_key || 'direct_price',
+            priceId: finalPriceId,
+            mode: mode,
             userId: req.session?.customUserSessionId || 'anonymous',
           },
         };

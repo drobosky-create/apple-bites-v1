@@ -263,31 +263,14 @@ export default function Checkout() {
             </Box>
           </MDBox>
 
-          {/* Coupon Field */}
-          {!couponApplied && (
-            <MDBox mb={4}>
-              <MDTypography variant="body2" gutterBottom>
-                Have a coupon code?
+          {/* Coupon info - Stripe handles this */}
+          <MDBox mb={4}>
+            <Alert severity="info" sx={{ bgcolor: '#EBF8FF', color: '#1E3A8A', border: '1px solid #93C5FD' }}>
+              <MDTypography variant="body2">
+                💡 <strong>Have a coupon?</strong> You can enter it during the secure Stripe checkout process.
               </MDTypography>
-              <Box display="flex" gap={1}>
-                <TextField
-                  fullWidth
-                  size="small"
-                  placeholder="Enter coupon code"
-                  value={couponCode}
-                  onChange={(e) => setCouponCode(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && applyCoupon()}
-                />
-                <Button 
-                  variant="outlined"
-                  onClick={applyCoupon}
-                  disabled={!couponCode.trim()}
-                >
-                  Apply
-                </Button>
-              </Box>
-            </MDBox>
-          )}
+            </Alert>
+          </MDBox>
 
           {/* Features */}
           <MDBox mb={4}>
@@ -309,7 +292,7 @@ export default function Checkout() {
             </Box>
           </MDBox>
 
-          {/* Checkout Form - Direct HTML form submission */}
+          {/* Stripe Hosted Checkout - Simplified */}
           <MDBox sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
             <form 
               method="POST" 
@@ -317,16 +300,13 @@ export default function Checkout() {
               style={{ width: '100%' }}
             >
               <input type="hidden" name="priceId" value={priceDetails?.priceId || ''} />
-              {appliedCoupon && (
-                <input type="hidden" name="couponId" value={appliedCoupon} />
-              )}
               <MDButton
                 type="submit"
                 variant="gradient"
                 color="info"
                 size="large"
                 fullWidth
-                disabled={loading}
+                disabled={loading || !priceDetails?.priceId}
                 sx={{
                   background: 'linear-gradient(45deg, #0A1F44 30%, #1B2C4F 90%)',
                   py: 1.5,
@@ -334,9 +314,16 @@ export default function Checkout() {
                   fontWeight: 600,
                 }}
               >
-                {loading ? 'Redirecting to Stripe...' : `Complete Purchase - $${(finalAmount / 100).toFixed(2)}`}
+                {loading ? 'Loading...' : !priceDetails?.priceId ? 'Loading pricing...' : `Continue to Secure Checkout - $${(baseAmount / 100).toFixed(2)}`}
               </MDButton>
             </form>
+          </MDBox>
+          
+          {/* Stripe handles coupons natively */}
+          <MDBox sx={{ textAlign: 'center', mt: 2 }}>
+            <MDTypography variant="body2" sx={{ color: '#6B7280' }}>
+              Enter coupon codes during checkout • Secure payment by Stripe
+            </MDTypography>
           </MDBox>
         </CardContent>
       </CheckoutCard>
