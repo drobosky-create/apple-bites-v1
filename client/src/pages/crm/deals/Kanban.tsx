@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { Box, Card, CardContent, Typography, Chip, Avatar, IconButton } from "@mui/material";
 import { DragDropContext, Droppable, Draggable, DropResult } from "react-beautiful-dnd";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import MDBox from "@/components/MDBox";
-import MDTypography from "@/components/MDTypography";
+import MDBox from "@/components/MD/MDBox";
+import MDTypography from "@/components/MD/MDTypography";
 import { MoreVert, AttachMoney, Schedule, Business } from "@mui/icons-material";
 import { apiRequest } from "@/lib/queryClient";
 
@@ -202,7 +202,7 @@ export default function Kanban() {
   });
 
   useEffect(() => {
-    if (fetchedDeals) {
+    if (fetchedDeals && Array.isArray(fetchedDeals)) {
       setDeals(fetchedDeals);
     }
   }, [fetchedDeals]);

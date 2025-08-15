@@ -16,9 +16,9 @@ import {
   Avatar
 } from "@mui/material";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import MDBox from "@/components/MDBox";
-import MDTypography from "@/components/MDTypography";
-import MDButton from "@/components/MDButton";
+import MDBox from "@/components/MD/MDBox";
+import MDTypography from "@/components/MD/MDTypography";
+import MDButton from "@/components/MD/MDButton";
 import { 
   Add, 
   MoreVert, 
@@ -222,10 +222,14 @@ export default function Targets() {
   const [selectedList, setSelectedList] = useState<TargetList | null>(null);
   const [viewingList, setViewingList] = useState<TargetList | null>(null);
   
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    name: string;
+    description: string;
+    status: 'Active' | 'Inactive' | 'Completed';
+  }>({
     name: '',
     description: '',
-    status: 'Active' as const
+    status: 'Active'
   });
 
   // Fetch target lists
@@ -350,9 +354,9 @@ export default function Targets() {
 
         {/* Sample firms display - in real implementation, fetch firms for this list */}
         <MDBox>
-          {firms.slice(0, 5).map((firm: Firm) => (
+          {Array.isArray(firms) ? firms.slice(0, 5).map((firm: Firm) => (
             <FirmCard key={firm.id} firm={firm} />
-          ))}
+          )) : []}
         </MDBox>
       </MDBox>
     );
@@ -387,7 +391,7 @@ export default function Targets() {
         gridTemplateColumns="repeat(auto-fill, minmax(300px, 1fr))"
         gap={3}
       >
-        {targetLists.map((targetList: TargetList) => (
+        {Array.isArray(targetLists) ? targetLists.map((targetList: TargetList) => (
           <div key={targetList.id} onClick={() => setViewingList(targetList)}>
             <TargetListCard
               targetList={targetList}
@@ -395,7 +399,7 @@ export default function Targets() {
               onDelete={handleDelete}
             />
           </div>
-        ))}
+        )) : []}
       </Box>
 
       {/* Create/Edit Dialog */}

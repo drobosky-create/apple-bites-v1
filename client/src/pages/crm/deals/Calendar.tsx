@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Box, Paper, Typography, Chip, IconButton, Menu, MenuItem } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
-import MDBox from "@/components/MDBox";
-import MDTypography from "@/components/MDTypography";
+import MDBox from "@/components/MD/MDBox";
+import MDTypography from "@/components/MD/MDTypography";
 import { ChevronLeft, ChevronRight, MoreVert, Event } from "@mui/icons-material";
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, startOfWeek, endOfWeek, isSameMonth, isSameDay, addMonths, subMonths } from "date-fns";
 
@@ -235,11 +235,11 @@ export default function Calendar() {
   }
 
   // Calculate statistics for current month
-  const monthDeals = deals.filter((deal: Deal) => {
+  const monthDeals = Array.isArray(deals) ? deals.filter((deal: Deal) => {
     if (!deal.expectedCloseDate) return false;
     const dealDate = new Date(deal.expectedCloseDate);
     return dealDate >= monthStart && dealDate <= monthEnd;
-  });
+  }) : [];
 
   const monthValue = monthDeals.reduce((sum: number, deal: Deal) => sum + (deal.value || 0), 0);
 
@@ -308,7 +308,7 @@ export default function Calendar() {
             <CalendarDay
               key={day.toISOString()}
               date={day}
-              deals={deals}
+              deals={Array.isArray(deals) ? deals : []}
               isCurrentMonth={isSameMonth(day, currentDate)}
               isToday={isSameDay(day, new Date())}
             />

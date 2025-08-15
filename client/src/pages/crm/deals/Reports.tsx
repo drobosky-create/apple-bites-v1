@@ -3,7 +3,7 @@ import {
   Box, 
   Card, 
   CardContent, 
-  Grid, 
+  Grid2 as Grid, 
   TextField, 
   MenuItem,
   ButtonGroup,
@@ -26,8 +26,8 @@ import {
   Area,
   AreaChart
 } from "recharts";
-import MDBox from "@/components/MDBox";
-import MDTypography from "@/components/MDTypography";
+import MDBox from "@/components/MD/MDBox";
+import MDTypography from "@/components/MD/MDTypography";
 import { 
   TrendingUp, 
   AttachMoney, 
@@ -86,7 +86,7 @@ function StatCard({
             <MDTypography variant="body2" color="text" mb={1}>
               {title}
             </MDTypography>
-            <MDTypography variant="h4" fontWeight="bold" color={color}>
+            <MDTypography variant="h4" fontWeight="bold" color="info">
               {value}
             </MDTypography>
             {subtitle && (
@@ -148,15 +148,16 @@ export default function Reports() {
   }
 
   // Calculate metrics
-  const totalDeals = deals.length;
-  const totalValue = deals.reduce((sum: number, deal: Deal) => sum + (deal.value || 0), 0);
+  const dealsArray = Array.isArray(deals) ? deals : [];
+  const totalDeals = dealsArray.length;
+  const totalValue = dealsArray.reduce((sum: number, deal: Deal) => sum + (deal.value || 0), 0);
   const avgDealValue = totalDeals > 0 ? totalValue / totalDeals : 0;
-  const closedWonDeals = deals.filter((deal: Deal) => deal.stage === 'closed-won').length;
+  const closedWonDeals = dealsArray.filter((deal: Deal) => deal.stage === 'closed-won').length;
   const closureRate = totalDeals > 0 ? (closedWonDeals / totalDeals) * 100 : 0;
 
   // Pipeline data by stage
   const pipelineData = Object.entries(STAGE_LABELS).map(([stage, label]) => {
-    const stageDeals = deals.filter((deal: Deal) => deal.stage === stage);
+    const stageDeals = dealsArray.filter((deal: Deal) => deal.stage === stage);
     const stageValue = stageDeals.reduce((sum: number, deal: Deal) => sum + (deal.value || 0), 0);
     return {
       stage: label,
@@ -228,8 +229,8 @@ export default function Reports() {
       </MDBox>
 
       {/* Key Metrics */}
-      <Grid container spacing={3} mb={4}>
-        <Grid item xs={12} sm={6} lg={3}>
+      <Grid container spacing={3} sx={{ mb: 4 }}>
+        <Grid xs={12} sm={6} lg={3}>
           <StatCard
             title="Total Deals"
             value={totalDeals}
@@ -239,7 +240,7 @@ export default function Reports() {
             trend={{ value: 12, label: "vs last month" }}
           />
         </Grid>
-        <Grid item xs={12} sm={6} lg={3}>
+        <Grid xs={12} sm={6} lg={3}>
           <StatCard
             title="Total Pipeline Value"
             value={formatCurrency(totalValue)}
@@ -249,7 +250,7 @@ export default function Reports() {
             trend={{ value: 8, label: "vs last month" }}
           />
         </Grid>
-        <Grid item xs={12} sm={6} lg={3}>
+        <Grid xs={12} sm={6} lg={3}>
           <StatCard
             title="Average Deal Size"
             value={formatCurrency(avgDealValue)}
@@ -259,7 +260,7 @@ export default function Reports() {
             trend={{ value: -3, label: "vs last month" }}
           />
         </Grid>
-        <Grid item xs={12} sm={6} lg={3}>
+        <Grid xs={12} sm={6} lg={3}>
           <StatCard
             title="Closure Rate"
             value={`${closureRate.toFixed(1)}%`}
@@ -275,10 +276,10 @@ export default function Reports() {
       {viewType === 'overview' && (
         <Grid container spacing={3}>
           {/* Pipeline by Stage */}
-          <Grid item xs={12} lg={8}>
+          <Grid xs={12} lg={8}>
             <Card>
               <CardContent>
-                <MDTypography variant="h6" fontWeight="bold" mb={3}>
+                <MDTypography variant="h6" fontWeight="bold" sx={{ mb: 3 }}>
                   Pipeline by Stage
                 </MDTypography>
                 <Box sx={{ height: 300 }}>
@@ -302,10 +303,10 @@ export default function Reports() {
           </Grid>
 
           {/* Stage Distribution */}
-          <Grid item xs={12} lg={4}>
+          <Grid xs={12} lg={4}>
             <Card>
               <CardContent>
-                <MDTypography variant="h6" fontWeight="bold" mb={3}>
+                <MDTypography variant="h6" fontWeight="bold" sx={{ mb: 3 }}>
                   Stage Distribution
                 </MDTypography>
                 <Box sx={{ height: 300 }}>
@@ -342,10 +343,10 @@ export default function Reports() {
       {viewType === 'pipeline' && (
         <Grid container spacing={3}>
           {/* Pipeline Value by Stage */}
-          <Grid item xs={12}>
+          <Grid xs={12}>
             <Card>
               <CardContent>
-                <MDTypography variant="h6" fontWeight="bold" mb={3}>
+                <MDTypography variant="h6" fontWeight="bold" sx={{ mb: 3 }}>
                   Pipeline Value by Stage
                 </MDTypography>
                 <Box sx={{ height: 400 }}>
@@ -368,10 +369,10 @@ export default function Reports() {
       {viewType === 'trends' && (
         <Grid container spacing={3}>
           {/* Monthly Trends */}
-          <Grid item xs={12} lg={6}>
+          <Grid xs={12} lg={6}>
             <Card>
               <CardContent>
-                <MDTypography variant="h6" fontWeight="bold" mb={3}>
+                <MDTypography variant="h6" fontWeight="bold" sx={{ mb: 3 }}>
                   Monthly Deal Count
                 </MDTypography>
                 <Box sx={{ height: 300 }}>
@@ -395,10 +396,10 @@ export default function Reports() {
             </Card>
           </Grid>
 
-          <Grid item xs={12} lg={6}>
+          <Grid xs={12} lg={6}>
             <Card>
               <CardContent>
-                <MDTypography variant="h6" fontWeight="bold" mb={3}>
+                <MDTypography variant="h6" fontWeight="bold" sx={{ mb: 3 }}>
                   Monthly Pipeline Value
                 </MDTypography>
                 <Box sx={{ height: 300 }}>

@@ -15,9 +15,9 @@ import {
 } from "@mui/material";
 import { DataGrid, GridColDef, GridActionsCellItem } from "@mui/x-data-grid";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import MDBox from "@/components/MDBox";
-import MDTypography from "@/components/MDTypography";
-import MDButton from "@/components/MDButton";
+import MDBox from "@/components/MD/MDBox";
+import MDTypography from "@/components/MD/MDTypography";
+import MDButton from "@/components/MD/MDButton";
 import { 
   Search, 
   MoreVert, 
@@ -112,7 +112,7 @@ export default function List() {
   };
 
   // Filter deals based on search and stage
-  const filteredDeals = deals.filter((deal: Deal) => {
+  const filteredDeals = Array.isArray(deals) ? deals.filter((deal: Deal) => {
     const matchesSearch = !searchTerm || 
       deal.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       deal.firmName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -121,7 +121,7 @@ export default function List() {
     const matchesStage = !selectedStage || deal.stage === selectedStage;
     
     return matchesSearch && matchesStage;
-  });
+  }) : [];
 
   const columns: GridColDef[] = [
     {

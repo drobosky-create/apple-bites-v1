@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { Box, Tabs, Tab, Typography, Button } from "@mui/material";
-import MDBox from "@/components/MDBox";
-import MDTypography from "@/components/MDTypography";
-import MDButton from "@/components/MDButton";
-import { Add, Dashboard, ViewList, Calendar, FormatListBulleted, Analytics } from "@mui/icons-material";
+import MDBox from "@/components/MD/MDBox";
+import MDTypography from "@/components/MD/MDTypography";
+import MDButton from "@/components/MD/MDButton";
+import { Add, Dashboard, ViewList, CalendarMonth, FormatListBulleted, Analytics } from "@mui/icons-material";
 import Kanban from "./Kanban";
 import List from "./List";
-import Calendar from "./Calendar";
+import CalendarView from "./Calendar";
 import Targets from "./Targets";
 import Reports from "./Reports";
 
@@ -121,7 +121,7 @@ export default function CRMDeals() {
               {...a11yProps(1)} 
             />
             <Tab 
-              icon={<Calendar sx={{ mr: 1 }} />} 
+              icon={<CalendarMonth sx={{ mr: 1 }} />} 
               iconPosition="start"
               label="Calendar" 
               {...a11yProps(2)} 
@@ -150,7 +150,7 @@ export default function CRMDeals() {
         <List />
       </TabPanel>
       <TabPanel value={activeTab} index={2}>
-        <Calendar />
+        <CalendarView />
       </TabPanel>
       <TabPanel value={activeTab} index={3}>
         <Targets />
