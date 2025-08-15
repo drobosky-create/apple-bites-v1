@@ -2520,10 +2520,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
         } catch (stripeError: any) {
           console.log('Stripe coupon error for code "' + couponCode + '":', stripeError.code, stripeError.message);
           
-          // Return invalid for any Stripe error
+          // Provide more specific error messages based on Stripe error codes
+          let errorMessage = 'Invalid coupon code';
+          if (stripeError.code === 'resource_missing') {
+            errorMessage = `Coupon "${couponCode}" not found. Please check the code and try again.`;
+          } else if (stripeError.code === 'coupon_expired') {
+            errorMessage = 'This coupon has expired.';
+          } else if (stripeError.code === 'max_redemptions_exceeded') {
+            errorMessage = 'This coupon has reached its maximum number of uses.';
+          }
+          
+          // Return invalid for any Stripe error with more specific message
           return res.status(400).json({ 
             valid: false, 
-            message: 'Invalid coupon code' 
+            message: errorMessage
           });
         }
       } catch (error: any) {

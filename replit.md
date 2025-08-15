@@ -15,6 +15,8 @@ This is a full-stack web application for Meritage Partners, designed as the foun
 - Checkout system now dynamically fetches pricing from Stripe to ensure accuracy
 - Fixed `/checkout?product=prod_xxx` parameter handling to properly fetch current Stripe pricing
 - Updated checkout form to use dynamic price IDs instead of hardcoded values
+- **Removed ALL hardcoded price fallbacks** - system now purely dynamic, loads from Stripe API only
+- **Enhanced coupon error handling** - provides specific error messages for missing/expired coupons
 **✅ COMPLETED: Streamlined GoHighLevel Integration (August 14, 2025)**
 - Eliminated triple redundancy in GHL integration by switching to pure API-only approach
 - Removed legacy webhook-based assessment processing in favor of comprehensive REST API calls

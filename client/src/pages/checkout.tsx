@@ -127,13 +127,17 @@ export default function Checkout() {
         setCouponCode('');
         setError(''); // Clear any previous errors
         
-        // Recreate payment intent with coupon - don't do this immediately, 
-        // let user see the discount first, then recreate on next page load
+        // Success message could be shown here if needed
+        console.log('Coupon applied successfully:', couponCode);
       } else {
         setError(data.message || 'Invalid coupon code');
+        // Clear the coupon input on error
+        setCouponCode('');
       }
     } catch (err) {
-      setError('Failed to apply coupon');
+      console.error('Coupon application error:', err);
+      setError('Failed to validate coupon. Please try again.');
+      setCouponCode('');
     }
   };
 
