@@ -2748,6 +2748,202 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   }
 
+  // ===== CRM API ROUTES =====
+
+  // Firm routes
+  app.get('/api/crm/firms', async (req, res) => {
+    try {
+      const firms = await storage.getAllFirms();
+      res.json(firms);
+    } catch (error) {
+      console.error('Error fetching firms:', error);
+      res.status(500).json({ error: 'Failed to fetch firms' });
+    }
+  });
+
+  app.post('/api/crm/firms', async (req, res) => {
+    try {
+      const firm = await storage.createFirm(req.body);
+      res.json(firm);
+    } catch (error) {
+      console.error('Error creating firm:', error);
+      res.status(500).json({ error: 'Failed to create firm' });
+    }
+  });
+
+  app.patch('/api/crm/firms/:id', async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const firm = await storage.updateFirm(id, req.body);
+      res.json(firm);
+    } catch (error) {
+      console.error('Error updating firm:', error);
+      res.status(500).json({ error: 'Failed to update firm' });
+    }
+  });
+
+  app.delete('/api/crm/firms/:id', async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteFirm(id);
+      res.json({ success: true });
+    } catch (error) {
+      console.error('Error deleting firm:', error);
+      res.status(500).json({ error: 'Failed to delete firm' });
+    }
+  });
+
+  // Contact routes
+  app.get('/api/crm/contacts', async (req, res) => {
+    try {
+      const contacts = await storage.getAllContacts();
+      res.json(contacts);
+    } catch (error) {
+      console.error('Error fetching contacts:', error);
+      res.status(500).json({ error: 'Failed to fetch contacts' });
+    }
+  });
+
+  app.post('/api/crm/contacts', async (req, res) => {
+    try {
+      const contact = await storage.createContact(req.body);
+      res.json(contact);
+    } catch (error) {
+      console.error('Error creating contact:', error);
+      res.status(500).json({ error: 'Failed to create contact' });
+    }
+  });
+
+  app.patch('/api/crm/contacts/:id', async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const contact = await storage.updateContact(id, req.body);
+      res.json(contact);
+    } catch (error) {
+      console.error('Error updating contact:', error);
+      res.status(500).json({ error: 'Failed to update contact' });
+    }
+  });
+
+  // Opportunity routes
+  app.get('/api/crm/opportunities', async (req, res) => {
+    try {
+      const opportunities = await storage.getAllOpportunities();
+      res.json(opportunities);
+    } catch (error) {
+      console.error('Error fetching opportunities:', error);
+      res.status(500).json({ error: 'Failed to fetch opportunities' });
+    }
+  });
+
+  app.post('/api/crm/opportunities', async (req, res) => {
+    try {
+      const opportunity = await storage.createOpportunity(req.body);
+      res.json(opportunity);
+    } catch (error) {
+      console.error('Error creating opportunity:', error);
+      res.status(500).json({ error: 'Failed to create opportunity' });
+    }
+  });
+
+  app.patch('/api/crm/opportunities/:id', async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const opportunity = await storage.updateOpportunity(id, req.body);
+      res.json(opportunity);
+    } catch (error) {
+      console.error('Error updating opportunity:', error);
+      res.status(500).json({ error: 'Failed to update opportunity' });
+    }
+  });
+
+  // Deal routes
+  app.get('/api/crm/deals', async (req, res) => {
+    try {
+      const deals = await storage.getAllDeals();
+      res.json(deals);
+    } catch (error) {
+      console.error('Error fetching deals:', error);
+      res.status(500).json({ error: 'Failed to fetch deals' });
+    }
+  });
+
+  app.post('/api/crm/deals', async (req, res) => {
+    try {
+      const deal = await storage.createDeal(req.body);
+      res.json(deal);
+    } catch (error) {
+      console.error('Error creating deal:', error);
+      res.status(500).json({ error: 'Failed to create deal' });
+    }
+  });
+
+  app.patch('/api/crm/deals/:id', async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const deal = await storage.updateDeal(id, req.body);
+      res.json(deal);
+    } catch (error) {
+      console.error('Error updating deal:', error);
+      res.status(500).json({ error: 'Failed to update deal' });
+    }
+  });
+
+  // Target List routes
+  app.get('/api/crm/target-lists', async (req, res) => {
+    try {
+      const lists = await storage.getAllTargetLists();
+      res.json(lists);
+    } catch (error) {
+      console.error('Error fetching target lists:', error);
+      res.status(500).json({ error: 'Failed to fetch target lists' });
+    }
+  });
+
+  app.post('/api/crm/target-lists', async (req, res) => {
+    try {
+      const list = await storage.createTargetList(req.body);
+      res.json(list);
+    } catch (error) {
+      console.error('Error creating target list:', error);
+      res.status(500).json({ error: 'Failed to create target list' });
+    }
+  });
+
+  app.patch('/api/crm/target-lists/:id', async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const list = await storage.updateTargetList(id, req.body);
+      res.json(list);
+    } catch (error) {
+      console.error('Error updating target list:', error);
+      res.status(500).json({ error: 'Failed to update target list' });
+    }
+  });
+
+  app.delete('/api/crm/target-lists/:id', async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteTargetList(id);
+      res.json({ success: true });
+    } catch (error) {
+      console.error('Error deleting target list:', error);
+      res.status(500).json({ error: 'Failed to delete target list' });
+    }
+  });
+
+  app.post('/api/crm/target-lists/:id/firms', async (req, res) => {
+    try {
+      const listId = parseInt(req.params.id);
+      const { firmIds } = req.body;
+      await storage.addFirmsToTargetList(listId, firmIds);
+      res.json({ success: true });
+    } catch (error) {
+      console.error('Error adding firms to target list:', error);
+      res.status(500).json({ error: 'Failed to add firms to target list' });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

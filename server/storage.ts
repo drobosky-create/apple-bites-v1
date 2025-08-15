@@ -5,6 +5,13 @@ import {
   teamMembers,
   teamSessions,
   users,
+  firms,
+  contacts,
+  opportunities,
+  deals,
+  targetLists,
+  targetListItems,
+  milestones,
   type ValuationAssessment, 
   type InsertValuationAssessment,
   type Lead,
@@ -16,10 +23,24 @@ import {
   type TeamSession,
   type User,
   type InsertUser,
-  type UpsertUser
+  type UpsertUser,
+  type Firm,
+  type InsertFirm,
+  type Contact,
+  type InsertContact,
+  type Opportunity,
+  type InsertOpportunity,
+  type Deal,
+  type InsertDeal,
+  type TargetList,
+  type InsertTargetList,
+  type TargetListItem,
+  type InsertTargetListItem,
+  type Milestone,
+  type InsertMilestone
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, desc, and, inArray } from "drizzle-orm";
+import { eq, desc, and, inArray, ilike, or } from "drizzle-orm";
 import { goHighLevelService } from "./gohighlevel-service";
 
 export interface IStorage {
@@ -69,6 +90,55 @@ export interface IStorage {
   getTeamSession(sessionId: string): Promise<TeamSession | undefined>;
   updateTeamSession(sessionId: string, expiresAt: Date): Promise<void>;
   deleteTeamSession(sessionId: string): Promise<void>;
+
+  // CRM Firm methods
+  createFirm(firm: InsertFirm): Promise<Firm>;
+  getFirm(id: number): Promise<Firm | undefined>;
+  updateFirm(id: number, updates: Partial<Firm>): Promise<Firm>;
+  deleteFirm(id: number): Promise<void>;
+  getAllFirms(): Promise<Firm[]>;
+  searchFirms(query: string): Promise<Firm[]>;
+
+  // CRM Contact methods
+  createContact(contact: InsertContact): Promise<Contact>;
+  getContact(id: number): Promise<Contact | undefined>;
+  updateContact(id: number, updates: Partial<Contact>): Promise<Contact>;
+  deleteContact(id: number): Promise<void>;
+  getAllContacts(): Promise<Contact[]>;
+  getContactsByFirm(firmId: number): Promise<Contact[]>;
+
+  // CRM Opportunity methods
+  createOpportunity(opportunity: InsertOpportunity): Promise<Opportunity>;
+  getOpportunity(id: number): Promise<Opportunity | undefined>;
+  updateOpportunity(id: number, updates: Partial<Opportunity>): Promise<Opportunity>;
+  deleteOpportunity(id: number): Promise<void>;
+  getAllOpportunities(): Promise<Opportunity[]>;
+  getOpportunitiesByStage(stage: string): Promise<Opportunity[]>;
+
+  // CRM Deal methods
+  createDeal(deal: InsertDeal): Promise<Deal>;
+  getDeal(id: number): Promise<Deal | undefined>;
+  updateDeal(id: number, updates: Partial<Deal>): Promise<Deal>;
+  deleteDeal(id: number): Promise<void>;
+  getAllDeals(): Promise<Deal[]>;
+  getDealsByStage(stage: string): Promise<Deal[]>;
+
+  // CRM Target List methods
+  createTargetList(targetList: InsertTargetList): Promise<TargetList>;
+  getTargetList(id: number): Promise<TargetList | undefined>;
+  updateTargetList(id: number, updates: Partial<TargetList>): Promise<TargetList>;
+  deleteTargetList(id: number): Promise<void>;
+  getAllTargetLists(): Promise<TargetList[]>;
+  addFirmsToTargetList(listId: number, firmIds: number[]): Promise<void>;
+  removeFirmFromTargetList(listId: number, firmId: number): Promise<void>;
+  getTargetListItems(listId: number): Promise<TargetListItem[]>;
+
+  // CRM Milestone methods
+  createMilestone(milestone: InsertMilestone): Promise<Milestone>;
+  getMilestone(id: number): Promise<Milestone | undefined>;
+  updateMilestone(id: number, updates: Partial<Milestone>): Promise<Milestone>;
+  deleteMilestone(id: number): Promise<void>;
+  getMilestonesByDeal(dealId: number): Promise<Milestone[]>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -419,6 +489,259 @@ export class DatabaseStorage implements IStorage {
     }
 
     return user;
+  }
+
+  // ===== CRM METHODS =====
+
+  // Firm methods
+  async createFirm(insertFirm: InsertFirm): Promise<Firm> {
+    const [firm] = await db
+      .insert(firms)
+      .values(insertFirm)
+      .returning();
+    return firm;
+  }
+
+  async getFirm(id: number): Promise<Firm | undefined> {
+    const [firm] = await db.select().from(firms).where(eq(firms.id, id));
+    return firm;
+  }
+
+  async updateFirm(id: number, updates: Partial<Firm>): Promise<Firm> {
+    const [firm] = await db
+      .update(firms)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(firms.id, id))
+      .returning();
+    return firm;
+  }
+
+  async deleteFirm(id: number): Promise<void> {
+    await db.delete(firms).where(eq(firms.id, id));
+  }
+
+  async getAllFirms(): Promise<Firm[]> {
+    return await db.select().from(firms).orderBy(desc(firms.createdAt));
+  }
+
+  async searchFirms(query: string): Promise<Firm[]> {
+    const searchTerm = `%${query}%`;
+    return await db.select().from(firms)
+      .where(
+        or(
+          ilike(firms.name, searchTerm),
+          ilike(firms.type, searchTerm),
+          ilike(firms.region, searchTerm)
+        )
+      )
+      .orderBy(desc(firms.createdAt));
+  }
+
+  // Contact methods
+  async createContact(insertContact: InsertContact): Promise<Contact> {
+    const [contact] = await db
+      .insert(contacts)
+      .values(insertContact)
+      .returning();
+    return contact;
+  }
+
+  async getContact(id: number): Promise<Contact | undefined> {
+    const [contact] = await db.select().from(contacts).where(eq(contacts.id, id));
+    return contact;
+  }
+
+  async updateContact(id: number, updates: Partial<Contact>): Promise<Contact> {
+    const [contact] = await db
+      .update(contacts)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(contacts.id, id))
+      .returning();
+    return contact;
+  }
+
+  async deleteContact(id: number): Promise<void> {
+    await db.delete(contacts).where(eq(contacts.id, id));
+  }
+
+  async getAllContacts(): Promise<Contact[]> {
+    return await db.select().from(contacts).orderBy(desc(contacts.createdAt));
+  }
+
+  async getContactsByFirm(firmId: number): Promise<Contact[]> {
+    return await db.select().from(contacts)
+      .where(eq(contacts.firmId, firmId))
+      .orderBy(desc(contacts.createdAt));
+  }
+
+  // Opportunity methods
+  async createOpportunity(insertOpportunity: InsertOpportunity): Promise<Opportunity> {
+    const [opportunity] = await db
+      .insert(opportunities)
+      .values(insertOpportunity)
+      .returning();
+    return opportunity;
+  }
+
+  async getOpportunity(id: number): Promise<Opportunity | undefined> {
+    const [opportunity] = await db.select().from(opportunities).where(eq(opportunities.id, id));
+    return opportunity;
+  }
+
+  async updateOpportunity(id: number, updates: Partial<Opportunity>): Promise<Opportunity> {
+    const [opportunity] = await db
+      .update(opportunities)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(opportunities.id, id))
+      .returning();
+    return opportunity;
+  }
+
+  async deleteOpportunity(id: number): Promise<void> {
+    await db.delete(opportunities).where(eq(opportunities.id, id));
+  }
+
+  async getAllOpportunities(): Promise<Opportunity[]> {
+    return await db.select().from(opportunities).orderBy(desc(opportunities.createdAt));
+  }
+
+  async getOpportunitiesByStage(stage: string): Promise<Opportunity[]> {
+    return await db.select().from(opportunities)
+      .where(eq(opportunities.stage, stage))
+      .orderBy(desc(opportunities.createdAt));
+  }
+
+  // Deal methods
+  async createDeal(insertDeal: InsertDeal): Promise<Deal> {
+    const [deal] = await db
+      .insert(deals)
+      .values(insertDeal)
+      .returning();
+    return deal;
+  }
+
+  async getDeal(id: number): Promise<Deal | undefined> {
+    const [deal] = await db.select().from(deals).where(eq(deals.id, id));
+    return deal;
+  }
+
+  async updateDeal(id: number, updates: Partial<Deal>): Promise<Deal> {
+    const [deal] = await db
+      .update(deals)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(deals.id, id))
+      .returning();
+    return deal;
+  }
+
+  async deleteDeal(id: number): Promise<void> {
+    await db.delete(deals).where(eq(deals.id, id));
+  }
+
+  async getAllDeals(): Promise<Deal[]> {
+    return await db.select().from(deals).orderBy(desc(deals.createdAt));
+  }
+
+  async getDealsByStage(stage: string): Promise<Deal[]> {
+    return await db.select().from(deals)
+      .where(eq(deals.stage, stage))
+      .orderBy(desc(deals.createdAt));
+  }
+
+  // Target List methods
+  async createTargetList(insertTargetList: InsertTargetList): Promise<TargetList> {
+    const [targetList] = await db
+      .insert(targetLists)
+      .values(insertTargetList)
+      .returning();
+    return targetList;
+  }
+
+  async getTargetList(id: number): Promise<TargetList | undefined> {
+    const [targetList] = await db.select().from(targetLists).where(eq(targetLists.id, id));
+    return targetList;
+  }
+
+  async updateTargetList(id: number, updates: Partial<TargetList>): Promise<TargetList> {
+    const [targetList] = await db
+      .update(targetLists)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(targetLists.id, id))
+      .returning();
+    return targetList;
+  }
+
+  async deleteTargetList(id: number): Promise<void> {
+    // Delete associated items first
+    await db.delete(targetListItems).where(eq(targetListItems.targetListId, id));
+    await db.delete(targetLists).where(eq(targetLists.id, id));
+  }
+
+  async getAllTargetLists(): Promise<TargetList[]> {
+    return await db.select().from(targetLists).orderBy(desc(targetLists.createdAt));
+  }
+
+  async addFirmsToTargetList(listId: number, firmIds: number[]): Promise<void> {
+    if (firmIds.length === 0) return;
+    
+    const items = firmIds.map(firmId => ({
+      targetListId: listId,
+      firmId,
+      status: 'Identified' as const,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    }));
+
+    await db.insert(targetListItems).values(items);
+  }
+
+  async removeFirmFromTargetList(listId: number, firmId: number): Promise<void> {
+    await db.delete(targetListItems)
+      .where(
+        and(
+          eq(targetListItems.targetListId, listId),
+          eq(targetListItems.firmId, firmId)
+        )
+      );
+  }
+
+  async getTargetListItems(listId: number): Promise<TargetListItem[]> {
+    return await db.select().from(targetListItems)
+      .where(eq(targetListItems.targetListId, listId))
+      .orderBy(desc(targetListItems.createdAt));
+  }
+
+  // Milestone methods
+  async createMilestone(insertMilestone: InsertMilestone): Promise<Milestone> {
+    const [milestone] = await db
+      .insert(milestones)
+      .values(insertMilestone)
+      .returning();
+    return milestone;
+  }
+
+  async getMilestone(id: number): Promise<Milestone | undefined> {
+    const [milestone] = await db.select().from(milestones).where(eq(milestones.id, id));
+    return milestone;
+  }
+
+  async updateMilestone(id: number, updates: Partial<Milestone>): Promise<Milestone> {
+    const [milestone] = await db
+      .update(milestones)
+      .set(updates)
+      .where(eq(milestones.id, id))
+      .returning();
+    return milestone;
+  }
+
+  async deleteMilestone(id: number): Promise<void> {
+    await db.delete(milestones).where(eq(milestones.id, id));
+  }
+
+  async getMilestonesByDeal(dealId: number): Promise<Milestone[]> {
+    return await db.select().from(milestones)
+      .where(eq(milestones.dealId, dealId))
+      .orderBy(milestones.date);
   }
 }
 

@@ -370,3 +370,277 @@ export type EbitdaData = z.infer<typeof ebitdaSchema>;
 export type AdjustmentsData = z.infer<typeof adjustmentsSchema>;
 export type ValueDriversData = z.infer<typeof valueDriversSchema>;
 export type FollowUpData = z.infer<typeof followUpSchema>;
+
+// ===== CRM ENTITIES =====
+
+// Firms table for managing PE/FO/Strategic/Advisor companies
+export const firms = pgTable("firms", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+  type: text("type").notNull(), // "PE", "FO", "Strategic", "Advisor", "Other"
+  website: varchar("website", { length: 255 }),
+  hqRegion: varchar("hq_region", { length: 100 }),
+  aum: decimal("aum", { precision: 15, scale: 2 }), // Assets Under Management
+  size: varchar("size", { length: 50 }), // "Small", "Mid", "Large"
+  naicsFocus: text("naics_focus").array(), // Array of NAICS codes
+  checkSizeMin: decimal("check_size_min", { precision: 15, scale: 2 }),
+  checkSizeMax: decimal("check_size_max", { precision: 15, scale: 2 }),
+  notes: text("notes"),
+  tags: text("tags").array(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Contacts table for managing individual people at firms
+export const contacts = pgTable("contacts", {
+  id: serial("id").primaryKey(),
+  firstName: varchar("first_name", { length: 100 }).notNull(),
+  lastName: varchar("last_name", { length: 100 }).notNull(),
+  email: varchar("email", { length: 255 }).unique(),
+  phone: varchar("phone", { length: 50 }),
+  title: varchar("title", { length: 150 }),
+  firmId: integer("firm_id").references(() => firms.id),
+  
+  // Assignment state (mutually exclusive)
+  opportunityId: integer("opportunity_id"), // Will reference opportunities.id
+  dealId: integer("deal_id"), // Will reference deals.id
+  
+  relationships: text("relationships").array(), // Array of relationship types
+  notes: text("notes"),
+  tags: text("tags").array(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Opportunities table for pre-LOI prospects
+export const opportunities = pgTable("opportunities", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+  sellerFirmId: integer("seller_firm_id").references(() => firms.id),
+  stage: text("stage").notNull().default("Prospect"), // "Prospect", "Qualified", "Pitch"
+  ownerId: varchar("owner_id").references(() => teamMembers.id),
+  probability: integer("probability").default(0), // 0-100%
+  valuationMin: decimal("valuation_min", { precision: 15, scale: 2 }),
+  valuationMax: decimal("valuation_max", { precision: 15, scale: 2 }),
+  expectedCloseDate: timestamp("expected_close_date"),
+  tags: text("tags").array(),
+  notes: text("notes"),
+  
+  // Link to assessment if created from Apple Bites
+  assessmentId: integer("assessment_id").references(() => valuationAssessments.id),
+  readinessScore: text("readiness_score"), // A-F grade from assessment
+  
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Deals table for post-LOI transactions
+export const deals = pgTable("deals", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+  type: text("type").notNull(), // "Sell", "Buy"
+  stage: text("stage").notNull().default("LOI"), // "LOI", "Diligence", "Closing"
+  ownerId: varchar("owner_id").references(() => teamMembers.id),
+  probability: integer("probability").default(50), // 0-100%
+  valuationMin: decimal("valuation_min", { precision: 15, scale: 2 }),
+  valuationMax: decimal("valuation_max", { precision: 15, scale: 2 }),
+  
+  // Fee tracking
+  engagementFeeAmount: decimal("engagement_fee_amount", { precision: 15, scale: 2 }),
+  successFeeType: text("success_fee_type"), // "%", "fixed", "tiered"
+  successFeeValue: decimal("success_fee_value", { precision: 8, scale: 4 }), // % as decimal or fixed amount
+  feeNotes: text("fee_notes"),
+  
+  expectedCloseDate: timestamp("expected_close_date"),
+  tags: text("tags").array(),
+  notes: text("notes"),
+  
+  // Link back to originating opportunity
+  sourceOpportunityId: integer("source_opportunity_id").references(() => opportunities.id),
+  
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Target Lists for organizing firms
+export const targetLists = pgTable("target_lists", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+  description: text("description"),
+  ownerId: varchar("owner_id").references(() => teamMembers.id),
+  tags: text("tags").array(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Join table for target list items with status tracking
+export const targetListItems = pgTable("target_list_items", {
+  id: serial("id").primaryKey(),
+  targetListId: integer("target_list_id").notNull().references(() => targetLists.id, { onDelete: "cascade" }),
+  firmId: integer("firm_id").notNull().references(() => firms.id, { onDelete: "cascade" }),
+  status: text("status").notNull().default("Identified"), // "Identified", "Contacted", "NDA", "Teaser Sent", "IOI", "Passed", "Active"
+  lastActivityAt: timestamp("last_activity_at"),
+  notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Milestones for deal tracking
+export const milestones = pgTable("milestones", {
+  id: serial("id").primaryKey(),
+  dealId: integer("deal_id").notNull().references(() => deals.id, { onDelete: "cascade" }),
+  type: text("type").notNull(), // "LOI Signed", "CIM Distributed", "Mgmt Call", "QA Delivered", "SPA Drafted", "Close"
+  date: timestamp("date").notNull(),
+  ownerId: varchar("owner_id").references(() => teamMembers.id),
+  notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// ===== CRM RELATIONS =====
+
+export const firmsRelations = relations(firms, ({ many }) => ({
+  contacts: many(contacts),
+  opportunities: many(opportunities),
+  targetListItems: many(targetListItems),
+}));
+
+export const contactsRelations = relations(contacts, ({ one }) => ({
+  firm: one(firms, {
+    fields: [contacts.firmId],
+    references: [firms.id],
+  }),
+  opportunity: one(opportunities, {
+    fields: [contacts.opportunityId],
+    references: [opportunities.id],
+  }),
+  deal: one(deals, {
+    fields: [contacts.dealId],
+    references: [deals.id],
+  }),
+}));
+
+export const opportunitiesRelations = relations(opportunities, ({ one, many }) => ({
+  sellerFirm: one(firms, {
+    fields: [opportunities.sellerFirmId],
+    references: [firms.id],
+  }),
+  owner: one(teamMembers, {
+    fields: [opportunities.ownerId],
+    references: [teamMembers.id],
+  }),
+  assessment: one(valuationAssessments, {
+    fields: [opportunities.assessmentId],
+    references: [valuationAssessments.id],
+  }),
+  assignedContacts: many(contacts),
+  deals: many(deals),
+}));
+
+export const dealsRelations = relations(deals, ({ one, many }) => ({
+  owner: one(teamMembers, {
+    fields: [deals.ownerId],
+    references: [teamMembers.id],
+  }),
+  sourceOpportunity: one(opportunities, {
+    fields: [deals.sourceOpportunityId],
+    references: [opportunities.id],
+  }),
+  assignedContacts: many(contacts),
+  milestones: many(milestones),
+}));
+
+export const targetListsRelations = relations(targetLists, ({ one, many }) => ({
+  owner: one(teamMembers, {
+    fields: [targetLists.ownerId],
+    references: [teamMembers.id],
+  }),
+  items: many(targetListItems),
+}));
+
+export const targetListItemsRelations = relations(targetListItems, ({ one }) => ({
+  targetList: one(targetLists, {
+    fields: [targetListItems.targetListId],
+    references: [targetLists.id],
+  }),
+  firm: one(firms, {
+    fields: [targetListItems.firmId],
+    references: [firms.id],
+  }),
+}));
+
+export const milestonesRelations = relations(milestones, ({ one }) => ({
+  deal: one(deals, {
+    fields: [milestones.dealId],
+    references: [deals.id],
+  }),
+  owner: one(teamMembers, {
+    fields: [milestones.ownerId],
+    references: [teamMembers.id],
+  }),
+}));
+
+// ===== CRM SCHEMAS =====
+
+export const insertFirmSchema = createInsertSchema(firms).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertContactSchema = createInsertSchema(contacts).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertOpportunitySchema = createInsertSchema(opportunities).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertDealSchema = createInsertSchema(deals).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertTargetListSchema = createInsertSchema(targetLists).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertTargetListItemSchema = createInsertSchema(targetListItems).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertMilestoneSchema = createInsertSchema(milestones).omit({
+  id: true,
+  createdAt: true,
+});
+
+// ===== CRM TYPES =====
+
+export type Firm = typeof firms.$inferSelect;
+export type InsertFirm = z.infer<typeof insertFirmSchema>;
+
+export type Contact = typeof contacts.$inferSelect;
+export type InsertContact = z.infer<typeof insertContactSchema>;
+
+export type Opportunity = typeof opportunities.$inferSelect;
+export type InsertOpportunity = z.infer<typeof insertOpportunitySchema>;
+
+export type Deal = typeof deals.$inferSelect;
+export type InsertDeal = z.infer<typeof insertDealSchema>;
+
+export type TargetList = typeof targetLists.$inferSelect;
+export type InsertTargetList = z.infer<typeof insertTargetListSchema>;
+
+export type TargetListItem = typeof targetListItems.$inferSelect;
+export type InsertTargetListItem = z.infer<typeof insertTargetListItemSchema>;
+
+export type Milestone = typeof milestones.$inferSelect;
+export type InsertMilestone = z.infer<typeof insertMilestoneSchema>;

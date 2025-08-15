@@ -106,6 +106,16 @@ function Router() {
           <Route path="/admin/team" component={AdminLoginPage} />
           <Route path="/team" component={TeamDashboard} />
           
+          {/* CRM Module - protected */}
+          <Route path="/crm/deals">
+            {isAuthenticated ? 
+              <Suspense fallback={<div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Loading CRM...</div>}>
+                {React.createElement(lazy(() => import("./pages/crm/deals")))}
+              </Suspense>
+              : <LoginPage />
+            }
+          </Route>
+          
           {/* Fallback - redirect to login if not authenticated */}
           <Route>
             {isAuthenticated ? <Dashboard /> : <LoginPage />}
