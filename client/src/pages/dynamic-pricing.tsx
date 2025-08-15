@@ -133,7 +133,7 @@ export default function DynamicPricingPage() {
     },
     {
       name: 'Growth & Exit Assessment',
-      price: growthProduct?.price ? `$${(growthProduct.price.amount / 100).toLocaleString()}` : '$795',
+      price: growthProduct?.price ? `$${(growthProduct.price.amount / 100).toLocaleString()}` : '$1,995',
       description: 'Comprehensive analysis for business growth and exit planning',
       features: [
         'Industry-specific NAICS valuation analysis',

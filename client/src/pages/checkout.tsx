@@ -32,12 +32,34 @@ export default function Checkout() {
 
   // Get product from URL params
   const urlParams = new URLSearchParams(window.location.search);
-  const productId = urlParams.get('product') || '';
+  const tier = urlParams.get('tier') || 'growth';
+  const priceId = urlParams.get('priceId') || '';
   
-  // Define tier and amount
-  const tier = 'growth';
-  const baseAmount = 79500; // $795.00 in cents
+  // Define tier and amount - fetch dynamically from Stripe if priceId is provided
+  const [priceDetails, setPriceDetails] = useState<{amount: number; name: string} | null>(null);
+  const baseAmount = priceDetails?.amount || 199500; // $1,995.00 in cents fallback
   const finalAmount = baseAmount - discount;
+
+  // Fetch price details from Stripe if priceId is provided
+  useEffect(() => {
+    if (priceId) {
+      const fetchPriceDetails = async () => {
+        try {
+          const response = await apiRequest('GET', `/api/stripe/price/${priceId}`);
+          const data = await response.json();
+          setPriceDetails({ amount: data.unit_amount, name: data.nickname || tier });
+        } catch (error) {
+          console.error('Failed to fetch price details:', error);
+          // Use fallback pricing
+          setPriceDetails({ amount: 199500, name: 'Growth & Exit Assessment' });
+        }
+      };
+      fetchPriceDetails();
+    } else {
+      // Use default pricing
+      setPriceDetails({ amount: 199500, name: 'Growth & Exit Assessment' });
+    }
+  }, [priceId, tier]);
 
   // Function to apply coupon using Stripe
   const applyCoupon = async () => {
@@ -162,7 +184,7 @@ export default function Checkout() {
             <Box sx={{ p: 2, bgcolor: '#F9FAFB', borderRadius: 1, mb: 2 }}>
               <Box display="flex" justifyContent="space-between" mb={1}>
                 <MDTypography variant="body2">
-                  Growth & Exit Assessment
+                  {priceDetails?.name || 'Growth & Exit Assessment'}
                 </MDTypography>
                 <MDTypography variant="body2">
                   ${(baseAmount / 100).toFixed(2)}

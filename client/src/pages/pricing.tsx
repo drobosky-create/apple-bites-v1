@@ -96,7 +96,7 @@ export default function PricingPage() {
     },
     {
       name: 'Growth & Exit Assessment',
-      price: growthProduct?.price ? formatPrice(growthProduct.price.amount, growthProduct.price.currency) : '$795',
+      price: growthProduct?.price ? formatPrice(growthProduct.price.amount, growthProduct.price.currency) : '$1,995',
       description: 'Comprehensive analysis for business growth and exit planning',
       features: [
         'Industry-specific NAICS valuation analysis',

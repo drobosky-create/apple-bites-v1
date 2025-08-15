@@ -82,7 +82,7 @@ export default function AssessmentHeader({ title, subtitle, tier, features }: As
                 border: '1px solid #059669'
               }}
             >
-              $795 Premium Tier
+              $1,995 Premium Tier
             </MDBox>
           ) : (
             <MDBox

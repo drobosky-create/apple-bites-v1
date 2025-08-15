@@ -368,7 +368,7 @@ export default function LandingPage() {
                       Growth & Exit
                     </Typography>
                     <Typography variant="h2" sx={{ color: '#333', fontWeight: 'bold', mb: 3 }}>
-                      $795
+                      $1,995
                     </Typography>
                     
                     <Box sx={{ mb: 4, textAlign: 'left', minHeight: '140px' }}>

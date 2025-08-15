@@ -2452,6 +2452,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
     });
 
+    // Get individual price details
+    app.get('/api/stripe/price/:priceId', async (req, res) => {
+      try {
+        const { priceId } = req.params;
+        const price = await stripe.prices.retrieve(priceId);
+        res.json(price);
+      } catch (error: any) {
+        console.error('Error fetching price:', error);
+        res.status(404).json({ error: 'Price not found' });
+      }
+    });
+
     // Stripe coupon validation endpoint with demo fallback
     app.post('/api/validate-coupon', async (req, res) => {
       try {

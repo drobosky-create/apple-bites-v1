@@ -10,6 +10,9 @@ This is a full-stack web application for Meritage Partners, designed as the foun
 - Added cache invalidation headers and query configuration to ensure fresh pricing data
 - Added manual pricing refresh endpoint for testing: `/api/stripe/refresh-pricing`
 - Pricing page now automatically reflects all Stripe dashboard price changes in real-time
+- Updated pricing detected: Growth & Exit Assessment now $1,995 (was $795) with new price ID automatically captured
+- Fixed all hardcoded $795 references across 6+ files (checkout, pricing pages, landing page, etc.)
+- Checkout system now dynamically fetches pricing from Stripe to ensure accuracy
 **✅ COMPLETED: Streamlined GoHighLevel Integration (August 14, 2025)**
 - Eliminated triple redundancy in GHL integration by switching to pure API-only approach
 - Removed legacy webhook-based assessment processing in favor of comprehensive REST API calls

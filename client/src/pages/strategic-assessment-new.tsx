@@ -671,7 +671,7 @@ export default function GrowthExitAssessment() {
               boxShadow: '0 2px 8px rgba(70, 130, 180, 0.3)'
             }}
           >
-            $795 Premium Tier
+            $1,995 Premium Tier
           </MDBox>
         </MDBox>
 
