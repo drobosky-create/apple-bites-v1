@@ -15,7 +15,7 @@ import {
 } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { MDButton } from '@/components/MD/MDButton';
+import MDButton from '@/components/MD/MDButton';
 import { apiRequest } from '@/lib/queryClient';
 
 interface Lead {

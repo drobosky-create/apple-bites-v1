@@ -115,12 +115,9 @@ function Router() {
             }
           </Route>
           <Route path="/workspace">
-            {isAuthenticated ? 
-              <Suspense fallback={<div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Loading Workspace...</div>}>
-                {React.createElement(lazy(() => import("./pages/workspace/WorkspaceLayout")))}
-              </Suspense>
-              : <LoginPage />
-            }
+            <Suspense fallback={<div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Loading Workspace...</div>}>
+              {React.createElement(lazy(() => import("./pages/workspace/WorkspaceLayout")))}
+            </Suspense>
           </Route>
 
           {/* Admin/Team pages - self-authenticated */}

@@ -1,16 +1,45 @@
 import React from "react";
 import { Switch, Route, Link, useLocation } from "wouter";
 import { Box, Tabs, Tab } from "@mui/material";
-import { CRMDashboard, VDRDashboard, TeamDashboard, AssessmentAdmin } from "lucide-react";
+import { useAdminAuth } from "@/hooks/use-admin-auth";
+import { useTeamAuth } from "@/hooks/use-team-auth";
 import MDBox from "@/components/MD/MDBox";
 import MDTypography from "@/components/MD/MDTypography";
 import CRMModule from "./CRMModule";
 import VDRModule from "./VDRModule";
 import TeamModule from "./TeamModule";
 import AssessmentAdminModule from "./AssessmentAdminModule";
+import AdminLoginPage from "@/pages/admin-login";
 
 export default function WorkspaceLayout() {
+  const { isAuthenticated: isAdminAuth, isLoading: adminLoading } = useAdminAuth();
+  const { isAuthenticated: isTeamAuth, isLoading: teamLoading } = useTeamAuth();
   const [location, setLocation] = useLocation();
+  
+  // Check if user has workspace access (admin or team member)
+  const hasWorkspaceAccess = isAdminAuth || isTeamAuth;
+  const isLoading = adminLoading || teamLoading;
+  
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div style={{ 
+        minHeight: '100vh', 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center',
+        background: 'linear-gradient(135deg, #0A1F44 0%, #1B2C4F 100%)',
+        color: 'white'
+      }}>
+        Loading workspace...
+      </div>
+    );
+  }
+  
+  // Redirect to admin login if not authenticated
+  if (!hasWorkspaceAccess) {
+    return <AdminLoginPage />;
+  }
   
   // Determine active tab from current route
   const getActiveTab = () => {
