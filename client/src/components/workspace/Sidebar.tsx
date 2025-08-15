@@ -1,103 +1,42 @@
 import React from 'react';
 import { useLocation } from 'wouter';
-import { Drawer, List, ListItemButton, ListItemText, ListItemIcon } from '@mui/material';
-import { Dashboard, Assignment, People, Assessment } from '@mui/icons-material';
-import MDBox from '@/components/MD/MDBox';
-import MDTypography from '@/components/MD/MDTypography';
+import { NAV_PERMS, can, type Role } from '@/lib/rbac';
 
-const sidebarItems = [
-  { 
-    to: '/workspace/crm', 
-    label: 'CRM', 
-    icon: Dashboard,
-    roles: ['analyst', 'manager', 'admin'] 
-  },
-  { 
-    to: '/workspace/vdr', 
-    label: 'VDR', 
-    icon: Assignment,
-    roles: ['manager', 'admin'] 
-  },
-  { 
-    to: '/workspace/team', 
-    label: 'Team', 
-    icon: People,
-    roles: ['admin'] 
-  },
-  { 
-    to: '/workspace/assessments', 
-    label: 'Assessments', 
-    icon: Assessment,
-    roles: ['analyst', 'manager', 'admin'] 
-  },
-];
+const items = [
+  { key: 'crm', icon: '📇', to: '/workspace/crm' },
+  { key: 'vdr', icon: '📁', to: '/workspace/vdr' },
+  { key: 'team', icon: '👥', to: '/workspace/team' },
+  { key: 'assessments', icon: '📊', to: '/workspace/assessments' },
+  { key: 'settings', icon: '⚙️', to: '/workspace/settings' },
+] as const;
 
 interface WorkspaceSidebarProps {
-  userRole?: string;
+  role?: Role;
 }
 
-export default function WorkspaceSidebar({ userRole = 'admin' }: WorkspaceSidebarProps) {
+export default function WorkspaceSidebar({ role = 'admin' }: WorkspaceSidebarProps) {
   const [location, setLocation] = useLocation();
-
-  const visibleItems = sidebarItems.filter(item => 
-    item.roles.includes(userRole)
-  );
-
+  
   return (
-    <Drawer
-      variant="permanent"
-      anchor="left"
-      PaperProps={{
-        sx: {
-          width: 240,
-          bgcolor: 'background.paper',
-          borderRight: '1px solid',
-          borderRightColor: 'divider',
-        }
-      }}
-    >
-      <MDBox p={2} sx={{ borderBottom: '1px solid', borderColor: 'divider' }}>
-        <MDTypography variant="h6" fontWeight="bold" color="text">
-          Internal Workspace
-        </MDTypography>
-        <MDTypography variant="caption" color="text.secondary">
-          Meritage Partners
-        </MDTypography>
-      </MDBox>
-      
-      <List sx={{ pt: 1 }}>
-        {visibleItems.map((item) => {
-          const IconComponent = item.icon;
-          const isActive = location.startsWith(item.to);
-          
-          return (
-            <ListItemButton
-              key={item.to}
-              onClick={() => setLocation(item.to)}
-              sx={{
-                mx: 1,
-                borderRadius: 1,
-                bgcolor: isActive ? 'primary.main' : 'transparent',
-                color: isActive ? 'primary.contrastText' : 'text.primary',
-                '&:hover': {
-                  bgcolor: isActive ? 'primary.dark' : 'action.hover',
-                },
-              }}
-            >
-              <ListItemIcon sx={{ color: 'inherit', minWidth: 36 }}>
-                <IconComponent fontSize="small" />
-              </ListItemIcon>
-              <ListItemText 
-                primary={item.label}
-                primaryTypographyProps={{
-                  fontSize: '0.875rem',
-                  fontWeight: isActive ? 600 : 400,
-                }}
-              />
-            </ListItemButton>
-          );
-        })}
-      </List>
-    </Drawer>
+    <aside className="w-64 shrink-0 border-r bg-white">
+      <div className="p-4 text-xl font-semibold">Internal Workspace</div>
+      <nav className="px-2 space-y-1">
+        {items
+          .filter(({ key }) => can(role, NAV_PERMS[key as keyof typeof NAV_PERMS].need))
+          .map(({ key, icon, to }) => {
+            const active = location.startsWith(to);
+            return (
+              <button
+                key={key}
+                onClick={() => setLocation(to)}
+                className={`flex items-center gap-3 rounded-xl px-3 py-2 hover:bg-gray-100 w-full text-left ${active ? 'bg-gray-100 font-medium' : ''}`}
+              >
+                <span className="text-lg">{icon}</span>
+                <span>{NAV_PERMS[key as any].label}</span>
+              </button>
+            );
+          })}
+      </nav>
+    </aside>
   );
 }

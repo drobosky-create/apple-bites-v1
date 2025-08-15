@@ -19,7 +19,14 @@ const KanbanView = () => (
   </MDBox>
 );
 
-const LeadsView = () => <LeadsManagement />;
+const LeadsView = () => {
+  return (
+    <div className="space-y-4">
+      <h1 className="text-2xl font-semibold">Leads</h1>
+      <LeadsManagement />
+    </div>
+  );
+};
 
 const ListView = () => (
   <MDBox p={3}>

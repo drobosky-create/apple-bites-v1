@@ -1,0 +1,437 @@
+Below are drop‑in files/patches you can paste in exactly where indicated.
+
+1) RBAC model (server)
+/server/auth/rbac.ts
+// Role + permission definitions central source of truth
+export type Role = 'admin' | 'manager' | 'analyst' | 'viewer';
+
+export type Permission =
+  | 'lead.read'
+  | 'lead.create'
+  | 'lead.update'
+  | 'lead.delete'
+  | 'vdr.read'
+  | 'team.read'
+  | 'assess.read'
+  | 'settings.read';
+
+export const ROLE_PERMS: Record<Role, Permission[]> = {
+  admin: [
+    'lead.read','lead.create','lead.update','lead.delete',
+    'vdr.read','team.read','assess.read','settings.read'
+  ],
+  manager: [
+    'lead.read','lead.create','lead.update',
+    'vdr.read','team.read','assess.read'
+  ],
+  analyst: [
+    'lead.read','lead.create','lead.update',
+    'vdr.read','team.read','assess.read'
+  ],
+  viewer: ['lead.read','vdr.read','team.read','assess.read']
+};
+
+export const hasPerm = (role: Role, perm: Permission) =>
+  ROLE_PERMS[role]?.includes(perm) ?? false;
+
+/server/middleware/auth.ts
+import type { Request, Response, NextFunction } from 'express';
+import { hasPerm, type Permission, type Role } from '../auth/rbac';
+
+declare global {
+  namespace Express {
+    interface User {
+      id: string;
+      email: string;
+      role: Role;
+      name?: string;
+    }
+    interface Request {
+      user?: Express.User;
+    }
+  }
+}
+
+// Minimal auth for now: read role from header or session cookie
+export function requireAuth(req: Request, res: Response, next: NextFunction) {
+  // TODO: replace with real session/JWT. This unblocks dev now.
+  const role = (req.header('x-role') as Role) || (req as any).session?.role;
+  const email = req.header('x-user') || (req as any).session?.email;
+  if (!role || !email) return res.status(401).json({ error: 'Unauthorized' });
+  req.user = { id: email, email, role: role as Role, name: email.split('@')[0] };
+  next();
+}
+
+export function requirePerm(perm: Permission) {
+  return (req: Request, res: Response, next: NextFunction) => {
+    if (!req.user) return res.status(401).json({ error: 'Unauthorized' });
+    if (!hasPerm(req.user.role, perm))
+      return res.status(403).json({ error: 'Forbidden', need: perm });
+    next();
+  };
+}
+
+/server/routes/leads.ts
+import { Router } from 'express';
+import { requireAuth, requirePerm } from '../middleware/auth';
+import { z } from 'zod';
+import { db } from '../storage'; // your storage wrapper
+// If using Drizzle: import { leads } from '../db/schema';
+
+const router = Router();
+router.use(requireAuth);
+
+// List
+router.get('/', requirePerm('lead.read'), async (_req, res) => {
+  const rows = await db.leads.list(); // implement in storage
+  res.json(rows);
+});
+
+// Create
+const LeadCreate = z.object({
+  name: z.string().min(1),
+  company: z.string().min(1),
+  email: z.string().email().optional(),
+  phone: z.string().optional(),
+  status: z.enum(['new','qualified','proposal','won','lost']).default('new'),
+  naics: z.string().optional(),
+});
+router.post('/', requirePerm('lead.create'), async (req, res) => {
+  const parsed = LeadCreate.safeParse(req.body);
+  if (!parsed.success) return res.status(400).json(parsed.error);
+  const created = await db.leads.create(parsed.data);
+  res.status(201).json(created);
+});
+
+// Update
+const LeadUpdate = LeadCreate.partial();
+router.patch('/:id', requirePerm('lead.update'), async (req, res) => {
+  const parsed = LeadUpdate.safeParse(req.body);
+  if (!parsed.success) return res.status(400).json(parsed.error);
+  const updated = await db.leads.update(req.params.id, parsed.data);
+  res.json(updated);
+});
+
+// Delete
+router.delete('/:id', requirePerm('lead.delete'), async (req, res) => {
+  await db.leads.remove(req.params.id);
+  res.status(204).end();
+});
+
+export default router;
+
+
+In /server/index.ts (or wherever you mount routes):
+
+import leads from './routes/leads';
+app.use('/api/leads', leads);
+
+2) Storage layer (server)
+/server/storage.ts
+// Works whether schema columns are mid-migration or not
+// Replace with your DB impl (Drizzle/Prisma/Knex). Example shows generic SQL.
+import { sql } from './sql'; // thin wrapper around your pool
+
+type LeadRow = {
+  id: string;
+  name: string;
+  company: string;
+  email?: string | null;
+  phone?: string | null;
+  status: 'new'|'qualified'|'proposal'|'won'|'lost';
+  naics?: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export const db = {
+  leads: {
+    async list(): Promise<LeadRow[]> {
+      const { rows } = await sql<LeadRow>(`
+        SELECT id, name, company,
+               COALESCE(email, '') as email,
+               COALESCE(phone, '') as phone,
+               COALESCE(status, 'new') as status,
+               COALESCE(naics, '') as naics,
+               created_at, updated_at
+        FROM leads
+        ORDER BY created_at DESC
+      `);
+      return rows;
+    },
+    async create(data: Partial<LeadRow>): Promise<LeadRow> {
+      const { rows } = await sql<LeadRow>(`
+        INSERT INTO leads (name, company, email, phone, status, naics)
+        VALUES ($1,$2,$3,$4,$5,$6)
+        RETURNING id, name, company, email, phone, status, naics, created_at, updated_at
+      `, [data.name, data.company, data.email ?? null, data.phone ?? null, data.status ?? 'new', data.naics ?? null]);
+      return rows[0];
+    },
+    async update(id: string, data: Partial<LeadRow>): Promise<LeadRow> {
+      // Build dynamic set safely
+      const fields: string[] = [];
+      const vals: any[] = [];
+      let i = 1;
+      for (const [k, v] of Object.entries(data)) {
+        fields.push(`${k} = $${i++}`);
+        vals.push(v);
+      }
+      vals.push(id);
+      const { rows } = await sql<LeadRow>(`
+        UPDATE leads SET ${fields.join(', ')}, updated_at = NOW()
+        WHERE id = $${i}
+        RETURNING id, name, company, email, phone, status, naics, created_at, updated_at
+      `, vals);
+      return rows[0];
+    },
+    async remove(id: string) {
+      await sql(`DELETE FROM leads WHERE id = $1`, [id]);
+    }
+  }
+};
+
+3) Schema patch (database)
+
+In /shared/schema.ts (Drizzle) or your Prisma schema, ensure these fields exist.
+If you already pushed, verify default/enum values match.
+
+Drizzle (example)
+import { pgTable, uuid, text, timestamp } from 'drizzle-orm/pg-core';
+
+export const leads = pgTable('leads', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  name: text('name').notNull(),
+  company: text('company').notNull(),
+  email: text('email'),
+  phone: text('phone'),
+  status: text('status').notNull().default('new'), // keep text + app-level enum for flexibility
+  naics: text('naics'),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+});
+
+
+Command (in Replit terminal):
+
+cd /home/runner/workspace
+npm run db:push --force
+
+4) Client RBAC + navigation
+/client/src/lib/rbac.ts
+export type Role = 'admin' | 'manager' | 'analyst' | 'viewer';
+export type NavKey = 'crm' | 'vdr' | 'team' | 'assessments' | 'settings';
+
+export const NAV_PERMS: Record<NavKey, { label: string; need?: string }> = {
+  crm: { label: 'CRM', need: 'lead.read' },
+  vdr: { label: 'VDR', need: 'vdr.read' },
+  team: { label: 'Team', need: 'team.read' },
+  assessments: { label: 'Assessments', need: 'assess.read' },
+  settings: { label: 'Settings', need: 'settings.read' },
+};
+
+const ROLE_PERMS: Record<Role, string[]> = {
+  admin: ['lead.read','lead.create','lead.update','lead.delete','vdr.read','team.read','assess.read','settings.read'],
+  manager: ['lead.read','lead.create','lead.update','vdr.read','team.read','assess.read'],
+  analyst: ['lead.read','lead.create','lead.update','vdr.read','team.read','assess.read'],
+  viewer: ['lead.read','vdr.read','team.read','assess.read'],
+};
+
+export const can = (role: Role, perm?: string) => !perm || ROLE_PERMS[role]?.includes(perm);
+
+/client/src/components/workspace/Sidebar.tsx
+import { Link, useLocation } from 'react-router-dom';
+import { NAV_PERMS, can, type Role } from '@/lib/rbac';
+
+const items = [
+  { key: 'crm', icon: '📇', to: '/workspace/crm' },
+  { key: 'vdr', icon: '📁', to: '/workspace/vdr' },
+  { key: 'team', icon: '👥', to: '/workspace/team' },
+  { key: 'assessments', icon: '📊', to: '/workspace/assessments' },
+  { key: 'settings', icon: '⚙️', to: '/workspace/settings' },
+] as const;
+
+export function Sidebar({ role }: { role: Role }) {
+  const { pathname } = useLocation();
+  return (
+    <aside className="w-64 shrink-0 border-r bg-white">
+      <div className="p-4 text-xl font-semibold">TeamTrack</div>
+      <nav className="px-2 space-y-1">
+        {items
+          .filter(({ key }) => can(role, NAV_PERMS[key as keyof typeof NAV_PERMS].need))
+          .map(({ key, icon, to }) => {
+            const active = pathname.startsWith(to);
+            return (
+              <Link
+                key={key}
+                to={to}
+                className={`flex items-center gap-3 rounded-xl px-3 py-2 hover:bg-gray-100 ${active ? 'bg-gray-100 font-medium' : ''}`}
+              >
+                <span className="text-lg">{icon}</span>
+                <span>{NAV_PERMS[key as any].label}</span>
+              </Link>
+            );
+          })}
+      </nav>
+    </aside>
+  );
+}
+
+/client/src/pages/workspace/WorkspaceLayout.tsx
+import { Outlet, Navigate } from 'react-router-dom';
+import { Sidebar } from '@/components/workspace/Sidebar';
+import { useAuth } from '@/state/auth'; // your hook
+
+export default function WorkspaceLayout() {
+  const { user, loading } = useAuth();
+
+  if (loading) return <div className="p-8">Loading…</div>;
+  if (!user) return <Navigate to="/login" replace />;
+
+  return (
+    <div className="flex h-screen">
+      <Sidebar role={user.role} />
+      <main className="flex-1 overflow-auto bg-gray-50">
+        <div className="mx-auto max-w-7xl p-6">
+          <Outlet />
+        </div>
+      </main>
+    </div>
+  );
+}
+
+5) Lead data integration (client)
+/client/src/features/crm/api.ts
+export async function fetchLeads(): Promise<any[]> {
+  const res = await fetch('/api/leads', { headers: devHeaders() });
+  if (!res.ok) throw new Error('Failed to load leads');
+  return res.json();
+}
+export async function createLead(payload: any) {
+  const res = await fetch('/api/leads', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...devHeaders() },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) throw new Error('Failed to create lead');
+  return res.json();
+}
+// dev helper to simulate auth until real session is wired
+function devHeaders() {
+  const role = localStorage.getItem('role') || 'admin';
+  const email = localStorage.getItem('email') || 'admin@example.com';
+  return { 'x-role': role, 'x-user': email };
+}
+
+/client/src/features/crm/LeadTable.tsx
+import { useEffect, useState } from 'react';
+import { fetchLeads } from './api';
+
+export default function LeadTable() {
+  const [rows, setRows] = useState<any[]>([]);
+  const [err, setErr] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        const data = await fetchLeads();
+        if (mounted) setRows(data);
+      } catch (e:any) {
+        setErr(e.message);
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    })();
+    return () => { mounted = false; };
+  }, []);
+
+  if (loading) return <div>Loading leads…</div>;
+  if (err) return <div className="text-red-600">{err}</div>;
+
+  return (
+    <div className="overflow-x-auto rounded-xl border bg-white">
+      <table className="min-w-full text-sm">
+        <thead className="bg-gray-50">
+          <tr>
+            <th className="px-4 py-2 text-left">Name</th>
+            <th className="px-4 py-2 text-left">Company</th>
+            <th className="px-4 py-2">Status</th>
+            <th className="px-4 py-2">NAICS</th>
+            <th className="px-4 py-2">Email</th>
+            <th className="px-4 py-2">Phone</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((r) => (
+            <tr key={r.id} className="border-t">
+              <td className="px-4 py-2">{r.name}</td>
+              <td className="px-4 py-2">{r.company}</td>
+              <td className="px-4 py-2 text-center">{r.status}</td>
+              <td className="px-4 py-2 text-center">{r.naics || '—'}</td>
+              <td className="px-4 py-2">{r.email || '—'}</td>
+              <td className="px-4 py-2">{r.phone || '—'}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+/client/src/pages/workspace/crm/Index.tsx
+import LeadTable from '@/features/crm/LeadTable';
+
+export default function CRMIndex() {
+  return (
+    <div className="space-y-4">
+      <h1 className="text-2xl font-semibold">Leads</h1>
+      <LeadTable />
+    </div>
+  );
+}
+
+6) Route protection on the client
+/client/src/components/auth/RequireRole.tsx
+import { Navigate } from 'react-router-dom';
+import { useAuth } from '@/state/auth';
+import type { Role } from '@/lib/rbac';
+
+export function RequireRole({ allow, children }: { allow: Role[]; children: JSX.Element }) {
+  const { user, loading } = useAuth();
+  if (loading) return <div className="p-8">Loading…</div>;
+  if (!user) return <Navigate to="/login" replace />;
+  if (!allow.includes(user.role)) return <Navigate to="/workspace/crm" replace />;
+  return children;
+}
+
+
+Example usage in your router:
+
+{
+  path: '/workspace/settings',
+  element: (
+    <RequireRole allow={['admin']}>
+      <SettingsPage />
+    </RequireRole>
+  )
+}
+
+7) Smoke tests / dev checklist
+
+In Replit terminal (server running on 5000):
+
+curl -s -H "x-role: admin" -H "x-user: admin@example.com" http://localhost:5000/api/leads | head -3
+
+
+Expected: JSON array (even if empty), 200 OK.
+
+Quick verify in app:
+
+Visit /workspace → login → sidebar renders per role.
+
+localStorage.setItem('role', 'analyst') → refresh → “Settings” link should disappear.
+
+Go to CRM → leads table shows DB rows and updates after you create a lead.
+
+Switch role to viewer → POST to /api/leads should return 403 (verify via Network tab).
