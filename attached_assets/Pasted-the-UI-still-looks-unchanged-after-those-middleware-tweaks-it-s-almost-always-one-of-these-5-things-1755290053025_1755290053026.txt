@@ -1,0 +1,102 @@
+the UI still looks unchanged after those middleware tweaks, it’s almost always one of these 5 things. Here’s a tight checklist plus a safe, drop‑in server order you can compare against.
+
+Quick checks (60‑second triage)
+
+Are static files getting 200s (not 401/404)?
+curl -I http://localhost:5000/assets/index-*.css
+If you get 401, auth is still intercepting. If 404, wrong static dir or build missing.
+
+Did the client actually build?
+From /home/runner/workspace/client:
+npm run build && ls dist/assets | head
+If dist is empty, the server is serving nothing new.
+
+Is the SPA fallback swallowing /api?
+If your “catch‑all” app.get('*') comes before you mount /api, your API returns HTML.
+curl -I http://localhost:5000/api/leads should be Content-Type: application/json. If it’s text/html, move the catch‑all below the API.
+
+Cache bite?
+Hard refresh with cache bypass (Ctrl/Cmd‑Shift‑R) or:
+curl -I http://localhost:5000/workspace and check for Cache-Control. If assets are fingerprinted (e.g., index-abc123.css) but the HTML still references an old name, you’re serving an old HTML file.
+
+Dev vs prod paths.
+If you’re using Vite in dev, the app should proxy to /api. In prod, Express must serve client/dist. Mixing those states leads to “no visual change”.
+
+Known‑good Express order (copy/paste skeleton)
+
+This scopes auth to API‑only, serves static before any auth, mounts API before the SPA fallback, and works for both dev and prod.
+
+// server/index.ts
+import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import cors from 'cors';
+import routes from './routes'; // your /api router
+import { authMiddleware } from './middleware/auth'; // applies to API only
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+// --- 1) STATIC FIRST (prod only) ---
+const clientDist = path.resolve(__dirname, '../client/dist');
+app.use(express.static(clientDist, { index: false })); // don't auto-serve index yet
+
+// --- 2) API (auth here, not globally) ---
+app.use('/api', authMiddleware, routes);
+
+// --- 3) SPA ROUTES (workspace etc.) ---
+app.get(['/workspace', '/workspace/*'], (_req, res) => {
+  res.sendFile(path.join(clientDist, 'index.html'));
+});
+
+// --- 4) FINAL CATCH‑ALL (optional) ---
+app.get('*', (_req, res) => {
+  res.sendFile(path.join(clientDist, 'index.html'));
+});
+
+// error handler last...
+
+If you’re in Vite dev mode
+
+Put Vite’s middlewares before the API, but still keep API under /api with auth:
+
+if (process.env.NODE_ENV !== 'production') {
+  const { createServer } = await import('vite');
+  const vite = await createServer({
+    root: path.resolve(__dirname, '../client'),
+    server: { middlewareMode: true, proxy: { '/api': 'http://localhost:5000' } },
+    appType: 'spa',
+  });
+  app.use(vite.middlewares);          // << serves front-end in dev
+}
+
+// API stays here
+app.use('/api', authMiddleware, routes);
+
+What to run now
+
+Build the client:
+cd /home/runner/workspace/client && npm run build
+
+Restart the server (so it picks up new static):
+cd /home/runner/workspace && npm run start
+
+Verify in 10 seconds:
+
+curl -I http://localhost:5000/assets/* → 200
+
+curl -I http://localhost:5000/api/leads → application/json
+
+Open /workspace with cache bypass.
+
+Bonus sanity checks
+
+Ensure no global app.use(authMiddleware) above static.
+
+Ensure the sidebar CSS classnames exist in the built CSS (if you use Tailwind JIT, confirm purge safelist includes any dynamically built classnames like bg-${color}-500).
+
+If you added Helmet/CSP, allow style-src 'self' 'unsafe-inline' (Vite injects inline in dev).

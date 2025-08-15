@@ -1,5 +1,6 @@
 import express, { type Request, Response, NextFunction } from "express";
 import session from "express-session";
+import path from "path";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import summaryRoute from './routes/summary';
@@ -66,14 +67,20 @@ app.use((req, res, next) => {
 });
 
 (async () => {
-  // 1) Serve static assets FIRST (no auth required)
+  // 1) Static assets FIRST (no auth, for production)
+  const clientDist = path.resolve(import.meta.dirname, '..', 'dist', 'public');
+  if (app.get("env") !== "development") {
+    app.use(express.static(clientDist, { index: false }));
+  }
+  
+  // 2) Serve public directory assets (always available)
   app.use(express.static('public'));
   
-  // 2) Mount API routes with proper scoping - auth will be applied within registerRoutes
+  // 3) API routes with auth scoped properly
   app.use('/api', summaryRoute);
   const server = await registerRoutes(app);
 
-  // 3) Initialize automation system
+  // 4) Initialize automation system
   try {
     const { loadAndBindRules } = await import('./automation/executor');
     await loadAndBindRules();
@@ -82,7 +89,22 @@ app.use((req, res, next) => {
     console.error('Failed to initialize automation system:', error);
   }
 
-  // 4) Error handling middleware
+  // 5) Vite dev middleware OR SPA fallback routes
+  if (app.get("env") === "development") {
+    await setupVite(app, server);
+  } else {
+    // SPA routes for workspace
+    app.get(['/workspace', '/workspace/*'], (_req, res) => {
+      res.sendFile(path.join(clientDist, 'index.html'));
+    });
+    
+    // Final catch-all for SPA
+    app.get('*', (_req, res) => {
+      res.sendFile(path.join(clientDist, 'index.html'));
+    });
+  }
+
+  // 6) Error handling middleware
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     const status = err.status || err.statusCode || 500;
     const message = err.message || "Internal Server Error";
@@ -90,16 +112,8 @@ app.use((req, res, next) => {
     res.status(status).json({ message });
     throw err;
   });
-  
-  // 5) Setup Vite dev or production static serving AFTER API routes
-  if (app.get("env") === "development") {
-    await setupVite(app, server);
-  } else {
-    app.use(express.static('dist/public'));
-    serveStatic(app);
-  }
 
-  // 6) Start server
+  // 7) Start server
   const port = 5000;
   server.listen({
     port,
