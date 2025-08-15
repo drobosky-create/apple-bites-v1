@@ -148,6 +148,14 @@ export const leads = pgTable("leads", {
   totalInteractions: integer("total_interactions").default(0),
   emailsSent: integer("emails_sent").default(0),
   
+  // Manual lead creation and override features
+  intakeSource: text("intake_source").notNull().default("applebites"), // "applebites" or "manual"
+  applebitestaken: boolean("applebites_taken").notNull().default(true),
+  qualifierScore: decimal("qualifier_score", { precision: 5, scale: 2 }),
+  lowQualifierFlag: boolean("low_qualifier_flag").notNull().default(false),
+  lastOverrideAt: timestamp("last_override_at"),
+  overrideCount: integer("override_count").notNull().default(0),
+  
   // Additional Data
   notes: text("notes"),
   tags: text("tags").array(), // For categorization and filtering
@@ -225,6 +233,35 @@ export type InsertLead = z.infer<typeof insertLeadSchema>;
 export type Lead = typeof leads.$inferSelect;
 export type InsertLeadActivity = z.infer<typeof insertLeadActivitySchema>;
 export type LeadActivity = typeof leadActivities.$inferSelect;
+
+// Lead state overrides table for manual advancement
+export const leadStateOverrides = pgTable("lead_state_overrides", {
+  id: varchar("id").primaryKey().notNull(), // UUID
+  leadId: integer("lead_id").notNull().references(() => leads.id),
+  fromState: text("from_state").notNull(),
+  toState: text("to_state").notNull(),
+  requestedByUserId: text("requested_by_user_id").notNull(),
+  approvedByUserId: text("approved_by_user_id").notNull(),
+  reason: text("reason").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Relations for lead state overrides
+export const leadStateOverridesRelations = relations(leadStateOverrides, ({ one }) => ({
+  lead: one(leads, {
+    fields: [leadStateOverrides.leadId],
+    references: [leads.id],
+  }),
+}));
+
+// Schema for lead state overrides
+export const insertLeadStateOverrideSchema = createInsertSchema(leadStateOverrides).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type InsertLeadStateOverride = z.infer<typeof insertLeadStateOverrideSchema>;
+export type LeadStateOverride = typeof leadStateOverrides.$inferSelect;
 
 // Team management tables
 export const teamMembers = pgTable("team_members", {

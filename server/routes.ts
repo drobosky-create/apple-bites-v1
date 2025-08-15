@@ -2,7 +2,8 @@ import type { Express, Request } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, isAuthenticated } from "./simpleAuth";
-import { insertValuationAssessmentSchema, type ValuationAssessment, loginSchema, insertTeamMemberSchema, type InsertTeamMember, type TeamMember, registerUserSchema, loginUserSchema, type RegisterUser, type LoginUser } from "@shared/schema";
+import { insertValuationAssessmentSchema, type ValuationAssessment, loginSchema, insertTeamMemberSchema, type InsertTeamMember, type TeamMember, registerUserSchema, loginUserSchema, type RegisterUser, type LoginUser, insertLeadSchema, insertLeadStateOverrideSchema } from "@shared/schema";
+import { requireRouteAccess } from "./rbac";
 import { generateValuationNarrative, type ValuationAnalysisInput } from "./openai";
 import { generateFinancialCoachingTips, generateContextualInsights, type FinancialCoachingData } from "./services/aiCoaching";
 import { generateValuationPDF } from "./pdf-generator";
@@ -3136,6 +3137,142 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // ===== APPLE BITES ECOSYSTEM API ROUTES =====
+  
+  // ===== LEAD MANAGEMENT ENDPOINTS =====
+  
+  // Create lead (manual or from Apple Bites)
+  app.post('/api/leads', requireRouteAccess(), async (req, res) => {
+    try {
+      const leadData = req.body;
+      
+      // Validate required fields
+      const requiredFields = ['firstName', 'lastName', 'email', 'company'];
+      for (const field of requiredFields) {
+        if (!leadData[field]) {
+          return res.status(400).json({ error: `${field} is required` });
+        }
+      }
+      
+      // Set defaults for manual lead creation
+      const lead = await storage.createLead({
+        ...leadData,
+        intakeSource: leadData.intakeSource || 'manual',
+        applebitestaken: leadData.intakeSource === 'manual' ? false : true,
+        lowQualifierFlag: leadData.qualifierScore ? parseFloat(leadData.qualifierScore) < 60 : false,
+        leadStatus: leadData.leadStatus || 'new',
+        leadScore: leadData.leadScore || 0,
+      });
+      
+      // Create activity log
+      await storage.createLeadActivity({
+        leadId: lead.id,
+        activityType: 'lead_created',
+        description: `Lead created via ${leadData.intakeSource || 'manual'} intake`,
+        activityData: JSON.stringify({ source: leadData.intakeSource || 'manual' }),
+      });
+      
+      res.status(201).json(lead);
+    } catch (error: any) {
+      console.error('Lead creation error:', error);
+      res.status(500).json({ error: 'Failed to create lead' });
+    }
+  });
+  
+  // Manual state transition override  
+  app.post('/api/leads/:id/override-transition', requireRouteAccess(), async (req, res) => {
+    try {
+      const leadId = parseInt(req.params.id);
+      const { toState, reason } = req.body;
+      const userId = req.user?.id;
+      
+      // Feature flag check
+      if (process.env.ALLOW_MANUAL_ADVANCE !== 'true' && process.env.NODE_ENV === 'production') {
+        return res.status(403).json({ error: 'Manual advance feature is disabled in production' });
+      }
+      
+      // Validate inputs
+      if (!toState || !reason) {
+        return res.status(400).json({ error: 'toState and reason are required' });
+      }
+      
+      if (reason.length < 15) {
+        return res.status(422).json({ error: 'Reason must be at least 15 characters' });
+      }
+      
+      // Get lead
+      const lead = await storage.getLeadById(leadId);
+      if (!lead) {
+        return res.status(404).json({ error: 'Lead not found' });
+      }
+      
+      // Check cooldown period (except for admin)
+      if (req.user?.role !== 'admin' && lead.lastOverrideAt) {
+        const cooldownDays = parseInt(process.env.MANUAL_ADVANCE_COOLDOWN_DAYS || '7');
+        const cooldownMs = cooldownDays * 24 * 60 * 60 * 1000;
+        const timeSinceLastOverride = Date.now() - new Date(lead.lastOverrideAt).getTime();
+        
+        if (timeSinceLastOverride < cooldownMs) {
+          const remainingDays = Math.ceil((cooldownMs - timeSinceLastOverride) / (24 * 60 * 60 * 1000));
+          return res.status(429).json({ 
+            error: `Cooldown period active. ${remainingDays} days remaining before next override allowed.` 
+          });
+        }
+      }
+      
+      // Validate forward-only transition (simplified - would use LeadStateService in full implementation)
+      const validTransitions: Record<string, string[]> = {
+        'new': ['qualified', 'contacted'],
+        'contacted': ['qualified', 'opportunity'],
+        'qualified': ['opportunity', 'converted'],
+        'opportunity': ['converted', 'closed'],
+      };
+      
+      const currentState = lead.leadStatus || 'new';
+      if (!validTransitions[currentState]?.includes(toState)) {
+        return res.status(422).json({ 
+          error: `Invalid transition from ${currentState} to ${toState}` 
+        });
+      }
+      
+      // Create override record
+      const override = await storage.createLeadStateOverride({
+        leadId: leadId,
+        fromState: currentState,
+        toState: toState,
+        requestedByUserId: String(userId),
+        approvedByUserId: String(userId),
+        reason: reason,
+      });
+      
+      // Update lead state
+      await storage.updateLead(leadId, {
+        leadStatus: toState,
+        lastOverrideAt: new Date(),
+        overrideCount: (lead.overrideCount || 0) + 1,
+      });
+      
+      // Create activity log
+      await storage.createLeadActivity({
+        leadId: leadId,
+        activityType: 'state_override',
+        description: `Manual advance: ${currentState} → ${toState}`,
+        activityData: JSON.stringify({ 
+          overrideId: override.id, 
+          reason: reason,
+          approvedBy: userId 
+        }),
+      });
+      
+      res.json({ 
+        success: true, 
+        override,
+        newState: toState 
+      });
+    } catch (error: any) {
+      console.error('Lead override error:', error);
+      res.status(500).json({ error: 'Failed to process override' });
+    }
+  });
   
   // Portal routes - customer-facing assessment history and invited data rooms
   app.get('/api/portal/assessments', isAuthenticated, async (req, res) => {

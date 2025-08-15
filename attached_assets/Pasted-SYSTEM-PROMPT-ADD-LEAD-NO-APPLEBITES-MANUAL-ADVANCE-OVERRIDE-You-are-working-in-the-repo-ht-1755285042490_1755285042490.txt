@@ -1,0 +1,108 @@
+SYSTEM PROMPT — ADD LEAD (NO APPLEBITES) + MANUAL ADVANCE OVERRIDE
+
+You are working in the repo https://github.com/drobosky-create/applebites-v1 on branch `ecosystem-modules`.
+
+Follow all rules in AGENT_RULES.md:
+- No phantom imports/paths (verify before coding)
+- Use existing Material Dashboard components for UI
+- No Grid2
+- No new deps unless found in package.json
+- RBAC: default deny, allow-list only, org isolation enforced server-first
+
+TASK GOAL
+Implement two secure features into the existing CRM/Leads system:
+
+1) **Manual Lead Creation (No AppleBites intake)**
+   - Allows creation of leads who never took an AppleBites assessment.
+   - Must preserve audit trails and intake source.
+   - Must be RBAC-protected (SalesRep+ can create; scoped to their org).
+   - Badge and filter in UI to distinguish manual leads.
+   - GHL tag `source_manual` optional — skip AppleBites-specific tags.
+
+2) **Manual Advance for Low-Qual AppleBites Leads**
+   - Allows Manager+ roles to move low-qual leads forward in the state machine.
+   - Requires `reason` (min 15 chars) and forward-only movement.
+   - Writes to `lead_state_overrides` table and audit log.
+   - Adds GHL tag `override_<to_state>` if GHL sync is on.
+   - Enforce cooldown (e.g., 7 days) unless Admin.
+   - Default-off in production until feature flag `ALLOW_MANUAL_ADVANCE=true`.
+
+IMPLEMENTATION REQUIREMENTS
+
+**Data Model Changes**
+In `shared/schema.ts`:
+- Extend `leads` table:
+  - `intake_source` TEXT NOT NULL DEFAULT 'applebites'
+  - `applebites_taken` BOOLEAN NOT NULL DEFAULT false
+  - `qualifier_score` NUMERIC NULL
+  - `low_qualifier_flag` BOOLEAN NOT NULL DEFAULT false
+  - `last_override_at` TIMESTAMPTZ NULL
+  - `override_count` INT NOT NULL DEFAULT 0
+- Create `lead_state_overrides` table:
+  - `id` UUID PK
+  - `lead_id` UUID FK → leads.id
+  - `from_state` TEXT NOT NULL
+  - `to_state` TEXT NOT NULL
+  - `requested_by_user_id` UUID FK → users.id
+  - `approved_by_user_id` UUID FK → users.id
+  - `reason` TEXT NOT NULL
+  - `created_at` TIMESTAMPTZ DEFAULT now()
+
+**Server**
+- New endpoint: `POST /api/leads`
+  - Creates lead with `intake_source='manual'`, `applebites_taken=false` if manual.
+  - RBAC: role ∈ {SalesRep, Manager, Admin}.
+  - Org isolation enforced in middleware.
+  - Audit: `event='lead.create'` with payload snapshot.
+- New endpoint: `POST /api/leads/:id/override-transition`
+  - Body: `{ to_state, reason }`
+  - RBAC: role ∈ {Manager, Admin}.
+  - Validate forward-only transition; enforce cooldown unless Admin.
+  - Insert override record + transition lead + audit.
+  - Optional GHL tag push.
+
+**UI — Workspace**
+- Leads index: Add “Add Lead (No AppleBites)” button (MDButton).
+  - Opens modal: fields for company, contact, pipeline, owner, qualifier score.
+  - On submit, calls POST /api/leads and refreshes table.
+  - DataGrid: badge chip `source: manual` (grey), `AB: No` (red).
+- Lead detail: Show “Manual Advance” button if:
+  - `low_qualifier_flag === true` OR (`applebites_taken === true` && low score)
+  - AND current user has Manager/Admin role.
+  - Modal: `Target Stage` (select, forward stages only), `Reason` (textarea, min 15 chars).
+  - On submit, calls override endpoint and refreshes timeline.
+
+**RBAC**
+- Add new endpoints to permissions matrix in RBAC middleware.
+- Keep default-deny; explicit allow for required roles only.
+- All server checks enforced before UI actions.
+
+**Audit & Logging**
+- All create/override actions log to audit table with:
+  `{ actorId, role, event, before, after, ts }`
+- Denied attempts also logged (`allowed=false`).
+
+**Feature Flags**
+- `ALLOW_MANUAL_ADVANCE` (default true in dev, false in prod until ready)
+- `MANUAL_ADVANCE_COOLDOWN_DAYS` (default 7)
+
+**Testing**
+- Unit test server endpoints:
+  - Non-authorized roles → 403
+  - Authorized roles → 201/200 with correct state change
+  - Missing/short reason → 422
+  - Backward state change → 422
+- UI smoke tests: buttons appear only for eligible roles/conditions.
+- Typecheck and lint must pass with zero phantom imports.
+
+ANTI-PHANTOM CODE PROTOCOL
+Before coding:
+1. VERIFY all imports/paths exist in repo.
+2. If missing, create minimal local stub in same feature folder.
+3. NO new deps unless in package.json.
+4. No Grid2. Use MUI Grid.
+
+OUTPUT FORMAT
+When building:
+- Start with PLAN → FILE IMPACT LIST → DIFFS → POST-CHECKS.
+- Run `npm run check` and fix errors before concluding.

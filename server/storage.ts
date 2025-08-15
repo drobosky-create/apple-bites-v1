@@ -2,6 +2,7 @@ import {
   valuationAssessments, 
   leads,
   leadActivities,
+  leadStateOverrides,
   teamMembers,
   teamSessions,
   users,
@@ -17,6 +18,8 @@ import {
   type InsertLead,
   type LeadActivity,
   type InsertLeadActivity,
+  type LeadStateOverride,
+  type InsertLeadStateOverride,
   type TeamMember,
   type InsertTeamMember,
   type TeamSession,
@@ -60,6 +63,10 @@ export interface IStorage {
   // Lead activity methods
   createLeadActivity(activity: InsertLeadActivity): Promise<LeadActivity>;
   getLeadActivities(leadId: number): Promise<LeadActivity[]>;
+  
+  // Lead state override methods
+  createLeadStateOverride(override: InsertLeadStateOverride): Promise<LeadStateOverride>;
+  getLeadStateOverrides(leadId: number): Promise<LeadStateOverride[]>;
 
   // User management methods (for both Replit Auth and custom auth)
   getUser(id: string): Promise<User | undefined>;
@@ -243,6 +250,19 @@ export class DatabaseStorage implements IStorage {
       .from(leadActivities)
       .where(eq(leadActivities.leadId, leadId))
       .orderBy(desc(leadActivities.createdAt));
+  }
+
+  // Lead state override methods
+  async createLeadStateOverride(override: InsertLeadStateOverride): Promise<LeadStateOverride> {
+    const [result] = await db.insert(leadStateOverrides).values({
+      ...override,
+      id: crypto.randomUUID(),
+    }).returning();
+    return result;
+  }
+
+  async getLeadStateOverrides(leadId: number): Promise<LeadStateOverride[]> {
+    return await db.select().from(leadStateOverrides).where(eq(leadStateOverrides.leadId, leadId)).orderBy(desc(leadStateOverrides.createdAt));
   }
 
   // User management methods (for Replit Auth)

@@ -23,6 +23,10 @@ export const ROUTE_PERMISSIONS: Record<string, UserRole[]> = {
   "/api/workspace/vdr/access": ["analyst", "manager", "admin"], // VDR access if assigned
   "/api/workspace/team/members": ["admin"], // Team management
   "/api/workspace/billing": ["admin"], // Billing admin only
+  
+  // Lead management endpoints
+  "/api/leads": ["analyst", "manager", "admin"], // Lead creation
+  "/api/leads/*/override-transition": ["manager", "admin"], // Manual advance
 };
 
 // Legacy scopes for compatibility
