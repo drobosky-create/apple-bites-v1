@@ -2714,8 +2714,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
         const YOUR_DOMAIN = `${req.protocol}://${req.get('host')}`;
         
-        // Build checkout session data
+        // Build checkout session data for embedded checkout
         const sessionData: any = {
+          ui_mode: 'embedded', // Key change for embedded checkout
           payment_method_types: ['card'],
           billing_address_collection: 'auto',
           line_items: [
@@ -2725,9 +2726,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             },
           ],
           mode: mode,
-          success_url: `${YOUR_DOMAIN}/checkout-success?session_id={CHECKOUT_SESSION_ID}`,
-          cancel_url: `${YOUR_DOMAIN}/checkout?canceled=true`,
-          allow_promotion_codes: true, // Enable Stripe's built-in coupon handling
+          return_url: `${YOUR_DOMAIN}/checkout-return?session_id={CHECKOUT_SESSION_ID}`,
           automatic_tax: {
             enabled: true,
           },
@@ -2756,22 +2755,48 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
         const session = await stripe.checkout.sessions.create(sessionData);
 
-        console.log('Checkout session created successfully:', session.id);
-        console.log('Redirecting to:', session.url);
+        console.log('Embedded checkout session created successfully:', session.id);
 
-        // Redirect to Stripe Checkout (like the official example)
-        if (session.url) {
-          res.redirect(303, session.url);
-        } else {
-          res.status(500).json({ error: 'Failed to create checkout session URL' });
-        }
+        // Return client secret for embedded checkout (not redirect URL)
+        res.json({ 
+          clientSecret: session.client_secret,
+          sessionId: session.id 
+        });
       } catch (error: any) {
         console.error('Checkout session creation error:', error);
         res.status(500).json({ error: 'Failed to create checkout session' });
       }
     });
 
-    // Verify Stripe Checkout Session
+    // Get checkout session status for return page
+    app.post("/api/checkout-session-status", async (req, res) => {
+      try {
+        const { sessionId } = req.body;
+        
+        if (!sessionId) {
+          return res.status(400).json({ error: 'Session ID required' });
+        }
+
+        // Retrieve the session from Stripe
+        const session = await stripe.checkout.sessions.retrieve(sessionId);
+        
+        res.json({
+          id: session.id,
+          status: session.status,
+          payment_status: session.payment_status,
+          amount_total: session.amount_total,
+          currency: session.currency,
+          payment_method_types: session.payment_method_types,
+          metadata: session.metadata
+        });
+        
+      } catch (error: any) {
+        console.error('Error retrieving checkout session:', error);
+        res.status(500).json({ error: 'Failed to retrieve session status' });
+      }
+    });
+
+    // Verify Stripe Checkout Session (legacy - keeping for compatibility)
     app.post("/api/verify-checkout-session", async (req, res) => {
       try {
         const { sessionId } = req.body;

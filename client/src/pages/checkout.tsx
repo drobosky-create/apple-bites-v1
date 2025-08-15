@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { Box, Typography, Card, CardContent, Alert, CircularProgress, TextField, Button } from '@mui/material';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Box, Typography, Card, CardContent, Alert, CircularProgress } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { loadStripe } from '@stripe/stripe-js';
+import { EmbeddedCheckoutProvider, EmbeddedCheckout } from '@stripe/react-stripe-js';
 import { apiRequest } from "@/lib/queryClient";
-import { MDBox, MDTypography, MDButton } from "@/components/MD";
+import { MDBox, MDTypography } from "@/components/MD";
 
 const CheckoutContainer = styled(Box)(({ theme }) => ({
   minHeight: '100vh',
@@ -20,19 +22,17 @@ const CheckoutCard = styled(Card)(({ theme }) => ({
   boxShadow: '0 20px 40px rgba(0,0,0,0.3)',
 }));
 
-// This component handles the redirect to Stripe Checkout
+// Load Stripe.js
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
 export default function Checkout() {
-  const [loading, setLoading] = useState(false);
+  const [clientSecret, setClientSecret] = useState('');
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [couponCode, setCouponCode] = useState('');
-  const [couponApplied, setCouponApplied] = useState(false);
-  const [discount, setDiscount] = useState(0);
-  const [appliedCoupon, setAppliedCoupon] = useState('');
 
   // Get product from URL params
   const urlParams = new URLSearchParams(window.location.search);
-  const tier = urlParams.get('tier') || 'growth';
+  const productId = urlParams.get('product') || 'prod_Sddbk2RWzr8kyL'; // Default to Growth assessment
   const priceId = urlParams.get('priceId') || '';
   const productId = urlParams.get('product') || '';
   
