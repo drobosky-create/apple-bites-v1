@@ -91,7 +91,14 @@ const LeadsManagement: React.FC = () => {
     },
   });
 
-  const handleCreateLead = () => {
+  const handleCreateLead = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!formData.firstName || !formData.lastName || !formData.email || !formData.company) {
+      alert('Please fill in all required fields');
+      return;
+    }
+    
     createLeadMutation.mutate({
       ...formData,
       intakeSource: 'manual',
@@ -192,68 +199,70 @@ const LeadsManagement: React.FC = () => {
 
       {/* Create Lead Modal */}
       <Dialog open={createLeadOpen} onClose={() => setCreateLeadOpen(false)} maxWidth="md" fullWidth>
-        <DialogTitle>Add Manual Lead</DialogTitle>
-        <DialogContent>
-          <Grid container spacing={2} sx={{ mt: 1 }}>
-            <Grid item xs={6}>
-              <TextField
-                label="First Name"
-                value={formData.firstName}
-                onChange={(e) => setFormData({...formData, firstName: e.target.value})}
-                fullWidth
-                required
-              />
+        <form onSubmit={handleCreateLead}>
+          <DialogTitle>Add Manual Lead</DialogTitle>
+          <DialogContent>
+            <Grid container spacing={2} sx={{ mt: 1 }}>
+              <Grid item xs={6}>
+                <TextField
+                  label="First Name"
+                  value={formData.firstName}
+                  onChange={(e) => setFormData({...formData, firstName: e.target.value})}
+                  fullWidth
+                  required
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  label="Last Name"
+                  value={formData.lastName}
+                  onChange={(e) => setFormData({...formData, lastName: e.target.value})}
+                  fullWidth
+                  required
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  label="Email"
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) => setFormData({...formData, email: e.target.value})}
+                  fullWidth
+                  required
+                />
+              </Grid>
+              <Grid item xs={8}>
+                <TextField
+                  label="Company"
+                  value={formData.company}
+                  onChange={(e) => setFormData({...formData, company: e.target.value})}
+                  fullWidth
+                  required
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <TextField
+                  label="Qualifier Score"
+                  type="number"
+                  value={formData.qualifierScore}
+                  onChange={(e) => setFormData({...formData, qualifierScore: e.target.value})}
+                  fullWidth
+                  inputProps={{ min: 0, max: 100 }}
+                />
+              </Grid>
             </Grid>
-            <Grid item xs={6}>
-              <TextField
-                label="Last Name"
-                value={formData.lastName}
-                onChange={(e) => setFormData({...formData, lastName: e.target.value})}
-                fullWidth
-                required
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                label="Email"
-                type="email"
-                value={formData.email}
-                onChange={(e) => setFormData({...formData, email: e.target.value})}
-                fullWidth
-                required
-              />
-            </Grid>
-            <Grid item xs={8}>
-              <TextField
-                label="Company"
-                value={formData.company}
-                onChange={(e) => setFormData({...formData, company: e.target.value})}
-                fullWidth
-                required
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <TextField
-                label="Qualifier Score"
-                type="number"
-                value={formData.qualifierScore}
-                onChange={(e) => setFormData({...formData, qualifierScore: e.target.value})}
-                fullWidth
-                inputProps={{ min: 0, max: 100 }}
-              />
-            </Grid>
-          </Grid>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setCreateLeadOpen(false)}>Cancel</Button>
-          <MDButton 
-            variant="contained" 
-            onClick={handleCreateLead}
-            disabled={createLeadMutation.isPending}
-          >
-            Create Lead
-          </MDButton>
-        </DialogActions>
+          </DialogContent>
+          <DialogActions>
+            <Button type="button" onClick={() => setCreateLeadOpen(false)}>Cancel</Button>
+            <MDButton 
+              type="submit"
+              variant="contained" 
+              disabled={createLeadMutation.isPending}
+            >
+              {createLeadMutation.isPending ? 'Creating...' : 'Create Lead'}
+            </MDButton>
+          </DialogActions>
+        </form>
       </Dialog>
 
       {/* Manual Advance Modal */}

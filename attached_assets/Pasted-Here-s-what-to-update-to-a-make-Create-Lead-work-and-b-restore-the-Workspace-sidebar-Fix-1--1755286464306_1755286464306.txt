@@ -1,0 +1,239 @@
+Here’s what to update to (a) make Create Lead work and (b) restore the Workspace sidebar.
+
+Fix 1 — “Create Lead” does nothing
+
+The DOM screenshot shows the button rendering but no handler firing. Wire the button to a submit handler and call the RBAC‑protected API.
+
+File: client/src/pages/workspace/LeadsManagement.tsx
+
+Wrap the modal inputs in a form and add a submit handler.
+
+// at top
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "@/utils/toast"; // or your toast util
+
+type NewLead = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  company?: string;
+  source: "manual";        // mark manual intake
+  qualifierScore?: number; // optional
+};
+
+const LeadsManagement = () => {
+  const qc = useQueryClient();
+  const [open, setOpen] = useState(false);
+  const [form, setForm] = useState<NewLead>({
+    firstName: "",
+    lastName: "",
+    email: "",
+    company: "",
+    source: "manual",
+    qualifierScore: undefined,
+  });
+
+  const createLead = useMutation({
+    mutationFn: async (payload: NewLead) => {
+      const res = await fetch("/api/leads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) throw new Error(await res.text());
+      return res.json();
+    },
+    onSuccess: () => {
+      toast.success("Lead created");
+      setOpen(false);
+      setForm({ firstName: "", lastName: "", email: "", company: "", source: "manual" });
+      qc.invalidateQueries({ queryKey: ["leads"] });
+    },
+    onError: (e: any) => toast.error(e?.message ?? "Failed to create lead"),
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!form.firstName || !form.lastName || !form.email) {
+      toast.error("First, last, and email are required");
+      return;
+    }
+    createLead.mutate(form);
+  };
+
+
+Ensure the modal has onSubmit and the button is type="submit".
+
+{/* Modal content */}
+<form onSubmit={handleSubmit}>
+  {/* ...TextFields updating `form` state... */}
+  <MDButton onClick={() => setOpen(false)} variant="text">Cancel</MDButton>
+  <MDButton type="submit" variant="contained" disabled={createLead.isLoading}>
+    {createLead.isLoading ? "Creating..." : "Create Lead"}
+  </MDButton>
+</form>
+
+
+Make sure your inputs actually update state.
+
+<TextField
+  label="First Name"
+  value={form.firstName}
+  onChange={(e) => setForm((s) => ({ ...s, firstName: e.target.value }))}
+/>
+
+
+If you’re gating manual creation by a flag, expose it:
+
+File: client/src/config/flags.ts
+
+export const ALLOW_MANUAL_CREATE = true; // set via env in prod
+
+
+Guard the Add Lead (No AppleBites) button with this flag.
+
+Fix 2 — Backend endpoint & RBAC
+
+If the button is wired but no visible result, a 403/404 from the API will feel like “nothing happens”. Ensure the route exists and roles match your rule: analyst+ can create.
+
+File: server/routes/leads.ts
+
+import { z } from "zod";
+import { rbac } from "../middleware/rbac";
+import type { Router } from "express";
+
+export function mountLeadRoutes(router: Router) {
+  const CreateLead = z.object({
+    firstName: z.string().min(1),
+    lastName: z.string().min(1),
+    email: z.string().email(),
+    company: z.string().optional(),
+    source: z.literal("manual").or(z.literal("applebites")).default("manual"),
+    qualifierScore: z.number().int().min(0).max(100).optional(),
+  });
+
+  router.post(
+    "/api/leads",
+    rbac.allow(["analyst", "manager", "admin"]), // analyst+
+    async (req, res) => {
+      const input = CreateLead.parse(req.body);
+      // idempotent upsert by email + org
+      const lead = await db.lead.upsert({
+        where: { orgId_email: { orgId: req.user.orgId, email: input.email } },
+        create: {
+          ...input,
+          orgId: req.user.orgId,
+          state: "lead:intake",
+          source: "manual",
+          createdBy: req.user.id,
+          manual: true,
+        },
+        update: { ...input },
+      });
+      await db.audit.create({
+        data: {
+          orgId: req.user.orgId,
+          actorId: req.user.id,
+          action: "lead:create",
+          resource: `lead:${lead.id}`,
+          before: null,
+          after: JSON.stringify(lead),
+        },
+      });
+      res.json(lead);
+    }
+  );
+}
+
+
+File: server/routes/index.ts
+
+import { mountLeadRoutes } from "./leads";
+export const mountRoutes = (router: Router) => {
+  mountLeadRoutes(router);
+  // ...others
+};
+
+
+RBAC check
+
+File: server/middleware/rbac.ts — confirm route map includes /api/leads:POST → analyst,manager,admin.
+
+Fix 3 — “Manual vs AppleBites” badge in table
+
+Make the source obvious.
+
+File: client/src/pages/workspace/LeadsManagement.tsx
+
+const columns = [
+  // ...
+  {
+    field: "source",
+    headerName: "Source",
+    renderCell: ({ row }) => (
+      <MDBadge color={row.source === "manual" ? "warning" : "info"} badgeContent={row.source} />
+    ),
+  },
+];
+
+Fix 4 — Restore the Workspace sidebar (TeamTrack)
+
+Re‑add a lightweight Drawer so navigation is consistent.
+
+File: client/src/components/layout/WorkspaceSidebar.tsx
+
+import { Drawer, List, ListItemButton, ListItemText } from "@mui/material";
+import { NavLink } from "react-router-dom";
+
+export default function WorkspaceSidebar() {
+  const links = [
+    { to: "/workspace/crm", label: "CRM" },
+    { to: "/workspace/vdr", label: "VDR" },
+    { to: "/workspace/team", label: "Team" },
+    { to: "/workspace/assessments", label: "Assessments" },
+  ];
+  return (
+    <Drawer variant="permanent" PaperProps={{ sx: { width: 240 } }}>
+      <List sx={{ mt: 8 }}>
+        {links.map((l) => (
+          <ListItemButton key={l.to} component={NavLink} to={l.to}>
+            <ListItemText primary={l.label} />
+          </ListItemButton>
+        ))}
+      </List>
+    </Drawer>
+  );
+}
+
+
+File: client/src/pages/workspace/_WorkspaceShell.tsx (or your layout)
+
+import WorkspaceSidebar from "@/components/layout/WorkspaceSidebar";
+
+export default function WorkspaceShell({ children }) {
+  return (
+    <MDBox display="flex">
+      <WorkspaceSidebar />
+      <MDBox flex={1} ml="240px">{children}</MDBox>
+    </MDBox>
+  );
+}
+
+
+Wrap LeadsManagement (and other workspace pages) with WorkspaceShell.
+
+Quick sanity checklist (catch the “silent” failures)
+
+Open DevTools → Network tab while clicking Create Lead:
+
+If no request fires → wiring issue (Fix 1).
+
+If request fires but 403 → adjust RBAC (analyst+).
+
+If 404 → mount route (Fix 2).
+
+If 500 → check Zod validation or DB upsert key.
+
+Confirm env flag ALLOW_MANUAL_CREATE (and ALLOW_MANUAL_ADVANCE) is true in your preview.
+
+Ensure the leads list uses React Query and invalidates ["leads"] after create, so the new row appears.
