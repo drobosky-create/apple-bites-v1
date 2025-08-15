@@ -67,7 +67,7 @@ function Router() {
           </Route>
           <Route path="/checkout">
             <Suspense fallback={<div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', background: 'linear-gradient(135deg, #0A1F44 0%, #1B2C4F 100%)' }}>Loading...</div>}>
-              {React.createElement(lazy(() => import("./pages/checkout-new")))}
+              {React.createElement(lazy(() => import("./pages/checkout")))}
             </Suspense>
           </Route>
           <Route path="/checkout-return">

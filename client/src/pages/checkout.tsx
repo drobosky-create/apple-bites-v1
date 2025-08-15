@@ -16,7 +16,7 @@ const CheckoutContainer = styled(Box)(({ theme }) => ({
 }));
 
 const CheckoutCard = styled(Card)(({ theme }) => ({
-  maxWidth: 600,
+  maxWidth: 800,
   width: '100%',
   borderRadius: theme.spacing(2),
   boxShadow: '0 20px 40px rgba(0,0,0,0.3)',
@@ -33,153 +33,57 @@ export default function Checkout() {
   // Get product from URL params
   const urlParams = new URLSearchParams(window.location.search);
   const productId = urlParams.get('product') || 'prod_Sddbk2RWzr8kyL'; // Default to Growth assessment
-  const priceId = urlParams.get('priceId') || '';
-  const productId = urlParams.get('product') || '';
   
-  // Define tier and amount - fetch dynamically from Stripe API only
-  const [priceDetails, setPriceDetails] = useState<{amount: number; name: string; priceId: string} | null>(null);
-  const [isLoadingPrice, setIsLoadingPrice] = useState(true);
-  const baseAmount = priceDetails?.amount || 0; // No fallback - must come from Stripe
-  const finalAmount = Math.max(0, baseAmount - discount);
-
-  // Fetch price details from Stripe - handle both priceId and productId (no fallbacks)
-  useEffect(() => {
-    const fetchPriceDetails = async () => {
-      setIsLoadingPrice(true);
-      try {
-        if (priceId) {
-          // Direct price ID provided
-          const response = await apiRequest('GET', `/api/stripe/price/${priceId}`);
-          const data = await response.json();
-          setPriceDetails({ 
-            amount: data.unit_amount, 
-            name: data.nickname || tier,
-            priceId: data.id
-          });
-        } else if (productId) {
-          // Product ID provided - get current active price from Stripe
-          const response = await apiRequest('GET', `/api/stripe/products`);
-          const data = await response.json();
-          const product = data.products.find((p: any) => p.id === productId);
-          
-          if (product && product.price) {
-            setPriceDetails({
-              amount: product.price.amount,
-              name: product.name,
-              priceId: product.price.id
-            });
-          } else {
-            throw new Error(`Product ${productId} not found or has no active price`);
-          }
-        } else {
-          // No specific ID - find Growth & Exit Assessment from Stripe
-          const response = await apiRequest('GET', `/api/stripe/products`);
-          const data = await response.json();
-          const growthProduct = data.products.find((p: any) => 
-            p.name?.toLowerCase().includes('growth') && p.price
-          );
-          
-          if (growthProduct && growthProduct.price) {
-            setPriceDetails({
-              amount: growthProduct.price.amount,
-              name: growthProduct.name,
-              priceId: growthProduct.price.id
-            });
-          } else {
-            throw new Error('No Growth & Exit Assessment product found with active pricing');
-          }
-        }
-      } catch (error) {
-        console.error('Failed to fetch price details:', error);
-        setError('Unable to load pricing information. Please try again or contact support.');
-      } finally {
-        setIsLoadingPrice(false);
-      }
-    };
-    
-    fetchPriceDetails();
-  }, [priceId, productId, tier]);
-
-  // Function to apply coupon using Stripe
-  const applyCoupon = async () => {
-    if (!couponCode.trim()) return;
-    
+  // Fetch client secret from server
+  const fetchClientSecret = useCallback(async () => {
     try {
-      const response = await apiRequest('POST', '/api/validate-coupon', { 
-        couponCode: couponCode.trim()
-      });
-      const data = await response.json();
+      setLoading(true);
       
-      if (response.ok && data.valid) {
-        const stripeCoupon = data.coupon;
-        let discountAmount = 0;
-        
-        // Calculate discount based on Stripe coupon type
-        if (stripeCoupon.percent_off) {
-          discountAmount = Math.round(baseAmount * (stripeCoupon.percent_off / 100));
-        } else if (stripeCoupon.amount_off) {
-          discountAmount = stripeCoupon.amount_off;
-        }
-        
-        setDiscount(discountAmount);
-        setAppliedCoupon(couponCode.trim());
-        setCouponApplied(true);
-        setCouponCode('');
-        setError(''); // Clear any previous errors
-        
-        // Success message could be shown here if needed
-        console.log('Coupon applied successfully:', couponCode);
-      } else {
-        setError(data.message || 'Invalid coupon code');
-        // Clear the coupon input on error
-        setCouponCode('');
+      // First, get the current price for this product
+      const productsResponse = await apiRequest('GET', '/api/stripe/products');
+      const productsData = await productsResponse.json();
+      
+      const product = productsData.products.find((p: any) => p.id === productId);
+      if (!product || !product.price) {
+        throw new Error(`Product ${productId} not found or has no active price`);
       }
-    } catch (err) {
-      console.error('Coupon application error:', err);
-      setError('Failed to validate coupon. Please try again.');
-      setCouponCode('');
+
+      // Create checkout session with embedded UI
+      const sessionResponse = await apiRequest('POST', '/api/create-checkout-session', {
+        priceId: product.price.id
+      });
+      
+      const sessionData = await sessionResponse.json();
+      
+      if (sessionData.clientSecret) {
+        setClientSecret(sessionData.clientSecret);
+      } else {
+        throw new Error('Failed to get client secret from server');
+      }
+      
+    } catch (err: any) {
+      console.error('Error creating checkout session:', err);
+      setError(err.message || 'Failed to initialize checkout');
+    } finally {
+      setLoading(false);
     }
-  };
-
-  const removeCoupon = () => {
-    setDiscount(0);
-    setAppliedCoupon('');
-    setCouponApplied(false);
-    setError('');
-  };
-
-  // Dummy function - we'll use a real HTML form instead
-  const redirectToStripeCheckout = () => {
-    setLoading(true);
-  };
+  }, [productId]);
 
   useEffect(() => {
-    // Don't auto-redirect if user is applying a coupon
-    setLoading(false);
-  }, []);
+    fetchClientSecret();
+  }, [fetchClientSecret]);
 
-  if (!import.meta.env.VITE_STRIPE_PUBLIC_KEY) {
+  if (loading) {
     return (
       <CheckoutContainer>
         <CheckoutCard>
-          <CardContent>
-            <Alert severity="error">
-              Stripe configuration required. Please contact support.
-            </Alert>
-          </CardContent>
-        </CheckoutCard>
-      </CheckoutContainer>
-    );
-  }
-
-  if (loading || isLoadingPrice) {
-    return (
-      <CheckoutContainer>
-        <CheckoutCard>
-          <CardContent sx={{ textAlign: 'center', py: 4 }}>
-            <CircularProgress size={40} />
-            <MDTypography variant="h6" sx={{ mt: 2 }}>
-              Initializing secure checkout...
+          <CardContent sx={{ textAlign: 'center', py: 6 }}>
+            <CircularProgress size={60} sx={{ color: '#0A1F44', mb: 3 }} />
+            <MDTypography variant="h5" color="dark">
+              Setting up secure checkout...
+            </MDTypography>
+            <MDTypography variant="body2" color="text" sx={{ mt: 1 }}>
+              Please wait while we prepare your payment form
             </MDTypography>
           </CardContent>
         </CheckoutCard>
@@ -191,8 +95,18 @@ export default function Checkout() {
     return (
       <CheckoutContainer>
         <CheckoutCard>
-          <CardContent>
-            <Alert severity="error">{error}</Alert>
+          <CardContent sx={{ py: 6 }}>
+            <Alert severity="error" sx={{ mb: 3 }}>
+              {error}
+            </Alert>
+            <MDBox textAlign="center">
+              <MDTypography variant="h5" color="dark" gutterBottom>
+                Unable to load checkout
+              </MDTypography>
+              <MDTypography variant="body2" color="text">
+                Please refresh the page or contact support if the problem persists.
+              </MDTypography>
+            </MDBox>
           </CardContent>
         </CheckoutCard>
       </CheckoutContainer>
@@ -202,128 +116,30 @@ export default function Checkout() {
   return (
     <CheckoutContainer>
       <CheckoutCard>
-        <CardContent sx={{ p: 4 }}>
-          {/* Header */}
-          <MDBox textAlign="center" mb={4}>
-            <img 
-              src="/apple-bites-logo.png" 
-              alt="Apple Bites" 
-              style={{ height: 60, marginBottom: 16 }}
-            />
-            <MDTypography variant="h4" fontWeight="bold" gutterBottom>
-              {tier === 'growth' ? 'Growth & Exit Assessment' : 
-               tier === 'capital' ? 'Capital Market Positioning Plan' : 'Assessment'}
+        <CardContent sx={{ p: 0 }}>
+          <MDBox p={3} textAlign="center" sx={{ bgcolor: '#f8f9fa', borderBottom: '1px solid #e9ecef' }}>
+            <MDTypography variant="h4" color="dark" gutterBottom>
+              Secure Checkout
             </MDTypography>
-            <MDTypography variant="h6" color="text" sx={{ opacity: 0.7 }}>
-              Secure checkout powered by Stripe
+            <MDTypography variant="body2" color="text">
+              Complete your purchase with Stripe's secure payment system
             </MDTypography>
-          </MDBox>
-
-          {/* Pricing Section */}
-          <MDBox mb={4}>
-            <MDTypography variant="h6" gutterBottom>
-              Order Summary:
-            </MDTypography>
-            <Box sx={{ p: 2, bgcolor: '#F9FAFB', borderRadius: 1, mb: 2 }}>
-              <Box display="flex" justifyContent="space-between" mb={1}>
-                <MDTypography variant="body2">
-                  {priceDetails?.name || 'Growth & Exit Assessment'}
-                </MDTypography>
-                <MDTypography variant="body2">
-                  ${(baseAmount / 100).toFixed(2)}
-                </MDTypography>
-              </Box>
-              {couponApplied && (
-                <Box display="flex" justifyContent="space-between" mb={1}>
-                  <MDTypography variant="body2" color="success">
-                    Coupon ({appliedCoupon})
-                    <Button 
-                      size="small" 
-                      onClick={removeCoupon}
-                      sx={{ ml: 1, minWidth: 'auto', p: 0.5 }}
-                    >
-                      ×
-                    </Button>
-                  </MDTypography>
-                  <MDTypography variant="body2" color="success">
-                    -${(discount / 100).toFixed(2)}
-                  </MDTypography>
-                </Box>
-              )}
-              <Box sx={{ borderTop: '1px solid #E5E7EB', pt: 1 }}>
-                <Box display="flex" justifyContent="space-between">
-                  <MDTypography variant="h6">
-                    Total
-                  </MDTypography>
-                  <MDTypography variant="h6">
-                    ${(finalAmount / 100).toFixed(2)}
-                  </MDTypography>
-                </Box>
-              </Box>
-            </Box>
-          </MDBox>
-
-          {/* Coupon info - Stripe handles this */}
-          <MDBox mb={4}>
-            <Alert severity="info" sx={{ bgcolor: '#EBF8FF', color: '#1E3A8A', border: '1px solid #93C5FD' }}>
+            <Alert severity="info" sx={{ mt: 2, bgcolor: '#EBF8FF', color: '#1E3A8A', border: '1px solid #93C5FD' }}>
               <MDTypography variant="body2">
-                💡 <strong>Have a coupon?</strong> You can enter it during the secure Stripe checkout process.
+                💡 <strong>Have a promotion code?</strong> You can enter it in the form below.
               </MDTypography>
             </Alert>
           </MDBox>
-
-          {/* Features */}
-          <MDBox mb={4}>
-            <MDTypography variant="h6" gutterBottom>
-              What's included:
-            </MDTypography>
-            <Box component="ul" sx={{ pl: 2, color: '#6B7280' }}>
-              <li>Industry-specific NAICS valuation analysis</li>
-              <li>Comprehensive AI-powered business insights</li>
-              <li>Professional PDF valuation report</li>
-              <li>Value improvement recommendations</li>
-              {tier === 'capital' && (
-                <>
-                  <li>Investment readiness assessment</li>
-                  <li>Capital structure optimization</li>
-                  <li>Access to capital readiness community</li>
-                </>
-              )}
-            </Box>
-          </MDBox>
-
-          {/* Stripe Hosted Checkout - Simplified */}
-          <MDBox sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
-            <form 
-              method="POST" 
-              action="/api/create-checkout-session"
-              style={{ width: '100%' }}
-            >
-              <input type="hidden" name="priceId" value={priceDetails?.priceId || ''} />
-              <MDButton
-                type="submit"
-                variant="gradient"
-                color="info"
-                size="large"
-                fullWidth
-                disabled={loading || !priceDetails?.priceId}
-                sx={{
-                  background: 'linear-gradient(45deg, #0A1F44 30%, #1B2C4F 90%)',
-                  py: 1.5,
-                  fontSize: '1.1rem',
-                  fontWeight: 600,
-                }}
-              >
-                {loading ? 'Loading...' : !priceDetails?.priceId ? 'Loading pricing...' : `Continue to Secure Checkout - $${(baseAmount / 100).toFixed(2)}`}
-              </MDButton>
-            </form>
-          </MDBox>
           
-          {/* Stripe handles coupons natively */}
-          <MDBox sx={{ textAlign: 'center', mt: 2 }}>
-            <MDTypography variant="body2" sx={{ color: '#6B7280' }}>
-              Enter coupon codes during checkout • Secure payment by Stripe
-            </MDTypography>
+          <MDBox p={2}>
+            {clientSecret && (
+              <EmbeddedCheckoutProvider
+                stripe={stripePromise}
+                options={{ clientSecret }}
+              >
+                <EmbeddedCheckout />
+              </EmbeddedCheckoutProvider>
+            )}
           </MDBox>
         </CardContent>
       </CheckoutCard>

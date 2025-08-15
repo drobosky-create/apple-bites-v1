@@ -2482,124 +2482,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
     });
 
-    // Stripe coupon validation endpoint with demo fallback
+    // DEPRECATED: Coupon validation endpoint - no longer needed with embedded checkout
+    // Stripe's embedded checkout handles promotion codes natively
     app.post('/api/validate-coupon', async (req, res) => {
-      try {
-        const { couponCode } = req.body;
-        
-        // First try to retrieve promotion code from Stripe (for user-friendly codes like "Test25")
-        try {
-          console.log('Validating Stripe promotion code:', couponCode);
-          const promotionCodes = await stripe.promotionCodes.list({
-            code: couponCode,
-            limit: 1
-          });
-          
-          if (promotionCodes.data.length > 0) {
-            const promotionCode = promotionCodes.data[0];
-            console.log('Found promotion code:', promotionCode.code, 'active:', promotionCode.active);
-            
-            if (!promotionCode.active) {
-              return res.status(400).json({ 
-                valid: false, 
-                message: 'Promotion code is not active' 
-              });
-            }
-            
-            // Get the associated coupon details
-            const couponId = typeof promotionCode.coupon === 'string' ? promotionCode.coupon : promotionCode.coupon.id;
-            const coupon = await stripe.coupons.retrieve(couponId);
-            console.log('Associated coupon:', coupon.id, coupon.valid);
-            
-            if (!coupon.valid) {
-              return res.status(400).json({ 
-                valid: false, 
-                message: 'Coupon is not valid or has expired' 
-              });
-            }
-            
-            // Return promotion code and coupon details
-            return res.json({
-              valid: true,
-              source: 'promotion_code',
-              coupon: {
-                id: coupon.id,
-                name: coupon.name,
-                percent_off: coupon.percent_off,
-                amount_off: coupon.amount_off,
-                currency: coupon.currency,
-                duration: coupon.duration,
-                duration_in_months: coupon.duration_in_months,
-                max_redemptions: coupon.max_redemptions,
-                times_redeemed: coupon.times_redeemed,
-                valid: coupon.valid
-              },
-              promotionCode: {
-                code: promotionCode.code,
-                active: promotionCode.active
-              }
-            });
-          }
-        } catch (promotionError: any) {
-          console.log('Promotion code lookup failed, trying direct coupon:', promotionError.message);
-        }
-
-        // If promotion code not found, try direct coupon lookup
-        try {
-          console.log('Validating direct Stripe coupon:', couponCode);
-          const coupon = await stripe.coupons.retrieve(couponCode);
-          console.log('Stripe coupon retrieved:', coupon.id, coupon.valid);
-          
-          if (!coupon.valid) {
-            return res.status(400).json({ 
-              valid: false, 
-              message: 'Coupon is not valid or has expired' 
-            });
-          }
-          
-          // Return Stripe coupon details
-          return res.json({
-            valid: true,
-            source: 'coupon',
-            coupon: {
-              id: coupon.id,
-              name: coupon.name,
-              percent_off: coupon.percent_off,
-              amount_off: coupon.amount_off,
-              currency: coupon.currency,
-              duration: coupon.duration,
-              duration_in_months: coupon.duration_in_months,
-              max_redemptions: coupon.max_redemptions,
-              times_redeemed: coupon.times_redeemed,
-              valid: coupon.valid
-            }
-          });
-        } catch (stripeError: any) {
-          console.log('Stripe coupon error for code "' + couponCode + '":', stripeError.code, stripeError.message);
-          
-          // Provide more specific error messages based on Stripe error codes
-          let errorMessage = 'Invalid coupon code';
-          if (stripeError.code === 'resource_missing') {
-            errorMessage = `Coupon or promotion code "${couponCode}" not found. Please check the code and try again.`;
-          } else if (stripeError.code === 'coupon_expired') {
-            errorMessage = 'This coupon has expired.';
-          } else if (stripeError.code === 'max_redemptions_exceeded') {
-            errorMessage = 'This coupon has reached its maximum number of uses.';
-          }
-          
-          // Return invalid for any Stripe error with more specific message
-          return res.status(400).json({ 
-            valid: false, 
-            message: errorMessage
-          });
-        }
-      } catch (error: any) {
-        console.error('Coupon validation error:', error);
-        res.status(500).json({ 
-          valid: false,
-          message: 'Error validating coupon' 
-        });
-      }
+      res.status(410).json({ 
+        error: 'This endpoint is deprecated. Coupons are now handled natively by Stripe checkout.',
+        message: 'Use promotion codes directly in the checkout form.'
+      });
     });
 
     // Create payment intent for one-time payments (Growth/Capital tiers)
@@ -2738,20 +2627,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
           },
         };
 
-        // Add coupon/discount if provided
-        if (couponId) {
-          try {
-            const coupon = await stripe.coupons.retrieve(couponId);
-            if (coupon.valid) {
-              sessionData.discounts = [{ coupon: couponId }];
-              sessionData.metadata.couponId = couponId;
-              console.log('Applied valid Stripe coupon:', couponId);
-            }
-          } catch (couponError) {
-            console.warn('Invalid Stripe coupon provided:', couponId);
-            // Continue without coupon if invalid
-          }
-        }
+        // Note: Coupons are handled automatically by Stripe embedded checkout via allow_promotion_codes
+        // Users enter promotion codes directly in the checkout form
 
         const session = await stripe.checkout.sessions.create(sessionData);
 

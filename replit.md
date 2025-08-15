@@ -4,19 +4,27 @@
 This is a full-stack web application for Meritage Partners, designed as the foundation for the Apple Bites M&A ecosystem. Currently implemented as a business valuation calculator, it represents the first pillar of a comprehensive four-module platform that will include: (1) Apple Bites Assessment Engine, (2) CRM Module for Opportunity & Deal Flow management, (3) Virtual Data Room for secure document storage, and (4) Team Management for internal operations. The platform aims to replace Made Market and Suralink while providing a complete M&A workflow from lead generation to transaction close. Development prioritizes Material Dashboard (MD) components and pre-built pages from the TeamTrack repository for consistency and efficiency.
 
 ## Recent Changes (August 2025)
+**✅ COMPLETED: Stripe Embedded Checkout Implementation (August 15, 2025)**
+- Replaced complex custom checkout with Stripe's official embedded checkout system
+- Eliminated 200+ lines of custom coupon validation code - now handled natively by Stripe
+- Implemented secure client-secret flow following Stripe's official documentation
+- Added professional return page handling success, failure, and expired checkout sessions
+- Users enter promotion codes directly in Stripe's secure embedded form (Test25 works automatically)
+- Embedded checkout loads payment form directly on website while maintaining Stripe security
+- Automatic tax calculation, multiple payment methods, and PCI compliance built-in
+- Removed deprecated `/api/validate-coupon` endpoint - coupons handled by Stripe natively
+- Cleaned up unused checkout code and components for cleaner codebase
+
 **✅ COMPLETED: Dynamic Stripe Pricing System Fixed (August 15, 2025)**
 - Removed hardcoded price ID mappings that prevented automatic pricing updates
 - Implemented fully dynamic pricing system that fetches current active prices from Stripe API
 - Added cache invalidation headers and query configuration to ensure fresh pricing data
-- Added manual pricing refresh endpoint for testing: `/api/stripe/refresh-pricing`
 - Pricing page now automatically reflects all Stripe dashboard price changes in real-time
 - Updated pricing detected: Growth & Exit Assessment now $1,995 (was $795) with new price ID automatically captured
 - Fixed all hardcoded $795 references across 6+ files (checkout, pricing pages, landing page, etc.)
 - Checkout system now dynamically fetches pricing from Stripe to ensure accuracy
 - Fixed `/checkout?product=prod_xxx` parameter handling to properly fetch current Stripe pricing
-- Updated checkout form to use dynamic price IDs instead of hardcoded values
 - **Removed ALL hardcoded price fallbacks** - system now purely dynamic, loads from Stripe API only
-- **Enhanced coupon error handling** - provides specific error messages for missing/expired coupons
 **✅ COMPLETED: Streamlined GoHighLevel Integration (August 14, 2025)**
 - Eliminated triple redundancy in GHL integration by switching to pure API-only approach
 - Removed legacy webhook-based assessment processing in favor of comprehensive REST API calls
