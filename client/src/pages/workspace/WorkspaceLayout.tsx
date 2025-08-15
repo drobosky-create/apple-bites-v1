@@ -1,10 +1,10 @@
 import React from "react";
-import { Switch, Route, Link, useLocation } from "wouter";
-import { Box, Tabs, Tab } from "@mui/material";
+import { Switch, Route, useLocation } from "wouter";
+import { Box } from "@mui/material";
 import { useAdminAuth } from "@/hooks/use-admin-auth";
 import { useTeamAuth } from "@/hooks/use-team-auth";
 import MDBox from "@/components/MD/MDBox";
-import MDTypography from "@/components/MD/MDTypography";
+import WorkspaceSidebar from "@/components/workspace/Sidebar";
 import CRMModule from "./CRMModule";
 import VDRModule from "./VDRModule";
 import TeamModule from "./TeamModule";
@@ -14,7 +14,6 @@ import AdminLoginPage from "@/pages/admin-login";
 export default function WorkspaceLayout() {
   const { isAuthenticated: isAdminAuth, isLoading: adminLoading } = useAdminAuth();
   const { isAuthenticated: isTeamAuth, isLoading: teamLoading } = useTeamAuth();
-  const [location, setLocation] = useLocation();
   
   // Check if user has workspace access (admin or team member)
   const hasWorkspaceAccess = isAdminAuth || isTeamAuth;

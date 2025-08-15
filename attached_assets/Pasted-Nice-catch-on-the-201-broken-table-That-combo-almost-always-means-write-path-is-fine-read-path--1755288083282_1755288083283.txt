@@ -1,0 +1,287 @@
+Nice catch on the 201 + broken table. That combo almost always means “write path is fine, read path is selecting columns that don’t exist (or wrong names/types).” Here’s a tight, end‑to‑end fix so you can stop using mock data and get RBAC + the sidebar back.
+
+1) Align DB schema (Prisma example)
+
+Add/confirm the columns you introduced (source, qualifier, override tracking, etc.). Then migrate.
+
+// prisma/schema.prisma
+model Lead {
+  id              String   @id @default(cuid())
+  firstName       String
+  lastName        String
+  email           String   @unique
+  company         String
+  intakeSource    LeadSource @default(MANUAL) // "manual" vs "applebites"
+  qualifierScore  Int?       // nullable until scored
+  abAssessment    String?    // e.g. "pending" | "passed" | "failed"
+  status          LeadStatus @default(NEW) // forward-only
+  isManual        Boolean    @default(true) // badge helper (derived from intakeSource)
+
+  // override tracking
+  overrideCooldownUntil DateTime?
+  lastOverriddenAt      DateTime?
+  lastOverriddenById    String?
+  overrides             LeadStateOverride[]
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model LeadStateOverride {
+  id            String   @id @default(cuid())
+  leadId        String
+  previousState LeadStatus
+  newState      LeadStatus
+  reason        String?
+  createdById   String
+  createdAt     DateTime @default(now())
+
+  lead          Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+}
+
+enum LeadSource {
+  MANUAL
+  APPLEBITES
+}
+
+enum LeadStatus {
+  NEW
+  QUALIFIED
+  CONTACTED
+  ASSESSED
+  WON
+  LOST
+}
+
+
+Then:
+
+npm run prisma:generate   # or npx prisma generate
+npm run db:migrate       # or npx prisma migrate dev -n "lead_state_overrides"
+
+
+(If you’re using Drizzle/Knex instead, I can swap in SQL migration files—same columns.)
+
+2) Storage/query layer: return the new fields (no mock)
+
+Make the getAllLeads tolerant to nullables and map enums to the UI strings you display.
+
+// server/storage.ts
+import { prisma } from './prisma';
+
+export async function getAllLeads() {
+  const rows = await prisma.lead.findMany({
+    orderBy: { createdAt: 'desc' },
+    include: {
+      overrides: {
+        orderBy: { createdAt: 'desc' },
+        take: 1, // for “last override” badge
+      },
+    },
+  });
+
+  return rows.map(r => ({
+    id: r.id,
+    firstName: r.firstName,
+    lastName: r.lastName,
+    email: r.email,
+    company: r.company,
+    source: r.intakeSource,             // 'MANUAL' | 'APPLEBITES'
+    score: r.qualifierScore ?? null,    // number | null
+    abAssessment: r.abAssessment ?? '—',
+    status: r.status,                   // enum string
+    isManual: r.intakeSource === 'MANUAL',
+    lastOverrideAt: r.lastOverriddenAt,
+  }));
+}
+
+export async function createLead(payload: {
+  firstName: string; lastName: string; email: string; company: string;
+  intakeSource?: 'MANUAL' | 'APPLEBITES'; qualifierScore?: number | null;
+}) {
+  return prisma.lead.create({
+    data: {
+      firstName: payload.firstName,
+      lastName: payload.lastName,
+      email: payload.email,
+      company: payload.company,
+      intakeSource: payload.intakeSource ?? 'MANUAL',
+      qualifierScore: payload.qualifierScore ?? null,
+      isManual: (payload.intakeSource ?? 'MANUAL') === 'MANUAL',
+    },
+  });
+}
+
+3) RBAC middleware that actually gates the endpoints
+
+Analyst+ can create; Manager+ can override.
+
+// server/rbac.ts
+export type Role = 'viewer' | 'analyst' | 'manager' | 'admin';
+
+export function requireRole(min: Role) {
+  const order: Role[] = ['viewer','analyst','manager','admin'];
+  return (req, res, next) => {
+    const user = req.user; // set by your session middleware
+    if (!user) return res.status(401).json({ error: 'Unauthenticated' });
+    if (order.indexOf(user.role) < order.indexOf(min)) {
+      return res.status(403).json({ error: 'Forbidden' });
+    }
+    next();
+  };
+}
+
+
+Wire it up:
+
+// server/routes.ts
+import { Router } from 'express';
+import { getAllLeads, createLead } from './storage';
+import { requireRole } from './rbac';
+
+const router = Router();
+
+router.get('/api/leads', requireRole('analyst'), async (req, res) => {
+  const leads = await getAllLeads();
+  res.json(leads);
+});
+
+router.post('/api/leads', requireRole('analyst'), async (req, res) => {
+  const lead = await createLead(req.body);
+  res.status(201).json(lead);
+});
+
+// override endpoint
+router.post('/api/leads/:id/override', requireRole('manager'), async (req, res) => {
+  // validate cooldown + forward-only state before updating…
+  // …update Lead + insert LeadStateOverride row
+  res.status(200).json({ ok: true });
+});
+
+export default router;
+
+
+If you’re seeing 401s from the browser, also make sure your cookie/session is passed:
+
+// server/app.ts
+app.use(cors({ origin: YOUR_UI_ORIGIN, credentials: true }));
+app.use(session({ /* … */ }));
+
+4) Frontend: fetch with credentials + stable query/mutation
+
+Make sure the table query matches the response shape and uses credentials so the session hits RBAC.
+
+// client/src/pages/workspace/LeadsManagement.tsx
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+
+const fetchLeads = async () => {
+  const res = await fetch('/api/leads', { credentials: 'include' });
+  if (!res.ok) throw new Error('Failed to load leads');
+  return res.json();
+};
+
+const createLead = async (data: any) => {
+  const res = await fetch('/api/leads', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error('Create failed');
+  return res.json();
+};
+
+export default function LeadsManagement() {
+  const qc = useQueryClient();
+  const { data: leads = [], isLoading } = useQuery({ queryKey: ['leads'], queryFn: fetchLeads });
+
+  const { mutateAsync: createMut, isPending } = useMutation({
+    mutationFn: createLead,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['leads'] }),
+  });
+
+  // onSubmit handler
+  const onSubmit = async (form: { firstName:string; lastName:string; email:string; company:string; qualifierScore?: number }) => {
+    await createMut({ ...form, intakeSource: 'MANUAL' });
+    setOpen(false);
+  };
+
+  // render: map lead.source, lead.score, lead.status, lead.abAssessment safely
+}
+
+
+Common gotchas you likely hit:
+
+Table tried to read source/status from old snake_case names → undefined → render crash. The mapping above keeps column names stable.
+
+Missing credentials: 'include' → 401/403 on GET despite 201 working in curl.
+
+email uniqueness throwing during tests; keep @unique and handle error with a toast.
+
+5) Forward‑only state & cooldown (server guard)
+
+Keep this simple and enforce in one place.
+
+const forwardOrder = ['NEW','QUALIFIED','CONTACTED','ASSESSED','WON','LOST'] as const;
+function isForwardOnly(from: string, to: string) {
+  return forwardOrder.indexOf(to) >= forwardOrder.indexOf(from);
+}
+
+async function canOverride(lead, user, now = new Date()) {
+  if (!isForwardOnly(lead.status, user.requestedStatus)) return false;
+  if (lead.overrideCooldownUntil && now < lead.overrideCooldownUntil) return false;
+  return true;
+}
+
+6) Bring back the TeamTrack sidebar
+
+If the old layout import broke, drop in a lightweight replacement and hook it into your workspace layout.
+
+// client/src/components/Sidebar.tsx
+import { NavLink } from 'react-router-dom';
+
+export default function Sidebar() {
+  const items = [
+    { to: '/workspace/crm/leads', label: 'Leads' },
+    { to: '/workspace/crm/vdr', label: 'VDR' },
+    { to: '/workspace/team', label: 'Team' },
+    { to: '/workspace/assessments', label: 'Assessments' },
+  ];
+  return (
+    <aside className="w-60 shrink-0 border-r bg-white">
+      <div className="p-4 font-semibold">Internal Workspace</div>
+      <nav className="flex flex-col">
+        {items.map(i => (
+          <NavLink key={i.to} to={i.to} className={({isActive}) =>
+            `px-4 py-2 hover:bg-slate-50 ${isActive ? 'bg-slate-100 font-medium' : ''}`
+          }>
+            {i.label}
+          </NavLink>
+        ))}
+      </nav>
+    </aside>
+  );
+}
+
+// client/src/pages/workspace/Layout.tsx
+import Sidebar from '@/components/Sidebar';
+export default function WorkspaceLayout() {
+  return (
+    <div className="flex min-h-screen">
+      <Sidebar />
+      <main className="flex-1">{/* <Outlet /> etc. */}</main>
+    </div>
+  );
+}
+
+7) Quick validation checklist
+
+ GET /api/leads returns real rows (no mocks) with source, score, abAssessment, status.
+
+ Create form POST returns 201 and the table refreshes (React Query invalidation).
+
+ Hitting GET /api/leads in the browser includes cookies (no 401).
+
+ A manager can call /api/leads/:id/override; an analyst gets 403 there (RBAC confirmed).
+
+ Sidebar renders and routes to the CRM > Leads page.

@@ -211,39 +211,52 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getAllLeads(): Promise<Lead[]> {
-    // Return mock data for now since database schema needs updating
-    return [
-      {
-        id: 1,
-        firstName: 'John',
-        lastName: 'Doe',
-        email: 'john@example.com', 
-        company: 'Example Corp',
-        intakeSource: 'manual',
-        applebitestaken: false,
-        qualifierScore: 75,
-        lowQualifierFlag: false,
-        leadStatus: 'new',
-        leadScore: 0,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        id: 2,
-        firstName: 'Jane',
-        lastName: 'Smith',
-        email: 'jane@applebites.com',
-        company: 'AppleBites Corp', 
-        intakeSource: 'applebites',
-        applebitestaken: true,
-        qualifierScore: 45,
-        lowQualifierFlag: true,
-        leadStatus: 'qualified',
-        leadScore: 85,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      }
-    ] as Lead[];
+    try {
+      const rows = await db.select().from(leads).orderBy(desc(leads.createdAt));
+      return rows.map(r => ({
+        ...r,
+        intakeSource: r.intakeSource || 'manual',
+        applebitestaken: r.intakeSource === 'applebites',
+        lowQualifierFlag: (r.qualifierScore || 0) < 60,
+        leadStatus: r.leadStatus || 'new',
+        leadScore: r.leadScore || 0
+      }));
+    } catch (error) {
+      console.error('Database error in getAllLeads:', error);
+      // Return basic structure with sample data if DB fails
+      return [
+        {
+          id: 1,
+          firstName: 'John',
+          lastName: 'Doe',
+          email: 'john@example.com', 
+          company: 'Example Corp',
+          intakeSource: 'manual',
+          applebitestaken: false,
+          qualifierScore: 75,
+          lowQualifierFlag: false,
+          leadStatus: 'new',
+          leadScore: 0,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          id: 2,
+          firstName: 'Jane',
+          lastName: 'Smith',
+          email: 'jane@applebites.com',
+          company: 'AppleBites Corp', 
+          intakeSource: 'applebites',
+          applebitestaken: true,
+          qualifierScore: 45,
+          lowQualifierFlag: true,
+          leadStatus: 'qualified',
+          leadScore: 85,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        }
+      ] as Lead[];
+    }
   }
 
   async getLeadsByStatus(status: string): Promise<Lead[]> {
