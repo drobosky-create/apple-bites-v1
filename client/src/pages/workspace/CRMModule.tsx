@@ -5,6 +5,8 @@ import MDBox from "@/components/MD/MDBox";
 import MDTypography from "@/components/MD/MDTypography";
 
 // Stub components for CRM tabs - will be implemented with real functionality
+import LeadsManagement from "./LeadsManagement";
+
 const KanbanView = () => (
   <MDBox p={3}>
     <MDTypography variant="h6" mb={2}>Deal Pipeline (Kanban)</MDTypography>
@@ -16,6 +18,8 @@ const KanbanView = () => (
     </MDBox>
   </MDBox>
 );
+
+const LeadsView = () => <LeadsManagement />;
 
 const ListView = () => (
   <MDBox p={3}>
@@ -74,12 +78,13 @@ export default function CRMModule() {
 
   const renderTabContent = () => {
     switch (activeTab) {
-      case 0: return <KanbanView />;
-      case 1: return <ListView />;
-      case 2: return <CalendarView />;
-      case 3: return <TargetsView />;
-      case 4: return <ReportsView />;
-      default: return <KanbanView />;
+      case 0: return <LeadsView />;
+      case 1: return <KanbanView />;
+      case 2: return <ListView />;
+      case 3: return <CalendarView />;
+      case 4: return <TargetsView />;
+      case 5: return <ReportsView />;
+      default: return <LeadsView />;
     }
   };
 
@@ -99,6 +104,7 @@ export default function CRMModule() {
             },
           }}
         >
+          <Tab label="Leads" />
           <Tab label="Kanban" />
           <Tab label="List" />
           <Tab label="Calendar" />
