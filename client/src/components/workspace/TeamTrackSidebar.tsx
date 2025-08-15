@@ -18,7 +18,7 @@ export default function TeamTrackSidebar() {
   const userRole = isAdmin ? "admin" : isTeam ? "member" : undefined;
 
   return (
-    <aside className="w-60 shrink-0 border-r bg-white/90 backdrop-blur p-3 overflow-y-auto">
+    <div className="h-full border-r bg-white/90 backdrop-blur p-3 overflow-y-auto">
       <div className="mb-4">
         <div className="text-lg font-bold text-slate-800">TeamTrack</div>
         <div className="text-xs text-slate-500">M&A Workspace</div>
@@ -51,6 +51,6 @@ export default function TeamTrackSidebar() {
            "Guest Access"}
         </div>
       </div>
-    </aside>
+    </div>
   );
 }

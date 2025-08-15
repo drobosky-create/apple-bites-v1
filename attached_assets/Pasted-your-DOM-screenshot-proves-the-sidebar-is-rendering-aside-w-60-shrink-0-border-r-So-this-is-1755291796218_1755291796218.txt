@@ -1,0 +1,98 @@
+your DOM screenshot proves the sidebar is rendering (<aside … w-60 shrink-0 border-r …>). So this isn’t routing or RBAC; it’s layout/CSS. The content area is likely stretching over it (absolute/fixed/stretched child inside CRMModule) so the sidebar has no visible footprint.
+
+Here’s the quickest fix that doesn’t require the Agent:
+
+Fix (switch to a “can’t-break” grid layout)
+
+Update your WorkspaceLayout.tsx container from flex to an explicit 2-column grid. This guarantees a 15rem left column no matter what children do.
+
+// client/src/pages/workspace/WorkspaceLayout.tsx
+import React from "react";
+import { Switch, Route } from "wouter";
+import TeamTrackSidebar from "@/components/workspace/TeamTrackSidebar";
+import { BuildFooter } from "@/components/Footer";
+// ...imports (CRMModule, etc.) and auth checks remain the same
+
+export default function WorkspaceLayout() {
+  // ... your auth logic above is unchanged
+
+  return (
+    // 15rem fixed left column + flexible right column (minmax prevents overflow)
+    <div className="min-h-screen grid grid-cols-[15rem_minmax(0,1fr)]">
+      {/* keep the sidebar visible & on top if content goes absolute */}
+      <aside className="sticky top-0 h-screen z-10">
+        <TeamTrackSidebar />
+      </aside>
+
+      {/* main column must not overflow the grid cell */}
+      <div className="min-w-0 flex flex-col">
+        <main className="flex-1 p-6 bg-gray-50">
+          <div className="mx-auto max-w-7xl">
+            <Switch>
+              <Route path="/workspace/crm" component={CRMModule} />
+              <Route path="/workspace/vdr" component={VDRModule} />
+              <Route path="/workspace/team" component={TeamModule} />
+              <Route path="/workspace/assessments" component={AssessmentAdminModule} />
+              <Route path="/workspace/leads" component={CRMModule} />
+              <Route path="/workspace/kanban" component={CRMModule} />
+              <Route path="/workspace/list" component={CRMModule} />
+              <Route path="/workspace/calendar" component={CRMModule} />
+              <Route path="/workspace/targets" component={CRMModule} />
+              <Route path="/workspace/reports" component={CRMModule} />
+              <Route path="/workspace/audit" component={CRMModule} />
+              <Route path="/workspace/settings" component={CRMModule} />
+              <Route>{() => <CRMModule />}</Route>
+            </Switch>
+          </div>
+        </main>
+        <BuildFooter />
+      </div>
+    </div>
+  );
+}
+
+Why this works
+
+Grid with grid-cols-[15rem_minmax(0,1fr)] reserves a hard 15rem left column; the main content cannot overlap it.
+
+min-w-0 on the right column prevents child components from forcing overflow that “pushes” the sidebar off-screen.
+
+sticky top-0 h-screen z-10 keeps the sidebar pinned and above any absolute/fixed content inside modules.
+
+30-second verification (no Agent)
+
+Save the file.
+
+Hard refresh the preview (Cmd/Ctrl-Shift-R).
+
+In DevTools → Elements, select the <aside> and confirm it now has width ~240px and is visible.
+
+If still hidden, in Console run:
+
+document.querySelector('aside')?.getBoundingClientRect()
+
+
+You should see a width near 240. If width is correct but you still don’t see it, some child in CRMModule is position:fixed/absolute; left:0; right:0;—we can add relative to the main column or remove that positioning in the offending module.
+
+If you prefer to keep Flex
+
+Add these two lines to force the same effect:
+
+<div className="flex min-h-screen">
+  <div className="w-60 shrink-0 sticky top-0 h-screen z-10"><TeamTrackSidebar/></div>
+  <div className="flex-1 min-w-0 flex flex-col">…</div>
+</div>
+
+Quick sanity checks
+
+Elements → the sidebar <aside> should have width ≈ 240px.
+
+Computed styles → ensure display: grid on the top container and no position: fixed on any wrapper that spans full viewport.
+
+If links don’t navigate, make sure TeamTrackSidebar uses links (not plain <button>). With wouter you can use:
+
+import { Link, useLocation } from "wouter";
+<Link href="/workspace/leads">Leads</Link>
+
+
+If this doesn’t snap it into place, paste the first ~40 lines of your TeamTrackSidebar.tsx (just the render/markup) and I’ll flag the exact class causing the overlap.

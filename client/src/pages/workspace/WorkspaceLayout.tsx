@@ -39,9 +39,15 @@ export default function WorkspaceLayout() {
     return <AdminLoginPage />;
   }
   return (
-    <div className="flex min-h-screen">
-      <TeamTrackSidebar />
-      <div className="flex-1 flex flex-col">
+    // 15rem fixed left column + flexible right column (minmax prevents overflow)
+    <div className="min-h-screen grid grid-cols-[15rem_minmax(0,1fr)]">
+      {/* keep the sidebar visible & on top if content goes absolute */}
+      <aside className="sticky top-0 h-screen z-10">
+        <TeamTrackSidebar />
+      </aside>
+
+      {/* main column must not overflow the grid cell */}
+      <div className="min-w-0 flex flex-col">
         <main className="flex-1 p-6 bg-gray-50">
           <div className="mx-auto max-w-7xl">
             <Switch>
@@ -57,9 +63,7 @@ export default function WorkspaceLayout() {
               <Route path="/workspace/reports" component={CRMModule} />
               <Route path="/workspace/audit" component={CRMModule} />
               <Route path="/workspace/settings" component={CRMModule} />
-              <Route>
-                <CRMModule />
-              </Route>
+              <Route>{() => <CRMModule />}</Route>
             </Switch>
           </div>
         </main>
