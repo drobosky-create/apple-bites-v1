@@ -187,7 +187,7 @@ export default function TermsOfUse() {
             Limited to standard reports and basic recommendations.
           </Typography>
 
-          <SectionTitle variant="h5">Growth Tier ($795)</SectionTitle>
+          <SectionTitle variant="h5">Growth Tier ($1,995)</SectionTitle>
           <Typography paragraph>
             Includes industry-specific NAICS-based valuations, comprehensive AI analysis, 
             enhanced reporting, and consultation scheduling access.

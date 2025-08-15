@@ -153,7 +153,7 @@ function GrowthExitAssessment() {
 
   const growthPrice = growthProduct?.price ? 
     formatPrice(growthProduct.price.amount, growthProduct.price.currency) : 
-    '$795';
+    '$1,995';
 
   const [formData, setFormData] = useState({
     primarySector: "",
