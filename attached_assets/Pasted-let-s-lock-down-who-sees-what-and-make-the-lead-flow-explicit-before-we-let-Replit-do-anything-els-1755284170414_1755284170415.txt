@@ -1,0 +1,180 @@
+let’s lock down “who sees what” and make the lead flow explicit before we let Replit do anything else.
+
+Access model (RBAC) — simple, strict, and enforceable
+
+Spaces
+
+/portal (client-facing): historical assessments, status, secure uploads, messages.
+
+/workspace (internal): Leads/Assessments, CRM, VDR, Team.
+
+Roles (claims on the server; default‑deny, allow‑list)
+
+client: portal only (their own org data).
+
+buyer (optional external): portal for specific shared deals/VDR folders (read-only unless granted).
+
+analyst: workspace: Leads/Assessments, CRM (no billing, no team admin).
+
+manager: workspace: CRM, VDR, Assessments, can invite users and approve sharing.
+
+admin: full workspace access incl. billing, role assignment, global reports.
+
+Guardrails (server-first)
+
+Middleware checks: role ∈ route.allowedRoles + resource.orgId == user.orgId + object‑level ACL for VDR folders/files.
+
+Everything is denied unless explicitly allowed; UI hides tabs but server enforces.
+
+Audit log on every write: {actorId, role, route, method, resource, before/after, ts}.
+
+Route + feature matrix (what each role gets)
+
+/portal/dashboard: assessments list, detail, messaging, secure upload (client).
+
+/workspace/leads: all leads + intake (analyst↑).
+
+/workspace/assessments: all assessments, scheduling, results (analyst↑).
+
+/workspace/crm: pipeline, list, calendar, targets, reports (analyst↑; some reports manager↑).
+
+/workspace/vdr: rooms, folders, NDA gating, permission sets (manager↑ for grant; analyst read/write if assigned).
+
+/workspace/team: users, roles, org settings (admin).
+
+Lead flow (defined, tag‑driven, webhook‑free)
+
+Canonical state machine
+
+Intake → 2) Nurture → 3) Qualified → 4) Assessment Scheduled →
+
+Assessment Completed → 6) Opportunity Created (CRM) → 7) NDA Signed →
+
+VDR Opened → 9) LOI → 10) Due Diligence → 11) Closed Won/Lost
+
+GHL tags (exact strings)
+
+lead:intake, lead:nurture, lead:qualified,
+
+assessment:scheduled, assessment:completed,
+
+crm:opportunity:created,
+
+nda:signed, vdr:opened,
+
+deal:loi, deal:dd, deal:won, deal:lost.
+
+Automations (in GHL)
+
+Tag add ➜ send confirmation + schedule link (Calendly/your scheduler) ➜ add assessment:scheduled.
+
+Assessment completion (Apple Bites) ➜ add assessment:completed ➜ call internal API to create CRM Opportunity and seed VDR room; add crm:opportunity:created.
+
+NDA e‑sign complete ➜ add nda:signed ➜ unlock VDR access; add vdr:opened.
+
+Apple Bites internal invariants
+
+State can only move forward (or to a terminal state). Server rejects illegal transitions.
+
+Every state change writes to audit + stamps changedBy.
+
+Data model (minimal keys you’ll need now)
+
+Org { id, name, tier }
+
+User { id, orgId, role }
+
+Lead { id, orgId, source, state, ownerId, ghlContactId? }
+
+Assessment { id, orgId, leadId, status, score, reportUrl }
+
+Opportunity { id, orgId, leadId, stage, amount?, expectedClose? }
+
+Deal { id, orgId, opportunityId, stage, fees, closeDate? }
+
+VDR.Room { id, orgId, dealId, ndaRequired, acl[] }
+
+Audit { id, orgId, actorId, action, resource, before, after, ts }
+
+“Anti‑Phantom Code” guardrails for the Replit AI Agent
+
+Drop these into your applebites-v1 repo so the agent keeps to the plan:
+
+1) Agent contract (repo root, AGENT_RULES.md)
+
+Only modify files that exist.
+
+Before any “create file” action: list target path in a Change Plan block and check it against allowed_paths.json.
+
+No new dependencies without adding them to package.json + WHY_DEP.md.
+
+All UI must use existing Material Dashboard components.
+
+Never touch /portal routing with workspace features.
+
+2) Allowed paths
+
+// allowed_paths.json
+{
+  "create": [
+    "server/rbac.ts",
+    "server/routes/*",
+    "server/services/*",
+    "client/src/pages/portal/*",
+    "client/src/pages/workspace/*",
+    "client/src/components/MD/*",
+    "shared/*",
+    "docs/*",
+    "tests/*"
+  ],
+  "modify": ["**/*"]
+}
+
+
+3) Pre-commit checks (simple CI you can run locally)
+
+scripts/precommit.sh runs:
+
+Type check
+
+Route guard test: verifies protected routes map to roles
+
+“Phantom check”: fails if a referenced import path doesn’t exist
+
+Lint for banned strings: Grid2, any as, hardcoded roles, direct DOM file access.
+
+4) Runtime guard
+
+On boot, assert:
+
+All workspace/* routes registered with required roles.
+
+UI tabs rendered only if hasRole(...).
+
+Feature flags consistent with tier.
+
+About the EBITDA multiples PDF you uploaded
+
+Yes—great idea to check in a vetted reference so the agent doesn’t invent valuation logic. Put the PDF in docs/valuation/ and (optionally) extract a small JSON registry the app can use:
+
+docs/valuation/EBITDA-Multiples.pdf (the file you provided)
+
+shared/multiples.naics.json (machine‑readable slice of the most used NAICS ranges—e.g., restaurants ~2–5×, manufacturing ~3–10× with ~5.4× median, information/software higher single to low double digits).
+
+Then:
+
+Add a tiny MultiplesService to read from the JSON for default comps in assessments/CRM.
+
+Unit test that blocks the agent from changing base ranges without updating docs/CHANGELOG_VALUATION.md.
+
+(Examples from your doc: manufacturing median ~5.4×; information/IT often ~9–15×; restaurants ~2–5× with ~2.3× median; overall many sectors cluster around ~4–5×. )
+
+Concrete next steps (no code yet)
+
+I’ll write the RBAC policy file (route→roles map) and the state machine for lead→deal transitions.
+
+Add AGENT_RULES.md, allowed_paths.json, and scripts/precommit.sh.
+
+Commit the EBITDA PDF to docs/valuation/ and a stub multiples.naics.json with 10–15 high‑impact NAICS to start.
+
+Create the /portal vs /workspace navigation document so the agent can mirror it without improvising.

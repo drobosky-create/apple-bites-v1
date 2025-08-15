@@ -1,0 +1,90 @@
+{
+  "metadata": {
+    "source": "EBITDA-Multiples.pdf reference document",
+    "last_updated": "2025-08-15",
+    "description": "Vetted EBITDA multiples for core NAICS codes in Apple Bites assessments",
+    "methodology": "Median ranges from transaction data and industry reports"
+  },
+  "multiples": {
+    "manufacturing": {
+      "naics_range": "31-33",
+      "description": "Manufacturing sectors",
+      "median_multiple": 5.4,
+      "range": [3.0, 10.0],
+      "examples": ["Food Manufacturing", "Machinery", "Transportation Equipment"]
+    },
+    "information_technology": {
+      "naics_range": "51",
+      "description": "Information and IT services",
+      "median_multiple": 12.0,
+      "range": [9.0, 15.0],
+      "examples": ["Software Publishers", "Data Processing", "Telecommunications"]
+    },
+    "restaurants_food_service": {
+      "naics_code": "722",
+      "description": "Food Services and Drinking Places",
+      "median_multiple": 2.3,
+      "range": [2.0, 5.0],
+      "examples": ["Full-Service Restaurants", "Limited-Service Eating Places"]
+    },
+    "professional_services": {
+      "naics_code": "54",
+      "description": "Professional, Scientific, and Technical Services",
+      "median_multiple": 6.5,
+      "range": [4.0, 12.0],
+      "examples": ["Legal Services", "Engineering Services", "Management Consulting"]
+    },
+    "healthcare": {
+      "naics_range": "62",
+      "description": "Health Care and Social Assistance",
+      "median_multiple": 7.8,
+      "range": [5.0, 12.0],
+      "examples": ["Ambulatory Health Care", "Hospitals", "Social Assistance"]
+    },
+    "construction": {
+      "naics_code": "23",
+      "description": "Construction",
+      "median_multiple": 4.2,
+      "range": [2.5, 8.0],
+      "examples": ["Residential Building", "Heavy Civil Engineering", "Specialty Trade"]
+    },
+    "retail_trade": {
+      "naics_range": "44-45",
+      "description": "Retail Trade",
+      "median_multiple": 3.8,
+      "range": [2.0, 7.0],
+      "examples": ["Motor Vehicle Dealers", "General Merchandise", "Food and Beverage"]
+    },
+    "wholesale_trade": {
+      "naics_code": "42",
+      "description": "Wholesale Trade",
+      "median_multiple": 4.5,
+      "range": [3.0, 8.0],
+      "examples": ["Merchant Wholesalers", "Electronic Markets", "Agents and Brokers"]
+    },
+    "finance_insurance": {
+      "naics_code": "52",
+      "description": "Finance and Insurance",
+      "median_multiple": 8.5,
+      "range": [5.0, 15.0],
+      "examples": ["Banking", "Securities", "Insurance Carriers"]
+    },
+    "real_estate": {
+      "naics_code": "53",
+      "description": "Real Estate and Rental and Leasing",
+      "median_multiple": 6.0,
+      "range": [4.0, 10.0],
+      "examples": ["Real Estate Services", "Rental and Leasing Services"]
+    }
+  },
+  "usage_notes": {
+    "default_fallback": 4.5,
+    "adjustment_factors": {
+      "size_premium": "Add 0.5-1.5x for companies >$50M revenue",
+      "geographic_premium": "Add 0.2-0.8x for metro markets",
+      "growth_premium": "Add 0.5-2.0x for >20% YoY growth",
+      "risk_discount": "Subtract 0.5-1.5x for customer concentration >50%"
+    },
+    "validation": "Compare against 3 most similar transactions when available"
+  }
+}

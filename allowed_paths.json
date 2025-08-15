@@ -1,0 +1,28 @@
+{
+  "create": [
+    "server/rbac.ts",
+    "server/routes/*",
+    "server/services/*", 
+    "server/middleware/*",
+    "client/src/pages/portal/*",
+    "client/src/pages/workspace/*",
+    "client/src/components/MD/*",
+    "client/src/hooks/*",
+    "shared/*",
+    "docs/*",
+    "tests/*",
+    "scripts/*"
+  ],
+  "modify": ["**/*"],
+  "forbidden": [
+    "node_modules/*",
+    "dist/*",
+    "build/*",
+    ".git/*"
+  ],
+  "notes": {
+    "create": "Only these paths allowed for new files",
+    "modify": "All existing files can be modified",
+    "forbidden": "Never touch these directories"
+  }
+}
