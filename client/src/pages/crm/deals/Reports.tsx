@@ -3,7 +3,7 @@ import {
   Box, 
   Card, 
   CardContent, 
-  Grid2 as Grid, 
+  Grid, 
   TextField, 
   MenuItem,
   ButtonGroup,
@@ -230,7 +230,7 @@ export default function Reports() {
 
       {/* Key Metrics */}
       <Grid container spacing={3} sx={{ mb: 4 }}>
-        <Grid xs={12} sm={6} lg={3}>
+        <Grid item xs={12} sm={6} lg={3}>
           <StatCard
             title="Total Deals"
             value={totalDeals}
@@ -240,7 +240,7 @@ export default function Reports() {
             trend={{ value: 12, label: "vs last month" }}
           />
         </Grid>
-        <Grid xs={12} sm={6} lg={3}>
+        <Grid item xs={12} sm={6} lg={3}>
           <StatCard
             title="Total Pipeline Value"
             value={formatCurrency(totalValue)}
@@ -250,7 +250,7 @@ export default function Reports() {
             trend={{ value: 8, label: "vs last month" }}
           />
         </Grid>
-        <Grid xs={12} sm={6} lg={3}>
+        <Grid item xs={12} sm={6} lg={3}>
           <StatCard
             title="Average Deal Size"
             value={formatCurrency(avgDealValue)}
@@ -260,7 +260,7 @@ export default function Reports() {
             trend={{ value: -3, label: "vs last month" }}
           />
         </Grid>
-        <Grid xs={12} sm={6} lg={3}>
+        <Grid item xs={12} sm={6} lg={3}>
           <StatCard
             title="Closure Rate"
             value={`${closureRate.toFixed(1)}%`}
@@ -276,7 +276,7 @@ export default function Reports() {
       {viewType === 'overview' && (
         <Grid container spacing={3}>
           {/* Pipeline by Stage */}
-          <Grid xs={12} lg={8}>
+          <Grid item xs={12} lg={8}>
             <Card>
               <CardContent>
                 <MDTypography variant="h6" fontWeight="bold" sx={{ mb: 3 }}>
@@ -303,7 +303,7 @@ export default function Reports() {
           </Grid>
 
           {/* Stage Distribution */}
-          <Grid xs={12} lg={4}>
+          <Grid item xs={12} lg={4}>
             <Card>
               <CardContent>
                 <MDTypography variant="h6" fontWeight="bold" sx={{ mb: 3 }}>
@@ -343,7 +343,7 @@ export default function Reports() {
       {viewType === 'pipeline' && (
         <Grid container spacing={3}>
           {/* Pipeline Value by Stage */}
-          <Grid xs={12}>
+          <Grid item xs={12}>
             <Card>
               <CardContent>
                 <MDTypography variant="h6" fontWeight="bold" sx={{ mb: 3 }}>
@@ -369,7 +369,7 @@ export default function Reports() {
       {viewType === 'trends' && (
         <Grid container spacing={3}>
           {/* Monthly Trends */}
-          <Grid xs={12} lg={6}>
+          <Grid item xs={12} lg={6}>
             <Card>
               <CardContent>
                 <MDTypography variant="h6" fontWeight="bold" sx={{ mb: 3 }}>
@@ -396,7 +396,7 @@ export default function Reports() {
             </Card>
           </Grid>
 
-          <Grid xs={12} lg={6}>
+          <Grid item xs={12} lg={6}>
             <Card>
               <CardContent>
                 <MDTypography variant="h6" fontWeight="bold" sx={{ mb: 3 }}>
