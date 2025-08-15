@@ -2796,7 +2796,45 @@ export async function registerRoutes(app: Express): Promise<Server> {
           case 'checkout.session.completed':
             const session = event.data.object;
             console.log('Checkout session completed:', session.id);
-            // Handle checkout completion if needed
+            
+            // Enhanced GHL integration with full customer data
+            if (session.payment_status === 'paid' && session.customer_details) {
+              try {
+                const customerData = {
+                  type: 'purchase_completed',
+                  sessionId: session.id,
+                  email: session.customer_details.email,
+                  phone: session.customer_details.phone,
+                  name: session.customer_details.name,
+                  address: session.customer_details.address,
+                  amount: session.amount_total / 100,
+                  currency: session.currency,
+                  productName: session.metadata?.lookup_key || 'Growth & Exit Assessment',
+                  tier: session.metadata?.mode === 'subscription' ? 'capital' : 'growth',
+                  timestamp: new Date().toISOString(),
+                  userId: session.metadata?.userId || 'checkout_customer',
+                };
+
+                // Send to N8N webhook for GHL integration
+                const n8nWebhookUrl = 'https://drobosky.app.n8n.cloud/webhook-test/replit-lead';
+                const response = await fetch(n8nWebhookUrl, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify(customerData),
+                });
+                
+                console.log('GHL webhook sent for checkout completion:', response.status);
+                console.log('Customer data sent to GHL:', {
+                  email: customerData.email,
+                  phone: customerData.phone,
+                  amount: customerData.amount,
+                  tier: customerData.tier
+                });
+
+              } catch (error) {
+                console.error('Error sending checkout data to GHL:', error);
+              }
+            }
             break;
 
           case 'invoice.payment_succeeded':
