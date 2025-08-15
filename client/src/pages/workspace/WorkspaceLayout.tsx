@@ -1,9 +1,7 @@
 import React from "react";
-import { Switch, Route, useLocation } from "wouter";
-import { Box } from "@mui/material";
+import { Switch, Route } from "wouter";
 import { useAdminAuth } from "@/hooks/use-admin-auth";
 import { useTeamAuth } from "@/hooks/use-team-auth";
-import MDBox from "@/components/MD/MDBox";
 import WorkspaceSidebar from "@/components/workspace/Sidebar";
 import CRMModule from "./CRMModule";
 import VDRModule from "./VDRModule";

@@ -1,0 +1,155 @@
+When “everything looked fine” and then visuals disappear right after wiring middleware/automation, it’s almost always one of these:
+
+static assets/CSS are being forced through auth
+
+CSP/headers are blocking Vite assets in preview
+
+a frontend runtime error (often from route/layout refactors) stops rendering before styles mount
+
+Here’s a tight plan with drop‑in fixes.
+
+1) Don’t auth‑gate static assets
+
+If we recently changed server/index.ts or server/routes.ts to apply auth globally, the browser can’t load /assets/*, /vite/*, or /static/*, so CSS/JS never load → blank/unstyled UI.
+
+Fix (Express order & scoping):
+
+// server/index.ts
+import path from "path";
+import express from "express";
+import cors from "cors";
+import { authMiddleware } from "./middleware/auth";
+import routes from "./routes";
+
+const app = express();
+
+app.use(cors());
+app.use(express.json());
+
+// 1) Serve static BEFORE any auth
+const clientDist = path.join(__dirname, "..", "client", "dist");
+app.use("/assets", express.static(path.join(clientDist, "assets"))); // Vite build assets
+app.use("/static", express.static(path.join(clientDist, "static"))); // if used
+app.use("/favicon.ico", express.static(path.join(clientDist, "favicon.ico")));
+
+// 2) Scope auth to API ONLY (not global)
+app.use("/api", authMiddleware, routes);
+
+// 3) SPA fallback last
+app.get("*", (_req, res) => {
+  res.sendFile(path.join(clientDist, "index.html"));
+});
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server on :${PORT}`));
+
+
+And if you mounted middleware globally, change it to API‑only:
+
+// server/routes.ts (unchanged usage, just confirm we export a router for /api)
+import { Router } from "express";
+const router = Router();
+
+// ... your /leads, /audit routes, etc.
+
+export default router;
+
+2) Allow Vite dev assets in preview (CSP/Helmet)
+
+If Helmet or a strict CSP went in, the Replit preview (or any iframe) may block the frontend bundle.
+
+If using helmet, loosen CSP just for dev:
+
+// server/index.ts
+import helmet from "helmet";
+
+const isDev = process.env.NODE_ENV !== "production";
+app.use(
+  helmet({
+    contentSecurityPolicy: isDev ? false : undefined,
+    crossOriginEmbedderPolicy: false,
+  })
+);
+
+3) Quick sanity checks (fast to verify)
+
+Browser Console (F12 → Console): red errors like “Failed to load resource /assets/index.css 401/403” or a React error pinpoints the issue.
+
+Network tab: look for /assets/* or @vite/client returning 401/403 or being blocked by CSP.
+
+Direct hit test: open /assets/index.css (or whatever Vite built) in the browser. If it 401s, middleware scope is the culprit.
+
+4) Vite dev vs prod paths
+
+If you’re running dev with Vite + API, make sure the client dev server is serving the UI and you’re not trying to serve dev assets from Express.
+
+Dev
+
+Start Vite (typically client:dev) and the server separately.
+
+Use a proxy from Vite to the API (vite.config.ts):
+
+// client/vite.config.ts
+export default defineConfig({
+  server: {
+    proxy: {
+      "/api": "http://localhost:5000"
+    }
+  }
+});
+
+
+Prod
+
+Run client build to create client/dist, then serve with Express static as shown in step 1.
+
+5) Guard the auth middleware itself
+
+If the middleware assumes headers are always present, even for non‑API routes, it may throw and kill the response.
+
+Middleware pattern (safe & scoped):
+
+// server/middleware/auth.ts
+import { Request, Response, NextFunction } from "express";
+
+export function authMiddleware(req: Request, res: Response, next: NextFunction) {
+  // only used under /api; defensive checks remain good practice
+  const role = req.header("x-role");
+  const user = req.header("x-user");
+  if (!role || !user) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+  (req as any).auth = { role, user };
+  next();
+}
+
+6) React side: avoid early throws in layout
+
+If we recently wired RBAC into the layout/sidebar, a missing context can throw before styles mount.
+
+Make RBAC non‑blocking:
+
+// client/src/lib/rbac.ts
+export function canView(role: string | undefined, feature: string) {
+  if (!role) return false; // instead of throwing
+  // ...existing logic
+}
+
+// client/src/components/workspace/Sidebar.tsx
+const role = auth?.role ?? "viewer"; // default, don’t crash
+const items = NAV_ITEMS.filter(i => canView(role, i.feature));
+
+
+Also ensure the CSS import still exists:
+
+// client/src/main.tsx
+import './index.css'; // Tailwind/global styles
+
+7) One‑liner test to prove it’s static/auth
+
+Open the browser devtools → Network, reload, and check the status of:
+
+/assets/index-*.css
+
+/assets/index-*.js
+If you see 401/403: the middleware scope fix above will restore visuals.

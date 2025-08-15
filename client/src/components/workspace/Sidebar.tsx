@@ -22,7 +22,10 @@ export default function WorkspaceSidebar({ role = 'admin' }: WorkspaceSidebarPro
       <div className="p-4 text-xl font-semibold">Internal Workspace</div>
       <nav className="px-2 space-y-1">
         {items
-          .filter(({ key }) => can(role, NAV_PERMS[key as keyof typeof NAV_PERMS].need))
+          .filter(({ key }) => {
+            const navItem = NAV_PERMS[key as keyof typeof NAV_PERMS];
+            return navItem ? can(role, navItem.need) : true;
+          })
           .map(({ key, icon, to }) => {
             const active = location.startsWith(to);
             return (
@@ -32,7 +35,7 @@ export default function WorkspaceSidebar({ role = 'admin' }: WorkspaceSidebarPro
                 className={`flex items-center gap-3 rounded-xl px-3 py-2 hover:bg-gray-100 w-full text-left ${active ? 'bg-gray-100 font-medium' : ''}`}
               >
                 <span className="text-lg">{icon}</span>
-                <span>{NAV_PERMS[key as any].label}</span>
+                <span>{NAV_PERMS[key as keyof typeof NAV_PERMS]?.label || key}</span>
               </button>
             );
           })}
