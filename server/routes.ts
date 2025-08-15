@@ -2608,6 +2608,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
           ui_mode: 'embedded', // Key change for embedded checkout
           payment_method_types: ['card'],
           billing_address_collection: 'auto',
+          phone_number_collection: {
+            enabled: true,
+          },
           line_items: [
             {
               price: finalPriceId,
@@ -2665,6 +2668,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           amount_total: session.amount_total,
           currency: session.currency,
           payment_method_types: session.payment_method_types,
+          customer_details: session.customer_details,
           metadata: session.metadata
         });
         
