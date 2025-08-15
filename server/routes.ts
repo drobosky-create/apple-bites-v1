@@ -57,17 +57,57 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const validatedData = registerUserSchema.parse(req.body);
       
-      // Check if user already exists
+      // Check if user already exists with account created by checkout
       const existingUser = await storage.getUserByEmail(validatedData.email);
       if (existingUser) {
-        return res.status(400).json({ message: "User already exists with this email" });
+        // If user exists but has no password (created by checkout), let them set password
+        if (!existingUser.passwordHash) {
+          // Hash password
+          const saltRounds = 12;
+          const passwordHash = await bcrypt.hash(validatedData.password, saltRounds);
+          
+          // Update existing user with password and full name
+          await storage.updateUser(existingUser.id, {
+            firstName: validatedData.firstName || existingUser.firstName,
+            lastName: validatedData.lastName || existingUser.lastName,
+            passwordHash,
+            awaitingPasswordCreation: false
+          });
+          
+          // Create session for updated user
+          req.session.userId = existingUser.id;
+          req.session.userEmail = existingUser.email;
+          req.session.userTier = existingUser.tier;
+          
+          req.session.save((err: any) => {
+            if (err) {
+              console.error('Session save error:', err);
+              return res.status(500).json({ message: "Session save failed" });
+            }
+            
+            console.log(`Password created for existing paid user: ${existingUser.email} with ${existingUser.tier} tier`);
+            res.json({
+              message: "Account setup complete",
+              user: {
+                id: existingUser.id,
+                email: existingUser.email,
+                firstName: validatedData.firstName || existingUser.firstName,
+                lastName: validatedData.lastName || existingUser.lastName,
+                tier: existingUser.tier, // Keep their paid tier
+              },
+            });
+          });
+          return;
+        } else {
+          return res.status(400).json({ message: "User already exists with this email" });
+        }
       }
 
       // Hash password
       const saltRounds = 12;
       const passwordHash = await bcrypt.hash(validatedData.password, saltRounds);
 
-      // Create user
+      // Create new user (defaults to free tier if no prior purchase)
       const user = await storage.createUser({
         firstName: validatedData.firstName || '',
         lastName: validatedData.lastName || '',
@@ -1566,16 +1606,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Get user by email
       const user = await storage.getUserByEmail(email);
       if (!user) {
-        return res.status(401).json({ error: "Invalid email or password" });
+        return res.status(401).json({ error: "Email not found. Please create an account first." });
       }
 
-      // Check if user needs to create password
+      // Check if user needs to create password (account created by purchase)
       if (!user.passwordHash) {
         return res.status(200).json({ 
           needsPasswordCreation: true,
           userId: user.id,
           email: user.email,
-          tier: user.tier
+          tier: user.tier,
+          message: "Please complete your account setup by creating a password."
         });
       }
 
