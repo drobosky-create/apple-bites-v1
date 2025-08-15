@@ -1,0 +1,175 @@
+Goal: Restore TeamTrack sidebar, make it universal across the TeamTrack app, exclude AppleBites legacy/production surfaces, and populate it from a single source of truth.
+
+1) Create a single nav config (source of truth)
+
+Create client/src/config/teamtrackNav.ts:
+
+// client/src/config/teamtrackNav.ts
+export type NavItem = {
+  label: string;
+  to: string;              // react-router path
+  icon?: React.ReactNode;  // optional
+  roles?: string[];        // allowed roles (omit = all)
+  featureFlag?: string;    // optional feature gate
+};
+
+export const TEAMTRACK_NAV: NavItem[] = [
+  { label: "Leads",       to: "/workspace/leads" },
+  { label: "Kanban",      to: "/workspace/kanban" },
+  { label: "List",        to: "/workspace/list" },
+  { label: "Calendar",    to: "/workspace/calendar" },
+  { label: "Targets",     to: "/workspace/targets" },
+  { label: "Reports",     to: "/workspace/reports" },
+  // top-row apps
+  { label: "CRM",         to: "/workspace/crm" },
+  { label: "VDR",         to: "/workspace/vdr" },
+  { label: "Team",        to: "/workspace/team" },
+  { label: "Assessments", to: "/workspace/assessments" },
+  { label: "Settings",    to: "/workspace/settings", roles: ["admin"] },
+  // add any new pages here so they show up automatically
+];
+
+
+If we add more pages later, only update this array.
+
+2) Sidebar component (TeamTrack only)
+
+Create client/src/components/workspace/TeamTrackSidebar.tsx:
+
+import { NavLink, useLocation } from "react-router-dom";
+import { TEAMTRACK_NAV } from "@/config/teamtrackNav";
+import clsx from "clsx";
+
+function useAuth() {
+  // replace with real auth selector/hook used in app
+  return { role: (window as any).__role || "member" };
+}
+
+function allowed(itemRoles?: string[], userRole?: string) {
+  if (!itemRoles || itemRoles.length === 0) return true;
+  return !!userRole && itemRoles.includes(userRole);
+}
+
+export default function TeamTrackSidebar() {
+  const { pathname } = useLocation();
+  const { role } = useAuth();
+
+  return (
+    <aside className="w-60 shrink-0 border-r bg-white/90 backdrop-blur p-3 overflow-y-auto">
+      <div className="mb-3 text-xs font-semibold uppercase tracking-wide text-slate-500">
+        TeamTrack
+      </div>
+      <nav className="space-y-1">
+        {TEAMTRACK_NAV.filter(i => allowed(i.roles, role)).map(item => {
+          const active = pathname.startsWith(item.to);
+          return (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              className={clsx(
+                "block rounded-lg px-3 py-2 text-sm",
+                active
+                  ? "bg-slate-900 text-white"
+                  : "text-slate-700 hover:bg-slate-100"
+              )}
+            >
+              {item.label}
+            </NavLink>
+          );
+        })}
+      </nav>
+    </aside>
+  );
+}
+
+
+Mobile toggle (optional): if we already have a drawer/hamburger, mount this component inside it; otherwise we can add later.
+
+3) Universal layout wrapper for TeamTrack
+
+Edit client/src/pages/workspace/WorkspaceLayout.tsx to use the new sidebar for all TeamTrack pages:
+
+import TeamTrackSidebar from "@/components/workspace/TeamTrackSidebar";
+// keep existing imports (Outlet, header, footer, etc.)
+
+export default function WorkspaceLayout() {
+  return (
+    <div className="flex min-h-screen">
+      <TeamTrackSidebar />
+      <div className="flex-1 flex flex-col">
+        {/* existing top header / breadcrumbs if any */}
+        <main className="flex-1 p-4">
+          <Outlet />
+        </main>
+        {/* keep version footer we added earlier */}
+      </div>
+    </div>
+  );
+}
+
+
+This makes the sidebar universal for everything under /workspace/*.
+
+4) Route gating so AppleBites prod stays untouched
+
+Do not mount TeamTrack layout on AppleBites production routes. Make the router do:
+
+TeamTrack routes (/workspace/*) → WorkspaceLayout (uses TeamTrackSidebar).
+
+AppleBites legacy/prod routes (e.g. /, /store, /applebites/*) → existing AppleBites layout (no changes).
+
+If we don’t already have it, ensure the router file (e.g. client/src/router.tsx) nests all TeamTrack pages under /workspace:
+
+{
+  path: "/workspace",
+  element: <WorkspaceLayout />,
+  children: [
+    { path: "leads", element: <LeadsPage /> },
+    { path: "kanban", element: <KanbanPage /> },
+    { path: "list", element: <ListPage /> },
+    { path: "calendar", element: <CalendarPage /> },
+    { path: "targets", element: <TargetsPage /> },
+    { path: "reports", element: <ReportsPage /> },
+    { path: "crm", element: <CrmPage /> },
+    { path: "vdr", element: <VdrPage /> },
+    { path: "team", element: <TeamPage /> },
+    { path: "assessments", element: <AssessmentsPage /> },
+    { path: "settings", element: <SettingsPage /> },
+  ],
+}
+
+
+Env guard (optional but nice):
+
+If we ever need a hard switch, respect APP_MODE=applebites|teamtrack and only mount /workspace when APP_MODE !== "applebites".
+
+5) Remove old RBAC crashes / make rendering defensive
+
+If the previous sidebar crashed when auth/permissions were undefined, keep the defensive checks (as above). Items with roles only render when the user has the role.
+
+6) Build + verify
+
+Run our existing build/version guardrails so cache doesn’t bite us:
+
+cd /home/runner/workspace
+./scripts/clean-rebuild.sh
+# then verify
+curl -s http://localhost:5000/__version
+# open /workspace in the preview and check that the TeamTrack sidebar appears on all /workspace pages
+
+
+Also verify a fingerprinted asset to ensure fresh CSS/JS:
+
+curl -I http://localhost:5000/assets/index-*.css
+
+7) Acceptance criteria
+
+Navigating to /workspace/ shows the TeamTrack sidebar.
+
+All pages listed in TEAMTRACK_NAV appear and highlight when active.
+
+AppleBites legacy/prod routes render with their original layout and no TeamTrack sidebar.
+
+No auth/role errors if a role is missing; admin-only items hide for non-admins.
+
+Footer still shows build/version so we can confirm the change is live.

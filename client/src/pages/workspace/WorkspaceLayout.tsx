@@ -2,7 +2,8 @@ import React from "react";
 import { Switch, Route } from "wouter";
 import { useAdminAuth } from "@/hooks/use-admin-auth";
 import { useTeamAuth } from "@/hooks/use-team-auth";
-import WorkspaceSidebar from "@/components/workspace/Sidebar";
+import TeamTrackSidebar from "@/components/workspace/TeamTrackSidebar";
+import { BuildFooter } from "@/components/Footer";
 import CRMModule from "./CRMModule";
 import VDRModule from "./VDRModule";
 import TeamModule from "./TeamModule";
@@ -38,21 +39,32 @@ export default function WorkspaceLayout() {
     return <AdminLoginPage />;
   }
   return (
-    <div className="flex h-screen">
-      <WorkspaceSidebar role="admin" />
-      <main className="flex-1 overflow-auto bg-gray-50">
-        <div className="mx-auto max-w-7xl p-6">
-          <Switch>
-            <Route path="/workspace/crm" component={CRMModule} />
-            <Route path="/workspace/vdr" component={VDRModule} />
-            <Route path="/workspace/team" component={TeamModule} />
-            <Route path="/workspace/assessments" component={AssessmentAdminModule} />
-            <Route>
-              <CRMModule />
-            </Route>
-          </Switch>
-        </div>
-      </main>
+    <div className="flex min-h-screen">
+      <TeamTrackSidebar />
+      <div className="flex-1 flex flex-col">
+        <main className="flex-1 p-6 bg-gray-50">
+          <div className="mx-auto max-w-7xl">
+            <Switch>
+              <Route path="/workspace/crm" component={CRMModule} />
+              <Route path="/workspace/vdr" component={VDRModule} />
+              <Route path="/workspace/team" component={TeamModule} />
+              <Route path="/workspace/assessments" component={AssessmentAdminModule} />
+              <Route path="/workspace/leads" component={CRMModule} />
+              <Route path="/workspace/kanban" component={CRMModule} />
+              <Route path="/workspace/list" component={CRMModule} />
+              <Route path="/workspace/calendar" component={CRMModule} />
+              <Route path="/workspace/targets" component={CRMModule} />
+              <Route path="/workspace/reports" component={CRMModule} />
+              <Route path="/workspace/audit" component={CRMModule} />
+              <Route path="/workspace/settings" component={CRMModule} />
+              <Route>
+                <CRMModule />
+              </Route>
+            </Switch>
+          </div>
+        </main>
+        <BuildFooter />
+      </div>
     </div>
   );
 }
