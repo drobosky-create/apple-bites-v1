@@ -133,7 +133,7 @@ export default function DynamicPricingPage() {
     },
     {
       name: 'Growth & Exit Assessment',
-      price: growthProduct?.price ? `$${(growthProduct.price.amount / 100).toLocaleString()}` : '$1,995',
+      price: growthProduct?.price ? `$${(growthProduct.price.amount / 100).toLocaleString()}` : 'Loading...',
       description: 'Comprehensive analysis for business growth and exit planning',
       features: [
         'Industry-specific NAICS valuation analysis',
@@ -152,7 +152,7 @@ export default function DynamicPricingPage() {
     },
     {
       name: 'Capital Market Positioning Plan',
-      price: capitalProduct?.price ? `$${(capitalProduct.price.amount / 100).toLocaleString()}` : '$1,995',
+      price: capitalProduct?.price ? `$${(capitalProduct.price.amount / 100).toLocaleString()}` : 'Loading...',
       description: 'Premium solution for capital market positioning and investment readiness',
       features: [
         'Everything in Growth & Exit Assessment',

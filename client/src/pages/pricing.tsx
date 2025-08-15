@@ -100,7 +100,7 @@ export default function PricingPage() {
     },
     {
       name: 'Growth & Exit Assessment',
-      price: growthProduct?.price ? formatPrice(growthProduct.price.amount, growthProduct.price.currency) : '$1,995',
+      price: growthProduct?.price ? formatPrice(growthProduct.price.amount, growthProduct.price.currency) : 'Loading...',
       description: 'Comprehensive analysis for business growth and exit planning',
       features: [
         'Industry-specific NAICS valuation analysis',
@@ -119,7 +119,7 @@ export default function PricingPage() {
     },
     {
       name: 'Capital Readiness Assessment',
-      price: capitalProduct?.price ? formatPrice(capitalProduct.price.amount, capitalProduct.price.currency) : '$1,995',
+      price: capitalProduct?.price ? formatPrice(capitalProduct.price.amount, capitalProduct.price.currency) : 'Loading...',
       description: 'Premium solution for investment readiness and capital raising',
       features: [
         'Everything in Growth & Exit Assessment',

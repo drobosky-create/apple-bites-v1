@@ -36,14 +36,16 @@ export default function Checkout() {
   const priceId = urlParams.get('priceId') || '';
   const productId = urlParams.get('product') || '';
   
-  // Define tier and amount - fetch dynamically from Stripe if priceId is provided
+  // Define tier and amount - fetch dynamically from Stripe API only
   const [priceDetails, setPriceDetails] = useState<{amount: number; name: string; priceId: string} | null>(null);
-  const baseAmount = priceDetails?.amount || 199500; // $1,995.00 in cents fallback
-  const finalAmount = baseAmount - discount;
+  const [isLoadingPrice, setIsLoadingPrice] = useState(true);
+  const baseAmount = priceDetails?.amount || 0; // No fallback - must come from Stripe
+  const finalAmount = Math.max(0, baseAmount - discount);
 
-  // Fetch price details from Stripe - handle both priceId and productId
+  // Fetch price details from Stripe - handle both priceId and productId (no fallbacks)
   useEffect(() => {
     const fetchPriceDetails = async () => {
+      setIsLoadingPrice(true);
       try {
         if (priceId) {
           // Direct price ID provided
@@ -55,7 +57,7 @@ export default function Checkout() {
             priceId: data.id
           });
         } else if (productId) {
-          // Product ID provided - get current active price
+          // Product ID provided - get current active price from Stripe
           const response = await apiRequest('GET', `/api/stripe/products`);
           const data = await response.json();
           const product = data.products.find((p: any) => p.id === productId);
@@ -63,14 +65,14 @@ export default function Checkout() {
           if (product && product.price) {
             setPriceDetails({
               amount: product.price.amount,
-              name: product.name || 'Growth & Exit Assessment',
+              name: product.name,
               priceId: product.price.id
             });
           } else {
-            throw new Error('Product not found or no active price');
+            throw new Error(`Product ${productId} not found or has no active price`);
           }
         } else {
-          // No specific ID - use default Growth & Exit Assessment
+          // No specific ID - find Growth & Exit Assessment from Stripe
           const response = await apiRequest('GET', `/api/stripe/products`);
           const data = await response.json();
           const growthProduct = data.products.find((p: any) => 
@@ -80,26 +82,18 @@ export default function Checkout() {
           if (growthProduct && growthProduct.price) {
             setPriceDetails({
               amount: growthProduct.price.amount,
-              name: growthProduct.name || 'Growth & Exit Assessment',
+              name: growthProduct.name,
               priceId: growthProduct.price.id
             });
           } else {
-            // Fallback
-            setPriceDetails({ 
-              amount: 199500, 
-              name: 'Growth & Exit Assessment',
-              priceId: 'price_1RwQghAYDUS7LgRZAssgVs6A' // Current price ID
-            });
+            throw new Error('No Growth & Exit Assessment product found with active pricing');
           }
         }
       } catch (error) {
         console.error('Failed to fetch price details:', error);
-        // Use fallback pricing
-        setPriceDetails({ 
-          amount: 199500, 
-          name: 'Growth & Exit Assessment',
-          priceId: 'price_1RwQghAYDUS7LgRZAssgVs6A' // Current price ID
-        });
+        setError('Unable to load pricing information. Please try again or contact support.');
+      } finally {
+        setIsLoadingPrice(false);
       }
     };
     
@@ -174,7 +168,7 @@ export default function Checkout() {
     );
   }
 
-  if (loading) {
+  if (loading || isLoadingPrice) {
     return (
       <CheckoutContainer>
         <CheckoutCard>
@@ -318,7 +312,7 @@ export default function Checkout() {
               action="/api/create-checkout-session"
               style={{ width: '100%' }}
             >
-              <input type="hidden" name="priceId" value={priceDetails?.priceId || 'price_1RwQghAYDUS7LgRZAssgVs6A'} />
+              <input type="hidden" name="priceId" value={priceDetails?.priceId || ''} />
               {appliedCoupon && (
                 <input type="hidden" name="couponId" value={appliedCoupon} />
               )}

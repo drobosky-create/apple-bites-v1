@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'wouter';
+import { useQuery } from "@tanstack/react-query";
 import { 
   Box, 
   Typography, 
@@ -11,6 +12,34 @@ import {
   Modal
 } from '@mui/material';
 import { CheckCircle } from 'lucide-react';
+
+// Dynamic Price Component
+const DynamicPriceDisplay = ({ productType }: { productType: 'growth' | 'capital' }) => {
+  const { data: productsData, isLoading } = useQuery({
+    queryKey: ['/api/stripe/products'],
+    retry: false,
+    staleTime: 0,
+    cacheTime: 0,
+  });
+
+  const product = productsData?.products?.find((p: any) => 
+    productType === 'growth' 
+      ? (p.name?.toLowerCase().includes('growth') || p.id === 'prod_Sddbk2RWzr8kyL')
+      : (p.name?.toLowerCase().includes('capital') || p.id === 'prod_Sdvq23217qaGhp')
+  );
+
+  const displayPrice = isLoading 
+    ? 'Loading...' 
+    : product?.price 
+      ? `$${(product.price.amount / 100).toLocaleString()}`
+      : 'Contact for pricing';
+
+  return (
+    <Typography variant="h2" sx={{ color: '#333', fontWeight: 'bold', mb: 3, minHeight: '56px' }}>
+      {displayPrice}
+    </Typography>
+  );
+};
 
 export default function LandingPage() {
   const [isComingSoonOpen, setIsComingSoonOpen] = useState(false);
@@ -367,9 +396,7 @@ export default function LandingPage() {
                     <Typography variant="h4" sx={{ color: '#333', fontWeight: 'bold', mb: 2 }}>
                       Growth & Exit
                     </Typography>
-                    <Typography variant="h2" sx={{ color: '#333', fontWeight: 'bold', mb: 3 }}>
-                      $1,995
-                    </Typography>
+                    <DynamicPriceDisplay productType="growth" />
                     
                     <Box sx={{ mb: 4, textAlign: 'left', minHeight: '140px' }}>
                       <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>

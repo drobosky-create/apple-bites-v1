@@ -139,7 +139,7 @@ export default function CheckoutSuccess() {
                 Product: {sessionData.productName || 'Growth & Exit Assessment'}
               </MDTypography>
               <MDTypography variant="body2" sx={{ mb: 1 }}>
-                Amount: ${sessionData.amount ? (sessionData.amount / 100).toFixed(2) : '1,995.00'}
+                Amount: ${sessionData.amount ? (sessionData.amount / 100).toFixed(2) : 'N/A'}
               </MDTypography>
               <MDTypography variant="body2">
                 Session ID: {sessionData.sessionId}

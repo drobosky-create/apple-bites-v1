@@ -154,7 +154,7 @@ export default function ValueCalculator() {
           name: 'Growth & Exit Assessment',
           color: 'primary',
           description: 'Professional industry-specific analysis with AI insights',
-          price: '$1,995',
+          price: 'Contact for pricing',
         };
       case 'capital':
         return {
