@@ -2347,33 +2347,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
       apiVersion: '2025-06-30.basil',
     });
 
-    // Get Stripe products and pricing
+    // Get Stripe products and pricing - fully dynamic
     app.get("/api/stripe/products", async (req, res) => {
       try {
         const products = await stripe.products.list({
           active: true
         });
 
-        // Known price mappings from our checkout configuration
-        const priceMapping = {
-          'prod_Sddbk2RWzr8kyL': 'price_1RqzLKAYDUS7LgRZj5ujxTbw', // Growth & Exit - $795 (updated)
-          'prod_Sdvq23217qaGhp': 'price_1RqZhaAYDUS7LgRZfYL9gP1H', // Capital Market - $3495
-        };
-
         const formattedProducts = await Promise.all(products.data.map(async (product) => {
           let price = null;
           
-          // Get the specific price for this product if we have it mapped
-          const priceId = priceMapping[product.id as keyof typeof priceMapping];
-          console.log(`Processing product ${product.name} (${product.id}) with price ID: ${priceId}`);
-          
-          if (priceId) {
-            try {
-              const priceObj = await stripe.prices.retrieve(priceId);
-              console.log(`Retrieved price for ${product.name}:`, {
+          // Fetch the most recent active price for this product
+          try {
+            const prices = await stripe.prices.list({
+              product: product.id,
+              active: true,
+              limit: 1,
+              expand: ['data.product']
+            });
+            
+            if (prices.data.length > 0) {
+              const priceObj = prices.data[0];
+              console.log(`Retrieved current price for ${product.name}:`, {
                 id: priceObj.id,
                 amount: priceObj.unit_amount,
-                currency: priceObj.currency
+                currency: priceObj.currency,
+                created: new Date(priceObj.created * 1000).toISOString()
               });
               
               price = {
@@ -2381,9 +2380,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 amount: priceObj.unit_amount,
                 currency: priceObj.currency
               };
-            } catch (priceError: any) {
-              console.error(`Failed to fetch price ${priceId} for product ${product.id}:`, priceError.message);
             }
+          } catch (priceError: any) {
+            console.error(`Failed to fetch prices for product ${product.id}:`, priceError.message);
           }
 
           return {
@@ -2394,10 +2393,58 @@ export async function registerRoutes(app: Express): Promise<Server> {
           };
         }));
 
+        // Set cache headers to ensure fresh data
+        res.set({
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0'
+        });
+
         res.json({ products: formattedProducts });
       } catch (error: any) {
         console.error('Error fetching Stripe products:', error);
         res.status(500).json({ error: 'Failed to fetch products' });
+      }
+    });
+
+    // Manual pricing refresh endpoint for testing
+    app.post("/api/stripe/refresh-pricing", async (req, res) => {
+      try {
+        console.log('Manual pricing refresh requested...');
+        
+        const products = await stripe.products.list({
+          active: true
+        });
+
+        const productDetails = [];
+        
+        for (const product of products.data) {
+          const prices = await stripe.prices.list({
+            product: product.id,
+            active: true,
+            limit: 1
+          });
+          
+          const currentPrice = prices.data[0];
+          productDetails.push({
+            productId: product.id,
+            name: product.name,
+            priceId: currentPrice?.id || 'No active price',
+            amount: currentPrice?.unit_amount || 0,
+            currency: currentPrice?.currency || 'usd',
+            lastUpdated: new Date().toISOString()
+          });
+        }
+
+        res.json({ 
+          success: true,
+          message: 'Pricing refreshed successfully',
+          products: productDetails,
+          refreshedAt: new Date().toISOString()
+        });
+      } catch (error: any) {
+        console.error('Pricing refresh error:', error);
+        res.status(500).json({ error: 'Failed to refresh pricing' });
       }
     });
 

@@ -4,6 +4,12 @@
 This is a full-stack web application for Meritage Partners, designed as the foundation for the Apple Bites M&A ecosystem. Currently implemented as a business valuation calculator, it represents the first pillar of a comprehensive four-module platform that will include: (1) Apple Bites Assessment Engine, (2) CRM Module for Opportunity & Deal Flow management, (3) Virtual Data Room for secure document storage, and (4) Team Management for internal operations. The platform aims to replace Made Market and Suralink while providing a complete M&A workflow from lead generation to transaction close. Development prioritizes Material Dashboard (MD) components and pre-built pages from the TeamTrack repository for consistency and efficiency.
 
 ## Recent Changes (August 2025)
+**✅ COMPLETED: Dynamic Stripe Pricing System Fixed (August 15, 2025)**
+- Removed hardcoded price ID mappings that prevented automatic pricing updates
+- Implemented fully dynamic pricing system that fetches current active prices from Stripe API
+- Added cache invalidation headers and query configuration to ensure fresh pricing data
+- Added manual pricing refresh endpoint for testing: `/api/stripe/refresh-pricing`
+- Pricing page now automatically reflects all Stripe dashboard price changes in real-time
 **✅ COMPLETED: Streamlined GoHighLevel Integration (August 14, 2025)**
 - Eliminated triple redundancy in GHL integration by switching to pure API-only approach
 - Removed legacy webhook-based assessment processing in favor of comprehensive REST API calls
