@@ -1,0 +1,262 @@
+“Create Lead” does nothing → it’s a button type / form wiring issue
+
+From your DOM screenshot the primary button renders as type="button". Inside a <form>, that won’t submit. Either wire an explicit onClick that calls your submit handler, or make it a real submit button.
+
+Frontend patch (LeadsManagement.tsx)
+
+Wrap the inputs in one <form onSubmit={handleSubmit}>.
+
+Make the action button type="submit".
+
+Send credentials so your RBAC cookie/session is included.
+
+Give the user feedback (loading/disabled, error toast).
+
+On success, close modal and refresh the table.
+
+// at top
+import { useState, useEffect, useCallback } from "react";
+// … MD components you already use
+// no new deps
+
+export default function LeadsManagement() {
+  const [open, setOpen] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [leads, setLeads] = useState<LeadDTO[]>([]);
+
+  // fetch leads with auth cookie
+  const loadLeads = useCallback(async () => {
+    const res = await fetch("/api/leads", { credentials: "include" });
+    if (!res.ok) throw new Error(`GET /api/leads ${res.status}`);
+    setLeads(await res.json());
+  }, []);
+
+  useEffect(() => {
+    loadLeads().catch((e) => setError(e.message));
+  }, [loadLeads]);
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setSaving(true);
+    setError(null);
+    const data = new FormData(e.currentTarget);
+    const payload = {
+      firstName: data.get("firstName"),
+      lastName: data.get("lastName"),
+      email: data.get("email"),
+      company: data.get("company"),
+      intakeSource: "manual",
+    };
+
+    const res = await fetch("/api/leads", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include", // IMPORTANT for RBAC cookie/session
+      body: JSON.stringify(payload),
+    });
+
+    setSaving(false);
+
+    if (!res.ok) {
+      const msg = await res.text();
+      setError(msg || `POST /api/leads ${res.status}`);
+      return;
+    }
+
+    // success
+    setOpen(false);
+    e.currentTarget.reset();
+    loadLeads().catch(() => {}); // refresh table
+  }
+
+  return (
+    <>
+      {/* Add Lead button */}
+      <MDButton onClick={() => setOpen(true)}>Add Lead (No AppleBites)</MDButton>
+
+      {/* Modal */}
+      <MDDialog open={open} onClose={() => setOpen(false)}>
+        <MDDialogTitle>Add Manual Lead</MDDialogTitle>
+        <form onSubmit={handleSubmit}>
+          <MDDialogContent>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <MDInput name="firstName" label="First Name*" required fullWidth />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <MDInput name="lastName" label="Last Name*" required fullWidth />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <MDInput name="email" type="email" label="Email*" required fullWidth />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <MDInput name="company" label="Company*" required fullWidth />
+              </Grid>
+            </Grid>
+            {error && <MDTypography color="error" mt={2}>{error}</MDTypography>}
+          </MDDialogContent>
+          <MDDialogActions>
+            <MDButton variant="text" onClick={() => setOpen(false)}>Cancel</MDButton>
+            {/* the key change: type="submit" and disabled while saving */}
+            <MDButton type="submit" disabled={saving}>
+              {saving ? "Creating…" : "Create Lead"}
+            </MDButton>
+          </MDDialogActions>
+        </form>
+      </MDDialog>
+
+      {/* Leads table renders from `leads` */}
+      {/* … */}
+    </>
+  );
+}
+
+
+Quick sanity checks:
+
+DevTools → Network: you should see a POST /api/leads with Status 200/201.
+
+If you see 401/403, your session/role isn’t flowing (fix in backend section below).
+
+If no request at all, the button still isn’t a submit or the form isn’t wrapping it.
+
+2) Make the API truly RBAC-protected (analyst+ create, manager+ override)
+
+You mentioned auth errors earlier—this is the exact shape that tends to work consistently.
+
+Backend patch (Express-style, no new deps)
+// server/rbac.ts
+export type Role = "client" | "buyer" | "analyst" | "manager" | "admin";
+
+export function requireAuth(req, res, next) {
+  // assume you set req.user via your auth middleware
+  if (!req.user) return res.status(401).send("Unauthenticated");
+  next();
+}
+
+export function requireRole(...allowed: Role[]) {
+  return (req, res, next) => {
+    const u = req.user;
+    if (!u) return res.status(401).send("Unauthenticated");
+    if (!allowed.includes(u.role)) return res.status(403).send("Forbidden");
+    next();
+  };
+}
+
+// server/routes.ts
+import { requireAuth, requireRole } from "./rbac";
+
+app.get("/api/leads",
+  requireAuth,
+  requireRole("analyst","manager","admin"),
+  async (req, res) => {
+    // fetch by org
+    const leads = await db.select().from(Lead).where(eq(Lead.orgId, req.user.orgId));
+    res.json(leads);
+  }
+);
+
+app.post("/api/leads",
+  requireAuth,
+  requireRole("analyst","manager","admin"),
+  async (req, res) => {
+    const { firstName, lastName, email, company, intakeSource } = req.body;
+    // validate (zod if you already use it)
+    if (!firstName || !lastName || !email || !company) {
+      return res.status(400).send("Missing required fields");
+    }
+    const lead = await db.insert(Lead).values({
+      orgId: req.user.orgId,
+      firstName, lastName, email, company,
+      source: intakeSource ?? "manual",
+      state: "lead:intake",
+      createdBy: req.user.id,
+      isManual: true,
+    }).returning();
+    // audit
+    await db.insert(Audit).values({
+      orgId: req.user.orgId,
+      actorId: req.user.id,
+      action: "lead:create",
+      resource: `Lead:${lead[0].id}`,
+      before: null,
+      after: JSON.stringify(lead[0]),
+      ts: new Date(),
+    });
+    res.status(201).json(lead[0]);
+  }
+);
+
+
+Notes:
+
+Keep credentials: "include" on the client fetch so cookies/sessions are sent.
+
+Ensure your CORS (if any) allows credentials and the origin you’re serving from.
+
+3) Restore the TeamTrack sidebar (without phantom imports)
+
+You can rebuild a minimal, RBAC-aware workspace sidebar using only components you already have (Material Dashboard + MUI). Place it under an existing, real path (no phantom paths), e.g.:
+
+client/src/layouts/Workspace/Sidebar.tsx
+client/src/layouts/Workspace/Layout.tsx (wraps the page with Drawer + AppBar)
+
+// client/src/layouts/Workspace/Sidebar.tsx
+import { Drawer, List, ListItemButton, ListItemText } from "@mui/material";
+import { NavLink } from "react-router-dom";
+import MDBox from "components/MDBox";
+import MDTypography from "components/MDTypography";
+import { useUser } from "../../state/auth"; // use your real hook/path
+
+const links = [
+  { to: "/workspace/leads", label: "CRM", roles: ["analyst","manager","admin"] },
+  { to: "/workspace/vdr", label: "VDR", roles: ["manager","admin"] },
+  { to: "/workspace/team", label: "Team", roles: ["admin"] },
+  { to: "/workspace/assessments", label: "Assessments", roles: ["analyst","manager","admin"] },
+];
+
+export default function Sidebar() {
+  const { user } = useUser();
+  const role = user?.role;
+
+  return (
+    <Drawer variant="permanent" anchor="left" PaperProps={{ sx: { width: 240 } }}>
+      <MDBox p={2}>
+        <MDTypography variant="h6">Internal Workspace</MDTypography>
+      </MDBox>
+      <List>
+        {links
+          .filter(l => role && l.roles.includes(role))
+          .map(l => (
+            <ListItemButton key={l.to} component={NavLink} to={l.to}>
+              <ListItemText primary={l.label} />
+            </ListItemButton>
+          ))}
+      </List>
+    </Drawer>
+  );
+}
+
+
+Then mount it in your workspace layout (and make sure your pages sit inside that layout). This gets you a clean, RBAC-filtered nav without relying on the old TeamTrack component.
+
+4) Quick diagnostics if it still “does nothing”
+
+No network request → your button still isn’t type="submit" or the form isn’t wrapping it.
+
+401 → user not authenticated (cookie not sent). Add credentials: "include" (client) and verify your auth middleware populates req.user.
+
+403 → role too low. Confirm test user role is analyst|manager|admin.
+
+200/201 but table doesn’t change → call loadLeads() after POST, or invalidate whatever data hook you use.
+
+5) Acceptance checklist
+
+ Clicking Create Lead triggers a visible network request and shows “Creating…” while pending.
+
+ A new row appears in the Leads table after success without a manual refresh.
+
+ Unauthorized users see a 403 and the UI shows a friendly error.
+
+ Sidebar renders only links the current role is allowed to see.

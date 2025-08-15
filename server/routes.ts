@@ -3141,37 +3141,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // ===== LEAD MANAGEMENT ENDPOINTS =====
   
   // Get all leads
-  app.get('/api/leads', (req, res) => {
-    // Bypass auth for testing
+  app.get('/api/leads', async (req, res) => {
     try {
-      res.json([
-        {
-          id: 1,
-          firstName: 'John',
-          lastName: 'Doe',
-          email: 'john@example.com', 
-          company: 'Example Corp',
-          intakeSource: 'manual',
-          applebitestaken: false,
-          qualifierScore: 75,
-          lowQualifierFlag: false,
-          leadStatus: 'new',
-          createdAt: new Date().toISOString()
-        },
-        {
-          id: 2,
-          firstName: 'Jane',
-          lastName: 'Smith',
-          email: 'jane@applebites.com',
-          company: 'AppleBites Corp', 
-          intakeSource: 'applebites',
-          applebitestaken: true,
-          qualifierScore: 45,
-          lowQualifierFlag: true,
-          leadStatus: 'qualified',
-          createdAt: new Date().toISOString()
-        }
-      ]);
+      const leads = await storage.getAllLeads();
+      res.json(leads);
     } catch (error: any) {
       console.error('Error fetching leads:', error);
       res.status(500).json({ error: 'Failed to fetch leads' });

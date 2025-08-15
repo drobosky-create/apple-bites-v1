@@ -53,18 +53,37 @@ const LeadsManagement: React.FC = () => {
   });
 
   // Fetch leads
-  const { data: leads = [], isLoading } = useQuery({
-    queryKey: ['/api/leads'],
+  const { data: leads = [], isLoading, refetch } = useQuery({
+    queryKey: ['leads'],
+    queryFn: async () => {
+      const response = await fetch('/api/leads', {
+        credentials: 'include'
+      });
+      if (!response.ok) {
+        throw new Error(`Failed to fetch leads: ${response.statusText}`);
+      }
+      return response.json();
+    },
     retry: false,
   });
 
   // Create lead mutation
   const createLeadMutation = useMutation({
     mutationFn: async (leadData: any) => {
-      return apiRequest('POST', '/api/leads', leadData);
+      const response = await fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(leadData),
+      });
+      if (!response.ok) {
+        throw new Error(`Failed to create lead: ${response.statusText}`);
+      }
+      return response.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/leads'] });
+      queryClient.invalidateQueries({ queryKey: ['leads'] });
+      refetch(); // Refresh the leads list
       setCreateLeadOpen(false);
       setFormData({
         firstName: '',
