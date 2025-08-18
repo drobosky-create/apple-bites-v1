@@ -1,30 +1,32 @@
 import { useEffect } from "react";
 import { useLocation } from "wouter";
-import { useAuth } from "@/hooks/use-auth";
+import { useAdminAuth } from "@/hooks/use-admin-auth";
+import AdminDashboard from "@/pages/admin-dashboard";
 
 export default function AdminAlias() {
-  const { isChecking, isAuthenticated, isAdmin } = useAuth();
+  const { isAuthenticated, isLoading } = useAdminAuth();
   const [, setLocation] = useLocation();
   
   useEffect(() => {
-    if (isChecking) return;
+    if (isLoading) return;
     
     if (!isAuthenticated) {
-      setLocation("/login", { replace: true });
-    } else if (isAdmin) {
-      setLocation("/workspace/admin", { replace: true });
-    } else {
-      setLocation("/workspace", { replace: true });
+      setLocation("/admin-login", { replace: true });
     }
-  }, [isChecking, isAuthenticated, isAdmin, setLocation]);
+  }, [isLoading, isAuthenticated, setLocation]);
 
-  if (isChecking) {
+  if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div>Checking access...</div>
+        <div>Checking admin access...</div>
       </div>
     );
   }
 
-  return null;
+  if (!isAuthenticated) {
+    return null;
+  }
+
+  // If authenticated as admin, show the admin dashboard directly
+  return <AdminDashboard />;
 }
