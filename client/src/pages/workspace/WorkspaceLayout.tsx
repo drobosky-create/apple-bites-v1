@@ -1,7 +1,7 @@
 // client/src/pages/workspace/WorkspaceLayout.tsx
 
-import React from "react";
-import { Switch, Route, Redirect } from "wouter";
+import React, { useEffect } from "react";
+import { Route, Switch, useLocation } from "wouter";
 import { useAdminAuth } from "@/hooks/use-admin-auth";
 import { useTeamAuth } from "@/hooks/use-team-auth";
 
@@ -17,9 +17,12 @@ import { BuildFooter } from "@/components/Footer";
 
 export default function WorkspaceLayout() {
   const { isAuthenticated: isAdminAuth, isLoading: adminLoading } = useAdminAuth();
-  const { isAuthenticated: isTeamAuth,  isLoading: teamLoading }  = useTeamAuth();
+  const { isAuthenticated: isTeamAuth, isLoading: teamLoading } = useTeamAuth();
 
-  const isLoading = adminLoading || teamLoading;
+  // Wouter programmatic navigation
+  const [, setLocation] = useLocation();
+
+  const isChecking = adminLoading || teamLoading;
   const hasWorkspaceAccess = isAdminAuth || isTeamAuth;
 
   console.log('WorkspaceLayout auth check:', {
@@ -27,22 +30,34 @@ export default function WorkspaceLayout() {
     isTeamAuth,
     adminLoading,
     teamLoading,
+    isChecking,
     hasWorkspaceAccess
   });
 
-  if (isLoading) {
+  useEffect(() => {
+    // Only decide once checks are complete
+    if (!isChecking && !hasWorkspaceAccess) {
+      console.log("No workspace access, redirecting to /admin");
+      // replace history so user can't go 'Back' to a blocked page
+      setLocation("/admin", { replace: true });
+    }
+  }, [isChecking, hasWorkspaceAccess, setLocation]);
+
+  if (isChecking) {
+    // Prevent premature redirects while auth is still resolving
     return (
-      <div style={{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center"}}>
-        Loading workspace…
+      <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        Checking access…
       </div>
     );
   }
 
   if (!hasWorkspaceAccess) {
-    console.log('No workspace access, redirecting to admin login');
-    return <Redirect to="/admin" />;
+    // We already kicked off navigation above; render nothing to avoid flicker
+    return null;
   }
 
+  // At this point, user has access. Render workspace routes.
   return (
     <MaterialDashboardLayout>
       <Switch>

@@ -1,0 +1,94 @@
+Got it — if /workspace still isn’t routing correctly after swapping to <Redirect>, it’s usually one of these:
+
+redirect firing during an “unknown/initial” auth state
+
+component not mounted within a Router
+
+conditional render path never reaches <Redirect> (e.g., layout always returns something else first)
+
+version mismatch (older Wouter without <Redirect> behavior you expect)
+
+Here’s a bullet-proof pattern that avoids all of that by using useLocation() for a programmatic redirect, plus an explicit loading gate. Drop this in and it’ll work regardless of Switch/Route composition.
+
+Replace your WorkspaceLayout.tsx with this
+// client/src/pages/workspace/WorkspaceLayout.tsx
+import React, { useEffect } from "react";
+import { Route, Switch, useLocation } from "wouter";
+import { useAdminAuth } from "@/hooks/use-admin-auth";
+import { useTeamAuth } from "@/hooks/use-team-auth";
+
+// Core modules
+import CRMModule from "./CRMModule";
+
+export default function WorkspaceLayout() {
+  const { isChecking: isCheckingAdmin, isAuthenticated: isAdmin } = useAdminAuth();
+  const { isChecking: isCheckingTeam, hasWorkspaceAccess } = useTeamAuth();
+
+  // Wouter programmatic navigation
+  const [, setLocation] = useLocation();
+
+  const isChecking = isCheckingAdmin || isCheckingTeam;
+
+  useEffect(() => {
+    // Only decide once checks are complete
+    if (!isChecking && !hasWorkspaceAccess) {
+      console.log("No workspace access, redirecting to /admin");
+      // replace history so user can't go 'Back' to a blocked page
+      setLocation("/admin", { replace: true });
+    }
+  }, [isChecking, hasWorkspaceAccess, setLocation]);
+
+  if (isChecking) {
+    // Prevent premature redirects while auth is still resolving
+    return (
+      <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        Checking access…
+      </div>
+    );
+  }
+
+  if (!hasWorkspaceAccess) {
+    // We already kicked off navigation above; render nothing to avoid flicker
+    return null;
+  }
+
+  // At this point, user has access. Render workspace routes.
+  return (
+    <Switch>
+      <Route path="/workspace">
+        <CRMModule /* TeamTrack / MaterialDashboard layout renders inside */ />
+      </Route>
+
+      {/* Optional nested examples: */}
+      <Route path="/workspace/clients">
+        <CRMModule initialTab="clients" />
+      </Route>
+
+      {/* Fallback in case of unknown subroutes under /workspace */}
+      <Route>
+        <CRMModule />
+      </Route>
+    </Switch>
+  );
+}
+
+Why this fixes it
+
+No early redirect during auth load: We wait until both auth hooks finish (isChecking false) before deciding. That prevents the “redirect because false by default” problem.
+
+Programmatic navigation > <Redirect> edge cases: setLocation("/admin", { replace: true }) works even if <Redirect> wouldn’t render due to tree composition or version quirks.
+
+No DOM flicker: When redirecting, we render null so users don’t see transient content.
+
+Quick sanity checks
+
+Ensure the app is wrapped in <Router> once near the root (e.g., in App.tsx).
+
+Make sure there’s a route for /admin and that successful admin login actually sets the flags your hooks read (isAuthenticated / hasWorkspaceAccess).
+
+Remove duplicate imports (you had both import { Switch, Route } from "wouter"; and import { Switch, Route, Redirect } from "wouter";). Keep just one import line.
+
+If you prefer <Redirect>, it should work too, but only after you add the loading gate:
+
+if (isChecking) return <Spinner/>;
+if (!hasWorkspaceAccess) return <Redirect to="/admin" />;
