@@ -1,5 +1,17 @@
 # replit.md
 
+# Apple Bites – Development Notes
+
+## Current Development Branch
+**main** (protecting production platform)
+
+All development is now being done directly on the **main** branch.  
+The previous `ecosystem-modules` branch has been merged into `main` via cherry-pick, including all features such as search functionality, tier management, admin login, and dashboard updates.  
+
+## Notes
+- Use `main` for all future commits and pull requests.  
+- `ecosystem-modules` is no longer the active development branch.  
+
 ## Overview
 This is a full-stack web application for Meritage Partners, designed as a business valuation calculator. It guides users through a multi-step valuation process, generates professional PDF reports, and provides administrative dashboards for lead and team management. The platform aims to offer comprehensive business valuation services, leveraging AI for narrative generation and integrating with key external services for CRM and email automation. The project's vision is to provide a streamlined, accurate, and professional valuation tool with market potential for various business sizes.
 
