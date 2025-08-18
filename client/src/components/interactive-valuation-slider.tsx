@@ -190,6 +190,26 @@ export default function InteractiveValuationSlider() {
     <Box sx={{ p: 0 }}>
       
 
+      {/* Operational Grade Gauge */}
+      <Card sx={{ mb: 3, textAlign: 'center' }}>
+        <CardContent sx={{ p: 3 }}>
+          <Typography variant="h5" sx={{ fontWeight: 'bold', color: '#0A1F44', mb: 2 }}>
+            Your Current Operational Grade
+          </Typography>
+          <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
+            <OperationalGradeGauge 
+              grade={baseGrade}
+              title="Overall Business Grade"
+              animated={true}
+              onGradeClick={(grade) => setSliderGrade(grade)}
+            />
+          </Box>
+          <Typography variant="body1" sx={{ color: '#67748e' }}>
+            This gauge shows your overall operational performance based on your assessment
+          </Typography>
+        </CardContent>
+      </Card>
+
       {/* Current vs Potential Value Cards with reduced spacing */}
       <Grid container spacing={2} sx={{ mb: 3 }}>
         {/* Current Value Card */}
