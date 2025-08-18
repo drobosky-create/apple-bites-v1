@@ -29,67 +29,49 @@ const navigationItems = [
   {
     text: 'Dashboard',
     icon: <DashboardIcon />,
-    path: '/',
+    path: '/workspace',
     roles: ['admin', 'manager', 'team_member']
   },
   {
-    text: 'Team Directory',
+    text: 'CRM Module',
     icon: <PeopleIcon />,
-    path: '/team',
+    path: '/workspace/crm',
+    roles: ['admin', 'manager', 'team_member']
+  },
+  {
+    text: 'Assessments',
+    icon: <AssessmentIcon />,
+    path: '/workspace/assessments',
+    roles: ['admin', 'manager', 'team_member']
+  },
+  {
+    text: 'Virtual Data Room',
+    icon: <AssignmentIcon />,
+    path: '/workspace/vdr',
     roles: ['admin', 'manager']
   },
   {
-    text: 'Reviews',
-    icon: <AssignmentIcon />,
-    path: '/reviews',
-    roles: ['admin', 'manager', 'team_member']
-  },
-  {
-    text: 'Goals',
+    text: 'Team Management',
     icon: <TargetIcon />,
-    path: '/goals',
-    roles: ['admin', 'manager', 'team_member']
+    path: '/workspace/team',
+    roles: ['admin', 'manager']
   },
   {
-    text: 'Templates',
-    icon: <AssessmentIcon />,
-    path: '/templates',
-    roles: ['admin']
-  },
-  {
-    text: 'Branding',
-    icon: <PaletteIcon />,
-    path: '/branding',
-    roles: ['admin']
-  },
-  {
-    text: 'Profile',
-    icon: <PersonIcon />,
-    path: '/profile',
-    roles: ['admin', 'manager', 'team_member']
-  },
-  {
-    text: 'Notifications',
-    icon: <NotificationsIcon />,
-    path: '/notifications',
-    roles: ['admin', 'manager', 'team_member']
-  },
-  {
-    text: 'Billing',
-    icon: <CreditCardIcon />,
-    path: '/billing',
-    roles: ['admin']
-  },
-  {
-    text: 'Setup Wizard',
+    text: 'Lead Pipeline',
     icon: <StarIcon />,
-    path: '/setup',
-    roles: ['admin']
+    path: '/workspace/leads',
+    roles: ['admin', 'manager', 'team_member']
   },
   {
-    text: 'Settings',
+    text: 'Reports & Analytics',
+    icon: <NotificationsIcon />,
+    path: '/workspace/reports',
+    roles: ['admin', 'manager', 'team_member']
+  },
+  {
+    text: 'Admin Settings',
     icon: <SettingsIcon />,
-    path: '/settings',
+    path: '/workspace/admin',
     roles: ['admin']
   }
 ];
@@ -111,15 +93,15 @@ export const MaterialDashboardLayout: React.FC<MaterialDashboardLayoutProps> = (
     <Box>
       <Box sx={{ 
         p: 3, 
-        background: 'linear-gradient(195deg, #42424a, #191919)',
+        background: 'linear-gradient(195deg, var(--primary-navy), var(--secondary-teal))',
         color: 'white',
         textAlign: 'center'
       }}>
         <Typography variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
-          PerformanceHub
+          Apple Bites
         </Typography>
         <Typography variant="body2" sx={{ opacity: 0.8, mt: 1 }}>
-          Performance Management
+          M&A Workspace
         </Typography>
       </Box>
 
@@ -135,9 +117,9 @@ export const MaterialDashboardLayout: React.FC<MaterialDashboardLayoutProps> = (
                   mx: 2,
                   my: 0.5,
                   borderRadius: 2,
-                  backgroundColor: isActive ? 'rgba(255, 255, 255, 0.2)' : 'transparent',
+                  backgroundColor: isActive ? 'rgba(68, 147, 222, 0.3)' : 'transparent',
                   '&:hover': {
-                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                    backgroundColor: 'rgba(68, 147, 222, 0.15)',
                   },
                   cursor: 'pointer',
                   color: isActive ? 'white' : 'rgba(255, 255, 255, 0.8)',
@@ -170,7 +152,7 @@ export const MaterialDashboardLayout: React.FC<MaterialDashboardLayoutProps> = (
             my: 0.5,
             borderRadius: 2,
             '&:hover': {
-              backgroundColor: 'rgba(255, 255, 255, 0.1)',
+              backgroundColor: 'rgba(68, 147, 222, 0.15)',
             },
             cursor: 'pointer',
             color: 'rgba(255, 255, 255, 0.8)',
@@ -207,7 +189,7 @@ export const MaterialDashboardLayout: React.FC<MaterialDashboardLayoutProps> = (
           '& .MuiDrawer-paper': {
             width: drawerWidth,
             boxSizing: 'border-box',
-            background: 'linear-gradient(195deg, #66bb6a, #43a047)',
+            background: 'linear-gradient(195deg, var(--primary-navy), var(--secondary-teal))',
             border: 'none',
           },
         }}
@@ -229,7 +211,7 @@ export const MaterialDashboardLayout: React.FC<MaterialDashboardLayoutProps> = (
           '& .MuiDrawer-paper': {
             boxSizing: 'border-box',
             width: drawerWidth,
-            background: 'linear-gradient(195deg, #66bb6a, #43a047)',
+            background: 'linear-gradient(195deg, var(--primary-navy), var(--secondary-teal))',
           },
         }}
       >
@@ -242,7 +224,7 @@ export const MaterialDashboardLayout: React.FC<MaterialDashboardLayoutProps> = (
         sx={{
           flexGrow: 1,
           width: { xs: '100%', md: `calc(100% - ${drawerWidth}px)` },
-          backgroundColor: '#f8f9fa',
+          backgroundColor: 'var(--background-default)',
           minHeight: '100vh',
         }}
       >
@@ -267,8 +249,8 @@ export const MaterialDashboardLayout: React.FC<MaterialDashboardLayoutProps> = (
               <MenuIcon />
             </IconButton>
 
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: '#344767' }}>
-              Welcome back, {user?.firstName || user?.email?.split('@')[0]}
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: 'var(--text-primary)' }}>
+              Welcome back, {user?.firstName || user?.email?.split('@')[0] || 'admin'}
             </Typography>
           </Toolbar>
         </AppBar>
