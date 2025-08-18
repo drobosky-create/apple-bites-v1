@@ -1,3 +1,12 @@
+You’re still seeing the old Tailwind sidebar because WorkspaceLayout.tsx is still rendering <TeamTrackSidebar /> inside a grid. Your DevTools shows:
+
+client/src/components/workspace/TeamTrackSidebar.tsx
+class="sticky top-0 h-screen ..."
+
+
+Replace WorkspaceLayout.tsx with this minimal version (no grid, no Tailwind sidebar; only the MUI layout):
+
+// client/src/pages/workspace/WorkspaceLayout.tsx
 import React from "react";
 import { Switch, Route } from "wouter";
 import { useAdminAuth } from "@/hooks/use-admin-auth";
@@ -54,3 +63,21 @@ export default function WorkspaceLayout() {
     </MaterialDashboardLayout>
   );
 }
+
+
+Also make sure App.tsx uses the splat route so all subpaths go through this layout:
+
+<Route path="/workspace/:rest*">
+  <Suspense fallback={<div style={{ minHeight:'100vh', display:'flex', alignItems:'center', justifyContent:'center' }}>Loading Workspace...</div>}>
+    {React.createElement(lazy(() => import("./pages/workspace/WorkspaceLayout")))}
+  </Suspense>
+</Route>
+
+
+Then hard-refresh /workspace/leads (Ctrl/Cmd+Shift+R).
+Quick check in DevTools console:
+
+!!document.querySelector('.MuiDrawer-paper')  // should be true
+
+
+If it’s still false, search for any remaining usages of TeamTrackSidebar and remove them from renders.
