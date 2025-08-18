@@ -110,7 +110,7 @@ export const MaterialDashboardLayout: React.FC<MaterialDashboardLayoutProps> = (
           const isActive = location === item.path;
 
           return (
-            <Link key={item.text} href={item.path}>
+            <Link key={item.text} href={item.path} style={{ textDecoration: 'none' }}>
               <ListItem 
                 component="div"
                 sx={{
@@ -123,6 +123,7 @@ export const MaterialDashboardLayout: React.FC<MaterialDashboardLayoutProps> = (
                   },
                   cursor: 'pointer',
                   color: isActive ? 'white' : 'rgba(255, 255, 255, 0.8)',
+                  textDecoration: 'none',
                 }}
                 data-testid={`nav-item-${item.text.toLowerCase().replace(' ', '-')}`}
               >
