@@ -1,5 +1,6 @@
 import React from "react";
 import TeamTrackSidebar from "@/components/workspace/TeamTrackSidebar";
+import { BuildFooter } from "@/components/Footer";
 
 interface MaterialDashboardLayoutProps {
   children: React.ReactNode;
@@ -23,6 +24,7 @@ export default function MaterialDashboardLayout({ children }: MaterialDashboardL
             {children}
           </div>
         </main>
+        <BuildFooter />
       </div>
     </div>
   );

@@ -1,8 +1,7 @@
 import React from 'react';
 import { useLocation } from "wouter";
 import { TEAMTRACK_NAV } from "@/config/teamtrackNav";
-import { useAdminAuth } from "@/hooks/use-admin-auth";
-import { useTeamAuth } from "@/hooks/use-team-auth";
+import { useAuth } from "@/hooks/use-auth";
 
 function allowed(itemRoles?: string[], userRole?: string) {
   if (!itemRoles || itemRoles.length === 0) return true;
@@ -11,11 +10,12 @@ function allowed(itemRoles?: string[], userRole?: string) {
 
 export default function TeamTrackSidebar() {
   const [location, setLocation] = useLocation();
-  const { isAuthenticated: isAdmin } = useAdminAuth();
-  const { isAuthenticated: isTeam } = useTeamAuth();
+  const { isAuthenticated, isAdmin, roles } = useAuth();
+  
+  console.log('TeamTrackSidebar auth state:', { isAuthenticated, isAdmin, roles });
   
   // Determine user role - admin takes precedence
-  const userRole = isAdmin ? "admin" : isTeam ? "member" : undefined;
+  const userRole = isAdmin ? "admin" : isAuthenticated ? "member" : undefined;
 
   return (
     <div className="h-full border-r bg-white/90 backdrop-blur p-3 overflow-y-auto">
