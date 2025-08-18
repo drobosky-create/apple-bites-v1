@@ -313,14 +313,15 @@ export default function ValueCalculator() {
 
           <Link href="/dashboard">
             <MDButton
-              className="text-[#dbdce1]"
               sx={{
-                background: 'transparent',
-                border: '1px solid rgba(255, 255, 255, 0.3)',
-                color: '#dbdce1',
+                background: 'linear-gradient(135deg, #0A1F44 0%, #1B2C4F 100%)',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                color: 'white',
+                fontWeight: 500,
                 '&:hover': {
-                  background: 'rgba(255, 255, 255, 0.1)',
-                  transform: 'translateY(-2px)'
+                  background: 'linear-gradient(135deg, #1B2C4F 0%, #2A3B5C 100%)',
+                  transform: 'translateY(-2px)',
+                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)'
                 },
                 transition: 'all 0.3s ease',
                 width: '100%',
