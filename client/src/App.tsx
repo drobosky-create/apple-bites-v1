@@ -10,6 +10,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { IS_UNIFIED_SHELL } from "@/config/flags";
 import AdminAlias from "@/pages/AdminAlias";
 import WorkspaceLayout from "@/pages/workspace/WorkspaceLayout";
+import WorkspaceLayoutTest from "@/pages/workspace/WorkspaceLayoutTest";
 import FreeAssessment from "@/pages/free-assessment";
 import GrowthExitAssessment from "@/pages/strategic-assessment-new-clean";
 import AnalyticsDashboard from "@/pages/analytics-dashboard";
@@ -62,6 +63,7 @@ function Router() {
           {/* Unified shell routing */}
           {IS_UNIFIED_SHELL ? (
             <>
+              <Route path="/workspace-test" component={WorkspaceLayoutTest} />
               <Route path="/workspace" component={WorkspaceLayout} />
               <Route path="/workspace/:rest*" component={WorkspaceLayout} />
               <Route path="/admin" component={AdminAlias} />

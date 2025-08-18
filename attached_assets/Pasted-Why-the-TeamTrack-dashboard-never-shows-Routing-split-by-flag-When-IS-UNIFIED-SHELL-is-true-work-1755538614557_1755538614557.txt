@@ -1,0 +1,80 @@
+Why the TeamTrack dashboard never shows
+
+Routing split by flag
+
+When IS_UNIFIED_SHELL is true, /workspace and /workspace/:rest* both go to WorkspaceLayout.
+
+That means the TeamTrack layout can only appear if WorkspaceLayout wraps it.
+
+In TeamTrack, the MaterialDashboardLayout is the top-level wrapper. In AppleBites, it’s one level down inside WorkspaceLayout.
+
+Fallback is swallowing /workspace
+
+In your WorkspaceLayout.tsx, the last route is <CRMModule /> (or role-aware fallback if you patched it).
+
+With Wouter, if no other route matches, that fallback route always wins, so you never actually see a blank MaterialDashboardLayout shell.
+
+Export mismatch risk
+
+In your edits, you flipped between:
+
+import MaterialDashboardLayout from "@/layouts/TeamTrack/MaterialDashboardLayout";
+// vs
+import { MaterialDashboardLayout } from "@/layouts/TeamTrack/MaterialDashboardLayout";
+
+
+If the export doesn’t match the import, React silently renders nothing for the shell. That would make it look like “the dashboard doesn’t work.”
+
+✅ How to prove the shell is working
+
+Temporarily strip WorkspaceLayout down to just the layout:
+
+// client/src/pages/workspace/WorkspaceLayout.tsx
+import React from "react";
+import MaterialDashboardLayout from "@/layouts/TeamTrack/MaterialDashboardLayout";
+
+export default function WorkspaceLayout() {
+  return (
+    <MaterialDashboardLayout>
+      <div style={{ padding: 20 }}>
+        <h1>Inside TeamTrack Shell ✅</h1>
+      </div>
+    </MaterialDashboardLayout>
+  );
+}
+
+
+Then go to /workspace.
+
+If you see the sidebar + header (TeamTrack look), the shell is working.
+
+If you only see “Inside TeamTrack Shell” with no sidebar, then your import/export is broken.
+
+🔧 Next Steps
+
+Fix the import/export mismatch
+
+Open MaterialDashboardLayout.tsx.
+
+If it ends with export default MaterialDashboardLayout;, use:
+
+import MaterialDashboardLayout from "@/layouts/TeamTrack/MaterialDashboardLayout";
+
+
+If it ends with export const MaterialDashboardLayout = ..., then use:
+
+import { MaterialDashboardLayout } from "@/layouts/TeamTrack/MaterialDashboardLayout";
+
+
+Add back your routes after confirming shell
+
+Once the shell renders, put the Switch with CRM/VDR/Admin back inside.
+
+Keep the role-aware fallback at the bottom:
+
+<Route>{isAdmin ? <AssessmentAdminModule /> : <CRMModule />}</Route>
+
+
+Sidebar config comes next
+
+After the shell is confirmed, adjust TeamTrackSidebar.tsx (or sidebar.tsx you copied from TeamTrack) to only show the AppleBites pages.
