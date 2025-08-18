@@ -1339,6 +1339,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Update user tier
+  app.patch("/api/users/:id/tier", isAdminAuthenticated, async (req, res) => {
+    try {
+      const userId = req.params.id;
+      const { tier } = req.body;
+      
+      if (!tier || !['free', 'growth', 'capital'].includes(tier)) {
+        return res.status(400).json({ error: "Valid tier is required (free, growth, capital)" });
+      }
+      
+      const updatedUser = await storage.updateUserTier(userId, tier);
+      res.json({ success: true, user: updatedUser });
+    } catch (error) {
+      console.error("Error updating user tier:", error);
+      res.status(500).json({ error: "Failed to update user tier" });
+    }
+  });
+
   app.get("/api/leads/:id", isAdminAuthenticated, async (req, res) => {
     try {
       const leadId = parseInt(req.params.id);
