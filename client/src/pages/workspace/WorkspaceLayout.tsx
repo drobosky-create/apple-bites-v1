@@ -8,7 +8,7 @@ import CRMModule from "./CRMModule";
 import VDRModule from "./VDRModule";
 import TeamModule from "./TeamModule";
 import AssessmentAdminModule from "./AssessmentAdminModule";
-import MaterialDashboardLayout from "@/layouts/TeamTrack/MaterialDashboardLayout";
+import MaterialDashboardLayout from "../../layouts/TeamTrack/MaterialDashboardLayout";
 import { BuildFooter } from "@/components/Footer";
 
 export default function WorkspaceLayout() {
