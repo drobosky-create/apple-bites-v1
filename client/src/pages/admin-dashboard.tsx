@@ -19,249 +19,7 @@ import { Grid } from '@mui/system';
 
 const appleBitesLogoPath = '/assets/logos/apple-bites-meritage-logo.png';
 
-// Admin Sidebar Component - Exact copy from user dashboard structure
-function AdminSidebar({ user, onSignOut, activeTab, setActiveTab }: { user: any; onSignOut: () => void; activeTab: string; setActiveTab: (tab: string) => void }) {
-  // Apple Bites Brand Colors - Exact copy from user dashboard
-  const colors = {
-    primary: "#00718d",
-    secondary: "#0A1F44", 
-    accent: "#005b8c",
-    grayLight: "#F7FAFC",
-    gray: "#CBD5E1"
-  };
 
-  const gradients = {
-    primary: "linear-gradient(135deg, #00718d 0%, #0A1F44 100%)",
-    light: "linear-gradient(135deg, #00718d 0%, #005b8c 100%)",
-    dark: "linear-gradient(135deg, #0A1F44 0%, #1C2D5A 100%)",
-    glow: "linear-gradient(135deg, #00718d 0%, #3B82F6 100%)"
-  };
-
-  const getTierGradient = (role: string) => {
-    switch (role) {
-      case 'admin': return gradients.primary;
-      case 'manager': return gradients.light;
-      default: return 'linear-gradient(135deg, #CBD5E1 0%, #94A3B8 100%)';
-    }
-  };
-
-  const getTierLabel = (role: string) => {
-    switch (role) {
-      case 'admin': return 'Admin';
-      case 'manager': return 'Manager';
-      default: return 'Member';
-    }
-  };
-
-  return (
-    <MDBox
-      sx={{
-        // Desktop: Fixed sidebar
-        position: { xs: 'relative', md: 'fixed' },
-        top: { xs: 0, md: '24px' },
-        left: { xs: 0, md: '24px' },
-        width: { xs: '100%', md: 280 },
-        height: { xs: 'auto', md: 'calc(100vh - 48px)' },
-        background: gradients.dark,
-        borderRadius: { xs: '0', md: '20px' },
-        border: { xs: 'none', md: `1px solid rgba(255, 255, 255, 0.15)` },
-        boxShadow: { xs: 'none', md: '0 4px 12px rgba(0,0,0,0.15), 0 0 0 1px rgba(255, 255, 255, 0.1)' },
-        backdropFilter: 'blur(8px)',
-        padding: { xs: 2, md: 3 },
-        display: 'flex',
-        flexDirection: 'column',
-        zIndex: 1000,
-        overflow: 'hidden', // Prevent internal scrolling
-        mb: { xs: 2, md: 0 }, // Add margin bottom on mobile
-      }}
-    >
-      {/* User Info Section */}
-      <MDBox mb={4}>
-        <MDBox display="flex" alignItems="center" mb={2}>
-          <Avatar
-            sx={{
-              background: gradients.glow,
-              width: 48,
-              height: 48,
-              mr: 2
-            }}
-          >
-            <User size={24} color="white" />
-          </Avatar>
-          <MDBox>
-            <MDTypography variant="h6" fontWeight="medium" sx={{ color: 'white' }}>
-              {user?.firstName} {user?.lastName}
-            </MDTypography>
-            <MDTypography variant="caption" sx={{ color: colors.accent }}>
-              {user?.email}
-            </MDTypography>
-          </MDBox>
-        </MDBox>
-        
-        <MDBox display="flex" alignItems="center">
-          <MDTypography variant="body2" mr={1} sx={{ color: 'white' }}>
-            Role:
-          </MDTypography>
-          <MDBox
-            sx={{
-              background: getTierGradient(user?.role || 'admin'),
-              color: 'white',
-              px: 2,
-              py: 0.5,
-              borderRadius: 2,
-              fontSize: '0.75rem',
-              fontWeight: 600,
-              textTransform: 'uppercase',
-              letterSpacing: '0.5px'
-            }}
-          >
-            {getTierLabel(user?.role || 'admin')}
-          </MDBox>
-        </MDBox>
-      </MDBox>
-
-      {/* Navigation Buttons - Exact structure from user dashboard */}
-      <MDBox display="flex" flexDirection="column" gap={1.5}>
-        <MDButton
-          onClick={() => setActiveTab('overview')}
-          sx={{
-            background: activeTab === 'overview' ? gradients.glow : 'transparent',
-            border: activeTab === 'overview' ? 'none' : `1px solid rgba(255, 255, 255, 0.3)`,
-            color: activeTab === 'overview' ? 'white' : '#dbdce1',
-            '&:hover': {
-              background: activeTab === 'overview' ? gradients.light : 'rgba(255, 255, 255, 0.1)',
-              transform: 'translateY(-2px)'
-            },
-            transition: 'all 0.3s ease',
-            width: '100%',
-            py: 1.2
-          }}
-          startIcon={<Home size={18} />}
-        >
-          Dashboard Overview
-        </MDButton>
-
-        <MDButton
-          onClick={() => setActiveTab('team')}
-          sx={{
-            background: activeTab === 'team' ? gradients.glow : 'transparent',
-            border: activeTab === 'team' ? 'none' : `1px solid rgba(255, 255, 255, 0.3)`,
-            color: activeTab === 'team' ? 'white' : '#dbdce1',
-            '&:hover': {
-              background: activeTab === 'team' ? gradients.light : 'rgba(255, 255, 255, 0.1)',
-              transform: 'translateY(-2px)'
-            },
-            transition: 'all 0.3s ease',
-            width: '100%',
-            py: 1.2
-          }}
-          startIcon={<Users size={18} />}
-        >
-          Team Members
-        </MDButton>
-
-        <MDButton
-          onClick={() => setActiveTab('leads')}
-          sx={{
-            background: activeTab === 'leads' ? gradients.glow : 'transparent',
-            border: activeTab === 'leads' ? 'none' : `1px solid rgba(255, 255, 255, 0.3)`,
-            color: activeTab === 'leads' ? 'white' : '#dbdce1',
-            '&:hover': {
-              background: activeTab === 'leads' ? gradients.light : 'rgba(255, 255, 255, 0.1)',
-              transform: 'translateY(-2px)'
-            },
-            transition: 'all 0.3s ease',
-            width: '100%',
-            py: 1.2
-          }}
-          startIcon={<FileText size={18} />}
-        >
-          Leads
-        </MDButton>
-
-
-
-        <MDButton
-          onClick={() => setActiveTab('users')}
-          sx={{
-            background: activeTab === 'users' ? gradients.glow : 'transparent',
-            border: activeTab === 'users' ? 'none' : `1px solid rgba(255, 255, 255, 0.3)`,
-            color: activeTab === 'users' ? 'white' : '#dbdce1',
-            '&:hover': {
-              background: activeTab === 'users' ? gradients.light : 'rgba(255, 255, 255, 0.1)',
-              transform: 'translateY(-2px)'
-            },
-            transition: 'all 0.3s ease',
-            width: '100%',
-            py: 1.2
-          }}
-          startIcon={<User size={18} />}
-        >
-          Users
-        </MDButton>
-
-        <MDButton
-          onClick={() => setActiveTab('analytics')}
-          sx={{
-            background: activeTab === 'analytics' ? gradients.glow : 'transparent',
-            border: activeTab === 'analytics' ? 'none' : `1px solid rgba(255, 255, 255, 0.3)`,
-            color: activeTab === 'analytics' ? 'white' : '#dbdce1',
-            '&:hover': {
-              background: activeTab === 'analytics' ? gradients.light : 'rgba(255, 255, 255, 0.1)',
-              transform: 'translateY(-2px)'
-            },
-            transition: 'all 0.3s ease',
-            width: '100%',
-            py: 1.2
-          }}
-          startIcon={<BarChart3 size={18} />}
-        >
-          Analytics
-        </MDButton>
-
-        <MDButton
-          onClick={onSignOut}
-          className="text-[#dbdce1]"
-          sx={{
-            background: 'transparent',
-            border: `1px solid #EF4444`,
-            color: '#EF4444',
-            '&:hover': {
-              background: 'rgba(239, 68, 68, 0.1)',
-              borderColor: '#DC2626',
-              transform: 'translateY(-2px)'
-            },
-            transition: 'all 0.3s ease',
-            width: '100%',
-            py: 1.2
-          }}
-          startIcon={<LogOut size={18} />}
-        >
-          Sign Out
-        </MDButton>
-      </MDBox>
-
-      {/* Spacer */}
-      <MDBox flexGrow={1} />
-
-      {/* Footer - Exact copy from user dashboard */}
-      <MDBox mt={4} pt={2} borderTop={`1px solid rgba(255, 255, 255, 0.2)`}>
-        <MDBox display="flex" flexDirection="column" alignItems="center" gap={1}>
-          <img
-            src="/assets/logos/apple-bites-meritage-logo.png"
-            alt="Apple Bites by Meritage Partners"
-            width={250}
-            height={250}
-            style={{
-              objectFit: 'contain',
-              maxWidth: '100%'
-            }}
-          />
-        </MDBox>
-      </MDBox>
-    </MDBox>
-  );
-}
 
 // Stats Card Component
 function StatsCard({ title, value, subtitle, icon: Icon, color }: {
@@ -331,20 +89,6 @@ export default function AdminDashboard() {
     lastName: 'Robosky',
     email: 'drobosky@meritage-partners.com',
     role: 'admin'
-  };
-
-  // Admin logout function
-  const handleAdminLogout = async () => {
-    try {
-      await fetch('/api/admin/logout', {
-        method: 'POST',
-        credentials: 'include',
-      });
-      window.location.href = '/admin';
-    } catch (error) {
-      console.error('Logout error:', error);
-      window.location.href = '/admin';
-    }
   };
 
   const { data: teamMembers, isLoading: membersLoading } = useQuery<TeamMember[]>({
@@ -442,53 +186,75 @@ export default function AdminDashboard() {
 
 
   return (
-    <MDBox sx={{ 
-      display: { xs: 'block', md: 'flex' }, 
-      minHeight: '100vh', 
-      backgroundColor: '#f8f9fa' 
-    }}>
-      <AdminSidebar user={adminUser} onSignOut={handleAdminLogout} activeTab={activeTab} setActiveTab={setActiveTab} />
-      
-      {/* Main Content */}
-      <MDBox
-        sx={{
-          flex: 1,
-          marginLeft: { xs: 0, md: '328px' }, // No margin on mobile, fixed margin on desktop
-          p: { xs: 2, md: 4 },
-          minHeight: '100vh',
-          width: { xs: '100%', md: 'calc(100% - 328px)' }, // Full width on mobile
-        }}
-      >
-        <Container maxWidth="xl">
-          {/* Header */}
-          <MDBox mb={3} display="flex" justifyContent="space-between" alignItems="center">
-            <MDBox>
-              <MDTypography variant="h4" fontWeight="bold" sx={{ color: '#344767', mb: 1 }}>
-                {activeTab === 'team' && 'Team Management'}
-                {activeTab === 'leads' && 'Lead Management'}
-                {activeTab === 'users' && 'User Directory'}
-                {activeTab === 'analytics' && 'Analytics Dashboard'}
-                {activeTab === 'overview' && 'Admin Dashboard'}
-              </MDTypography>
-              <MDTypography variant="body1" sx={{ color: '#67748e' }}>
-                Welcome back, {adminUser?.firstName} {adminUser?.lastName} - {activeTab === 'team' && 'Manage your team and organization'}
-                {activeTab === 'leads' && 'Track and manage leads'}
-                {activeTab === 'users' && 'View all registered consumers'}
-                {activeTab === 'analytics' && 'View system analytics'}
-                {activeTab === 'overview' && 'Overview of all system metrics'}
-              </MDTypography>
-            </MDBox>
-            <MDBox display="flex" gap={2}>
-              <MDButton
-                variant="outlined"
-                color="info"
-                onClick={handleAdminLogout}
-                startIcon={<LogOut size={18} />}
-              >
-                Logout
-              </MDButton>
-            </MDBox>
-          </MDBox>
+    <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
+      {/* Header */}
+      <MDBox mb={3} display="flex" justifyContent="space-between" alignItems="center">
+        <MDBox>
+          <MDTypography variant="h4" fontWeight="bold" sx={{ color: '#344767', mb: 1 }}>
+            {activeTab === 'team' && 'Team Management'}
+            {activeTab === 'leads' && 'Lead Management'}
+            {activeTab === 'users' && 'User Directory'}
+            {activeTab === 'analytics' && 'Analytics Dashboard'}
+            {activeTab === 'overview' && 'Admin Dashboard'}
+          </MDTypography>
+          <MDTypography variant="body1" sx={{ color: '#67748e' }}>
+            Welcome back, {adminUser?.firstName} {adminUser?.lastName} - {activeTab === 'team' && 'Manage your team and organization'}
+            {activeTab === 'leads' && 'Track and manage leads'}
+            {activeTab === 'users' && 'View all registered consumers'}
+            {activeTab === 'analytics' && 'View system analytics'}
+            {activeTab === 'overview' && 'Overview of all system metrics'}
+          </MDTypography>
+        </MDBox>
+        
+        {/* Tab Navigation */}
+        <MDBox display="flex" gap={1} flexWrap="wrap">
+          <MDButton
+            variant={activeTab === 'overview' ? 'contained' : 'outlined'}
+            color="info"
+            size="small"
+            onClick={() => setActiveTab('overview')}
+            startIcon={<Home size={16} />}
+          >
+            Overview
+          </MDButton>
+          <MDButton
+            variant={activeTab === 'team' ? 'contained' : 'outlined'}
+            color="info"
+            size="small"
+            onClick={() => setActiveTab('team')}
+            startIcon={<Users size={16} />}
+          >
+            Team
+          </MDButton>
+          <MDButton
+            variant={activeTab === 'leads' ? 'contained' : 'outlined'}
+            color="info"
+            size="small"
+            onClick={() => setActiveTab('leads')}
+            startIcon={<FileText size={16} />}
+          >
+            Leads
+          </MDButton>
+          <MDButton
+            variant={activeTab === 'users' ? 'contained' : 'outlined'}
+            color="info"
+            size="small"
+            onClick={() => setActiveTab('users')}
+            startIcon={<User size={16} />}
+          >
+            Users
+          </MDButton>
+          <MDButton
+            variant={activeTab === 'analytics' ? 'contained' : 'outlined'}
+            color="info"
+            size="small"
+            onClick={() => setActiveTab('analytics')}
+            startIcon={<BarChart3 size={16} />}
+          >
+            Analytics
+          </MDButton>
+        </MDBox>
+      </MDBox>
 
           {/* Conditional Content Based on Active Tab */}
           {activeTab === 'team' && (
@@ -727,8 +493,6 @@ export default function AdminDashboard() {
           )}
 
         </Container>
-      </MDBox>
-    </MDBox>
   );
 }
 
