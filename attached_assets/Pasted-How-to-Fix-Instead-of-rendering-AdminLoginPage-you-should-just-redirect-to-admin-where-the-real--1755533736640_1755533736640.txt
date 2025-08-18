@@ -1,4 +1,6 @@
-// client/src/pages/workspace/WorkspaceLayout.tsx
+How to Fix
+
+Instead of rendering AdminLoginPage, you should just redirect to /admin (where the real admin login lives):
 
 import React from "react";
 import { Switch, Route, Redirect } from "wouter";
@@ -22,14 +24,6 @@ export default function WorkspaceLayout() {
   const isLoading = adminLoading || teamLoading;
   const hasWorkspaceAccess = isAdminAuth || isTeamAuth;
 
-  console.log('WorkspaceLayout auth check:', {
-    isAdminAuth,
-    isTeamAuth,
-    adminLoading,
-    teamLoading,
-    hasWorkspaceAccess
-  });
-
   if (isLoading) {
     return (
       <div style={{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center"}}>
@@ -38,8 +32,9 @@ export default function WorkspaceLayout() {
     );
   }
 
+  // ❌ don’t render AdminLoginPage here
+  // ✅ just redirect to /admin
   if (!hasWorkspaceAccess) {
-    console.log('No workspace access, redirecting to admin login');
     return <Redirect to="/admin" />;
   }
 
@@ -71,3 +66,15 @@ export default function WorkspaceLayout() {
     </MaterialDashboardLayout>
   );
 }
+
+🔑 What this changes:
+
+Before: !hasWorkspaceAccess → renders AdminLoginPage (consumer login).
+
+After: !hasWorkspaceAccess → redirects user straight to /admin where your real admin login form is.
+
+👉 So now the correct flow will be:
+
+Go to /admin → log in with your admin credentials.
+
+Navigate to /workspace → TeamTrack sidebar + workspace dashboard loads.
