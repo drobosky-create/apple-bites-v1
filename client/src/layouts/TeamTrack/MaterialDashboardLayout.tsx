@@ -106,44 +106,57 @@ export const MaterialDashboardLayout: React.FC<MaterialDashboardLayoutProps> = (
       </Box>
 
       <List sx={{ pt: 0 }}>
-        {navigationItems.map((item) => {
-          const isActive = location === item.path;
+        {navigationItems
+          .filter(item => {
+            // Role-based filtering
+            if (!user) return false;
+            
+            // Check if user has admin access from useAuth hook
+            const hasAdminRole = user.roles?.some(role => role === 'Admin') || false;
+            const userRole = hasAdminRole ? 'admin' : 
+                           user.roles?.some(role => role === 'Ops') ? 'manager' : 
+                           'team_member';
+            
+            return item.roles.includes(userRole);
+          })
+          .map((item) => {
+            const isActive = location === item.path;
 
-          return (
-            <Link key={item.text} href={item.path} style={{ textDecoration: 'none' }}>
-              <ListItem 
-                component="div"
-                sx={{
-                  mx: 2,
-                  my: 0.5,
-                  borderRadius: 2,
-                  backgroundColor: isActive ? 'rgba(68, 147, 222, 0.3)' : 'transparent',
-                  '&:hover': {
-                    backgroundColor: 'rgba(68, 147, 222, 0.15)',
-                  },
-                  cursor: 'pointer',
-                  color: isActive ? 'white' : 'rgba(255, 255, 255, 0.8)',
-                  textDecoration: 'none',
-                }}
-                data-testid={`nav-item-${item.text.toLowerCase().replace(' ', '-')}`}
-              >
-                <ListItemIcon sx={{ 
-                  color: 'inherit',
-                  minWidth: 40 
-                }}>
-                  {item.icon}
-                </ListItemIcon>
-                <ListItemText 
-                  primary={item.text}
-                  primaryTypographyProps={{
-                    fontSize: '0.875rem',
-                    fontWeight: isActive ? 600 : 400
+            return (
+              <Link key={item.text} href={item.path} style={{ textDecoration: 'none' }}>
+                <ListItem 
+                  component="div"
+                  sx={{
+                    mx: 2,
+                    my: 0.5,
+                    borderRadius: 2,
+                    backgroundColor: isActive ? 'rgba(68, 147, 222, 0.3)' : 'transparent',
+                    '&:hover': {
+                      backgroundColor: 'rgba(68, 147, 222, 0.15)',
+                    },
+                    cursor: 'pointer',
+                    color: isActive ? 'white' : 'rgba(255, 255, 255, 0.8)',
+                    textDecoration: 'none',
                   }}
-                />
-              </ListItem>
-            </Link>
-          );
-        })}
+                  data-testid={`nav-item-${item.text.toLowerCase().replace(' ', '-')}`}
+                >
+                  <ListItemIcon sx={{ 
+                    color: 'inherit',
+                    minWidth: 40 
+                  }}>
+                    {item.icon}
+                  </ListItemIcon>
+                  <ListItemText 
+                    primary={item.text}
+                    primaryTypographyProps={{
+                      fontSize: '0.875rem',
+                      fontWeight: isActive ? 600 : 400
+                    }}
+                  />
+                </ListItem>
+              </Link>
+            );
+          })}
 
         {/* Logout */}
         <ListItem 

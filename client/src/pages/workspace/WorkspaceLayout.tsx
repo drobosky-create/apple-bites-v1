@@ -79,11 +79,20 @@ export default function WorkspaceLayout() {
         <Route path="/workspace/audit"       component={CRMModule} />
         <Route path="/workspace/settings"    component={CRMModule} />
 
-        {/* Default fallback:
-           - bare /workspace (no subpath) lands here
-           - admins see Apple Bites admin; others see CRM
+        {/* Role-aware fallback routing:
+           - Admin → AdminDashboard (AppleBites admin)
+           - Team/Manager → CRMModule (Lead management)  
+           - Consumer → AssessmentAdminModule (Assessment interface)
         */}
-        <Route>{isAdmin ? <AdminDashboard /> : <CRMModule />}</Route>
+        <Route>
+          {isAdmin ? (
+            <AdminDashboard />
+          ) : isAuthenticated ? (
+            <CRMModule />
+          ) : (
+            <AssessmentAdminModule />
+          )}
+        </Route>
       </Switch>
       <BuildFooter />
     </MaterialDashboardLayout>
