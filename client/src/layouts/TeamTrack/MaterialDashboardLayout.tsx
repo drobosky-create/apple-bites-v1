@@ -10,10 +10,10 @@ export default function MaterialDashboardLayout({ children }: MaterialDashboardL
   console.log('MOUNT: TeamTrack MaterialDashboardLayout');
   
   return (
-    // 15rem fixed left column + flexible right column (minmax prevents overflow)
-    <div className="min-h-screen grid grid-cols-[15rem_minmax(0,1fr)]">
+    // 240px fixed left column + flexible right column (minmax prevents overflow)
+    <div className="min-h-screen grid grid-cols-[240px_minmax(0,1fr)]" style={{backgroundColor: '#f8fafc'}}>
       {/* keep the sidebar visible & on top if content goes absolute */}
-      <aside className="sticky top-0 h-screen z-10">
+      <aside className="sticky top-0 h-screen z-10 bg-white shadow-lg">
         <TeamTrackSidebar />
       </aside>
 

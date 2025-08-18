@@ -18,10 +18,11 @@ export default function TeamTrackSidebar() {
   const userRole = isAdmin ? "admin" : isAuthenticated ? "member" : undefined;
 
   return (
-    <div className="h-full border-r bg-white/90 backdrop-blur p-3 overflow-y-auto">
-      <div className="mb-4">
-        <div className="text-lg font-bold text-slate-800">TeamTrack</div>
-        <div className="text-xs text-slate-500">M&A Workspace</div>
+    <div className="h-full border-r bg-white shadow-lg p-4 overflow-y-auto" style={{minWidth: '240px', borderRight: '2px solid #e5e7eb'}}>
+      <div className="mb-6">
+        <div className="text-xl font-bold text-slate-800">Apple Bites</div>
+        <div className="text-sm text-slate-600">M&A Workspace</div>
+        <div className="text-xs text-emerald-600 mt-1">Admin: {userRole}</div>
       </div>
       
       <nav className="space-y-1">
