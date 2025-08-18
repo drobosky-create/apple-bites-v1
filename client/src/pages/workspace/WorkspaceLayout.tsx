@@ -23,6 +23,14 @@ export default function WorkspaceLayout() {
   const isLoading = adminLoading || teamLoading;
   const hasWorkspaceAccess = isAdminAuth || isTeamAuth;
 
+  console.log('WorkspaceLayout auth check:', {
+    isAdminAuth,
+    isTeamAuth,
+    adminLoading,
+    teamLoading,
+    hasWorkspaceAccess
+  });
+
   if (isLoading) {
     return (
       <div style={{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center"}}>
@@ -31,7 +39,16 @@ export default function WorkspaceLayout() {
     );
   }
 
-  if (!hasWorkspaceAccess) return <AdminLoginPage />;
+  if (!hasWorkspaceAccess) {
+    console.log('No workspace access, redirecting to admin login');
+    // Redirect to admin login instead of rendering AdminLoginPage component
+    window.location.href = '/admin';
+    return (
+      <div style={{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center"}}>
+        Redirecting to admin login...
+      </div>
+    );
+  }
 
   return (
     <MaterialDashboardLayout>
