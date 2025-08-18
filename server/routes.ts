@@ -1437,13 +1437,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // GET /api/assessments - Get user-specific assessments for dashboard and past assessments
   app.get("/api/assessments", async (req, res) => {
     try {
-      // Check if user is authenticated
-      if (!req.session.userId) {
+      // Check if user is authenticated (either system)
+      const userId = req.session.userId || req.session.customUserSessionId;
+      if (!userId) {
         return res.status(401).json({ error: "Authentication required" });
       }
 
       // Get user's email from session to filter assessments
-      const user = await storage.getUserById(req.session.userId);
+      let user;
+      if (req.session.userId) {
+        user = await storage.getUserById(req.session.userId);
+      } else {
+        user = await storage.getUserById(req.session.customUserSessionId);
+      }
+      
       if (!user) {
         return res.status(404).json({ error: "User not found" });
       }
