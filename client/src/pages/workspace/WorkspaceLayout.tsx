@@ -1,3 +1,5 @@
+// client/src/pages/workspace/WorkspaceLayout.tsx
+
 import React from "react";
 import { Switch, Route } from "wouter";
 import { useAdminAuth } from "@/hooks/use-admin-auth";
