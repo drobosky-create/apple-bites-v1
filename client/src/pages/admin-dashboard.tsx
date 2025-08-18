@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Link, useLocation } from 'wouter';
-import { Users, Plus, Edit, Trash2, Shield, LogOut, UserPlus, Settings, Home, BarChart3, Calendar, FileText, User, Menu, Clock, Crown, TrendingUp, Mail, Phone, Building, Eye, ExternalLink, ChevronDown, ChevronUp } from 'lucide-react';
+import { Users, Plus, Edit, Trash2, Shield, LogOut, UserPlus, Settings, Home, BarChart3, Calendar, FileText, User, Clock, Crown, TrendingUp, Mail, Phone, Building, Eye, ExternalLink, ChevronDown, ChevronUp, Search, Filter, X, Save } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { insertTeamMemberSchema, type InsertTeamMember, type TeamMember } from '@shared/schema';
@@ -14,7 +14,7 @@ import MDTypography from '@/components/MD/MDTypography';
 import MDButton from '@/components/MD/MDButton';
 import { Avatar } from '@mui/material';
 import MDInput from '@/components/MD/MDInput';
-import { Card, CardContent, Container, Box, Button, Typography, Modal, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Chip, Checkbox } from '@mui/material';
+import { Card, CardContent, Container, Box, Button, Typography, Modal, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Chip, Checkbox, InputAdornment, Menu, MenuItem, Select, FormControl } from '@mui/material';
 import { Grid } from '@mui/system';
 
 const appleBitesLogoPath = '/assets/logos/apple-bites-meritage-logo.png';
@@ -886,6 +886,16 @@ function UsersManagement() {
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
   const queryClient = useQueryClient();
   const { toast } = useToast();
+  
+  // Search and filter state for users
+  const [userSearchTerm, setUserSearchTerm] = useState('');
+  const [userFilterAnchor, setUserFilterAnchor] = useState<null | HTMLElement>(null);
+  const [userTierFilter, setUserTierFilter] = useState<string>('');
+  const [userStatusFilter, setUserStatusFilter] = useState<string>('');
+  
+  // Tier editing state
+  const [editingUserTier, setEditingUserTier] = useState<string | null>(null);
+  const [newTierValue, setNewTierValue] = useState<string>('');
 
   const { data: users, isLoading: usersLoading } = useQuery<any[]>({
     queryKey: ['/api/users'],
@@ -978,6 +988,36 @@ function UsersManagement() {
     },
   });
 
+  // Update user tier mutation
+  const updateUserTierMutation = useMutation({
+    mutationFn: async ({ userId, tier }: { userId: string; tier: string }) => {
+      const response = await fetch(`/api/users/${userId}/tier`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tier }),
+      });
+      if (!response.ok) throw new Error('Failed to update user tier');
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/users'] });
+      setEditingUserTier(null);
+      setNewTierValue('');
+      toast({
+        title: "Success",
+        description: "User tier updated successfully",
+        variant: "default",
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to update user tier",
+        variant: "destructive",
+      });
+    },
+  });
+
   const handleDeleteUser = (userId: string) => {
     if (window.confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
       deleteSingleUserMutation.mutate(userId);
@@ -1006,12 +1046,59 @@ function UsersManagement() {
   };
 
   const handleSelectAll = () => {
-    if (selectedUsers.length === users?.length) {
+    if (selectedUsers.length === filteredUsers?.length) {
       setSelectedUsers([]);
     } else {
-      setSelectedUsers(users?.map(u => u.id) || []);
+      setSelectedUsers(filteredUsers?.map(u => u.id) || []);
     }
   };
+
+  // Filter users based on search and filters
+  const filteredUsers = useMemo(() => {
+    if (!users) return [];
+    
+    return users.filter(user => {
+      // Text search
+      const searchLower = userSearchTerm.toLowerCase();
+      const matchesSearch = !userSearchTerm || 
+        `${user.firstName || ''} ${user.lastName || ''}`.toLowerCase().includes(searchLower) ||
+        (user.fullName || '').toLowerCase().includes(searchLower) ||
+        (user.email || '').toLowerCase().includes(searchLower);
+      
+      // Tier filter
+      const matchesTier = !userTierFilter || user.tier === userTierFilter;
+      
+      // Status filter
+      const matchesStatus = !userStatusFilter || 
+        (userStatusFilter === 'active' && user.isActive) ||
+        (userStatusFilter === 'inactive' && !user.isActive);
+      
+      return matchesSearch && matchesTier && matchesStatus;
+    });
+  }, [users, userSearchTerm, userTierFilter, userStatusFilter]);
+
+  const clearUserFilters = () => {
+    setUserSearchTerm('');
+    setUserTierFilter('');
+    setUserStatusFilter('');
+    setUserFilterAnchor(null);
+  };
+
+  const handleEditTier = (userId: string, currentTier: string) => {
+    setEditingUserTier(userId);
+    setNewTierValue(currentTier || 'free');
+  };
+
+  const handleSaveTier = (userId: string) => {
+    updateUserTierMutation.mutate({ userId, tier: newTierValue });
+  };
+
+  const handleCancelEdit = () => {
+    setEditingUserTier(null);
+    setNewTierValue('');
+  };
+
+  const hasActiveUserFilters = userSearchTerm || userTierFilter || userStatusFilter;
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -1076,7 +1163,7 @@ function UsersManagement() {
       <Card sx={{ boxShadow: '0 2px 8px -4px rgba(0,0,0,0.1)' }}>
         <MDBox p={2.5} display="flex" justifyContent="space-between" alignItems="center">
           <MDTypography variant="h6" fontWeight="bold" sx={{ color: '#344767' }}>
-            All Users ({users?.length || 0})
+            All Users ({hasActiveUserFilters ? filteredUsers?.length : users?.length || 0})
           </MDTypography>
           <MDBox display="flex" gap={2}>
             {selectedUsers.length > 0 && (
@@ -1101,6 +1188,125 @@ function UsersManagement() {
             </MDButton>
           </MDBox>
         </MDBox>
+
+        {/* Search and Filter Controls */}
+        <MDBox px={2.5} pb={2}>
+          <MDBox display="flex" gap={2} mb={2}>
+            <TextField
+              variant="outlined"
+              size="small"
+              placeholder="Search users..."
+              value={userSearchTerm}
+              onChange={(e) => setUserSearchTerm(e.target.value)}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Search size={20} color="#9CA3AF" />
+                  </InputAdornment>
+                ),
+                endAdornment: userSearchTerm && (
+                  <InputAdornment position="end">
+                    <X 
+                      size={16} 
+                      color="#9CA3AF" 
+                      style={{ cursor: 'pointer' }}
+                      onClick={() => setUserSearchTerm('')}
+                    />
+                  </InputAdornment>
+                )
+              }}
+              sx={{
+                flexGrow: 1,
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: 2,
+                  backgroundColor: '#F9FAFB',
+                  '&:hover': { backgroundColor: '#F3F4F6' }
+                }
+              }}
+            />
+            <MDButton
+              onClick={(e) => setUserFilterAnchor(e.currentTarget)}
+              sx={{
+                minWidth: 'auto',
+                p: 1.5,
+                backgroundColor: hasActiveUserFilters ? '#00718d' : '#F9FAFB',
+                color: hasActiveUserFilters ? 'white' : '#6B7280',
+                border: '1px solid #E5E7EB',
+                '&:hover': {
+                  backgroundColor: hasActiveUserFilters ? '#005f73' : '#F3F4F6'
+                }
+              }}
+            >
+              <Filter size={18} />
+            </MDButton>
+            
+            {/* Filter Menu */}
+            <Menu
+              anchorEl={userFilterAnchor}
+              open={Boolean(userFilterAnchor)}
+              onClose={() => setUserFilterAnchor(null)}
+              sx={{ mt: 1 }}
+            >
+              <Box sx={{ p: 2, minWidth: 200 }}>
+                <MDTypography variant="subtitle2" fontWeight="medium" mb={2}>
+                  Filter by Tier
+                </MDTypography>
+                {['', 'free', 'growth', 'capital'].map(tier => (
+                  <MenuItem 
+                    key={tier}
+                    onClick={() => setUserTierFilter(tier)}
+                    selected={userTierFilter === tier}
+                    sx={{ px: 1, py: 0.5, borderRadius: 1, mb: 0.5 }}
+                  >
+                    {tier ? tier.charAt(0).toUpperCase() + tier.slice(1) : 'All Tiers'}
+                  </MenuItem>
+                ))}
+                
+                <MDTypography variant="subtitle2" fontWeight="medium" mt={2} mb={2}>
+                  Filter by Status
+                </MDTypography>
+                {['', 'active', 'inactive'].map(status => (
+                  <MenuItem 
+                    key={status}
+                    onClick={() => setUserStatusFilter(status)}
+                    selected={userStatusFilter === status}
+                    sx={{ px: 1, py: 0.5, borderRadius: 1, mb: 0.5 }}
+                  >
+                    {status ? status.charAt(0).toUpperCase() + status.slice(1) : 'All Statuses'}
+                  </MenuItem>
+                ))}
+                
+                {hasActiveUserFilters && (
+                  <MDButton
+                    onClick={clearUserFilters}
+                    sx={{
+                      mt: 2,
+                      width: '100%',
+                      backgroundColor: '#F3F4F6',
+                      color: '#6B7280',
+                      '&:hover': { backgroundColor: '#E5E7EB' }
+                    }}
+                  >
+                    Clear All Filters
+                  </MDButton>
+                )}
+              </Box>
+            </Menu>
+          </MDBox>
+
+          {/* Results Summary */}
+          {hasActiveUserFilters && (
+            <MDBox mb={2}>
+              <MDTypography variant="body2" color="text" sx={{ opacity: 0.7 }}>
+                Showing {filteredUsers?.length || 0} of {users?.length || 0} users
+                {(userTierFilter || userStatusFilter || userSearchTerm) && ' • '}
+                {userSearchTerm && `Searching for "${userSearchTerm}"`}
+                {userTierFilter && ` • ${userTierFilter.charAt(0).toUpperCase() + userTierFilter.slice(1)} tier`}
+                {userStatusFilter && ` • ${userStatusFilter.charAt(0).toUpperCase() + userStatusFilter.slice(1)} users`}
+              </MDTypography>
+            </MDBox>
+          )}
+        </MDBox>
         
         <TableContainer>
           <Table>
@@ -1108,8 +1314,8 @@ function UsersManagement() {
               <TableRow sx={{ backgroundColor: '#f8f9fa' }}>
                 <TableCell>
                   <Checkbox
-                    checked={users && users.length > 0 && selectedUsers.length === users.length}
-                    indeterminate={selectedUsers.length > 0 && selectedUsers.length < (users?.length || 0)}
+                    checked={filteredUsers && filteredUsers.length > 0 && selectedUsers.length === filteredUsers.length}
+                    indeterminate={selectedUsers.length > 0 && selectedUsers.length < (filteredUsers?.length || 0)}
                     onChange={handleSelectAll}
                   />
                 </TableCell>
@@ -1129,14 +1335,16 @@ function UsersManagement() {
                     <Typography variant="body2">Loading users...</Typography>
                   </TableCell>
                 </TableRow>
-              ) : users && users.length === 0 ? (
+              ) : filteredUsers && filteredUsers.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={8} align="center">
-                    <Typography variant="body2">No users found</Typography>
+                    <Typography variant="body2">
+                      {hasActiveUserFilters ? 'No users match your search criteria' : 'No users found'}
+                    </Typography>
                   </TableCell>
                 </TableRow>
               ) : (
-                users?.map((user) => (
+                filteredUsers?.map((user) => (
                   <TableRow key={user.id}>
                     <TableCell>
                       <Checkbox
@@ -1156,11 +1364,54 @@ function UsersManagement() {
                       <Typography variant="body2">{user.email}</Typography>
                     </TableCell>
                     <TableCell>
-                      <Chip 
-                        label={user.tier?.toUpperCase() || 'FREE'}
-                        size="small"
-                        color={getTierColor(user.tier || 'free')}
-                      />
+                      {editingUserTier === user.id ? (
+                        <MDBox display="flex" alignItems="center" gap={1}>
+                          <FormControl size="small" sx={{ minWidth: 100 }}>
+                            <Select
+                              value={newTierValue}
+                              onChange={(e) => setNewTierValue(e.target.value)}
+                              sx={{ fontSize: '0.875rem' }}
+                            >
+                              <MenuItem value="free">Free</MenuItem>
+                              <MenuItem value="growth">Growth</MenuItem>
+                              <MenuItem value="capital">Capital</MenuItem>
+                            </Select>
+                          </FormControl>
+                          <IconButton 
+                            size="small" 
+                            onClick={() => handleSaveTier(user.id)}
+                            sx={{ color: '#16A34A' }}
+                            title="Save"
+                            disabled={updateUserTierMutation.isPending}
+                          >
+                            <Save size={14} />
+                          </IconButton>
+                          <IconButton 
+                            size="small" 
+                            onClick={handleCancelEdit}
+                            sx={{ color: '#DC2626' }}
+                            title="Cancel"
+                          >
+                            <X size={14} />
+                          </IconButton>
+                        </MDBox>
+                      ) : (
+                        <MDBox display="flex" alignItems="center" gap={1}>
+                          <Chip 
+                            label={user.tier?.toUpperCase() || 'FREE'}
+                            size="small"
+                            color={getTierColor(user.tier || 'free')}
+                          />
+                          <IconButton 
+                            size="small" 
+                            onClick={() => handleEditTier(user.id, user.tier || 'free')}
+                            sx={{ color: '#6B7280', '&:hover': { color: '#00718d' } }}
+                            title="Edit Tier"
+                          >
+                            <Edit size={14} />
+                          </IconButton>
+                        </MDBox>
+                      )}
                     </TableCell>
                     <TableCell>
                       <Chip 
