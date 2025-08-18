@@ -7,6 +7,9 @@ import MobileNavigation from "@/components/MobileNavigation";
 import { AdminAuthProvider } from "@/hooks/use-admin-auth";
 import { TeamAuthProvider } from "@/hooks/use-team-auth";
 import { useAuth } from "@/hooks/useAuth";
+import { IS_UNIFIED_SHELL } from "@/config/flags";
+import AdminAlias from "@/pages/AdminAlias";
+import WorkspaceLayout from "@/pages/workspace/WorkspaceLayout";
 import FreeAssessment from "@/pages/free-assessment";
 import GrowthExitAssessment from "@/pages/strategic-assessment-new-clean";
 import AnalyticsDashboard from "@/pages/analytics-dashboard";
@@ -55,7 +58,17 @@ function Router() {
           <Route path="/winthestorm" component={WinTheStormDemo} />
           <Route path="/signup" component={SignupPage} />
           <Route path="/login" component={LoginPage} />
-          <Route path="/admin" component={AdminLoginPage} />
+          
+          {/* Unified shell routing */}
+          {IS_UNIFIED_SHELL ? (
+            <>
+              <Route path="/workspace" component={WorkspaceLayout} />
+              <Route path="/workspace/:rest*" component={WorkspaceLayout} />
+              <Route path="/admin" component={AdminAlias} />
+            </>
+          ) : (
+            <Route path="/admin" component={AdminLoginPage} />
+          )}
           
           {/* Legal pages - always accessible */}
           <Route path="/privacy-policy" component={PrivacyPolicy} />
@@ -114,12 +127,14 @@ function Router() {
               : <LoginPage />
             }
           </Route>
-          <Route path="/workspace/:rest*">
-            {/* Workspace requires admin or team authentication - handled internally by WorkspaceLayout */}
-            <Suspense fallback={<div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Loading Workspace...</div>}>
-              {React.createElement(lazy(() => import("./pages/workspace/WorkspaceLayout")))}
-            </Suspense>
-          </Route>
+          {/* Legacy workspace route for non-unified shell */}
+          {!IS_UNIFIED_SHELL && (
+            <Route path="/workspace/:rest*">
+              <Suspense fallback={<div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Loading Workspace...</div>}>
+                {React.createElement(lazy(() => import("./pages/workspace/WorkspaceLayout")))}
+              </Suspense>
+            </Route>
+          )}
 
           {/* Admin/Team pages - self-authenticated */}
           <Route path="/admin/analytics" component={AnalyticsDashboard} />

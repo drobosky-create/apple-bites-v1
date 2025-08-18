@@ -1080,6 +1080,101 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json({ authenticated: false });
   });
 
+  // Unified authentication endpoint for the new workspace shell
+  app.get("/api/me", async (req, res) => {
+    try {
+      let user = null;
+      let roles: string[] = [];
+      let permissions: Record<string, boolean> = {};
+
+      // Check admin authentication first
+      if ((req.session as any)?.adminAuthenticated) {
+        user = {
+          id: 'admin',
+          email: 'drobosky@meritage-partners.com',
+          firstName: 'Admin',
+          lastName: 'User',
+          roles: ['Admin']
+        };
+        roles = ['Admin'];
+        permissions = {
+          'admin.read': true,
+          'admin.write': true,
+          'users.read': true,
+          'users.write': true,
+          'teams.read': true,
+          'teams.write': true,
+          'products.read': true,
+          'products.write': true,
+          'naics.read': true,
+          'naics.write': true,
+          'content.read': true,
+          'content.write': true,
+          'billing.read': true,
+          'assessments.read': true,
+          'assessments.write': true,
+          'clients.read': true,
+          'clients.write': true,
+        };
+      }
+      // Check team authentication
+      else if (req.session?.teamSessionId) {
+        const teamMember = await storage.getTeamMemberById(req.session.teamSessionId);
+        if (teamMember) {
+          user = {
+            id: teamMember.id.toString(),
+            email: teamMember.email,
+            firstName: teamMember.firstName,
+            lastName: teamMember.lastName,
+            roles: [teamMember.role]
+          };
+          roles = [teamMember.role];
+          
+          // Basic permissions for team members
+          permissions = {
+            'clients.read': true,
+            'assessments.read': true,
+            'billing.read': teamMember.role === 'Admin' || teamMember.role === 'Ops',
+            'users.read': teamMember.role === 'Admin',
+            'teams.read': teamMember.role === 'Admin',
+          };
+        }
+      }
+      // Check regular user authentication
+      else if (req.session?.userId) {
+        const regularUser = await storage.getUser(req.session.userId);
+        if (regularUser) {
+          user = {
+            id: regularUser.id.toString(),
+            email: regularUser.email,
+            firstName: regularUser.firstName,
+            lastName: regularUser.lastName,
+            roles: ['Viewer']
+          };
+          roles = ['Viewer'];
+          permissions = {
+            'assessments.read': true,
+            'billing.read': true,
+          };
+        }
+      }
+
+      if (!user) {
+        return res.status(401).json({ message: 'Unauthorized' });
+      }
+
+      res.json({
+        user,
+        roles,
+        permissions
+      });
+
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  });
+
   app.post("/api/admin/logout", (req, res) => {
     (req.session as any).adminAuthenticated = false;
     res.json({ success: true });

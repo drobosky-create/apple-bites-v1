@@ -2,8 +2,7 @@
 
 import React, { useEffect } from "react";
 import { Route, Switch, useLocation } from "wouter";
-import { useAdminAuth } from "@/hooks/use-admin-auth";
-import { useTeamAuth } from "@/hooks/use-team-auth";
+import { useAuth } from "@/hooks/use-auth";
 
 // Core modules
 import CRMModule from "./CRMModule";
@@ -16,35 +15,23 @@ import MaterialDashboardLayout from "@/layouts/TeamTrack/MaterialDashboardLayout
 import { BuildFooter } from "@/components/Footer";
 
 export default function WorkspaceLayout() {
-  const { isAuthenticated: isAdminAuth, isLoading: adminLoading } = useAdminAuth();
-  const { isAuthenticated: isTeamAuth, isLoading: teamLoading } = useTeamAuth();
-
-  // Wouter programmatic navigation
+  const { isChecking, isAuthenticated, isAdmin } = useAuth();
   const [, setLocation] = useLocation();
 
-  const isChecking = adminLoading || teamLoading;
-  const hasWorkspaceAccess = isAdminAuth || isTeamAuth;
-
   console.log('WorkspaceLayout auth check:', {
-    isAdminAuth,
-    isTeamAuth,
-    adminLoading,
-    teamLoading,
     isChecking,
-    hasWorkspaceAccess
+    isAuthenticated,
+    isAdmin
   });
 
   useEffect(() => {
-    // Only decide once checks are complete
-    if (!isChecking && !hasWorkspaceAccess) {
-      console.log("No workspace access, redirecting to /admin");
-      // replace history so user can't go 'Back' to a blocked page
-      setLocation("/admin", { replace: true });
+    if (!isChecking && !isAuthenticated) {
+      console.log("No authentication, redirecting to login");
+      setLocation("/login", { replace: true });
     }
-  }, [isChecking, hasWorkspaceAccess, setLocation]);
+  }, [isChecking, isAuthenticated, setLocation]);
 
   if (isChecking) {
-    // Prevent premature redirects while auth is still resolving
     return (
       <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
         Checking access…
@@ -52,8 +39,7 @@ export default function WorkspaceLayout() {
     );
   }
 
-  if (!hasWorkspaceAccess) {
-    // We already kicked off navigation above; render nothing to avoid flicker
+  if (!isAuthenticated) {
     return null;
   }
 
@@ -75,7 +61,19 @@ export default function WorkspaceLayout() {
         <Route path="/workspace/targets"     component={CRMModule} />
         <Route path="/workspace/reports"     component={CRMModule} />
 
-        {/* Admin only */}
+        {/* Admin only routes */}
+        {isAdmin && (
+          <>
+            <Route path="/workspace/admin"       component={CRMModule} />
+            <Route path="/workspace/admin/users" component={CRMModule} />
+            <Route path="/workspace/admin/teams" component={CRMModule} />
+            <Route path="/workspace/admin/products" component={CRMModule} />
+            <Route path="/workspace/admin/naics" component={CRMModule} />
+            <Route path="/workspace/admin/content" component={CRMModule} />
+          </>
+        )}
+        
+        {/* Legacy admin routes */}
         <Route path="/workspace/audit"       component={CRMModule} />
         <Route path="/workspace/settings"    component={CRMModule} />
 
