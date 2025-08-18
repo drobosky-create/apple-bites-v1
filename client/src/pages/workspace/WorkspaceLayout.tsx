@@ -9,6 +9,7 @@ import CRMModule from "./CRMModule";
 import VDRModule from "./VDRModule";
 import TeamModule from "./TeamModule";
 import AssessmentAdminModule from "./AssessmentAdminModule";
+import AdminDashboard from "@/pages/admin-dashboard";
 
 // Layout + footer
 import MaterialDashboardLayout from "@/layouts/TeamTrack/MaterialDashboardLayout";
@@ -64,12 +65,13 @@ export default function WorkspaceLayout() {
         {/* Admin only routes */}
         {isAdmin && (
           <>
-            <Route path="/workspace/admin"       component={CRMModule} />
-            <Route path="/workspace/admin/users" component={CRMModule} />
-            <Route path="/workspace/admin/teams" component={CRMModule} />
-            <Route path="/workspace/admin/products" component={CRMModule} />
-            <Route path="/workspace/admin/naics" component={CRMModule} />
-            <Route path="/workspace/admin/content" component={CRMModule} />
+            {/* Use AdminDashboard for admin routes */}
+            <Route path="/workspace/admin"          component={AdminDashboard} />
+            <Route path="/workspace/admin/users"    component={AdminDashboard} />
+            <Route path="/workspace/admin/teams"    component={AdminDashboard} />
+            <Route path="/workspace/admin/products" component={AdminDashboard} />
+            <Route path="/workspace/admin/naics"    component={AdminDashboard} />
+            <Route path="/workspace/admin/content"  component={AdminDashboard} />
           </>
         )}
         
@@ -77,8 +79,11 @@ export default function WorkspaceLayout() {
         <Route path="/workspace/audit"       component={CRMModule} />
         <Route path="/workspace/settings"    component={CRMModule} />
 
-        {/* Default fallback */}
-        <Route><CRMModule /></Route>
+        {/* Default fallback:
+           - bare /workspace (no subpath) lands here
+           - admins see Apple Bites admin; others see CRM
+        */}
+        <Route>{isAdmin ? <AdminDashboard /> : <CRMModule />}</Route>
       </Switch>
       <BuildFooter />
     </MaterialDashboardLayout>

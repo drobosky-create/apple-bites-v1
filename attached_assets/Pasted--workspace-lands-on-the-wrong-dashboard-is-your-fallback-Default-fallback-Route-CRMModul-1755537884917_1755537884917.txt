@@ -1,0 +1,60 @@
+/workspace lands on the “wrong” dashboard is your fallback:
+
+/* Default fallback */
+<Route><CRMModule /></Route>
+
+
+That catches the bare /workspace (no subpath) and forces the CRM view. You don’t need to juggle redirects—just make the fallback role-aware so admins see the Apple Bites admin (AssessmentAdminModule) and everyone else sees CRM.
+
+Here’s a minimal, safe patch (no resets, stay on ecosystem-modules):
+
+ // client/src/pages/workspace/WorkspaceLayout.tsx
+
+         {/* Admin only routes */}
+         {isAdmin && (
+           <>
+-            <Route path="/workspace/admin"       component={CRMModule} />
+-            <Route path="/workspace/admin/users" component={CRMModule} />
+-            <Route path="/workspace/admin/teams" component={CRMModule} />
+-            <Route path="/workspace/admin/products" component={CRMModule} />
+-            <Route path="/workspace/admin/naics" component={CRMModule} />
+-            <Route path="/workspace/admin/content" component={CRMModule} />
++            {/* Use your admin module for admin routes */}
++            <Route path="/workspace/admin"          component={AssessmentAdminModule} />
++            <Route path="/workspace/admin/users"    component={AssessmentAdminModule} />
++            <Route path="/workspace/admin/teams"    component={AssessmentAdminModule} />
++            <Route path="/workspace/admin/products" component={AssessmentAdminModule} />
++            <Route path="/workspace/admin/naics"    component={AssessmentAdminModule} />
++            <Route path="/workspace/admin/content"  component={AssessmentAdminModule} />
+           </>
+         )}
+
+         {/* Legacy admin routes */}
+         <Route path="/workspace/audit"       component={CRMModule} />
+         <Route path="/workspace/settings"    component={CRMModule} />
+
+-        {/* Default fallback */}
+-        <Route><CRMModule /></Route>
++        {/* Default fallback:
++           - bare /workspace (no subpath) lands here
++           - admins see Apple Bites admin; others see CRM
++        */}
++        <Route>{isAdmin ? <AssessmentAdminModule /> : <CRMModule />}</Route>
+
+Why this fixes it
+
+In your setup, /workspace/* subroutes match first. The bare /workspace doesn’t match any of those, so it falls through to the last <Route>.
+
+Making that last route role-aware guarantees:
+
+Admin → AssessmentAdminModule (Apple Bites admin inside the TeamTrack shell)
+
+Team/Consumer → CRMModule (TeamTrack CRM)
+
+Quick checklist
+
+Keep your MaterialDashboardLayout as-is (you’re already using the TeamTrack shell).
+
+Ensure your sidebar links point to these paths: /workspace/crm, /workspace/assessments, /workspace/admin, etc.
+
+If you later split admin pages (Users/Teams/etc.) into dedicated components, just change the component= targets—no routing overhaul needed.
