@@ -17,10 +17,14 @@ interface SignupFormData {
 export default function SignupPage() {
   const [, setLocation] = useLocation();
 
+  // Check if email is pre-filled from purchase
+  const urlParams = new URLSearchParams(window.location.search);
+  const prefilledEmail = urlParams.get('email') || '';
+
   const [formData, setFormData] = useState<SignupFormData>({
     firstName: '',
     lastName: '',
-    email: '',
+    email: prefilledEmail,
     password: '',
     confirmPassword: ''
   });

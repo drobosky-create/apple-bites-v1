@@ -2834,9 +2834,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const session = await stripe.checkout.sessions.retrieve(sessionId);
         
         if (session.payment_status === 'paid') {
-          // Update user tier immediately upon payment verification
           const userId = session.metadata?.userId;
+          const customerEmail = session.customer_details?.email;
+          const customerName = session.customer_details?.name;
           let newTier = 'growth'; // Default to growth for paid purchases
+          let createdNewUser = false;
+          let finalUserId = userId;
           
           // Determine tier based on the purchased product
           const lookupKey = session.metadata?.lookup_key;
@@ -2846,9 +2849,47 @@ export async function registerRoutes(app: Express): Promise<Server> {
             newTier = 'growth';
           }
           
-          if (userId && userId !== 'anonymous') {
+          // Handle user creation for anonymous purchases
+          if (!userId || userId === 'anonymous') {
+            if (customerEmail) {
+              try {
+                // Check if user already exists
+                const existingUser = await storage.getUserByEmail(customerEmail);
+                
+                if (existingUser) {
+                  // Update existing user's tier
+                  await storage.updateUserTier(existingUser.id, newTier);
+                  finalUserId = existingUser.id;
+                  console.log(`Updated existing user ${existingUser.id} to tier ${newTier} after purchase`);
+                } else {
+                  // Create new user account with purchased tier
+                  const nameParts = customerName?.split(' ') || ['', ''];
+                  const firstName = nameParts[0] || '';
+                  const lastName = nameParts.slice(1).join(' ') || '';
+                  
+                  const newUser = await storage.createUser({
+                    email: customerEmail,
+                    firstName,
+                    lastName,
+                    tier: newTier,
+                    passwordHash: null, // User will need to set password later
+                    authProvider: 'stripe_purchase',
+                    awaitingPasswordCreation: true
+                  });
+                  
+                  finalUserId = newUser.id;
+                  createdNewUser = true;
+                  console.log(`Created new user ${newUser.id} with tier ${newTier} after purchase`);
+                }
+              } catch (error) {
+                console.error('Error creating/updating user during payment verification:', error);
+              }
+            }
+          } else {
+            // Update existing authenticated user
             try {
               await storage.updateUserTier(userId, newTier);
+              finalUserId = userId;
               console.log(`Updated user ${userId} to tier ${newTier} after payment verification`);
             } catch (error) {
               console.error('Error updating user tier during verification:', error);
@@ -2862,7 +2903,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
             amount: session.amount_total,
             productName: session.metadata?.productId || 'Growth & Exit Assessment',
             tier: newTier,
-            customerEmail: session.customer_details?.email,
+            customerEmail: customerEmail,
+            userId: finalUserId,
+            createdNewUser,
             updatedTier: true, // Flag to indicate tier was updated
           });
         } else {
