@@ -27,6 +27,7 @@ import LandingPage from "@/pages/landing";
 import CheckoutSuccess from "@/pages/checkout-success";
 import AdminLoginPage from "@/pages/admin-login";
 import CookieBanner from "@/components/CookieBanner";
+import { IS_UNIFIED_SHELL } from "@/config/flags";
 
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -51,21 +52,12 @@ function Router() {
       <MobileNavigation>
         <Switch>
           {/* Authentication routes - always accessible */}
-    <Route path="/signup" component={SignupPage} />
-    <Route path="/login" component={LoginPage} />
-    <Route path="/admin-login" component={AdminLoginPage} />
+          <Route path="/signup" component={SignupPage} />
+          <Route path="/login" component={LoginPage} />
+          <Route path="/admin-login" component={AdminLoginPage} />
 
-          {/* Unified shell routing */}
-          {IS_UNIFIED_SHELL ? (
-            <>
-              <Route path="/workspace" component={WorkspaceLayout} />
-              <Route path="/workspace/:rest*" component={WorkspaceLayout} />
-              <Route path="/admin" component={AdminAlias} />
-            </>
-          ) : (
-            <Route path="/admin" component={AdminLoginPage} />
-          )}
-  >>>>>>> 8ae390b (Add a dedicated login page for administrators)
+          {/* Admin routes - always accessible */}
+          <Route path="/admin" component={AdminLoginPage} />
 
           
           {/* Legal pages - always accessible */}
