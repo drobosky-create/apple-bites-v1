@@ -51,9 +51,22 @@ function Router() {
       <MobileNavigation>
         <Switch>
           {/* Authentication routes - always accessible */}
-          <Route path="/signup" component={SignupPage} />
-          <Route path="/login" component={LoginPage} />
-          <Route path="/admin" component={AdminLoginPage} />
+    <Route path="/signup" component={SignupPage} />
+    <Route path="/login" component={LoginPage} />
+    <Route path="/admin-login" component={AdminLoginPage} />
+
+          {/* Unified shell routing */}
+          {IS_UNIFIED_SHELL ? (
+            <>
+              <Route path="/workspace" component={WorkspaceLayout} />
+              <Route path="/workspace/:rest*" component={WorkspaceLayout} />
+              <Route path="/admin" component={AdminAlias} />
+            </>
+          ) : (
+            <Route path="/admin" component={AdminLoginPage} />
+          )}
+  >>>>>>> 8ae390b (Add a dedicated login page for administrators)
+
           
           {/* Legal pages - always accessible */}
           <Route path="/privacy-policy" component={PrivacyPolicy} />
