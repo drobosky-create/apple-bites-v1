@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import { Link } from 'wouter';
 import { useAuth } from '@/hooks/useAuth';
 import MDBox from '@/components/MD/MDBox';
@@ -20,10 +20,13 @@ import {
   Check,
   Lock,
   Star,
-  TrendingUp
+  TrendingUp,
+  Search,
+  Filter,
+  X
 } from 'lucide-react';
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Card, CardContent, Typography, Chip } from '@mui/material';
+import { Card, CardContent, Typography, Chip, TextField, InputAdornment, Menu, MenuItem, Box } from '@mui/material';
 import { useTheme, useMediaQuery } from '@mui/material';
 
 interface DashboardUser {
@@ -63,6 +66,41 @@ function PastAssessmentsSection() {
   const { data: assessments, isLoading } = useQuery<Assessment[]>({
     queryKey: ['/api/assessments'],
   });
+
+  // Search and filter state
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterAnchor, setFilterAnchor] = useState<null | HTMLElement>(null);
+  const [gradeFilter, setGradeFilter] = useState<string>('');
+  const [tierFilter, setTierFilter] = useState<string>('');
+
+  // Filter assessments based on search and filters
+  const filteredAssessments = useMemo(() => {
+    if (!assessments) return [];
+    
+    return assessments.filter(assessment => {
+      // Text search
+      const searchLower = searchTerm.toLowerCase();
+      const matchesSearch = !searchTerm || 
+        assessment.company?.toLowerCase().includes(searchLower) ||
+        `${assessment.firstName} ${assessment.lastName}`.toLowerCase().includes(searchLower) ||
+        assessment.email?.toLowerCase().includes(searchLower);
+      
+      // Grade filter
+      const matchesGrade = !gradeFilter || assessment.overallScore === gradeFilter;
+      
+      // Tier filter
+      const matchesTier = !tierFilter || assessment.tier === tierFilter;
+      
+      return matchesSearch && matchesGrade && matchesTier;
+    });
+  }, [assessments, searchTerm, gradeFilter, tierFilter]);
+
+  const clearFilters = () => {
+    setSearchTerm('');
+    setGradeFilter('');
+    setTierFilter('');
+    setFilterAnchor(null);
+  };
 
   const formatCurrency = (value: string | null) => {
     if (!value) return "$0";
@@ -144,9 +182,153 @@ function PastAssessmentsSection() {
     );
   }
 
+  const hasActiveFilters = searchTerm || gradeFilter || tierFilter;
+  const displayAssessments = filteredAssessments.slice(0, 3);
+
   return (
     <MDBox display="flex" flexDirection="column" gap={2}>
-      {assessments.slice(0, 3).map((assessment) => (
+      {/* Search and Filter Controls */}
+      <MDBox display="flex" gap={2} mb={2}>
+        <TextField
+          variant="outlined"
+          size="small"
+          placeholder="Search assessments..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <Search size={20} color="#9CA3AF" />
+              </InputAdornment>
+            ),
+            endAdornment: searchTerm && (
+              <InputAdornment position="end">
+                <X 
+                  size={16} 
+                  color="#9CA3AF" 
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => setSearchTerm('')}
+                />
+              </InputAdornment>
+            )
+          }}
+          sx={{
+            flexGrow: 1,
+            '& .MuiOutlinedInput-root': {
+              borderRadius: 2,
+              backgroundColor: '#F9FAFB',
+              '&:hover': { backgroundColor: '#F3F4F6' }
+            }
+          }}
+        />
+        <MDButton
+          onClick={(e) => setFilterAnchor(e.currentTarget)}
+          sx={{
+            minWidth: 'auto',
+            p: 1.5,
+            backgroundColor: hasActiveFilters ? '#00718d' : '#F9FAFB',
+            color: hasActiveFilters ? 'white' : '#6B7280',
+            border: '1px solid #E5E7EB',
+            '&:hover': {
+              backgroundColor: hasActiveFilters ? '#005f73' : '#F3F4F6'
+            }
+          }}
+        >
+          <Filter size={18} />
+        </MDButton>
+        
+        {/* Filter Menu */}
+        <Menu
+          anchorEl={filterAnchor}
+          open={Boolean(filterAnchor)}
+          onClose={() => setFilterAnchor(null)}
+          sx={{ mt: 1 }}
+        >
+          <Box sx={{ p: 2, minWidth: 200 }}>
+            <MDTypography variant="subtitle2" fontWeight="medium" mb={2}>
+              Filter by Grade
+            </MDTypography>
+            {['', 'A', 'B', 'C', 'D', 'F'].map(grade => (
+              <MenuItem 
+                key={grade}
+                onClick={() => setGradeFilter(grade)}
+                selected={gradeFilter === grade}
+                sx={{ px: 1, py: 0.5, borderRadius: 1, mb: 0.5 }}
+              >
+                {grade || 'All Grades'}
+              </MenuItem>
+            ))}
+            
+            <MDTypography variant="subtitle2" fontWeight="medium" mt={2} mb={2}>
+              Filter by Tier
+            </MDTypography>
+            {['', 'free', 'growth', 'capital'].map(tier => (
+              <MenuItem 
+                key={tier}
+                onClick={() => setTierFilter(tier)}
+                selected={tierFilter === tier}
+                sx={{ px: 1, py: 0.5, borderRadius: 1, mb: 0.5 }}
+              >
+                {tier ? tier.charAt(0).toUpperCase() + tier.slice(1) : 'All Tiers'}
+              </MenuItem>
+            ))}
+            
+            {hasActiveFilters && (
+              <MDButton
+                onClick={clearFilters}
+                sx={{
+                  mt: 2,
+                  width: '100%',
+                  backgroundColor: '#F3F4F6',
+                  color: '#6B7280',
+                  '&:hover': { backgroundColor: '#E5E7EB' }
+                }}
+              >
+                Clear All Filters
+              </MDButton>
+            )}
+          </Box>
+        </Menu>
+      </MDBox>
+
+      {/* Results Summary */}
+      {hasActiveFilters && (
+        <MDBox mb={2}>
+          <MDTypography variant="body2" color="text" sx={{ opacity: 0.7 }}>
+            Showing {filteredAssessments.length} of {assessments.length} assessments
+            {(gradeFilter || tierFilter || searchTerm) && ' • '}
+            {searchTerm && `Searching for "${searchTerm}"`}
+            {gradeFilter && ` • Grade ${gradeFilter}`}
+            {tierFilter && ` • ${tierFilter.charAt(0).toUpperCase() + tierFilter.slice(1)} tier`}
+          </MDTypography>
+        </MDBox>
+      )}
+
+      {/* No Results Message */}
+      {filteredAssessments.length === 0 && assessments.length > 0 && (
+        <Card sx={{ p: 4, textAlign: 'center' }}>
+          <Search size={48} color="#9CA3AF" style={{ marginBottom: 16 }} />
+          <MDTypography variant="h6" fontWeight="medium" color="text" mb={1}>
+            No matching assessments
+          </MDTypography>
+          <MDTypography variant="body2" color="text" mb={3}>
+            Try adjusting your search terms or filters
+          </MDTypography>
+          <MDButton
+            onClick={clearFilters}
+            sx={{
+              backgroundColor: '#F3F4F6',
+              color: '#6B7280',
+              '&:hover': { backgroundColor: '#E5E7EB' }
+            }}
+          >
+            Clear Filters
+          </MDButton>
+        </Card>
+      )}
+
+      {/* Assessment Cards */}
+      {displayAssessments.map((assessment) => (
         <Card key={assessment.id} sx={{ p: 3, border: '1px solid #E5E7EB' }}>
           <MDBox display="flex" justifyContent="space-between" alignItems="center">
             <MDBox display="flex" alignItems="center" gap={2}>
@@ -201,7 +383,7 @@ function PastAssessmentsSection() {
         </Card>
       ))}
       
-      {assessments.length > 3 && (
+      {filteredAssessments.length > 3 && (
         <Link href="/past-assessments">
           <MDButton
             sx={{
@@ -218,7 +400,7 @@ function PastAssessmentsSection() {
             }}
             startIcon={<BarChart3 size={18} />}
           >
-            View All Assessments ({assessments.length})
+            View All Assessments ({hasActiveFilters ? filteredAssessments.length : assessments.length})
           </MDButton>
         </Link>
       )}
