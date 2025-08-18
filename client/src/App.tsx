@@ -115,6 +115,7 @@ function Router() {
             }
           </Route>
           <Route path="/workspace/:rest*">
+            {/* Workspace requires admin or team authentication - handled internally by WorkspaceLayout */}
             <Suspense fallback={<div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Loading Workspace...</div>}>
               {React.createElement(lazy(() => import("./pages/workspace/WorkspaceLayout")))}
             </Suspense>
