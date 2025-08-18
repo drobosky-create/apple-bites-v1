@@ -1434,14 +1434,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   })
 
-  // GET /api/assessments - Get last 3 assessments for Past Assessments page
+  // GET /api/assessments - Get user-specific assessments for dashboard and past assessments
   app.get("/api/assessments", async (req, res) => {
     try {
+      // Check if user is authenticated
+      if (!req.session.userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+
+      // Get user's email from session to filter assessments
+      const user = await storage.getUserById(req.session.userId);
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
       const assessments = await storage.getAllValuationAssessments();
-      // Sort by creation date, newest first, and limit to 3
-      const sortedAssessments = assessments
+      
+      // Filter assessments by user's email
+      const userAssessments = assessments.filter(assessment => 
+        assessment.email === user.email
+      );
+
+      // Sort by creation date, newest first
+      const sortedAssessments = userAssessments
         .sort((a, b) => new Date(b.createdAt || '').getTime() - new Date(a.createdAt || '').getTime())
-        .slice(0, 3)
         .map(assessment => ({
           id: assessment.id,
           firstName: assessment.firstName || 'Unknown',
@@ -1464,7 +1480,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       res.json(sortedAssessments);
     } catch (error) {
-      console.error("Error fetching assessments:", error);
+      console.error("Error fetching user assessments:", error);
       res.status(500).json({ error: "Failed to fetch assessments" });
     }
   });
