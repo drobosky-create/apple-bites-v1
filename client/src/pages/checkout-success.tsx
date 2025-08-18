@@ -25,10 +25,11 @@ export default function CheckoutSuccess() {
         .then(data => {
           if (data.success) {
             setSessionData(data);
-            // If tier was updated, refresh user auth data
-            if (data.updatedTier) {
+            // If a new user was created or tier was updated, refresh auth data
+            if (data.updatedTier || data.createdNewUser) {
               queryClient.invalidateQueries({ queryKey: ['/api/auth/user'] });
-              console.log('Tier updated, refreshing user data');
+              queryClient.invalidateQueries({ queryKey: ['/api/me'] });
+              console.log('User account updated after purchase, refreshing user data');
             }
           } else {
             setError('Payment verification failed');
@@ -152,13 +153,20 @@ export default function CheckoutSuccess() {
               variant="gradient"
               color="info"
               size="large"
-              onClick={() => setLocation('/dashboard')}
+              onClick={() => {
+                // If a new user was created, they need to create an account
+                if (sessionData?.createdNewUser) {
+                  setLocation('/signup?email=' + encodeURIComponent(sessionData.customerEmail));
+                } else {
+                  setLocation('/dashboard');
+                }
+              }}
               sx={{
                 background: 'linear-gradient(45deg, #0A1F44 30%, #1B2C4F 90%)',
                 minWidth: 180,
               }}
             >
-              Go to Dashboard
+              {sessionData?.createdNewUser ? 'Complete Account Setup' : 'Go to Dashboard'}
             </MDButton>
             
             <MDButton

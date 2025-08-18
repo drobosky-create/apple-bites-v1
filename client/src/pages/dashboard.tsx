@@ -56,14 +56,7 @@ interface Assessment {
   executiveSummary?: string;
 }
 
-// Mock user data - replace with actual auth data
-const mockUser: DashboardUser = {
-  name: 'Demo User',
-  email: 'demo@applebites.ai',
-  tier: 'free',
-  firstName: 'Demo',
-  lastName: 'User'
-};
+// Remove mock user data - will use real auth data only
 
 // Past Assessments Component
 function PastAssessmentsSection() {
@@ -264,22 +257,29 @@ export default function Dashboard() {
   }
 
   // Redirect to login if not authenticated
-  if (!isAuthenticated) {
+  if (!isAuthenticated || !user) {
     return (
       <div style={{ 
         minHeight: '100vh', 
         backgroundColor: 'white',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        flexDirection: 'column',
+        gap: '16px'
       }}>
-        <div>Please log in to access dashboard</div>
+        <div>Please log in to access your dashboard</div>
+        <Link href="/login">
+          <MDButton variant="gradient" color="info">
+            Go to Login
+          </MDButton>
+        </Link>
       </div>
     );
   }
   
-  // Use actual user data or fallback to mock for testing
-  const displayUser = (user as DashboardUser) || mockUser;
+  // Use actual user data only - no mock fallback
+  const displayUser = user as DashboardUser;
 
   const handleSignOut = () => {
     logout(); // Use the logout function from useAuth
