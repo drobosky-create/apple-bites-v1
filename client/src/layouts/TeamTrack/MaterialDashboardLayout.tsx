@@ -129,14 +129,19 @@ export const MaterialDashboardLayout: React.FC<MaterialDashboardLayoutProps> = (
                   sx={{
                     mx: 2,
                     my: 0.5,
-                    borderRadius: 2,
-                    backgroundColor: isActive ? 'rgba(68, 147, 222, 0.3)' : 'transparent',
+                    borderRadius: '20px', // Pillbox shape
+                    backgroundColor: isActive ? 'rgba(255, 255, 255, 0.12)' : 'transparent',
+                    backdropFilter: isActive ? 'blur(8px)' : 'none',
+                    boxShadow: isActive ? '0 4px 12px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : 'none', // Depth effect
+                    border: isActive ? '1px solid rgba(255, 255, 255, 0.08)' : 'none',
                     '&:hover': {
-                      backgroundColor: 'rgba(68, 147, 222, 0.15)',
+                      backgroundColor: isActive ? 'rgba(255, 255, 255, 0.12)' : 'rgba(255, 255, 255, 0.06)',
+                      boxShadow: isActive ? '0 4px 12px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : '0 2px 8px rgba(0, 0, 0, 0.1)',
                     },
                     cursor: 'pointer',
-                    color: isActive ? 'white' : 'rgba(255, 255, 255, 0.8)',
+                    color: 'rgba(255, 255, 255, 0.9)', // Keep consistent color
                     textDecoration: 'none',
+                    transition: 'all 0.2s ease-in-out', // Smooth transitions
                   }}
                   data-testid={`nav-item-${item.text.toLowerCase().replace(' ', '-')}`}
                 >
@@ -164,13 +169,15 @@ export const MaterialDashboardLayout: React.FC<MaterialDashboardLayoutProps> = (
           sx={{
             mx: 2,
             my: 0.5,
-            borderRadius: 2,
+            borderRadius: '20px', // Pillbox shape for logout too
             '&:hover': {
-              backgroundColor: 'rgba(68, 147, 222, 0.15)',
+              backgroundColor: 'rgba(255, 255, 255, 0.06)',
+              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
             },
             cursor: 'pointer',
             color: 'rgba(255, 255, 255, 0.8)',
-            mt: 'auto'
+            mt: 'auto',
+            transition: 'all 0.2s ease-in-out',
           }}
           data-testid="nav-item-logout"
         >
@@ -205,6 +212,7 @@ export const MaterialDashboardLayout: React.FC<MaterialDashboardLayoutProps> = (
             boxSizing: 'border-box',
             background: 'linear-gradient(195deg, var(--primary-navy), var(--secondary-teal))',
             border: 'none',
+            boxShadow: '4px 0 12px rgba(0, 0, 0, 0.15)', // Add depth to sidebar
           },
         }}
         open
@@ -226,6 +234,7 @@ export const MaterialDashboardLayout: React.FC<MaterialDashboardLayoutProps> = (
             boxSizing: 'border-box',
             width: drawerWidth,
             background: 'linear-gradient(195deg, var(--primary-navy), var(--secondary-teal))',
+            boxShadow: '4px 0 12px rgba(0, 0, 0, 0.15)', // Add depth to mobile sidebar too
           },
         }}
       >
