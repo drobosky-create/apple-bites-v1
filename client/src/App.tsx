@@ -58,6 +58,7 @@ function Router() {
           <Route path="/winthestorm" component={WinTheStormDemo} />
           <Route path="/signup" component={SignupPage} />
           <Route path="/login" component={LoginPage} />
+          <Route path="/admin-login" component={AdminLoginPage} />
           
           {/* Unified shell routing */}
           {IS_UNIFIED_SHELL ? (
