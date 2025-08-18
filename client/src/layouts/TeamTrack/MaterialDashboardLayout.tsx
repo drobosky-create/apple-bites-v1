@@ -16,7 +16,7 @@ import {
   Palette as PaletteIcon
 } from '@mui/icons-material';
 import { Link, useLocation } from 'wouter';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/hooks/use-auth';
 import { useState } from 'react';
 
 interface MaterialDashboardLayoutProps {
