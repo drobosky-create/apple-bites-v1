@@ -1,3 +1,17 @@
+Got it ✅ — let’s do a clean version of your WorkspaceLayout.tsx that:
+
+Uses the correct TeamTrack MaterialDashboardLayout
+
+Includes all your intended workspace pages (CRM, VDR, Team, Assessments, plus Leads, Kanban, List, Calendar, Targets, Reports, Audit, Settings)
+
+Falls back to CRMModule by default
+
+Keeps the footer inside the layout
+
+Here’s the updated file:
+
+// client/src/pages/workspace/WorkspaceLayout.tsx
+
 import React from "react";
 import { Switch, Route } from "wouter";
 import { useAdminAuth } from "@/hooks/use-admin-auth";
@@ -59,3 +73,12 @@ export default function WorkspaceLayout() {
     </MaterialDashboardLayout>
   );
 }
+
+
+✅ This version guarantees:
+
+We’re importing the TeamTrack sidebar layout
+
+All workspace routes are covered
+
+It’s safe for the ecosystem-modules branch (no changes to main)
